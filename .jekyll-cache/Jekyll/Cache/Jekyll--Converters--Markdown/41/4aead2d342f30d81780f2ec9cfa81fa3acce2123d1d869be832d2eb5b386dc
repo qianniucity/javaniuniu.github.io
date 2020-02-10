@@ -1,0 +1,74 @@
+I"<h3 id="概念-voview-object">概念 VO（View Object）</h3>
+<h4 id="场景1">场景1</h4>
+<p>当前端展示页面展示的更多关于用户的消息,如用户的角色Role,而User实体类中的信息不全</p>
+
+<p>现在我们有一张用户列表t_user,对应的实体类如下:</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">io.swagger.annotations.ApiModelProperty</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"用户id"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">userId</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"用户名称"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">accountname</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * 状态参考 UserStatus
+     */</span>
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"用户状态  1已认证，2 认证中，3未通过认证，7未提交认证"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">status</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"头像地址"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">headPicFileName</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"手机号"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">telephone</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * 用户级别 0到期 1游客 2临时用户 3认证用户 参考health com.dachen.health.commons.vo.User
+     */</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">userLevel</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"医生信息"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Doctor</span> <span class="n">doctor</span><span class="o">;</span>
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>我们通过创建一个类通过 UserVO extends User 的方式获取更多</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CircleUserVO</span> <span class="kd">extends</span> <span class="nc">User</span><span class="o">{</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"在该圈子的角色1：管理员 2：圈主（负责人）3：顾问 逗号拼接 多个角色 可同时为管理员，圈主，顾问"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">role</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"0否 1是 永久免费"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">permanentFree</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"1正常 2欠费"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">arrearageStatus</span><span class="o">;</span>
+
+    <span class="err">。。。。</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="场景二">场景二</h4>
+<p>当前端提交给后台的数据很有限或者很少时,如注册页面提供的信息一般在4个字段左右，而通常的User实体类会有大量的字段需要填充</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CircleUserVO</span> <span class="o">{</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"手机号"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">telephone</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"用户名称"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">accountname</span><span class="o">;</span>
+
+    <span class="nd">@ApiModelProperty</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"用户密码"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>1</p>
+:ET
