@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>注释解释 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>token设计至jwt - JAVA 牛牛</title>
 
-<meta name="description" content="@Slf4j 一般注解在类的开头 详情参考">
-<link rel="canonical" href="http://localhost:4000/annotation"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="package sc.whorl.logic.service.user;import com.github.pagehelper.PageHelper;import com.github.pagehelper.PageInfo;import org.springframework.beans.factory.an...">
+<link rel="canonical" href="http://localhost:4000/goodjavacode/token/jwt"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">TODO</li><li class="toc-h2"><a href="/todo">TODO</a></li><li class="toc-h1">Mark web site</li><li class="toc-h2"><a href="/mark/website">Mark web site</a></li><li class="toc-h1">Annotation</li><li class="toc-h2 active"><a href="/annotation">Annotation</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">CODE</li><li class="toc-h2"><a href="/goodjavacode/redis">redis key设计</a></li><li class="toc-h2 active"><a href="/goodjavacode/token/jwt">token设计至jwt</a></li><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/codedesign/vo">java中VO的使用(VO视图对象)</a></li><li class="toc-h2"><a href="/codedesign/dto">java中DTO的使用(DTO数据传输对象)</a></li><li class="toc-h1">注释说明</li><li class="toc-h2"><a href="/code/annotation">注释说明</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -334,20 +334,267 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>注释解释</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>token设计至jwt</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/2020-02-10-annotation.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="注释解释"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/good-java-code/2020-02-12-jwt.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="token设计至jwt"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B3%A8%E8%A7%A3">注解</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 10, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-10T00:00:00+08:00">
-    <meta itemprop="keywords" content="注解"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=code">code</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="code"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>@Slf4j 一般注解在类的开头 <a href="https://blog.csdn.net/fanrenxiang/article/details/81012803">详情参考</a></p>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-10T00:00:00+08:00"><!-- start custom article footer snippet -->
+<div class="article__content" itemprop="articleBody"><div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">logic</span><span class="o">.</span><span class="na">service</span><span class="o">.</span><span class="na">user</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.github.pagehelper.PageHelper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.github.pagehelper.PageInfo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.AuthenticationManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.UsernamePasswordAuthenticationToken</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.Authentication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.context.SecurityContextHolder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.transaction.annotation.Transactional</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.ObjectUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.context.WebApplicationContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.RequestContextHolder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.ServletRequestAttributes</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.ServletContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">lombok.extern.slf4j.Slf4j</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.dao.auth.UserMapper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.model.auth.User</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.model.auth.UserRole</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.MsgResponseBody</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.PageResponse</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.SenUnitDic</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.SenUnitException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.base.BaseService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.lock.RedisLock</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.config.jwt.JWTUserDetail</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.config.jwt.JwtTokenUtil</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.utils.ErrorCodeEnum</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.utils.UserAuthInfoUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.ScUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.redis.RedisUtil</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.spring.SpringUtil</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.web.vo.system.UserListQueryRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.web.vo.user.UserVo</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">tk.mybatis.mapper.entity.Example</span><span class="o">;</span>
+
+<span class="cm">/**
+ * &lt;一句话功能简述&gt; &lt;功能详细描述&gt;
+ *
+ * @see: [相关类/方法]（可选）
+ * @since [产品/模块版本] （可选）
+ */</span>
+<span class="nd">@Service</span>
+<span class="nd">@Slf4j</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="kd">extends</span> <span class="nc">BaseService</span><span class="o">&lt;</span><span class="nc">UserMapper</span><span class="o">,</span> <span class="nc">User</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">RedisUtil</span> <span class="n">redisUtil</span><span class="o">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">BCryptPasswordEncoder</span> <span class="n">bCryptPasswordEncoder</span><span class="o">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">JwtTokenUtil</span> <span class="n">jwtTokenUtil</span><span class="o">;</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.access_token:#{30*24*60*60}}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">access_token_expiration</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="nc">AuthenticationManager</span> <span class="n">authenticationManager</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">upUser</span><span class="o">(</span><span class="nc">Long</span> <span class="n">userId</span><span class="o">,</span> <span class="nc">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setTid</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
+        <span class="n">updateByPrimaryKeySelective</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="s">"用户更新成功!"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Transactional</span><span class="o">(</span><span class="n">rollbackFor</span> <span class="o">=</span> <span class="nc">Exception</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">dblUser</span><span class="o">(</span><span class="nc">Long</span> <span class="n">userId</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">SenUnitDic</span><span class="o">.</span><span class="na">USER_STATUS_DBL</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setTid</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">updateByPrimaryKeySelective</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+        <span class="nc">UserRole</span> <span class="n">userRole</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UserRole</span><span class="o">();</span>
+        <span class="n">userRole</span><span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
+        <span class="n">userRole</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">SenUnitDic</span><span class="o">.</span><span class="na">USER_STATUS_DBL</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="s">"用户禁用成功!"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="kd">public</span> <span class="nc">PageResponse</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="nf">searchListUser</span><span class="o">(</span><span class="nc">UserListQueryRequest</span> <span class="n">userRequest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">PageHelper</span><span class="o">.</span><span class="na">startPage</span><span class="o">(</span><span class="n">userRequest</span><span class="o">.</span><span class="na">getPageIndex</span><span class="o">(),</span> <span class="n">userRequest</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">());</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">userList</span> <span class="o">=</span> <span class="n">selectListAll</span><span class="o">();</span>
+        <span class="nc">PageInfo</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">pageInfo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PageInfo</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;(</span><span class="n">userList</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">PageResponse</span><span class="o">(</span><span class="n">pageInfo</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sample</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//获取spring上下文</span>
+        <span class="nc">WebApplicationContext</span> <span class="n">wac</span> <span class="o">=</span> <span class="o">(</span><span class="nc">WebApplicationContext</span><span class="o">)</span> <span class="nc">SpringUtil</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">();</span>
+        <span class="c1">//获取请求上下文</span>
+        <span class="nc">HttpServletRequest</span> <span class="n">httpRequest</span> <span class="o">=</span> <span class="o">((</span><span class="nc">ServletRequestAttributes</span><span class="o">)</span> <span class="nc">RequestContextHolder</span><span class="o">.</span><span class="na">currentRequestAttributes</span><span class="o">()).</span><span class="na">getRequest</span><span class="o">();</span>
+        <span class="nc">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">httpRequest</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+        <span class="c1">//获取响应上下文</span>
+        <span class="nc">HttpServletResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="o">((</span><span class="nc">ServletRequestAttributes</span><span class="o">)</span> <span class="nc">RequestContextHolder</span><span class="o">.</span><span class="na">currentRequestAttributes</span><span class="o">()).</span><span class="na">getResponse</span><span class="o">();</span>
+        <span class="c1">//获取用户登陆后的信息</span>
+        <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUser</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">register</span><span class="o">(</span><span class="nc">UserVo</span> <span class="n">userVo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Example</span> <span class="n">example</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Example</span><span class="o">(</span><span class="nc">User</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">example</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">().</span><span class="na">andEqualTo</span><span class="o">(</span><span class="s">"loginName"</span><span class="o">,</span> <span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">()).</span><span class="na">orEqualTo</span><span class="o">(</span><span class="s">"mobile"</span><span class="o">,</span> <span class="n">userVo</span><span class="o">.</span><span class="na">getUserPhone</span><span class="o">());</span>
+        <span class="nc">RedisLock</span><span class="o">.</span><span class="na">tryLock</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">userList</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">selectByExample</span><span class="o">(</span><span class="n">example</span><span class="o">);</span>
+        <span class="nc">RedisLock</span><span class="o">.</span><span class="na">unLock</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nc">ScUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userList</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">SenUnitException</span><span class="o">(</span><span class="nc">SenUnitDic</span><span class="o">.</span><span class="na">RESULT_CODE_SERVICE_UNAVAILABLE</span><span class="o">,</span> <span class="s">"账户已存在!"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">User</span> <span class="n">users</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
+        <span class="n">users</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
+        <span class="n">users</span><span class="o">.</span><span class="na">setPassWord</span><span class="o">(</span><span class="n">bCryptPasswordEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()));</span>
+        <span class="n">users</span><span class="o">.</span><span class="na">setMobile</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getUserPhone</span><span class="o">());</span>
+        <span class="n">users</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="s">"EBL"</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">users</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 用户登陆相关,主要验证用户用户密码以及设置jwt和用户缓存相关,并返回jwt的凭证
+     *
+     * @param userVo
+     * @return
+     */</span>
+    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">JWTUserDetail</span><span class="o">&gt;</span> <span class="nf">login</span><span class="o">(</span><span class="nc">UserVo</span> <span class="n">userVo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
+        <span class="nc">User</span> <span class="n">userOne</span> <span class="o">=</span> <span class="n">selectOne</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userOne</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户不存在!"</span><span class="o">);</span>
+            <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getCode</span><span class="o">()).</span><span class="na">setResult</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">bCryptPasswordEncoder</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">(),</span> <span class="n">userOne</span><span class="o">.</span><span class="na">getPassWord</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户登陆密码错误!"</span><span class="o">);</span>
+            <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getCode</span><span class="o">()).</span><span class="na">setResult</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="nc">Authentication</span> <span class="n">authentication</span> <span class="o">=</span> <span class="n">authenticationManager</span><span class="o">.</span><span class="na">authenticate</span><span class="o">(</span>
+                <span class="k">new</span> <span class="nf">UsernamePasswordAuthenticationToken</span><span class="o">(</span>
+                        <span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">(),</span>
+                        <span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()</span>
+                <span class="o">)</span>
+        <span class="o">);</span>
+        <span class="nc">SecurityContextHolder</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">setAuthentication</span><span class="o">(</span><span class="n">authentication</span><span class="o">);</span>
+        <span class="c1">//使用jwt生成token 用于权限效验</span>
+        <span class="nc">JWTUserDetail</span> <span class="n">jwtUserDetail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JWTUserDetail</span><span class="o">();</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getLoginName</span><span class="o">());</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setLoginTime</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getTid</span><span class="o">());</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setUserType</span><span class="o">(</span><span class="nc">JWTUserDetail</span><span class="o">.</span><span class="na">UserType</span><span class="o">.</span><span class="na">User</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">generateToken</span><span class="o">(</span><span class="n">jwtUserDetail</span><span class="o">);</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setJwtToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="n">jwtUserDetail</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logout</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">redisUtil</span><span class="o">.</span><span class="na">setEx</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">JWT_TOKEN_PREFIX</span><span class="o">,</span> <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUserType</span><span class="o">(),</span> <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUserId</span><span class="o">()),</span> <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUser</span><span class="o">().</span><span class="na">getJwtToken</span><span class="o">(),</span> <span class="n">access_token_expiration</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">com</span><span class="o">.</span><span class="na">javaniuniu</span><span class="o">.</span><span class="na">scshorlsweb</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">jwt</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.alibaba.fastjson.JSONObject</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.EqualsAndHashCode</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<span class="nd">@EqualsAndHashCode</span><span class="o">(</span><span class="n">callSuper</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
+<span class="nd">@Data</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JWTUserDetail</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 登陆用户编号
+     */</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">userId</span><span class="o">;</span>
+    <span class="cm">/**
+     * 登陆用户账户名称(可能为手机号邮箱或者名称用户维度唯一)
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">loginName</span><span class="o">;</span>
+    <span class="cm">/**
+     * 登陆用户类型
+     */</span>
+    <span class="kd">private</span> <span class="nc">UserType</span> <span class="n">userType</span><span class="o">;</span>
+    <span class="cm">/**
+     * 登陆用户凭证
+     */</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">jwtToken</span><span class="o">;</span>
+    <span class="cm">/**
+     * 登陆时间
+     */</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">loginTime</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">enum</span> <span class="nc">UserType</span> <span class="o">{</span>
+        <span class="nc">User</span><span class="o">(</span><span class="s">"USER"</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span>
+        <span class="nc">Operator</span><span class="o">(</span><span class="s">"OPT"</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span>
+        <span class="nc">Erp</span><span class="o">(</span><span class="s">"ERP"</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="nf">UserType</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="nc">UserType</span> <span class="n">c</span> <span class="o">:</span> <span class="nc">UserType</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getIndex</span><span class="o">()</span> <span class="o">==</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getIndex</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">index</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">JWTUserDetail</span> <span class="nf">fromJson</span><span class="o">(</span><span class="nc">String</span> <span class="n">json</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">JSONObject</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="nc">JWTUserDetail</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toJson</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">JSONObject</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><a href="https://github.com/Senssic/sc-whorl/tree/master/sc-whorl-web/src/main/java/sc/whorl/system/config/jwt">参考链接</a></p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-12T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -358,7 +605,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/mark/website">Mark web site</a></div><div class="next"><span>NEXT</span><a href="/mark/website">Mark web site</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/goodjavacode/redis">redis key设计</a></div><div class="next"><span>NEXT</span><a href="/codedesign/vo">java中VO的使用(VO视图对象)</a></div></div></div>
 
 </div>
 
