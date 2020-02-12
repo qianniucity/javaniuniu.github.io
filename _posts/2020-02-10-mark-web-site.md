@@ -11,4 +11,7 @@ sidebar:
 3. [JAVA VO、DTO、DO、PO的概念、区别和用处](https://blog.csdn.net/Thousa_Ho/article/details/73196347)
 4. [Bean转换工具DozerBeanMapper](https://blog.csdn.net/weixin_41835612/article/details/83775374)
 5. [druid 参数配置详解](https://www.cnblogs.com/halberd-lee/p/11304790.html)
-6. [ThreadLocal](https://www.jianshu.com/p/3c5d7f09dfbd)
+6. **ThreadLocal** 是一个线程内部的存储类，可以在指定线程内存储数据，数据存储以后，只有指定线程可以得到存储数据 (https://www.jianshu.com/p/3c5d7f09dfbd)
+7. [mysql视图](https://blog.csdn.net/king101125s/article/details/104228364)
+8. [Java范型说明参考](https://www.runoob.com/java/java-generics.html)
+9. 范型 (MyMapper<T> extends Mapper<T>, MySqlMapper<T>) [源码参考](https://github.com/Senssic/sc-whorl/blob/master/sc-whorl-web/src/main/java/sc/whorl/system/commons/MyMapper.java)
