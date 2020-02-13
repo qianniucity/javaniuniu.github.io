@@ -1,0 +1,178 @@
+I"$C<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">commons</span><span class="o">.</span><span class="na">preventresubmit</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.commons.lang3.StringUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.commons.lang3.concurrent.BasicThreadFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.AutoConfigureAfter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.redis.connection.RedisStringCommands</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.redis.core.RedisCallback</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.redis.core.StringRedisTemplate</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.redis.core.types.Expiration</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.concurrent.ScheduledExecutorService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.ScheduledThreadPoolExecutor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.regex.Pattern</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 基于redis的分布式锁
+ * // TODO 基于redis的分布式锁
+ */</span>
+<span class="nd">@Configuration</span>
+<span class="nd">@AutoConfigureAfter</span><span class="o">(</span><span class="nc">RedisAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RedisLockHelper</span> <span class="o">{</span>
+
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DELIMITER</span> <span class="o">=</span> <span class="s">"|"</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * 如果要求比较高可以通过注入的方式分配
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ScheduledExecutorService</span> <span class="no">EXECUTOR_SERVICE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ScheduledThreadPoolExecutor</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span>
+            <span class="k">new</span> <span class="nc">BasicThreadFactory</span><span class="o">.</span><span class="na">Builder</span><span class="o">().</span><span class="na">namingPattern</span><span class="o">(</span><span class="s">"sen-unit-schedule-pool-%d"</span><span class="o">).</span><span class="na">daemon</span><span class="o">(</span><span class="kc">true</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
+
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">StringRedisTemplate</span> <span class="n">stringRedisTemplate</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">RedisLockHelper</span><span class="o">(</span><span class="nc">StringRedisTemplate</span> <span class="n">stringRedisTemplate</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="na">stringRedisTemplate</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取锁（存在死锁风险）
+     *
+     * @param lockKey
+     *         lockKey
+     * @param value
+     *         value
+     * @param time
+     *         超时时间
+     * @param unit
+     *         过期单位
+     * @return true or false
+     */</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">tryLock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">value</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">time</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">execute</span><span class="o">((</span><span class="nc">RedisCallback</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;)</span> <span class="n">connection</span> <span class="o">-&gt;</span> <span class="n">connection</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">lockKey</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(),</span> <span class="n">value</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(),</span> <span class="nc">Expiration</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">time</span><span class="o">,</span> <span class="n">unit</span><span class="o">),</span> <span class="nc">RedisStringCommands</span><span class="o">.</span><span class="na">SetOption</span><span class="o">.</span><span class="na">SET_IF_ABSENT</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 删除对应的key参数
+     *
+     * @param lockKey
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">unlock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">lockKey</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * *****************************************************************************************************
+     * 华丽的分割线
+     * *****************************************************************************************************
+     */</span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="cm">/**
+     * 获取锁
+     *
+     * @param lockKey
+     *         lockKey
+     * @param uuid
+     *         UUID
+     * @param timeout
+     *         超时时间
+     * @param unit
+     *         过期单位
+     * @return true or false
+     */</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">lock</span><span class="o">(</span><span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">,</span> <span class="kt">long</span> <span class="n">timeout</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">long</span> <span class="n">milliseconds</span> <span class="o">=</span> <span class="nc">Expiration</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">timeout</span><span class="o">,</span> <span class="n">unit</span><span class="o">).</span><span class="na">getExpirationTimeInMilliseconds</span><span class="o">();</span>
+        <span class="kt">boolean</span> <span class="n">success</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setIfAbsent</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="n">milliseconds</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELIMITER</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">success</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">expire</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">timeout</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">oldVal</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">getAndSet</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="n">milliseconds</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELIMITER</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">);</span>
+            <span class="kd">final</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">oldValues</span> <span class="o">=</span> <span class="n">oldVal</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="nc">Pattern</span><span class="o">.</span><span class="na">quote</span><span class="o">(</span><span class="no">DELIMITER</span><span class="o">));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">oldValues</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">success</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 立即释放锁
+     * @see &lt;a href="http://redis.io/commands/set"&gt;Redis Documentation: SET&lt;/a&gt;
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">unlock</span><span class="o">(</span><span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">unlock</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 延迟unlock
+     *
+     * @param lockKey
+     *         key
+     * @param uuid
+     *         client(最好是唯一键的)
+     * @param delayTime
+     *         延迟时间
+     * @param unit
+     *         时间单位
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">unlock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">,</span> <span class="kt">long</span> <span class="n">delayTime</span><span class="o">,</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">lockKey</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">delayTime</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">doUnlock</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">uuid</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="no">EXECUTOR_SERVICE</span><span class="o">.</span><span class="na">schedule</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+                <span class="n">doUnlock</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">uuid</span><span class="o">);</span>
+            <span class="o">},</span> <span class="n">delayTime</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * @param lockKey
+     *         key
+     * @param uuid
+     *         client(最好是唯一键的)
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">doUnlock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">val</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="n">lockKey</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">values</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="nc">Pattern</span><span class="o">.</span><span class="na">quote</span><span class="o">(</span><span class="no">DELIMITER</span><span class="o">));</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">values</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">uuid</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">values</span><span class="o">[</span><span class="mi">1</span><span class="o">]))</span> <span class="o">{</span>
+            <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">lockKey</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>可参考文档</p>
+<ul>
+  <li><a href="https://blog.csdn.net/syilt/article/details/100039332">使用Redis实现分布式lock</a></li>
+  <li><a href="https://www.cnblogs.com/fixzd/p/9479970.html">redis系列：基于redis的分布式锁</a></li>
+</ul>
+:ET

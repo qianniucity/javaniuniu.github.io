@@ -5,6 +5,8 @@ tags: mark
 sidebar:
   nav: docs-en-todo
 ---
+参考项目 [sc-whorl](https://github.com/Senssic/sc-whorl)
+一句话解释
 
 1. **logback** `继承自 log4j`，它建立在有十年工业经验的日志系统之上。它 `比其它所有的日志系统更快并且更小`，包含了许多独特并且有用的特性。[详细参考文档](http://www.logback.cn)
 2. **领域驱动设计实践** 领域驱动设计将软件系统分为四层：基础结构层、领域层、应用层和表现层。[参考，领域驱动设计实践（一，二，三）](https://www.cnblogs.com/daxnet/archive/2010/07/07/1772584.html)
@@ -15,3 +17,12 @@ sidebar:
 7. [mysql视图](https://blog.csdn.net/king101125s/article/details/104228364)
 8. [Java范型说明参考](https://www.runoob.com/java/java-generics.html)
 9. 范型 (MyMapper<T> extends Mapper<T>, MySqlMapper<T>) [源码参考](https://github.com/Senssic/sc-whorl/blob/master/sc-whorl-web/src/main/java/sc/whorl/system/commons/MyMapper.java)
+10. 通过Example提供的方法实现条件查询，替代mapper.xml中的条件查询 [tk.mybatis.Example的用法](https://blog.csdn.net/u011919791/article/details/53941568?utm_source=blogxgwz0) [tkmybatis通用mapper实现在使用Example进行查询的几种方式](https://blog.csdn.net/maicose/article/details/88670974)
+11. [使用Redis实现分布式lock](https://blog.csdn.net/syilt/article/details/100039332)
+12. [redis系列：基于redis的分布式锁](https://www.cnblogs.com/fixzd/p/9479970.html)
+13. final修饰的参数，只能用这个参数的值，你不能修改它[JAVA方法中的参数用final来修饰的原因](https://www.cnblogs.com/gmq-sh/p/8431960.html)
+14. ApplicationContextAware 用于获取 spring 上下文 [ApplicationContextAware使用理解](https://www.jianshu.com/p/4c0723615a52)
+15. Environment 用来表示整个应用运行时的环境，为了更形象地理解Environment，你可以把Spring应用的运行时简单地想象成两个部分：一个是Spring应用本身，一个是Spring应用所处的环境 [Spring--Environment类](https://www.jianshu.com/p/5f10192eb958)
+16. opsForValue含大量已不同的方式插入数据到redis  [RedisTemplate之opsForValue使用说明](https://blog.csdn.net/aoxiangzhe/article/details/93164823)
+17. expire是设置redis过期时间的命令 [redis之expire命令详解](https://blog.csdn.net/zhaozhirongfree1111/article/details/84982858)
+18. Pattern，正则表达式的编译表示，操作字符序列的利器 [Java字符序列Pattern](https://www.cnblogs.com/aniao/p/9351534.html)

@@ -18,3 +18,6 @@ sidebar:
 - @Log4j/@Slf4j ： 注在类上，提供对应的 Logger 对象，变量名为 log   ，private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 4. @Value 给属性赋值 [@Value注入](https://www.cnblogs.com/wangbin2188/p/9014837.html)
+5. @Target注解用法  [取值(ElementType)有](https://www.cnblogs.com/unknows/p/10261539.html)
+6. @Retention(RetentionPolicy.RUNTIME)  解不仅被保存到class文件中，jvm加载class文件之后，仍然存在 [RetentionPolicy.RUNTIME](https://www.cnblogs.com/a8457013/p/9965551.html)
+7. Java自定义注解用在请求拦截中比较常用 [Java自定义注解](https://www.cnblogs.com/jajian/p/9695055.html)
