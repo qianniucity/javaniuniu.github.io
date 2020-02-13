@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-02-13T17:26:06+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-02-13T20:43:43+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
 </subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">基于redis的分布式锁</title><link href="http://localhost:4000/goodjavacode/redis/distributed" rel="alternate" type="text/html" title="基于redis的分布式锁" /><published>2020-02-13T00:00:00+08:00</published><updated>2020-02-13T00:00:00+08:00</updated><id>http://localhost:4000/goodjavacode/redis/redis-distributed</id><content type="html" xml:base="http://localhost:4000/goodjavacode/redis/distributed">&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;whorl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;commons&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;preventresubmit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
 &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.apache.commons.lang3.StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -175,7 +175,7 @@
 &lt;ul&gt;
   &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/syilt/article/details/100039332&quot;&gt;使用Redis实现分布式lock&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/fixzd/p/9479970.html&quot;&gt;redis系列：基于redis的分布式锁&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="code" /><summary type="html">package sc.whorl.system.commons.preventresubmit; import org.apache.commons.lang3.StringUtils; import org.apache.commons.lang3.concurrent.BasicThreadFactory; import org.springframework.boot.autoconfigure.AutoConfigureAfter; import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration; import org.springframework.context.annotation.Configuration; import org.springframework.data.redis.connection.RedisStringCommands; import org.springframework.data.redis.core.RedisCallback; import org.springframework.data.redis.core.StringRedisTemplate; import org.springframework.data.redis.core.types.Expiration; import java.util.concurrent.ScheduledExecutorService; import java.util.concurrent.ScheduledThreadPoolExecutor; import java.util.concurrent.TimeUnit; import java.util.regex.Pattern; /** * 基于redis的分布式锁 * // TODO 基于redis的分布式锁 */ @Configuration @AutoConfigureAfter(RedisAutoConfiguration.class) public class RedisLockHelper { private static final String DELIMITER = &quot;|&quot;; /** * 如果要求比较高可以通过注入的方式分配 */ private static final ScheduledExecutorService EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(10, new BasicThreadFactory.Builder().namingPattern(&quot;sen-unit-schedule-pool-%d&quot;).daemon(true).build()); private final StringRedisTemplate stringRedisTemplate; public RedisLockHelper(StringRedisTemplate stringRedisTemplate) { this.stringRedisTemplate = stringRedisTemplate; } /** * 获取锁（存在死锁风险） * * @param lockKey * lockKey * @param value * value * @param time * 超时时间 * @param unit * 过期单位 * @return true or false */ public boolean tryLock(final String lockKey, final String value, final long time, final TimeUnit unit) { return stringRedisTemplate.execute((RedisCallback&amp;lt;Boolean&amp;gt;) connection -&amp;gt; connection.set(lockKey.getBytes(), value.getBytes(), Expiration.from(time, unit), RedisStringCommands.SetOption.SET_IF_ABSENT)); } /** * 删除对应的key参数 * * @param lockKey */ public void unlock(final String lockKey) { stringRedisTemplate.delete(lockKey); } /** * ***************************************************************************************************** * 华丽的分割线 * ***************************************************************************************************** */ /** * 获取锁 * * @param lockKey * lockKey * @param uuid * UUID * @param timeout * 超时时间 * @param unit * 过期单位 * @return true or false */ public boolean lock(String lockKey, final String uuid, long timeout, final TimeUnit unit) { final long milliseconds = Expiration.from(timeout, unit).getExpirationTimeInMilliseconds(); boolean success = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, (System.currentTimeMillis() + milliseconds) + DELIMITER + uuid); if (success) { stringRedisTemplate.expire(lockKey, timeout, TimeUnit.SECONDS); } else { String oldVal = stringRedisTemplate.opsForValue().getAndSet(lockKey, (System.currentTimeMillis() + milliseconds) + DELIMITER + uuid); final String[] oldValues = oldVal.split(Pattern.quote(DELIMITER)); if (Long.parseLong(oldValues[0]) + 1 &amp;lt;= System.currentTimeMillis()) { return true; } } return success; } /** * 立即释放锁 * @see &amp;lt;a href=&quot;http://redis.io/commands/set&quot;&amp;gt;Redis Documentation: SET&amp;lt;/a&amp;gt; */ public void unlock(String lockKey, String value) { unlock(lockKey, value, 0, TimeUnit.MILLISECONDS); } /** * 延迟unlock * * @param lockKey * key * @param uuid * client(最好是唯一键的) * @param delayTime * 延迟时间 * @param unit * 时间单位 */ public void unlock(final String lockKey, final String uuid, long delayTime, TimeUnit unit) { if (StringUtils.isEmpty(lockKey)) { return; } if (delayTime &amp;lt;= 0) { doUnlock(lockKey, uuid); } else { EXECUTOR_SERVICE.schedule(() -&amp;gt; { doUnlock(lockKey, uuid); }, delayTime, unit); } } /** * @param lockKey * key * @param uuid * client(最好是唯一键的) */ private void doUnlock(final String lockKey, final String uuid) { String val = stringRedisTemplate.opsForValue().get(lockKey); final String[] values = val.split(Pattern.quote(DELIMITER)); if (values.length &amp;lt;= 0) { return; } if (uuid.equals(values[1])) { stringRedisTemplate.delete(lockKey); } } } 可参考文档 使用Redis实现分布式lock redis系列：基于redis的分布式锁</summary></entry><entry><title type="html">使用Redis实现分布式lock</title><link href="http://localhost:4000/goodjavacode/redis/distributed/2" rel="alternate" type="text/html" title="使用Redis实现分布式lock" /><published>2020-02-13T00:00:00+08:00</published><updated>2020-02-13T00:00:00+08:00</updated><id>http://localhost:4000/goodjavacode/redis/distributed/redis-distributed2</id><content type="html" xml:base="http://localhost:4000/goodjavacode/redis/distributed/2">&lt;pre&gt;&lt;code class=&quot;language-Java&quot;&gt;/**
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="code" /><summary type="html">package sc.whorl.system.commons.preventresubmit; import org.apache.commons.lang3.StringUtils; import org.apache.commons.lang3.concurrent.BasicThreadFactory; import org.springframework.boot.autoconfigure.AutoConfigureAfter; import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration; import org.springframework.context.annotation.Configuration; import org.springframework.data.redis.connection.RedisStringCommands; import org.springframework.data.redis.core.RedisCallback; import org.springframework.data.redis.core.StringRedisTemplate; import org.springframework.data.redis.core.types.Expiration; import java.util.concurrent.ScheduledExecutorService; import java.util.concurrent.ScheduledThreadPoolExecutor; import java.util.concurrent.TimeUnit; import java.util.regex.Pattern; /** * 基于redis的分布式锁 * // TODO 基于redis的分布式锁 */ @Configuration @AutoConfigureAfter(RedisAutoConfiguration.class) public class RedisLockHelper { private static final String DELIMITER = &quot;|&quot;; /** * 如果要求比较高可以通过注入的方式分配 */ private static final ScheduledExecutorService EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(10, new BasicThreadFactory.Builder().namingPattern(&quot;sen-unit-schedule-pool-%d&quot;).daemon(true).build()); private final StringRedisTemplate stringRedisTemplate; public RedisLockHelper(StringRedisTemplate stringRedisTemplate) { this.stringRedisTemplate = stringRedisTemplate; } /** * 获取锁（存在死锁风险） * * @param lockKey * lockKey * @param value * value * @param time * 超时时间 * @param unit * 过期单位 * @return true or false */ public boolean tryLock(final String lockKey, final String value, final long time, final TimeUnit unit) { return stringRedisTemplate.execute((RedisCallback&amp;lt;Boolean&amp;gt;) connection -&amp;gt; connection.set(lockKey.getBytes(), value.getBytes(), Expiration.from(time, unit), RedisStringCommands.SetOption.SET_IF_ABSENT)); } /** * 删除对应的key参数 * * @param lockKey */ public void unlock(final String lockKey) { stringRedisTemplate.delete(lockKey); } /** * ***************************************************************************************************** * 华丽的分割线 * ***************************************************************************************************** */ /** * 获取锁 * * @param lockKey * lockKey * @param uuid * UUID * @param timeout * 超时时间 * @param unit * 过期单位 * @return true or false */ public boolean lock(String lockKey, final String uuid, long timeout, final TimeUnit unit) { final long milliseconds = Expiration.from(timeout, unit).getExpirationTimeInMilliseconds(); boolean success = stringRedisTemplate.opsForValue().setIfAbsent(lockKey, (System.currentTimeMillis() + milliseconds) + DELIMITER + uuid); if (success) { stringRedisTemplate.expire(lockKey, timeout, TimeUnit.SECONDS); } else { String oldVal = stringRedisTemplate.opsForValue().getAndSet(lockKey, (System.currentTimeMillis() + milliseconds) + DELIMITER + uuid); final String[] oldValues = oldVal.split(Pattern.quote(DELIMITER)); if (Long.parseLong(oldValues[0]) + 1 &amp;lt;= System.currentTimeMillis()) { return true; } } return success; } /** * 立即释放锁 * @see &amp;lt;a href=&quot;http://redis.io/commands/set&quot;&amp;gt;Redis Documentation: SET&amp;lt;/a&amp;gt; */ public void unlock(String lockKey, String value) { unlock(lockKey, value, 0, TimeUnit.MILLISECONDS); } /** * 延迟unlock * * @param lockKey * key * @param uuid * client(最好是唯一键的) * @param delayTime * 延迟时间 * @param unit * 时间单位 */ public void unlock(final String lockKey, final String uuid, long delayTime, TimeUnit unit) { if (StringUtils.isEmpty(lockKey)) { return; } if (delayTime &amp;lt;= 0) { doUnlock(lockKey, uuid); } else { EXECUTOR_SERVICE.schedule(() -&amp;gt; { doUnlock(lockKey, uuid); }, delayTime, unit); } } /** * @param lockKey * key * @param uuid * client(最好是唯一键的) */ private void doUnlock(final String lockKey, final String uuid) { String val = stringRedisTemplate.opsForValue().get(lockKey); final String[] values = val.split(Pattern.quote(DELIMITER)); if (values.length &amp;lt;= 0) { return; } if (uuid.equals(values[1])) { stringRedisTemplate.delete(lockKey); } } } 可参考文档 使用Redis实现分布式lock redis系列：基于redis的分布式锁</summary></entry><entry><title type="html">使用Redis实现分布式lock</title><link href="http://localhost:4000/goodjavacode/redis/distributed/2" rel="alternate" type="text/html" title="使用Redis实现分布式lock" /><published>2020-02-13T00:00:00+08:00</published><updated>2020-02-13T00:00:00+08:00</updated><id>http://localhost:4000/goodjavacode/redis/distributed/redis-distributed2</id><content type="html" xml:base="http://localhost:4000/goodjavacode/redis/distributed/2">&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
  * Redis分布式锁
  * 使用 SET resource-name anystring NX EX max-lock-time 实现
  * &amp;lt;p&amp;gt;
@@ -200,193 +200,193 @@
  * @author zsy
  * @version 1.0
  * @date 2019年8月22日 22:21:27
- */
-public class RedisLock {
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RedisLock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
-    private static Logger logger = LoggerFactory.getLogger(RedisLock.class);
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Logger&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;LoggerFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLogger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 
-    private RedisTemplate redisTemplate;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RedisTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 将key 的值设为value ，当且仅当key 不存在，等效于 SETNX。
-     */
-    public static final String NX = &quot;NX&quot;;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;NX&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * seconds — 以秒为单位设置 key 的过期时间，等效于EXPIRE key seconds
-     */
-    public static final String EX = &quot;EX&quot;;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EX&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;EX&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 调用set后的返回值
-     */
-    public static final String OK = &quot;OK&quot;;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;OK&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;OK&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 默认请求锁的超时时间(ms 毫秒)
-     */
-    private static final long TIME_OUT = 100;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;TIME_OUT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 默认锁的有效时间(s)
-     */
-    public static final int EXPIRE = 60;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EXPIRE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 解锁的lua脚本
-     */
-    public static final String UNLOCK_LUA;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;UNLOCK_LUA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    static {
-        StringBuilder sb = new StringBuilder();
-        sb.append(&quot;if redis.call(\&quot;get\&quot;,KEYS[1]) == ARGV[1] &quot;);
-        sb.append(&quot;then &quot;);
-        sb.append(&quot;    return redis.call(\&quot;del\&quot;,KEYS[1]) &quot;);
-        sb.append(&quot;else &quot;);
-        sb.append(&quot;    return 0 &quot;);
-        sb.append(&quot;end &quot;);
-        UNLOCK_LUA = sb.toString();
-    }
+    &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;StringBuilder&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;if redis.call(\&quot;get\&quot;,KEYS[1]) == ARGV[1] &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;then &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;    return redis.call(\&quot;del\&quot;,KEYS[1]) &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;else &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;    return 0 &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;end &quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;no&quot;&gt;UNLOCK_LUA&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sb&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 锁标志对应的key
-     */
-    private String lockKey;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 记录到日志的锁标志对应的key
-     */
-    private String lockKeyLog = &quot;&quot;;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 锁对应的值
-     */
-    private String lockValue;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 锁的有效时间(s)
-     */
-    private int expireTime = EXPIRE;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EXPIRE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 请求锁的超时时间(ms)
-     */
-    private long timeOut = TIME_OUT;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;TIME_OUT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 锁标记
-     */
-    private volatile boolean locked = false;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;volatile&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-    final Random random = new Random();
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Random&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 使用默认的锁过期时间和请求锁的超时时间
      *
      * @param redisTemplate
      * @param lockKey       锁的key（Redis的Key）
-     */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey) {
-        this.redisTemplate = redisTemplate;
-        this.lockKey = lockKey + &quot;_lock&quot;;
-    }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RedisLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;redisTemplate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lockKey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;_lock&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 使用默认的请求锁的超时时间，指定锁的过期时间
      *
      * @param redisTemplate
      * @param lockKey       锁的key（Redis的Key）
      * @param expireTime    锁的过期时间(单位：秒)
-     */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey, int expireTime) {
-        this(redisTemplate, lockKey);
-        this.expireTime = expireTime;
-    }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RedisLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;expireTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 使用默认的锁的过期时间，指定请求锁的超时时间
      *
      * @param redisTemplate
      * @param lockKey       锁的key（Redis的Key）
      * @param timeOut       请求锁的超时时间(单位：毫秒)
-     */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey, long timeOut) {
-        this(redisTemplate, lockKey);
-        this.timeOut = timeOut;
-    }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RedisLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;timeOut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 锁的过期时间和请求锁的超时时间都是用指定的值
      *
      * @param redisTemplate
      * @param lockKey       锁的key（Redis的Key）
      * @param expireTime    锁的过期时间(单位：秒)
      * @param timeOut       请求锁的超时时间(单位：毫秒)
-     */
-    public RedisLock(RedisTemplate redisTemplate, String lockKey, int expireTime, long timeOut) {
-        this(redisTemplate, lockKey, expireTime);
-        this.timeOut = timeOut;
-    }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RedisLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisTemplate&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;timeOut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 尝试获取锁 超时返回
      *
      * @return
-     */
-    public boolean tryLock() {
-        // 生成随机key
-        lockValue = UUID.randomUUID().toString();
-        // 请求锁超时时间，纳秒
-        long timeout = timeOut * 1000000;
-        // 系统当前时间，纳秒
-        long nowTime = System.nanoTime();
-        while ((System.nanoTime() - nowTime) &amp;lt; timeout) {
-            if (OK.equalsIgnoreCase(this.set(lockKey, lockValue, expireTime))) {
-                locked = true;
-                // 上锁成功结束请求
-                return locked;
-            }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;tryLock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 生成随机key&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;UUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;randomUUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 请求锁超时时间，纳秒&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 系统当前时间，纳秒&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nowTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nanoTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nanoTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nowTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equalsIgnoreCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;c1&quot;&gt;// 上锁成功结束请求&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-            // 每次请求等待一段时间
-            seleep(10, 50000);
-        }
-        return locked;
-    }
+            &lt;span class=&quot;c1&quot;&gt;// 每次请求等待一段时间&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;seleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 尝试获取锁 立即返回
      *
      * @return 是否成功获得锁
-     */
-    public boolean lock() {
-        lockValue = UUID.randomUUID().toString();
-        //不存在则添加 且设置过期时间（单位ms）
-        String result = set(lockKey, lockValue, expireTime);
-        locked = OK.equalsIgnoreCase(result);
-        return locked;
-    }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;UUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;randomUUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//不存在则添加 且设置过期时间（单位ms）&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equalsIgnoreCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 以阻塞方式的获取锁
      *
      * @return 是否成功获得锁
-     */
-    public boolean lockBlock() {
-        lockValue = UUID.randomUUID().toString();
-        while (true) {
-            //不存在则添加 且设置过期时间（单位ms）
-            String result = set(lockKey, lockValue, expireTime);
-            if (OK.equalsIgnoreCase(result)) {
-                locked = true;
-                return locked;
-            }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lockBlock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;UUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;randomUUID&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;//不存在则添加 且设置过期时间（单位ms）&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;equalsIgnoreCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-            // 每次请求等待一段时间
-            seleep(10, 50000);
-        }
-    }
+            &lt;span class=&quot;c1&quot;&gt;// 每次请求等待一段时间&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;seleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 解锁
      * &amp;lt;p&amp;gt;
      * 可以通过以下修改，让这个锁实现更健壮：
@@ -394,46 +394,46 @@ public class RedisLock {
      * 不使用固定的字符串作为键的值，而是设置一个不可猜测（non-guessable）的长随机字符串，作为口令串（token）。
      * 不使用 DEL 命令来释放锁，而是发送一个 Lua 脚本，这个脚本只在客户端传入的值和键的口令串相匹配时，才对键进行删除。
      * 这两个改动可以防止持有过期锁的客户端误删现有锁的情况出现。
-     */
-    public Boolean unlock() {
-        // 只有加锁成功并且锁还有效才去释放锁
-        // 只有加锁成功并且锁还有效才去释放锁
-        if (locked) {
-            return (Boolean) redisTemplate.execute(new RedisCallback&amp;lt;Boolean&amp;gt;() {
-                @Override
-                public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-                    Object nativeConnection = connection.getNativeConnection();
-                    Long result = 0L;
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;unlock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 只有加锁成功并且锁还有效才去释放锁&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 只有加锁成功并且锁还有效才去释放锁&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RedisCallback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+                &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doInRedis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisConnection&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DataAccessException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getNativeConnection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                    &lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
-                    List&amp;lt;String&amp;gt; keys = new ArrayList&amp;lt;&amp;gt;();
-                    keys.add(lockKey);
-                    List&amp;lt;String&amp;gt; values = new ArrayList&amp;lt;&amp;gt;();
-                    values.add(lockValue);
+                    &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockKey&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
 
-                    // 集群模式
-                    if (nativeConnection instanceof JedisCluster) {
-                        result = (Long) ((JedisCluster) nativeConnection).eval(UNLOCK_LUA, keys, values);
-                    }
+                    &lt;span class=&quot;c1&quot;&gt;// 集群模式&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JedisCluster&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JedisCluster&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;UNLOCK_LUA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-                    // 单机模式
-                    if (nativeConnection instanceof Jedis) {
-                        result = (Long) ((Jedis) nativeConnection).eval(UNLOCK_LUA, keys, values);
-                    }
+                    &lt;span class=&quot;c1&quot;&gt;// 单机模式&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Jedis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Jedis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;UNLOCK_LUA&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;keys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;values&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-                    if (result == 0 &amp;amp;&amp;amp; !StringUtils.isEmpty(lockKeyLog)) {
-                        logger.info(&quot;Redis分布式锁，解锁{}失败！解锁时间：{}&quot;, lockKeyLog, System.currentTimeMillis());
-                    }
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Redis分布式锁，解锁{}失败！解锁时间：{}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentTimeMillis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+                    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-                    locked = result == 0;
-                    return result == 1;
-                }
-            });
-        }
+                    &lt;span class=&quot;n&quot;&gt;locked&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-        return true;
-    }
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * 重写redisTemplate的set方法
      * &amp;lt;p&amp;gt;
      * 命令 SET resource-name anystring NX EX max-lock-time 是一种在 Redis 中实现锁的简单方法。
@@ -447,69 +447,69 @@ public class RedisLock {
      * @param value   锁里面的值
      * @param seconds 过去时间（秒）
      * @return
-     */
-    private String set(final String key, final String value, final long seconds) {
-        Assert.isTrue(!StringUtils.isEmpty(key), &quot;key不能为空&quot;);
-        return (String) redisTemplate.execute(new RedisCallback&amp;lt;String&amp;gt;() {
-            @Override
-            public String doInRedis(RedisConnection connection) throws DataAccessException {
-                Object nativeConnection = connection.getNativeConnection();
-                String result = null;
-                if (nativeConnection instanceof JedisCommands) {
-                    result = ((JedisCommands) nativeConnection).set(key, value, NX, EX, seconds);
-                }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seconds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Assert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isTrue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;key不能为空&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;redisTemplate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;RedisCallback&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doInRedis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;RedisConnection&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DataAccessException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getNativeConnection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+                &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;instanceof&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JedisCommands&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JedisCommands&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeConnection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;NX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EX&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;seconds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-                if (!StringUtils.isEmpty(lockKeyLog) &amp;amp;&amp;amp; !StringUtils.isEmpty(result)) {
-                    logger.info(&quot;获取锁{}的时间：{}&quot;, lockKeyLog, System.currentTimeMillis());
-                }
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;StringUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;获取锁{}的时间：{}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentTimeMillis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-                return result;
-            }
-        });
-    }
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    /**
+    &lt;span class=&quot;cm&quot;&gt;/**
      * @param millis 毫秒
      * @param nanos  纳秒
      * @Title: seleep
      * @Description: 线程等待时间
      * @author yuhao.wang
-     */
-    private void seleep(long millis, int nanos) {
-        try {
-            Thread.sleep(millis, random.nextInt(nanos));
-        } catch (InterruptedException e) {
-            logger.info(&quot;获取分布式锁休眠被中断：&quot;, e);
-        }
-    }
+     */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;seleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;millis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;millis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nanos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;logger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;获取分布式锁休眠被中断：&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    public String getLockKeyLog() {
-        return lockKeyLog;
-    }
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getLockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    public void setLockKeyLog(String lockKeyLog) {
-        this.lockKeyLog = lockKeyLog;
-    }
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setLockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;lockKeyLog&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lockKeyLog&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    public int getExpireTime() {
-        return expireTime;
-    }
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getExpireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    public void setExpireTime(int expireTime) {
-        this.expireTime = expireTime;
-    }
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setExpireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;expireTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;expireTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    public long getTimeOut() {
-        return timeOut;
-    }
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getTimeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
-    public void setTimeOut(long timeOut) {
-        this.timeOut = timeOut;
-    }
-}
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setTimeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;timeOut&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeOut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 
 
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="code" /><summary type="html">/** * Redis分布式锁 * 使用 SET resource-name anystring NX EX max-lock-time 实现 * &amp;lt;p&amp;gt; * 该方案在 Redis 官方 SET 命令页有详细介绍。 * http://doc.redisfans.com/string/set.html * &amp;lt;p&amp;gt; * 在介绍该分布式锁设计之前，我们先来看一下在从 Redis 2.6.12 开始 SET 提供的新特性， * 命令 SET key value [EX seconds] [PX milliseconds] [NX|XX]，其中： * &amp;lt;p&amp;gt; * EX seconds — 以秒为单位设置 key 的过期时间； * PX milliseconds — 以毫秒为单位设置 key 的过期时间； * NX — 将key 的值设为value ，当且仅当key 不存在，等效于 SETNX。 * XX — 将key 的值设为value ，当且仅当key 存在，等效于 SETEX。 * &amp;lt;p&amp;gt; * 命令 SET resource-name anystring NX EX max-lock-time 是一种在 Redis 中实现锁的简单方法。 * &amp;lt;p&amp;gt; * 客户端执行以上的命令： * &amp;lt;p&amp;gt; * 如果服务器返回 OK ，那么这个客户端获得锁。 * 如果服务器返回 NIL ，那么客户端获取锁失败，可以在稍后再重试。 * * @author zsy * @version 1.0 * @date 2019年8月22日 22:21:27 */ public class RedisLock { private static Logger logger = LoggerFactory.getLogger(RedisLock.class); private RedisTemplate redisTemplate; /** * 将key 的值设为value ，当且仅当key 不存在，等效于 SETNX。 */ public static final String NX = &quot;NX&quot;; /** * seconds — 以秒为单位设置 key 的过期时间，等效于EXPIRE key seconds */ public static final String EX = &quot;EX&quot;; /** * 调用set后的返回值 */ public static final String OK = &quot;OK&quot;; /** * 默认请求锁的超时时间(ms 毫秒) */ private static final long TIME_OUT = 100; /** * 默认锁的有效时间(s) */ public static final int EXPIRE = 60; /** * 解锁的lua脚本 */ public static final String UNLOCK_LUA; static { StringBuilder sb = new StringBuilder(); sb.append(&quot;if redis.call(\&quot;get\&quot;,KEYS[1]) == ARGV[1] &quot;); sb.append(&quot;then &quot;); sb.append(&quot; return redis.call(\&quot;del\&quot;,KEYS[1]) &quot;); sb.append(&quot;else &quot;); sb.append(&quot; return 0 &quot;); sb.append(&quot;end &quot;); UNLOCK_LUA = sb.toString(); } /** * 锁标志对应的key */ private String lockKey; /** * 记录到日志的锁标志对应的key */ private String lockKeyLog = &quot;&quot;; /** * 锁对应的值 */ private String lockValue; /** * 锁的有效时间(s) */ private int expireTime = EXPIRE; /** * 请求锁的超时时间(ms) */ private long timeOut = TIME_OUT; /** * 锁标记 */ private volatile boolean locked = false; final Random random = new Random(); /** * 使用默认的锁过期时间和请求锁的超时时间 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） */ public RedisLock(RedisTemplate redisTemplate, String lockKey) { this.redisTemplate = redisTemplate; this.lockKey = lockKey + &quot;_lock&quot;; } /** * 使用默认的请求锁的超时时间，指定锁的过期时间 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） * @param expireTime 锁的过期时间(单位：秒) */ public RedisLock(RedisTemplate redisTemplate, String lockKey, int expireTime) { this(redisTemplate, lockKey); this.expireTime = expireTime; } /** * 使用默认的锁的过期时间，指定请求锁的超时时间 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） * @param timeOut 请求锁的超时时间(单位：毫秒) */ public RedisLock(RedisTemplate redisTemplate, String lockKey, long timeOut) { this(redisTemplate, lockKey); this.timeOut = timeOut; } /** * 锁的过期时间和请求锁的超时时间都是用指定的值 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） * @param expireTime 锁的过期时间(单位：秒) * @param timeOut 请求锁的超时时间(单位：毫秒) */ public RedisLock(RedisTemplate redisTemplate, String lockKey, int expireTime, long timeOut) { this(redisTemplate, lockKey, expireTime); this.timeOut = timeOut; } /** * 尝试获取锁 超时返回 * * @return */ public boolean tryLock() { // 生成随机key lockValue = UUID.randomUUID().toString(); // 请求锁超时时间，纳秒 long timeout = timeOut * 1000000; // 系统当前时间，纳秒 long nowTime = System.nanoTime(); while ((System.nanoTime() - nowTime) &amp;lt; timeout) { if (OK.equalsIgnoreCase(this.set(lockKey, lockValue, expireTime))) { locked = true; // 上锁成功结束请求 return locked; } // 每次请求等待一段时间 seleep(10, 50000); } return locked; } /** * 尝试获取锁 立即返回 * * @return 是否成功获得锁 */ public boolean lock() { lockValue = UUID.randomUUID().toString(); //不存在则添加 且设置过期时间（单位ms） String result = set(lockKey, lockValue, expireTime); locked = OK.equalsIgnoreCase(result); return locked; } /** * 以阻塞方式的获取锁 * * @return 是否成功获得锁 */ public boolean lockBlock() { lockValue = UUID.randomUUID().toString(); while (true) { //不存在则添加 且设置过期时间（单位ms） String result = set(lockKey, lockValue, expireTime); if (OK.equalsIgnoreCase(result)) { locked = true; return locked; } // 每次请求等待一段时间 seleep(10, 50000); } } /** * 解锁 * &amp;lt;p&amp;gt; * 可以通过以下修改，让这个锁实现更健壮： * &amp;lt;p&amp;gt; * 不使用固定的字符串作为键的值，而是设置一个不可猜测（non-guessable）的长随机字符串，作为口令串（token）。 * 不使用 DEL 命令来释放锁，而是发送一个 Lua 脚本，这个脚本只在客户端传入的值和键的口令串相匹配时，才对键进行删除。 * 这两个改动可以防止持有过期锁的客户端误删现有锁的情况出现。 */ public Boolean unlock() { // 只有加锁成功并且锁还有效才去释放锁 // 只有加锁成功并且锁还有效才去释放锁 if (locked) { return (Boolean) redisTemplate.execute(new RedisCallback&amp;lt;Boolean&amp;gt;() { @Override public Boolean doInRedis(RedisConnection connection) throws DataAccessException { Object nativeConnection = connection.getNativeConnection(); Long result = 0L; List&amp;lt;String&amp;gt; keys = new ArrayList&amp;lt;&amp;gt;(); keys.add(lockKey); List&amp;lt;String&amp;gt; values = new ArrayList&amp;lt;&amp;gt;(); values.add(lockValue); // 集群模式 if (nativeConnection instanceof JedisCluster) { result = (Long) ((JedisCluster) nativeConnection).eval(UNLOCK_LUA, keys, values); } // 单机模式 if (nativeConnection instanceof Jedis) { result = (Long) ((Jedis) nativeConnection).eval(UNLOCK_LUA, keys, values); } if (result == 0 &amp;amp;&amp;amp; !StringUtils.isEmpty(lockKeyLog)) { logger.info(&quot;Redis分布式锁，解锁{}失败！解锁时间：{}&quot;, lockKeyLog, System.currentTimeMillis()); } locked = result == 0; return result == 1; } }); } return true; } /** * 重写redisTemplate的set方法 * &amp;lt;p&amp;gt; * 命令 SET resource-name anystring NX EX max-lock-time 是一种在 Redis 中实现锁的简单方法。 * &amp;lt;p&amp;gt; * 客户端执行以上的命令： * &amp;lt;p&amp;gt; * 如果服务器返回 OK ，那么这个客户端获得锁。 * 如果服务器返回 NIL ，那么客户端获取锁失败，可以在稍后再重试。 * * @param key 锁的Key * @param value 锁里面的值 * @param seconds 过去时间（秒） * @return */ private String set(final String key, final String value, final long seconds) { Assert.isTrue(!StringUtils.isEmpty(key), &quot;key不能为空&quot;); return (String) redisTemplate.execute(new RedisCallback&amp;lt;String&amp;gt;() { @Override public String doInRedis(RedisConnection connection) throws DataAccessException { Object nativeConnection = connection.getNativeConnection(); String result = null; if (nativeConnection instanceof JedisCommands) { result = ((JedisCommands) nativeConnection).set(key, value, NX, EX, seconds); } if (!StringUtils.isEmpty(lockKeyLog) &amp;amp;&amp;amp; !StringUtils.isEmpty(result)) { logger.info(&quot;获取锁{}的时间：{}&quot;, lockKeyLog, System.currentTimeMillis()); } return result; } }); } /** * @param millis 毫秒 * @param nanos 纳秒 * @Title: seleep * @Description: 线程等待时间 * @author yuhao.wang */ private void seleep(long millis, int nanos) { try { Thread.sleep(millis, random.nextInt(nanos)); } catch (InterruptedException e) { logger.info(&quot;获取分布式锁休眠被中断：&quot;, e); } } public String getLockKeyLog() { return lockKeyLog; } public void setLockKeyLog(String lockKeyLog) { this.lockKeyLog = lockKeyLog; } public int getExpireTime() { return expireTime; } public void setExpireTime(int expireTime) { this.expireTime = expireTime; } public long getTimeOut() { return timeOut; } public void setTimeOut(long timeOut) { this.timeOut = timeOut; } }</summary></entry><entry><title type="html">redis key设计</title><link href="http://localhost:4000/goodjavacode/redis" rel="alternate" type="text/html" title="redis key设计" /><published>2020-02-12T00:00:00+08:00</published><updated>2020-02-12T00:00:00+08:00</updated><id>http://localhost:4000/goodjavacode/redis-keyset</id><content type="html" xml:base="http://localhost:4000/goodjavacode/redis">&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/** -------------------key相关操作--------------------- */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="code" /><summary type="html">/** * Redis分布式锁 * 使用 SET resource-name anystring NX EX max-lock-time 实现 * &amp;lt;p&amp;gt; * 该方案在 Redis 官方 SET 命令页有详细介绍。 * http://doc.redisfans.com/string/set.html * &amp;lt;p&amp;gt; * 在介绍该分布式锁设计之前，我们先来看一下在从 Redis 2.6.12 开始 SET 提供的新特性， * 命令 SET key value [EX seconds] [PX milliseconds] [NX|XX]，其中： * &amp;lt;p&amp;gt; * EX seconds — 以秒为单位设置 key 的过期时间； * PX milliseconds — 以毫秒为单位设置 key 的过期时间； * NX — 将key 的值设为value ，当且仅当key 不存在，等效于 SETNX。 * XX — 将key 的值设为value ，当且仅当key 存在，等效于 SETEX。 * &amp;lt;p&amp;gt; * 命令 SET resource-name anystring NX EX max-lock-time 是一种在 Redis 中实现锁的简单方法。 * &amp;lt;p&amp;gt; * 客户端执行以上的命令： * &amp;lt;p&amp;gt; * 如果服务器返回 OK ，那么这个客户端获得锁。 * 如果服务器返回 NIL ，那么客户端获取锁失败，可以在稍后再重试。 * * @author zsy * @version 1.0 * @date 2019年8月22日 22:21:27 */ public class RedisLock { private static Logger logger = LoggerFactory.getLogger(RedisLock.class); private RedisTemplate redisTemplate; /** * 将key 的值设为value ，当且仅当key 不存在，等效于 SETNX。 */ public static final String NX = &quot;NX&quot;; /** * seconds — 以秒为单位设置 key 的过期时间，等效于EXPIRE key seconds */ public static final String EX = &quot;EX&quot;; /** * 调用set后的返回值 */ public static final String OK = &quot;OK&quot;; /** * 默认请求锁的超时时间(ms 毫秒) */ private static final long TIME_OUT = 100; /** * 默认锁的有效时间(s) */ public static final int EXPIRE = 60; /** * 解锁的lua脚本 */ public static final String UNLOCK_LUA; static { StringBuilder sb = new StringBuilder(); sb.append(&quot;if redis.call(\&quot;get\&quot;,KEYS[1]) == ARGV[1] &quot;); sb.append(&quot;then &quot;); sb.append(&quot; return redis.call(\&quot;del\&quot;,KEYS[1]) &quot;); sb.append(&quot;else &quot;); sb.append(&quot; return 0 &quot;); sb.append(&quot;end &quot;); UNLOCK_LUA = sb.toString(); } /** * 锁标志对应的key */ private String lockKey; /** * 记录到日志的锁标志对应的key */ private String lockKeyLog = &quot;&quot;; /** * 锁对应的值 */ private String lockValue; /** * 锁的有效时间(s) */ private int expireTime = EXPIRE; /** * 请求锁的超时时间(ms) */ private long timeOut = TIME_OUT; /** * 锁标记 */ private volatile boolean locked = false; final Random random = new Random(); /** * 使用默认的锁过期时间和请求锁的超时时间 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） */ public RedisLock(RedisTemplate redisTemplate, String lockKey) { this.redisTemplate = redisTemplate; this.lockKey = lockKey + &quot;_lock&quot;; } /** * 使用默认的请求锁的超时时间，指定锁的过期时间 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） * @param expireTime 锁的过期时间(单位：秒) */ public RedisLock(RedisTemplate redisTemplate, String lockKey, int expireTime) { this(redisTemplate, lockKey); this.expireTime = expireTime; } /** * 使用默认的锁的过期时间，指定请求锁的超时时间 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） * @param timeOut 请求锁的超时时间(单位：毫秒) */ public RedisLock(RedisTemplate redisTemplate, String lockKey, long timeOut) { this(redisTemplate, lockKey); this.timeOut = timeOut; } /** * 锁的过期时间和请求锁的超时时间都是用指定的值 * * @param redisTemplate * @param lockKey 锁的key（Redis的Key） * @param expireTime 锁的过期时间(单位：秒) * @param timeOut 请求锁的超时时间(单位：毫秒) */ public RedisLock(RedisTemplate redisTemplate, String lockKey, int expireTime, long timeOut) { this(redisTemplate, lockKey, expireTime); this.timeOut = timeOut; } /** * 尝试获取锁 超时返回 * * @return */ public boolean tryLock() { // 生成随机key lockValue = UUID.randomUUID().toString(); // 请求锁超时时间，纳秒 long timeout = timeOut * 1000000; // 系统当前时间，纳秒 long nowTime = System.nanoTime(); while ((System.nanoTime() - nowTime) &amp;lt; timeout) { if (OK.equalsIgnoreCase(this.set(lockKey, lockValue, expireTime))) { locked = true; // 上锁成功结束请求 return locked; } // 每次请求等待一段时间 seleep(10, 50000); } return locked; } /** * 尝试获取锁 立即返回 * * @return 是否成功获得锁 */ public boolean lock() { lockValue = UUID.randomUUID().toString(); //不存在则添加 且设置过期时间（单位ms） String result = set(lockKey, lockValue, expireTime); locked = OK.equalsIgnoreCase(result); return locked; } /** * 以阻塞方式的获取锁 * * @return 是否成功获得锁 */ public boolean lockBlock() { lockValue = UUID.randomUUID().toString(); while (true) { //不存在则添加 且设置过期时间（单位ms） String result = set(lockKey, lockValue, expireTime); if (OK.equalsIgnoreCase(result)) { locked = true; return locked; } // 每次请求等待一段时间 seleep(10, 50000); } } /** * 解锁 * &amp;lt;p&amp;gt; * 可以通过以下修改，让这个锁实现更健壮： * &amp;lt;p&amp;gt; * 不使用固定的字符串作为键的值，而是设置一个不可猜测（non-guessable）的长随机字符串，作为口令串（token）。 * 不使用 DEL 命令来释放锁，而是发送一个 Lua 脚本，这个脚本只在客户端传入的值和键的口令串相匹配时，才对键进行删除。 * 这两个改动可以防止持有过期锁的客户端误删现有锁的情况出现。 */ public Boolean unlock() { // 只有加锁成功并且锁还有效才去释放锁 // 只有加锁成功并且锁还有效才去释放锁 if (locked) { return (Boolean) redisTemplate.execute(new RedisCallback&amp;lt;Boolean&amp;gt;() { @Override public Boolean doInRedis(RedisConnection connection) throws DataAccessException { Object nativeConnection = connection.getNativeConnection(); Long result = 0L; List&amp;lt;String&amp;gt; keys = new ArrayList&amp;lt;&amp;gt;(); keys.add(lockKey); List&amp;lt;String&amp;gt; values = new ArrayList&amp;lt;&amp;gt;(); values.add(lockValue); // 集群模式 if (nativeConnection instanceof JedisCluster) { result = (Long) ((JedisCluster) nativeConnection).eval(UNLOCK_LUA, keys, values); } // 单机模式 if (nativeConnection instanceof Jedis) { result = (Long) ((Jedis) nativeConnection).eval(UNLOCK_LUA, keys, values); } if (result == 0 &amp;amp;&amp;amp; !StringUtils.isEmpty(lockKeyLog)) { logger.info(&quot;Redis分布式锁，解锁{}失败！解锁时间：{}&quot;, lockKeyLog, System.currentTimeMillis()); } locked = result == 0; return result == 1; } }); } return true; } /** * 重写redisTemplate的set方法 * &amp;lt;p&amp;gt; * 命令 SET resource-name anystring NX EX max-lock-time 是一种在 Redis 中实现锁的简单方法。 * &amp;lt;p&amp;gt; * 客户端执行以上的命令： * &amp;lt;p&amp;gt; * 如果服务器返回 OK ，那么这个客户端获得锁。 * 如果服务器返回 NIL ，那么客户端获取锁失败，可以在稍后再重试。 * * @param key 锁的Key * @param value 锁里面的值 * @param seconds 过去时间（秒） * @return */ private String set(final String key, final String value, final long seconds) { Assert.isTrue(!StringUtils.isEmpty(key), &quot;key不能为空&quot;); return (String) redisTemplate.execute(new RedisCallback&amp;lt;String&amp;gt;() { @Override public String doInRedis(RedisConnection connection) throws DataAccessException { Object nativeConnection = connection.getNativeConnection(); String result = null; if (nativeConnection instanceof JedisCommands) { result = ((JedisCommands) nativeConnection).set(key, value, NX, EX, seconds); } if (!StringUtils.isEmpty(lockKeyLog) &amp;amp;&amp;amp; !StringUtils.isEmpty(result)) { logger.info(&quot;获取锁{}的时间：{}&quot;, lockKeyLog, System.currentTimeMillis()); } return result; } }); } /** * @param millis 毫秒 * @param nanos 纳秒 * @Title: seleep * @Description: 线程等待时间 * @author yuhao.wang */ private void seleep(long millis, int nanos) { try { Thread.sleep(millis, random.nextInt(nanos)); } catch (InterruptedException e) { logger.info(&quot;获取分布式锁休眠被中断：&quot;, e); } } public String getLockKeyLog() { return lockKeyLog; } public void setLockKeyLog(String lockKeyLog) { this.lockKeyLog = lockKeyLog; } public int getExpireTime() { return expireTime; } public void setExpireTime(int expireTime) { this.expireTime = expireTime; } public long getTimeOut() { return timeOut; } public void setTimeOut(long timeOut) { this.timeOut = timeOut; } }</summary></entry><entry><title type="html">redis key设计</title><link href="http://localhost:4000/goodjavacode/redis" rel="alternate" type="text/html" title="redis key设计" /><published>2020-02-12T00:00:00+08:00</published><updated>2020-02-12T00:00:00+08:00</updated><id>http://localhost:4000/goodjavacode/redis-keyset</id><content type="html" xml:base="http://localhost:4000/goodjavacode/redis">&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/** -------------------key相关操作--------------------- */&lt;/span&gt;
 
     &lt;span class=&quot;cm&quot;&gt;/**
      * 删除key
