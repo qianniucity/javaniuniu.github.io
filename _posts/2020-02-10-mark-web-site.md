@@ -28,4 +28,4 @@ sidebar:
 16. opsForValue含大量已不同的方式插入数据到redis  [RedisTemplate之opsForValue使用说明](https://blog.csdn.net/aoxiangzhe/article/details/93164823)
 17. expire是设置redis过期时间的命令 [redis之expire命令详解](https://blog.csdn.net/zhaozhirongfree1111/article/details/84982858)
 18. Pattern，正则表达式的编译表示，操作字符序列的利器 [Java字符序列Pattern](https://www.cnblogs.com/aniao/p/9351534.html)
-19. spring AOP中业务逻辑仅仅只关注业务本身，将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来[@Aspect 注解使用详解](https://blog.csdn.net/fz13768884254/article/details/83538709)
+19. spring AOP中业务逻辑仅仅只关注业务本身，将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来[@Aspect 注解使用详解](https://blog.csdn.net/fz13768884254/article/details/83538709) [Spring AOP切点表达式用法总结](https://www.cnblogs.com/zhangxufeng/p/9160869.html)

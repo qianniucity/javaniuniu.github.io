@@ -1,0 +1,162 @@
+I"�D<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">utils</span><span class="o">.</span><span class="na">date</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.commons.lang3.time.DateFormatUtils</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.text.ParseException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.text.SimpleDateFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<span class="cm">/**
+ * date工具
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DateUtil</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">parsePatterns</span> <span class="o">=</span> <span class="o">{</span>
+            <span class="s">"yyyy-MM-dd"</span><span class="o">,</span> <span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">,</span> <span class="s">"yyyy-MM-dd HH:mm"</span><span class="o">,</span> <span class="s">"yyyy-MM"</span><span class="o">,</span>
+            <span class="s">"yyyy/MM/dd"</span><span class="o">,</span> <span class="s">"yyyy/MM/dd HH:mm:ss"</span><span class="o">,</span> <span class="s">"yyyy/MM/dd HH:mm"</span><span class="o">,</span> <span class="s">"yyyy/MM"</span><span class="o">,</span>
+            <span class="s">"yyyy.MM.dd"</span><span class="o">,</span> <span class="s">"yyyy.MM.dd HH:mm:ss"</span><span class="o">,</span> <span class="s">"yyyy.MM.dd HH:mm"</span><span class="o">,</span> <span class="s">"yyyy.MM"</span><span class="o">};</span>
+
+    <span class="cm">/**
+     * 得到当前日期字符串 格式（yyyy-MM-dd）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getDate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">getDate</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当前日期字符串 格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getDate</span><span class="o">(</span><span class="nc">String</span> <span class="n">pattern</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">DateFormatUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="n">pattern</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到日期字符串 默认格式（yyyy-MM-dd） pattern可以为："yyyy-MM-dd" "HH:mm:ss" "E"
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">formatDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">date</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">pattern</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">formatDate</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">pattern</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">pattern</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">formatDate</span> <span class="o">=</span> <span class="nc">DateFormatUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">date</span><span class="o">,</span> <span class="n">pattern</span><span class="o">[</span><span class="mi">0</span><span class="o">].</span><span class="na">toString</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">formatDate</span> <span class="o">=</span> <span class="nc">DateFormatUtils</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="n">date</span><span class="o">,</span> <span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">formatDate</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到日期时间字符串，转换格式（yyyy-MM-dd HH:mm:ss）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">formatDateTime</span><span class="o">(</span><span class="nc">Date</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="n">date</span><span class="o">,</span> <span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当前时间字符串 格式（HH:mm:ss）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getTime</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="s">"HH:mm:ss"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当前日期和时间字符串 格式（yyyy-MM-dd HH:mm:ss）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getDateTime</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当前年份字符串 格式（yyyy）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getYear</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="s">"yyyy"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当前月份字符串 格式（MM）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getMonth</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="s">"MM"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当天字符串 格式（dd）
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getDay</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="s">"dd"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 得到当前星期字符串 格式（E）星期几
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getWeek</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">formatDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="s">"E"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 日期型字符串转化为日期 格式
+     * { "yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm",
+     *   "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm",
+     *   "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm" }
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Date</span> <span class="nf">parseDate</span><span class="o">(</span><span class="nc">Object</span> <span class="n">str</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">SimpleDateFormat</span><span class="o">(</span><span class="n">parsePatterns</span><span class="o">[</span><span class="mi">0</span><span class="o">]).</span><span class="na">parse</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">ParseException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取过去的天数
+     * @param date
+     * @return
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">pastDays</span><span class="o">(</span><span class="nc">Date</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()-</span><span class="n">date</span><span class="o">.</span><span class="na">getTime</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">/(</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取过去的小时
+     * @param date
+     * @return
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">pastHour</span><span class="o">(</span><span class="nc">Date</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()-</span><span class="n">date</span><span class="o">.</span><span class="na">getTime</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">/(</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 获取过去的分钟
+     * @param date
+     * @return
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">pastMinutes</span><span class="o">(</span><span class="nc">Date</span> <span class="n">date</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">t</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()-</span><span class="n">date</span><span class="o">.</span><span class="na">getTime</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">/(</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 转换为时间（天,时:分:秒.毫秒）
+     * @param timeMillis
+     * @return
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">formatDateTime</span><span class="o">(</span><span class="kt">long</span> <span class="n">timeMillis</span><span class="o">){</span>
+        <span class="kt">long</span> <span class="n">day</span> <span class="o">=</span> <span class="n">timeMillis</span><span class="o">/(</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">hour</span> <span class="o">=</span> <span class="o">(</span><span class="n">timeMillis</span><span class="o">/(</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">)-</span><span class="n">day</span><span class="o">*</span><span class="mi">24</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">min</span> <span class="o">=</span> <span class="o">((</span><span class="n">timeMillis</span><span class="o">/(</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">))-</span><span class="n">day</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">-</span><span class="n">hour</span><span class="o">*</span><span class="mi">60</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="n">timeMillis</span><span class="o">/</span><span class="mi">1000</span><span class="o">-</span><span class="n">day</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">-</span><span class="n">hour</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">-</span><span class="n">min</span><span class="o">*</span><span class="mi">60</span><span class="o">);</span>
+        <span class="kt">long</span> <span class="n">sss</span> <span class="o">=</span> <span class="o">(</span><span class="n">timeMillis</span><span class="o">-</span><span class="n">day</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">-</span><span class="n">hour</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">-</span><span class="n">min</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span><span class="o">-</span><span class="n">s</span><span class="o">*</span><span class="mi">1000</span><span class="o">);</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">day</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">?</span><span class="n">day</span><span class="o">+</span><span class="s">","</span><span class="o">:</span><span class="s">""</span><span class="o">)+</span><span class="n">hour</span><span class="o">+</span><span class="s">":"</span><span class="o">+</span><span class="n">min</span><span class="o">+</span><span class="s">":"</span><span class="o">+</span><span class="n">s</span><span class="o">+</span><span class="s">"."</span><span class="o">+</span><span class="n">sss</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+:ET

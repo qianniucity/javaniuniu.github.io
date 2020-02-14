@@ -34,3 +34,6 @@ public EnterpriseDbController(EnterpriseDbService service) {
 ### 切面编程
 **使用场景** 将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来
 **代码实现** 1. 用自定义注解的方式实现
+```java
+@Around("execution(public * *(..)) && @annotation(sc.whorl.system.commons.limitrate.Limit)")
+```
