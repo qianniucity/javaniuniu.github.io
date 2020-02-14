@@ -8,9 +8,9 @@ sidebar:
   nav: docs-en-code
 ---
 在编写代码的时候，使用@Autowired注解是，发现IDE报的一个警告，如下：
-```txt
+
 Spring Team recommends "Always use constructor based dependency injection in your beans. Always use assertions for mandatory dependencies".
-```
+{:.error}
 翻译：Spring建议”总是在您的bean中使用构造函数建立依赖注入。总是使用断言强制依赖”。
 
 
