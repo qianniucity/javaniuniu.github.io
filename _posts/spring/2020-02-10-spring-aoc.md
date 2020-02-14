@@ -1,7 +1,9 @@
 ---
 title: spring-aoc
 permalink: /spring/aoc
-tags: spring
+tags: Spring Aoc
+pageview: true
+show_date: true
 sidebar:
   nav: docs-en-springboot
 ---

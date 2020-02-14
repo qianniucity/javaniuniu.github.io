@@ -1,7 +1,7 @@
 ---
 title: springboot-aop
 permalink: /springboot/aop
-tags: springboot
+tags: SpringBoot Aop
 sidebar:
   nav: docs-en-springboot
 ---

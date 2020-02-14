@@ -1,7 +1,7 @@
 ---
 title: springboot-di
 permalink: /springboot/di
-tags: springboot
+tags: SpringBoot Di
 sidebar:
   nav: docs-en-springboot
 ---

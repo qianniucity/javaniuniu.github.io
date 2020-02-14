@@ -1,7 +1,9 @@
 ---
 title: spring-aop
 permalink: /spring/aop
-tags: spring
+tags: Spring Aop
+pageview: true
+show_date: true
 sidebar:
   nav: docs-en-springboot
 ---

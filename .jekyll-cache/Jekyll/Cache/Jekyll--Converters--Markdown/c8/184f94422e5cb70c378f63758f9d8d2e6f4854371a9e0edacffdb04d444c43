@@ -1,0 +1,26 @@
+I"{<h2 id="数据库设计">数据库设计</h2>
+<p>使用tk.mybits
+使用example 代替mapper.xml条件查询
+使用范型 实现通用sql操作</p>
+
+<h2 id="services设计">Services设计</h2>
+<p>service 在Controller 的调用用 private 修饰</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">UserService</span> <span class="n">userService</span><span class="o">;</span>
+</code></pre></div></div>
+
+<h2 id="autowired的使用推荐对构造函数进行注释">@Autowired的使用:推荐对构造函数进行注释</h2>
+
+<p>建议后写成下面的样子：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">;</span>
+
+<span class="nd">@Autowired</span>
+<span class="kd">public</span> <span class="nf">EnterpriseDbController</span><span class="o">(</span><span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
+   <span class="k">this</span><span class="o">.</span><span class="na">service</span> <span class="o">=</span> <span class="n">service</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="切面编程">切面编程</h3>
+<p>将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来
+操作时候多用自定义注解的方式实现</p>
+:ET

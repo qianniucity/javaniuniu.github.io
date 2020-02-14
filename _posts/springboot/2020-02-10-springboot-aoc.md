@@ -1,7 +1,7 @@
 ---
 title: springboot-aoc
 permalink: /springboot/aoc
-tags: springboot
+tags: SpringBoot Aoc
 sidebar:
   nav: docs-en-springboot
 ---
