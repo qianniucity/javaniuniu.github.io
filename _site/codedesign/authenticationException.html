@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Aspect实现样例 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>AuthenticationException 使用及所有子类 - JAVA 牛牛</title>
 
-<meta name="description" content="package sc.whorl.system.commons.aspect.weblog;import net.logstash.logback.marker.Markers;import org.aspectj.lang.JoinPoint;import org.aspectj.lang.Proceeding...">
-<link rel="canonical" href="http://localhost:4000/goodjavacode/aspect"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常  AccountStatusException:用户状态异常它包含如下子类          AccountExpiredException:账户过期      CredentialsExpiredException:证书过...">
+<link rel="canonical" href="http://localhost:4000/codedesign/authenticationException"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">CODE</li><li class="toc-h2"><a href="/goodjavacode/redis">redis key设计</a></li><li class="toc-h2"><a href="/goodjavacode/token/jwt">token设计至jwt</a></li><li class="toc-h2"><a href="/goodjavacode/redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/goodjavacode/redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/codedesign/java">java代码设计</a></li><li class="toc-h2"><a href="/codedesign/vo">java中VO的使用(VO视图对象)</a></li><li class="toc-h2"><a href="/codedesign/dto">java中DTO的使用(DTO数据传输对象)</a></li><li class="toc-h2"><a href="/goodjavacode/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/goodjavacode/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2 active"><a href="/goodjavacode/aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/goodjavacode/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h1">异常处理</li><li class="toc-h2"><a href="/codedesign/authenticationException">AuthenticationException 使用及所有子类</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/goodjavacode/date">date工具</a></li><li class="toc-h2"><a href="/goodjavacode/FastJson">FastJson工具包</a></li><li class="toc-h1">注释说明</li><li class="toc-h2"><a href="/code/annotation">注释说明</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">CODE</li><li class="toc-h2"><a href="/goodjavacode/redis">redis key设计</a></li><li class="toc-h2"><a href="/goodjavacode/token/jwt">token设计至jwt</a></li><li class="toc-h2"><a href="/goodjavacode/redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/goodjavacode/redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/codedesign/java">java代码设计</a></li><li class="toc-h2"><a href="/codedesign/vo">java中VO的使用(VO视图对象)</a></li><li class="toc-h2"><a href="/codedesign/dto">java中DTO的使用(DTO数据传输对象)</a></li><li class="toc-h2"><a href="/goodjavacode/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/goodjavacode/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/goodjavacode/aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/goodjavacode/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h1">异常处理</li><li class="toc-h2 active"><a href="/codedesign/authenticationException">AuthenticationException 使用及所有子类</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/goodjavacode/date">date工具</a></li><li class="toc-h2"><a href="/goodjavacode/FastJson">FastJson工具包</a></li><li class="toc-h1">注释说明</li><li class="toc-h2"><a href="/code/annotation">注释说明</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -334,155 +334,96 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Aspect实现样例</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>AuthenticationException 使用及所有子类</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/java-code-mark/2020-02-14-aspect.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Aspect实现样例"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/java-code-design/2020-02-15-AuthenticationException.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="AuthenticationException 使用及所有子类"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
+                href="/archive.html?tag=%E4%BB%A3%E7%A0%81%E8%AE%BE%E8%AE%A1">代码设计</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Aspect">Aspect</a>
+                href="/archive.html?tag=CodeDesign">CodeDesign</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B">面向切面编程</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 14, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeMark,Aspect,面向切面编程"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86">异常处理</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
+    <meta itemprop="keywords" content="代码设计,CodeDesign,异常处理"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">commons</span><span class="o">.</span><span class="na">aspect</span><span class="o">.</span><span class="na">weblog</span><span class="o">;</span>
+<div class="article__content" itemprop="articleBody"><p><strong>AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常</strong></p>
+<ol>
+  <li>AccountStatusException:用户状态异常它包含如下子类
+    <ul>
+      <li>AccountExpiredException:账户过期</li>
+      <li>CredentialsExpiredException:证书过期</li>
+      <li>DisabledException:账户不可用</li>
+      <li>LockedException:账户锁定</li>
+    </ul>
+  </li>
+  <li>ActiveDirectoryAuthenticationException,</li>
+  <li>AuthenticationCancelledException:已取消OpenID身份验证</li>
+  <li>AuthenticationCredentialsNotFoundException:如果由于<code class="highlighter-rouge">SecurityContext</code>中没有身份验证对象而拒绝身份验证请求，则抛出该异常。</li>
+  <li>AuthenticationServiceException:如果由于系统问题而无法处理身份验证请求，则抛出该异常。例如，如果后端身份验证存储库不可用，则可能会抛出此错误。</li>
+  <li>BadCredentialsException:如果由于凭据无效而拒绝身份验证请求，则抛出该异常。 对于抛出此异常，这意味着该帐户既未锁定也未禁用。</li>
+  <li>InsufficientAuthenticationException:如果由于凭据未充分信任而拒绝身份验证请求，则抛出该异常。
+如果<code class="highlighter-rouge">AccessDecisionVoters</code>对身份验证级别不满意，通常会引发此异常，例如使用“记住我”机制或匿名执行。 然后，<code class="highlighter-rouge">ExceptionTranslationFilter</code>通常将导致<code class="highlighter-rouge">AuthenticationEntryPoint</code>被调用，从而允许主体以更强的身份验证级别进行身份验证。</li>
+  <li>NonceExpiredException:如果由于摘要随机数已过期而拒绝认证请求，则抛出该异常。</li>
+  <li>OAuth2AuthenticationException:对于所有与OAuth 2.0相关的身份验证错误，都会引发此异常。在许多情况下可能会发生错误，例如：
+    <ul>
+      <li>授权请求或令牌请求缺少必需的参数</li>
+      <li>客户端标识符缺失或无效</li>
+      <li>无效或不匹配的重定向URI</li>
+      <li>请求的范围无效，未知或格式错误</li>
+      <li>资源所有者或授权服务器拒绝了访问请求</li>
+      <li>客户端身份验证失败</li>
+      <li>提供的授权授权（授权代码，资源所有者凭证）无效，已过期或已撤销</li>
+    </ul>
+  </li>
+  <li>PreAuthenticatedCredentialsNotFoundException:</li>
+  <li>ProviderNotFoundException:如果未找到支持所提供的<code class="highlighter-rouge">Authentication</code>对象的<code class="highlighter-rouge">AuthenticationProvider</code>，则由<code class="highlighter-rouge">ProviderManager</code>抛出。</li>
+  <li>RememberMeAuthenticationException:使用“记住我”身份验证时发生身份验证异常时，将引发此异常。</li>
+  <li>Saml2AuthenticationException:对于所有与SAML 2.0相关的身份验证错误，都会引发此异常。在许多情况下可能会发生错误，例如：
+    <ul>
+      <li>响应或断言请求丢失或格式错误</li>
+      <li>主题缺失或无效</li>
+      <li>签名缺失或无效</li>
+      <li>断言的时间段验证失败</li>
+      <li>断言条件之一不满足</li>
+      <li>解密失败</li>
+      <li>无法找到主题标识符，通常称为用户名</li>
+    </ul>
+  </li>
+  <li>SessionAuthenticationException:由<code class="highlighter-rouge">SessionAuthenticationStrategy</code>抛出，以指示认证对象对于当前会话无效，通常是因为同一用户超过了允许其同时进行的会话数。</li>
+  <li>UsernameNotFoundException:如果<code class="highlighter-rouge">UserDetailsService</code>实现无法通过用户名找到用户，则抛出该异常。</li>
+</ol>
 
-
-<span class="kn">import</span> <span class="nn">net.logstash.logback.marker.Markers</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.JoinPoint</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.ProceedingJoinPoint</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.Signature</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.AfterReturning</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Around</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Aspect</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Before</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.annotation.Pointcut</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.aspectj.lang.reflect.MethodSignature</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.core.annotation.Order</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.util.StringUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestBody</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestParam</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.RequestContextHolder</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.ServletRequestAttributes</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.lang.reflect.Parameter</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">io.swagger.annotations.ApiOperation</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.mapper.JsonMapper</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.rest.RequestUtil</span><span class="o">;</span>
-
-<span class="cm">/**
- * 统一日志处理切面
- */</span>
-<span class="nd">@Aspect</span>
+<h5 id="举例">举例</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Slf4j</span>
 <span class="nd">@Component</span>
-<span class="c1">//为了统计执行时间</span>
-<span class="nd">@Order</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebLogAspect</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOGGER</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">WebLogAspect</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-    <span class="kd">private</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
-
-    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"execution(public * sc.whorl.web.*.*(..))"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">webLog</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Before</span><span class="o">(</span><span class="s">"webLog()"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doBefore</span><span class="o">(</span><span class="nc">JoinPoint</span> <span class="n">joinPoint</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
-        <span class="n">startTime</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="nd">@AfterReturning</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"webLog()"</span><span class="o">,</span> <span class="n">returning</span> <span class="o">=</span> <span class="s">"ret"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doAfterReturning</span><span class="o">(</span><span class="nc">Object</span> <span class="n">ret</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Around</span><span class="o">(</span><span class="s">"webLog()"</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">doAround</span><span class="o">(</span><span class="nc">ProceedingJoinPoint</span> <span class="n">joinPoint</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
-        <span class="c1">//获取当前请求对象</span>
-        <span class="nc">ServletRequestAttributes</span> <span class="n">attributes</span> <span class="o">=</span> <span class="o">(</span><span class="nc">ServletRequestAttributes</span><span class="o">)</span> <span class="nc">RequestContextHolder</span><span class="o">.</span><span class="na">getRequestAttributes</span><span class="o">();</span>
-        <span class="nc">HttpServletRequest</span> <span class="n">request</span> <span class="o">=</span> <span class="n">attributes</span><span class="o">.</span><span class="na">getRequest</span><span class="o">();</span>
-        <span class="c1">//记录请求信息(通过logstash传入elasticsearch)</span>
-        <span class="nc">WebLog</span> <span class="n">webLog</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WebLog</span><span class="o">();</span>
-        <span class="nc">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">proceed</span><span class="o">();</span>
-        <span class="nc">Signature</span> <span class="n">signature</span> <span class="o">=</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">();</span>
-        <span class="nc">MethodSignature</span> <span class="n">methodSignature</span> <span class="o">=</span> <span class="o">(</span><span class="nc">MethodSignature</span><span class="o">)</span> <span class="n">signature</span><span class="o">;</span>
-        <span class="nc">Method</span> <span class="n">method</span> <span class="o">=</span> <span class="n">methodSignature</span><span class="o">.</span><span class="na">getMethod</span><span class="o">();</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">method</span><span class="o">.</span><span class="na">isAnnotationPresent</span><span class="o">(</span><span class="nc">ApiOperation</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
-            <span class="nc">ApiOperation</span> <span class="n">log</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getAnnotation</span><span class="o">(</span><span class="nc">ApiOperation</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-            <span class="n">webLog</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">log</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="kt">long</span> <span class="n">endTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setBasePath</span><span class="o">(</span><span class="nc">RequestUtil</span><span class="o">.</span><span class="na">getBasePath</span><span class="o">(</span><span class="n">request</span><span class="o">));</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setIp</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getRemoteUser</span><span class="o">());</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setMethod</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getMethod</span><span class="o">());</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setParameter</span><span class="o">(</span><span class="n">getParameter</span><span class="o">(</span><span class="n">method</span><span class="o">,</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getArgs</span><span class="o">()));</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setResult</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setSpendTime</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">endTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">.</span><span class="na">get</span><span class="o">()));</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setStartTime</span><span class="o">(</span><span class="n">startTime</span><span class="o">.</span><span class="na">get</span><span class="o">());</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setUri</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
-        <span class="n">webLog</span><span class="o">.</span><span class="na">setUrl</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getRequestURL</span><span class="o">().</span><span class="na">toString</span><span class="o">());</span>
-        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">logMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
-        <span class="n">logMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"url"</span><span class="o">,</span><span class="n">webLog</span><span class="o">.</span><span class="na">getUrl</span><span class="o">());</span>
-        <span class="n">logMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"method"</span><span class="o">,</span><span class="n">webLog</span><span class="o">.</span><span class="na">getMethod</span><span class="o">());</span>
-        <span class="n">logMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"parameter"</span><span class="o">,</span><span class="n">webLog</span><span class="o">.</span><span class="na">getParameter</span><span class="o">());</span>
-        <span class="n">logMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"spendTime"</span><span class="o">,</span><span class="n">webLog</span><span class="o">.</span><span class="na">getSpendTime</span><span class="o">());</span>
-        <span class="n">logMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"description"</span><span class="o">,</span><span class="n">webLog</span><span class="o">.</span><span class="na">getDescription</span><span class="o">());</span>
-        <span class="c1">//        LOGGER.info("{}", JsonUtil.objectToJson(webLog));</span>
-        <span class="no">LOGGER</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="nc">Markers</span><span class="o">.</span><span class="na">appendEntries</span><span class="o">(</span><span class="n">logMap</span><span class="o">),</span> <span class="nc">JsonMapper</span><span class="o">.</span><span class="na">nonDefaultMapper</span><span class="o">().</span><span class="na">toJson</span><span class="o">(</span><span class="n">webLog</span><span class="o">));</span>
-        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * 根据方法和传入的参数获取请求参数
-     */</span>
-    <span class="kd">private</span> <span class="nc">Object</span> <span class="nf">getParameter</span><span class="o">(</span><span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">argList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="nc">Parameter</span><span class="o">[]</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">getParameters</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">parameters</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="nc">RequestBody</span> <span class="n">requestBody</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">getAnnotation</span><span class="o">(</span><span class="nc">RequestBody</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">requestBody</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">argList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
-            <span class="o">}</span>
-            <span class="nc">RequestParam</span> <span class="n">requestParam</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">getAnnotation</span><span class="o">(</span><span class="nc">RequestParam</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">requestParam</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
-                <span class="nc">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">getName</span><span class="o">();</span>
-                <span class="k">if</span> <span class="o">(!</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">requestParam</span><span class="o">.</span><span class="na">value</span><span class="o">()))</span> <span class="o">{</span>
-                    <span class="n">key</span> <span class="o">=</span> <span class="n">requestParam</span><span class="o">.</span><span class="na">value</span><span class="o">();</span>
-                <span class="o">}</span>
-                <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
-                <span class="n">argList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">argList</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">argList</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">argList</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UnauthorizedHandler</span> <span class="kd">implements</span> <span class="nc">AuthenticationEntryPoint</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">commence</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> <span class="nc">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span> <span class="nc">AuthenticationException</span> <span class="n">e</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ServletException</span> <span class="o">{</span>
+        <span class="c1">// 用户登录时身份认证未通过</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">BadCredentialsException</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户登录时身份认证失败!"</span><span class="o">);</span>
+            <span class="nc">ResultUtil</span><span class="o">.</span><span class="na">writeJavaScript</span><span class="o">(</span><span class="n">httpServletResponse</span><span class="o">,</span> <span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getCode</span><span class="o">(),</span> <span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">InsufficientAuthenticationException</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"缺少请求头参数,Authorization传递是token值所以参数是必须的."</span><span class="o">);</span>
+            <span class="nc">ResultUtil</span><span class="o">.</span><span class="na">writeJavaScript</span><span class="o">(</span><span class="n">httpServletResponse</span><span class="o">,</span> <span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">NO_TOKEN</span><span class="o">.</span><span class="na">getCode</span><span class="o">(),</span> <span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">NO_TOKEN</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">argList</span><span class="o">;</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户token无效."</span><span class="o">);</span>
+            <span class="nc">ResultUtil</span><span class="o">.</span><span class="na">writeJavaScript</span><span class="o">(</span><span class="n">httpServletResponse</span><span class="o">,</span> <span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getCode</span><span class="o">(),</span> <span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
         <span class="o">}</span>
+
     <span class="o">}</span>
 <span class="o">}</span>
-
 </code></pre></div></div>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-14T00:00:00+08:00"><!-- start custom article footer snippet -->
+
+<h5 id="参考文档">参考文档:</h5>
+<p><a href="https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/core/AuthenticationException.html">docs.spring.io</a></p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-15T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -493,7 +434,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/goodjavacode/BeanMapper">Dozer BeanMapper 对象转换</a></div><div class="next"><span>NEXT</span><a href="/goodjavacode/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/goodjavacode/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></div><div class="next"><span>NEXT</span><a href="/goodjavacode/date">date工具</a></div></div></div>
 
 </div>
 

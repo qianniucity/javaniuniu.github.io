@@ -1,0 +1,46 @@
+I"�<p><strong>AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常</strong></p>
+<ol>
+  <li>AccountStatusException:用户状态异常它包含如下子类
+    <ul>
+      <li>AccountExpiredException:账户过期</li>
+      <li>CredentialsExpiredException:证书过期</li>
+      <li>DisabledException:账户不可用</li>
+      <li>LockedException:账户锁定</li>
+    </ul>
+  </li>
+  <li>ActiveDirectoryAuthenticationException,</li>
+  <li>AuthenticationCancelledException:已取消OpenID身份验证</li>
+  <li>AuthenticationCredentialsNotFoundException:如果由于<code class="highlighter-rouge">SecurityContext</code>中没有身份验证对象而拒绝身份验证请求，则抛出该异常。</li>
+  <li>AuthenticationServiceException:如果由于系统问题而无法处理身份验证请求，则抛出该异常。例如，如果后端身份验证存储库不可用，则可能会抛出此错误。</li>
+  <li>BadCredentialsException:如果由于凭据无效而拒绝身份验证请求，则抛出该异常。 对于抛出此异常，这意味着该帐户既未锁定也未禁用。</li>
+  <li>InsufficientAuthenticationException:如果由于凭据未充分信任而拒绝身份验证请求，则抛出该异常。
+如果<code class="highlighter-rouge">AccessDecisionVoters</code>对身份验证级别不满意，通常会引发此异常，例如使用“记住我”机制或匿名执行。 然后，<code class="highlighter-rouge">ExceptionTranslationFilter</code>通常将导致<code class="highlighter-rouge">AuthenticationEntryPoint</code>被调用，从而允许主体以更强的身份验证级别进行身份验证。</li>
+  <li>NonceExpiredException:如果由于摘要随机数已过期而拒绝认证请求，则抛出该异常。</li>
+  <li>OAuth2AuthenticationException:对于所有与OAuth 2.0相关的身份验证错误，都会引发此异常。在许多情况下可能会发生错误，例如：
+             - 授权请求或令牌请求缺少必需的参数
+             - 客户端标识符缺失或无效
+             - 无效或不匹配的重定向URI
+             - 请求的范围无效，未知或格式错误
+             - 资源所有者或授权服务器拒绝了访问请求
+             - 客户端身份验证失败
+             - 提供的授权授权（授权代码，资源所有者凭证）无效，已过期或已撤销</li>
+  <li>PreAuthenticatedCredentialsNotFoundException:</li>
+  <li>ProviderNotFoundException:如果未找到支持所提供的Authentication对象的AuthenticationProvider，则由ProviderManager抛出。</li>
+  <li>RememberMeAuthenticationException:使用“记住我”身份验证时发生身份验证异常时，将引发此异常。</li>
+  <li>Saml2AuthenticationException:对于所有与SAML 2.0相关的身份验证错误，都会引发此异常。
+在许多情况下可能会发生错误，例如：</li>
+</ol>
+
+<p>响应或断言请求丢失或格式错误
+主题缺失或无效
+签名缺失或无效
+断言的时间段验证失败
+断言条件之一不满足
+解密失败
+无法找到主题标识符，通常称为用户名</p>
+<ol>
+  <li>SessionAuthenticationException:
+由SessionAuthenticationStrategy抛出，以指示认证对象对于当前会话无效，通常是因为同一用户超过了允许其同时进行的会话数。</li>
+  <li>UsernameNotFoundException:如果UserDetailsService实现无法通过用户名找到用户，则抛出该异常。</li>
+</ol>
+:ET
