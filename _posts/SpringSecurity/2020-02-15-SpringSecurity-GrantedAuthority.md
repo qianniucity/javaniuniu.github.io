@@ -1,5 +1,5 @@
 ---
-title: GrantedAuthority使用实例
+title: GrantedAuthority
 permalink: /SpringSecurity/GrantedAuthority
 tags: SpringSecurity 类解释
 pageview: true

@@ -1,6 +1,6 @@
 ---
-title: GrantedAuthorityHolder
-permalink: /SpringSecurity/GrantedAuthorityHolder
+title: SecurityContextHolder
+permalink: /SpringSecurity/SecurityContextHolder
 tags: SpringSecurity 类解释
 pageview: true
 show_date: true

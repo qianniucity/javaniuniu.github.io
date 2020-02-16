@@ -1,5 +1,5 @@
 ---
-title: SecurityContext
+title: SecurityContext使用实例
 permalink: /SpringSecurity/SecurityContext
 tags: SpringSecurity CodeMark
 pageview: true
