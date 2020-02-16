@@ -1,0 +1,124 @@
+I"�C<h3 id="简介">简介</h3>
+<p>UserDetails =&gt; Spring Security基础接口，包含某个用户的账号，密码，权限，状态（是否锁定）等信息。只有getter方法。</p>
+<h3 id="userdetails接口">UserDetails接口</h3>
+<p>用于表示一个principal,但是一般情况下是作为（你所使用的用户数据库）和（Spring Security 的安全上下文需要保留的信息）之间的适配器。</p>
+
+<p>实际上就是相当于定义一个规范，Security这个框架不管你的应用时怎么存储用户和权限信息的。只要你取出来的时候把它包装成一个UserDetails对象给我用就可以了。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">userdetails</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.GrantedAuthority</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDetails</span> <span class="kd">extends</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="nc">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">GrantedAuthority</span><span class="o">&gt;</span> <span class="nf">getAuthorities</span><span class="o">();</span>
+
+    <span class="nc">String</span> <span class="nf">getPassword</span><span class="o">();</span>
+
+    <span class="nc">String</span> <span class="nf">getUsername</span><span class="o">();</span>
+
+    <span class="kt">boolean</span> <span class="nf">isAccountNonExpired</span><span class="o">();</span>
+
+    <span class="kt">boolean</span> <span class="nf">isAccountNonLocked</span><span class="o">();</span>
+
+    <span class="kt">boolean</span> <span class="nf">isCredentialsNonExpired</span><span class="o">();</span>
+
+    <span class="kt">boolean</span> <span class="nf">isEnabled</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h3 id="userdetails用来做什么为什么还要带上权限集合">UserDetails用来做什么？为什么还要带上权限集合？</h3>
+
+<p><strong>如果我们不用认证框架，我们是怎么手动实现登录认证的？</strong></p>
+
+<p>基本上就是根据前端提交上来的用户名从数据库中查找这个账号的信息，然后比对密码。再进一步，可能还会添加一个字段来判断，当前用户是否已被锁定。这个接口就是这么用的。即把这些信息取出来，然后包装成一个对象交由框架去认证。</p>
+
+<p><strong>为什么还要带上权限？</strong></p>
+
+<p>因为登录成功后也不是什么都能访问的，还要根据你所拥有的权限进行判断。有权限你才能访问特定的对象。Security框架是这样设计的，即认证成功后，就把用户信息和拥有的权限都存储在SecurityContext中，当访问受保护资源（某个对象/方法）的时候，就把权限拿出来比对，看看是否满足。</p>
+
+<h3 id="框架提供的userdetails默认实现">框架提供的UserDetails默认实现</h3>
+
+<p>UserDetails有一个默认实现（框架提供的），User。用户可以从自己的数据库中取出此用户的账号，密码，以及相关权限，然后用构造方法填充创建一个User对象即可。
+<em>注：实现CredentialsContainer接口是为了在登录成功后，清除用户信息中的密码。（登录成功后会将用户信息存储在SecurityContext中）</em></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">implements</span> <span class="nc">UserDetails</span><span class="o">,</span> <span class="nc">CredentialsContainer</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">500L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Log</span> <span class="n">logger</span> <span class="o">=</span> <span class="nc">LogFactory</span><span class="o">.</span><span class="na">getLog</span><span class="o">(</span><span class="nc">User</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">GrantedAuthority</span><span class="o">&gt;</span> <span class="n">authorities</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">accountNonExpired</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">accountNonLocked</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">credentialsNonExpired</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">enabled</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">username</span><span class="o">,</span> <span class="nc">String</span> <span class="n">password</span><span class="o">,</span> <span class="nc">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">GrantedAuthority</span><span class="o">&gt;</span> <span class="n">authorities</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">username</span><span class="o">,</span> <span class="n">password</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="n">authorities</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">username</span><span class="o">,</span> <span class="nc">String</span> <span class="n">password</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">enabled</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">accountNonExpired</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">credentialsNonExpired</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">accountNonLocked</span><span class="o">,</span> <span class="nc">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">GrantedAuthority</span><span class="o">&gt;</span> <span class="n">authorities</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">username</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="s">""</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">username</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">enabled</span> <span class="o">=</span> <span class="n">enabled</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">accountNonExpired</span> <span class="o">=</span> <span class="n">accountNonExpired</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">credentialsNonExpired</span> <span class="o">=</span> <span class="n">credentialsNonExpired</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">accountNonLocked</span> <span class="o">=</span> <span class="n">accountNonLocked</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">authorities</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">unmodifiableSet</span><span class="o">(</span><span class="n">sortAuthorities</span><span class="o">(</span><span class="n">authorities</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Cannot pass null or empty values to constructor"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="c1">//省略部分代码</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h3 id="什么时候提供userdetails信息怎么提供">什么时候提供UserDetails信息，怎么提供？</h3>
+
+<p><strong>UserDetailsService接口</strong></p>
+
+<p>那肯定是认证的时候。其实认证的操作，框架都已经帮你实现了，它所需要的只是，你给我提供获取信息的方式。所以它就定义一个接口，然后让你去实现，实现好了之后再注入给它。</p>
+
+<p>框架提供一个UserDetailsService接口用来加载用户信息。如果要自定义实现的话，用户可以实现一个CustomUserDetailsService的类，然后把你的应用中的UserService和AuthorityService注入到这个类中，用户获取用户信息和权限信息，然后在loadUserByUsername方法中，构造一个User对象（框架的类）返回即可。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">userdetails</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDetailsService</span> <span class="o">{</span>
+    <span class="nc">UserDetails</span> <span class="nf">loadUserByUsername</span><span class="o">(</span><span class="nc">String</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">UsernameNotFoundException</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h3 id="框架提供的userdetailsservice接口默认实现">框架提供的UserDetailsService接口默认实现</h3>
+
+<ul>
+  <li>InMemoryDaoImpl =&gt; 存储于内存</li>
+  <li>JdbcDaoImpl =&gt; 存储于数据库（磁盘）
+其中，如果你的数据库设计符合JdbcDaoImpl中的规范，你也就不用自己去实现UserDetailsService了。但是大多数情况是不符合的，因为你用户表不一定就叫users，可能还有其他前缀什么的，比如叫tb_users。或者字段名也跟它不一样。如果你一定要使用这个JdbcDaoImpl，你可以通过它的setter方法修改它的数据库查询语句。</li>
+</ul>
+
+<p><em>注：它是利用Spring框架的JdbcTemplate来查询数据库的</em></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JdbcDaoImpl</span> <span class="kd">extends</span> <span class="nc">JdbcDaoSupport</span> <span class="kd">implements</span> <span class="nc">UserDetailsService</span><span class="o">,</span> <span class="nc">MessageSourceAware</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEF_USERS_BY_USERNAME_QUERY</span> <span class="o">=</span> <span class="s">"select username,password,enabled from users where username = ?"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEF_AUTHORITIES_BY_USERNAME_QUERY</span> <span class="o">=</span> <span class="s">"select username,authority from authorities where username = ?"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY</span> <span class="o">=</span> <span class="s">"select g.id, g.group_name, ga.authority from groups g, group_members gm, group_authorities ga where gm.username = ? and g.id = ga.group_id and g.id = gm.group_id"</span><span class="o">;</span>
+    <span class="kd">protected</span> <span class="nc">MessageSourceAccessor</span> <span class="n">messages</span> <span class="o">=</span> <span class="nc">SpringSecurityMessageSource</span><span class="o">.</span><span class="na">getAccessor</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">authoritiesByUsernameQuery</span> <span class="o">=</span> <span class="s">"select username,authority from authorities where username = ?"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">groupAuthoritiesByUsernameQuery</span> <span class="o">=</span> <span class="s">"select g.id, g.group_name, ga.authority from groups g, group_members gm, group_authorities ga where gm.username = ? and g.id = ga.group_id and g.id = gm.group_id"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">usersByUsernameQuery</span> <span class="o">=</span> <span class="s">"select username,password,enabled from users where username = ?"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">rolePrefix</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">usernameBasedPrimaryKey</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">enableAuthorities</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">enableGroups</span><span class="o">;</span>
+    <span class="c1">//省略方法</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h3 id="注入到哪里去呢">注入到哪里去呢？</h3>
+
+<p>那肯定是注入到认证处理类中的，框架利用AuthenticationManager（接口）来进行认证。而Security为了支持多种方式认证，它提供ProviderManager类，这个实现了AuthenticationManager接口。它拥有多种认证方式，可以根据认证的类型委托给对应的认证处理类进行处理，这个处理类实现了AuthenticationProvider接口。</p>
+
+<p>所以，最终UserDetailsService是注入到AuthenticationProvider的实现类中。</p>
+<h3 id="误解">误解</h3>
+
+<ol>
+  <li>UserDetailService 负责认证用户
+实际上：UserDetailService只单纯地负责存取用户信息，除了给框架内的其他组件提供数据外没有其他功能。而认证过程是由AuthenticationManager来完成的。<strong>（大多数情况下，可以通过实现AuthenticationProvider接口来自定义认证过程）</strong></li>
+</ol>
+:ET

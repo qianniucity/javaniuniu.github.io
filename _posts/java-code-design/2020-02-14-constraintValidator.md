@@ -1,7 +1,7 @@
 ---
 title: 通过实现ConstraintValidator完成自定义校验注解
-permalink: /goodjavacode/constraintValidator
-tags: CodeDesign 校验
+permalink: /java-code-design/constraintValidator
+tags: CodeDesign CodeMark 数据校验
 pageview: true
 show_date: true
 sidebar:

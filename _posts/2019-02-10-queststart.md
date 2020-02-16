@@ -9,4 +9,23 @@ show_date: true
 sidebar:
   nav: docs-en-todo
 ---
+```xml
+插入图片
+![图片pic1]({{"/assets/images/java_code_design/52017893333_2.gif"}})
+
+文字背景
+Success Text.
+{:.success}
+
+Info Text.
+{:.info}
+
+Warning Text.
+{:.warning}
+
+Error Text.
+{:.error}
+```
+
+
 [参考链接](https://tianqi.name/jekyll-TeXt-theme/docs/zh/quick-start)

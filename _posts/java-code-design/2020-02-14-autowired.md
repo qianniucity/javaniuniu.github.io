@@ -1,7 +1,7 @@
 ---
 title: Autowired的使用:推荐对构造函数进行注释
-permalink: /goodjavacode/autowired
-tags: Code Annotation
+permalink: /java-code-design/autowired
+tags: Spring注解 CodeDesign
 pageview: true
 show_date: true
 sidebar:

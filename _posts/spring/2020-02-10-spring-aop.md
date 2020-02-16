@@ -1,11 +1,11 @@
 ---
-title: spring-aop
-permalink: /spring/aop
-tags: Spring Aop
+title: Spring-Aop
+permalink: /Spring/Aop
+tags: SpringAop
 pageview: true
 show_date: true
 sidebar:
-  nav: docs-en-springboot
+  nav: docs-en-Spring
 ---
 
 A Post with Header Image, See [Page layout](https://tianqi.name/jekyll-TeXt-theme/samples.html#page-layout) for more examples.

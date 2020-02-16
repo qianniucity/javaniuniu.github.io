@@ -1,7 +1,7 @@
 ---
 title: java代码设计
-permalink: /codedesign/java
-tags: 代码设计 CodeDesign
+permalink: /java-code-design/java
+tags: CodeDesign
 pageview: true
 show_date: true
 sidebar:
@@ -37,3 +37,6 @@ public EnterpriseDbController(EnterpriseDbService service) {
 ```java
 @Around("execution(public * *(..)) && @annotation(sc.whorl.system.commons.limitrate.Limit)")
 ```
+
+### 对返回给前端的数据进行格式封装处理
+当代码中已经有 [MsgResponseBody](/java-util-code/MsgResponseBody) 作为`Response`封装类时，项目中还用到 [ResultUtil](/java-util-code/ResultUtil) 作为`Response`的封装,看了下源码，`MsgResponseBody`都出现在被`@RestController` 注释的控制类中，而@RestController 是注释了 `@ResponseBody`的，而其他非控制类，则乖乖的使用`Response`挨个处理
