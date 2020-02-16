@@ -8,7 +8,9 @@ sidebar:
   nav: docs-en-Spring
 ---
 ### 简介
-UserDetails => Spring Security基础接口，包含某个用户的账号，密码，权限，状态（是否锁定）等信息。只有getter方法。
+- UserDetails => Spring Security基础接口，包含某个用户的账号，密码，权限，状态（是否锁定）等信息。只有getter方法。
+- Authentication => 认证对象，认证开始时创建，认证成功后存储于SecurityContext
+- principal => 用户信息对象，是一个Object，通常可转为UserDetails
 ### UserDetails接口
 用于表示一个principal,但是一般情况下是作为（你所使用的用户数据库）和（Spring Security 的安全上下文需要保留的信息）之间的适配器。
 

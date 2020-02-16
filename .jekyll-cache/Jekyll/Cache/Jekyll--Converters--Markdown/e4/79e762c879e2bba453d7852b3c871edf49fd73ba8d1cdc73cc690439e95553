@@ -1,0 +1,78 @@
+I"�$<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">springsecurity</span><span class="o">.</span><span class="na">conf</span><span class="o">;</span>
+
+
+<span class="kn">import</span> <span class="nn">com.google.common.base.Function</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.Lists</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.GrantedAuthority</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.authority.SimpleGrantedAuthority</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.userdetails.UserDetails</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.userdetails.UserDetailsService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.userdetails.UsernameNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.ObjectUtils</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">lombok.extern.slf4j.Slf4j</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.dao.auth.UserMapper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.model.auth.Role</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.model.auth.User</span><span class="o">;</span>
+
+
+<span class="cm">/***
+ *
+ * @FileName: CustomUserDetailsService
+
+ * @remark: 配置用户权限认证
+ * @explain 当用户登录时会进入此类的loadUserByUsername方法对用户进行验证，验证成功后会被保存在当前回话的principal对象中
+ *             系统获取当前登录对象信息方法 WebUserDetails webUserDetails = (WebUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+ *
+ *              异常信息：
+ *              UsernameNotFoundException     用户找不到
+ *              BadCredentialsException       坏的凭据
+ *              AccountExpiredException       账户过期
+ *              LockedException               账户锁定
+ *              DisabledException             账户不可用
+ *              CredentialsExpiredException   证书过期
+ *
+ *
+ */</span>
+<span class="nd">@Slf4j</span>
+<span class="nd">@Service</span><span class="o">(</span><span class="s">"myUserDetailService"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomUserDetailsService</span> <span class="kd">implements</span> <span class="nc">UserDetailsService</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">UserMapper</span> <span class="n">userMapper</span><span class="o">;</span>
+
+
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">UserDetails</span> <span class="nf">loadUserByUsername</span><span class="o">(</span><span class="nc">String</span> <span class="n">username</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">UsernameNotFoundException</span> <span class="o">{</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"登录用户："</span> <span class="o">+</span> <span class="n">username</span><span class="o">);</span>
+        <span class="c1">//用户用户信息和用户角色</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">username</span><span class="o">);</span>
+        <span class="nc">User</span> <span class="n">userOne</span> <span class="o">=</span> <span class="n">userMapper</span><span class="o">.</span><span class="na">selectOne</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userOne</span><span class="o">))</span> <span class="o">{</span>
+            <span class="c1">//后台抛出的异常是：org.springframework.security.authentication.BadCredentialsException: Bad credentials  坏的凭证 如果要抛出UsernameNotFoundException 用户找不到异常则需要自定义重新它的异常</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"登录用户："</span> <span class="o">+</span> <span class="n">username</span> <span class="o">+</span> <span class="s">" 不存在."</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">UsernameNotFoundException</span><span class="o">(</span><span class="s">"登录用户："</span> <span class="o">+</span> <span class="n">username</span> <span class="o">+</span> <span class="s">" 不存在"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">GrantedAuthority</span><span class="o">&gt;</span> <span class="n">grantedAuths</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">GrantedAuthority</span><span class="o">&gt;();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Role</span><span class="o">&gt;</span> <span class="n">roles</span> <span class="o">=</span> <span class="n">userMapper</span><span class="o">.</span><span class="na">selectRolsByUserId</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getTid</span><span class="o">());</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">roles</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">grantedAuths</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="nc">Lists</span><span class="o">.</span><span class="na">transform</span><span class="o">(</span><span class="n">roles</span><span class="o">,</span> <span class="o">(</span><span class="nc">Function</span><span class="o">&lt;</span><span class="nc">Role</span><span class="o">,</span> <span class="nc">GrantedAuthority</span><span class="o">&gt;)</span> <span class="n">role</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">SimpleGrantedAuthority</span><span class="o">(</span><span class="s">"ROLE_"</span> <span class="o">+</span> <span class="n">role</span><span class="o">.</span><span class="na">getRoleName</span><span class="o">())));</span>
+        <span class="o">}</span>
+        <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">userdetails</span><span class="o">.</span><span class="na">User</span> <span class="n">baseUser</span> <span class="o">=</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">security</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">userdetails</span><span class="o">.</span><span class="na">User</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getLoginName</span><span class="o">(),</span> <span class="n">userOne</span><span class="o">.</span><span class="na">getPassWord</span><span class="o">(),</span>
+                <span class="n">grantedAuths</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">baseUser</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+:ET

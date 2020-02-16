@@ -1,7 +1,7 @@
 ---
 title: WebSecurityConfigurerAdapter
 permalink: /SpringSecurity/WebSecurityConfigurerAdapter
-tags: SpringSecurity 类解释 CodeMark
+tags: SpringSecurity CodeMark
 pageview: true
 show_date: true
 sidebar:

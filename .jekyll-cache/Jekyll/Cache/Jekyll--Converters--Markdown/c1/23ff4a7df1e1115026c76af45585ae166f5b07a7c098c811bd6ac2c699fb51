@@ -1,0 +1,73 @@
+I"�(<p><strong>默认实现SecurityContextHolder</strong></p>
+<ul>
+  <li>SecurityContext:认证成功后，就把用户信息和拥有的权限都存储在其中</li>
+  <li>Authentication =&gt; 认证对象，认证开始时创建，认证成功后存储于SecurityContext</li>
+  <li>principal =&gt; 用户信息对象，是一个Object，通常可转为UserDetails</li>
+</ul>
+
+<p>Authentication中的principal方法获取对象</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WsController</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="nc">SimpMessagingTemplate</span> <span class="n">simpMessagingTemplate</span><span class="o">;</span>
+
+    <span class="nd">@MessageMapping</span><span class="o">(</span><span class="s">"/ws/chat"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handleMsg</span><span class="o">(</span><span class="nc">Authentication</span> <span class="n">authentication</span><span class="o">,</span> <span class="nc">ChatMsg</span> <span class="n">chatMsg</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Hr</span> <span class="n">hr</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Hr</span><span class="o">)</span> <span class="n">authentication</span><span class="o">.</span><span class="na">getPrincipal</span><span class="o">();</span>
+        <span class="n">chatMsg</span><span class="o">.</span><span class="na">setFrom</span><span class="o">(</span><span class="n">hr</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
+        <span class="n">chatMsg</span><span class="o">.</span><span class="na">setFromNickname</span><span class="o">(</span><span class="n">hr</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="n">chatMsg</span><span class="o">.</span><span class="na">setDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+        <span class="n">simpMessagingTemplate</span><span class="o">.</span><span class="na">convertAndSendToUser</span><span class="o">(</span><span class="n">chatMsg</span><span class="o">.</span><span class="na">getTo</span><span class="o">(),</span> <span class="s">"/queue/chat"</span><span class="o">,</span> <span class="n">chatMsg</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HrUtils</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Hr</span> <span class="nf">getCurrentHr</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">((</span><span class="nc">Hr</span><span class="o">)</span> <span class="nc">SecurityContextHolder</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">getAuthentication</span><span class="o">().</span><span class="na">getPrincipal</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>SecurityContext</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+     * 用户登陆相关,主要验证用户用户密码以及设置jwt和用户缓存相关,并返回jwt的凭证
+     *
+     * @param userVo
+     * @return
+     */</span>
+    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">JWTUserDetail</span><span class="o">&gt;</span> <span class="nf">login</span><span class="o">(</span><span class="nc">UserVo</span> <span class="n">userVo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
+        <span class="nc">User</span> <span class="n">userOne</span> <span class="o">=</span> <span class="n">selectOne</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userOne</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户不存在!"</span><span class="o">);</span>
+            <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getCode</span><span class="o">()).</span><span class="na">setResult</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">bCryptPasswordEncoder</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">(),</span> <span class="n">userOne</span><span class="o">.</span><span class="na">getPassWord</span><span class="o">()))</span> <span class="o">{</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户登陆密码错误!"</span><span class="o">);</span>
+            <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getCode</span><span class="o">()).</span><span class="na">setResult</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="nc">Authentication</span> <span class="n">authentication</span> <span class="o">=</span> <span class="n">authenticationManager</span><span class="o">.</span><span class="na">authenticate</span><span class="o">(</span>
+                <span class="k">new</span> <span class="nf">UsernamePasswordAuthenticationToken</span><span class="o">(</span>
+                        <span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">(),</span>
+                        <span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()</span>
+                <span class="o">)</span>
+        <span class="o">);</span>
+        <span class="nc">SecurityContextHolder</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">setAuthentication</span><span class="o">(</span><span class="n">authentication</span><span class="o">);</span>
+        <span class="c1">//使用jwt生成token 用于权限效验</span>
+        <span class="nc">JWTUserDetail</span> <span class="n">jwtUserDetail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JWTUserDetail</span><span class="o">();</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getLoginName</span><span class="o">());</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setLoginTime</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getTid</span><span class="o">());</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setUserType</span><span class="o">(</span><span class="nc">JWTUserDetail</span><span class="o">.</span><span class="na">UserType</span><span class="o">.</span><span class="na">User</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">generateToken</span><span class="o">(</span><span class="n">jwtUserDetail</span><span class="o">);</span>
+        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setJwtToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="n">jwtUserDetail</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>参考文档</p>
+<ul>
+  <li><a href="https://github.com/minplemon/vhr/tree/master/vhr/vhrserver/vhr-web/src/main/java/org/javaboy/vhr/controller">principal</a></li>
+  <li><a href="https://github.com/minplemon/sc-whorl/tree/master/sc-whorl-web/src/main/java/sc/whorl/system/commons">SecurityContextHolder</a></li>
+</ul>
+:ET

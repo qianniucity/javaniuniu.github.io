@@ -7,3 +7,4 @@ show_date: true
 sidebar:
   nav: docs-en-Spring
 ---
+**默认实现SimpleGrantedAuthority**
