@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>SecurityContextHolder - JAVA 牛牛</title>
 
-<meta name="description" content="作用： 保留系统当前的安全上下文细节，其中就包括当前使用系统的用户的信息。上下文细节怎么表示？用SecurityContext对象来表示每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？存储在一个SecurityContextHolder中，整个应用就一个SecurityContextH...">
+<meta name="description" content="作用： 保留系统当前的安全上下文细节，其中就包括当前使用系统的用户的信息。上下文细节怎么表示？ 用SecurityContext对象来表示每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？ 存储在一个SecurityContextHolder中，整个应用就一个SecurityContex...">
 <link rel="canonical" href="http://localhost:4000/SpringSecurity/SecurityContextHolder"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">SpringSecurity</li><li class="toc-h2"><a href="/SpringSecurity/class">SpringSecurity用到的类</a></li><li class="toc-h2"><a href="/SpringSecurity/User">User</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetails">UserDetails</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetailsService">UserDetailsService</a></li><li class="toc-h2"><a href="/SpringSecurity/GrantedAuthority">GrantedAuthority</a></li><li class="toc-h2 active"><a href="/SpringSecurity/SecurityContextHolder">SecurityContextHolder</a></li><li class="toc-h2"><a href="/SpringSecurity/SecurityContext">SecurityContext使用实例</a></li><li class="toc-h2"><a href="/SpringSecurity/WebSecurityConfigurerAdapter">WebSecurityConfigurerAdapter</a></li><li class="toc-h2"><a href="/SpringSecurity/authenticationException">AuthenticationException 使用及所有子类</a></li><li class="toc-h1">SpringBoot</li><li class="toc-h2"><a href="/SpringBoot/Aop">SpringBoot Aop</a></li><li class="toc-h2"><a href="/SpringBoot/Aoc">SpringBoot Aoc</a></li><li class="toc-h2"><a href="/SpringBoot/Di">SpringBoot Di</a></li><li class="toc-h1">Spring</li><li class="toc-h2"><a href="/Spring/Aop">Spring Aop</a></li><li class="toc-h2"><a href="/Spring/Aoc">Spring Aoc</a></li><li class="toc-h2"><a href="/Spring/Di">Spring Di</a></li><li class="toc-h2"><a href="/Spring/Aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/Spring/Annotation">注释解释</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">SpringSecurity</li><li class="toc-h2"><a href="/SpringSecurity/class">SpringSecurity用到的类</a></li><li class="toc-h2"><a href="/SpringSecurity/User">User</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetails">UserDetails</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetailsService">UserDetailsService</a></li><li class="toc-h2"><a href="/SpringSecurity/GrantedAuthority">GrantedAuthority</a></li><li class="toc-h2 active"><a href="/SpringSecurity/SecurityContextHolder">SecurityContextHolder</a></li><li class="toc-h2"><a href="/SpringSecurity/SecurityContext">SecurityContext使用实例</a></li><li class="toc-h2"><a href="/SpringSecurity/WebSecurityConfigurerAdapter">WebSecurityConfigurerAdapter</a></li><li class="toc-h2"><a href="/SpringSecurity/authenticationException">AuthenticationException 使用及所有子类</a></li><li class="toc-h2"><a href="/SpringSecurity/RequestMatcher">RequestMatcher(配置忽略url和认证的url)</a></li><li class="toc-h1">SpringBoot</li><li class="toc-h2"><a href="/SpringBoot/Aop">SpringBoot Aop</a></li><li class="toc-h2"><a href="/SpringBoot/Aoc">SpringBoot Aoc</a></li><li class="toc-h2"><a href="/SpringBoot/Di">SpringBoot Di</a></li><li class="toc-h2"><a href="/Spring/OncePerRequestFilter">OncePerRequestFilter</a></li><li class="toc-h1">Spring</li><li class="toc-h2"><a href="/Spring/Aop">Spring Aop</a></li><li class="toc-h2"><a href="/Spring/Aoc">Spring Aoc</a></li><li class="toc-h2"><a href="/Spring/Di">Spring Di</a></li><li class="toc-h2"><a href="/Spring/Aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/Spring/Annotation">注释解释</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -351,19 +351,16 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><p><strong>作用：</strong> 保留系统当前的安全上下文细节，其中就包括当前使用系统的用户的信息。</p>
 
-<p><strong>上下文细节怎么表示？</strong>
+<p><strong>上下文细节怎么表示？</strong> <br />
 用SecurityContext对象来表示</p>
 
-<p><strong>每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？</strong>
+<p><strong>每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？</strong> <br />
 存储在一个SecurityContextHolder中，整个应用就一个SecurityContextHolder。</p>
 
-<p><strong>SecurityContextHolder存储SecurityContext的方式？</strong></p>
-
-<p>这要考虑到应用场景。</p>
-<ol>
-  <li>单机系统，即应用从开启到关闭的整个生命周期只有一个用户在使用。由于整个应用只需要保存一个SecurityContext（安全上下文即可）</li>
-  <li>多用户系统，比如典型的Web系统，整个生命周期可能同时有多个用户在使用。这时候应用需要保存多个SecurityContext（安全上下文），需要利用ThreadLocal进行保存，每个线程都可以利用ThreadLocal获取其自己的SecurityContext，及安全上下文。</li>
-</ol>
+<p><strong>SecurityContextHolder存储SecurityContext的方式？</strong> <br />
+这要考虑到应用场景。 <br />
+1.单机系统，即应用从开启到关闭的整个生命周期只有一个用户在使用。由于整个应用只需要保存一个SecurityContext（安全上下文即可） <br />
+2.多用户系统，比如典型的Web系统，整个生命周期可能同时有多个用户在使用。这时候应用需要保存多个SecurityContext（安全上下文），需要利用ThreadLocal进行保存，每个线程都可以利用ThreadLocal获取其自己的SecurityContext，及安全上下文。</p>
 
 <h4 id="源码分析">源码分析：</h4>
 <p>SecurityContextHolder结构</p>

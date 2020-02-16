@@ -1,0 +1,132 @@
+I"�L<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">jwt</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.BadCredentialsException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.UsernamePasswordAuthenticationToken</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.context.SecurityContextHolder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.core.userdetails.UserDetails</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.security.web.authentication.WebAuthenticationDetailsSource</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.ObjectUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.StringUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.filter.OncePerRequestFilter</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.FilterChain</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.ServletException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">lombok.extern.slf4j.Slf4j</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.conf.CustomUserDetailsService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.utils.ErrorCodeEnum</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.redis.RedisUtil</span><span class="o">;</span>
+
+<span class="cm">/***
+ *
+ * @FileName: JwtAuthenticationTokenFilter
+ * @remark: jwt认证token
+ * @explain 每次请求接口时 就会进入这里验证token 是否合法
+ *             token 如果用户一直在操作，则token 过期时间会叠加    如果超过设置的过期时间未操作  则token 失效 需要重新登录
+ *
+ */</span>
+<span class="nd">@Slf4j</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JwtAuthenPreFilter</span> <span class="kd">extends</span> <span class="nc">OncePerRequestFilter</span> <span class="o">{</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">JwtTokenUtil</span> <span class="n">jwtTokenUtil</span><span class="o">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">RedisUtil</span> <span class="n">redisUtil</span><span class="o">;</span>
+
+    <span class="cm">/**
+     * 防止filter被执行两次
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">FILTER_APPLIED</span> <span class="o">=</span> <span class="s">"__spring_security_JwtAuthenPreFilter_filterApplied"</span><span class="o">;</span>
+
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.header:Authorization}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">tokenHeader</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.tokenHead:Bearer-}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">tokenHead</span><span class="o">;</span>
+    <span class="cm">/**
+     * 距离快过期多久刷新令牌
+     */</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.token.subRefresh:#{10*60}}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">subRefresh</span><span class="o">;</span>
+    <span class="c1">// 不需要认证的接口</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.security.antMatchers}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">antMatchers</span><span class="o">;</span>
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">CustomUserDetailsService</span> <span class="n">customUserDetailsService</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">JwtAuthenPreFilter</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doFilterInternal</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> <span class="nc">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">filterChain</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">ServletException</span><span class="o">,</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="no">FILTER_APPLIED</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">httpServletResponse</span><span class="o">);</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="no">FILTER_APPLIED</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+
+        <span class="nc">SkipPathAntMatcher</span> <span class="n">skipPathRequestMatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SkipPathAntMatcher</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">antMatchers</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">)));</span>
+        <span class="c1">//过滤掉不需要token验证的url</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">skipPathRequestMatcher</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">httpServletResponse</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="c1">//1.判断是否有效 2.判断是否过期 3.如果未过期的,且过期时间小于10分钟的延长过期时间,并在当前response返回新的header,客户端需替换此令牌</span>
+                <span class="nc">String</span> <span class="n">authHeader</span> <span class="o">=</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">tokenHeader</span><span class="o">);</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">authHeader</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">authHeader</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">tokenHead</span><span class="o">))</span> <span class="o">{</span>
+                    <span class="kd">final</span> <span class="nc">String</span> <span class="n">authToken</span> <span class="o">=</span> <span class="n">authHeader</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">tokenHead</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
+                    <span class="nc">JWTUserDetail</span> <span class="n">userDetail</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">getUserFromToken</span><span class="o">(</span><span class="n">authToken</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userDetail</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌非法,解析失败{}!"</span><span class="o">,</span> <span class="n">authToken</span><span class="o">);</span>
+                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">isTokenExpired</span><span class="o">(</span><span class="n">authToken</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌已失效!{}"</span><span class="o">,</span> <span class="n">authToken</span><span class="o">);</span>
+                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+                    <span class="o">}</span>
+                    <span class="k">if</span> <span class="o">(!</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">redisUtil</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">authToken</span><span class="o">)))</span> <span class="o">{</span>
+                        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌已位于黑名单!{}"</span><span class="o">,</span> <span class="n">authToken</span><span class="o">);</span>
+                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+                    <span class="o">}</span>
+                    <span class="c1">//令牌快过期生成新的令牌并设置到返回头中,客户端在每次的restful请求如果发现有就替换原值,同时原值做redis黑名单</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">subRefresh</span><span class="o">).</span><span class="na">after</span><span class="o">(</span><span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">getExpirationDateFromToken</span><span class="o">(</span><span class="n">authToken</span><span class="o">)))</span> <span class="o">{</span>
+                        <span class="nc">String</span> <span class="n">resAuthToken</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">generateToken</span><span class="o">(</span><span class="n">userDetail</span><span class="o">);</span>
+                        <span class="n">redisUtil</span><span class="o">.</span><span class="na">setEx</span><span class="o">(</span><span class="n">authToken</span><span class="o">,</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">JWT_TOKEN_PREFIX</span><span class="o">,</span> <span class="n">userDetail</span><span class="o">.</span><span class="na">getUserType</span><span class="o">(),</span> <span class="n">userDetail</span><span class="o">.</span><span class="na">getUserId</span><span class="o">()),</span> <span class="n">subRefresh</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
+                        <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="n">tokenHeader</span><span class="o">,</span> <span class="n">tokenHead</span> <span class="o">+</span> <span class="n">resAuthToken</span><span class="o">);</span>
+                    <span class="o">}</span>
+                    <span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">LOCAL_USER</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">userDetail</span><span class="o">);</span>
+                    <span class="nc">UserDetails</span> <span class="n">userDetails</span> <span class="o">=</span> <span class="n">customUserDetailsService</span><span class="o">.</span><span class="na">loadUserByUsername</span><span class="o">(</span><span class="n">userDetail</span><span class="o">.</span><span class="na">getLoginName</span><span class="o">());</span>
+                    <span class="nc">UsernamePasswordAuthenticationToken</span> <span class="n">authentication</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UsernamePasswordAuthenticationToken</span><span class="o">(</span><span class="n">userDetails</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">userDetails</span><span class="o">.</span><span class="na">getAuthorities</span><span class="o">());</span>
+                    <span class="n">authentication</span><span class="o">.</span><span class="na">setDetails</span><span class="o">(</span><span class="k">new</span> <span class="nc">WebAuthenticationDetailsSource</span><span class="o">().</span><span class="na">buildDetails</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">));</span>
+                    <span class="nc">SecurityContextHolder</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">setAuthentication</span><span class="o">(</span><span class="n">authentication</span><span class="o">);</span>
+                <span class="o">}</span><span class="k">else</span><span class="o">{</span>
+                    <span class="c1">//需要校验却无用户token</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"无header请求--&gt;"</span> <span class="o">+</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
+                   <span class="c1">// throw new InsufficientAuthenticationException(ErrorCodeEnum.NO_TOKEN.getMessage());</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌解析失败!"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">httpServletResponse</span><span class="o">);</span>
+            <span class="c1">//调用完成后清除</span>
+            <span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">LOCAL_USER</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+</code></pre></div></div>
+:ET

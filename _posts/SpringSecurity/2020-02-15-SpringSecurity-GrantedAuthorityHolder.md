@@ -10,17 +10,16 @@ sidebar:
 
 **作用：** 保留系统当前的安全上下文细节，其中就包括当前使用系统的用户的信息。
 
-**上下文细节怎么表示？**
+**上下文细节怎么表示？**   
 用SecurityContext对象来表示
 
-**每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？**
+**每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？**   
 存储在一个SecurityContextHolder中，整个应用就一个SecurityContextHolder。
 
-**SecurityContextHolder存储SecurityContext的方式？**
-
-这要考虑到应用场景。
-1. 单机系统，即应用从开启到关闭的整个生命周期只有一个用户在使用。由于整个应用只需要保存一个SecurityContext（安全上下文即可）
-2. 多用户系统，比如典型的Web系统，整个生命周期可能同时有多个用户在使用。这时候应用需要保存多个SecurityContext（安全上下文），需要利用ThreadLocal进行保存，每个线程都可以利用ThreadLocal获取其自己的SecurityContext，及安全上下文。
+**SecurityContextHolder存储SecurityContext的方式？**   
+这要考虑到应用场景。   
+1.单机系统，即应用从开启到关闭的整个生命周期只有一个用户在使用。由于整个应用只需要保存一个SecurityContext（安全上下文即可）   
+2.多用户系统，比如典型的Web系统，整个生命周期可能同时有多个用户在使用。这时候应用需要保存多个SecurityContext（安全上下文），需要利用ThreadLocal进行保存，每个线程都可以利用ThreadLocal获取其自己的SecurityContext，及安全上下文。
 
 #### 源码分析：
 SecurityContextHolder结构
