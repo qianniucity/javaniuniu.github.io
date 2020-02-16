@@ -25,3 +25,5 @@ sidebar:
 7. Java自定义注解用在请求拦截中比较常用 [Java自定义注解](https://www.cnblogs.com/jajian/p/9695055.html)
 8. @Aspect AOP为Aspect Oriented Programming的缩写，意为：面向切面编程 [@Aspect 注解使用详解](https://blog.csdn.net/fz13768884254/article/details/83538709)
 9. @Order 定义Spring IOC容器中Bean的执行顺序的优先级 [浅谈Spring @Order注解的使用](https://blog.csdn.net/yaomingyang/article/details/86649072)
+10. @EnableGlobalMethodSecurity(prePostEnabled=true) 这个注解，会从SecurityContext中取出Authencation对象，然后再取出Collection<GrantedAuthority> authorites集合。然后比对当前用户是否有权限"readArtical"。实际上就是比对集合中是否有那个GrantedAuthority的getAuthority()方法返回的字符串与"radArtical"匹配。
+11. 

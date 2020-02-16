@@ -324,6 +324,17 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java8"><h2 itemprop="headline" class="item__header">JAVA8新特性</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">Set&lt;GrantedAuthority&gt; grantedAuths = new HashSet&lt;GrantedAuthority&gt;();
+        List&lt;Role&gt; roles = userMapper.selectRolsByUserId(userOne.getTid());
+        if (!ObjectUtils.isEmpty(roles)) {
+            grantedAuths.addAll(Lists.transform(roles, (Function&lt;Role, GrantedAuthority&gt;) role -&gt; new SimpleGrantedAuthority("ROLE_...</div><p><a href="/java8">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=TODO">TODO</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
+    <meta itemprop="keywords" content="TODO"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java-util-code/ResultUtil"><h2 itemprop="headline" class="item__header">对返回给前端的数据进行格式封装处理-MVC</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">package com.javaniuniu.scshorlsweb.system.utils.rest;
 
@@ -443,8 +454,21 @@ public class WsController {
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
     <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/GrantedAuthority"><h2 itemprop="headline" class="item__header">GrantedAuthority</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">默认实现SimpleGrantedAuthority</div><p><a href="/SpringSecurity/GrantedAuthority">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+          <header><a href="/SpringSecurity/GrantedAuthorityHolder"><h2 itemprop="headline" class="item__header">GrantedAuthorityHolder</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">作用： 保留系统当前的安全上下文细节，其中就包括当前使用系统的用户的信息。
+
+上下文细节怎么表示？
+用SecurityContext对象来表示
+
+每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？
+存储在一个SecurityContextHolder中，整个应用就一个SecurityContextHolder。
+
+SecurityContextHolder存储SecurityContext的方式？
+
+这要考虑到应用场景。
+
+  单机系统，即应用从开启到关闭的整个生命周期只有一个用户在使用。由于整个应用只需要保存一个SecurityContext（安全上下文即可）
+  多用户系统，比如典型的Web系统，整个生命周期可能同时有多个用户在使用。这时候应用需要保存多个...</div><p><a href="/SpringSecurity/GrantedAuthorityHolder">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
             </li><li>
@@ -454,64 +478,31 @@ public class WsController {
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
     <meta itemprop="keywords" content="SpringSecurity,类解释"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/authenticationException"><h2 itemprop="headline" class="item__header">AuthenticationException 使用及所有子类</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常
+          <header><a href="/SpringSecurity/GrantedAuthority"><h2 itemprop="headline" class="item__header">GrantedAuthority使用实例</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">默认实现SimpleGrantedAuthority
+GrantedAuthority接口
+我们知道UserDeitails接口里面有一个getAuthorities()方法。这个方法将返回此用户的所拥有的权限。这个集合将用于用户的访问控制，也就是Authorization。
 
-  AccountStatusException:用户状态异常它包含如下子类
-    
-      AccountExpiredException:账户过期
-      CredentialsExpiredException:证书过期
-      DisabledException:账户不可用
-      LockedException:账户锁定
-    
-  
-  ActiveDirectoryAuthenticationException,
-  AuthenticationCancelledException:已取消OpenID身份验证
-  AuthenticationCredentials...</div><p><a href="/SpringSecurity/authenticationException">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+所谓权限，就是一个字符串。一般不会重复。
+
+所谓权限检查，就是查看用户权限列表中是否含有匹配的字符串。
+
+package org.springframework.security.core;
+
+import java.io.Serializable;
+
+public interface GrantedAuthority extends Serializable {
+    String getAuthority...</div><p><a href="/SpringSecurity/GrantedAuthority">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E7%B1%BB%E8%A7%A3%E9%87%8A">类解释</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86">异常处理</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,类解释,异常处理"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/Spring/Aspect"><h2 itemprop="headline" class="item__header">Aspect实现样例</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">package sc.whorl.system.commons.aspect.weblog;
-
-
-import net.logstash.logback.marker.Markers;
-
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-i...</div><p><a href="/Spring/Aspect">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringAop">SpringAop</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Aspect">Aspect</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B">面向切面编程</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%BB%9F%E4%B8%80%E6%97%A5%E5%BF%97%E5%A4%84%E7%90%86%E5%88%87%E9%9D%A2">统一日志处理切面</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 14, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringAop,CodeMark,Aspect,面向切面编程,统一日志处理切面"></div>
+    <meta itemprop="keywords" content="SpringSecurity,类解释"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>38 post articles, 5 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>40 post articles, 5 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/">
             <i class="fas fa-angle-left"></i>
