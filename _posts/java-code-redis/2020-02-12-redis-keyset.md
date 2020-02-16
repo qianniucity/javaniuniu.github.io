@@ -1,6 +1,6 @@
 ---
 title: redis key设计
-permalink: /java-code-redis/redis/keyset
+permalink: /java-code-redis/keyset
 tags: CodeMark Redis
 pageview: true
 show_date: true

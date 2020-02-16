@@ -1,6 +1,6 @@
 ---
 title: 基于redis的分布式锁
-permalink: /java-code-redis/redis/distributed
+permalink: /java-code-redis/distributed
 tags: CodeMark Redis分布式
 pageview: true
 show_date: true

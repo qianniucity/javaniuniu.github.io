@@ -1,0 +1,111 @@
+I"u><h4 id="redis中opsforvalue方法的使用介绍">Redis中opsForValue()方法的使用介绍：</h4>
+
+<h5 id="1setk-key-v-value">1、set(K key, V value)</h5>
+<p>新增一个字符串类型的值，key是键，value是值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"stringValue"</span><span class="o">,</span><span class="s">"bbb"</span><span class="o">);</span>
+</code></pre></div></div>
+<h5 id="2getobject-key">2、get(Object key)</h5>
+<p>获取key键对应的值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">stringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+</code></pre></div></div>
+<h5 id="3appendk-key-string-value">3、append(K key, String value)</h5>
+<p>在原有的值基础上新增字符串到末尾。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">append</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="s">"appendValue"</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">stringValueAppend</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过append(K key, String value)方法修改后的字符串:"</span><span class="o">+</span><span class="n">stringValueAppend</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="4getk-key-long-start-long-end">4、get(K key, long start, long end)</h5>
+<p>截取key键对应值得字符串，从开始下标位置开始到结束下标的位置(包含结束下标)的字符串。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">cutString</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过get(K key, long start, long end)方法获取截取的字符串:"</span><span class="o">+</span><span class="n">cutString</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="5getandsetk-key-v-value">5、getAndSet(K key, V value)</h5>
+<p>获取原来key键对应的值并重新赋新值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">oldAndNewStringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">getAndSet</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="s">"ccc"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"通过getAndSet(K key, V value)方法获取原来的值："</span> <span class="o">+</span> <span class="n">oldAndNewStringValue</span> <span class="o">);</span>  
+<span class="nc">String</span> <span class="n">newStringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"修改过后的值:"</span><span class="o">+</span><span class="n">newStringValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="6setbitk-key-long-offset-boolean-value">6、setBit(K key, long offset, boolean value)</h5>
+<p>key键对应的值value对应的ascii码,在offset的位置(从左向右数)变为value。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setBit</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="kc">false</span><span class="o">);</span>  
+<span class="n">newStringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过setBit(K key,long offset,boolean value)方法修改过后的值:"</span><span class="o">+</span><span class="n">newStringValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="7getbitk-key-long-offset">7、getBit(K key, long offset)</h5>
+<p>判断指定的位置ASCII码的bit位是否为1。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">bitBoolean</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">getBit</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过getBit(K key,long offset)方法判断指定bit位的值是:"</span> <span class="o">+</span> <span class="n">bitBoolean</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="8sizek-key">8、size(K key)</h5>
+<p>获取指定字符串的长度</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Long</span> <span class="n">stringValueLength</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">size</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过size(K key)方法获取字符串的长度:"</span><span class="o">+</span><span class="n">stringValueLength</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="9incrementk-key-double-delta">9、increment(K key, double delta)</h5>
+<p>以增量的方式将double值存储在变量中。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">stringValueDouble</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">increment</span><span class="o">(</span><span class="s">"doubleKey"</span><span class="o">,</span><span class="mi">5</span><span class="o">);</span>   
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过increment(K key, double delta)方法以增量方式存储double值:"</span> <span class="o">+</span> <span class="n">stringValueDouble</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="10incrementk-key-long-delta">10、increment(K key, long delta)</h5>
+<p>以增量的方式将long值存储在变量中。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">stringValueLong</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">increment</span><span class="o">(</span><span class="s">"longKey"</span><span class="o">,</span><span class="mi">6</span><span class="o">);</span>   
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过increment(K key, long delta)方法以增量方式存储long值:"</span> <span class="o">+</span> <span class="n">stringValueLong</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="11setifabsentk-key-v-value">11、setIfAbsent(K key, V value)</h5>
+<p>如果键不存在则新增,存在则不改变已经有的值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">absentBoolean</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setIfAbsent</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">,</span><span class="s">"fff"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过setIfAbsent(K key, V value)方法判断变量值absentValue是否存在:"</span> <span class="o">+</span> <span class="n">absentBoolean</span><span class="o">);</span>  
+<span class="k">if</span><span class="o">(</span><span class="n">absentBoolean</span><span class="o">){</span>  
+    <span class="nc">String</span> <span class="n">absentValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">",不存在，则新增后的值是:"</span><span class="o">+</span><span class="n">absentValue</span><span class="o">);</span>  
+    <span class="kt">boolean</span> <span class="n">existBoolean</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setIfAbsent</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">,</span><span class="s">"eee"</span><span class="o">);</span>  
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">",再次调用setIfAbsent(K key, V value)判断absentValue是否存在并重新赋值:"</span> <span class="o">+</span> <span class="n">existBoolean</span><span class="o">);</span>  
+    <span class="k">if</span><span class="o">(!</span><span class="n">existBoolean</span><span class="o">){</span>  
+        <span class="n">absentValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"如果存在,则重新赋值后的absentValue变量的值是:"</span> <span class="o">+</span> <span class="n">absentValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="12setk-key-v-value-long-timeout-timeunit-unit">12、set(K key, V value, long timeout, TimeUnit unit)</h5>
+<p>设置变量值的过期时间。</p>
+
+<p>redisTemplate.opsForValue().set(“timeOutKey”, “timeOut”, 5, TimeUnit.SECONDS);<br />
+String timeOutValue = redisTemplate.opsForValue().get(“timeOutKey”)+””;<br />
+System.out.println(“通过set(K key, V value, long timeout, TimeUnit unit)方法设置过期时间，过期之前获取的数据:”+timeOutValue);<br />
+Thread.sleep(5*1000);<br />
+timeOutValue = redisTemplate.opsForValue().get(“timeOutKey”)+””;<br />
+System.out.print(“,等待10s过后，获取的值:”+timeOutValue);</p>
+<h5 id="13setk-key-v-value-long-offset">13、set(K key, V value, long offset)</h5>
+<p>覆盖从指定位置开始的值。</p>
+
+<p>redisTemplate.opsForValue().set(“absentKey”,”dd”,1);<br />
+String overrideString = redisTemplate.opsForValue().get(“absentKey”);<br />
+System.out.println(“通过set(K key, V value, long offset)方法覆盖部分的值:”+overrideString);</p>
+<h5 id="14multisetmap-extends-k-extends-v-map">14、multiSet(Map&lt;? extends K,? extends V&gt; map)</h5>
+<p>设置map集合到redis。</p>
+
+<p>Map valueMap = new HashMap();<br />
+valueMap.put(“valueMap1”,”map1”);<br />
+valueMap.put(“valueMap2”,”map2”);<br />
+valueMap.put(“valueMap3”,”map3”);<br />
+redisTemplate.opsForValue().multiSet(valueMap);</p>
+<h5 id="15multigetcollection-keys">15、multiGet(Collection<K> keys)</K></h5>
+<p>根据集合取出对应的value值。</p>
+
+<p>//根据List集合取出对应的value值<br />
+List paraList = new ArrayList();<br />
+paraList.add(“valueMap1”);<br />
+paraList.add(“valueMap2”);<br />
+paraList.add(“valueMap3”);<br />
+List<String> valueList = redisTemplate.opsForValue().multiGet(paraList);  
+for (String value : valueList){  
+    System.out.println("通过multiGet(Collection<K> keys)方法获取map值:" + value);  
+}</K></String></p>
+<h5 id="16multisetifabsentmap-extends-k-extends-v-map">16、multiSetIfAbsent(Map&lt;? extends K,? extends V&gt; map)</h5>
+<p>如果对应的map集合名称不存在，则添加；如果存在则不做修改。</p>
+
+<p>Map valueMap = new HashMap();<br />
+valueMap.put(“valueMap1”,”map1”);<br />
+valueMap.put(“valueMap2”,”map2”);<br />
+valueMap.put(“valueMap3”,”map3”);<br />
+redisTemplate.opsForValue().multiSetIfAbsent(valueMap);</p>
+:ET

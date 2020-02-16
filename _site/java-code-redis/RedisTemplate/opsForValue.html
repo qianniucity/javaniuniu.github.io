@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>基于redis的分布式锁 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>RedisTemplate之opsForValue使用说明 - JAVA 牛牛</title>
 
-<meta name="description" content="package sc.whorl.system.commons.preventresubmit;import org.apache.commons.lang3.StringUtils;import org.apache.commons.lang3.concurrent.BasicThreadFactory;imp...">
-<link rel="canonical" href="http://localhost:4000/java-code-redis/redis/distributed"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="Redis中opsForValue()方法的使用介绍：1、set(K key, V value)新增一个字符串类型的值，key是键，value是值。redisTemplate.opsForValue().set("stringValue","bbb");2、get(Object key)获取key键对应的值。St...">
+<link rel="canonical" href="http://localhost:4000/java-code-redis/RedisTemplate/opsForValue"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/java-code-design/java">java代码设计</a></li><li class="toc-h2"><a href="/java-code-design/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/java-code-design/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h2"><a href="/java-code-design/token/jwt">token设计至jwt</a></li><li class="toc-h1">Redis</li><li class="toc-h2"><a href="/java-code-redis/redis/keyset">redis key设计</a></li><li class="toc-h2 active"><a href="/java-code-redis/redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/java-code-redis/redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h1">领域驱动设计</li><li class="toc-h2"><a href="/java-code-design-data/dasign-data">领域驱动设计详解</a></li><li class="toc-h2"><a href="/java-code-design-data/vo">VO视图对象</a></li><li class="toc-h2"><a href="/java-code-design-data/dto">DTO数据传输对象</a></li><li class="toc-h2"><a href="/java-code-design-data/POJO">java中POJO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/PO">java中PO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/DO">java中DO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/BO">java中BO的使用</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/java-util-code/date">date工具</a></li><li class="toc-h2"><a href="/java-util-code/FastJson">FastJson工具包</a></li><li class="toc-h2"><a href="/java-util-code/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/java-util-code/ResultUtil">对返回给前端的数据进行格式封装处理-MVC</a></li><li class="toc-h2"><a href="/java-util-code/MsgResponseBody">对返回给前端的数据进行格式封装处理-SpringBoot</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/java-code-design/java">java代码设计</a></li><li class="toc-h2"><a href="/java-code-design/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/java-code-design/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h2"><a href="/java-code-design/token/jwt">token设计至jwt</a></li><li class="toc-h1">Redis</li><li class="toc-h2 active"><a href="/java-code-redis/RedisTemplate/opsForValue">RedisTemplate之opsForValue使用说明</a></li><li class="toc-h2"><a href="/java-code-redis/keyset">redis key设计</a></li><li class="toc-h2"><a href="/java-code-redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/java-code-redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h1">领域驱动设计</li><li class="toc-h2"><a href="/java-code-design-data/dasign-data">领域驱动设计详解</a></li><li class="toc-h2"><a href="/java-code-design-data/vo">VO视图对象</a></li><li class="toc-h2"><a href="/java-code-design-data/dto">DTO数据传输对象</a></li><li class="toc-h2"><a href="/java-code-design-data/POJO">java中POJO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/PO">java中PO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/DO">java中DO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/BO">java中BO的使用</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/java-util-code/date">date工具</a></li><li class="toc-h2"><a href="/java-util-code/FastJson">FastJson工具包</a></li><li class="toc-h2"><a href="/java-util-code/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/java-util-code/ResultUtil">对返回给前端的数据进行格式封装处理-MVC</a></li><li class="toc-h2"><a href="/java-util-code/MsgResponseBody">对返回给前端的数据进行格式封装处理-SpringBoot</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -334,199 +334,134 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>基于redis的分布式锁</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>RedisTemplate之opsForValue使用说明</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/java-code-redis/2020-02-13-redis-distributed.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="基于redis的分布式锁"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/java-code-redis/2020-02-16-redis-RedisTemplate-opsForValue.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="RedisTemplate之opsForValue使用说明"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Redis%E5%88%86%E5%B8%83%E5%BC%8F">Redis分布式</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 13, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-13T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeMark,Redis分布式"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=Redis">Redis</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
+    <meta itemprop="keywords" content="Redis"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">commons</span><span class="o">.</span><span class="na">preventresubmit</span><span class="o">;</span>
+<div class="article__content" itemprop="articleBody"><h4 id="redis中opsforvalue方法的使用介绍">Redis中opsForValue()方法的使用介绍：</h4>
 
-<span class="kn">import</span> <span class="nn">org.apache.commons.lang3.StringUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.commons.lang3.concurrent.BasicThreadFactory</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.AutoConfigureAfter</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.redis.connection.RedisStringCommands</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.redis.core.RedisCallback</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.redis.core.StringRedisTemplate</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.data.redis.core.types.Expiration</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.util.concurrent.ScheduledExecutorService</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.ScheduledThreadPoolExecutor</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.regex.Pattern</span><span class="o">;</span>
-
-<span class="cm">/**
- * 基于redis的分布式锁
- * // TODO 基于redis的分布式锁
- */</span>
-<span class="nd">@Configuration</span>
-<span class="nd">@AutoConfigureAfter</span><span class="o">(</span><span class="nc">RedisAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RedisLockHelper</span> <span class="o">{</span>
-
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DELIMITER</span> <span class="o">=</span> <span class="s">"|"</span><span class="o">;</span>
-
-    <span class="cm">/**
-     * 如果要求比较高可以通过注入的方式分配
-     */</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ScheduledExecutorService</span> <span class="no">EXECUTOR_SERVICE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ScheduledThreadPoolExecutor</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span>
-            <span class="k">new</span> <span class="nc">BasicThreadFactory</span><span class="o">.</span><span class="na">Builder</span><span class="o">().</span><span class="na">namingPattern</span><span class="o">(</span><span class="s">"sen-unit-schedule-pool-%d"</span><span class="o">).</span><span class="na">daemon</span><span class="o">(</span><span class="kc">true</span><span class="o">).</span><span class="na">build</span><span class="o">());</span>
-
-
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">StringRedisTemplate</span> <span class="n">stringRedisTemplate</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">RedisLockHelper</span><span class="o">(</span><span class="nc">StringRedisTemplate</span> <span class="n">stringRedisTemplate</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="k">this</span><span class="o">.</span><span class="na">stringRedisTemplate</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * 获取锁（存在死锁风险）
-     *
-     * @param lockKey
-     *         lockKey
-     * @param value
-     *         value
-     * @param time
-     *         超时时间
-     * @param unit
-     *         过期单位
-     * @return true or false
-     */</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">tryLock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">value</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">time</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">execute</span><span class="o">((</span><span class="nc">RedisCallback</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;)</span> <span class="n">connection</span> <span class="o">-&gt;</span> <span class="n">connection</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">lockKey</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(),</span> <span class="n">value</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(),</span> <span class="nc">Expiration</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">time</span><span class="o">,</span> <span class="n">unit</span><span class="o">),</span> <span class="nc">RedisStringCommands</span><span class="o">.</span><span class="na">SetOption</span><span class="o">.</span><span class="na">SET_IF_ABSENT</span><span class="o">));</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * 删除对应的key参数
-     *
-     * @param lockKey
-     */</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">unlock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">lockKey</span><span class="o">);</span>
-    <span class="o">}</span>
-
-
-    <span class="cm">/**
-     * *****************************************************************************************************
-     * 华丽的分割线
-     * *****************************************************************************************************
-     */</span>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <span class="cm">/**
-     * 获取锁
-     *
-     * @param lockKey
-     *         lockKey
-     * @param uuid
-     *         UUID
-     * @param timeout
-     *         超时时间
-     * @param unit
-     *         过期单位
-     * @return true or false
-     */</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">lock</span><span class="o">(</span><span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">,</span> <span class="kt">long</span> <span class="n">timeout</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="kt">long</span> <span class="n">milliseconds</span> <span class="o">=</span> <span class="nc">Expiration</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">timeout</span><span class="o">,</span> <span class="n">unit</span><span class="o">).</span><span class="na">getExpirationTimeInMilliseconds</span><span class="o">();</span>
-        <span class="kt">boolean</span> <span class="n">success</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setIfAbsent</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="n">milliseconds</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELIMITER</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">success</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">expire</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">timeout</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="nc">String</span> <span class="n">oldVal</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">getAndSet</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">+</span> <span class="n">milliseconds</span><span class="o">)</span> <span class="o">+</span> <span class="no">DELIMITER</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">);</span>
-            <span class="kd">final</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">oldValues</span> <span class="o">=</span> <span class="n">oldVal</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="nc">Pattern</span><span class="o">.</span><span class="na">quote</span><span class="o">(</span><span class="no">DELIMITER</span><span class="o">));</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nc">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">oldValues</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">success</span><span class="o">;</span>
-    <span class="o">}</span>
-
-
-    <span class="cm">/**
-     * 立即释放锁
-     * @see &lt;a href="http://redis.io/commands/set"&gt;Redis Documentation: SET&lt;/a&gt;
-     */</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">unlock</span><span class="o">(</span><span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">unlock</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * 延迟unlock
-     *
-     * @param lockKey
-     *         key
-     * @param uuid
-     *         client(最好是唯一键的)
-     * @param delayTime
-     *         延迟时间
-     * @param unit
-     *         时间单位
-     */</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">unlock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">,</span> <span class="kt">long</span> <span class="n">delayTime</span><span class="o">,</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">lockKey</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">return</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">delayTime</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">doUnlock</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">uuid</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="no">EXECUTOR_SERVICE</span><span class="o">.</span><span class="na">schedule</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                <span class="n">doUnlock</span><span class="o">(</span><span class="n">lockKey</span><span class="o">,</span> <span class="n">uuid</span><span class="o">);</span>
-            <span class="o">},</span> <span class="n">delayTime</span><span class="o">,</span> <span class="n">unit</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * @param lockKey
-     *         key
-     * @param uuid
-     *         client(最好是唯一键的)
-     */</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">doUnlock</span><span class="o">(</span><span class="kd">final</span> <span class="nc">String</span> <span class="n">lockKey</span><span class="o">,</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">uuid</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span> <span class="n">val</span> <span class="o">=</span> <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="n">lockKey</span><span class="o">);</span>
-        <span class="kd">final</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">values</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="nc">Pattern</span><span class="o">.</span><span class="na">quote</span><span class="o">(</span><span class="no">DELIMITER</span><span class="o">));</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">values</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">uuid</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">values</span><span class="o">[</span><span class="mi">1</span><span class="o">]))</span> <span class="o">{</span>
-            <span class="n">stringRedisTemplate</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="n">lockKey</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-
+<h5 id="1setk-key-v-value">1、set(K key, V value)</h5>
+<p>新增一个字符串类型的值，key是键，value是值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"stringValue"</span><span class="o">,</span><span class="s">"bbb"</span><span class="o">);</span>
+</code></pre></div></div>
+<h5 id="2getobject-key">2、get(Object key)</h5>
+<p>获取key键对应的值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">stringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">)</span>
+</code></pre></div></div>
+<h5 id="3appendk-key-string-value">3、append(K key, String value)</h5>
+<p>在原有的值基础上新增字符串到末尾。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">append</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="s">"appendValue"</span><span class="o">);</span>
+<span class="nc">String</span> <span class="n">stringValueAppend</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过append(K key, String value)方法修改后的字符串:"</span><span class="o">+</span><span class="n">stringValueAppend</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="4getk-key-long-start-long-end">4、get(K key, long start, long end)</h5>
+<p>截取key键对应值得字符串，从开始下标位置开始到结束下标的位置(包含结束下标)的字符串。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">cutString</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过get(K key, long start, long end)方法获取截取的字符串:"</span><span class="o">+</span><span class="n">cutString</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="5getandsetk-key-v-value">5、getAndSet(K key, V value)</h5>
+<p>获取原来key键对应的值并重新赋新值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">oldAndNewStringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">getAndSet</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span> <span class="s">"ccc"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"通过getAndSet(K key, V value)方法获取原来的值："</span> <span class="o">+</span> <span class="n">oldAndNewStringValue</span> <span class="o">);</span>  
+<span class="nc">String</span> <span class="n">newStringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"修改过后的值:"</span><span class="o">+</span><span class="n">newStringValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="6setbitk-key-long-offset-boolean-value">6、setBit(K key, long offset, boolean value)</h5>
+<p>key键对应的值value对应的ascii码,在offset的位置(从左向右数)变为value。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setBit</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span><span class="mi">1</span><span class="o">,</span><span class="kc">false</span><span class="o">);</span>  
+<span class="n">newStringValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"key"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过setBit(K key,long offset,boolean value)方法修改过后的值:"</span><span class="o">+</span><span class="n">newStringValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="7getbitk-key-long-offset">7、getBit(K key, long offset)</h5>
+<p>判断指定的位置ASCII码的bit位是否为1。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">bitBoolean</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">getBit</span><span class="o">(</span><span class="s">"key"</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过getBit(K key,long offset)方法判断指定bit位的值是:"</span> <span class="o">+</span> <span class="n">bitBoolean</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="8sizek-key">8、size(K key)</h5>
+<p>获取指定字符串的长度</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Long</span> <span class="n">stringValueLength</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">size</span><span class="o">(</span><span class="s">"key"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过size(K key)方法获取字符串的长度:"</span><span class="o">+</span><span class="n">stringValueLength</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="9incrementk-key-double-delta">9、increment(K key, double delta)</h5>
+<p>以增量的方式将double值存储在变量中。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">stringValueDouble</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">increment</span><span class="o">(</span><span class="s">"doubleKey"</span><span class="o">,</span><span class="mi">5</span><span class="o">);</span>   
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过increment(K key, double delta)方法以增量方式存储double值:"</span> <span class="o">+</span> <span class="n">stringValueDouble</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="10incrementk-key-long-delta">10、increment(K key, long delta)</h5>
+<p>以增量的方式将long值存储在变量中。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span> <span class="n">stringValueLong</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">increment</span><span class="o">(</span><span class="s">"longKey"</span><span class="o">,</span><span class="mi">6</span><span class="o">);</span>   
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过increment(K key, long delta)方法以增量方式存储long值:"</span> <span class="o">+</span> <span class="n">stringValueLong</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="11setifabsentk-key-v-value">11、setIfAbsent(K key, V value)</h5>
+<p>如果键不存在则新增,存在则不改变已经有的值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="n">absentBoolean</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setIfAbsent</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">,</span><span class="s">"fff"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过setIfAbsent(K key, V value)方法判断变量值absentValue是否存在:"</span> <span class="o">+</span> <span class="n">absentBoolean</span><span class="o">);</span>  
+<span class="k">if</span><span class="o">(</span><span class="n">absentBoolean</span><span class="o">){</span>  
+    <span class="nc">String</span> <span class="n">absentValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">",不存在，则新增后的值是:"</span><span class="o">+</span><span class="n">absentValue</span><span class="o">);</span>  
+    <span class="kt">boolean</span> <span class="n">existBoolean</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">setIfAbsent</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">,</span><span class="s">"eee"</span><span class="o">);</span>  
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">",再次调用setIfAbsent(K key, V value)判断absentValue是否存在并重新赋值:"</span> <span class="o">+</span> <span class="n">existBoolean</span><span class="o">);</span>  
+    <span class="k">if</span><span class="o">(!</span><span class="n">existBoolean</span><span class="o">){</span>  
+        <span class="n">absentValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">"如果存在,则重新赋值后的absentValue变量的值是:"</span> <span class="o">+</span> <span class="n">absentValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="12setk-key-v-value-long-timeout-timeunit-unit">12、set(K key, V value, long timeout, TimeUnit unit)</h5>
+<p>设置变量值的过期时间。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"timeOutKey"</span><span class="o">,</span> <span class="s">"timeOut"</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>  
+<span class="nc">String</span> <span class="n">timeOutValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"timeOutKey"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过set(K key, V value, long timeout, TimeUnit unit)方法设置过期时间，过期之前获取的数据:"</span><span class="o">+</span><span class="n">timeOutValue</span><span class="o">);</span>  
+<span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">5</span><span class="o">*</span><span class="mi">1000</span><span class="o">);</span>  
+<span class="n">timeOutValue</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"timeOutKey"</span><span class="o">)+</span><span class="s">""</span><span class="o">;</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">",等待10s过后，获取的值:"</span><span class="o">+</span><span class="n">timeOutValue</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="13setk-key-v-value-long-offset">13、set(K key, V value, long offset)</h5>
+<p>覆盖从指定位置开始的值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">set</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">,</span><span class="s">"dd"</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>  
+<span class="nc">String</span> <span class="n">overrideString</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"absentKey"</span><span class="o">);</span>  
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过set(K key, V value, long offset)方法覆盖部分的值:"</span><span class="o">+</span><span class="n">overrideString</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="14multisetmap-extends-k-extends-v-map">14、multiSet(Map&lt;? extends K,? extends V&gt; map)</h5>
+<p>设置map集合到redis。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Map</span> <span class="n">valueMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">();</span>  
+<span class="n">valueMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"valueMap1"</span><span class="o">,</span><span class="s">"map1"</span><span class="o">);</span>  
+<span class="n">valueMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"valueMap2"</span><span class="o">,</span><span class="s">"map2"</span><span class="o">);</span>  
+<span class="n">valueMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"valueMap3"</span><span class="o">,</span><span class="s">"map3"</span><span class="o">);</span>  
+<span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">multiSet</span><span class="o">(</span><span class="n">valueMap</span><span class="o">);</span>  
+</code></pre></div></div>
+<h5 id="15multigetcollection-keys">15、multiGet(Collection<K> keys)</K></h5>
+<p>根据集合取出对应的value值。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//根据List集合取出对应的value值  </span>
+<span class="nc">List</span> <span class="n">paraList</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>  
+<span class="n">paraList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"valueMap1"</span><span class="o">);</span>  
+<span class="n">paraList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"valueMap2"</span><span class="o">);</span>  
+<span class="n">paraList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"valueMap3"</span><span class="o">);</span>  
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">valueList</span> <span class="o">=</span> <span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">multiGet</span><span class="o">(</span><span class="n">paraList</span><span class="o">);</span>  
+<span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">value</span> <span class="o">:</span> <span class="n">valueList</span><span class="o">){</span>  
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"通过multiGet(Collection&lt;K&gt; keys)方法获取map值:"</span> <span class="o">+</span> <span class="n">value</span><span class="o">);</span>  
 <span class="o">}</span>
-
+</code></pre></div></div>
+<h5 id="16multisetifabsentmap-extends-k-extends-v-map">16、multiSetIfAbsent(Map&lt;? extends K,? extends V&gt; map)</h5>
+<p>如果对应的map集合名称不存在，则添加；如果存在则不做修改。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Map</span> <span class="n">valueMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">();</span>  
+<span class="n">valueMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"valueMap1"</span><span class="o">,</span><span class="s">"map1"</span><span class="o">);</span>  
+<span class="n">valueMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"valueMap2"</span><span class="o">,</span><span class="s">"map2"</span><span class="o">);</span>  
+<span class="n">valueMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"valueMap3"</span><span class="o">,</span><span class="s">"map3"</span><span class="o">);</span>  
+<span class="n">redisTemplate</span><span class="o">.</span><span class="na">opsForValue</span><span class="o">().</span><span class="na">multiSetIfAbsent</span><span class="o">(</span><span class="n">valueMap</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p>可参考文档</p>
+<p>参考文档</p>
 <ul>
-  <li><a href="https://blog.csdn.net/syilt/article/details/100039332">使用Redis实现分布式lock</a></li>
-  <li><a href="https://www.cnblogs.com/fixzd/p/9479970.html">redis系列：基于redis的分布式锁</a></li>
+  <li><a href="https://blog.csdn.net/qq_25135655/article/details/80357137">RedisTemplate之opsForValue使用说明</a></li>
 </ul>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-13T00:00:00+08:00"><!-- start custom article footer snippet -->
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-16T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -537,7 +472,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-code-redis/redis/keyset">redis key设计</a></div><div class="next"><span>NEXT</span><a href="/java-code-redis/redis/distributed/2">使用Redis实现分布式lock</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-code-design/token/jwt">token设计至jwt</a></div><div class="next"><span>NEXT</span><a href="/java-code-redis/keyset">redis key设计</a></div></div></div>
 
 </div>
 

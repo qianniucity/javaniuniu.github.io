@@ -1,6 +1,6 @@
 ---
 title: 使用Redis实现分布式lock
-permalink: /java-code-redis/redis/distributed/2
+permalink: /java-code-redis/distributed/2
 tags: CodeMark Redis 分布式
 pageview: true
 show_date: true

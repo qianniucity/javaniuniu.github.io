@@ -8,6 +8,23 @@ show_date: true
 sidebar:
   nav: docs-en-todo
 ---
+Success Text.
+{:.success}
+
+Info Text.
+{:.info}
+
+Warning Text.
+{:.warning}
+
+Error Text.
+{:.error}
+
+`success`{:.success}
+`info`{:.info}
+`warning`{:.warning}
+`error`{:.error}
+
 ```xml
 插入图片
 ![图片pic1]({{"/assets/images/java_code_design/52017893333_2.gif"}})
@@ -24,6 +41,11 @@ Warning Text.
 
 Error Text.
 {:.error}
+
+`success`{:.success}
+`info`{:.info}
+`warning`{:.warning}
+`error`{:.error}
 ```
 
 
