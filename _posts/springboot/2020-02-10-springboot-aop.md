@@ -1,6 +1,6 @@
 ---
 title: SpringBoot-Aop
-permalink: /springboot/Aop
+permalink: /SpringBoot/Aop
 tags: SpringBootAop
 sidebar:
   nav: docs-en-Spring
