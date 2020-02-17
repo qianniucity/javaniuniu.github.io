@@ -1,0 +1,58 @@
+I"�<h1 id="deploying-the-elk-stack-on-kubernetes-with-helm">Deploying the ELK Stack on Kubernetes with Helm</h1>
+<h2 id="algorithm">Algorithm</h2>
+<h3 id="题目两数相加">题目：<a href="https://leetcode-cn.com/problems/add-two-numbers/">两数相加</a></h3>
+
+<blockquote>
+  <p>给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
+如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+您可以假设除了数字 0 之外，这两个数都不会以 0 开头</p>
+</blockquote>
+
+<h3 id="题解">题解：</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">addTwoNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">l2</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ListNode</span><span class="p">:</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">r</span> <span class="o">=</span><span class="n">re</span>
+        <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">l1</span> <span class="ow">or</span> <span class="n">l2</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l1</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">carry</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+            <span class="n">carry</span> <span class="o">=</span> <span class="n">s</span><span class="o">//</span><span class="mi">10</span>
+            <span class="n">r</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="n">s</span><span class="o">%</span><span class="mi">10</span><span class="p">)</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="nb">next</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">l1</span> <span class="o">!=</span><span class="bp">None</span><span class="p">):</span><span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="nb">next</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">l2</span> <span class="o">!=</span><span class="bp">None</span><span class="p">):</span><span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="nb">next</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">r</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="nb">next</span>
+</code></pre></div></div>
+<ul>
+  <li>时间复杂度：O(\max(m, n))，假设 mm 和 nn 分别表示 l1l1 和 l2l2 的长度，上面的算法最多重复 \max(m, n)max(m,n) 次。</li>
+  <li>空间复杂度：O(\max(m, n))， 新列表的长度最多为 \max(m,n) + 1max(m,n)+1。</li>
+</ul>
+
+<h2 id="review">Review</h2>
+<ul>
+  <li>
+    <h3 id="基于kbs集群部署elk-并通过helm-管理elk"><a href="https://logz.io/blog/deploying-the-elk-stack-on-kubernetes-with-helm/">基于kbs集群部署ELK 并通过Helm 管理ELK</a></h3>
+  </li>
+  <li>其中包括整个的安装步骤</li>
+</ul>
+
+<h2 id="tip">Tip</h2>
+<h3 id="atom">Atom</h3>
+<p>插件功能丰富,常用markdown 插件作文档编辑，同时配合支持git github markdown预览等插件，特别方便。当然也包括编程插件</p>
+
+<ul>
+  <li><a href="https://atom.io/">Atom 下载地址</a></li>
+  <li><a href="https://atom.io/packages">Atom 插件下载地址</a></li>
+</ul>
+
+<h2 id="share">Share</h2>
+<ul>
+  <li>
+    <h3 id="linux系统简介"><a href="http://c.biancheng.net/linux_tutorial/10/">Linux系统简介</a></h3>
+  </li>
+</ul>
+:ET

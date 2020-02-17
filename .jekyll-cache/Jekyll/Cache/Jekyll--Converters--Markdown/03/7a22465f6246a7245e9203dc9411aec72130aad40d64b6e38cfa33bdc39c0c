@@ -1,0 +1,104 @@
+I"%<h1 id="awsome-day-online">AWSOME DAY Online</h1>
+<h2 id="algorithm">Algorithm</h2>
+<h3 id="题目无重复字符的最长子串">题目：<a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">无重复字符的最长子串</a></h3>
+
+<blockquote>
+  <p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
+</blockquote>
+
+<h3 id="题解1">题解1</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span>
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="o">;</span><span class="n">j</span><span class="o">++)</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">allUnique</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="n">i</span><span class="o">,</span><span class="n">j</span><span class="o">))</span> <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span><span class="n">j</span><span class="o">-</span><span class="n">i</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">allUnique</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">start</span><span class="o">,</span> <span class="kt">int</span> <span class="n">end</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">end</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">Character</span> <span class="n">ch</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">set</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">ch</span><span class="o">))</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ul>
+  <li>时间复杂度：O(n^3)</li>
+  <li>空间复杂度：O(min(n, m))</li>
+</ul>
+
+<h3 id="题解2">题解2</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span><span class="k">return</span> <span class="mi">0</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">lookup</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">max_len</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cur_len</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">cur_len</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">:</span>
+                <span class="n">lookup</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">cur_len</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">cur_len</span> <span class="o">&gt;</span> <span class="n">max_len</span><span class="p">:</span><span class="n">max_len</span> <span class="o">=</span> <span class="n">cur_len</span>
+            <span class="n">lookup</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">max_len</span>
+</code></pre></div></div>
+
+<pre><code class="language-txt">思路：
+这道题主要用到思路是：滑动窗口
+
+什么是滑动窗口？
+
+其实就是一个队列,比如例题中的 abcabcbb，进入这个队列（窗口）为 abc 满足题目要求，当再进入 a，队列变成了 abca，这时候不满足要求。所以，我们要移动这个队列！
+
+如何移动？
+
+我们只要把队列的左边的元素移出就行了，直到满足题目要求！
+
+一直维持这样的队列，找出队列出现最长的长度时候，求出解！
+
+时间复杂度：O(n)O(n)
+</code></pre>
+
+<h2 id="review">Review</h2>
+<ul>
+  <li>
+    <h3 id="awsome-day-online-1"><a href="https://aws.amazon.com/cn/events/awsome-day/awsome-day-online/">AWSOME DAY Online</a></h3>
+  </li>
+  <li><a href="https://onlinexperiences.com/scripts/Server.nxp?LASCmd=L:0&amp;AI=1&amp;ShowKey=68882&amp;LoginType=0&amp;InitialDisplay=1&amp;ClientBrowser=0&amp;DisplayItem=NULL&amp;LangLocaleID=0&amp;SSO=1&amp;RFR=NULL">AWSOME DAY Online 会议注册地址</a></li>
+</ul>
+
+<ol>
+  <li>AWS 是一个免费的会议，有 AWS 高级讲师在线授课，同时也有如有疑问，有专门的技术人员实时在线解答</li>
+  <li>AWSOME DAY Online 适用与IT管理，程序员，架构师，商务，等等</li>
+  <li>注册成功后，如有会议，会有 AWS 工作人员电话通知，并且会有邮箱通知</li>
+  <li>会议时间一般安排在周末下午，会有5个左右的模块，总时间5个小时左右</li>
+  <li>每个会议模块后都有试题，答对后会有 AWS 的证书</li>
+  <li>活动很精彩，墙裂推荐
+。。。</li>
+</ol>
+
+<h2 id="tip">Tip</h2>
+<ul>
+  <li>
+    <h3 id="markdown-项目文档工具"><a href="../blog/MkDocs.md">Markdown 项目文档工具</a></h3>
+  </li>
+</ul>
+
+<h2 id="share">Share</h2>
+<ul>
+  <li>
+    <h3 id="python资源大全中文版包括web框架网络爬虫模板引擎数据库数据可视化图片处理等"><a href="https://github.com/jobbole/awesome-python-cn">Python资源大全中文版，包括：Web框架、网络爬虫、模板引擎、数据库、数据可视化、图片处理等</a></h3>
+  </li>
+</ul>
+:ET
