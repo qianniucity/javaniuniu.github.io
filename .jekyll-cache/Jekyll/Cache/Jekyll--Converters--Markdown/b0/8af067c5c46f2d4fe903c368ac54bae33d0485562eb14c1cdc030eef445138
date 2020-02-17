@@ -1,0 +1,89 @@
+I"�#<h5 id="一句话简介">一句话简介</h5>
+<p>TimeUnit是java.util.concurrent包下面的一个类，表示给定单元粒度的时间段</p>
+
+<h5 id="主要使用">主要使用</h5>
+<ul>
+  <li>时间颗粒度转换</li>
+  <li>延时</li>
+</ul>
+
+<p>常用的颗粒度</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">TimeUnit</span><span class="o">.</span><span class="na">DAYS</span>          <span class="c1">//天</span>
+<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">HOURS</span>         <span class="c1">//小时</span>
+<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MINUTES</span>       <span class="c1">//分钟</span>
+<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span>       <span class="c1">//秒</span>
+<span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span>  <span class="c1">//毫秒</span>
+</code></pre></div></div>
+
+<p>1、时间颗粒度转换</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">long</span> <span class="nf">toMillis</span><span class="o">(</span><span class="kt">long</span> <span class="n">d</span><span class="o">)</span>    <span class="c1">//转化成毫秒</span>
+<span class="kd">public</span> <span class="kt">long</span> <span class="nf">toSeconds</span><span class="o">(</span><span class="kt">long</span> <span class="n">d</span><span class="o">)</span>  <span class="c1">//转化成秒</span>
+<span class="kd">public</span> <span class="kt">long</span> <span class="nf">toMinutes</span><span class="o">(</span><span class="kt">long</span> <span class="n">d</span><span class="o">)</span>  <span class="c1">//转化成分钟</span>
+<span class="kd">public</span> <span class="kt">long</span> <span class="nf">toHours</span><span class="o">(</span><span class="kt">long</span> <span class="n">d</span><span class="o">)</span>    <span class="c1">//转化成小时</span>
+<span class="kd">public</span> <span class="kt">long</span> <span class="nf">toDays</span><span class="o">(</span><span class="kt">long</span> <span class="n">d</span><span class="o">)</span>     <span class="c1">//转化天</span>
+</code></pre></div></div>
+
+<p>例子</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//1天有24个小时    1代表1天：将1天转化为小时</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">DAYS</span><span class="o">.</span><span class="na">toHours</span><span class="o">(</span> <span class="mi">1</span> <span class="o">)</span> <span class="o">);</span>
+        <span class="c1">//结果： 24</span>
+        <span class="c1">//1小时有3600秒</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">HOURS</span><span class="o">.</span><span class="na">toSeconds</span><span class="o">(</span> <span class="mi">1</span> <span class="o">));</span>
+        <span class="c1">//结果3600</span>
+        <span class="c1">//把3天转化成小时</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">HOURS</span><span class="o">.</span><span class="na">convert</span><span class="o">(</span> <span class="mi">3</span> <span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">DAYS</span> <span class="o">)</span> <span class="o">);</span>
+        <span class="c1">//结果是：72</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>2、延时</p>
+<ul>
+  <li>一般的写法
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test2</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+          <span class="nd">@Override</span>
+          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+              <span class="k">try</span> <span class="o">{</span>
+                  <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">);</span>
+                  <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"延时完成了"</span><span class="o">);</span>
+              <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                  <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+              <span class="o">}</span>
+          <span class="o">}</span>
+      <span class="o">}).</span><span class="na">start</span><span class="o">();</span>  <span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>TimeUnit 写法
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test2</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span> <span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+          <span class="nd">@Override</span>
+          <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+              <span class="k">try</span> <span class="o">{</span>
+                  <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span> <span class="mi">5</span> <span class="o">);</span>
+                  <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span> <span class="s">"延时5秒，完成了"</span><span class="o">);</span>
+              <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                  <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+              <span class="o">}</span>
+          <span class="o">}</span>
+      <span class="o">}).</span><span class="na">start</span><span class="o">();</span>  <span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>参考链接</p>
+<ul>
+  <li><a href="https://www.cnblogs.com/zhaoyanjun/p/5486726.html">TimeUnit 使用</a></li>
+</ul>
+:ET
