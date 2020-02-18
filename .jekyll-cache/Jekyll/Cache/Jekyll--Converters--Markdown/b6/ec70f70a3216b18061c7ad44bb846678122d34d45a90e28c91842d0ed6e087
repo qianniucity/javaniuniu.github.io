@@ -1,0 +1,96 @@
+I"�<p>在项目中日期格式化是最常见的问题，之前涉及的 java.util.Date 和 java.util.Calendar 类易用性差，不支持时区，非线程安全，对日期的计算方式繁琐，而且容易出错，因为月份是从0开始的，从 Calendar 中获取的月份需要加一才能表示当前月份。</p>
+
+<p>在 JDK8 中，一个新的重要特性就是引入了全新的时间和日期API，它被收录在 java.time 包中，借助新的时间和日期API可以以更简洁的方法处理时间和日期。</p>
+
+<p>下面我们通过一些配置实现对日期类型LocalDateTime的格式化</p>
+
+<h5 id="导入依赖">导入依赖</h5>
+<p>新建一个spring boot项目导入web依赖即可</p>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<p>配置方案一
+定义一个配置类，在里面定义两个 Bean 即可完成全局日期格式化处理，同时还兼顾了 Date 和 LocalDateTime 并存</p>
+
+<p>复制代码
+package com.carry.config;</p>
+
+<p>import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;</p>
+
+<p>import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;</p>
+
+<p>import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;</p>
+
+<p>@Configuration
+public class LocalDateTimeSerializerConfig {</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
+private String pattern;
+
+ // 方案一
+@Bean
+public LocalDateTimeSerializer localDateTimeDeserializer() {
+    return new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(pattern));
+}
+
+@Bean
+public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+    return builder -&gt; builder.serializerByType(LocalDateTime.class, localDateTimeDeserializer());
+}
+</code></pre></div></div>
+
+<p>}
+复制代码</p>
+
+<p>实体类
+复制代码
+package com.carry.dto;</p>
+
+<p>import java.time.LocalDateTime;</p>
+
+<p>public class Order {</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private LocalDateTime createTime;
+
+public LocalDateTime getCreateTime() {
+    return createTime;
+}
+
+public void setCreateTime(LocalDateTime createTime) {
+    this.createTime = createTime;
+}
+</code></pre></div></div>
+
+<p>}
+复制代码</p>
+
+<p>控制层
+复制代码
+package com.carry.controller;</p>
+
+<p>import java.time.LocalDateTime;</p>
+
+<p>import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;</p>
+
+<p>import com.carry.dto.Order;</p>
+
+<p>@RestController
+@RequestMapping(“/orders”)
+public class OrderController {</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@GetMapping
+public Order query() {
+    Order order = new Order();
+    order.setCreateTime(LocalDateTime.now());
+    return order;
+} }
+</code></pre></div></div>
+:ET

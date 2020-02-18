@@ -1,0 +1,344 @@
+I"�<h5 id="一句话介绍">一句话介绍</h5>
+<p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；这种动态获取信息以及动态调用对象方法的功能称为java语言的反射机制。</p>
+
+<h5 id="用途">用途</h5>
+
+<p>在日常的第三方应用开发过程中，经常会遇到某个类的某个成员变量、方法或是属性是私有的或是只对系统应用开放，这时候就可以利用Java的反射机制通过反射来获取所需的私有成员或是方法。当然，也不是所有的都适合反射，之前就遇到一个案例，通过反射得到的结果与预期不符。阅读源码发现，经过层层调用后在最终返回结果的地方对应用的权限进行了校验，对于没有权限的应用返回值是没有意义的缺省值，否则返回实际值起到保护用户的隐私目的。</p>
+
+<h5 id="反射机制的相关类">反射机制的相关类</h5>
+
+<p>与Java反射相关的类如下：</p>
+
+<p>| 类名| 	用途|
+| :—–| :—- |
+| Class类	| 代表类的实体，在运行的Java应用程序中表示类和接口|
+| Field类	| 代表类的成员变量（成员变量也称为类的属性）|
+| Method类	| 代表类的方法|
+| Constructor类	| 代表类的构造方法|</p>
+<h5 id="class类">Class类</h5>
+
+<p>Class代表类的实体，在运行的Java应用程序中表示类和接口。在这个类中提供了很多有用的方法，这里对他们简单的分类介绍。</p>
+
+<ul>
+  <li>获得类相关的方法</li>
+</ul>
+
+<p>| 方法| 	用途|
+| asSubclass(Class<u> clazz)	| 把传递的类的对象转换成代表其子类的对象|
+| Cast| 	把对象转换成代表类或是接口的对象|
+| getClassLoader()| 	获得类的加载器|
+| getClasses()| 	返回一个数组，数组中包含该类中所有公共类和接口类的对象|
+| getDeclaredClasses()| 	返回一个数组，数组中包含该类中所有类和接口类的对象|
+| forName(String className)	| 根据类名返回类的对象|
+| getName()	| 获得类的完整路径名字|
+| newInstance()	| 创建类的实例|
+| getPackage()	| 获得类的包|
+| getSimpleName()	| 获得类的名字|
+| getSuperclass()	| 获得当前类继承的父类的名字|
+| getInterfaces()	| 获得当前类实现的类或是接口|</u></p>
+<ul>
+  <li>获得类中属性相关的方法
+| 方法| 	用途|
+| getField(String name)	| 获得某个公有的属性对象|
+| getFields()	| 获得所有公有的属性对象|
+| getDeclaredField(String name)	| 获得某个属性对象|
+| getDeclaredFields()	| 获得所有属性对象|</li>
+  <li>获得类中注解相关的方法
+| 方法| 	用途|
+| getAnnotation(Class<a> annotationClass)	| 返回该类中与参数类型匹配的公有注解对象|
+| getAnnotations()	| 返回该类所有的公有注解对象|
+| getDeclaredAnnotation(Class<a> annotationClass)| 	返回该类中与参数类型匹配的所有注解对象|
+| getDeclaredAnnotations()| 	返回该类所有的注解对象|</a></a></li>
+  <li>获得类中构造器相关的方法
+| 方法| 	用途|
+| getConstructor(Class…<?> parameterTypes)| 	获得该类中与参数类型匹配的公有构造方法|
+| getConstructors()| 	获得该类的所有公有构造方法|
+| getDeclaredConstructor(Class...<?> parameterTypes)| 	获得该类中与参数类型匹配的构造方法|
+| getDeclaredConstructors()	| 获得该类所有构造方法|</li>
+  <li>获得类中方法相关的方法
+| 方法| 	用途|
+| getMethod(String name, Class…<?> parameterTypes)| 	获得该类某个公有的方法|
+| getMethods()| 	获得该类所有公有的方法|
+| getDeclaredMethod(String name, Class...<?> parameterTypes)| 	获得该类某个方法|
+| getDeclaredMethods()| 	获得该类所有方法|</li>
+  <li>类中其他重要的方法
+| 方法| 	用途|
+| isAnnotation()| 	如果是注解类型则返回true|
+| isAnnotationPresent(Class&lt;? extends Annotation&gt; annotationClass)| 	如果是指定类型注解类型则返回true|
+| isAnonymousClass()| 	如果是匿名类则返回true|
+| isArray()	| 如果是一个数组类则返回true|
+| isEnum()	| 如果是枚举类则返回true|
+| isInstance(Object obj)	| 如果obj是该类的实例则返回true|
+| isInterface()	| 如果是接口类则返回true|
+| isLocalClass()	| 如果是局部类则返回true|
+| isMemberClass()	| 如果是内部类则返回true|
+    <h5 id="field类">Field类</h5>
+  </li>
+</ul>
+
+<p>Field代表类的成员变量（成员变量也称为类的属性）。</p>
+
+<p>| 方法| 	用途
+| equals(Object obj)	| 属性与obj相等则返回true|
+| get(Object obj)| 	获得obj中对应的属性值|
+| set(Object obj, Object value)	| 设置obj中对应属性值|</p>
+<h5 id="method类">Method类</h5>
+
+<p>Method代表类的方法。</p>
+
+<p>| 方法| 	用途|
+| invoke(Object obj, Object… args)	| 传递object对象及参数调用该对象对应的方法|</p>
+<h5 id="constructor类">Constructor类</h5>
+
+<p>Constructor代表类的构造方法。</p>
+
+<p>| 方法| 	用途|
+| newInstance(Object… initargs)	根据传递的参数创建类的对象|</p>
+<h5 id="示例">示例</h5>
+
+<p>为了演示反射的使用，首先构造一个与书籍相关的model——Book.java，然后通过反射方法示例创建对象、反射私有构造方法、反射私有属性、反射私有方法，最后给出两个比较复杂的反射示例——获得当前ZenMode和关机Shutdown。</p>
+
+<ul>
+  <li>被反射类Book.java
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Book</span><span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="nc">String</span> <span class="no">TAG</span> <span class="o">=</span> <span class="s">"BookTag"</span><span class="o">;</span>
+
+  <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">String</span> <span class="n">author</span><span class="o">;</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="s">"Book{"</span> <span class="o">+</span>
+              <span class="s">"name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+              <span class="s">", author='"</span> <span class="o">+</span> <span class="n">author</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+              <span class="sc">'}'</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="nf">Book</span><span class="o">()</span> <span class="o">{</span>
+  <span class="o">}</span>
+
+  <span class="kd">private</span> <span class="nf">Book</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">author</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">author</span> <span class="o">=</span> <span class="n">author</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAuthor</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">author</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAuthor</span><span class="o">(</span><span class="nc">String</span> <span class="n">author</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">author</span> <span class="o">=</span> <span class="n">author</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">private</span> <span class="nc">String</span> <span class="nf">declaredMethod</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+      <span class="k">switch</span> <span class="o">(</span><span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+              <span class="n">string</span> <span class="o">=</span> <span class="s">"I am declaredMethod 1 !"</span><span class="o">;</span>
+              <span class="k">break</span><span class="o">;</span>
+          <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+              <span class="n">string</span> <span class="o">=</span> <span class="s">"I am declaredMethod 2 !"</span><span class="o">;</span>
+              <span class="k">break</span><span class="o">;</span>
+          <span class="k">default</span><span class="o">:</span>
+              <span class="n">string</span> <span class="o">=</span> <span class="s">"I am declaredMethod 1 !"</span><span class="o">;</span>
+      <span class="o">}</span>
+
+      <span class="k">return</span> <span class="n">string</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>反射逻辑封装在ReflectClass.java
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ReflectClass</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="nc">String</span> <span class="no">TAG</span> <span class="o">=</span> <span class="s">"peter.log.ReflectClass"</span><span class="o">;</span>
+
+  <span class="c1">// 创建对象</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">reflectNewInstance</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">classBook</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"com.android.peter.reflectdemo.Book"</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">objectBook</span> <span class="o">=</span> <span class="n">classBook</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+          <span class="nc">Book</span> <span class="n">book</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Book</span><span class="o">)</span> <span class="n">objectBook</span><span class="o">;</span>
+          <span class="n">book</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Android进阶之光"</span><span class="o">);</span>
+          <span class="n">book</span><span class="o">.</span><span class="na">setAuthor</span><span class="o">(</span><span class="s">"刘望舒"</span><span class="o">);</span>
+          <span class="nc">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span><span class="s">"reflectNewInstance book = "</span> <span class="o">+</span> <span class="n">book</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 反射私有的构造方法</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">reflectPrivateConstructor</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">classBook</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"com.android.peter.reflectdemo.Book"</span><span class="o">);</span>
+          <span class="nc">Constructor</span><span class="o">&lt;?&gt;</span> <span class="n">declaredConstructorBook</span> <span class="o">=</span> <span class="n">classBook</span><span class="o">.</span><span class="na">getDeclaredConstructor</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="n">declaredConstructorBook</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">objectBook</span> <span class="o">=</span> <span class="n">declaredConstructorBook</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="s">"Android开发艺术探索"</span><span class="o">,</span><span class="s">"任玉刚"</span><span class="o">);</span>
+          <span class="nc">Book</span> <span class="n">book</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Book</span><span class="o">)</span> <span class="n">objectBook</span><span class="o">;</span>
+          <span class="nc">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span><span class="s">"reflectPrivateConstructor book = "</span> <span class="o">+</span> <span class="n">book</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 反射私有属性</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">reflectPrivateField</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">classBook</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"com.android.peter.reflectdemo.Book"</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">objectBook</span> <span class="o">=</span> <span class="n">classBook</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+          <span class="nc">Field</span> <span class="n">fieldTag</span> <span class="o">=</span> <span class="n">classBook</span><span class="o">.</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">"TAG"</span><span class="o">);</span>
+          <span class="n">fieldTag</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+          <span class="nc">String</span> <span class="n">tag</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">fieldTag</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">objectBook</span><span class="o">);</span>
+          <span class="nc">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span><span class="s">"reflectPrivateField tag = "</span> <span class="o">+</span> <span class="n">tag</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 反射私有方法</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">reflectPrivateMethod</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">classBook</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"com.android.peter.reflectdemo.Book"</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">methodBook</span> <span class="o">=</span> <span class="n">classBook</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">"declaredMethod"</span><span class="o">,</span><span class="kt">int</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="n">methodBook</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">objectBook</span> <span class="o">=</span> <span class="n">classBook</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+          <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="o">(</span><span class="nc">String</span><span class="o">)</span> <span class="n">methodBook</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">objectBook</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span>
+
+          <span class="nc">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span><span class="s">"reflectPrivateMethod string = "</span> <span class="o">+</span> <span class="n">string</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 获得系统Zenmode值</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getZenMode</span><span class="o">()</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">zenMode</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">cServiceManager</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"android.os.ServiceManager"</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">mGetService</span> <span class="o">=</span> <span class="n">cServiceManager</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"getService"</span><span class="o">,</span> <span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">oNotificationManagerService</span> <span class="o">=</span> <span class="n">mGetService</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nc">Context</span><span class="o">.</span><span class="na">NOTIFICATION_SERVICE</span><span class="o">);</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">cINotificationManagerStub</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"android.app.INotificationManager$Stub"</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">mAsInterface</span> <span class="o">=</span> <span class="n">cINotificationManagerStub</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"asInterface"</span><span class="o">,</span><span class="nc">IBinder</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">oINotificationManager</span> <span class="o">=</span> <span class="n">mAsInterface</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="n">oNotificationManagerService</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">mGetZenMode</span> <span class="o">=</span> <span class="n">cINotificationManagerStub</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"getZenMode"</span><span class="o">);</span>
+          <span class="n">zenMode</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">mGetZenMode</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">oINotificationManager</span><span class="o">);</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+
+      <span class="k">return</span> <span class="n">zenMode</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 关闭手机</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shutDown</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">cServiceManager</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"android.os.ServiceManager"</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">mGetService</span> <span class="o">=</span> <span class="n">cServiceManager</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"getService"</span><span class="o">,</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">oPowerManagerService</span> <span class="o">=</span> <span class="n">mGetService</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="nc">Context</span><span class="o">.</span><span class="na">POWER_SERVICE</span><span class="o">);</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">cIPowerManagerStub</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"android.os.IPowerManager$Stub"</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">mShutdown</span> <span class="o">=</span> <span class="n">cIPowerManagerStub</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"shutdown"</span><span class="o">,</span><span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span><span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="nc">Method</span> <span class="n">mAsInterface</span> <span class="o">=</span> <span class="n">cIPowerManagerStub</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"asInterface"</span><span class="o">,</span><span class="nc">IBinder</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="nc">Object</span> <span class="n">oIPowerManager</span> <span class="o">=</span> <span class="n">mAsInterface</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span><span class="n">oPowerManagerService</span><span class="o">);</span>
+          <span class="n">mShutdown</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">oIPowerManager</span><span class="o">,</span><span class="kc">true</span><span class="o">,</span><span class="kc">null</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shutdownOrReboot</span><span class="o">(</span><span class="kd">final</span> <span class="kt">boolean</span> <span class="n">shutdown</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">confirm</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="nc">ServiceManager</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"android.os.ServiceManager"</span><span class="o">);</span>
+          <span class="c1">// 获得ServiceManager的getService方法</span>
+          <span class="nc">Method</span> <span class="n">getService</span> <span class="o">=</span> <span class="nc">ServiceManager</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"getService"</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="c1">// 调用getService获取RemoteService</span>
+          <span class="nc">Object</span> <span class="n">oRemoteService</span> <span class="o">=</span> <span class="n">getService</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="nc">Context</span><span class="o">.</span><span class="na">POWER_SERVICE</span><span class="o">);</span>
+          <span class="c1">// 获得IPowerManager.Stub类</span>
+          <span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">cStub</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"android.os.IPowerManager$Stub"</span><span class="o">);</span>
+          <span class="c1">// 获得asInterface方法</span>
+          <span class="nc">Method</span> <span class="n">asInterface</span> <span class="o">=</span> <span class="n">cStub</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"asInterface"</span><span class="o">,</span> <span class="n">android</span><span class="o">.</span><span class="na">os</span><span class="o">.</span><span class="na">IBinder</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+          <span class="c1">// 调用asInterface方法获取IPowerManager对象</span>
+          <span class="nc">Object</span> <span class="n">oIPowerManager</span> <span class="o">=</span> <span class="n">asInterface</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="n">oRemoteService</span><span class="o">);</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">shutdown</span><span class="o">)</span> <span class="o">{</span>
+              <span class="c1">// 获得shutdown()方法</span>
+              <span class="nc">Method</span> <span class="n">shutdownMethod</span> <span class="o">=</span> <span class="n">oIPowerManager</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span>
+                      <span class="s">"shutdown"</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+              <span class="c1">// 调用shutdown()方法</span>
+              <span class="n">shutdownMethod</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">oIPowerManager</span><span class="o">,</span> <span class="n">confirm</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+          <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+              <span class="c1">// 获得reboot()方法</span>
+              <span class="nc">Method</span> <span class="n">rebootMethod</span> <span class="o">=</span> <span class="n">oIPowerManager</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"reboot"</span><span class="o">,</span>
+                      <span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+              <span class="c1">// 调用reboot()方法</span>
+              <span class="n">rebootMethod</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">oIPowerManager</span><span class="o">,</span> <span class="n">confirm</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+          <span class="o">}</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>调用相应反射逻辑方法
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="k">try</span> <span class="o">{</span>
+          <span class="c1">// 创建对象</span>
+          <span class="nc">ReflectClass</span><span class="o">.</span><span class="na">reflectNewInstance</span><span class="o">();</span>
+
+          <span class="c1">// 反射私有的构造方法</span>
+          <span class="nc">ReflectClass</span><span class="o">.</span><span class="na">reflectPrivateConstructor</span><span class="o">();</span>
+
+          <span class="c1">// 反射私有属性</span>
+          <span class="nc">ReflectClass</span><span class="o">.</span><span class="na">reflectPrivateField</span><span class="o">();</span>
+
+          <span class="c1">// 反射私有方法</span>
+          <span class="nc">ReflectClass</span><span class="o">.</span><span class="na">reflectPrivateMethod</span><span class="o">();</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">ex</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="o">}</span>
+
+      <span class="nc">Log</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="no">TAG</span><span class="o">,</span><span class="s">" zenmode = "</span> <span class="o">+</span> <span class="nc">ReflectClass</span><span class="o">.</span><span class="na">getZenMode</span><span class="o">());</span>
+</code></pre></div>    </div>
+  </li>
+  <li>Log输出结果如下：
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>08-27 15:11:37.999 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectNewInstance book = Book{name='Android进阶之光', author='刘望舒'}
+08-27 15:11:38.000 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectPrivateConstructor book = Book{name='Android开发艺术探索', author='任玉刚'}
+08-27 15:11:38.000 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectPrivateField tag = BookTag
+08-27 15:11:38.000 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectPrivateMethod string = I am declaredMethod 1 !
+08-27 15:11:38.004 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectDemo:  zenmode = 0
+</code></pre></div>    </div>
+    <h5 id="总结">总结</h5>
+  </li>
+</ul>
+
+<p>本文列举了反射机制使用过程中常用的、重要的一些类及其方法，更多信息和用法需要近一步的阅读Google提供的相关文档和示例。</p>
+
+<p>在阅读Class类文档时发现一个特点，以通过反射获得Method对象为例，一般会提供四种方法，getMethod(parameterTypes)、getMethods()、getDeclaredMethod(parameterTypes)和getDeclaredMethods()。getMethod(parameterTypes)用来获取某个公有的方法的对象，getMethods()获得该类所有公有的方法，getDeclaredMethod(parameterTypes)获得该类某个方法，getDeclaredMethods()获得该类所有方法。带有Declared修饰的方法可以反射到私有的方法，没有Declared修饰的只能用来反射公有的方法。其他的Annotation、Field、Constructor也是如此。</p>
+
+<p>在ReflectClass类中还提供了两种反射PowerManager.shutdown()的方法，在调用的时候会输出如下log，提示没有相关权限。之前在项目中尝试反射其他方法的时候还遇到过有权限和没权限返回的值不一样的情况。如果源码中明确进行了权限验证，而你的应用又无法获得这个权限的话，建议就不要浪费时间反射了。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> W/System.err: java.lang.reflect.InvocationTargetException
+ W/System.err:     at java.lang.reflect.Method.invoke(Native Method)
+ W/System.err:     at .ReflectClass.shutDown(ReflectClass.java:104)
+ W/System.err:     at .MainActivity$1.onClick(MainActivity.java:25)
+ W/System.err:     at android.view.View.performClick(View.java:6259)
+ W/System.err:     at android.view.View$PerformClick.run(View.java:24732)
+ W/System.err:     at android.os.Handler.handleCallback(Handler.java:789)
+ W/System.err:     at android.os.Handler.dispatchMessage(Handler.java:98)
+ W/System.err:     at android.os.Looper.loop(Looper.java:164)
+ W/System.err:     at android.app.ActivityThread.main(ActivityThread.java:6592)
+ W/System.err:     at java.lang.reflect.Method.invoke(Native Method)
+ W/System.err:     at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)
+ W/System.err:     at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:769)
+ W/System.err: Caused by: java.lang.SecurityException: Neither user 10224 nor current process has android.permission.REBOOT.
+ W/System.err:     at android.os.Parcel.readException(Parcel.java:1942)
+ W/System.err:     at android.os.Parcel.readException(Parcel.java:1888)
+ W/System.err:     at android.os.IPowerManager$Stub$Proxy.shutdown(IPowerManager.java:787)
+ W/System.err:  ... 12 more
+</code></pre></div></div>
+:ET

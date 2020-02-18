@@ -1,0 +1,157 @@
+I"T6<h4 id="joinpoint-对象">JoinPoint 对象</h4>
+<p>JoinPoint对象<code class="highlighter-rouge">封装了SpringAop中切面方法的信息</code>,在切面方法中添加<code class="highlighter-rouge">JoinPoint参数</code>,就可以获取到封装了该方法信息的<code class="highlighter-rouge">JoinPoint对象</code>. <br />
+<strong>常用api:</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">方法名</th>
+      <th style="text-align: left">功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Signature getSignature();</td>
+      <td style="text-align: left">获取封装了署名信息的对象,在该对象中可以获取到目标方法名,所属类的Class等信息</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Object[] getArgs();</td>
+      <td style="text-align: left">获取传入目标方法的参数对象</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Object getTarget();</td>
+      <td style="text-align: left">获取被代理的对象</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Object getThis();</td>
+      <td style="text-align: left">获取代理对象</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="proceedingjoinpoint对象">ProceedingJoinPoint对象</h4>
+
+<p><strong>ProceedingJoinPoint对象是JoinPoint的子接口,该对象只用在@Around的切面方法中,</strong>
+添加了</p>
+<ul>
+  <li>Object proceed() throws Throwable //执行目标方法</li>
+  <li>Object proceed(Object[] var1) throws Throwable //传入的新的参数去执行目标方法
+两个方法.</li>
+</ul>
+
+<h4 id="demo">Demo</h4>
+
+<p><strong>切面类</strong></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Aspect</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">aopAspect</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 定义一个切入点表达式,用来确定哪些类需要代理
+     * execution(* aopdemo.*.*(..))代表aopdemo包下所有类的所有方法都会被代理
+     */</span>
+    <span class="nd">@Pointcut</span><span class="o">(</span><span class="s">"execution(* aopdemo.*.*(..))"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">declareJoinPointerExpression</span><span class="o">()</span> <span class="o">{}</span>
+
+    <span class="cm">/**
+     * 前置方法,在目标方法执行前执行
+     * @param joinPoint 封装了代理方法信息的对象,若用不到则可以忽略不写
+     */</span>
+    <span class="nd">@Before</span><span class="o">(</span><span class="s">"declareJoinPointerExpression()"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">beforeMethod</span><span class="o">(</span><span class="nc">JoinPoint</span> <span class="n">joinPoint</span><span class="o">){</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法名为:"</span> <span class="o">+</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法所属类的简单类名:"</span> <span class="o">+</span>        <span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getDeclaringType</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法所属类的类名:"</span> <span class="o">+</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getDeclaringTypeName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法声明类型:"</span> <span class="o">+</span> <span class="nc">Modifier</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">joinPoint</span><span class="o">.</span><span class="na">getSignature</span><span class="o">().</span><span class="na">getModifiers</span><span class="o">()));</span>
+        <span class="c1">//获取传入目标方法的参数</span>
+        <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span> <span class="o">=</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getArgs</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"第"</span> <span class="o">+</span> <span class="o">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">"个参数为:"</span> <span class="o">+</span> <span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"被代理的对象:"</span> <span class="o">+</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getTarget</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"代理对象自己:"</span> <span class="o">+</span> <span class="n">joinPoint</span><span class="o">.</span><span class="na">getThis</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 环绕方法,可自定义目标方法执行的时机
+     * @param pjd JoinPoint的子接口,添加了
+     *            Object proceed() throws Throwable 执行目标方法
+     *            Object proceed(Object[] var1) throws Throwable 传入的新的参数去执行目标方法
+     *            两个方法
+     * @return 此方法需要返回值,返回值视为目标方法的返回值
+     */</span>
+    <span class="nd">@Around</span><span class="o">(</span><span class="s">"declareJoinPointerExpression()"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">aroundMethod</span><span class="o">(</span><span class="nc">ProceedingJoinPoint</span> <span class="n">pjd</span><span class="o">){</span>
+        <span class="nc">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">//前置通知</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法执行前..."</span><span class="o">);</span>
+            <span class="c1">//执行目标方法</span>
+            <span class="c1">//result = pjd.proeed();</span>
+            <span class="c1">//用新的参数值执行目标方法</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">pjd</span><span class="o">.</span><span class="na">proceed</span><span class="o">(</span><span class="k">new</span> <span class="nc">Object</span><span class="o">[]{</span><span class="s">"newSpring"</span><span class="o">,</span><span class="s">"newAop"</span><span class="o">});</span>
+            <span class="c1">//返回通知</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法返回结果后..."</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//异常通知</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"执行目标方法异常后..."</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="c1">//后置通知</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"目标方法执行后..."</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>被代理类</strong></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 被代理对象
+ */</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TargetClass</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 拼接两个字符串
+     */</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">joint</span><span class="o">(</span><span class="nc">String</span> <span class="n">str1</span><span class="o">,</span> <span class="nc">String</span> <span class="n">str2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">str1</span> <span class="o">+</span> <span class="s">"+"</span> <span class="o">+</span> <span class="n">str2</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p><strong>测试类</strong></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestAop</span> <span class="o">{</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testAOP</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">//1、创建Spring的IOC的容器</span>
+        <span class="nc">ApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"classpath:bean.xml"</span><span class="o">);</span>
+
+        <span class="c1">//2、从IOC容器中获取bean的实例</span>
+        <span class="nc">TargetClass</span> <span class="n">targetClass</span> <span class="o">=</span> <span class="o">(</span><span class="nc">TargetClass</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"targetClass"</span><span class="o">);</span>
+
+        <span class="c1">//3、使用bean</span>
+        <span class="nc">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">targetClass</span><span class="o">.</span><span class="na">joint</span><span class="o">(</span><span class="s">"spring"</span><span class="o">,</span><span class="s">"aop"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"result:"</span> <span class="o">+</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p><strong>输出结果</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>目标方法执行前...
+目标方法名为:joint
+目标方法所属类的简单类名:TargetClass
+目标方法所属类的类名:aopdemo.TargetClass
+目标方法声明类型:public
+第1个参数为:newSpring
+第2个参数为:newAop
+被代理的对象:aopdemo.TargetClass@4efc180e
+代理对象自己:aopdemo.TargetClass@4efc180e
+目标方法返回结果后...
+目标方法执行后...
+result:newSpring+newAop
+</code></pre></div></div>
+
+<p>参考链接</p>
+<ul>
+  <li><a href="https://blog.csdn.net/qq_15037231/article/details/80624064">JoinPoint的用法</a></li>
+</ul>
+:ET

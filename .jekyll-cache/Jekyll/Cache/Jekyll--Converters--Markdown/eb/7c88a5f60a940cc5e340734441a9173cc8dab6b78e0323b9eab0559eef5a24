@@ -1,0 +1,316 @@
+I"�o<h5 id="一句话简介">一句话简介</h5>
+<p>WebMvcConfigurer配置类其实是Spring内部的一种配置方式，采用JavaBean的形式来代替传统的xml配置文件形式进行针对框架个性化定制，可以自定义一些Handler，Interceptor，ViewResolver，MessageConverter。基于java-based方式的spring mvc配置，需要创建一个配置类并实现WebMvcConfigurer 接口</p>
+
+<h5 id="主要讲解">主要讲解</h5>
+<p>通过ViewController将一个请求转到一个页面
+通过ResourceHandlers实现静态资源的地址映射
+通过MessageConverter实现将@ResponseBody实体转Fastjson字符串返回，可以返回实体进行重写
+通过addCorsMappings实现ajax跨域请求
+通过addInterceptors添加拦截器</p>
+
+<p>SpringBoot2.0（官方推荐）</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>    
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfg</span> <span class="kd">implements</span> <span class="nc">WebMvcConfigurer</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>SpringBoot2.0以前版本</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>    
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfig</span> <span class="kd">extends</span> <span class="nc">WebMvcConfigurerAdapter</span> <span class="o">{</span>
+<span class="err">｝</span>
+</code></pre></div></div>
+<h5 id="配置resourcehandlers">配置ResourceHandlers</h5>
+<p>此方法用来专门注册一个Handler，来处理静态资源的，例如：图片，js，css等。举例：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nd">@Override</span>
+ <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addResourceHandlers</span><span class="o">(</span><span class="nc">ResourceHandlerRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+     <span class="c1">//可以通过http://127.0.0.1:8080/web/home.html访问resources/web/home.html页面</span>
+     <span class="n">registry</span><span class="o">.</span><span class="na">addResourceHandler</span><span class="o">(</span><span class="s">"/web/**"</span><span class="o">).</span><span class="na">addResourceLocations</span><span class="o">(</span><span class="s">"classpath:/web/"</span><span class="o">);</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+<p>当你请求http://127.0.0.1:8080/web/home.html时，会把resources/web/home.html返回。注意：这里的静态资源是放置在WEB-INF目录下的</p>
+
+<h5 id="配置viewcontroller">配置ViewController</h5>
+<p>此方法可以很方便的实现一个请求到视图的映射，而无需书写controller，例如：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">addViewControllers</span><span class="o">(</span><span class="nc">ViewControllerRegistry</span> <span class="n">registry</span><span class="o">){</span>
+	<span class="n">registry</span><span class="o">.</span><span class="na">addViewController</span><span class="o">(</span><span class="s">"/login"</span><span class="o">).</span><span class="na">setViewName</span><span class="o">(</span><span class="s">"web/login.html"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>|这是访问http://127.0.0.1:8080/login时，会直接返回login.html页面。</p>
+
+<h5 id="配置messageconverter">配置MessageConverter</h5>
+<p>这个配置一般针对于Api接口服务程序，配置在请求返回时内容采用什么转换器进行转换，我们最常用到的就是fastJson的转换，配置如下所示</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * 消息内容转换配置
+     * 配置fastJson返回json转换
+     * @param converters
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">configureMessageConverters</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">HttpMessageConverter</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">converters</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//创建fastJson消息转换器</span>
+        <span class="nc">FastJsonHttpMessageConverter</span> <span class="n">fastConverter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FastJsonHttpMessageConverter</span><span class="o">(){</span>
+            <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">writeInternal</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="nc">HttpOutputMessage</span> <span class="n">outputMessage</span><span class="o">){</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="k">if</span><span class="o">(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="nc">PreUser</span><span class="o">){</span>
+                        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+                        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"preUser"</span><span class="o">,</span><span class="n">obj</span><span class="o">);</span>
+                        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"result"</span><span class="o">,</span><span class="s">"success"</span><span class="o">);</span>
+                        <span class="kd">super</span><span class="o">.</span><span class="na">writeInternal</span><span class="o">(</span> <span class="n">map</span><span class="o">,</span> <span class="n">outputMessage</span><span class="o">);</span>
+                    <span class="o">}</span><span class="k">else</span><span class="o">{</span>
+                        <span class="kd">super</span><span class="o">.</span><span class="na">writeInternal</span><span class="o">(</span> <span class="n">obj</span><span class="o">,</span> <span class="n">outputMessage</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">};</span>
+      <span class="c1">//  FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">supportedMediaTypes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">supportedMediaTypes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON</span><span class="o">);</span>
+        <span class="n">supportedMediaTypes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON_UTF8</span><span class="o">);</span>
+        <span class="n">fastConverter</span><span class="o">.</span><span class="na">setSupportedMediaTypes</span><span class="o">(</span><span class="n">supportedMediaTypes</span><span class="o">);</span>
+
+        <span class="c1">//创建配置类</span>
+        <span class="nc">FastJsonConfig</span> <span class="n">fastJsonConfig</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FastJsonConfig</span><span class="o">();</span>
+        <span class="n">fastJsonConfig</span><span class="o">.</span><span class="na">setCharset</span><span class="o">(</span><span class="nc">Charset</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"UTF-8"</span><span class="o">));</span>
+        <span class="n">fastJsonConfig</span><span class="o">.</span><span class="na">setDateFormat</span><span class="o">(</span><span class="s">"YYYY-MM-dd"</span><span class="o">);</span>
+
+        <span class="c1">//修改配置返回内容的过滤</span>
+        <span class="n">fastJsonConfig</span><span class="o">.</span><span class="na">setSerializerFeatures</span><span class="o">(</span>
+                <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">DisableCircularReferenceDetect</span><span class="o">,</span>
+                <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">WriteMapNullValue</span><span class="o">,</span>
+                <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">WriteNullStringAsEmpty</span><span class="o">,</span>
+                <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">PrettyFormat</span>
+        <span class="o">);</span>
+        <span class="n">fastConverter</span><span class="o">.</span><span class="na">setFastJsonConfig</span><span class="o">(</span><span class="n">fastJsonConfig</span><span class="o">);</span>
+        <span class="c1">//将fastjson添加到视图消息转换器列表内</span>
+        <span class="n">converters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">fastConverter</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<table>
+  <tbody>
+    <tr>
+      <td>FastJson SerializerFeatures</td>
+    </tr>
+    <tr>
+      <td>WriteNullListAsEmpty ：List字段如果为null,输出为[],而非null</td>
+    </tr>
+    <tr>
+      <td>WriteNullStringAsEmpty ： 字符类型字段如果为null,输出为”“,而非null</td>
+    </tr>
+    <tr>
+      <td>DisableCircularReferenceDetect ：消除对同一对象循环引用的问题，默认为false（如果不配置有可能会进入死循环）</td>
+    </tr>
+    <tr>
+      <td>WriteNullBooleanAsFalse：Boolean字段如果为null,输出为false,而非null</td>
+    </tr>
+    <tr>
+      <td>WriteMapNullValue：是否输出值为null的字段,默认为false。</td>
+    </tr>
+    <tr>
+      <td>WriteNullNumberAsZero: 数值字段如果为null，则输出为0</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>重写writeInternal方法，可以重新构造返回对象，达到统一的返回值</td>
+    </tr>
+    <tr>
+      <td>setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>httpmessageconvert在自动配置jackson，默认使用用jackson 。所以如果返回类型为application/json的数据使用jackson 。所以去除jackson的依赖。</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>       <span class="nt">&lt;dependency&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;exclusions&gt;</span>
+				<span class="nt">&lt;exclusion&gt;</span>
+					<span class="nt">&lt;artifactId&gt;</span>jackson-databind<span class="nt">&lt;/artifactId&gt;</span>
+					<span class="nt">&lt;groupId&gt;</span>com.fasterxml.jackson.core<span class="nt">&lt;/groupId&gt;</span>
+				<span class="nt">&lt;/exclusion&gt;</span>
+			<span class="nt">&lt;/exclusions&gt;</span>
+		<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
+
+<p>不去依赖的写法</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Configuration</span>
+    <span class="nd">@ConditionalOnClass</span><span class="o">({</span><span class="nc">FastJsonHttpMessageConverter</span><span class="o">.</span><span class="na">class</span><span class="o">})</span> <span class="c1">//1</span>
+    <span class="nd">@ConditionalOnProperty</span><span class="o">(</span><span class="c1">//2</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="o">{</span><span class="s">"spring.http.converters.preferred-json-mapper"</span><span class="o">},</span>
+            <span class="n">havingValue</span> <span class="o">=</span> <span class="s">"fastjson"</span><span class="o">,</span>
+            <span class="n">matchIfMissing</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="o">)</span>
+    <span class="kd">protected</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">FastJson2HttpMessageConverterConfiguration</span> <span class="o">{</span>
+        <span class="kd">protected</span> <span class="nf">FastJson2HttpMessageConverterConfiguration</span><span class="o">()</span> <span class="o">{</span>
+        <span class="o">}</span>
+        <span class="nd">@Bean</span>
+        <span class="nd">@ConditionalOnMissingBean</span><span class="o">({</span><span class="nc">FastJsonHttpMessageConverter</span><span class="o">.</span><span class="na">class</span><span class="o">})</span><span class="c1">//3</span>
+        <span class="kd">public</span> <span class="nc">FastJsonHttpMessageConverter</span> <span class="nf">fastJsonHttpMessageConverter</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">//创建fastJson消息转换器</span>
+            <span class="nc">FastJsonHttpMessageConverter</span> <span class="n">fastConverter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FastJsonHttpMessageConverter</span><span class="o">(){</span>
+                <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">writeInternal</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="nc">HttpOutputMessage</span> <span class="n">outputMessage</span><span class="o">){</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="k">if</span><span class="o">(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="nc">PreUser</span><span class="o">){</span>
+                            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+                            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"result"</span><span class="o">,</span><span class="s">"success"</span><span class="o">);</span>
+                            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"preUser"</span><span class="o">,</span><span class="n">obj</span><span class="o">);</span>
+                            <span class="kd">super</span><span class="o">.</span><span class="na">writeInternal</span><span class="o">(</span> <span class="n">map</span><span class="o">,</span> <span class="n">outputMessage</span><span class="o">);</span>
+                        <span class="o">}</span><span class="k">else</span><span class="o">{</span>
+                            <span class="kd">super</span><span class="o">.</span><span class="na">writeInternal</span><span class="o">(</span> <span class="n">obj</span><span class="o">,</span> <span class="n">outputMessage</span><span class="o">);</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">};</span>
+            <span class="c1">//  FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">supportedMediaTypes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="n">supportedMediaTypes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON</span><span class="o">);</span>
+            <span class="n">supportedMediaTypes</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON_UTF8</span><span class="o">);</span>
+            <span class="n">fastConverter</span><span class="o">.</span><span class="na">setSupportedMediaTypes</span><span class="o">(</span><span class="n">supportedMediaTypes</span><span class="o">);</span>
+
+            <span class="c1">//创建配置类</span>
+            <span class="nc">FastJsonConfig</span> <span class="n">fastJsonConfig</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FastJsonConfig</span><span class="o">();</span>
+            <span class="n">fastJsonConfig</span><span class="o">.</span><span class="na">setCharset</span><span class="o">(</span><span class="nc">Charset</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"UTF-8"</span><span class="o">));</span>
+            <span class="n">fastJsonConfig</span><span class="o">.</span><span class="na">setDateFormat</span><span class="o">(</span><span class="s">"YYYY-MM-dd"</span><span class="o">);</span>
+
+            <span class="c1">//修改配置返回内容的过滤</span>
+            <span class="n">fastJsonConfig</span><span class="o">.</span><span class="na">setSerializerFeatures</span><span class="o">(</span>
+                    <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">DisableCircularReferenceDetect</span><span class="o">,</span>
+                    <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">WriteMapNullValue</span><span class="o">,</span>
+                    <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">WriteNullStringAsEmpty</span><span class="o">,</span>
+                    <span class="nc">SerializerFeature</span><span class="o">.</span><span class="na">PrettyFormat</span>
+            <span class="o">);</span>
+            <span class="n">fastConverter</span><span class="o">.</span><span class="na">setFastJsonConfig</span><span class="o">(</span><span class="n">fastJsonConfig</span><span class="o">);</span>
+            <span class="c1">//将fastjson添加到视图消息转换器列表内</span>
+           <span class="c1">// converters.add(fastConverter);</span>
+            <span class="k">return</span> <span class="n">fastConverter</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>application.yml添加配置</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring:
+  http:
+    converters:
+      preferred-json-mapper: fastjson
+</code></pre></div></div>
+
+<p>以上代码判断返回类型PreUser的对象，进行重写。返回数据为</p>
+<pre><code class="language-FastJson">{
+	"result":"success",
+	"preUser":{
+		"address":"广东广州天河",
+		"age":29,
+		"date":"2018-09-20",
+		"desc":"tom is 29 years old",
+		"hobby":[
+			"打球",
+			"写代码"
+		],
+		"name":"tom",
+		"phone":""
+	}
+}
+</code></pre>
+
+<h5 id="配置cors跨域">配置CORS跨域</h5>
+
+<p>Spring既然为了集成了CROS，那就证明了一点，以后前后端分离是一个开发趋势</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+   <span class="cm">/**
+     * 跨域CORS配置
+     * @param registry
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addCorsMappings</span><span class="o">(</span><span class="nc">CorsRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">addCorsMappings</span><span class="o">(</span><span class="n">registry</span><span class="o">);</span>
+        <span class="n">registry</span><span class="o">.</span><span class="na">addMapping</span><span class="o">(</span><span class="s">"/cors/**"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowedHeaders</span><span class="o">(</span><span class="s">"*"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowedMethods</span><span class="o">(</span><span class="s">"POST"</span><span class="o">,</span><span class="s">"GET"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">allowedOrigins</span><span class="o">(</span><span class="s">"*"</span><span class="o">);</span>
+    <span class="o">}</span>  
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+	<span class="nt">&lt;head&gt;</span>
+		<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"UTF-8"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;title&gt;&lt;/title&gt;</span>
+		<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"js/jquery.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+		<span class="nt">&lt;script&gt;</span>
+            <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+                <span class="na">type</span><span class="p">:</span><span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span>
+                <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8080/preUser</span><span class="dl">"</span><span class="p">,</span>
+                <span class="na">dataType</span><span class="p">:</span><span class="dl">"</span><span class="s2">json</span><span class="dl">"</span><span class="p">,</span>
+                <span class="na">success</span><span class="p">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">status</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">){</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">xhr</span><span class="p">.</span><span class="nx">getAllResponseHeaders</span><span class="p">());</span>
+                <span class="p">},</span>
+                <span class="na">error</span><span class="p">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">jqXHR</span><span class="p">){</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error: </span><span class="dl">"</span><span class="o">+</span><span class="nx">jqXHR</span><span class="p">.</span><span class="nx">status</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+		<span class="nt">&lt;/script&gt;</span>
+	<span class="nt">&lt;/head&gt;</span>
+	<span class="nt">&lt;body&gt;</span>
+		cores.html
+	<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>验证访问：http://127.0.0.1:8080/web/cors.html,没设置addCorsMappings()报跨域异常。</p>
+
+<h5 id="配置拦截器">配置拦截器</h5>
+<p>在之前Xml配置形式天下的时候，我们都是在spring-mvc.xml配置文件内添加<mvc:interceptor>标签配置拦截器。</mvc:interceptor></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
+     * 拦截器配置
+     * @param registry
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addInterceptors</span><span class="o">(</span><span class="nc">InterceptorRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">registry</span><span class="o">.</span><span class="na">addInterceptor</span><span class="o">(</span><span class="k">new</span> <span class="nc">CustomHandlerInterceptor</span><span class="o">()).</span><span class="na">addPathPatterns</span><span class="o">(</span><span class="s">"/**"</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">InterceptorRegistry</code>内的<code class="highlighter-rouge">addInterceptor</code>需要一个实现<code class="highlighter-rouge">HandlerInterceptor</code>接口的拦截器实例，<code class="highlighter-rouge">addPathPatterns</code>方法用于设置拦截器的过滤路径规则·。<code class="highlighter-rouge">excludePathPatterns</code> 表示不拦截。</p>
+
+<p>@Slf4j
+public class CustomHandlerInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response, Object handler)
+            throws Exception {
+        log.info(“preHandle:请求前调用”);
+        //返回 false 则请求中断
+        return true;
+    }</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Override
+public void postHandle(HttpServletRequest request,
+                       HttpServletResponse response, Object handler,
+                       ModelAndView modelAndView) throws Exception {
+    log.info("postHandle:请求后调用");
+}
+
+@Override
+public void afterCompletion(HttpServletRequest request,
+                            HttpServletResponse response, Object handler, Exception ex)
+        throws Exception {
+    log.info("afterCompletion:请求调用完成后回调方法，即在视图渲染完成后回调");
+} }
+</code></pre></div></div>
+
+<p>每次请求时打印</p>
+
+<p>2018-12-24 22:21:34.434  INFO 2156 — [io-8080-exec-10]  : preHandle:请求前调用
+2018-12-24 22:21:34.436  INFO 2156 — [io-8080-exec-10]  : postHandle:请求后调用
+2018-12-24 22:21:34.436  INFO 2156 — [io-8080-exec-10]  : afterCompletion:请求调用完成后回调方法，即在视图渲染完成后回调</p>
+:ET
