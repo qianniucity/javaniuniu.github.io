@@ -1,6 +1,6 @@
 ---
-title: OncePerRequestFilter
-permalink: /Spring/OncePerRequestFilter
+title: OncePerRequestFilter示例
+permalink: /Spring/OncePerRequestFilter/example
 tags: SpringFilter CodeMark JWT
 pageview: true
 show_date: true

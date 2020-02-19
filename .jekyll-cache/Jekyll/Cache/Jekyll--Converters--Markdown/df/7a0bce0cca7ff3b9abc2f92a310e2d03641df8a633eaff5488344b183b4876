@@ -1,0 +1,233 @@
+I"�a<h4 id="干货">干货</h4>
+<p>SpringMVC解析器用于解析request请求参数并绑定数据到Controller的入参上。
+自定义一个参数解析器需要实现HandlerMethodArgumentResolver接口，重写supportsParameter和resolveArgument方法，配置文件中加入resolver配置。
+如果需要多个解析器同时生效需要在一个解析器中对其他解析器做兼容</p>
+<h4 id="缘起">缘起</h4>
+<p>为什么要自定义一个解析器呢？</p>
+
+<p>源于需要对前端请求参数进行手动URLDecode，也即除了Web容器自动decode一次，代码内还需要再decode一次。</p>
+
+<p>针对这种需求，首先想到的是filter或者interceptor实现，但是由于HttpServletRequest对象本身是不提供setParameter()方法的，因此想要修改request中的参数值为decode后的值是不易达到的。</p>
+
+<p>SpringMVC的HandlerMethodArgumentResolver，解析器；其功能就是解析request请求参数并绑定数据到Controller的入参上。因此自定义解析器加入URLDecode逻辑即可完全满足需求。</p>
+
+<p>下面，就一步一步的完成一个解析器由简到繁的实现过程。</p>
+
+<h4 id="实现一个极其简单的参数解析器">实现一个极其简单的参数解析器</h4>
+<p>具体如何自定义一个参数解析器呢？</p>
+
+<p>其实很简单，一句话——实现HandlerMethodArgumentResolver接口，重写supportsParameter和resolveArgument方法，配置文件中加入resolver配置。</p>
+
+<p>示例代码如下：</p>
+
+<ul>
+  <li>自定义解析器实现</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyArgumentsResolver</span> <span class="kd">implements</span> <span class="nc">HandlerMethodArgumentResolver</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 解析器是否支持当前参数
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 指定参数如果被应用MyParam注解，则使用该解析器。</span>
+        <span class="c1">// 如果直接返回true，则代表将此解析器用于所有参数</span>
+        <span class="k">return</span> <span class="n">parameter</span><span class="o">.</span><span class="na">hasParameterAnnotation</span><span class="o">(</span><span class="nc">MyParam</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 将request中的请求参数解析到当前Controller参数上
+     * @param parameter 需要被解析的Controller参数，此参数必须首先传给{@link #supportsParameter}并返回true
+     * @param mavContainer 当前request的ModelAndViewContainer
+     * @param webRequest 当前request
+     * @param binderFactory 生成{@link WebDataBinder}实例的工厂
+     * @return 解析后的Controller参数
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">,</span> <span class="nc">ModelAndViewContainer</span> <span class="n">mavContainer</span><span class="o">,</span>
+                                  <span class="nc">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="nc">WebDataBinderFactory</span> <span class="n">binderFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ul>
+  <li>自定义注解
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">({</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">MyParam</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>在springmvc配置文件中注册解析器
+```java</li>
+</ul>
+<mvc:annotation-driven>
+        <!--MyArgumentsResolver-->
+        <mvc:argument-resolvers>
+            <bean class="xxx.xxx.xxx.MyArgumentsResolver" />
+        </mvc:argument-resolvers>
+</mvc:annotation-driven>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+好了，现在解析器会把所有应用了@MyParam注解的参数都赋值为null。
+
+#### 实现一个解析原始类型的参数解析器
+对于如何解析原始类型参数，SpringMVC已经有了一个内置的实现——RequestParamMethodArgumentResolver，因此完全可以参考这个实现来自定义我们自己的解析器。
+
+如上所述，解析器逻辑的主要部分都在resolveArgument方法内，这里就说说自定义该方法的实现。
+```java
+@Override
+public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                              NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+
+    // 解析器中的自定义逻辑——urldecode
+    Object arg = URLDecoder.decode(webRequest.getParameter(parameter.getParameterName()), "UTF-8");
+
+    // 将解析后的值绑定到对应的Controller参数上，利用DataBinder提供的方法便捷的实现类型转换
+    if (binderFactory != null) {
+
+        // 生成参数绑定器，第一个参数为request请求对象，第二个参数为需要绑定的目标对象，第三个参数为需要绑定的目标对象名
+        WebDataBinder binder = binderFactory.createBinder(webRequest, null, parameter.getParameterName());
+
+        try {
+
+            // 将参数转到预期类型，第一个参数为解析后的值，第二个参数为绑定Controller参数的类型，第三个参数为绑定的Controller参数
+            arg = binder.convertIfNecessary(arg, parameter.getParameterType(), parameter);
+
+        } catch (ConversionNotSupportedException ex) {
+            throw new MethodArgumentConversionNotSupportedException(arg, ex.getRequiredType(),
+                    parameter.getParameterName(), parameter, ex.getCause());
+        } catch (TypeMismatchException ex) {
+            throw new MethodArgumentTypeMismatchException(arg, ex.getRequiredType(),
+                    parameter.getParameterName(), parameter, ex.getCause());
+        }
+    }
+    return arg;
+}
+</code></pre></div></div>
+<h4 id="添加解析对象类型参数的功能">添加解析对象类型参数的功能</h4>
+<p>对于如何解析对象类型参数，SpringMVC内也有了一个内置的实现——ModelAttributeMethodProcessor，我们也是参考这个实现来自定义我们自己的解析器。</p>
+
+<p>同样，resolveArgument方法示例如下</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">,</span> <span class="nc">ModelAndViewContainer</span> <span class="n">mavContainer</span><span class="o">,</span>
+                              <span class="nc">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="nc">WebDataBinderFactory</span> <span class="n">binderFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+    <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getParameterName</span><span class="o">();</span>
+
+    <span class="c1">// 查找是否已有名为name的参数值的映射，如果没有则创建一个</span>
+    <span class="nc">Object</span> <span class="n">attribute</span> <span class="o">=</span> <span class="n">mavContainer</span><span class="o">.</span><span class="na">containsAttribute</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+        <span class="o">?</span> <span class="n">mavContainer</span><span class="o">.</span><span class="na">getModel</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+        <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="na">createAttribute</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">binderFactory</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">binderFactory</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">WebDataBinder</span> <span class="n">binder</span> <span class="o">=</span> <span class="n">binderFactory</span><span class="o">.</span><span class="na">createBinder</span><span class="o">(</span><span class="n">webRequest</span><span class="o">,</span> <span class="n">attribute</span><span class="o">,</span> <span class="n">name</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 进行参数绑定</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">bindRequestParameters</span><span class="o">(</span><span class="n">binder</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 将参数转到预期类型，第一个参数为解析后的值，第二个参数为绑定Controller参数的类型，第三个参数为绑定的Controller参数</span>
+        <span class="n">attribute</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="na">convertIfNecessary</span><span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">(),</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getParameterType</span><span class="o">(),</span> <span class="n">parameter</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">attribute</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kd">protected</span> <span class="kt">void</span> <span class="nf">bindRequestParameters</span><span class="o">(</span><span class="nc">WebDataBinder</span> <span class="n">binder</span><span class="o">,</span> <span class="nc">NativeWebRequest</span> <span class="n">request</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">UnsupportedEncodingException</span> <span class="o">{</span>
+    <span class="c1">// 将key-value封装为map，传给bind方法进行参数值绑定</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameterMap</span><span class="o">();</span>
+
+    <span class="k">for</span> <span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">[]&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">params</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+        <span class="c1">// 执行urldecode</span>
+        <span class="nc">String</span> <span class="n">value</span> <span class="o">=</span> <span class="nc">URLDecoder</span><span class="o">.</span><span class="na">decode</span><span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">()[</span><span class="mi">0</span><span class="o">],</span> <span class="s">"UTF-8"</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nc">PropertyValues</span> <span class="n">propertyValues</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MutablePropertyValues</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
+
+    <span class="c1">// 将K-V绑定到binder.target属性上</span>
+    <span class="n">binder</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="n">propertyValues</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h4 id="同时支持多个参数解析器生效">同时支持多个参数解析器生效</h4>
+<p>到目前为止，不论对于原始类型或者对象类型的参数，我们都可以自定义一个参数解析器了，但是还有一个很严重的问题存在——无法让自定义解析器和现有解析器同时生效。</p>
+
+<p>举个例子，public String myController(@Valid @MyParam param, BindingResult result){}，这个方法在执行时是会报错的。他会提示类似如下报错：</p>
+
+<p>An Errors/BindingResult argument is expected to be declared immediately after the model attribute, the @RequestBody or the @RequestPart arguments</p>
+
+<p>是SpringMVC不支持同时使用两个解析器吗？public String myController(@Valid @ModelAttribute param, BindingResult result){}，也是两个内置解析器，没有任何问题。</p>
+
+<p>再去看ModelAttributeMethodProcessor的实现，原来是对@Valid做了兼容处理。</p>
+
+<p>因此， <strong>如果需要多个解析器同时生效需要在一个解析器中对其他解析器做兼容。</strong></p>
+
+<p>这里仅以对@Valid进行兼容处理为例，在解析对象类型的解析器实现中进行修改</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
+<span class="kd">public</span> <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">,</span> <span class="nc">ModelAndViewContainer</span> <span class="n">mavContainer</span><span class="o">,</span>
+                              <span class="nc">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="nc">WebDataBinderFactory</span> <span class="n">binderFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+
+    <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getParameterName</span><span class="o">();</span>
+
+    <span class="c1">// 查找是否已有名为name的参数值的映射，如果没有则创建一个</span>
+    <span class="nc">Object</span> <span class="n">attribute</span> <span class="o">=</span> <span class="n">mavContainer</span><span class="o">.</span><span class="na">containsAttribute</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+        <span class="o">?</span> <span class="n">mavContainer</span><span class="o">.</span><span class="na">getModel</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+        <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="na">createAttribute</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">parameter</span><span class="o">,</span> <span class="n">binderFactory</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">binderFactory</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">WebDataBinder</span> <span class="n">binder</span> <span class="o">=</span> <span class="n">binderFactory</span><span class="o">.</span><span class="na">createBinder</span><span class="o">(</span><span class="n">webRequest</span><span class="o">,</span> <span class="n">attribute</span><span class="o">,</span> <span class="n">name</span><span class="o">);</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 进行参数绑定，此方法实现不再赘述，可到上节查看</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">bindRequestParameters</span><span class="o">(</span><span class="n">binder</span><span class="o">,</span> <span class="n">webRequest</span><span class="o">);</span>
+
+<span class="c1">// -----------------------------------对@Valid做兼容----------------------------------------------------</span>
+
+            <span class="c1">// 如果使用了validation校验, 则进行相应校验</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">parameter</span><span class="o">.</span><span class="na">hasParameterAnnotation</span><span class="o">(</span><span class="nc">Valid</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
+                <span class="c1">// 如果有校验报错，会将结果放在binder.bindingResult属性中</span>
+                <span class="n">binder</span><span class="o">.</span><span class="na">validate</span><span class="o">();</span>
+            <span class="o">}</span>
+
+            <span class="c1">// 如果参数中不包含BindingResult参数，直接抛出异常</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">().</span><span class="na">hasErrors</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="na">isBindExceptionRequired</span><span class="o">(</span><span class="n">binder</span><span class="o">,</span> <span class="n">parameter</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">BindException</span><span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">());</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 关键,使Controller中接下来的BindingResult参数可以接收异常</span>
+        <span class="nc">Map</span> <span class="n">bindingResultModel</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">().</span><span class="na">getModel</span><span class="o">();</span>
+        <span class="n">mavContainer</span><span class="o">.</span><span class="na">removeAttributes</span><span class="o">(</span><span class="n">bindingResultModel</span><span class="o">);</span>
+        <span class="n">mavContainer</span><span class="o">.</span><span class="na">addAllAttributes</span><span class="o">(</span><span class="n">bindingResultModel</span><span class="o">);</span>
+
+<span class="c1">// -----------------------------------对@Valid做兼容----------------------------------------------------</span>
+
+        <span class="c1">// 将参数转到预期类型，第一个参数为解析后的值，第二个参数为绑定Controller参数的类型，第三个参数为绑定的Controller参数</span>
+        <span class="n">attribute</span> <span class="o">=</span> <span class="n">binder</span><span class="o">.</span><span class="na">convertIfNecessary</span><span class="o">(</span><span class="n">binder</span><span class="o">.</span><span class="na">getTarget</span><span class="o">(),</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getParameterType</span><span class="o">(),</span> <span class="n">parameter</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="k">return</span> <span class="n">attribute</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="cm">/**
+ * 检查参数中是否包含BindingResult参数
+ */</span>
+<span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">isBindExceptionRequired</span><span class="o">(</span><span class="nc">WebDataBinder</span> <span class="n">binder</span><span class="o">,</span> <span class="nc">MethodParameter</span> <span class="n">methodParam</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">methodParam</span><span class="o">.</span><span class="na">getParameterIndex</span><span class="o">();</span>
+    <span class="nc">Class</span><span class="o">[]</span> <span class="n">paramTypes</span> <span class="o">=</span> <span class="n">methodParam</span><span class="o">.</span><span class="na">getMethod</span><span class="o">().</span><span class="na">getParameterTypes</span><span class="o">();</span>
+    <span class="kt">boolean</span> <span class="n">hasBindingResult</span> <span class="o">=</span> <span class="n">paramTypes</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nc">Errors</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="n">paramTypes</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]);</span>
+    <span class="k">return</span> <span class="o">!</span><span class="n">hasBindingResult</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>OK，到这里，我们自定义的解析器已经可以算是一个完善的参数解析器了，如果有对其他解析器做兼容的需要，只要参照此类方法稍作修改即可。</p>
+
+<h4 id="后记">后记</h4>
+<p>还记得这次自定义解析器的原因吗——需要对前端请求参数进行手动URLDecode，也即除了Web容器自动decode一次，代码内还需要再decode一次。</p>
+
+<p>事实证明，根本不需要进行二次decode，写出的解析器也就无疾而终了，仅存这篇整理，算是对SpringMVC解析器的一次学习总结吧。</p>
+:ET

@@ -5,17 +5,18 @@ tags: Filter拦截器 示例
 pageview: true
 show_date: true
 sidebar:
-  nav: docs-en-code
+  nav: docs-en-web
 ---
 #### 拦截器与过滤器的区别
-过滤器可以简单理解为“取你所想取”，忽视掉那些你不想要的东西；拦截器可以简单理解为“拒你所想拒”，关心你想要拒绝掉哪些东西，比如一个BBS论坛上拦截掉敏感词汇。
-1.拦截器是基于java反射机制的，而过滤器是基于函数回调的。
-2.过滤器依赖于servlet容器，而拦截器不依赖于servlet容器。
-3.拦截器只对action起作用，而过滤器几乎可以对所有请求起作用。
-4.拦截器可以访问action上下文、值栈里的对象，而过滤器不能。
-5.在action的生命周期里，拦截器可以多起调用，而过滤器只能在容器初始化时调用一次。
+过滤器可以简单理解为 **“取你所想取”**，忽视掉那些你不想要的东西；拦截器可以简单理解为 **“拒你所想拒”**，关心你想要拒绝掉哪些东西，比如一个BBS论坛上拦截掉敏感词汇。      
+1.拦截器是基于java反射机制的，而过滤器是基于函数回调的。   
+2.过滤器依赖于servlet容器，而拦截器不依赖于servlet容器。    
+3.拦截器只对action起作用，而过滤器几乎可以对所有请求起作用。    
+4.拦截器可以访问action上下文、值栈里的对象，而过滤器不能。   
+5.在action的生命周期里，拦截器可以多起调用，而过滤器只能在容器初始化时调用一次。    
 
 - addInitParameter 方法使示例1
+
 ```java
 /**
  * 注册一个StatViewServlet
@@ -41,6 +42,7 @@ public ServletRegistrationBean DruidStatViewServle() {
 }
 ```
 - addInitParameter 方法使示例2
+
 ```java
 /**
  * 注册一个：filterRegistrationBean
@@ -57,6 +59,7 @@ public FilterRegistrationBean druidStatFilter() {
 }
 ```
 - addUrlPatterns 方法使示例1
+
 ```java
 registration.addUrlPatterns("/*");过滤应用程序中所有资源,当前应用程序根下的所有文件包括多级子目录下的所有文件，注意这里*前有“/”
   registration.addUrlPatterns(".html");过滤指定的类型文件资源, 当前应用程序根目录下的所有html文件，注意：*.html前没有“/”,否则错误

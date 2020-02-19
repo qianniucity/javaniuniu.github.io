@@ -1,0 +1,55 @@
+I"�<h4 id="拦截器与过滤器的区别">拦截器与过滤器的区别</h4>
+<p>过滤器可以简单理解为 <strong>“取你所想取”</strong>，忽视掉那些你不想要的东西；拦截器可以简单理解为 <strong>“拒你所想拒”</strong>，关心你想要拒绝掉哪些东西，比如一个BBS论坛上拦截掉敏感词汇。    <br />
+1.拦截器是基于java反射机制的，而过滤器是基于函数回调的。 <br />
+2.过滤器依赖于servlet容器，而拦截器不依赖于servlet容器。  <br />
+3.拦截器只对action起作用，而过滤器几乎可以对所有请求起作用。  <br />
+4.拦截器可以访问action上下文、值栈里的对象，而过滤器不能。 <br />
+5.在action的生命周期里，拦截器可以多起调用，而过滤器只能在容器初始化时调用一次。</p>
+
+<h4 id="方法细节">方法细节</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">init</span>
+<span class="kt">void</span> <span class="n">init</span><span class="err">（</span><span class="nc">FilterConfig</span>  <span class="n">filterConfig</span><span class="err">）</span>
+   <span class="err">抛出</span><span class="nc">ServletException</span>
+<span class="n">Web</span><span class="err">容器调用以指示过滤器已投入使用。</span>
+<span class="err">实例化过滤器后，</span><span class="n">servlet</span><span class="err">容器仅调用一次</span><span class="n">init</span><span class="err">方法。在要求过滤器执行任何过滤工作之前，必须成功完成</span><span class="n">init</span><span class="err">方法。</span>
+
+<span class="err">如果使用</span><span class="n">init</span><span class="err">方法，则</span><span class="n">Web</span><span class="err">容器无法将过滤器投入使用</span>
+
+<span class="err">抛出</span><span class="nc">ServletException</span>
+<span class="err">在</span><span class="n">Web</span><span class="err">容器定义的时间段内不返回</span>
+<span class="err">抛出：</span>
+<span class="nc">ServletException</span><span class="o">|</span>
+</code></pre></div></div>
+
+<p>| doFilter
+void doFilter（ServletRequest  请求，
+               ServletResponse  响应，
+               FilterChain  链）
+       抛出IOException，
+               ServletException
+doFilter每当客户端对链末端的资源提出请求时，每次通过链传递请求/响应对时，容器都会调用Filter 的方法。传入此方法的FilterChain允许Filter将请求和响应传递给链中的下一个实体。
+此方法的典型实现将遵循以下模式：</p>
+
+<p>检查请求
+（可选）使用自定义实现包装请求对象，以过滤内容或标头以进行输入过滤
+（可选）使用自定义实现包装响应对象，以过滤内容或标头以进行输出过滤
+或者调用中使用FilterChain对象链中的下一个实体（chain.doFilter()），
+或不将请求/响应对传递给过滤器链中的下一个实体以阻止请求处理
+调用过滤器链中的下一个实体后，直接在响应上设置标头。
+抛出：
+IOException
+ServletException|
+破坏
+| void destroy（）
+由Web容器调用，以指示过滤器已停止使用。
+仅在过滤器的doFilter方法中的所有线程都已退出或经过超时时间后，才调用此方法。Web容器调用此方法后，将不再在该过滤器实例上再次调用doFilter方法。</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>此方法使筛选器有机会清理所持有的所有资源（例如，内存，文件句柄，线程），并确保任何持久状态都与筛选器在内存中的当前状态同步。</td>
+    </tr>
+  </tbody>
+</table>
+:ET

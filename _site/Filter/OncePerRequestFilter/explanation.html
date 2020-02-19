@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>OncePerRequestFilter - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>OncePerRequestFilter类方法说明 - JAVA 牛牛</title>
 
-<meta name="description" content="一句话简介springboot中javax.servlet.Filter原生接口的实现；而Spring的OncePerRequestFilter类实际上是一个实现了Filter接口的抽象类。spring对Filter进行了一些封装处理。 OncePerRequestFilter，顾名思义，它能够确保在一次请求中只...">
-<link rel="canonical" href="http://localhost:4000/Spring/OncePerRequestFilter"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="参考 OncePerRequestFilter示例            修饰符和类型      方法和说明      描述                  void      doFilter(ServletRequest request, ServletResponse response, FilterCh...">
+<link rel="canonical" href="http://localhost:4000/Filter/OncePerRequestFilter/explanation"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">SpringSecurity</li><li class="toc-h2"><a href="/SpringSecurity/class">SpringSecurity用到的类</a></li><li class="toc-h2"><a href="/SpringSecurity/User">User</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetails">UserDetails</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetailsService">UserDetailsService</a></li><li class="toc-h2"><a href="/SpringSecurity/GrantedAuthority">GrantedAuthority</a></li><li class="toc-h2"><a href="/SpringSecurity/SecurityContextHolder">SecurityContextHolder</a></li><li class="toc-h2"><a href="/SpringSecurity/SecurityContext">SecurityContext使用实例</a></li><li class="toc-h2"><a href="/SpringSecurity/WebSecurityConfigurerAdapter">WebSecurityConfigurerAdapter</a></li><li class="toc-h2"><a href="/SpringSecurity/authenticationException">AuthenticationException 使用及所有子类</a></li><li class="toc-h2"><a href="/SpringSecurity/RequestMatcher">RequestMatcher(配置忽略url和认证的url)</a></li><li class="toc-h1">SpringBoot</li><li class="toc-h2"><a href="/SpringBoot/Aop">SpringBoot Aop</a></li><li class="toc-h2"><a href="/SpringBoot/Aoc">SpringBoot Aoc</a></li><li class="toc-h2"><a href="/SpringBoot/Di">SpringBoot Di</a></li><li class="toc-h2 active"><a href="/Spring/OncePerRequestFilter">OncePerRequestFilter</a></li><li class="toc-h2"><a href="/SpringBoot/WebMvcConfigurer">WebMvcConfigurer讲解</a></li><li class="toc-h1">Spring</li><li class="toc-h2"><a href="/Spring/Aop">Spring Aop</a></li><li class="toc-h2"><a href="/Spring/Aoc">Spring Aoc</a></li><li class="toc-h2"><a href="/Spring/Di">Spring Di</a></li><li class="toc-h2"><a href="/Spring/Aspect/explanation">Aspect配置说明</a></li><li class="toc-h2"><a href="/Spring/Aspect/JoinPoint">JoinPoint的用法</a></li><li class="toc-h2"><a href="/Spring/Aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/Spring/Annotation">注释解释</a></li><li class="toc-h2"><a href="/Spring/Annotation/myself">自定义注释</a></li><li class="toc-h2"><a href="/Spring/ComponentAndBean">注解中@Component和@Bean的区别</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">过滤器</li><li class="toc-h2"><a href="/Filter/explanation">Filter类方法详解</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/explanation">FilterRegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/example">FilterRegistrationBean示例</a></li><li class="toc-h2"><a href="/Filter/RegistrationBean/explanation">RegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/CharacterEncodingFilter/explanation">CharacterEncodingFilter类方法说明</a></li><li class="toc-h2 active"><a href="/Filter/OncePerRequestFilter/explanation">OncePerRequestFilter类方法说明</a></li><li class="toc-h1">解析器</li><li class="toc-h2"><a href="/Handler/HandlerMethodArgumentResolver/explanation">HandlerMethodArgumentResolver类说明</a></li><li class="toc-h1">拦截器</li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -323,7 +323,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </svg>
 <a title="记录在java的道路能走多远
 " href="/">JAVA 牛牛</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/">Home</a></li><li class="navigation__item"><a href="/SpringSecurity/class">Spring</a></li><li class="navigation__item"><a href="/java-code-design/java">CODE</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/ARTS">ARTS</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/minplemon">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+        <ul><li class="navigation__item"><a href="/">Home</a></li><li class="navigation__item"><a href="/SpringSecurity/class">Spring</a></li><li class="navigation__item"><a href="/Filter/explanation">WEB</a></li><li class="navigation__item"><a href="/java-code-design/java">CODE</a></li><li class="navigation__item"><a href="/java-code-redis/RedisTemplate/opsForValue">DATA</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/ARTS">ARTS</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/minplemon">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
@@ -334,164 +334,80 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>OncePerRequestFilter</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>OncePerRequestFilter类方法说明</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/spring/2020-02-16-Spring-OncePerRequestFilter.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="OncePerRequestFilter"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/Filter/2020-02-19-OncePerRequestFilter.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="OncePerRequestFilter类方法说明"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringFilter">SpringFilter</a>
+                href="/archive.html?tag=Filter%E6%8B%A6%E6%88%AA%E5%99%A8">Filter拦截器</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=JWT">JWT</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringFilter,CodeMark,JWT"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=%E7%B1%BB%E8%A7%A3%E9%87%8A">类解释</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 19, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-19T00:00:00+08:00">
+    <meta itemprop="keywords" content="Filter拦截器,类解释"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h4 id="一句话简介">一句话简介</h4>
-<p>springboot中javax.servlet.Filter原生接口的实现；而Spring的OncePerRequestFilter类实际上是一个实现了Filter接口的抽象类。spring对Filter进行了一些封装处理。 <br />
-OncePerRequestFilter，顾名思义，<strong>它能够确保在一次请求中只通过一次filter，而需要重复的执行。</strong> 大家常识上都认为，一次请求本来就只filter一次，为什么还要由此特别限定呢，往往我们的常识和实际的实现并不真的一样，经过一番资料的查阅，此方法是为了兼容不同的web container，也就是说并不是所有的container都入我们期望的只过滤一次，servlet版本不同，执行过程也不同，因此，为了兼容各种不同运行环境和版本，默认filter继承OncePerRequestFilter是一个比较稳妥的选择。</p>
+<div class="article__content" itemprop="articleBody"><p>参考 <a href="/Spring/OncePerRequestFilter/example">OncePerRequestFilter示例</a></p>
 
-<h4 id="使用场景">使用场景</h4>
-<p>jwt认证token</p>
-
-<h4 id="示例">示例</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="n">sc</span><span class="o">.</span><span class="na">whorl</span><span class="o">.</span><span class="na">system</span><span class="o">.</span><span class="na">config</span><span class="o">.</span><span class="na">jwt</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.BadCredentialsException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.UsernamePasswordAuthenticationToken</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.core.context.SecurityContextHolder</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.core.userdetails.UserDetails</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.web.authentication.WebAuthenticationDetailsSource</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.util.ObjectUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.util.StringUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.filter.OncePerRequestFilter</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">javax.servlet.FilterChain</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.ServletException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">lombok.extern.slf4j.Slf4j</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.conf.CustomUserDetailsService</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.utils.ErrorCodeEnum</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.redis.RedisUtil</span><span class="o">;</span>
-
-<span class="cm">/***
- *
- * @FileName: JwtAuthenticationTokenFilter
- * @remark: jwt认证token
- * @explain 每次请求接口时 就会进入这里验证token 是否合法
- *             token 如果用户一直在操作，则token 过期时间会叠加    如果超过设置的过期时间未操作  则token 失效 需要重新登录
- *
- */</span>
-<span class="nd">@Slf4j</span>
-<span class="nd">@Component</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JwtAuthenPreFilter</span> <span class="kd">extends</span> <span class="nc">OncePerRequestFilter</span> <span class="o">{</span>
-    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">JwtTokenUtil</span> <span class="n">jwtTokenUtil</span><span class="o">;</span>
-    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">RedisUtil</span> <span class="n">redisUtil</span><span class="o">;</span>
-
-    <span class="cm">/**
-     * 防止filter被执行两次
-     */</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">FILTER_APPLIED</span> <span class="o">=</span> <span class="s">"__spring_security_JwtAuthenPreFilter_filterApplied"</span><span class="o">;</span>
-
-
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.header:Authorization}"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">tokenHeader</span><span class="o">;</span>
-
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.tokenHead:Bearer-}"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">tokenHead</span><span class="o">;</span>
-    <span class="cm">/**
-     * 距离快过期多久刷新令牌
-     */</span>
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.token.subRefresh:#{10*60}}"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">subRefresh</span><span class="o">;</span>
-    <span class="c1">// 不需要认证的接口</span>
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.security.antMatchers}"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">antMatchers</span><span class="o">;</span>
-    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">CustomUserDetailsService</span> <span class="n">customUserDetailsService</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nf">JwtAuthenPreFilter</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doFilterInternal</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span> <span class="nc">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">filterChain</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">ServletException</span><span class="o">,</span> <span class="nc">IOException</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="no">FILTER_APPLIED</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">httpServletResponse</span><span class="o">);</span>
-            <span class="k">return</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="no">FILTER_APPLIED</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-
-        <span class="nc">SkipPathAntMatcher</span> <span class="n">skipPathRequestMatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SkipPathAntMatcher</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">antMatchers</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">","</span><span class="o">)));</span>
-        <span class="c1">//过滤掉不需要token验证的url</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">skipPathRequestMatcher</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">))</span> <span class="o">{</span>
-            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">httpServletResponse</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="c1">//1.判断是否有效 2.判断是否过期 3.如果未过期的,且过期时间小于10分钟的延长过期时间,并在当前response返回新的header,客户端需替换此令牌</span>
-                <span class="nc">String</span> <span class="n">authHeader</span> <span class="o">=</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">tokenHeader</span><span class="o">);</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">authHeader</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">authHeader</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="n">tokenHead</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="kd">final</span> <span class="nc">String</span> <span class="n">authToken</span> <span class="o">=</span> <span class="n">authHeader</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">tokenHead</span><span class="o">.</span><span class="na">length</span><span class="o">());</span>
-                    <span class="nc">JWTUserDetail</span> <span class="n">userDetail</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">getUserFromToken</span><span class="o">(</span><span class="n">authToken</span><span class="o">);</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userDetail</span><span class="o">))</span> <span class="o">{</span>
-                        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌非法,解析失败{}!"</span><span class="o">,</span> <span class="n">authToken</span><span class="o">);</span>
-                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-                    <span class="o">}</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">isTokenExpired</span><span class="o">(</span><span class="n">authToken</span><span class="o">))</span> <span class="o">{</span>
-                        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌已失效!{}"</span><span class="o">,</span> <span class="n">authToken</span><span class="o">);</span>
-                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-                    <span class="o">}</span>
-                    <span class="k">if</span> <span class="o">(!</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">redisUtil</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">authToken</span><span class="o">)))</span> <span class="o">{</span>
-                        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌已位于黑名单!{}"</span><span class="o">,</span> <span class="n">authToken</span><span class="o">);</span>
-                        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-                    <span class="o">}</span>
-                    <span class="c1">//令牌快过期生成新的令牌并设置到返回头中,客户端在每次的restful请求如果发现有就替换原值,同时原值做redis黑名单</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">subRefresh</span><span class="o">).</span><span class="na">after</span><span class="o">(</span><span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">getExpirationDateFromToken</span><span class="o">(</span><span class="n">authToken</span><span class="o">)))</span> <span class="o">{</span>
-                        <span class="nc">String</span> <span class="n">resAuthToken</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">generateToken</span><span class="o">(</span><span class="n">userDetail</span><span class="o">);</span>
-                        <span class="n">redisUtil</span><span class="o">.</span><span class="na">setEx</span><span class="o">(</span><span class="n">authToken</span><span class="o">,</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">JWT_TOKEN_PREFIX</span><span class="o">,</span> <span class="n">userDetail</span><span class="o">.</span><span class="na">getUserType</span><span class="o">(),</span> <span class="n">userDetail</span><span class="o">.</span><span class="na">getUserId</span><span class="o">()),</span> <span class="n">subRefresh</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
-                        <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">setHeader</span><span class="o">(</span><span class="n">tokenHeader</span><span class="o">,</span> <span class="n">tokenHead</span> <span class="o">+</span> <span class="n">resAuthToken</span><span class="o">);</span>
-                    <span class="o">}</span>
-                    <span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">LOCAL_USER</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">userDetail</span><span class="o">);</span>
-                    <span class="nc">UserDetails</span> <span class="n">userDetails</span> <span class="o">=</span> <span class="n">customUserDetailsService</span><span class="o">.</span><span class="na">loadUserByUsername</span><span class="o">(</span><span class="n">userDetail</span><span class="o">.</span><span class="na">getLoginName</span><span class="o">());</span>
-                    <span class="nc">UsernamePasswordAuthenticationToken</span> <span class="n">authentication</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UsernamePasswordAuthenticationToken</span><span class="o">(</span><span class="n">userDetails</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">userDetails</span><span class="o">.</span><span class="na">getAuthorities</span><span class="o">());</span>
-                    <span class="n">authentication</span><span class="o">.</span><span class="na">setDetails</span><span class="o">(</span><span class="k">new</span> <span class="nc">WebAuthenticationDetailsSource</span><span class="o">().</span><span class="na">buildDetails</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">));</span>
-                    <span class="nc">SecurityContextHolder</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">setAuthentication</span><span class="o">(</span><span class="n">authentication</span><span class="o">);</span>
-                <span class="o">}</span><span class="k">else</span><span class="o">{</span>
-                    <span class="c1">//需要校验却无用户token</span>
-                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"无header请求--&gt;"</span> <span class="o">+</span> <span class="n">httpServletRequest</span><span class="o">.</span><span class="na">getRequestURI</span><span class="o">());</span>
-                   <span class="c1">// throw new InsufficientAuthenticationException(ErrorCodeEnum.NO_TOKEN.getMessage());</span>
-                <span class="o">}</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"令牌解析失败!"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
-                <span class="k">throw</span> <span class="k">new</span> <span class="nf">BadCredentialsException</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">TOKEN_INVALID</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-            <span class="o">}</span>
-            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">httpServletRequest</span><span class="o">,</span> <span class="n">httpServletResponse</span><span class="o">);</span>
-            <span class="c1">//调用完成后清除</span>
-            <span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">LOCAL_USER</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-
-</code></pre></div></div>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-16T00:00:00+08:00"><!-- start custom article footer snippet -->
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">修饰符和类型</th>
+      <th style="text-align: left">方法和说明</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">void</td>
+      <td style="text-align: left">doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)</td>
+      <td style="text-align: left">此doFilter实现存储“已过滤”的请求属性，如果该属性已经存在，则继续进行而不进行过滤。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected abstract void</td>
+      <td style="text-align: left">doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)</td>
+      <td style="text-align: left">与相同的合同doFilter，但保证在单个请求线程中每个请求仅被调用一次。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected void</td>
+      <td style="text-align: left">doFilterNestedErrorDispatch(HttpServletRequest request, HttpServletResponse response, FilterChainfilterChain)</td>
+      <td style="text-align: left">通常，在REQUEST分派完成后，将发生ERROR分派，并且筛选器链重新开始。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected String</td>
+      <td style="text-align: left">getAlreadyFilteredAttributeName()</td>
+      <td style="text-align: left">返回标识已过滤请求的请求属性的名称。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">isAsyncDispatch(HttpServletRequest request)</td>
+      <td style="text-align: left">javax.servlet.DispatcherType.ASYNCServlet 3.0中引入的分派器类型意味着可以在单个请求的过程中在多个线程中调用过滤器。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">isAsyncStarted(HttpServletRequest request)</td>
+      <td style="text-align: left">请求处理是否处于异步模式，这意味着在退出当前线程后将不会提交响应。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">shouldNotFilter(HttpServletRequest request)</td>
+      <td style="text-align: left">可以在子类中重写以进行自定义过滤控制，然后返回true以避免对给定请求进行过滤。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">shouldNotFilterAsyncDispatch()</td>
+      <td style="text-align: left">javax.servlet.DispatcherType.ASYNCServlet 3.0中引入的分派器类型意味着可以在单个请求的过程中在多个线程中调用过滤器。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">shouldNotFilterErrorDispatch()</td>
+      <td style="text-align: left">是否过滤错误调度，例如servlet容器何时处理和错误映射到web.xml。</td>
+    </tr>
+  </tbody>
+</table>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-19T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -502,7 +418,7 @@ OncePerRequestFilter，顾名思义，<strong>它能够确保在一次请求中�
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/SpringBoot/Di">SpringBoot Di</a></div><div class="next"><span>NEXT</span><a href="/SpringBoot/WebMvcConfigurer">WebMvcConfigurer讲解</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/Filter/CharacterEncodingFilter/explanation">CharacterEncodingFilter类方法说明</a></div><div class="next"><span>NEXT</span><a href="/Handler/HandlerMethodArgumentResolver/explanation">HandlerMethodArgumentResolver类说明</a></div></div></div>
 
 </div>
 

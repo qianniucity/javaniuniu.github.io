@@ -5,7 +5,7 @@ tags: Redis
 pageview: true
 show_date: true
 sidebar:
-  nav: docs-en-code
+  nav: docs-en-data
 ---
 #### Redis中opsForValue()方法的使用介绍：
 

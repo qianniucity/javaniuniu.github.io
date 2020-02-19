@@ -1,0 +1,59 @@
+I"�<p>参考 <a href="/Spring/OncePerRequestFilter/example">OncePerRequestFilter示例</a></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">修饰符和类型</th>
+      <th style="text-align: left">方法和说明</th>
+      <th style="text-align: left">描述</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">void</td>
+      <td style="text-align: left">doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)</td>
+      <td style="text-align: left">此doFilter实现存储“已过滤”的请求属性，如果该属性已经存在，则继续进行而不进行过滤。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected abstract void</td>
+      <td style="text-align: left">doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)</td>
+      <td style="text-align: left">与相同的合同doFilter，但保证在单个请求线程中每个请求仅被调用一次。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected void</td>
+      <td style="text-align: left">doFilterNestedErrorDispatch(HttpServletRequest request, HttpServletResponse response, FilterChainfilterChain)</td>
+      <td style="text-align: left">通常，在REQUEST分派完成后，将发生ERROR分派，并且筛选器链重新开始。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected String</td>
+      <td style="text-align: left">getAlreadyFilteredAttributeName()</td>
+      <td style="text-align: left">返回标识已过滤请求的请求属性的名称。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">isAsyncDispatch(HttpServletRequest request)</td>
+      <td style="text-align: left">javax.servlet.DispatcherType.ASYNCServlet 3.0中引入的分派器类型意味着可以在单个请求的过程中在多个线程中调用过滤器。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">isAsyncStarted(HttpServletRequest request)</td>
+      <td style="text-align: left">请求处理是否处于异步模式，这意味着在退出当前线程后将不会提交响应。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">shouldNotFilter(HttpServletRequest request)</td>
+      <td style="text-align: left">可以在子类中重写以进行自定义过滤控制，然后返回true以避免对给定请求进行过滤。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">shouldNotFilterAsyncDispatch()</td>
+      <td style="text-align: left">javax.servlet.DispatcherType.ASYNCServlet 3.0中引入的分派器类型意味着可以在单个请求的过程中在多个线程中调用过滤器。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">protected boolean</td>
+      <td style="text-align: left">shouldNotFilterErrorDispatch()</td>
+      <td style="text-align: left">是否过滤错误调度，例如servlet容器何时处理和错误映射到web.xml。</td>
+    </tr>
+  </tbody>
+</table>
+:ET

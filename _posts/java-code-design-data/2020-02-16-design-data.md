@@ -5,7 +5,7 @@ tags: 领域驱动设计 CodeDesign
 pageview: true
 show_date: true
 sidebar:
-  nav: docs-en-code
+  nav: docs-en-data
 ---
 TODO 设计成csdn爆款
 

@@ -5,7 +5,7 @@ tags: CodeMark Redis 分布式
 pageview: true
 show_date: true
 sidebar:
-  nav: docs-en-code
+  nav: docs-en-data
 ---
 
 ```java
