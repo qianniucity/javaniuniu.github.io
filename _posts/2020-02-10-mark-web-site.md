@@ -10,7 +10,7 @@ sidebar:
 参考项目 [sc-whorl](https://github.com/Senssic/sc-whorl)
 一句话解释
 
-1. **logback** `继承自 log4j`，它建立在有十年工业经验的日志系统之上。它 `比其它所有的日志系统更快并且更小`，包含了许多独特并且有用的特性。[详细参考文档](http://www.logback.cn)
+1. **logback** `继承自 log4j`，它建立在有十年工业经验的日志系统之上。它 `比其它所有的日志系统更快并且更小`，包含了许多独特并且有用的特性。[详细参考文档](http://www.logback.cn) [logback 常用配置（详解）](https://blog.csdn.net/qq_36850813/article/details/83092051)
 2. **领域驱动设计实践** 领域驱动设计将软件系统分为四层：基础结构层、领域层、应用层和表现层。[参考，领域驱动设计实践（一，二，三）](https://www.cnblogs.com/daxnet/archive/2010/07/07/1772584.html)
 3. [JAVA VO、DTO、DO、PO的概念、区别和用处](https://blog.csdn.net/Thousa_Ho/article/details/73196347)
 4. 对象之间属性数据拷贝 [Bean转换工具DozerBeanMapper](https://blog.csdn.net/weixin_41835612/article/details/83775374)
