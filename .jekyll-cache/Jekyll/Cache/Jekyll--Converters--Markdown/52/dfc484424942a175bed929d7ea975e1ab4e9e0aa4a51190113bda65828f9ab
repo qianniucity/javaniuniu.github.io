@@ -1,0 +1,119 @@
+I"#,<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="c">&lt;!-- scan 配置文件如果发生改变，将会被重新加载  scanPeriod 检测间隔时间--&gt;</span>
+<span class="nt">&lt;configuration</span> <span class="na">scan=</span><span class="s">"true"</span> <span class="na">scanPeriod=</span><span class="s">"60 seconds"</span> <span class="na">debug=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;contextName&gt;</span>logback<span class="nt">&lt;/contextName&gt;</span>
+    <span class="nt">&lt;include</span> <span class="na">resource=</span><span class="s">"org/springframework/boot/logging/logback/base.xml"</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 日志存储级别 --&gt;</span>
+    <span class="nt">&lt;springProperty</span> <span class="na">scope=</span><span class="s">"context"</span> <span class="na">name=</span><span class="s">"rootlevel"</span> <span class="na">source=</span><span class="s">"logging.level.root"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;springProperty</span> <span class="na">scope=</span><span class="s">"context"</span> <span class="na">name=</span><span class="s">"busilevel"</span> <span class="na">source=</span><span class="s">"logging.level.com.xncoding"</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 日志存储路径 --&gt;</span>
+    <span class="nt">&lt;springProperty</span> <span class="na">scope=</span><span class="s">"context"</span> <span class="na">name=</span><span class="s">"logPath"</span> <span class="na">source=</span><span class="s">"logging.path"</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- 普通日志 --&gt;</span>
+    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"INFO_FILE"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;file&gt;</span>${logPath}/info.log<span class="nt">&lt;/file&gt;</span>
+        <span class="c">&lt;!-- 循环政策：基于时间创建日志文件 --&gt;</span>
+        <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- 日志命名:单个文件大于128MB 按照时间+自增i 生成log文件 --&gt;</span>
+            <span class="nt">&lt;fileNamePattern&gt;</span>${logPath}/info-%d{yyyy-MM-dd}.%i.log<span class="nt">&lt;/fileNamePattern&gt;</span>
+            <span class="nt">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;maxFileSize&gt;</span>128MB<span class="nt">&lt;/maxFileSize&gt;</span>
+            <span class="nt">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
+            <span class="c">&lt;!-- 最大保存时间：30天--&gt;</span>
+            <span class="nt">&lt;maxHistory&gt;</span>30<span class="nt">&lt;/maxHistory&gt;</span>
+        <span class="nt">&lt;/rollingPolicy&gt;</span>
+        <span class="nt">&lt;append&gt;</span>true<span class="nt">&lt;/append&gt;</span>
+        <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n<span class="nt">&lt;/pattern&gt;</span>
+            <span class="nt">&lt;charset&gt;</span>utf-8<span class="nt">&lt;/charset&gt;</span>
+        <span class="nt">&lt;/encoder&gt;</span>
+        <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.filter.LevelFilter"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;level&gt;</span>info<span class="nt">&lt;/level&gt;</span>
+            <span class="nt">&lt;onMatch&gt;</span>ACCEPT<span class="nt">&lt;/onMatch&gt;</span>
+            <span class="nt">&lt;onMismatch&gt;</span>DENY<span class="nt">&lt;/onMismatch&gt;</span>
+        <span class="nt">&lt;/filter&gt;</span>
+    <span class="nt">&lt;/appender&gt;</span>
+    <span class="c">&lt;!-- 错误日志 --&gt;</span>
+    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"ERROR_FILE"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;file&gt;</span>${logPath}/error.log<span class="nt">&lt;/file&gt;</span>
+        <span class="c">&lt;!-- 循环政策：基于时间创建日志文件 --&gt;</span>
+        <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- 日志命名:单个文件大于2MB 按照时间+自增i 生成log文件 --&gt;</span>
+            <span class="nt">&lt;fileNamePattern&gt;</span>${logPath}/error-%d{yyyy-MM-dd}.%i.log<span class="nt">&lt;/fileNamePattern&gt;</span>
+            <span class="nt">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;maxFileSize&gt;</span>2MB<span class="nt">&lt;/maxFileSize&gt;</span>
+            <span class="nt">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
+            <span class="c">&lt;!-- 最大保存时间：180天--&gt;</span>
+            <span class="nt">&lt;maxHistory&gt;</span>180<span class="nt">&lt;/maxHistory&gt;</span>
+        <span class="nt">&lt;/rollingPolicy&gt;</span>
+        <span class="nt">&lt;append&gt;</span>true<span class="nt">&lt;/append&gt;</span>
+        <span class="c">&lt;!-- 日志格式 --&gt;</span>
+        <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n<span class="nt">&lt;/pattern&gt;</span>
+            <span class="nt">&lt;charset&gt;</span>utf-8<span class="nt">&lt;/charset&gt;</span>
+        <span class="nt">&lt;/encoder&gt;</span>
+        <span class="c">&lt;!-- 日志级别过滤器 --&gt;</span>
+        <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.filter.LevelFilter"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- 过滤的级别 --&gt;</span>
+            <span class="nt">&lt;level&gt;</span>ERROR<span class="nt">&lt;/level&gt;</span>
+            <span class="c">&lt;!-- 匹配时的操作：接收（记录） --&gt;</span>
+            <span class="nt">&lt;onMatch&gt;</span>ACCEPT<span class="nt">&lt;/onMatch&gt;</span>
+            <span class="c">&lt;!-- 不匹配时的操作：拒绝（不记录） --&gt;</span>
+            <span class="nt">&lt;onMismatch&gt;</span>DENY<span class="nt">&lt;/onMismatch&gt;</span>
+        <span class="nt">&lt;/filter&gt;</span>
+    <span class="nt">&lt;/appender&gt;</span>
+    <span class="c">&lt;!-- 控制台 --&gt;</span>
+    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"STDOUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- 日志格式 --&gt;</span>
+        <span class="nt">&lt;encoder&gt;</span>
+            <span class="nt">&lt;pattern&gt;</span>%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n<span class="nt">&lt;/pattern&gt;</span>
+            <span class="nt">&lt;charset&gt;</span>utf-8<span class="nt">&lt;/charset&gt;</span>
+        <span class="nt">&lt;/encoder&gt;</span>
+        <span class="c">&lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&gt;</span>
+        <span class="nt">&lt;filter</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.filter.ThresholdFilter"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;level&gt;</span>DEBUG<span class="nt">&lt;/level&gt;</span>
+        <span class="nt">&lt;/filter&gt;</span>
+    <span class="nt">&lt;/appender&gt;</span>
+    <span class="c">&lt;!-- 屏蔽kafka的警告 --&gt;</span>
+    <span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"org.apache.kafka"</span> <span class="na">level=</span><span class="s">"ERROR"</span><span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- additivity 避免执行2次 --&gt;</span>
+    <span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"com.xncoding"</span> <span class="na">level=</span><span class="s">"${busilevel}"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"INFO_FILE"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"ERROR_FILE"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/logger&gt;</span>
+    <span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"${rootlevel}"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"INFO_FILE"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"ERROR_FILE"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/root&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<h4 id="applicationyml-配置">application.yml 配置</h4>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##########################################################
+##################  所有profile共有的配置  #################
+##########################################################
+
+###################  项目启动端口  ###################
+server.port: 8092
+
+###################  spring配置  ###################
+spring:
+  profiles:
+    active: dev
+
+---
+
+#####################################################################
+########################  开发环境profile  ##########################
+#####################################################################
+spring:
+  profiles: dev
+
+logging:
+  level:
+    root: INFO
+    com.xncoding: DEBUG
+  path: D:/logs/springboot-aop
+
+</code></pre></div></div>
+:ET

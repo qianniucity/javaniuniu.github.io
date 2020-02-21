@@ -116,3 +116,6 @@ public class EntityObjectConverter {
 }
 
 ```
+
+参考链接
+- 对象之间属性数据拷贝 [Bean转换工具DozerBeanMapper](https://blog.csdn.net/weixin_41835612/article/details/83775374)
