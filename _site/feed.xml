@@ -1,128 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-02-21T21:12:02+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">logback配置</title><link href="http://localhost:4000/java-util-code/logback" rel="alternate" type="text/html" title="logback配置" /><published>2020-02-21T00:00:00+08:00</published><updated>2020-02-21T00:00:00+08:00</updated><id>http://localhost:4000/java-util-code/logback-spring</id><content type="html" xml:base="http://localhost:4000/java-util-code/logback">&lt;h4 id=&quot;logback-springxml-配置&quot;&gt;logback-spring.xml 配置&lt;/h4&gt;
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- scan 配置文件如果发生改变，将会被重新加载  scanPeriod 检测间隔时间--&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scan=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scanPeriod=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;60 seconds&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;debug=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;contextName&amp;gt;&lt;/span&gt;logback&lt;span class=&quot;nt&quot;&gt;&amp;lt;/contextName&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;include&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org/springframework/boot/logging/logback/base.xml&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志存储级别 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;springProperty&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rootlevel&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;source=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logging.level.root&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;springProperty&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;busilevel&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;source=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logging.level.com.xncoding&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志存储路径 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;springProperty&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logPath&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;source=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logging.path&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 普通日志 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO_FILE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;${logPath}/info.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rollingPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志命名:单个文件大于128MB 按照时间+自增i 生成log文件 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;fileNamePattern&amp;gt;&lt;/span&gt;${logPath}/info-%d{yyyy-MM-dd}.%i.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/fileNamePattern&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;timeBasedFileNamingAndTriggeringPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxFileSize&amp;gt;&lt;/span&gt;128MB&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxFileSize&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 最大保存时间：30天--&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxHistory&amp;gt;&lt;/span&gt;30&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxHistory&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rollingPolicy&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;append&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/append&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;charset&amp;gt;&lt;/span&gt;utf-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/charset&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;info&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMatch&amp;gt;&lt;/span&gt;ACCEPT&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMatch&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMismatch&amp;gt;&lt;/span&gt;DENY&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMismatch&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 错误日志 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;${logPath}/error.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rollingPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志命名:单个文件大于2MB 按照时间+自增i 生成log文件 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;fileNamePattern&amp;gt;&lt;/span&gt;${logPath}/error-%d{yyyy-MM-dd}.%i.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/fileNamePattern&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;timeBasedFileNamingAndTriggeringPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-                &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxFileSize&amp;gt;&lt;/span&gt;2MB&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxFileSize&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 最大保存时间：180天--&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxHistory&amp;gt;&lt;/span&gt;180&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxHistory&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rollingPolicy&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;append&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/append&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志格式 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;charset&amp;gt;&lt;/span&gt;utf-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/charset&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志级别过滤器 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 过滤的级别 --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;ERROR&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 匹配时的操作：接收（记录） --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMatch&amp;gt;&lt;/span&gt;ACCEPT&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMatch&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 不匹配时的操作：拒绝（不记录） --&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMismatch&amp;gt;&lt;/span&gt;DENY&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMismatch&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 控制台 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;STDOUT&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.ConsoleAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志格式 --&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;charset&amp;gt;&lt;/span&gt;utf-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/charset&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;DEBUG&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 屏蔽kafka的警告 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;logger&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.apache.kafka&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- additivity 避免执行2次 --&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;logger&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.xncoding&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${busilevel}&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;additivity=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;STDOUT&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/logger&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;root&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${rootlevel}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/root&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-02-22T23:49:42+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">SpringBoot AOP演示项目-日志篇</title><link href="http://localhost:4000/SpringBoot/Aop/log" rel="alternate" type="text/html" title="SpringBoot AOP演示项目-日志篇" /><published>2020-02-22T00:00:00+08:00</published><updated>2020-02-22T00:00:00+08:00</updated><id>http://localhost:4000/SpringBoot/Aop/SpringBoot-Aop-log</id><content type="html" xml:base="http://localhost:4000/SpringBoot/Aop/log">&lt;p&gt;源码地址
+&lt;a href=&quot;https://github.com/minplemon/springboot-buckets/tree/master/springboot-aop&quot;&gt;springboot-aop&lt;/a&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;applicationyml-配置&quot;&gt;application.yml 配置&lt;/h4&gt;
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##########################################################
-##################  所有profile共有的配置  #################
-##########################################################
+&lt;p&gt;一句话简介知识点
+Spring AOP面向切面编程，可以用来配置 &lt;strong&gt;事务&lt;/strong&gt;、&lt;strong&gt;做日志&lt;/strong&gt;、&lt;strong&gt;权限验证&lt;/strong&gt;、&lt;strong&gt;在用户请求时做一些处理&lt;/strong&gt;等等 &lt;br /&gt;
+CommandLineRunner,实现在项目启动后执行的功能可以用来做 &lt;strong&gt;预先数据的加载&lt;/strong&gt;&lt;/p&gt;
 
-###################  项目启动端口  ###################
-server.port: 8092
+&lt;h4 id=&quot;面向切面编程主要知识点&quot;&gt;面向切面编程主要知识点&lt;/h4&gt;
 
-###################  spring配置  ###################
-spring:
-  profiles:
-    active: dev
-
----
-
-#####################################################################
-########################  开发环境profile  ##########################
-#####################################################################
-spring:
-  profiles: dev
-
-logging:
-  level:
-    root: INFO
-    com.xncoding: DEBUG
-  path: D:/logs/springboot-aop
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;参考链接&lt;/p&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;logback&lt;/strong&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;继承自 log4j&lt;/code&gt;，它建立在有十年工业经验的日志系统之上。它 &lt;code class=&quot;highlighter-rouge&quot;&gt;比其它所有的日志系统更快并且更小&lt;/code&gt;，包含了许多独特并且有用的特性。&lt;a href=&quot;http://www.logback.cn&quot;&gt;详细参考文档&lt;/a&gt; &lt;a href=&quot;https://blog.csdn.net/qq_36850813/article/details/83092051&quot;&gt;logback 常用配置（详解）&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="CodeMark" /><category term="工具类" /><summary type="html">logback-spring.xml 配置 &amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!-- scan 配置文件如果发生改变，将会被重新加载 scanPeriod 检测间隔时间--&amp;gt; &amp;lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&amp;gt; &amp;lt;contextName&amp;gt;logback&amp;lt;/contextName&amp;gt; &amp;lt;include resource=&quot;org/springframework/boot/logging/logback/base.xml&quot;/&amp;gt; &amp;lt;!-- 日志存储级别 --&amp;gt; &amp;lt;springProperty scope=&quot;context&quot; name=&quot;rootlevel&quot; source=&quot;logging.level.root&quot; /&amp;gt; &amp;lt;springProperty scope=&quot;context&quot; name=&quot;busilevel&quot; source=&quot;logging.level.com.xncoding&quot; /&amp;gt; &amp;lt;!-- 日志存储路径 --&amp;gt; &amp;lt;springProperty scope=&quot;context&quot; name=&quot;logPath&quot; source=&quot;logging.path&quot; /&amp;gt; &amp;lt;!-- 普通日志 --&amp;gt; &amp;lt;appender name=&quot;INFO_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&amp;gt; &amp;lt;file&amp;gt;${logPath}/info.log&amp;lt;/file&amp;gt; &amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt; &amp;lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&amp;gt; &amp;lt;!-- 日志命名:单个文件大于128MB 按照时间+自增i 生成log文件 --&amp;gt; &amp;lt;fileNamePattern&amp;gt;${logPath}/info-%d{yyyy-MM-dd}.%i.log&amp;lt;/fileNamePattern&amp;gt; &amp;lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&amp;gt; &amp;lt;maxFileSize&amp;gt;128MB&amp;lt;/maxFileSize&amp;gt; &amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt; &amp;lt;!-- 最大保存时间：30天--&amp;gt; &amp;lt;maxHistory&amp;gt;30&amp;lt;/maxHistory&amp;gt; &amp;lt;/rollingPolicy&amp;gt; &amp;lt;append&amp;gt;true&amp;lt;/append&amp;gt; &amp;lt;encoder class=&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&amp;gt; &amp;lt;pattern&amp;gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&amp;lt;/pattern&amp;gt; &amp;lt;charset&amp;gt;utf-8&amp;lt;/charset&amp;gt; &amp;lt;/encoder&amp;gt; &amp;lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&amp;gt; &amp;lt;level&amp;gt;info&amp;lt;/level&amp;gt; &amp;lt;onMatch&amp;gt;ACCEPT&amp;lt;/onMatch&amp;gt; &amp;lt;onMismatch&amp;gt;DENY&amp;lt;/onMismatch&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;/appender&amp;gt; &amp;lt;!-- 错误日志 --&amp;gt; &amp;lt;appender name=&quot;ERROR_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&amp;gt; &amp;lt;file&amp;gt;${logPath}/error.log&amp;lt;/file&amp;gt; &amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt; &amp;lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&amp;gt; &amp;lt;!-- 日志命名:单个文件大于2MB 按照时间+自增i 生成log文件 --&amp;gt; &amp;lt;fileNamePattern&amp;gt;${logPath}/error-%d{yyyy-MM-dd}.%i.log&amp;lt;/fileNamePattern&amp;gt; &amp;lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&amp;gt; &amp;lt;maxFileSize&amp;gt;2MB&amp;lt;/maxFileSize&amp;gt; &amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt; &amp;lt;!-- 最大保存时间：180天--&amp;gt; &amp;lt;maxHistory&amp;gt;180&amp;lt;/maxHistory&amp;gt; &amp;lt;/rollingPolicy&amp;gt; &amp;lt;append&amp;gt;true&amp;lt;/append&amp;gt; &amp;lt;!-- 日志格式 --&amp;gt; &amp;lt;encoder class=&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&amp;gt; &amp;lt;pattern&amp;gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&amp;lt;/pattern&amp;gt; &amp;lt;charset&amp;gt;utf-8&amp;lt;/charset&amp;gt; &amp;lt;/encoder&amp;gt; &amp;lt;!-- 日志级别过滤器 --&amp;gt; &amp;lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&amp;gt; &amp;lt;!-- 过滤的级别 --&amp;gt; &amp;lt;level&amp;gt;ERROR&amp;lt;/level&amp;gt; &amp;lt;!-- 匹配时的操作：接收（记录） --&amp;gt; &amp;lt;onMatch&amp;gt;ACCEPT&amp;lt;/onMatch&amp;gt; &amp;lt;!-- 不匹配时的操作：拒绝（不记录） --&amp;gt; &amp;lt;onMismatch&amp;gt;DENY&amp;lt;/onMismatch&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;/appender&amp;gt; &amp;lt;!-- 控制台 --&amp;gt; &amp;lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&amp;gt; &amp;lt;!-- 日志格式 --&amp;gt; &amp;lt;encoder&amp;gt; &amp;lt;pattern&amp;gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&amp;lt;/pattern&amp;gt; &amp;lt;charset&amp;gt;utf-8&amp;lt;/charset&amp;gt; &amp;lt;/encoder&amp;gt; &amp;lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&amp;gt; &amp;lt;filter class=&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&amp;gt; &amp;lt;level&amp;gt;DEBUG&amp;lt;/level&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;/appender&amp;gt; &amp;lt;!-- 屏蔽kafka的警告 --&amp;gt; &amp;lt;logger name=&quot;org.apache.kafka&quot; level=&quot;ERROR&quot;/&amp;gt; &amp;lt;!-- additivity 避免执行2次 --&amp;gt; &amp;lt;logger name=&quot;com.xncoding&quot; level=&quot;${busilevel}&quot; additivity=&quot;false&quot;&amp;gt; &amp;lt;appender-ref ref=&quot;STDOUT&quot;/&amp;gt; &amp;lt;appender-ref ref=&quot;INFO_FILE&quot;/&amp;gt; &amp;lt;appender-ref ref=&quot;ERROR_FILE&quot;/&amp;gt; &amp;lt;/logger&amp;gt; &amp;lt;root level=&quot;${rootlevel}&quot;&amp;gt; &amp;lt;appender-ref ref=&quot;INFO_FILE&quot;/&amp;gt; &amp;lt;appender-ref ref=&quot;ERROR_FILE&quot;/&amp;gt; &amp;lt;/root&amp;gt; &amp;lt;/configuration&amp;gt; application.yml 配置 ########################################################## ################## 所有profile共有的配置 ################# ########################################################## ################### 项目启动端口 ################### server.port: 8092 ################### spring配置 ################### spring: profiles: active: dev --- ##################################################################### ######################## 开发环境profile ########################## ##################################################################### spring: profiles: dev logging: level: root: INFO com.xncoding: DEBUG path: D:/logs/springboot-aop 参考链接 logback 继承自 log4j，它建立在有十年工业经验的日志系统之上。它 比其它所有的日志系统更快并且更小，包含了许多独特并且有用的特性。详细参考文档 logback 常用配置（详解）</summary></entry><entry><title type="html">Lombok 实战</title><link href="http://localhost:4000/Annotation/Lombok" rel="alternate" type="text/html" title="Lombok 实战" /><published>2020-02-21T00:00:00+08:00</published><updated>2020-02-21T00:00:00+08:00</updated><id>http://localhost:4000/Annotation/Lombok</id><content type="html" xml:base="http://localhost:4000/Annotation/Lombok">&lt;ul&gt;
+  &lt;li&gt;执行点（Executepoint） - 类初始化，方法调用。&lt;/li&gt;
+  &lt;li&gt;连接点（Joinpoint）    - 执行点+方位的组合，可确定Joinpoint，比如类开始初始化前，类初始化后，方法调用前，方法调用后。&lt;/li&gt;
+  &lt;li&gt;切点（Pointcut）       - 在众多执行点中，定位感兴趣的执行点。Executepoint相当于数据库表中的记录，而Pointcut相当于查询条件。&lt;/li&gt;
+  &lt;li&gt;增强（Advice）         - 织入到目标类连接点上的一段程序代码。除了一段程序代码外，还拥有执行点的方位信息。&lt;/li&gt;
+  &lt;li&gt;目标对象（Target）     - 增强逻辑的织入目标类&lt;/li&gt;
+  &lt;li&gt;引介（Introduction）   - 一种特殊的增强（advice），它为类添加一些额外的属性和方法，动态为业务类添加其他接口的实现逻辑，让业务类成为这个接口的实现类。&lt;/li&gt;
+  &lt;li&gt;代理（Proxy）          - 一个类被AOP织入后，产生一个结果类，它便是融合了原类和增强逻辑的代理类。&lt;/li&gt;
+  &lt;li&gt;切面（Aspect）         - 切面由切点（Pointcut）和增强（Advice/Introduction）组成，既包括横切逻辑定义，也包括连接点定义。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;aop工作重点&quot;&gt;AOP工作重点：&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;如何通过切点（Pointcut）和增强（Advice）定位到连接点（Jointpoint）上；&lt;/li&gt;
+  &lt;li&gt;如何在增强（Advice）中编写切面的代码。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;主要注解&quot;&gt;主要注解&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;@Pointcut切点注解&lt;/li&gt;
+  &lt;li&gt;@Before 在切点方法之前执行&lt;/li&gt;
+  &lt;li&gt;@After 在切点方法之后执行&lt;/li&gt;
+  &lt;li&gt;@AfterReturning 切点方法返回后执行&lt;/li&gt;
+  &lt;li&gt;@AfterThrowing 切点方法抛异常执行&lt;/li&gt;
+  &lt;li&gt;@Around 属于环绕增强，能控制切点执行前，执行后，，用这个注解后，程序抛异常，会影响@AfterThrowing这个注解&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;执行前后顺序是这样&quot;&gt;执行前后顺序是这样&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;@Around环绕通知&lt;/li&gt;
+  &lt;li&gt;@Before通知执行&lt;/li&gt;
+  &lt;li&gt;@Before通知执行结束&lt;/li&gt;
+  &lt;li&gt;@Around环绕通知执行结束&lt;/li&gt;
+  &lt;li&gt;@After后置通知执行了!&lt;/li&gt;
+  &lt;li&gt;@AfterReturning第一个后置返回通知的返回值：18&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;参考文档&quot;&gt;参考文档：&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://javaniuniu.com/Spring/Aspect/explanation&quot;&gt;Aspect配置说明&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://javaniuniu.com/Spring/Aspect&quot;&gt;Aspect实现样例&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/myblogs-miller/p/9046425.html&quot;&gt;springboot启动时执行任务CommandLineRunner&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://javaniuniu.com/Annotation/myself&quot;&gt;自定义注释&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://javaniuniu.com/java-code-design-data/vo&quot;&gt;java中VO的使用(VO视图对象)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://javaniuniu.com/Annotation/Lombok&quot;&gt;Lombok 实战&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://blog.csdn.net/qq_36850813/article/details/83092051&quot;&gt;logback 常用配置（详解）&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="SpringBootAop" /><summary type="html">源码地址 springboot-aop 一句话简介知识点 Spring AOP面向切面编程，可以用来配置 事务、做日志、权限验证、在用户请求时做一些处理等等 CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先数据的加载 面向切面编程主要知识点 执行点（Executepoint） - 类初始化，方法调用。 连接点（Joinpoint） - 执行点+方位的组合，可确定Joinpoint，比如类开始初始化前，类初始化后，方法调用前，方法调用后。 切点（Pointcut） - 在众多执行点中，定位感兴趣的执行点。Executepoint相当于数据库表中的记录，而Pointcut相当于查询条件。 增强（Advice） - 织入到目标类连接点上的一段程序代码。除了一段程序代码外，还拥有执行点的方位信息。 目标对象（Target） - 增强逻辑的织入目标类 引介（Introduction） - 一种特殊的增强（advice），它为类添加一些额外的属性和方法，动态为业务类添加其他接口的实现逻辑，让业务类成为这个接口的实现类。 代理（Proxy） - 一个类被AOP织入后，产生一个结果类，它便是融合了原类和增强逻辑的代理类。 切面（Aspect） - 切面由切点（Pointcut）和增强（Advice/Introduction）组成，既包括横切逻辑定义，也包括连接点定义。 AOP工作重点： 如何通过切点（Pointcut）和增强（Advice）定位到连接点（Jointpoint）上； 如何在增强（Advice）中编写切面的代码。 主要注解 @Pointcut切点注解 @Before 在切点方法之前执行 @After 在切点方法之后执行 @AfterReturning 切点方法返回后执行 @AfterThrowing 切点方法抛异常执行 @Around 属于环绕增强，能控制切点执行前，执行后，，用这个注解后，程序抛异常，会影响@AfterThrowing这个注解 执行前后顺序是这样 @Around环绕通知 @Before通知执行 @Before通知执行结束 @Around环绕通知执行结束 @After后置通知执行了! @AfterReturning第一个后置返回通知的返回值：18 参考文档： Aspect配置说明 Aspect实现样例 springboot启动时执行任务CommandLineRunner 自定义注释 java中VO的使用(VO视图对象) Lombok 实战 logback 常用配置（详解）</summary></entry><entry><title type="html">Lombok 实战</title><link href="http://localhost:4000/Annotation/Lombok" rel="alternate" type="text/html" title="Lombok 实战" /><published>2020-02-21T00:00:00+08:00</published><updated>2020-02-21T00:00:00+08:00</updated><id>http://localhost:4000/Annotation/Lombok</id><content type="html" xml:base="http://localhost:4000/Annotation/Lombok">&lt;ul&gt;
   &lt;li&gt;@Data ： 注在类上，提供类的get、set、equals、hashCode、canEqual、toString方法&lt;/li&gt;
   &lt;li&gt;@AllArgsConstructor ： 注在类上，提供类的全参构造&lt;/li&gt;
   &lt;li&gt;@NoArgsConstructor ： 注在类上，提供类的无参构造&lt;/li&gt;
@@ -406,7 +339,130 @@ lombok.anyConstructor.addConstructorProperties = true
         &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="注解" /><category term="Lombok" /><summary type="html">@Data ： 注在类上，提供类的get、set、equals、hashCode、canEqual、toString方法 @AllArgsConstructor ： 注在类上，提供类的全参构造 @NoArgsConstructor ： 注在类上，提供类的无参构造 @Setter ： 注在属性上，提供 set 方法 @Getter ： 注在属性上，提供 get 方法 @EqualsAndHashCode ： 注在类上，提供对应的 equals 和 hashCode 方法 @Log4j/@Slf4j ： 注在类上，提供对应的 Logger 对象，变量名为 log ，private static final Logger log = LoggerFactory.getLogger(UserController.class); @EqualsAndHashCode(callSuper = false) 作用就是自动的给model bean实现equals方法和hashcode方法，callSuper = false 表示生成的 hashcode 包括父类属性 详情参考 今天主要说下@NoArgsConstructor, @RequiredArgsConstructor, @AllArgsConstructor @NoArgsConstructor 1.1 @NoArgsConstructor 实战使用 @NoArgsConstructor在类上使用，它可以提供一个无参构造器，比如： @NoArgsConstructor public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; public User() { } } 当然，有时候我们会使用到单例模式，这个时候我们需要将构造器私有化，那么就可以使用这样一个属性access设置构造器的权限： @NoArgsConstructor(access = AccessLevel.PRIVATE) public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; private User() { } } 当类中有final字段没有被初始化时，编译器会报错，但是也可用@NoArgsConstructor(force = true)，那么Lombok就会为没有初始化的final字段设置默认值 0 / false / null, 这样编译器就不会报错，如下所示： @NoArgsConstructor(force = true) public class User { private final String gender; private String username; private String password; } // 编译后： public class User { private final String gender = null; private String username; private String password; public User() { } } 对于具有约束的字段（例如使用了@NonNull注解的字段），不会生成字段检查，如下所示： @NoArgsConstructor(force = true) public class User { private final String gender; @NonNull private String username; private String password; } // 编译后： public class User { private final String gender = null; @NonNull private String username; private String password; public User() { } } 1.2 @NoArgsConstructor 配置详解 首先来看看 @NoArgsConstructor 注解源码部分的实现： @Target(ElementType.TYPE) @Retention(RetentionPolicy.SOURCE) public @interface NoArgsConstructor { String staticName() default &quot;&quot;; // 在构造方法的入参上添加注解。e.g. @NonNull // up to JDK7: @EqualsAndHashCode(onParam=@__({@AnnotationsGoHere})) // from JDK8: @EqualsAndHashCode(onParam_={@AnnotationsGohere}) AnyAnnotation[] onConstructor() default {}; // 设置构造方法的访问权限，默认是 public AccessLevel access() default lombok.AccessLevel.PUBLIC; // 是否强制对未赋值的final字段初始化值。 boolean force() default false; @Deprecated @Retention(RetentionPolicy.SOURCE) @Target({}) @interface AnyAnnotation {} } 看到有这样一个注解属性：staticName，是代表什么意思呢？ 也就是说是否生成静态的构造方法，如果生成静态的构造方法，那么原来的实例构造方法将会被私有（private），然后创建一个你指定名称的静态构造方法，并且是public的，如下所示： @NoArgsConstructor(staticName = &quot;UserHa&quot;) public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; private User() { } public static User UserHa() { return new User(); } } @RequiredArgsConstructor 2.1 @RequiredArgsConstructor 实战使用 @RequiredArgsConstructor也是在类上使用，但是这个注解可以生成带参或者不带参的构造方法。 若带参数，只能是类中所有带有 @NonNull注解的和以final修饰的未经初始化的字段，如下所示： @RequiredArgsConstructor public class User { private final String gender; @NonNull private String username; private String password; } // 编译后： public class User { private final String gender; @NonNull private String username; private String password; public User(String gender, @NonNull String username) { if (username == null) { throw new NullPointerException(&quot;username is marked @NonNull but is null&quot;); } else { this.gender = gender; this.username = username; } } } 如果针对User类使用@RequiredArgsConstructor注解实现空参构造方法，那么我们就要这样定义实体类： @RequiredArgsConstructor public class User { private final String gender = &quot;男&quot;; private String username; private String password; } 当然如果我们要是想生成空参构造，仅适用上一个注解@NoArgsConstructor就可以了。 2.2 @RequiredArgsConstructor 配置详解 先撸注解源码： @Target(ElementType.TYPE) @Retention(RetentionPolicy.SOURCE) public @interface RequiredArgsConstructor { // 是否使用静态构造器，并制定静态构造器的名称 String staticName() default &quot;&quot;; // 构造器入参添加注解 AnyAnnotation[] onConstructor() default {}; @Deprecated @Retention(RetentionPolicy.SOURCE) @Target({}) @interface AnyAnnotation {} } 没什么好说的，可以参见@NoArgsConstructor @AllArgsConstructor 3.1 @AllArgsConstructor 实战使用 @AllArgsConstructor同样是在类上使用，该注解提供一个全参数的构造方法，默认不提供无参构造。 需要注意的是，这里的全参不包括已初始化的final字段（主要是final字段，一旦被赋值不允许再被修改）。 @AllArgsConstructor public class User { private final String gender; private String username; private String password; } // 编译后 public class User { private final String gender; private String username; private String password; public User(String gender, String username, String password) { this.gender = gender; this.username = username; this.password = password; } } 3.2 @AllArgsConstructor 配置详解 @Target(ElementType.TYPE) @Retention(RetentionPolicy.SOURCE) public @interface AllArgsConstructor { // 是否使用静态构造器，并制定静态构造器的名称 String staticName() default &quot;&quot;; // 构造器入参添加注解 AnyAnnotation[] onConstructor() default {}; // 设置构造器的访问权限 AccessLevel access() default lombok.AccessLevel.PUBLIC; @Deprecated @Retention(RetentionPolicy.SOURCE) @Target({}) @interface AnyAnnotation {} } 同样这几个属性配置方式，也可以参见@NoArgsConstructor Constructor 全局配置 # 如果设置为true，则lombok将向生成的构造函数添加 @java.beans.ConstructorProperties。 lombok.anyConstructor.addConstructorProperties = [true | false] (default: false) # 是否禁用这几种构造器注解 lombok.[allArgsConstructor|requiredArgsConstructor|noArgsConstructor].flagUsage = [warning | error] (default: not set) lombok.anyConstructor.flagUsage = [warning | error] (default: not set) # 是否支持复制现有的注解，在本类中使用。e.g. @Nullable/@NonNull annotations lombok.copyableAnnotations = [A list of fully qualified types] (default: empty list) 测试 addConstructorProperties 全局配置文件内容 config.stopBubbling = true # 首先清除原有配置 clear lombok.anyConstructor.addConstructorProperties # 设置新的配置 lombok.anyConstructor.addConstructorProperties = true 实体类 @AllArgsConstructor public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; @ConstructorProperties({&quot;username&quot;, &quot;password&quot;}) // 被添加 public User(String username, String password) { this.username = username; this.password = password; } }</summary></entry><entry><title type="html">处理文件上传(MultipartResolver)</title><link href="http://localhost:4000/java-util-code/MultipartResolver/explanation" rel="alternate" type="text/html" title="处理文件上传(MultipartResolver)" /><published>2020-02-19T00:00:00+08:00</published><updated>2020-02-19T00:00:00+08:00</updated><id>http://localhost:4000/java-util-code/MultipartResolver/MultipartResolver</id><content type="html" xml:base="http://localhost:4000/java-util-code/MultipartResolver/explanation">&lt;h4 id=&quot;简介&quot;&gt;简介&lt;/h4&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="注解" /><category term="Lombok" /><summary type="html">@Data ： 注在类上，提供类的get、set、equals、hashCode、canEqual、toString方法 @AllArgsConstructor ： 注在类上，提供类的全参构造 @NoArgsConstructor ： 注在类上，提供类的无参构造 @Setter ： 注在属性上，提供 set 方法 @Getter ： 注在属性上，提供 get 方法 @EqualsAndHashCode ： 注在类上，提供对应的 equals 和 hashCode 方法 @Log4j/@Slf4j ： 注在类上，提供对应的 Logger 对象，变量名为 log ，private static final Logger log = LoggerFactory.getLogger(UserController.class); @EqualsAndHashCode(callSuper = false) 作用就是自动的给model bean实现equals方法和hashcode方法，callSuper = false 表示生成的 hashcode 包括父类属性 详情参考 今天主要说下@NoArgsConstructor, @RequiredArgsConstructor, @AllArgsConstructor @NoArgsConstructor 1.1 @NoArgsConstructor 实战使用 @NoArgsConstructor在类上使用，它可以提供一个无参构造器，比如： @NoArgsConstructor public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; public User() { } } 当然，有时候我们会使用到单例模式，这个时候我们需要将构造器私有化，那么就可以使用这样一个属性access设置构造器的权限： @NoArgsConstructor(access = AccessLevel.PRIVATE) public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; private User() { } } 当类中有final字段没有被初始化时，编译器会报错，但是也可用@NoArgsConstructor(force = true)，那么Lombok就会为没有初始化的final字段设置默认值 0 / false / null, 这样编译器就不会报错，如下所示： @NoArgsConstructor(force = true) public class User { private final String gender; private String username; private String password; } // 编译后： public class User { private final String gender = null; private String username; private String password; public User() { } } 对于具有约束的字段（例如使用了@NonNull注解的字段），不会生成字段检查，如下所示： @NoArgsConstructor(force = true) public class User { private final String gender; @NonNull private String username; private String password; } // 编译后： public class User { private final String gender = null; @NonNull private String username; private String password; public User() { } } 1.2 @NoArgsConstructor 配置详解 首先来看看 @NoArgsConstructor 注解源码部分的实现： @Target(ElementType.TYPE) @Retention(RetentionPolicy.SOURCE) public @interface NoArgsConstructor { String staticName() default &quot;&quot;; // 在构造方法的入参上添加注解。e.g. @NonNull // up to JDK7: @EqualsAndHashCode(onParam=@__({@AnnotationsGoHere})) // from JDK8: @EqualsAndHashCode(onParam_={@AnnotationsGohere}) AnyAnnotation[] onConstructor() default {}; // 设置构造方法的访问权限，默认是 public AccessLevel access() default lombok.AccessLevel.PUBLIC; // 是否强制对未赋值的final字段初始化值。 boolean force() default false; @Deprecated @Retention(RetentionPolicy.SOURCE) @Target({}) @interface AnyAnnotation {} } 看到有这样一个注解属性：staticName，是代表什么意思呢？ 也就是说是否生成静态的构造方法，如果生成静态的构造方法，那么原来的实例构造方法将会被私有（private），然后创建一个你指定名称的静态构造方法，并且是public的，如下所示： @NoArgsConstructor(staticName = &quot;UserHa&quot;) public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; private User() { } public static User UserHa() { return new User(); } } @RequiredArgsConstructor 2.1 @RequiredArgsConstructor 实战使用 @RequiredArgsConstructor也是在类上使用，但是这个注解可以生成带参或者不带参的构造方法。 若带参数，只能是类中所有带有 @NonNull注解的和以final修饰的未经初始化的字段，如下所示： @RequiredArgsConstructor public class User { private final String gender; @NonNull private String username; private String password; } // 编译后： public class User { private final String gender; @NonNull private String username; private String password; public User(String gender, @NonNull String username) { if (username == null) { throw new NullPointerException(&quot;username is marked @NonNull but is null&quot;); } else { this.gender = gender; this.username = username; } } } 如果针对User类使用@RequiredArgsConstructor注解实现空参构造方法，那么我们就要这样定义实体类： @RequiredArgsConstructor public class User { private final String gender = &quot;男&quot;; private String username; private String password; } 当然如果我们要是想生成空参构造，仅适用上一个注解@NoArgsConstructor就可以了。 2.2 @RequiredArgsConstructor 配置详解 先撸注解源码： @Target(ElementType.TYPE) @Retention(RetentionPolicy.SOURCE) public @interface RequiredArgsConstructor { // 是否使用静态构造器，并制定静态构造器的名称 String staticName() default &quot;&quot;; // 构造器入参添加注解 AnyAnnotation[] onConstructor() default {}; @Deprecated @Retention(RetentionPolicy.SOURCE) @Target({}) @interface AnyAnnotation {} } 没什么好说的，可以参见@NoArgsConstructor @AllArgsConstructor 3.1 @AllArgsConstructor 实战使用 @AllArgsConstructor同样是在类上使用，该注解提供一个全参数的构造方法，默认不提供无参构造。 需要注意的是，这里的全参不包括已初始化的final字段（主要是final字段，一旦被赋值不允许再被修改）。 @AllArgsConstructor public class User { private final String gender; private String username; private String password; } // 编译后 public class User { private final String gender; private String username; private String password; public User(String gender, String username, String password) { this.gender = gender; this.username = username; this.password = password; } } 3.2 @AllArgsConstructor 配置详解 @Target(ElementType.TYPE) @Retention(RetentionPolicy.SOURCE) public @interface AllArgsConstructor { // 是否使用静态构造器，并制定静态构造器的名称 String staticName() default &quot;&quot;; // 构造器入参添加注解 AnyAnnotation[] onConstructor() default {}; // 设置构造器的访问权限 AccessLevel access() default lombok.AccessLevel.PUBLIC; @Deprecated @Retention(RetentionPolicy.SOURCE) @Target({}) @interface AnyAnnotation {} } 同样这几个属性配置方式，也可以参见@NoArgsConstructor Constructor 全局配置 # 如果设置为true，则lombok将向生成的构造函数添加 @java.beans.ConstructorProperties。 lombok.anyConstructor.addConstructorProperties = [true | false] (default: false) # 是否禁用这几种构造器注解 lombok.[allArgsConstructor|requiredArgsConstructor|noArgsConstructor].flagUsage = [warning | error] (default: not set) lombok.anyConstructor.flagUsage = [warning | error] (default: not set) # 是否支持复制现有的注解，在本类中使用。e.g. @Nullable/@NonNull annotations lombok.copyableAnnotations = [A list of fully qualified types] (default: empty list) 测试 addConstructorProperties 全局配置文件内容 config.stopBubbling = true # 首先清除原有配置 clear lombok.anyConstructor.addConstructorProperties # 设置新的配置 lombok.anyConstructor.addConstructorProperties = true 实体类 @AllArgsConstructor public class User { private String username; private String password; } // 编译后： public class User { private String username; private String password; @ConstructorProperties({&quot;username&quot;, &quot;password&quot;}) // 被添加 public User(String username, String password) { this.username = username; this.password = password; } }</summary></entry><entry><title type="html">logback配置</title><link href="http://localhost:4000/java-util-code/logback" rel="alternate" type="text/html" title="logback配置" /><published>2020-02-21T00:00:00+08:00</published><updated>2020-02-21T00:00:00+08:00</updated><id>http://localhost:4000/java-util-code/logback-spring</id><content type="html" xml:base="http://localhost:4000/java-util-code/logback">&lt;h4 id=&quot;logback-springxml-配置&quot;&gt;logback-spring.xml 配置&lt;/h4&gt;
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- scan 配置文件如果发生改变，将会被重新加载  scanPeriod 检测间隔时间--&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scan=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scanPeriod=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;60 seconds&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;debug=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;contextName&amp;gt;&lt;/span&gt;logback&lt;span class=&quot;nt&quot;&gt;&amp;lt;/contextName&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;include&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org/springframework/boot/logging/logback/base.xml&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志存储级别 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;springProperty&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rootlevel&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;source=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logging.level.root&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;springProperty&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;busilevel&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;source=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logging.level.com.xncoding&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志存储路径 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;springProperty&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;context&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logPath&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;source=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logging.path&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 普通日志 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO_FILE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;${logPath}/info.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rollingPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志命名:单个文件大于128MB 按照时间+自增i 生成log文件 --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;fileNamePattern&amp;gt;&lt;/span&gt;${logPath}/info-%d{yyyy-MM-dd}.%i.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/fileNamePattern&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;timeBasedFileNamingAndTriggeringPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxFileSize&amp;gt;&lt;/span&gt;128MB&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxFileSize&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 最大保存时间：30天--&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxHistory&amp;gt;&lt;/span&gt;30&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxHistory&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rollingPolicy&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;append&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/append&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;charset&amp;gt;&lt;/span&gt;utf-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/charset&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;info&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMatch&amp;gt;&lt;/span&gt;ACCEPT&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMatch&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMismatch&amp;gt;&lt;/span&gt;DENY&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMismatch&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 错误日志 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;file&amp;gt;&lt;/span&gt;${logPath}/error.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/file&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;rollingPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志命名:单个文件大于2MB 按照时间+自增i 生成log文件 --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;fileNamePattern&amp;gt;&lt;/span&gt;${logPath}/error-%d{yyyy-MM-dd}.%i.log&lt;span class=&quot;nt&quot;&gt;&amp;lt;/fileNamePattern&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;timeBasedFileNamingAndTriggeringPolicy&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxFileSize&amp;gt;&lt;/span&gt;2MB&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxFileSize&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 最大保存时间：180天--&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;maxHistory&amp;gt;&lt;/span&gt;180&lt;span class=&quot;nt&quot;&gt;&amp;lt;/maxHistory&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/rollingPolicy&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;append&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/append&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志格式 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;charset&amp;gt;&lt;/span&gt;utf-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/charset&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志级别过滤器 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 过滤的级别 --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;ERROR&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 匹配时的操作：接收（记录） --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMatch&amp;gt;&lt;/span&gt;ACCEPT&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMatch&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 不匹配时的操作：拒绝（不记录） --&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;onMismatch&amp;gt;&lt;/span&gt;DENY&lt;span class=&quot;nt&quot;&gt;&amp;lt;/onMismatch&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 控制台 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;STDOUT&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.core.ConsoleAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 日志格式 --&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;encoder&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;pattern&amp;gt;&lt;/span&gt;%d{yyyy-MM-dd HH:mm:ss.SSS}  %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&lt;span class=&quot;nt&quot;&gt;&amp;lt;/pattern&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;charset&amp;gt;&lt;/span&gt;utf-8&lt;span class=&quot;nt&quot;&gt;&amp;lt;/charset&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/encoder&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;&amp;lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;filter&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;level&amp;gt;&lt;/span&gt;DEBUG&lt;span class=&quot;nt&quot;&gt;&amp;lt;/level&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/filter&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- 屏蔽kafka的警告 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;logger&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.apache.kafka&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- additivity 避免执行2次 --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;logger&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;com.xncoding&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${busilevel}&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;additivity=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;STDOUT&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/logger&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;root&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;level=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;${rootlevel}&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ERROR_FILE&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/root&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/configuration&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;applicationyml-配置&quot;&gt;application.yml 配置&lt;/h4&gt;
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;##########################################################
+##################  所有profile共有的配置  #################
+##########################################################
+
+###################  项目启动端口  ###################
+server.port: 8092
+
+###################  spring配置  ###################
+spring:
+  profiles:
+    active: dev
+
+---
+
+#####################################################################
+########################  开发环境profile  ##########################
+#####################################################################
+spring:
+  profiles: dev
+
+logging:
+  level:
+    root: INFO
+    com.xncoding: DEBUG
+  path: D:/logs/springboot-aop
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;参考链接&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;logback&lt;/strong&gt; &lt;code class=&quot;highlighter-rouge&quot;&gt;继承自 log4j&lt;/code&gt;，它建立在有十年工业经验的日志系统之上。它 &lt;code class=&quot;highlighter-rouge&quot;&gt;比其它所有的日志系统更快并且更小&lt;/code&gt;，包含了许多独特并且有用的特性。&lt;a href=&quot;http://www.logback.cn&quot;&gt;详细参考文档&lt;/a&gt; &lt;a href=&quot;https://blog.csdn.net/qq_36850813/article/details/83092051&quot;&gt;logback 常用配置（详解）&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="CodeMark" /><category term="工具类" /><summary type="html">logback-spring.xml 配置 &amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt; &amp;lt;!-- scan 配置文件如果发生改变，将会被重新加载 scanPeriod 检测间隔时间--&amp;gt; &amp;lt;configuration scan=&quot;true&quot; scanPeriod=&quot;60 seconds&quot; debug=&quot;false&quot;&amp;gt; &amp;lt;contextName&amp;gt;logback&amp;lt;/contextName&amp;gt; &amp;lt;include resource=&quot;org/springframework/boot/logging/logback/base.xml&quot;/&amp;gt; &amp;lt;!-- 日志存储级别 --&amp;gt; &amp;lt;springProperty scope=&quot;context&quot; name=&quot;rootlevel&quot; source=&quot;logging.level.root&quot; /&amp;gt; &amp;lt;springProperty scope=&quot;context&quot; name=&quot;busilevel&quot; source=&quot;logging.level.com.xncoding&quot; /&amp;gt; &amp;lt;!-- 日志存储路径 --&amp;gt; &amp;lt;springProperty scope=&quot;context&quot; name=&quot;logPath&quot; source=&quot;logging.path&quot; /&amp;gt; &amp;lt;!-- 普通日志 --&amp;gt; &amp;lt;appender name=&quot;INFO_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&amp;gt; &amp;lt;file&amp;gt;${logPath}/info.log&amp;lt;/file&amp;gt; &amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt; &amp;lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&amp;gt; &amp;lt;!-- 日志命名:单个文件大于128MB 按照时间+自增i 生成log文件 --&amp;gt; &amp;lt;fileNamePattern&amp;gt;${logPath}/info-%d{yyyy-MM-dd}.%i.log&amp;lt;/fileNamePattern&amp;gt; &amp;lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&amp;gt; &amp;lt;maxFileSize&amp;gt;128MB&amp;lt;/maxFileSize&amp;gt; &amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt; &amp;lt;!-- 最大保存时间：30天--&amp;gt; &amp;lt;maxHistory&amp;gt;30&amp;lt;/maxHistory&amp;gt; &amp;lt;/rollingPolicy&amp;gt; &amp;lt;append&amp;gt;true&amp;lt;/append&amp;gt; &amp;lt;encoder class=&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&amp;gt; &amp;lt;pattern&amp;gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&amp;lt;/pattern&amp;gt; &amp;lt;charset&amp;gt;utf-8&amp;lt;/charset&amp;gt; &amp;lt;/encoder&amp;gt; &amp;lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&amp;gt; &amp;lt;level&amp;gt;info&amp;lt;/level&amp;gt; &amp;lt;onMatch&amp;gt;ACCEPT&amp;lt;/onMatch&amp;gt; &amp;lt;onMismatch&amp;gt;DENY&amp;lt;/onMismatch&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;/appender&amp;gt; &amp;lt;!-- 错误日志 --&amp;gt; &amp;lt;appender name=&quot;ERROR_FILE&quot; class=&quot;ch.qos.logback.core.rolling.RollingFileAppender&quot;&amp;gt; &amp;lt;file&amp;gt;${logPath}/error.log&amp;lt;/file&amp;gt; &amp;lt;!-- 循环政策：基于时间创建日志文件 --&amp;gt; &amp;lt;rollingPolicy class=&quot;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&quot;&amp;gt; &amp;lt;!-- 日志命名:单个文件大于2MB 按照时间+自增i 生成log文件 --&amp;gt; &amp;lt;fileNamePattern&amp;gt;${logPath}/error-%d{yyyy-MM-dd}.%i.log&amp;lt;/fileNamePattern&amp;gt; &amp;lt;timeBasedFileNamingAndTriggeringPolicy class=&quot;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&quot;&amp;gt; &amp;lt;maxFileSize&amp;gt;2MB&amp;lt;/maxFileSize&amp;gt; &amp;lt;/timeBasedFileNamingAndTriggeringPolicy&amp;gt; &amp;lt;!-- 最大保存时间：180天--&amp;gt; &amp;lt;maxHistory&amp;gt;180&amp;lt;/maxHistory&amp;gt; &amp;lt;/rollingPolicy&amp;gt; &amp;lt;append&amp;gt;true&amp;lt;/append&amp;gt; &amp;lt;!-- 日志格式 --&amp;gt; &amp;lt;encoder class=&quot;ch.qos.logback.classic.encoder.PatternLayoutEncoder&quot;&amp;gt; &amp;lt;pattern&amp;gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&amp;lt;/pattern&amp;gt; &amp;lt;charset&amp;gt;utf-8&amp;lt;/charset&amp;gt; &amp;lt;/encoder&amp;gt; &amp;lt;!-- 日志级别过滤器 --&amp;gt; &amp;lt;filter class=&quot;ch.qos.logback.classic.filter.LevelFilter&quot;&amp;gt; &amp;lt;!-- 过滤的级别 --&amp;gt; &amp;lt;level&amp;gt;ERROR&amp;lt;/level&amp;gt; &amp;lt;!-- 匹配时的操作：接收（记录） --&amp;gt; &amp;lt;onMatch&amp;gt;ACCEPT&amp;lt;/onMatch&amp;gt; &amp;lt;!-- 不匹配时的操作：拒绝（不记录） --&amp;gt; &amp;lt;onMismatch&amp;gt;DENY&amp;lt;/onMismatch&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;/appender&amp;gt; &amp;lt;!-- 控制台 --&amp;gt; &amp;lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&amp;gt; &amp;lt;!-- 日志格式 --&amp;gt; &amp;lt;encoder&amp;gt; &amp;lt;pattern&amp;gt;%d{yyyy-MM-dd HH:mm:ss.SSS} %p ${PID:-} --- [%15thread] %logger:%-3L : %msg%n&amp;lt;/pattern&amp;gt; &amp;lt;charset&amp;gt;utf-8&amp;lt;/charset&amp;gt; &amp;lt;/encoder&amp;gt; &amp;lt;!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息--&amp;gt; &amp;lt;filter class=&quot;ch.qos.logback.classic.filter.ThresholdFilter&quot;&amp;gt; &amp;lt;level&amp;gt;DEBUG&amp;lt;/level&amp;gt; &amp;lt;/filter&amp;gt; &amp;lt;/appender&amp;gt; &amp;lt;!-- 屏蔽kafka的警告 --&amp;gt; &amp;lt;logger name=&quot;org.apache.kafka&quot; level=&quot;ERROR&quot;/&amp;gt; &amp;lt;!-- additivity 避免执行2次 --&amp;gt; &amp;lt;logger name=&quot;com.xncoding&quot; level=&quot;${busilevel}&quot; additivity=&quot;false&quot;&amp;gt; &amp;lt;appender-ref ref=&quot;STDOUT&quot;/&amp;gt; &amp;lt;appender-ref ref=&quot;INFO_FILE&quot;/&amp;gt; &amp;lt;appender-ref ref=&quot;ERROR_FILE&quot;/&amp;gt; &amp;lt;/logger&amp;gt; &amp;lt;root level=&quot;${rootlevel}&quot;&amp;gt; &amp;lt;appender-ref ref=&quot;INFO_FILE&quot;/&amp;gt; &amp;lt;appender-ref ref=&quot;ERROR_FILE&quot;/&amp;gt; &amp;lt;/root&amp;gt; &amp;lt;/configuration&amp;gt; application.yml 配置 ########################################################## ################## 所有profile共有的配置 ################# ########################################################## ################### 项目启动端口 ################### server.port: 8092 ################### spring配置 ################### spring: profiles: active: dev --- ##################################################################### ######################## 开发环境profile ########################## ##################################################################### spring: profiles: dev logging: level: root: INFO com.xncoding: DEBUG path: D:/logs/springboot-aop 参考链接 logback 继承自 log4j，它建立在有十年工业经验的日志系统之上。它 比其它所有的日志系统更快并且更小，包含了许多独特并且有用的特性。详细参考文档 logback 常用配置（详解）</summary></entry><entry><title type="html">处理文件上传(MultipartResolver)</title><link href="http://localhost:4000/java-util-code/MultipartResolver/explanation" rel="alternate" type="text/html" title="处理文件上传(MultipartResolver)" /><published>2020-02-19T00:00:00+08:00</published><updated>2020-02-19T00:00:00+08:00</updated><id>http://localhost:4000/java-util-code/MultipartResolver/MultipartResolver</id><content type="html" xml:base="http://localhost:4000/java-util-code/MultipartResolver/explanation">&lt;h4 id=&quot;简介&quot;&gt;简介&lt;/h4&gt;
 &lt;p&gt;MultipartResolver 用于处理文件上传，当收到请求时 DispatcherServlet 的 checkMultipart() 方法会调用 MultipartResolver 的 isMultipart() 方法判断请求中是否包含文件。如果请求数据中包含文件，则调用 MultipartResolver 的 resolveMultipart() 方法对请求的数据进行解析，然后将文件数据解析成 MultipartFile 并封装在 MultipartHttpServletRequest (继承了 HttpServletRequest) 对象中，最后传递给 Controller，在 MultipartResolver 接口中有如下方法：&lt;/p&gt;
 
 &lt;ul&gt;
@@ -1309,110 +1365,4 @@ void	setBeanName(String beanName)
 void	setEnvironment(Environment environment)
 设置Environment此过滤器运行的位置。
 void	setServletContext(ServletContext servletContext)
-存储运行bean工厂的ServletContext。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="Filter拦截器" /><category term="类解释" /><summary type="html">| 修饰符和类型| 方法和说明|描述| | :—–| :—- | :—- | protected void addRequiredProperty(String property) 子类可以调用此方法以指定此属性（必须与它们公开的JavaBean属性匹配）是强制性的，并且必须作为配置参数提供。 void afterPropertiesSet() 调用initFilterBean()可能包含子类的自定义初始化的方法。 protected Environment createEnvironment() 创建并返回一个新的StandardServletEnvironment。 void destroy() 子类可以重写此方法以执行自定义过滤器关闭。 Environment getEnvironment() 返回Environment与此过滤器关联的。 FilterConfig getFilterConfig() 使此过滤器的FilterConfig可用（如果有）。 protected String getFilterName() 使此过滤器的名称可用于子类。 protected ServletContext getServletContext() 使此过滤器的ServletContext可用于子类。 void init(FilterConfig filterConfig) 初始化此过滤器的标准方法。 protected void initBeanWrapper(BeanWrapper bw) 可能使用自定义编辑器为此GenericFilterBean初始化BeanWrapper。 protected void initFilterBean() 子类可以重写此方法以执行自定义初始化。 void setBeanName(String beanName) 存储在Spring bean工厂中定义的bean名称。 void setEnvironment(Environment environment) 设置Environment此过滤器运行的位置。 void setServletContext(ServletContext servletContext) 存储运行bean工厂的ServletContext。</summary></entry><entry><title type="html">FilterRegistrationBean类方法说明</title><link href="http://localhost:4000/Filter/FilterRegistrationBean/explanation" rel="alternate" type="text/html" title="FilterRegistrationBean类方法说明" /><published>2020-02-19T00:00:00+08:00</published><updated>2020-02-19T00:00:00+08:00</updated><id>http://localhost:4000/Filter/FilterRegistrationBean/FilterRegistrationBean</id><content type="html" xml:base="http://localhost:4000/Filter/FilterRegistrationBean/explanation">&lt;p&gt;&lt;a href=&quot;/Filter/FilterRegistrationBean/example&quot;&gt;FilterRegistrationBean示例&lt;/a&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;构造函数和描述&quot;&gt;构造函数和描述&lt;/h4&gt;
-&lt;p&gt;FilterRegistrationBean()  &lt;br /&gt;
-创建一个新的FilterRegistrationBean实例.&lt;/p&gt;
-
-&lt;p&gt;FilterRegistrationBean(Filter filter, ServletRegistrationBean… servletRegistrationBeans)    &lt;br /&gt;
-创建一个新的FilterRegistrationBean实例，以将其注册到指定的ServletRegistrationBean .&lt;/p&gt;
-
-&lt;h4 id=&quot;methods&quot;&gt;Methods&lt;/h4&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;修饰符和类型&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;方法和说明&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;描述&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;addServletNames(String… servletNames)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;为过滤器添加servlet名称.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;addServletRegistrationBeans(ServletRegistrationBean… servletRegistrationBeans)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;为过滤器添加ServletRegistrationBean .&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;addUrlPatterns(String… urlPatterns)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;添加将向其注册过滤器的URL模式.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;protected void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;configure(FilterRegistration.Dynamic registration)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;配置注册设置.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;protected Filter&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;getFilter()&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回正在注册的过滤器.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Collection&lt;String&gt;&lt;/String&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;getServletNames()&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回一个可变的servlet名称集合，将向其注册过滤器.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Collection&lt;ServletRegistrationBean&gt;&lt;/ServletRegistrationBean&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;getServletRegistrationBeans()&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回将注册过滤器的ServletRegistrationBean的可变集合.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;Collection&lt;String&gt;&lt;/String&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;getUrlPatterns()&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回一个可变的URL模式集合，过滤器将针对该URL模式进行注册.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;boolean&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;isMatchAfter()&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;返回是否应在ServletContext的任何声明的Filter映射之后匹配过滤器映射.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;onStartup(ServletContext servletContext)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;使用初始化所需的所有Servlet，过滤器，侦听器上下文参数和属性来配置给定的ServletContext .&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setDispatcherTypes(DispatcherType first, DispatcherType… rest)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;使用指定元素set dispatcher types便捷方法.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setDispatcherTypes(EnumSet&lt;DispatcherType&gt; dispatcherTypes)&lt;/DispatcherType&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;设置应与注册一起使用的调度程序类型.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setFilter(Filter filter)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;设置要注册的过滤器.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setMatchAfter(boolean matchAfter)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;设置是否在ServletContext的任何声明的过滤器映射之后匹配过滤器映射.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setServletNames(Collection&lt;String&gt; servletNames)&lt;/String&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;设置将向其注册过滤器的servlet名称.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setServletRegistrationBeans(Collection&amp;lt;? extends ServletRegistrationBean&amp;gt; servletRegistrationBeans)&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;设置ServletRegistrationBean ，将向其注册过滤器.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;void&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;setUrlPatterns(Collection&lt;String&gt; urlPatterns)&lt;/String&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;设置注册过滤器的URL格式.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="Filter拦截器" /><category term="类解释" /><summary type="html">FilterRegistrationBean示例 构造函数和描述 FilterRegistrationBean() 创建一个新的FilterRegistrationBean实例. FilterRegistrationBean(Filter filter, ServletRegistrationBean… servletRegistrationBeans) 创建一个新的FilterRegistrationBean实例，以将其注册到指定的ServletRegistrationBean . Methods 修饰符和类型 方法和说明 描述 void addServletNames(String… servletNames) 为过滤器添加servlet名称. void addServletRegistrationBeans(ServletRegistrationBean… servletRegistrationBeans) 为过滤器添加ServletRegistrationBean . void addUrlPatterns(String… urlPatterns) 添加将向其注册过滤器的URL模式. protected void configure(FilterRegistration.Dynamic registration) 配置注册设置. protected Filter getFilter() 返回正在注册的过滤器. Collection getServletNames() 返回一个可变的servlet名称集合，将向其注册过滤器. Collection getServletRegistrationBeans() 返回将注册过滤器的ServletRegistrationBean的可变集合. Collection getUrlPatterns() 返回一个可变的URL模式集合，过滤器将针对该URL模式进行注册. boolean isMatchAfter() 返回是否应在ServletContext的任何声明的Filter映射之后匹配过滤器映射. void onStartup(ServletContext servletContext) 使用初始化所需的所有Servlet，过滤器，侦听器上下文参数和属性来配置给定的ServletContext . void setDispatcherTypes(DispatcherType first, DispatcherType… rest) 使用指定元素set dispatcher types便捷方法. void setDispatcherTypes(EnumSet dispatcherTypes) 设置应与注册一起使用的调度程序类型. void setFilter(Filter filter) 设置要注册的过滤器. void setMatchAfter(boolean matchAfter) 设置是否在ServletContext的任何声明的过滤器映射之后匹配过滤器映射. void setServletNames(Collection servletNames) 设置将向其注册过滤器的servlet名称. void setServletRegistrationBeans(Collection&amp;lt;? extends ServletRegistrationBean&amp;gt; servletRegistrationBeans) 设置ServletRegistrationBean ，将向其注册过滤器. void setUrlPatterns(Collection urlPatterns) 设置注册过滤器的URL格式.</summary></entry></feed>
+存储运行bean工厂的ServletContext。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="Filter拦截器" /><category term="类解释" /><summary type="html">| 修饰符和类型| 方法和说明|描述| | :—–| :—- | :—- | protected void addRequiredProperty(String property) 子类可以调用此方法以指定此属性（必须与它们公开的JavaBean属性匹配）是强制性的，并且必须作为配置参数提供。 void afterPropertiesSet() 调用initFilterBean()可能包含子类的自定义初始化的方法。 protected Environment createEnvironment() 创建并返回一个新的StandardServletEnvironment。 void destroy() 子类可以重写此方法以执行自定义过滤器关闭。 Environment getEnvironment() 返回Environment与此过滤器关联的。 FilterConfig getFilterConfig() 使此过滤器的FilterConfig可用（如果有）。 protected String getFilterName() 使此过滤器的名称可用于子类。 protected ServletContext getServletContext() 使此过滤器的ServletContext可用于子类。 void init(FilterConfig filterConfig) 初始化此过滤器的标准方法。 protected void initBeanWrapper(BeanWrapper bw) 可能使用自定义编辑器为此GenericFilterBean初始化BeanWrapper。 protected void initFilterBean() 子类可以重写此方法以执行自定义初始化。 void setBeanName(String beanName) 存储在Spring bean工厂中定义的bean名称。 void setEnvironment(Environment environment) 设置Environment此过滤器运行的位置。 void setServletContext(ServletContext servletContext) 存储运行bean工厂的ServletContext。</summary></entry></feed>
