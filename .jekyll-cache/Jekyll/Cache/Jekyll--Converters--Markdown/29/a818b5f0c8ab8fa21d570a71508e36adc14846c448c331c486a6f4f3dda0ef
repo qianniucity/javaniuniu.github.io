@@ -1,0 +1,184 @@
+I"�V<h4 id="一句话介绍">一句话介绍</h4>
+<p>Hamcrest是用于Java的单元测试的框架，它使用matcher匹配器来进行断言。在Spring-boot-starter中集成了Hamcrest,无需而外引入。</p>
+
+<h5 id="核心api">核心API</h5>
+
+<ol>
+  <li>is
+    <ul>
+      <li>使用is匹配器使得程序更加易懂
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">" text "</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">equalToIgnoringWhiteSpace</span><span class="o">(</span><span class="n">str2</span><span class="o">)));</span>
+</code></pre></div>        </div>
+      </li>
+      <li>用于简单数据类型的判断
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">str2</span><span class="o">));</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>not  <br />
+和is使用方式一样，只是含义相反。
+    <ul>
+      <li>使用not匹配器使得程序更加易懂
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">" text "</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">not</span><span class="o">(</span><span class="n">equalToIgnoringWhiteSpace</span><span class="o">(</span><span class="n">str2</span><span class="o">)));</span>
+</code></pre></div>        </div>
+      </li>
+      <li>用于简单数据类型的判断
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">not</span><span class="o">(</span><span class="n">str2</span><span class="o">));</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>containsString
+    <ul>
+      <li>是否包含子串
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text123"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">containsString</span><span class="o">(</span><span class="n">str2</span><span class="o">));</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>以为某个字段开头/结尾
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text123"</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">startsWith</span><span class="o">(</span><span class="s">"text"</span><span class="o">));</span><span class="c1">// 以某个字符开头</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">endsWith</span><span class="o">(</span><span class="s">"text"</span><span class="o">));</span><span class="c1">// 以某个字符开头</span>
+</code></pre></div>    </div>
+  </li>
+  <li>判断两个对象是否为同一个实体
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Cat</span> <span class="n">cat</span><span class="o">=</span><span class="k">new</span> <span class="nc">Cat</span><span class="o">();</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">cat</span><span class="o">,</span> <span class="n">sameInstance</span><span class="o">(</span><span class="n">cat</span><span class="o">));</span>
+</code></pre></div>    </div>
+  </li>
+  <li>类似OR的效果
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"calligraphy"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">start</span> <span class="o">=</span> <span class="s">"call"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">end</span> <span class="o">=</span> <span class="s">"foo"</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">anyOf</span><span class="o">(</span><span class="n">startsWith</span><span class="o">(</span><span class="n">start</span><span class="o">),</span> <span class="n">containsString</span><span class="o">(</span><span class="n">end</span><span class="o">)));</span>
+</code></pre></div>    </div>
+  </li>
+  <li>类似AND的效果
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">"calligraphy"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">start</span> <span class="o">=</span> <span class="s">"call"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">end</span> <span class="o">=</span> <span class="s">"phy"</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">allOf</span><span class="o">(</span><span class="n">startsWith</span><span class="o">(</span><span class="n">start</span><span class="o">),</span> <span class="n">endsWith</span><span class="o">(</span><span class="n">end</span><span class="o">)));</span>
+</code></pre></div>    </div>
+    <h5 id="匹配器">匹配器</h5>
+  </li>
+</ol>
+
+<p><strong>Number 匹配器</strong></p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">assertThat</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">greaterThan</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span> <span class="c1">// 大于</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="n">greaterThanOrEqualTo</span><span class="o">(</span><span class="mi">5</span><span class="o">));</span> <span class="c1">//大于等于</span>
+<span class="n">assertThat</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="n">lessThan</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span> <span class="c1">// 小于</span>
+<span class="n">assertThat</span><span class="o">(-</span><span class="mi">1</span><span class="o">,</span> <span class="n">lessThanOrEqualTo</span><span class="o">(</span><span class="mi">5</span><span class="o">));</span> <span class="c1">// 小于等于</span>
+</code></pre></div></div>
+<p><strong>Text 匹配器</strong></p>
+
+<ol>
+  <li>匹配空串
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">isEmptyString</span><span class="o">());</span> <span class="c1">// 空字符串</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">isEmptyOrNullString</span><span class="o">());</span> <span class="c1">// 空字符串或者null</span>
+</code></pre></div>    </div>
+  </li>
+  <li>匹配字符串相等
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">str1</span> <span class="o">=</span> <span class="s">"text"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">str2</span> <span class="o">=</span> <span class="s">" text "</span><span class="o">;</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">str1</span><span class="o">,</span> <span class="n">equalToIgnoringWhiteSpace</span><span class="o">(</span><span class="n">str2</span><span class="o">));</span> <span class="c1">// 忽略左右空白</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">equalToIgnoringCase</span><span class="o">(</span><span class="n">b</span><span class="o">));</span> <span class="c1">//忽略大小写</span>
+</code></pre></div>    </div>
+    <h5 id="collections-匹配器">Collections 匹配器</h5>
+  </li>
+  <li>检查某个元素是否在集合中
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">collection</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span><span class="s">"cd"</span><span class="o">,</span><span class="s">"ef"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">hasItem</span><span class="o">(</span><span class="s">"cd"</span><span class="o">));</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">not</span><span class="o">(</span><span class="n">hasItem</span><span class="o">(</span><span class="s">"zz"</span><span class="o">)));</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">hasItems</span><span class="o">(</span><span class="s">"cd"</span><span class="o">,</span> <span class="s">"ab"</span><span class="o">));</span> <span class="c1">// 检查多个元素是否在集合中</span>
+</code></pre></div>    </div>
+  </li>
+  <li>检查所有元素
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">collection</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span><span class="s">"cd"</span><span class="o">,</span><span class="s">"ef"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">hasItems</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span><span class="s">"cd"</span><span class="o">,</span><span class="s">"ef"</span><span class="o">));</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">hasItems</span><span class="o">(</span><span class="s">"cd"</span><span class="o">,</span> <span class="s">"ab"</span><span class="o">,</span><span class="s">"ef"</span><span class="o">));</span> <span class="c1">// 错误</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">hasItems</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span><span class="s">"cd"</span><span class="o">));</span> <span class="c1">// 错误</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">containsInAnyOrder</span><span class="o">(</span><span class="s">"cd"</span><span class="o">,</span> <span class="s">"ab"</span><span class="o">,</span><span class="s">"ef"</span><span class="o">));</span> <span class="c1">//正确,不区分顺序</span>
+</code></pre></div>    </div>
+  </li>
+  <li>为空检查
+    <ul>
+      <li>集合为空检查
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">collection</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span><span class="s">"cd"</span><span class="o">,</span><span class="s">"ef"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">empty</span><span class="o">());</span> <span class="c1">// false, 用于检查集合类型</span>
+</code></pre></div>        </div>
+      </li>
+      <li>数组为空检查
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span><span class="o">[]</span> <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">"ab"</span> <span class="o">};</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">array</span><span class="o">,</span> <span class="n">emptyArray</span><span class="o">());</span> <span class="c1">// false</span>
+</code></pre></div>        </div>
+      </li>
+      <li>map为空检查
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">maps</span> <span class="o">=</span> <span class="nc">Maps</span><span class="o">.</span><span class="na">newHashMap</span><span class="o">();</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">maps</span><span class="o">,</span> <span class="n">equalTo</span><span class="o">(</span><span class="nc">Collections</span><span class="o">.</span><span class="na">EMPTY_MAP</span><span class="o">));</span>
+</code></pre></div>        </div>
+      </li>
+      <li>Iterable为空检查
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Iterable</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">collection</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">();</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">collection</span><span class="o">,</span> <span class="n">emptyIterable</span><span class="o">());</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>检查数目
+    <ul>
+      <li>检查集合数目
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span> <span class="s">"cd"</span><span class="o">,</span> <span class="s">"ef"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">hasSize</span><span class="o">(</span><span class="mi">3</span><span class="o">));</span>
+</code></pre></div>        </div>
+      </li>
+      <li>检查iterable数目
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Iterable</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span> <span class="s">"cd"</span><span class="o">,</span> <span class="s">"ef"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">iterableWithSize</span><span class="o">(</span><span class="mi">3</span><span class="o">));</span>
+</code></pre></div>        </div>
+      </li>
+      <li>检查每项的条件
+        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="nc">Lists</span><span class="o">.</span><span class="na">newArrayList</span><span class="o">(</span><span class="s">"ab"</span><span class="o">,</span> <span class="s">"cd"</span><span class="o">,</span> <span class="s">"ef"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">list</span><span class="o">,</span> <span class="n">everyItem</span><span class="o">(</span><span class="n">equalTo</span><span class="o">(</span><span class="s">"ab"</span><span class="o">)));</span>
+</code></pre></div>        </div>
+        <h5 id="bean-匹配器">Bean 匹配器</h5>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>定义一个City的bean</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Data</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">City</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="nc">String</span> <span class="n">state</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ol>
+  <li>测试是否存在某个属性
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">City</span> <span class="n">city</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">City</span><span class="o">(</span><span class="s">"shenzhen"</span><span class="o">,</span> <span class="s">"CA"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">city</span><span class="o">,</span> <span class="n">hasProperty</span><span class="o">(</span><span class="s">"state"</span><span class="o">));</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">city</span><span class="o">,</span> <span class="n">hasProperty</span><span class="o">(</span><span class="s">"state"</span><span class="o">,</span> <span class="n">equalTo</span><span class="o">(</span><span class="s">"CA"</span><span class="o">)));</span> <span class="c1">// 判断是否存在某个属性，并且是否存在某个特性值</span>
+</code></pre></div>    </div>
+  </li>
+  <li>判断两个对象property值是否一样
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">City</span> <span class="n">city</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">City</span><span class="o">(</span><span class="s">"San Francisco"</span><span class="o">,</span> <span class="s">"CA"</span><span class="o">);</span>
+<span class="nc">City</span> <span class="n">city2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">City</span><span class="o">(</span><span class="s">"San Francisco"</span><span class="o">,</span> <span class="s">"CA"</span><span class="o">);</span>
+<span class="n">assertThat</span><span class="o">(</span><span class="n">city</span><span class="o">,</span> <span class="n">samePropertyValuesAs</span><span class="o">(</span><span class="n">city2</span><span class="o">));</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+:ET

@@ -1,7 +1,7 @@
 ---
 title: SpringBoot AOP演示项目-日志篇
 permalink: /SpringBoot/Aop/log
-tags: SpringBootAop
+tags: SpringBootAop 打印日志
 sidebar:
   nav: docs-en-Spring
 ---
