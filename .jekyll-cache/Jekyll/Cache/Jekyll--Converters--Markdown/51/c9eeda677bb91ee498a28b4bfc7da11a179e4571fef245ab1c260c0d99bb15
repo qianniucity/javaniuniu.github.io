@@ -1,0 +1,77 @@
+I"<ol>
+  <li>
+    <p>概述   <br />
+在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。</p>
+  </li>
+  <li>
+    <p>KeyGenerator
+这负责为缓存中的每个数据项生成每个键，这些键将用于在检索时查找数据项。</p>
+  </li>
+</ol>
+
+<p>此处的默认实现是SimpleKeyGenerator –它使用提供的方法参数来生成密钥。这意味着，如果我们有两个使用相同的缓存名称和参数类型集的方法，则很有可能会导致冲突。</p>
+
+<p>它还意味着缓存数据可以由另一种方法覆盖。</p>
+
+<ol>
+  <li>自定义密钥生成器
+密钥生成器只需要实现一个方法：</li>
+</ol>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Object</span> <span class="nf">generate</span><span class="o">(</span><span class="nc">Object</span> <span class="n">object</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">params</span><span class="o">)</span>
+</code></pre></div></div>
+<p>如果未正确实现或使用，则可能导致覆盖缓存数据。</p>
+
+<p>让我们来看看实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomKeyGenerator</span> <span class="kd">implements</span> <span class="nc">KeyGenerator</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">generate</span><span class="o">(</span><span class="nc">Object</span> <span class="n">target</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"_"</span>
+          <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"_"</span>
+          <span class="o">+</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">arrayToDelimitedString</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"_"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>之后，我们有两种可能的方式使用它;第一种是在应用程序Config中声明一个豆。</p>
+
+<p>请务必指出，类必须从缓存配置支持或实现缓存配置程序扩展：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@EnableCaching</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationConfig</span> <span class="kd">extends</span> <span class="nc">CachingConfigurerSupport</span> <span class="o">{</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">CacheManager</span> <span class="nf">cacheManager</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">SimpleCacheManager</span> <span class="n">cacheManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleCacheManager</span><span class="o">();</span>
+        <span class="nc">Cache</span> <span class="n">booksCache</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ConcurrentMapCache</span><span class="o">(</span><span class="s">"books"</span><span class="o">);</span>
+        <span class="n">cacheManager</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">booksCache</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">cacheManager</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Bean</span><span class="o">(</span><span class="s">"customKeyGenerator"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">KeyGenerator</span> <span class="nf">keyGenerator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">CustomKeyGenerator</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>第二种方法是将其用于特定方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
+
+    <span class="nd">@Cacheable</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"books"</span><span class="o">,</span> <span class="n">keyGenerator</span> <span class="o">=</span> <span class="s">"customKeyGenerator"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Book</span><span class="o">&gt;</span> <span class="nf">getBooks</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Book</span><span class="o">&gt;</span> <span class="n">books</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">books</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="s">"The Counterfeiters"</span><span class="o">,</span> <span class="s">"André Gide"</span><span class="o">));</span>
+        <span class="n">books</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="s">"Peer Gynt and Hedda Gabler"</span><span class="o">,</span> <span class="s">"Henrik Ibsen"</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">books</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ol>
+  <li>结论
+在本文中，我们探讨了实现自定义春季缓存的密钥生成器的方法。</li>
+</ol>
+
+<p>与往常一样，示例的完整源代码可在 <a href="https://github.com/eugenp/tutorials/tree/master/spring-caching">GitHub</a> 上找到。</p>
+:ET

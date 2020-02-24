@@ -1,5 +1,5 @@
 ---
-title: redis key设计
+title: redis key处理（增删查改）
 permalink: /java-code-redis/keyset
 tags: CodeMark Redis
 pageview: true

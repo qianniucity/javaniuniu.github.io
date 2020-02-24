@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Home - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Spring Cache – KeyGenerator自定义rediskey - JAVA 牛牛</title>
 
-<meta name="description" content="记录在java的道路能走多远
-">
-<link rel="canonical" href="http://localhost:4000/page6/"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="1. 概述在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。2. KeyGenerator这负责为缓存中的每个数据项生成每个键，这些键将用于在检索时查找数据项。此处的默认实现是SimpleKeyGenerator –它使用提供的方法参数来生成密钥。这意味着，如果我们有两个使用相同的缓...">
+<link rel="canonical" href="http://localhost:4000/java-code-redis/KeyGenerator"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -257,7 +256,18 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page layout--page--sidebar clearfix js-page-root">
+  <div class="page__mask d-print-none js-page-mask js-sidebar-hide"></div>
+  <div class="page__viewport">
+    <div class="page__actions d-print-none">
+      <div class="button button--circle button--lg box-shadow-2 sidebar-button js-sidebar-show">
+        <i class="fas fa-bars icon--show"></i>
+      </div>
+    </div>
+
+    <div class="grid page__grid">
+
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">Redis</li><li class="toc-h2"><a href="/java-code-redis/RedisTemplate/opsForValue">RedisTemplate之opsForValue使用说明</a></li><li class="toc-h2"><a href="/java-code-redis/keyset">redis key处理（增删查改）</a></li><li class="toc-h2"><a href="/java-code-redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/java-code-redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h2 active"><a href="/java-code-redis/KeyGenerator">Spring Cache – KeyGenerator自定义rediskey</a></li><li class="toc-h1">领域驱动设计</li><li class="toc-h2"><a href="/java-code-design-data/dasign-data">领域驱动设计详解</a></li><li class="toc-h2"><a href="/java-code-design-data/vo">VO视图对象</a></li><li class="toc-h2"><a href="/java-code-design-data/dto">DTO数据传输对象</a></li><li class="toc-h2"><a href="/java-code-design-data/POJO">java中POJO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/PO">java中PO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/DO">java中DO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/BO">java中BO的使用</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -318,211 +328,131 @@ MFrGw6cAAAAASUVORK5CYII=" />
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/User"><h2 itemprop="headline" class="item__header">User</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">简介
-UserDetails的默认实现（框架提供的），User。用户可以从自己的数据库中取出此用户的账号，密码，以及相关权限，然后用构造方法填充创建一个User对象即可。 注：实现CredentialsContainer接口是为了在登录成功后，清除用户信息中的密码。（登录成功后会将用户信息存储在SecurityContext中）
-源码
-public class User implements UserDetails, CredentialsContainer {
-    private static final long serialVersionUID = 500L;
-    private static final Log logger = LogFactory.getLog(Us...</div><p><a href="/SpringSecurity/User">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Spring Cache – KeyGenerator自定义rediskey</h1></header><span class="split-space">&nbsp;</span>
+          <a class="edit-on-github"
+            title="Edit on Github"
+            href="https://github.com/minplemon/minplemon.github.io/tree/master/_posts/java-code-redis/2020-02-24-KeyGenerator.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Spring Cache – KeyGenerator自定义rediskey"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/RequestMatcher"><h2 itemprop="headline" class="item__header">RequestMatcher(配置忽略url和认证的url)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">一句话简介
-匹配HttpServletRequest的简单策略接口RequestMatcher，其下定义了matches方法，如果返回是true表示提供的请求与提供的匹配规则匹配，如果返回的是false则不匹配。
+                href="/archive.html?tag=Redis">Redis</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 24, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-24T00:00:00+08:00">
+    <meta itemprop="keywords" content="Redis"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
-RequestMatcher其实现类：
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h4 id="1-概述">1. 概述</h4>
+<p>在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。</p>
 
-  AntPathRequestMatcher：重点
-  MvcRequestMatcher：重点
-  RegexRequestMatcher： 根据正则模式进行匹配
-  AnyRequestMatcher
+<h4 id="2-keygenerator">2. KeyGenerator</h4>
+<p>这负责为缓存中的每个数据项生成每个键，这些键将用于在检索时查找数据项。</p>
 
+<p>此处的默认实现是SimpleKeyGenerator –它使用提供的方法参数来生成密钥。这意味着，如果我们有两个使用相同的缓存名称和参数类型集的方法，则很有可能会导致冲突。</p>
 
-使用场景
-可配合过滤器，过滤掉不需要token验证的url
+<p>它还意味着缓存数据可以由另一种方法覆盖。</p>
 
-示例
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-im...</div><p><a href="/SpringSecurity/RequestMatcher">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java8"><h2 itemprop="headline" class="item__header">JAVA8新特性</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Set&lt;GrantedAuthority&gt; grantedAuths = new HashSet&lt;GrantedAuthority&gt;();
-        List&lt;Role&gt; roles = userMapper.selectRolsByUserId(userOne.getTid());
-        if (!ObjectUtils.isEmpty(roles)) {
-            grantedAuths.addAll(Lists.transform(roles, (Function&lt;Role, GrantedAuthority&gt;) role -&gt; new SimpleGrantedAuthority("ROLE_...</div><p><a href="/java8">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=TODO">TODO</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="TODO"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/ResultUtil"><h2 itemprop="headline" class="item__header">对返回给前端的数据进行格式封装处理-MVC</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">package com.javaniuniu.scshorlsweb.system.utils.rest;
+<h4 id="3-自定义密钥生成器">3. 自定义密钥生成器</h4>
+<p>密钥生成器只需要实现一个方法：</p>
 
-import com.alibaba.fastjson.JSON;
-import com.javaniuniu.scshorlsweb.system.commons.MsgResponseBody;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Object</span> <span class="nf">generate</span><span class="o">(</span><span class="nc">Object</span> <span class="n">object</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">params</span><span class="o">)</span>
+</code></pre></div></div>
+<p>如果未正确实现或使用，则可能导致覆盖缓存数据。</p>
 
-import java.io.IOException;
-import java.io.PrintWriter;
+<p>让我们来看看实现：</p>
 
-import javax.servlet.http.HttpServletResponse;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomKeyGenerator</span> <span class="kd">implements</span> <span class="nc">KeyGenerator</span> <span class="o">{</span>
 
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">generate</span><span class="o">(</span><span class="nc">Object</span> <span class="n">target</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">...</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">target</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getSimpleName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"_"</span>
+          <span class="o">+</span> <span class="n">method</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"_"</span>
+          <span class="o">+</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">arrayToDelimitedString</span><span class="o">(</span><span class="n">params</span><span class="o">,</span> <span class="s">"_"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>之后，我们有两种可能的方式使用它;第一种是在应用程序Config中声明一个豆。</p>
 
+<p>请务必指出，类必须从缓存配置支持或实现缓存配置程序扩展：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@EnableCaching</span>
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationConfig</span> <span class="kd">extends</span> <span class="nc">CachingConfigurerSupport</span> <span class="o">{</span>
 
-/***
- *  对返回给前端的数据进行格式封装处理
- */
-public class ResultUtil {
-    /**
-     * 将json输出到前端(参...</div><p><a href="/java-util-code/ResultUtil">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%BF%94%E5%9B%9E%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85">返回前端数据格式封装</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeMark,工具类,返回前端数据格式封装"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/MsgResponseBody"><h2 itemprop="headline" class="item__header">对返回给前端的数据进行格式封装处理-SpringBoot</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">package com.javaniuniu.scshorlsweb.system.commons;
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">CacheManager</span> <span class="nf">cacheManager</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">SimpleCacheManager</span> <span class="n">cacheManager</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleCacheManager</span><span class="o">();</span>
+        <span class="nc">Cache</span> <span class="n">booksCache</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ConcurrentMapCache</span><span class="o">(</span><span class="s">"books"</span><span class="o">);</span>
+        <span class="n">cacheManager</span><span class="o">.</span><span class="na">setCaches</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">booksCache</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">cacheManager</span><span class="o">;</span>
+    <span class="o">}</span>
 
-import java.io.Serializable;
+    <span class="nd">@Bean</span><span class="o">(</span><span class="s">"customKeyGenerator"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">KeyGenerator</span> <span class="nf">keyGenerator</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">CustomKeyGenerator</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>第二种方法是将其用于特定方法：</p>
 
-public class MsgResponseBody&lt;T&gt; implements Serializable {
-    private static final String SUCCESS = "0";
-    private static final String ERROR = "0";
-    private String resultCode;
-    private T result;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookService</span> <span class="o">{</span>
 
-    private MsgResponseBody(String statusCode) {
-      ...</div><p><a href="/java-util-code/MsgResponseBody">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%BF%94%E5%9B%9E%E5%89%8D%E7%AB%AF%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%B0%81%E8%A3%85">返回前端数据格式封装</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeMark,工具类,返回前端数据格式封装"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/WebSecurityConfigurerAdapter"><h2 itemprop="headline" class="item__header">WebSecurityConfigurerAdapter</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">WebSecurityConfigurerAdapter 类是个适配器, 在配置的时候,需要我们根据自己的业务写个配置类去继承他
-package sc.whorl.system.config.springsecurity.conf;
+    <span class="nd">@Cacheable</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"books"</span><span class="o">,</span> <span class="n">keyGenerator</span> <span class="o">=</span> <span class="s">"customKeyGenerator"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Book</span><span class="o">&gt;</span> <span class="nf">getBooks</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Book</span><span class="o">&gt;</span> <span class="n">books</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+        <span class="n">books</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="s">"The Counterfeiters"</span><span class="o">,</span> <span class="s">"André Gide"</span><span class="o">));</span>
+        <span class="n">books</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">Book</span><span class="o">(</span><span class="s">"Peer Gynt and Hedda Gabler"</span><span class="o">,</span> <span class="s">"Henrik Ibsen"</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">books</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h4 id="4-结论">4. 结论</h4>
+<p>在本文中，我们探讨了实现自定义春季缓存的密钥生成器的方法。</p>
 
+<p>与往常一样，示例的完整源代码可在 <a href="https://github.com/eugenp/tutorials/tree/master/spring-caching">GitHub</a> 上找到。</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-24T00:00:00+08:00"><!-- start custom article footer snippet -->
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configur...</div><p><a href="/SpringSecurity/WebSecurityConfigurerAdapter">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/UserDetails"><h2 itemprop="headline" class="item__header">UserDetails</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">简介
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
+</div><div class="article__license"><div class="license">
+    <p>This work is licensed under a <a itemprop="license" rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">Attribution-NonCommercial 4.0 International</a> license.
+      <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">
+        <img alt="Attribution-NonCommercial 4.0 International" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" />
+      </a>
+    </p>
+  </div></div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-code-redis/distributed/2">使用Redis实现分布式lock</a></div><div class="next"><span>NEXT</span><a href="/java-code-design-data/dasign-data">领域驱动设计详解</a></div></div></div>
 
-  UserDetails =&gt; Spring Security基础接口，包含某个用户的账号，密码，权限，状态（是否锁定）等信息。只有getter方法。
-  Authentication =&gt; 认证对象，认证开始时创建，认证成功后存储于SecurityContext
-  principal =&gt; 用户信息对象，是一个Object，通常可转为UserDetails
-    UserDetails接口
-    用于表示一个principal,但是一般情况下是作为（你所使用的用户数据库）和（Spring Security 的安全上下文需要保留的信息）之间的适配器。
-  
+</div>
 
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-实际上就是相当于定义一个规范，Security这个框架不管你的应用时怎么存储用户和权限信息的...</div><p><a href="/SpringSecurity/UserDetails">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%B1%BB%E8%A7%A3%E9%87%8A">类解释</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,类解释"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/SecurityContext"><h2 itemprop="headline" class="item__header">SecurityContext使用实例</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">默认实现SecurityContextHolder
-
-  SecurityContext:认证成功后，就把用户信息和拥有的权限都存储在其中
-  Authentication =&gt; 认证对象，认证开始时创建，认证成功后存储于SecurityContext
-  principal =&gt; 用户信息对象，是一个Object，通常可转为UserDetails
-
-
-Authentication中的principal方法获取对象
-@Controller
-public class WsController {
-    @Autowired
-    SimpMessagingTemplate simpMessagingTemplate;
-
-    @MessageMapping("/ws/c...</div><p><a href="/SpringSecurity/SecurityContext">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
-      </article></div>
-</div><div class="layout--home"><div class="pagination"><p>76 post articles, 10 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page5">
-            <i class="fas fa-angle-left"></i>
-          </a></li><li>
-              <a class="button button--secondary button--circle" href="/"><span>1</span></a>
-            </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
-                </li><li>
-              <div class="button button--primary button--circle focus"><span>6</span></div>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/page7"><span>7</span></a>
-                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/page10"><span>10</span></a>
-                </li><li><a class="button button--secondary button--circle" href="/page7">
-            <i class="fas fa-angle-right"></i>
-          </a></li></ul>
-    </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
 </div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
@@ -567,7 +497,7 @@ public class WsController {
   </div>
 </footer>
 </div></div>
-    </div><script>(function() {
+    </div></div></div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -1084,6 +1014,98 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $pageMask = $('.js-page-mask');
+    var $pageRoot = $('.js-page-root');
+    var $sidebarShow = $('.js-sidebar-show');
+    var $sidebarHide = $('.js-sidebar-hide');
+
+    function freeze(e) {
+      if (e.target === $pageMask[0]) {
+        e.preventDefault();
+      }
+    }
+    function stopBodyScrolling(bool) {
+      if (bool === true) {
+        window.addEventListener('touchmove', freeze, { passive: false });
+      } else {
+        window.removeEventListener('touchmove', freeze, { passive: false });
+      }
+    }
+
+    $sidebarShow.on('click', function() {
+      stopBodyScrolling(true); $pageRoot.addClass('show-sidebar');
+    });
+    $sidebarHide.on('click', function() {
+      stopBodyScrolling(false); $pageRoot.removeClass('show-sidebar');
+    });
+  });
+})();
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script><script>
   window.Lazyload.js(['https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js', 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js'], function() {
     var $canvas = null, $this = null, _ctx = null, _text = '';

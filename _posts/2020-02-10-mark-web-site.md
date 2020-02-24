@@ -10,10 +10,10 @@ sidebar:
 参考项目 [sc-whorl](https://github.com/Senssic/sc-whorl)
 一句话解释
 
-1.
+1.[@ConfigurationProperties](https://blog.csdn.net/yusimiao/article/details/97622666) 注解，我们可以更方便且安全的在  application.properties 或 application.yml 文件中 获取参数值
 2. **领域驱动设计实践** 领域驱动设计将软件系统分为四层：基础结构层、领域层、应用层和表现层。[参考，领域驱动设计实践（一，二，三）](https://www.cnblogs.com/daxnet/archive/2010/07/07/1772584.html)
 3. [JAVA VO、DTO、DO、PO的概念、区别和用处](https://blog.csdn.net/Thousa_Ho/article/details/73196347)
-4. 
+4.
 5. [druid 参数配置详解](https://www.cnblogs.com/halberd-lee/p/11304790.html)
 6. **ThreadLocal** 是一个线程内部的存储类，可以在指定线程内存储数据，数据存储以后，只有指定线程可以得到存储数据 (https://www.jianshu.com/p/3c5d7f09dfbd)
 7. [mysql视图](https://blog.csdn.net/king101125s/article/details/104228364)
