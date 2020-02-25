@@ -1,0 +1,158 @@
+I"�9<h4 id="一句话简介">一句话简介</h4>
+<p>Java Persistence API定义了一种定义，可以将常规的普通Java对象（有时被称作POJO）映射到数据库</p>
+
+<h4 id="映射规则">映射规则：</h4>
+<ol>
+  <li>实体类__必须__用 @javax.persistence.<strong>Entity</strong> 进行注解；</li>
+  <li><strong>必须__使用 @javax.persistence.__Id</strong> 来注解一个主键；</li>
+  <li>实体类必须拥有一个 <strong>public 或者 protected</strong> 的 <strong>无参</strong> 构造函数，之外实体类还可以拥有其他的构造函数；</li>
+  <li>实体类必须是一个 <strong>顶级类</strong>（top-level class）。一个枚举（enum）或者一个接口（interface）不能被注解为一个实体；</li>
+  <li>实体类不能是 <strong>final</strong> 类型的，也 <strong>不能有 final</strong> 类型的方法；</li>
+  <li>如果实体类的一个实例需要用传值的方式调用（例如，远程调用），则这个实体类必须实现（implements）java.io.Serializable 接口。 <br />
+不与@Table结合的话 表名 默认为 SnakeCaseStrategy(命名策略 )为表名<br />
+若使用 name属性 且没有与@Table结合 则表名为 name值的SnakeCaseStrategy(命名策略 )
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Entity  
+public class UserEntity{...} 表名 user_entity  
+@Entity(name="UE")  
+public class UserEntity{...} 表名 ue  
+@Entity(name="UsEntity")  
+public class UserEntity{...} 表名 us_entity
+</code></pre></div>    </div>
+    <h4 id="映射规则可以通过使用-table-和-column-注解修改">映射规则可以通过使用 @Table 和 @Column 注解修改</h4>
+    <h5 id="table">@Table</h5>
+    <ul>
+      <li>@Table注解的常用选项是 name，用于指明数据库的表名</li>
+      <li>@Table注解还有两个选项 catalog 和 schema 用于设置表所属的数据库目录或模式，通常为数据库名</li>
+    </ul>
+  </li>
+</ol>
+
+<h5 id="column">@Column</h5>
+<p>@Column注解用来改变class中字段名与db中表的字段名的映射规则</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Column注释定义了将成员属性映射到关系表中的哪一列和该列的结构信息，属性如下：
+　　1）name：映射的列名。如：映射tbl_user表的name列，可以在name属性的上面或getName方法上面加入；
+　　2）unique：是否唯一；
+　　3）nullable：是否允许为空；
+　　4）length：对于字符型列，length属性指定列的最大字符长度；
+　　5）insertable：是否允许插入；
+　　6）updatetable：是否允许更新；
+　　7）columnDefinition：定义建表时创建此列的DDL；
+　　8）secondaryTable：从表名。如果此列不建在主表上（默认是主表），该属性定义该列所在从表的名字
+</code></pre></div></div>
+
+<h4 id="hibernate中entity和table的区别">hibernate中@Entity和@Table的区别：</h4>
+<p>@Entity说明这个class是实体类，并且使用默认的orm规则，即class名即数据库表中表名，class字段名即表中的字段名
+如果想改变这种默认的orm规则，就要使用@Table来改变class名与数据库中表名的映射规则，@Column来改变class中字段名与db中表的字段名的映射规则</p>
+
+<h4 id="mappedsuperclass和entity的区别">@MappedSuperclass和@Entity的区别</h4>
+
+<h5 id="使用场景">使用场景</h5>
+<p>数据库表中都需要id来表示编号，id是这些映射实体类的通用的属性，交给jpa统一生成主键id编号，那么使用一个父类来封装这些通用属性，并用@MappedSuperclas标识。</p>
+
+<h5 id="示例">示例</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">IdEntity</span> <span class="o">{</span>
+    <span class="kd">protected</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="nc">Integer</span> <span class="nf">getId</span><span class="o">();</span>
+    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">id</span><span class="o">);</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@MappedSuperclass</span>
+<span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">BaseEntity</span> <span class="kd">extends</span> <span class="nc">IdEntity</span> <span class="o">{</span>
+
+    <span class="nd">@Id</span>
+    <span class="nd">@GeneratedValue</span>
+    <span class="nd">@Column</span><span class="o">(</span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="o">)</span>   
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Entity</span>
+<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"yyw_user"</span><span class="o">)</span>
+<span class="nd">@Cache</span><span class="o">(</span><span class="n">usage</span><span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="na">hibernate</span><span class="o">.</span><span class="na">annotations</span><span class="o">.</span><span class="na">CacheConcurrencyStrategy</span><span class="o">.</span><span class="na">READ_WRITE</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">extends</span> <span class="nc">BaseEntity</span> <span class="o">{</span>
+    <span class="nd">@Column</span><span class="o">(</span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="o">,</span><span class="n">nullable</span><span class="o">=</span><span class="kc">false</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="nd">@Column</span><span class="o">(</span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="o">,</span><span class="n">nullable</span><span class="o">=</span><span class="kc">true</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">User</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"User [name="</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">", id="</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="s">", password="</span> <span class="o">+</span> <span class="n">password</span>
+                <span class="o">+</span> <span class="s">"]"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Entity</span>
+<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"yyw_subjects"</span><span class="o">)</span>
+<span class="nd">@Cache</span><span class="o">(</span><span class="n">usage</span><span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="na">hibernate</span><span class="o">.</span><span class="na">annotations</span><span class="o">.</span><span class="na">CacheConcurrencyStrategy</span><span class="o">.</span><span class="na">READ_WRITE</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Subject</span> <span class="kd">extends</span> <span class="nc">BaseEntity</span> <span class="o">{</span>
+
+    <span class="nd">@Column</span><span class="o">(</span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="o">,</span><span class="n">nullable</span><span class="o">=</span><span class="kc">false</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">content</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">Subject</span><span class="o">(){}</span>
+    <span class="kd">public</span> <span class="nf">Subject</span><span class="o">(</span><span class="nc">String</span> <span class="n">content</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getContent</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">content</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setContent</span><span class="o">(</span><span class="nc">String</span> <span class="n">content</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">content</span> <span class="o">=</span> <span class="n">content</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"Subject [id="</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="s">", content="</span> <span class="o">+</span> <span class="n">content</span> <span class="o">+</span> <span class="s">"]"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="注意">注意:</h5>
+<ol>
+  <li>标注为@MappedSuperclass的类将不是一个完整的实体类，他将 <strong>不会映射到数据库表</strong>，但是 <strong>他的属性都将映射到其子类的数据库字段中</strong>。</li>
+  <li>标注为@MappedSuperclass的类 <strong>不能再标注@Entity或@Table注解</strong>，也 <strong>无需实现序列化接口</strong>。</li>
+</ol>
+
+<h4 id="id">@id</h4>
+<p>如果是主键id，还会用到@Id注解</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Id注释指定表的主键，它可以有多种生成方式：
+　　1）TABLE：容器指定用底层的数据表确保唯一；
+　　2）SEQUENCE：使用数据库德SEQUENCE列莱保证唯一（Oracle数据库通过序列来生成唯一ID）；
+　　3）IDENTITY：使用数据库的IDENTITY列莱保证唯一；
+　　4）AUTO：由容器挑选一个合适的方式来保证唯一；
+　　5）NONE：容器不负责主键的生成，由程序来完成。
+</code></pre></div></div>
+
+<h4 id="总结">总结</h4>
+<ol>
+  <li>@Entity  @Table 区别通过上面博文可得出</li>
+  <li>@Entity  @Table 通常同时出现</li>
+</ol>
+:ET
