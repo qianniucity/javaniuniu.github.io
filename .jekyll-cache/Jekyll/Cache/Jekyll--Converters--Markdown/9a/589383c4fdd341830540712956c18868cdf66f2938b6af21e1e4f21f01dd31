@@ -1,0 +1,70 @@
+I"�<h4 id="原理">原理</h4>
+<p>DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的字段。说白了, 就是在更新某条记录之前, 先把这条记录从数据库查出来, 那么这条数据就在session(一级缓存)中, 我们再去修改这个对象的数据即可;</p>
+
+<p>作者：帅可儿妞
+链接：https://www.jianshu.com/p/5e3567488d16
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+<h4 id="dynamicupdate正确使用方式1">@DynamicUpdate正确使用方式1</h4>
+<h5 id="做-update-操作">做 update 操作</h5>
+<ol>
+  <li>在做 update实体类的某个属性之前，先做findById操作</li>
+  <li>将需要修改的字段做 set 操作</li>
+  <li>做 save 操作</li>
+</ol>
+
+<h4 id="举例">举例</h4>
+<p>先说明一下@DynamicUpdate注解用在实体类上   <br />
+有 数据库 表tbl_foo和对应的实体类Foo，如下：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">id</th>
+      <th style="text-align: left">name</th>
+      <th style="text-align: left">col3</th>
+      <th style="text-align: left">col4</th>
+      <th style="text-align: left">col5</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">毕加索</td>
+      <td style="text-align: left">1770</td>
+      <td style="text-align: left">奥地利</td>
+      <td style="text-align: left">男</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">col3</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">col4</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">col5</span><span class="o">;</span>
+    <span class="n">getter</span><span class="o">...</span>
+    <span class="n">setter</span><span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>在Service中更新id=1记录的name属性，代码如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Foo</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">fooDao</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">foo</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"贝多芬"</span><span class="o">);</span>
+<span class="n">fooDao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">foo</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p><strong>两种情况：</strong></p>
+<ol>
+  <li>在entity类中未使用@DynamicUpdate注解或使用了@DynamicUpdate(false)，那么Hibernate底层执行的sql如:
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">update</span> <span class="n">tbl_foo</span> <span class="k">set</span> <span class="n">name</span><span class="o">=?</span><span class="p">,</span> <span class="n">col3</span><span class="o">=?</span><span class="p">,</span> <span class="n">col4</span><span class="o">=?</span><span class="p">,</span> <span class="n">col5</span><span class="o">=?</span> <span class="k">where</span> <span class="n">id</span><span class="o">=?</span>
+</code></pre></div>    </div>
+  </li>
+  <li>在entity类中使用了@DynamicUpdate注解(或@DynamicUpdate(true))，Hibernate底层执行的sql如:
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">update</span> <span class="n">tbl_foo</span> <span class="k">set</span> <span class="n">name</span><span class="o">=?</span> <span class="k">where</span> <span class="n">id</span><span class="o">=?</span>
+</code></pre></div>    </div>
+    <p>以上两种情况对数据库更新的结果是<code class="highlighter-rouge">等效</code>的，但是<code class="highlighter-rouge">使用@DynamicUpdate性能会好一些</code>。因为不使用@DynamicUpdate时，即使没有改变的字段也会被更新。如果进行频繁的更新操作，并且每次只更新少数字段，那么@DynamicUpdate对性能的优化效果还是很好的。</p>
+  </li>
+</ol>
+:ET

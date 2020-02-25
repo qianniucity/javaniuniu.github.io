@@ -345,6 +345,39 @@ Java Persistence API定义了一种定义，可以将常规的普通Java对象�
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-25T00:00:00+08:00">
     <meta itemprop="keywords" content="jpa,Spring注解"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java-code-design-data/jpa/DynamicUpdate"><h2 itemprop="headline" class="item__header">DynamicUpdate正确使用方式</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">原理
+DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的字段。说白了, 就是在更新某条记录之前, 先把这条记录从数据库查出来, 那么这条数据就在session(一级缓存)中, 我们再去修改这个对象的数据即可;
+
+@DynamicUpdate正确使用方式
+
+  在做 update实体类的某个属性之前，先做findById操作
+  将需要修改的字段做 set 操作
+  做 save 操作
+
+
+误区及经常出现的错误
+
+  更新数据时，只传入需要更新的数据，而没有操作findById操作,造成其他数据为null
+
+
+举例
+先说明一下@DynamicUpdate注解用在实体类上   
+有 数据库 表tbl_foo和对应的实体类Foo，如下：
+
+
+  
+    
+ ...</div><p><a href="/java-code-design-data/jpa/DynamicUpdate">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=jpa">jpa</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 25, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-25T00:00:00+08:00">
+    <meta itemprop="keywords" content="jpa,Spring注解"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java-code-redis/KeyGenerator"><h2 itemprop="headline" class="item__header">Spring Cache – KeyGenerator自定义rediskey</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">1. 概述
 在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。
@@ -486,23 +519,8 @@ CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先�
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 21, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-21T00:00:00+08:00">
     <meta itemprop="keywords" content="注解,Lombok"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/MultipartResolver/explanation"><h2 itemprop="headline" class="item__header">处理文件上传(MultipartResolver)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">简介
-MultipartResolver 用于处理文件上传，当收到请求时 DispatcherServlet 的 checkMultipart() 方法会调用 MultipartResolver 的 isMultipart() 方法判断请求中是否包含文件。如果请求数据中包含文件，则调用 MultipartResolver 的 resolveMultipart() 方法对请求的数据进行解析，然后将文件数据解析成 MultipartFile 并封装在 MultipartHttpServletRequest (继承了 HttpServletRequest) 对象中，最后传递给 Controller，在 MultipartResolver 接口中有如下方法：
-
-
-  boolean isMul...</div><p><a href="/java-util-code/MultipartResolver/explanation">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0">文件上传</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 19, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-19T00:00:00+08:00">
-    <meta itemprop="keywords" content="文件上传,工具类"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>77 post articles, 10 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>78 post articles, 10 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
