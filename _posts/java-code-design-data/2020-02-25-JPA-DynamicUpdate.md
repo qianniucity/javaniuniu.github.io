@@ -1,7 +1,7 @@
 ---
 title: DynamicUpdate正确使用方式
 permalink: /java-code-design-data/jpa/DynamicUpdate
-tags: jpa Spring注解
+tags: jpa Spring注解 数据库
 pageview: true
 show_date: true
 sidebar:
