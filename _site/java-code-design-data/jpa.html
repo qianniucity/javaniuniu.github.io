@@ -530,8 +530,36 @@ public class UserEntity{...} 表名 us_entity
 <p><img src="/assets/images/java_code_design_data/280044-20161224100845886-614588432.jpg" alt="图片pic1" /></p>
 
 <h4 id="其他注解">其他注解</h4>
+<h5 id="manytoone-多对一单向不产生中间表但可以用joincolumnname--来指定生成外键的名字外键在多的一方表中产生">@ManyToOne （多对一）单向：不产生中间表，但可以用@Joincolumn（name=”  “）来指定生成外键的名字，外键在多的一方表中产生</h5>
+<h5 id="onetomany-一对多单向会产生中间表此时可以用onetomany-joincolumnname-避免产生中间表并且指定了外键的名字别看joincolumn在一中写着但它存在在多的那个表中通常配合list-一起使用">@OneToMany （一对多）单向：会产生中间表，此时可以用@onetoMany @Joincolumn（name=” “）避免产生中间表，并且指定了外键的名字（别看@joincolumn在一中写着，但它存在在多的那个表中,通常配合List 一起使用）</h5>
+<h5 id="onetomanymanytoone双向两个注解一起用的如果不在onetomany中加mappedy属性就会产生中间表此时通常在manytoone的注解下再添上注解joincolumnname-来指定外键的名字说明多的一方为关系维护端关系维护端负责外键记录的更新关系被维护端没有权利更新外键记录onetomanymappedby一对多中多中一的属性出现mapby为被维护端默认为延迟加载">@OneToMany ,@ManyToOne 双向（两个注解一起用的）：如果不在@OneToMany中加mappedy属性就会产生中间表，此时通常在@ManyToOne的注解下再添上注解@Joincolumn(name=” “)来指定外键的名字(说明：多的一方为关系维护端，关系维护端负责外键记录的更新，关系被维护端没有权利更新外键记录)！（@OneToMany(mappedBy=”一对多中，多中一的属性”)出现mapby为被维护端|||默认为延迟加载)</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//用例：</span>
+<span class="nd">@ManyToOne</span><span class="o">(</span><span class="n">fetch</span><span class="o">=</span><span class="nc">FetchType</span><span class="o">.</span><span class="na">LAZY</span><span class="o">)</span>
+<span class="nd">@JoinColumn</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"child_id"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">OrderChild</span> <span class="n">orderChild</span><span class="o">;</span>
+
+<span class="nd">@OneToMany</span><span class="o">(</span><span class="n">mappedBy</span><span class="o">=</span><span class="s">"orderChild"</span><span class="o">,</span><span class="n">fetch</span><span class="o">=</span><span class="nc">FetchType</span><span class="o">.</span><span class="na">LAZY</span><span class="o">,</span><span class="n">cascade</span><span class="o">={</span><span class="nc">CascadeType</span><span class="o">.</span><span class="na">MERGE</span><span class="o">})</span>
+<span class="nd">@NotFound</span><span class="o">(</span><span class="n">action</span><span class="o">=</span><span class="nc">NotFoundAction</span><span class="o">.</span><span class="na">IGNORE</span><span class="o">)</span><span class="c1">//代表可以为空，允许为null</span>
+<span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">OrderChildGoods</span><span class="o">&gt;</span> <span class="n">goodsList</span><span class="o">;</span>
+<span class="c1">//hibernate中@ManyToOne默认是立即加载，@OneToMany默认是懒加载</span>
+
+<span class="c1">//但是如果加上了@NotFound之后设置的fetch=FetchType.LAZY是不起作用的，也就是设置@NotFound后变为了立即加载eager</span>
+</code></pre></div></div>
+<h5 id="joincolumn">@JoinColumn</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@ManyToOne</span> <span class="c1">//多个公告对于一个管理员</span>
+<span class="nd">@JoinColumn</span><span class="o">(</span><span class="n">columnDefinition</span><span class="o">=</span><span class="s">"BIGINT(20) NOT NULL COMMENT '创建管理员ID'"</span><span class="o">)</span>
+<span class="c1">//JoinColumn 不添加name属性，按照生成数据库字段的规则_id 数据库中字段 create_admin_id</span>
+<span class="kd">private</span> <span class="nc">Admin</span> <span class="n">createAdmin</span><span class="o">;</span>
+</code></pre></div></div>
+<h5 id="lob-大对象存储类型">@Lob 大对象存储类型</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Lob</span>
+<span class="nd">@Column</span><span class="o">(</span><span class="n">columnDefinition</span> <span class="o">=</span> <span class="s">"TEXT COMMENT '商品描述'"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">String</span> <span class="n">note</span><span class="o">;</span>
+<span class="c1">//`note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '商品描述',</span>
+</code></pre></div></div>
 <h5 id="embeddable-嵌套映射">@Embeddable 嵌套映射</h5>
-<h5 id="createdate-根据当前时间来生成默认的时间戳">@CreateDate 根据当前时间来生成默认的时间戳</h5>
+<h5 id="creationtimestamp--根据当前时间来生成默认的时间戳insert时生成">@CreationTimestamp  根据当前时间来生成默认的时间戳（insert时生成）</h5>
+<h5 id="updatetimestamp----根据当前时间来生成默认的时间戳update是更新">@UpdateTimestamp    根据当前时间来生成默认的时间戳（update是更新）</h5>
 <h5 id="inheritance-hibernate继承策略总共有三种single_tabletable_per_class-和-joined">@Inheritance Hibernate继承策略,总共有三种<a href="https://blog.csdn.net/zhong562748437/article/details/85113555">SINGLE_TABLE、TABLE_PER_CLASS 和 JOINED</a></h5>
 <h5 id="id">@id</h5>
 <p>如果是主键id，还会用到@Id注解</p>
@@ -543,12 +571,43 @@ public class UserEntity{...} 表名 us_entity
 　　5）NONE：容器不负责主键的生成，由程序来完成。
 </code></pre></div></div>
 
+<h5 id="双向关联模型">双向关联模型</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Entity</span>
+<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"address"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AddressEO</span> <span class="kd">implements</span> <span class="n">java</span><span class="o">.</span><span class="na">io</span><span class="o">.</span><span class="na">Serializable</span> <span class="o">{</span>
+
+  <span class="nd">@ManyToOne</span><span class="o">(</span><span class="n">cascade</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">CascadeType</span><span class="o">.</span><span class="na">ALL</span> <span class="o">})</span>
+  <span class="nd">@JoinColumn</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"customer_id"</span><span class="o">)</span><span class="c1">//外键字段</span>
+  <span class="kd">private</span> <span class="nc">CustomerEO</span> <span class="n">customer</span><span class="o">;</span>
+
+  <span class="c1">// ...</span>
+<span class="o">}</span>
+
+<span class="nd">@Entity</span>
+<span class="nd">@Table</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"customer"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerEO</span> <span class="o">{</span>
+
+  <span class="nd">@OneToMany</span><span class="o">(</span><span class="n">mappedBy</span><span class="o">=</span><span class="s">"customer"</span><span class="o">)</span>
+  <span class="kd">private</span> <span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">AddressEO</span><span class="o">&gt;</span> <span class="n">addresses</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">AddressEO</span><span class="o">&gt;();</span>
+
+  <span class="c1">// ...</span>
+<span class="o">}</span>
+<span class="c1">//其中，@OneToMany标记中的mappedBy属性的值为AddressEO实体中所引用的CustomerEO实体的属性名</span>
+</code></pre></div></div>
+
 <h4 id="总结">总结</h4>
 <ol>
   <li>@Entity  @Table 区别通过上面博文可得出</li>
   <li>@Entity  @Table 通常同时出现</li>
   <li>@MappedSuperclass类 相当于把通用属性放在一起，再让之类继承实现</li>
 </ol>
+
+<p>参考链接</p>
+<ul>
+  <li><a href="https://www.cnblogs.com/gXing/p/8662453.html">hibernate注解@manytoone，@onetomany</a></li>
+  <li><a href="https://blog.csdn.net/qq_34042441/article/details/80281654">Hibernate 多表关联 @ManyToOne</a></li>
+  <li><a href="https://www.cnblogs.com/jpfss/p/11059629.html">@JoinColumn 详解</a></li>
+</ul>
 </div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-25T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
