@@ -1,0 +1,401 @@
+I"w�<h2 id="builder">@Builder</h2>
+<p>###1. @Builder 实战使用</p>
+
+<blockquote>
+  <blockquote>
+    <p>如果对建造者设计模式不太清楚的，可以先了解一下：建造这模式</p>
+  </blockquote>
+</blockquote>
+
+<p>@Builder注释为你的类生成相对略微复杂的构建器API。@Builder可以让你以下面显示的那样调用你的代码，来初始化你的实例对象：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Person</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">name</span><span class="o">(</span><span class="s">"Adam Savage"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">city</span><span class="o">(</span><span class="s">"San Francisco"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">job</span><span class="o">(</span><span class="s">"Mythbusters"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">job</span><span class="o">(</span><span class="s">"Unchained Reaction"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>@Builder可以放在类，构造函数或方法上。 虽然放在类上和放在构造函数上这两种模式是最常见的用例，但@Builder最容易用放在方法的用例来解释。</p>
+
+<p>使用@Builder注释的方法可以帮助我们完成一下一些事情：</p>
+
+<ul>
+  <li>一个名为FooBuilder的内部静态类，并具有和实体类形同的属性（称为构建器）。</li>
+  <li>在构建器中：对于目标类中的所有的属性和未初始化的final字段，都会在构建器中创建对应属性；</li>
+  <li>在构建器中：创建一个无参的default构造函数。</li>
+  <li>在构建器中：对于实体类中的每个参数，都会对应创建类似于“setter”的方法，只不多方法名与该参数名相同。 并且返回值是构建器本身（便于链式调用），如上例所示。</li>
+  <li>在构建器中：一个build()方法，调用此方法，就会根据设置的值进行创建实体对象。</li>
+  <li>在构建器中：同时也会生成一个toString()方法。</li>
+  <li>在实体类中：会创建一个builder()方法，它的目的是用来创建构建器。</li>
+</ul>
+
+<blockquote>
+  <blockquote>
+    <p>说的多了有点绕，我们还是先来使用一下试试，然后再详细说明：</p>
+  </blockquote>
+</blockquote>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Builder</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 编译后：</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="nc">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">username</span><span class="o">,</span> <span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span> <span class="nf">builder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">UserBuilder</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+        <span class="nc">UserBuilder</span><span class="o">()</span> <span class="o">{}</span>
+
+        <span class="kd">public</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span> <span class="nf">username</span><span class="o">(</span><span class="nc">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kd">public</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span> <span class="nf">password</span><span class="o">(</span><span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kd">public</span> <span class="nc">User</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">User</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">username</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="na">password</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">"User.UserBuilder(username="</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">+</span> <span class="s">", password="</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">+</span> <span class="s">")"</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="2-builder-中使用-singular-注释集合">2. @Builder 中使用 @Singular 注释集合</h3>
+
+<p>2.1 @Singular 实战使用</p>
+
+<p>@Builder也可以为集合类型的参数或字段生成一种特殊的方法。 它采用修改列表中一个元素而不是整个列表的方式，可以是增加一个元素，也可以是删除一个元素。 例如：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Person</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">job</span><span class="o">(</span><span class="s">"Mythbusters"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">job</span><span class="o">(</span><span class="s">"Unchained Reaction"</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</code></pre></div></div>
+<p>这样就可以轻松地将List <String>字段中包含2个字符串。 但是想要这样来操作集合，你需要使用@Singular来注释字段或参数。</String></p>
+
+<p>在使用@Singular注释注释一个集合字段（使用@Builder注释类），lombok会将该构建器节点视为一个集合，并生成两个adder方法而不是setter方法。</p>
+
+<ul>
+  <li>一个向集合添加单个元素，</li>
+  <li>
+    <p>一个将另一个集合的所有元素添加到集合中。
+将不生成仅设置集合（替换已添加的任何内容）的setter。 还生成了clear方法。 这些singular构建器相对而言是有些复杂的，主要是来保证以下特性：</p>
+  </li>
+  <li>在调用build()时，生成的集合将是不可变的。</li>
+  <li>在调用build()之后调用其中一个adder方法或clear方法不会修改任何已经生成的对象。如果对集合修改之后，再调用build()，则会创建一个基于上一个对象创建的对象实体。</li>
+  <li>
+    <p>生成的集合将被压缩到最小的可行格式，同时保持高效。
+@Singular只能应用于lombok已知的集合类型。目前，支持的类型有：</p>
+  </li>
+  <li>java.util:
+    <ul>
+      <li>Iterable, Collection, 和List (一般情况下，由压缩的不可修改的ArrayList支持).</li>
+      <li>Set, SortedSet, and NavigableSet (一般情况下，生成可变大小不可修改的HashSet或者TreeSet).</li>
+      <li>Map, SortedMap, and NavigableMap (一般情况下，生成可变大小不可修改的HashMap或者TreeMap).</li>
+    </ul>
+  </li>
+  <li>Guava’s com.google.common.collect:
+    <ul>
+      <li>ImmutableCollection and ImmutableList</li>
+      <li>ImmutableSet and ImmutableSortedSet</li>
+      <li>ImmutableMap, ImmutableBiMap, and ImmutableSortedMap</li>
+      <li>ImmutableTable
+再来看看使用了@Singular注解之后的编译情况：
+```java
+@Builder
+public class User {
+private final Integer id;
+private final String zipCode = “215500”;
+private String username;
+private String password;
+@Singular
+private List<String> hobbies;
+}</String></li>
+    </ul>
+  </li>
+</ul>
+
+<p>// 编译后：
+public class User {
+    private final Integer id;
+    private final String zipCode = “215500”;
+    private String username;
+    private String password;
+    private List<String> hobbies;
+    User(Integer id, String username, String password, List<String> hobbies) {
+        this.id = id; this.username = username;
+        this.password = password; this.hobbies = hobbies;
+    }</String></String></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public static User.UserBuilder builder() {return new User.UserBuilder();}
+
+public static class UserBuilder {
+    private Integer id;
+    private String username;
+    private String password;
+    private ArrayList&lt;String&gt; hobbies;
+    UserBuilder() {}
+    public User.UserBuilder id(Integer id) { this.id = id; return this; }
+    public User.UserBuilder username(String username) { this.username = username; return this; }
+    public User.UserBuilder password(String password) { this.password = password; return this; }
+
+    public User.UserBuilder hobby(String hobby) {
+        if (this.hobbies == null) {
+            this.hobbies = new ArrayList();
+        }
+        this.hobbies.add(hobby);
+        return this;
+    }
+
+    public User.UserBuilder hobbies(Collection&lt;? extends String&gt; hobbies) {
+        if (this.hobbies == null) {
+            this.hobbies = new ArrayList();
+        }
+        this.hobbies.addAll(hobbies);
+        return this;
+    }
+
+    public User.UserBuilder clearHobbies() {
+        if (this.hobbies != null) {
+            this.hobbies.clear();
+        }
+        return this;
+    }
+
+    public User build() {
+        List hobbies;
+        switch(this.hobbies == null ? 0 : this.hobbies.size()) {
+        case 0:
+            hobbies = Collections.emptyList();
+            break;
+        case 1:
+            hobbies = Collections.singletonList(this.hobbies.get(0));
+            break;
+        default:
+            hobbies = Collections.unmodifiableList(new ArrayList(this.hobbies));
+        }
+        return new User(this.id, this.username, this.password, hobbies);
+    }
+    public String toString() {
+        return "User.UserBuilder(id=" + this.id + ", username=" + this.username + ", password=" + this.password + ", hobbies=" + this.hobbies + ")";
+    }
+} } ```
+</code></pre></div></div>
+
+<p>其实，lombok的创作者还是很用心的，在进行build()来床建实例对象时，并没有直接使用Collections.unmodifiableList(Collection)此方法来床架实例，而是分为三种情况，</p>
+
+<ul>
+  <li>第一种，当集合中没有元素时，创建一个空list；</li>
+  <li>第二种情况，当集合中存在一个元素时，创建一个不可变的单元素list；</li>
+  <li>
+    <p>第三种情况，根据当前集合的元素数量创建对应合适大小的list；
+当然我们看编译生成的代码，创建了三个关于集合操作的方法：</p>
+  </li>
+  <li>hobby(String hobby)：向集合中添加一个元素</li>
+  <li>hobbies(Collection&lt;? extends String&gt; hobbies)：添加一个集合所有的元素</li>
+  <li>clearHobbies()：清空当前集合数据
+2.2 @Singular 注解配置详解</li>
+</ul>
+
+<p>我们先来看看 @Singular 注解的详情：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">({</span><span class="no">FIELD</span><span class="o">,</span> <span class="no">PARAMETER</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="no">SOURCE</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">Singular</span> <span class="o">{</span>
+	<span class="c1">// 修改添加集合元素的方法名</span>
+	<span class="nc">String</span> <span class="nf">value</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>测试如何使用注解属性vlaue</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Builder</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">zipCode</span> <span class="o">=</span> <span class="s">"215500"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="nd">@Singular</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"testHobbies"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">hobbies</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="c1">// 测试类</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BuilderTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">testHobbies</span><span class="o">(</span><span class="s">"reading"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">testHobbies</span><span class="o">(</span><span class="s">"chatting"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">id</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>说明，当我们使用了注解属性value之后，我们在使用添加集合元素时的方法名发生相应的改变。但是，同时生成的添加整个集合的方法名发生改变了吗？我们再来看看编译后的代码：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 编译后：</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+	<span class="c1">// 省略部分代码，只看关键部分</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">UserBuilder</span> <span class="o">{</span>
+		<span class="kd">public</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span> <span class="nf">testHobbies</span><span class="o">(</span><span class="nc">String</span> <span class="n">testHobbies</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">hobbies</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">hobbies</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">hobbies</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">testHobbies</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span> <span class="nf">hobbies</span><span class="o">(</span><span class="nc">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">hobbies</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">hobbies</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">hobbies</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">hobbies</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">hobbies</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">User</span><span class="o">.</span><span class="na">UserBuilder</span> <span class="nf">clearHobbies</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">hobbies</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">hobbies</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>可以看到，只有添加一个元素的方法名发生了改变。</p>
+
+<h3 id="3-builderdefault-使用">3. @Builder.Default 使用</h3>
+
+<p>比如有这样一个实体类：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Builder</span>
+<span class="nd">@ToString</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="nd">@Builder</span><span class="o">.</span><span class="na">Default</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">id</span> <span class="o">=</span> <span class="no">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="nd">@Builder</span><span class="o">.</span><span class="na">Default</span>
+    <span class="kd">private</span> <span class="kt">long</span> <span class="n">insertTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>在类中我在id和insertTime上都添加注解@Builder.Default，当我在使用这个实体对象时，我就不需要在为这两个字段进行初始化值，如下面这样：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BuilderTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// 输出内容：</span>
+<span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="o">=</span><span class="mi">416219</span><span class="n">e1</span><span class="o">-</span><span class="n">bc64</span><span class="o">-</span><span class="mi">43</span><span class="n">fd</span><span class="o">-</span><span class="n">b2c3</span><span class="o">-</span><span class="mi">9</span><span class="n">f8dc109c2e8</span><span class="o">,</span> <span class="n">username</span><span class="o">=</span><span class="n">jdkong</span><span class="o">,</span> <span class="n">password</span><span class="o">=</span><span class="n">jdkong</span><span class="o">,</span> <span class="n">insertTime</span><span class="o">=</span><span class="mi">1546869309868</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>lombok在实例化对象时就为我们初始化了这两个字段值。</p>
+
+<p>当然，你如果再对这两个字段进行设值的话，那么默认定义的值将会被覆盖掉，如下面这样：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BuilderTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">id</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// 输出内容</span>
+<span class="nc">User</span><span class="o">(</span><span class="n">id</span><span class="o">=</span><span class="n">jdkong</span><span class="o">,</span> <span class="n">username</span><span class="o">=</span><span class="n">jdkong</span><span class="o">,</span> <span class="n">password</span><span class="o">=</span><span class="n">jdkong</span><span class="o">,</span> <span class="n">insertTime</span><span class="o">=</span><span class="mi">1546869642151</span><span class="o">)</span>
+</code></pre></div></div>
+<h3 id="4-builder-详细配置">4. @Builder 详细配置</h3>
+
+<p>下面我们再来详细看看@Builder这个注解类地详细实现：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">({</span><span class="no">TYPE</span><span class="o">,</span> <span class="no">METHOD</span><span class="o">,</span> <span class="no">CONSTRUCTOR</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="no">SOURCE</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">Builder</span> <span class="o">{</span>
+	<span class="c1">// 如果@Builder注解在类上，可以使用 @Builder.Default指定初始化表达式</span>
+	<span class="nd">@Target</span><span class="o">(</span><span class="no">FIELD</span><span class="o">)</span>
+	<span class="nd">@Retention</span><span class="o">(</span><span class="no">SOURCE</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">Default</span> <span class="o">{}</span>
+	<span class="c1">// 指定实体类中创建 Builder 的方法的名称，默认为: builder (个人觉得没必要修改)</span>
+	<span class="nc">String</span> <span class="nf">builderMethodName</span><span class="o">()</span> <span class="k">default</span> <span class="s">"builder"</span><span class="o">;</span>
+	<span class="c1">// 指定 Builder 中用来构件实体类的方法的名称，默认为：build (个人觉得没必要修改)</span>
+	<span class="nc">String</span> <span class="nf">buildMethodName</span><span class="o">()</span> <span class="k">default</span> <span class="s">"build"</span><span class="o">;</span>
+	<span class="c1">// 指定创建的建造者类的名称，默认为：实体类名+Builder</span>
+	<span class="nc">String</span> <span class="nf">builderClassName</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+	<span class="c1">// 使用toBuilder可以实现以一个实例为基础继续创建一个对象。（也就是重用原来对象的值）</span>
+	<span class="kt">boolean</span> <span class="nf">toBuilder</span><span class="o">()</span> <span class="k">default</span> <span class="kc">false</span><span class="o">;</span>
+
+	<span class="nd">@Target</span><span class="o">({</span><span class="no">FIELD</span><span class="o">,</span> <span class="no">PARAMETER</span><span class="o">})</span>
+	<span class="nd">@Retention</span><span class="o">(</span><span class="no">SOURCE</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">ObtainVia</span> <span class="o">{</span>
+		<span class="c1">// 告诉lombok使用表达式获取值</span>
+		<span class="nc">String</span> <span class="nf">field</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+		<span class="c1">// 告诉lombok使用表达式获取值</span>
+		<span class="nc">String</span> <span class="nf">method</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+
+		<span class="kt">boolean</span> <span class="nf">isStatic</span><span class="o">()</span> <span class="k">default</span> <span class="kc">false</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>以上注解属性，我只测试一个比较常用的toBuilder，因为我们在对实体对象进行操作时，往往会存在对某些实体对象的某个字段进行二次赋值，这个时候就会用到这一属性。但是，这会创建一个新的对象，而不是原来的对象，原来的对象属性是不可变的，除非你自己想要给这个实体类再添加上@Data或者@setter方法（我是这么干过，哈哈）。下面就来测试一下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Builder</span><span class="o">(</span><span class="n">toBuilder</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="nd">@ToString</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="c1">// 测试类</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BuilderTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">User</span> <span class="n">user1</span> <span class="o">=</span> <span class="nc">User</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="s">"jdkong"</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user1</span><span class="o">);</span>
+
+        <span class="nc">User</span> <span class="n">user2</span> <span class="o">=</span> <span class="n">user1</span><span class="o">.</span><span class="na">toBuilder</span><span class="o">().</span><span class="na">username</span><span class="o">(</span><span class="s">"jdkong2"</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+        <span class="c1">// 验证user2是否是基于user1的现有属性创建的</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user2</span><span class="o">);</span>
+        <span class="c1">// 验证对象是否是同一对象</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">user1</span> <span class="o">==</span> <span class="n">user2</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// 输出内容</span>
+<span class="nc">User</span><span class="o">(</span><span class="n">username</span><span class="o">=</span><span class="n">jdkong</span><span class="o">,</span> <span class="n">password</span><span class="o">=</span><span class="n">jdkong</span><span class="o">)</span>
+<span class="nc">User</span><span class="o">(</span><span class="n">username</span><span class="o">=</span><span class="n">jdkong2</span><span class="o">,</span> <span class="n">password</span><span class="o">=</span><span class="n">jdkong</span><span class="o">)</span>
+<span class="kc">false</span>
+</code></pre></div></div>
+
+<ol>
+  <li>@Builder 全局配置
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span> <span class="err">是否禁止使用</span><span class="nd">@Builder</span>
+<span class="n">lombok</span><span class="o">.</span><span class="na">builder</span><span class="o">.</span><span class="na">flagUsage</span> <span class="o">=</span> <span class="o">[</span><span class="n">warning</span> <span class="o">|</span> <span class="n">error</span><span class="o">]</span> <span class="o">(</span><span class="k">default</span><span class="o">:</span> <span class="n">not</span> <span class="n">set</span><span class="o">)</span>
+<span class="err">#是否使用</span><span class="nc">Guaua</span>
+<span class="n">lombok</span><span class="o">.</span><span class="na">singular</span><span class="o">.</span><span class="na">useGuava</span> <span class="o">=</span> <span class="o">[</span><span class="kc">true</span> <span class="o">|</span> <span class="kc">false</span><span class="o">]</span> <span class="o">(</span><span class="k">default</span><span class="o">:</span> <span class="kc">false</span><span class="o">)</span>
+<span class="err">#</span> <span class="err">是否自动使用</span><span class="n">singular</span><span class="err">，默认是使用</span>
+<span class="n">lombok</span><span class="o">.</span><span class="na">singular</span><span class="o">.</span><span class="na">auto</span> <span class="o">=</span> <span class="o">[</span><span class="kc">true</span> <span class="o">|</span> <span class="kc">false</span><span class="o">]</span> <span class="o">(</span><span class="k">default</span><span class="o">:</span> <span class="kc">true</span><span class="o">)</span>
+</code></pre></div>    </div>
+  </li>
+</ol>
+:ET

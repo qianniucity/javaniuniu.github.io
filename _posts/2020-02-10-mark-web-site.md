@@ -31,3 +31,5 @@ sidebar:
 19. spring AOP中业务逻辑仅仅只关注业务本身，将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来[@Aspect 注解使用详解](https://blog.csdn.net/fz13768884254/article/details/83538709) [Spring AOP切点表达式用法总结](https://www.cnblogs.com/zhangxufeng/p/9160869.html)
 20. AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常
 21. AccessDeineHandler 用来解决认证过的用户访问无权限资源时的异常
+22. [Spring事务管理 与 SpringAOP](https://www.cnblogs.com/xdyixia/p/9376077.html)
+23. 

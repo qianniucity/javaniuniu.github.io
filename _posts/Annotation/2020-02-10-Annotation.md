@@ -29,6 +29,8 @@ sidebar:
 
 @RepositoryRestResourcepublic配合spring-boot-starter-data-rest使用。
 
+[@ApiModelProperty()用于方法，字段； 表示对model属性的说明或者数据操作更改](https://www.cnblogs.com/jpfss/p/11439601.html)
+
 #### 二、注解(annotations)详解
 
 @SpringBootApplication：申明让spring boot自动给程序进行必要的配置，这个配置等同于：@Configuration ，@EnableAutoConfiguration 和 @ComponentScan 三个配置。
