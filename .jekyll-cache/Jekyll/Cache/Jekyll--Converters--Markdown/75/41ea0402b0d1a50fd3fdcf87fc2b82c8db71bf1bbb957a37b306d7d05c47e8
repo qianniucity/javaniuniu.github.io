@@ -1,0 +1,68 @@
+I"�%<h2 id="redirect重定向流程">redirect重定向流程</h2>
+<p>客户发送一个请求到服务器，服务器匹配servlet，这都和请求转发一样，servlet处理完之后调用了sendRedirect()这个方法，这个方法是response的方法，所以，当这个servlet处理完之后，看到response.senRedirect()方法，立即向客户端返回这个响应，响应行告诉客户端你必须要再发送一个请求，去访问test.jsp，紧接着客户端受到这个请求后，立刻发出一个新的请求，去请求test.jsp,这里两个请求互不干扰，相互独立，在前面request里面setAttribute()的任何东西，在后面的request里面都获得不了。可见，在sendRedirect()里面是两个请求，两个响应。</p>
+
+<h3 id="重定向场景">重定向场景</h3>
+<p>Spring MVC中做form表单功能提交时，防止用户客户端后退或者刷新时重复提交问题，需要在服务端进行重定向跳转,其中redirect是直接跳转到其他页面，有以下3种方法进行重定向。</p>
+
+<h3 id="1-responsesendredirect重定向跳转">1. response.sendRedirect重定向跳转</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/testredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span> <span class="nc">ModelAndView</span> <span class="nf">testredirect</span><span class="o">(</span><span class="nc">HttpServletResponse</span> <span class="n">response</span><span class="o">){</span>  
+    <span class="n">response</span><span class="o">.</span><span class="na">sendRedirect</span><span class="o">(</span><span class="s">"/index"</span><span class="o">);</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="2-viewresolver直接跳转">2. ViewResolver直接跳转</h3>
+<p>不带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/testredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span>  <span class="nc">String</span> <span class="nf">testredirect</span><span class="o">(</span><span class="nc">HttpServletResponse</span> <span class="n">response</span><span class="o">){</span>  
+    <span class="k">return</span> <span class="s">"redirect:/index"</span><span class="o">;</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/testredirect"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">testredirect</span><span class="o">(</span><span class="nc">Model</span> <span class="n">model</span><span class="o">,</span> <span class="nc">RedirectAttributes</span> <span class="n">attr</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">attr</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">"test"</span><span class="o">,</span> <span class="s">"51gjie"</span><span class="o">);</span><span class="c1">//跳转地址带上test参数</span>
+    <span class="n">attr</span><span class="o">.</span><span class="na">addFlashAttribute</span><span class="o">(</span><span class="s">"u2"</span><span class="o">,</span> <span class="s">"51gjie"</span><span class="o">);</span><span class="c1">//跳转地址不带上u2参数</span>
+	<span class="k">return</span> <span class="s">"redirect:/user/users"</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="3-modelandview重定向">3. ModelAndView重定向</h3>
+<p>不带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/restredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span>  <span class="nc">ModelAndView</span> <span class="nf">restredirect</span><span class="o">(</span><span class="nc">String</span> <span class="n">userName</span><span class="o">){</span>  
+    <span class="nc">ModelAndView</span>  <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ModelAndView</span><span class="o">(</span><span class="s">"redirect:/main/index"</span><span class="o">);</span>    
+    <span class="k">return</span> <span class="n">model</span><span class="o">;</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/toredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span>  <span class="nc">ModelAndView</span> <span class="nf">toredirect</span><span class="o">(</span><span class="nc">String</span> <span class="n">userName</span><span class="o">){</span>  
+    <span class="nc">ModelAndView</span>  <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ModelAndView</span><span class="o">(</span><span class="s">"/main/index"</span><span class="o">);</span>   
+    <span class="n">model</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">"userName"</span><span class="o">,</span> <span class="n">userName</span><span class="o">);</span>  <span class="c1">//把userName参数带入到controller的RedirectAttributes</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">;</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="其他return-类型">其他return 类型</h2>
+<h5 id="跳转到-adminadminreg-页面">跳转到 admin/adminReg 页面</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/reg"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">reg</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"admin/adminReg"</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="返回指定数据到前端jsonresult">返回指定数据到前端，JsonResult</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/news/delete/{id}"</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="nc">JsonResult</span> <span class="nf">newsDelete</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">newsService</span><span class="o">.</span><span class="na">delNews</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="nc">JsonResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JsonResult</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">setToSuccess</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+:ET

@@ -324,6 +324,49 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringSecurity/User"><h2 itemprop="headline" class="item__header">User</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">简介
+UserDetails的默认实现（框架提供的），User。用户可以从自己的数据库中取出此用户的账号，密码，以及相关权限，然后用构造方法填充创建一个User对象即可。 注：实现CredentialsContainer接口是为了在登录成功后，清除用户信息中的密码。（登录成功后会将用户信息存储在SecurityContext中）
+源码
+public class User implements UserDetails, CredentialsContainer {
+    private static final long serialVersionUID = 500L;
+    private static final Log logger = LogFactory.getLog(Us...</div><p><a href="/SpringSecurity/User">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=CodeMark">CodeMark</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringSecurity/RequestMatcher"><h2 itemprop="headline" class="item__header">RequestMatcher(配置忽略url和认证的url)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">一句话简介
+匹配HttpServletRequest的简单策略接口RequestMatcher，其下定义了matches方法，如果返回是true表示提供的请求与提供的匹配规则匹配，如果返回的是false则不匹配。
+
+RequestMatcher其实现类：
+
+  AntPathRequestMatcher：重点
+  MvcRequestMatcher：重点
+  RegexRequestMatcher： 根据正则模式进行匹配
+  AnyRequestMatcher
+
+
+使用场景
+可配合过滤器，过滤掉不需要token验证的url
+
+示例
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+im...</div><p><a href="/SpringSecurity/RequestMatcher">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=CodeMark">CodeMark</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java8"><h2 itemprop="headline" class="item__header">JAVA8新特性</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">Set&lt;GrantedAuthority&gt; grantedAuths = new HashSet&lt;GrantedAuthority&gt;();
         List&lt;Role&gt; roles = userMapper.selectRolsByUserId(userOne.getTid());
@@ -453,54 +496,8 @@ public class WsController {
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
     <meta itemprop="keywords" content="SpringSecurity,CodeMark"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/SecurityContextHolder"><h2 itemprop="headline" class="item__header">SecurityContextHolder</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">作用： 保留系统当前的安全上下文细节，其中就包括当前使用系统的用户的信息。
-
-上下文细节怎么表示？ 
-用SecurityContext对象来表示
-
-每个用户都会有它的上下文，那这个SecurityContext保存在哪里呢？ 
-存储在一个SecurityContextHolder中，整个应用就一个SecurityContextHolder。
-
-SecurityContextHolder存储SecurityContext的方式？ 
-这要考虑到应用场景。 
-1.单机系统，即应用从开启到关闭的整个生命周期只有一个用户在使用。由于整个应用只需要保存一个SecurityContext（安全上下文即可） 
-2.多用户系统，比如典型的Web系统，整个生命周期可能同时有多个用户在使用。这时候应用需要保...</div><p><a href="/SpringSecurity/SecurityContextHolder">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%B1%BB%E8%A7%A3%E9%87%8A">类解释</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,类解释"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringSecurity/GrantedAuthority"><h2 itemprop="headline" class="item__header">GrantedAuthority</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">默认实现SimpleGrantedAuthority
-GrantedAuthority接口
-我们知道UserDeitails接口里面有一个getAuthorities()方法。这个方法将返回此用户的所拥有的权限。这个集合将用于用户的访问控制，也就是Authorization。
-
-所谓权限，就是一个字符串。一般不会重复。
-
-所谓权限检查，就是查看用户权限列表中是否含有匹配的字符串。
-
-package org.springframework.security.core;
-
-import java.io.Serializable;
-
-public interface GrantedAuthority extends Serializable {
-    String getAuthority...</div><p><a href="/SpringSecurity/GrantedAuthority">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringSecurity">SpringSecurity</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%B1%BB%E8%A7%A3%E9%87%8A">类解释</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringSecurity,类解释"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>82 post articles, 11 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>84 post articles, 11 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page6">
             <i class="fas fa-angle-left"></i>

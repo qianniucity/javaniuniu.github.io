@@ -324,6 +324,61 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java-code-redis/KeyGenerator"><h2 itemprop="headline" class="item__header">Spring Cache – KeyGenerator自定义rediskey</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. 概述
+在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。
+
+2. KeyGenerator
+这负责为缓存中的每个数据项生成每个键，这些键将用于在检索时查找数据项。
+
+此处的默认实现是SimpleKeyGenerator –它使用提供的方法参数来生成密钥。这意味着，如果我们有两个使用相同的缓存名称和参数类型集的方法，则很有可能会导致冲突。
+
+它还意味着缓存数据可以由另一种方法覆盖。
+
+3. 自定义密钥生成器
+密钥生成器只需要实现一个方法：
+
+Object generate(Object object, Method method, Object... params)
+
+如果未正确实现或使用，则可能导致覆盖缓存数据。
+
+让我们来看看实现：
+
+public...</div><p><a href="/java-code-redis/KeyGenerator">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Redis">Redis</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 24, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-24T00:00:00+08:00">
+    <meta itemprop="keywords" content="Redis"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java-util-code/Hamcrest"><h2 itemprop="headline" class="item__header">单元测试的框架Hamcrest</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">一句话介绍
+Hamcrest是用于Java的单元测试的框架，它使用matcher匹配器来进行断言。在Spring-boot-starter中集成了Hamcrest,无需而外引入。
+
+核心API
+
+
+  is
+    
+      使用is匹配器使得程序更加易懂
+        String str1 = "text";
+String str2 = " text ";
+assertThat(str1, is(equalToIgnoringWhiteSpace(str2)));
+        
+      
+      用于简单数据类型的判断
+        String str1 = "text";
+String str2 = "text";
+assertThat(str1, is(s...</div><p><a href="/java-util-code/Hamcrest">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95">单元测试</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 23, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-23T00:00:00+08:00">
+    <meta itemprop="keywords" content="工具类,单元测试"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/SpringBoot/Ansync"><h2 itemprop="headline" class="item__header">SpringBoot Ansync 异步线程池-三种方式</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">源码地址
 springboot-async
@@ -411,49 +466,6 @@ CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先�
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-21T00:00:00+08:00">
     <meta itemprop="keywords" content="注解,Lombok"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/MultipartResolver/explanation"><h2 itemprop="headline" class="item__header">处理文件上传(MultipartResolver)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">简介
-MultipartResolver 用于处理文件上传，当收到请求时 DispatcherServlet 的 checkMultipart() 方法会调用 MultipartResolver 的 isMultipart() 方法判断请求中是否包含文件。如果请求数据中包含文件，则调用 MultipartResolver 的 resolveMultipart() 方法对请求的数据进行解析，然后将文件数据解析成 MultipartFile 并封装在 MultipartHttpServletRequest (继承了 HttpServletRequest) 对象中，最后传递给 Controller，在 MultipartResolver 接口中有如下方法：
-
-
-  boolean isMul...</div><p><a href="/java-util-code/MultipartResolver/explanation">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0">文件上传</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 19, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-19T00:00:00+08:00">
-    <meta itemprop="keywords" content="文件上传,工具类"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/Docket/explanation"><h2 itemprop="headline" class="item__header">Docket(Swagger2中应用)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">修饰符和类型
-      方法和说明
-      描述
-    
-  
-  
-    
-      Docket
-      additionalModels(com.fasterxml.classmate.ResolvedType first, com.fasterxml.classmate.ResolvedType… remaining)
-      添加不属于任何批注或可能是隐式的其他模型的方法
-    
-    
-      Docket
-      alternateTypeRules(AlternateTypeRule… alternateTypeRules)
-      添加模型替换规则（alternateTypeRules）
-    
-    
-      Docket...</div><p><a href="/java-util-code/Docket/explanation">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Swagger2">Swagger2</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 19, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-19T00:00:00+08:00">
-    <meta itemprop="keywords" content="Swagger2,工具类"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/Handler/HandlerMethodArgumentResolver/explanation"><h2 itemprop="headline" class="item__header">HandlerMethodArgumentResolver解析器说明</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">前面已经讲了很多关于 过滤器 相关内容，接下来会陆续讲到对拦截的数据，我们还能做些啥？
 
@@ -488,7 +500,7 @@ ThreadLocal类，它是在当前线程（Thread.currentThread()）的ThreadLocal
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-19T00:00:00+08:00">
     <meta itemprop="keywords" content="Handler解析器"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>82 post articles, 11 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>84 post articles, 11 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/">
             <i class="fas fa-angle-left"></i>
