@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">过滤器</li><li class="toc-h2"><a href="/Filter/explanation">Filter类方法详解</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/explanation">FilterRegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/example">FilterRegistrationBean示例</a></li><li class="toc-h2"><a href="/Filter/RegistrationBean/explanation">RegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/CharacterEncodingFilter/explanation">CharacterEncodingFilter类方法说明</a></li><li class="toc-h2"><a href="/Filter/OncePerRequestFilter/explanation">OncePerRequestFilter类方法说明</a></li><li class="toc-h1">解析器</li><li class="toc-h2"><a href="/Handler/DefaultServletHandlerConfigurer/explanation">DefaultServletHandlerConfigurer解析器说明</a></li><li class="toc-h2"><a href="/Handler/HandlerMethodArgumentResolver/explanation">HandlerMethodArgumentResolver类说明</a></li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">拦截器</li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">控制类</li><li class="toc-h2 active"><a href="/web/Controller/retrurn">控制类中，return的几种形态</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">过滤器</li><li class="toc-h2"><a href="/Filter/explanation">Filter类方法详解</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/explanation">FilterRegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/example">FilterRegistrationBean示例</a></li><li class="toc-h2"><a href="/Filter/RegistrationBean/explanation">RegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/CharacterEncodingFilter/explanation">CharacterEncodingFilter类方法说明</a></li><li class="toc-h2"><a href="/Filter/OncePerRequestFilter/explanation">OncePerRequestFilter类方法说明</a></li><li class="toc-h1">解析器</li><li class="toc-h2"><a href="/Handler/DefaultServletHandlerConfigurer/explanation">DefaultServletHandlerConfigurer解析器说明</a></li><li class="toc-h2"><a href="/Handler/HandlerMethodArgumentResolver/explanation">HandlerMethodArgumentResolver类说明</a></li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">拦截器</li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">控制类</li><li class="toc-h2 active"><a href="/web/Controller/retrurn">控制类中，return的几种形态</a></li><li class="toc-h2"><a href="/web/Controller/BindingResult">Springboot 使用BindingResult校验参数</a></li><li class="toc-h2"><a href="/web/Annotation/Valid">Valid介绍及相关注解</a></li><li class="toc-h2"><a href="/web/Controller/retrurn/2">Controller 数据处理示例(Model ModelAndView redirect)</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -423,6 +423,148 @@ MFrGw6cAAAAASUVORK5CYII=" />
         <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
     <span class="o">}</span>
 </code></pre></div></div>
+<p>———2020/03/01 更新 ModelAndView 和 Map 及 Model</p>
+
+<h2 id="modelandview">ModelAndView</h2>
+
+<h3 id="概述">概述</h3>
+
+<p>控制器处理方法的返回值如果为 ModelAndView, 则其既包含视图信息，也包含模型数据信息。</p>
+
+<h4 id="添加模型数据">添加模型数据:</h4>
+<ul>
+  <li>MoelAndView addObject(String attributeName, Object attributeValue)</li>
+  <li>ModelAndView addAllObject(Map&lt; String, ?&gt; modelMap )</li>
+</ul>
+
+<p>####设置视图:</p>
+<ul>
+  <li>void setView(View view )</li>
+  <li>void setViewName(String viewName)</li>
+</ul>
+
+<h4 id="示例">示例</h4>
+
+<ul>
+  <li>register_form.jsp
+```html
+&lt;!DOCTYPE HTML&gt;</li>
+</ul>
+<html>
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <form action="model/register" method="post">
+        username: <input type="text" name="username" />
+        <br />
+        password: <input type="password" name="password" />
+        <br />
+        email: <input type="text" name="email" />
+        <br />
+        age: <input type="text" name="age" />
+        <br />
+        province: <input type="text" name="address.province" />
+        <br />
+        city: <input type="text" name="address.city" />
+        <br />
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">-</span> <span class="n">ModelController</span><span class="p">.</span><span class="n">java</span>
+<span class="p">```</span><span class="n">java</span>
+<span class="k">package</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch3</span><span class="p">;</span>
+
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">stereotype</span><span class="p">.</span><span class="n">Controller</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">bind</span><span class="p">.</span><span class="n">annotation</span><span class="p">.</span><span class="n">RequestMapping</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">servlet</span><span class="p">.</span><span class="n">ModelAndView</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch2</span><span class="p">.</span><span class="k">model</span><span class="p">.</span><span class="n">User</span><span class="p">;</span>
+
+<span class="p">@</span><span class="n">Controller</span>
+<span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"model"</span><span class="p">)</span>
+<span class="k">public</span> <span class="n">class</span> <span class="n">ModelController</span> <span class="p">{</span>
+
+    <span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"register"</span><span class="p">)</span>
+    <span class="k">public</span> <span class="n">ModelAndView</span> <span class="n">register</span><span class="p">(</span><span class="n">User</span> <span class="n">user</span><span class="p">){</span>
+
+        <span class="n">ModelAndView</span> <span class="n">mv</span> <span class="p">=</span> <span class="n">new</span> <span class="n">ModelAndView</span><span class="p">(</span><span class="s2">"home"</span><span class="p">);</span>
+        <span class="n">mv</span><span class="p">.</span><span class="n">addObject</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+
+        <span class="n">return</span> <span class="n">mv</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>home.jsp
+```html
+&lt;%@ page language=”java” contentType=”text/html; charset=UTF-8”
+  pageEncoding=”UTF-8”%&gt;
+&lt;!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “http://www.w3.org/TR/html4/loose.dtd”&gt;</li>
+</ul>
+<html>
+<body>
+<h2>Welcome ${requestScope.user.username }!</h2>
+</body>
+</html>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="p">##</span> <span class="n">Map</span> <span class="err">及</span> <span class="k">Model</span>
+
+<span class="p">###</span> <span class="err">概述</span>    
+<span class="n">Spring</span> <span class="n">MVC</span> <span class="err">在内部使用了一个</span><span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">ui</span><span class="p">.</span><span class="k">Model</span> <span class="err">接口存储模型数据。</span>
+
+<span class="n">Spring</span> <span class="n">MVC</span> <span class="err">在调用方法前会创建一个–隐含的模型对象作为模型数据的存储容器。如果方法的入参为</span> <span class="n">Map</span> <span class="err">或</span> <span class="k">Model</span> <span class="err">类型，</span><span class="n">Spring</span> <span class="n">MVC</span> <span class="err">会隐含模型的引用传递给这些入参。在方法体内，开发者可以通过这个入参对象访问到模型中的所有数据，也可以向模型中添加新的属性数据。</span>
+
+<span class="p">####</span> <span class="err">示例</span>
+<span class="p">-</span> <span class="m">1</span><span class="err">、</span><span class="n">Map</span>
+<span class="p">```</span><span class="n">java</span>
+<span class="k">package</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch3</span><span class="p">;</span>
+
+<span class="n">import</span> <span class="n">java</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">Map</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">stereotype</span><span class="p">.</span><span class="n">Controller</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">bind</span><span class="p">.</span><span class="n">annotation</span><span class="p">.</span><span class="n">RequestMapping</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch2</span><span class="p">.</span><span class="k">model</span><span class="p">.</span><span class="n">User</span><span class="p">;</span>
+
+<span class="p">@</span><span class="n">Controller</span>
+<span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"model"</span><span class="p">)</span>
+<span class="k">public</span> <span class="n">class</span> <span class="n">ModelController</span> <span class="p">{</span>
+
+    <span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"register"</span><span class="p">)</span>
+    <span class="k">public</span> <span class="k">String</span> <span class="n">register</span><span class="p">(</span><span class="n">User</span> <span class="n">user</span><span class="p">,</span> <span class="n">Map</span><span class="p">&lt;</span><span class="k">String</span><span class="p">,</span> <span class="n">Object</span><span class="p">&gt;</span> <span class="n">map</span><span class="p">){</span>
+
+        <span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+
+        <span class="n">return</span> <span class="s2">"home"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>2、Model
+```java
+package com.ricky.codelab.webapp.ch3;</li>
+</ul>
+
+<p>import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;</p>
+
+<p>import com.ricky.codelab.webapp.ch2.model.User;</p>
+
+<p>@Controller
+@RequestMapping(“model”)
+public class ModelController {</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@RequestMapping("register")
+public String register(User user, Model model){
+
+    model.addAttribute("user", user);
+
+    return "home";
+} } ```
+</code></pre></div></div>
 </div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-29T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
@@ -434,7 +576,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></div><div class="next"><span>NEXT</span><a href="/java-code-design-data/jpa">JPA相关注解(@Table @Entity @MappedSuperclass)</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></div><div class="next"><span>NEXT</span><a href="/web/Controller/BindingResult">Springboot 使用BindingResult校验参数</a></div></div></div>
 
 </div>
 

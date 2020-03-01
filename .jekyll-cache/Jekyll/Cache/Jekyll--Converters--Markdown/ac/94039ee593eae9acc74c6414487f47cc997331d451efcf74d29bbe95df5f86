@@ -1,0 +1,130 @@
+I"y,<h3 id="主要用途">主要用途</h3>
+<h4 id="主要用于表单验证减轻了代码量">主要用于表单验证,减轻了代码量</h4>
+
+<h3 id="相关依赖">相关依赖</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">implementation</span> <span class="err">'</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">boot</span><span class="o">:</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">starter</span><span class="o">-</span><span class="n">web</span><span class="err">'</span>
+</code></pre></div></div>
+<p>在Springboot启动器的web包下包含了<code class="highlighter-rouge">javax.validation.Valid</code>所以无需添加多余的依赖</p>
+
+<h3 id="valid相关注解的使用方式">Valid相关注解的使用方式</h3>
+
+<h5 id="1在相关的实体类的相关字段添加用于充当验证条件的注解">1.在相关的实体类的相关字段添加用于充当验证条件的注解</h5>
+
+<p>示例:</p>
+
+<ul>
+  <li>字段:
+<strong>(ps:这里只是为了演示,大家要注意命名规范)</strong>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"用户名不能为空"</span><span class="o">)</span>
+<span class="nd">@Email</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"邮箱不正确"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>实体类
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Data</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="nd">@NoArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RegisterUser</span> <span class="o">{</span>
+
+  <span class="nd">@Min</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1000000</span><span class="o">)</span>
+  <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"ID不能为空"</span><span class="o">)</span>
+  <span class="kd">private</span> <span class="nc">Long</span> <span class="n">userId</span><span class="o">;</span>
+
+  <span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"用户名不能为空"</span><span class="o">)</span>
+  <span class="nd">@Email</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"邮箱不正确"</span><span class="o">)</span>
+  <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+
+  <span class="cm">/**
+   * 教师职称
+   */</span>
+  <span class="kd">private</span> <span class="nc">String</span> <span class="n">position</span><span class="o">;</span>
+
+  <span class="cm">/**
+   * 教师所属教研室
+   */</span>
+  <span class="kd">private</span> <span class="nc">String</span> <span class="n">office</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+    <h5 id="2在controller层的方法的要校验的参数上添加valid注解">2.在controller层的方法的要校验的参数上添加@Valid注解</h5>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@PostMapping</span><span class="o">(</span><span class="s">"/action/register"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">Result</span> <span class="nf">registerByForm</span><span class="o">(</span><span class="nd">@Valid</span> <span class="nd">@RequestBody</span> <span class="nc">RegisterUser</span> <span class="n">registerUser</span><span class="o">){</span>
+  <span class="k">return</span> <span class="n">userService</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">registerUser</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+    <h5 id="3编写全局异常捕捉类">3.编写全局异常捕捉类</h5>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Slf4j</span>
+<span class="nd">@ControllerAdvice</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GlobalExceptionHandler</span> <span class="o">{</span>
+
+  <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="nc">String</span> <span class="no">EXCEPTION_MSG_KEY</span> <span class="o">=</span> <span class="s">"Exception message : "</span><span class="o">;</span>
+
+  <span class="nd">@ResponseBody</span>
+  <span class="nd">@ExceptionHandler</span><span class="o">(</span><span class="nc">MethodArgumentNotValidException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="nc">Result</span> <span class="nf">handleValidException</span><span class="o">(</span><span class="nc">MethodArgumentNotValidException</span> <span class="n">e</span><span class="o">){</span>
+              <span class="c1">//日志记录错误信息</span>
+              <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">().</span><span class="na">getFieldError</span><span class="o">()).</span><span class="na">getDefaultMessage</span><span class="o">());</span>
+              <span class="c1">//将错误信息返回给前台</span>
+              <span class="k">return</span> <span class="nc">Result</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="mi">103</span><span class="o">,</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getBindingResult</span><span class="o">().</span><span class="na">getFieldError</span><span class="o">()).</span><span class="na">getDefaultMessage</span><span class="o">());</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+    <p><strong>相关代码类</strong></p>
+  </li>
+  <li>Result类
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Data</span>
+<span class="nd">@JsonInclude</span><span class="o">(</span><span class="nc">JsonInclude</span><span class="o">.</span><span class="na">Include</span><span class="o">.</span><span class="na">NON_NULL</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Result</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">code</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="no">T</span> <span class="n">data</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">Result</span><span class="o">()</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">code</span> <span class="o">=</span> <span class="mi">200</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">message</span> <span class="o">=</span> <span class="s">"操作成功"</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="cm">/**
+   * 用于错误处理
+   * @param code 错误码
+   * @param message 错误提示信息
+   */</span>
+  <span class="kd">public</span> <span class="nf">Result</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">code</span><span class="o">,</span><span class="nc">String</span> <span class="n">message</span><span class="o">){</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">code</span> <span class="o">=</span> <span class="n">code</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">message</span> <span class="o">=</span> <span class="n">message</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span>  <span class="nc">Result</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">error</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">code</span><span class="o">,</span><span class="nc">String</span> <span class="n">msg</span><span class="o">){</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nc">Result</span><span class="o">&lt;&gt;(</span><span class="n">code</span><span class="o">,</span><span class="n">msg</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+    <h5 id="非法字段验证结果">非法字段验证结果</h5>
+  </li>
+</ul>
+
+<p>相关注解</p>
+
+<p>@Null 限制只能为null
+@NotNull 限制必须不为null
+@AssertFalse 限制必须为false
+@AssertTrue 限制必须为true
+@DecimalMax(value) 限制必须为一个不大于指定值的数字
+@DecimalMin(value) 限制必须为一个不小于指定值的数字
+@Digits(integer,fraction) 限制必须为一个小数，且整数部分的位数不能超过integer，小数部分的位数不能超过fraction
+@Future 限制必须是一个将来的日期
+@Max(value) 限制必须为一个不大于指定值的数字
+@Min(value) 限制必须为一个不小于指定值的数字
+@Past 限制必须是一个过去的日期
+@Pattern(value) 限制必须符合指定的正则表达式
+@Size(max,min) 限制字符长度必须在min到max之间
+@Past 验证注解的元素值（日期类型）比当前时间早
+@NotEmpty 验证注解的元素值不为null且不为空（字符串长度不为0、集合大小不为0）
+@NotBlank 验证注解的元素值不为空（不为null、去除首位空格后长度为0），不同于@NotEmpty，@NotBlank只应用于字符串且在比较时会去除字符串的空格
+@Email 验证注解的元素值是Email，也可以通过正则表达式和flag指定自定义的email格式
+需要注意每个注解对应的数据类型</p>
+
+<p>作者：叫我胖虎大人
+链接：https://www.jianshu.com/p/c8686fa5ef63
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+:ET

@@ -1,0 +1,195 @@
+I"�_<p><a href="https://github.com/minplemon/shops/tree/master/src/main/java/com/javaniuniu/shops/controller">GitHub源码</a></p>
+
+<h3 id="直接返回所需要的数据">直接返回所需要的数据</h3>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//删除用户地址</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.delAddresslBtn</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">addressId</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">addressId</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+            <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/user/userAddress/delete/</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">addressId</span><span class="p">,</span>
+            <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="o">==</span><span class="dl">"</span><span class="s2">SUCCESS</span><span class="dl">"</span><span class="p">){</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">tr[addressId=</span><span class="dl">"</span><span class="o">+</span><span class="nx">addressId</span><span class="o">+</span><span class="dl">"</span><span class="s2">]</span><span class="dl">"</span><span class="p">).</span><span class="nx">remove</span><span class="p">();</span>
+                    <span class="nx">toastr</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">"</span><span class="s2">地址信息删除成功...</span><span class="dl">"</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">toastr</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="na">error</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">toastr</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">发生错误...</span><span class="dl">"</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/userAddress/delete/{id}"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">delUserAddress</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">userAddressService</span><span class="o">.</span><span class="na">deleteById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"收货地址删除成功..."</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">"success"</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="返回数据通过jsonresult封装">返回数据通过JsonResult封装</h3>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//保存用户地址</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#addAddressBtn</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">addressId</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">addressId</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+            <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/user/userAddress/add/</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">method</span><span class="p">:</span><span class="dl">"</span><span class="s2">post</span><span class="dl">"</span><span class="p">,</span>
+            <span class="na">data</span><span class="p">:{</span>
+                <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#id</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(),</span>
+                <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#address</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(),</span>
+                <span class="dl">"</span><span class="s2">phone</span><span class="dl">"</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#phone</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(),</span>
+                <span class="dl">"</span><span class="s2">zipcode</span><span class="dl">"</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#zipcode</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(),</span>
+                <span class="dl">"</span><span class="s2">consignee</span><span class="dl">"</span><span class="p">:</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#consignee</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span>
+            <span class="p">},</span>
+            <span class="na">success</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">status</span><span class="o">==</span><span class="dl">"</span><span class="s2">SUCCESS</span><span class="dl">"</span><span class="p">){</span>
+                    <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#addAddressSuccess</span><span class="dl">'</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+                    <span class="nx">toastr</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="dl">"</span><span class="s2">添加成功</span><span class="dl">"</span><span class="p">);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="nx">toastr</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="na">error</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                <span class="nx">toastr</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">发生错误...</span><span class="dl">"</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+    <span class="p">});</span>
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/userAddress/add"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="nc">JsonResult</span> <span class="nf">doAddUserAddress</span><span class="o">(</span><span class="nc">HttpSession</span> <span class="n">session</span><span class="o">,</span> <span class="nc">UserAddress</span> <span class="n">userAddress</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">userAddress</span><span class="o">.</span><span class="na">setUser</span><span class="o">(</span><span class="n">getUserFromSession</span><span class="o">(</span><span class="n">session</span><span class="o">));</span>
+        <span class="n">userAddressService</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">userAddress</span><span class="o">);</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"地址信息保存成功."</span><span class="o">);</span>
+
+        <span class="nc">JsonResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JsonResult</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">setToSuccess</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>redirect 重定向到其他 controller 继续执行</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/reg"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">doReg</span><span class="o">(</span><span class="nc">Admin</span> <span class="n">admin</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">adminService</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">admin</span><span class="o">);</span>
+        <span class="k">return</span> <span class="s">"redirect:/"</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="通过controller-实现页面跳转">通过controller 实现页面跳转</h3>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"nav navbar-nav navbar-right"</span> <span class="na">th:unless=</span><span class="s">"${session.login_user != null}"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/user/login"</span><span class="nt">&gt;</span>登陆<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"/user/reg"</span><span class="nt">&gt;</span>注册<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+            <span class="nt">&lt;/ul&gt;</span>
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/login"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">login</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"admin/adminLogin"</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+<p>跳转到 adminLogin.html 页面</p>
+
+<h3 id="通过-redirect-后面携带参数返回数据到前端">通过 redirect 后面携带参数，返回数据到前端</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/login"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">doLogin</span><span class="o">(</span><span class="nc">Admin</span> <span class="n">admin</span><span class="o">,</span> <span class="nc">HttpSession</span> <span class="n">session</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">adminService</span><span class="o">.</span><span class="na">checkLogin</span><span class="o">(</span><span class="n">admin</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nc">AdminUtil</span><span class="o">.</span><span class="na">saveAdminToSession</span><span class="o">(</span><span class="n">session</span><span class="o">,</span> <span class="n">adminService</span><span class="o">.</span><span class="na">findByUsernameAndPassword</span><span class="o">(</span><span class="n">admin</span><span class="o">.</span><span class="na">getUsername</span><span class="o">(),</span> <span class="n">admin</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()));</span>
+            <span class="n">log</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"管理员[{}]登陆成功"</span><span class="o">,</span> <span class="n">admin</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
+            <span class="k">return</span> <span class="s">"redirect:/admin/product"</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="s">"redirect:/admin/login?errorPwd=true"</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"#"</span> <span class="na">th:action=</span><span class="s">"@{/user/login}"</span> <span class="na">method=</span><span class="s">"post"</span>
+          <span class="na">id=</span><span class="s">"loginForm"</span> <span class="na">class=</span><span class="s">"form-signin"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;h2</span> <span class="na">class=</span><span class="s">"form-signin-heading"</span><span class="nt">&gt;</span>系统登录<span class="nt">&lt;/h2&gt;</span>
+
+         <span class="nt">&lt;div</span> <span class="na">th:unless=</span><span class="s">"${#httpServletRequest.getParameter('errorPwd')==null}"</span><span class="nt">&gt;</span>
+             <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"errorPwd"</span> <span class="na">class=</span><span class="s">"alert alert-success"</span><span class="nt">&gt;</span>用户密码错误...<span class="nt">&lt;/div&gt;</span>
+             <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+                 <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                     <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">#errorPwd</span><span class="dl">'</span><span class="p">).</span><span class="nx">hide</span><span class="p">(</span><span class="dl">'</span><span class="s1">slow</span><span class="dl">'</span><span class="p">);</span>
+                 <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+             <span class="nt">&lt;/script&gt;</span>
+         <span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<h3 id="通过-model-传递数据到前端渲染">通过 Model 传递数据到前端渲染</h3>
+<ul>
+  <li>html 触发请求
+```html</li>
+</ul>
+<div class="row br" th:fragment="user">
+    <ul class="nav nav-tabs">
+        <li id="sub-nav-user"><a href="/user/profile">个人信息</a></li>
+        <li id="sub-nav-order"><a href="/user/order/">订单管理</a></li>
+        <li id="sub-nav-address"><a href="/user/userAddress">地址管理</a></li>
+<!--        <li id="sub-nav-security"><a href="/user/security">安全管理</a></li>-->
+    </ul>
+</div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+- controller 接收请求，并将数据传递到前端     
+1.通过model传递数据 userAddressList 到前端 userAddress.html 渲染       
+2."userAddressList" 对应 html 中的 ${userAddressList}       
+```java
+@RequestMapping(value = "/userAddress", method = RequestMethod.GET)
+    public String userAddress(Model model, HttpSession session) {
+        model.addAttribute("title", "地址管理");
+        List&lt;UserAddress&gt; userAddressList = userAddressService.findByUserId(UserUtil.getUserFromSession(session).getId());
+        model.addAttribute("userAddressList", userAddressList);
+        return "user/userAddress";
+    }
+</code></pre></div></div>
+
+<ul>
+  <li>html前端渲染
+```html</li>
+</ul>
+<tbody>
+                <tr th:each="userAddress:${userAddressList}" addressid="${userAddress.id}">
+                    <td th:text="${userAddress.consignee}">收件人</td>
+                    <td th:text="${userAddress.zipcode}">邮编</td>
+                    <td th:text="${userAddress.phone}">手机</td>
+                    <td th:text="${userAddress.address}">地址</td>
+                    <td>
+                        <a class="btn btn-info btn-xs delAddresslBtn" th:addressid="${userAddress.id}">删除</a>
+                        <a class="btn btn-info btn-xs editAddresslBtn" th:addressid="${userAddress.id}">修改</a>
+                    </td>
+                </tr>
+            </tbody>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+### 通过 ModelAndView 传递数据到前端渲染
+```html
+&lt;ul class="nav nav-tabs"&gt;
+        &lt;!--&lt;li id="sub-nav-admin"&gt;&lt;a href="/user/profile"&gt;个人信息&lt;/a&gt;&lt;/li&gt;--&gt;
+        &lt;li id="sub-nav-product"&gt;&lt;a href="/admin/product"&gt;商品管理&lt;/a&gt;&lt;/li&gt;
+        &lt;li id="sub-nav-order"&gt;&lt;a href="/admin/order"&gt;订单管理&lt;/a&gt;&lt;/li&gt;
+        &lt;li id="sub-nav-news"&gt;&lt;a href="/admin/news"&gt;公告管理&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ModelAndView</span> <span class="nf">index</span><span class="o">(</span><span class="nc">ModelAndView</span> <span class="n">model</span><span class="o">,</span> <span class="nc">HttpServletRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Page</span><span class="o">&lt;</span><span class="nc">News</span><span class="o">&gt;</span> <span class="n">page</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Page</span><span class="o">&lt;</span><span class="nc">News</span><span class="o">&gt;(</span><span class="n">request</span><span class="o">);</span>
+        <span class="n">newsService</span><span class="o">.</span><span class="na">findNews</span><span class="o">(</span><span class="n">page</span><span class="o">);</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">"page"</span><span class="o">,</span><span class="n">page</span><span class="o">);</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">setViewName</span><span class="o">(</span><span class="s">"admin/news/newsAdmin"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;tbody&gt;</span>
+            <span class="nt">&lt;tr</span> <span class="na">th:each=</span><span class="s">"news:${page.result}"</span> <span class="na">th:pid=</span><span class="s">"${news.id}"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;td</span> <span class="na">th:text=</span><span class="s">"${news.createTime}"</span><span class="nt">&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td</span> <span class="na">th:text=</span><span class="s">"${news.title}"</span><span class="nt">&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;a</span> <span class="na">class=</span><span class="s">"btn btn-info btn-xs"</span><span class="nt">&gt;</span>查看<span class="nt">&lt;/a&gt;</span> <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">"btn btn-info btn-xs"</span><span class="nt">&gt;</span>修改 <span class="nt">&lt;a</span>
+                        <span class="na">class=</span><span class="s">"btn btn-info btn-xs"</span><span class="nt">&gt;</span>删除<span class="nt">&lt;/a&gt;&lt;/a&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;/tbody&gt;</span>
+</code></pre></div></div>
+:ET

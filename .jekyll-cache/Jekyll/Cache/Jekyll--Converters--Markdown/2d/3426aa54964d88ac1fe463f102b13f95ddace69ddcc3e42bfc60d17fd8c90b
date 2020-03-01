@@ -1,0 +1,131 @@
+I"�<h3 id="主要用途">主要用途</h3>
+<h4 id="主要用于表单验证减轻了代码量">主要用于表单验证,减轻了代码量</h4>
+
+<h3 id="相关依赖">相关依赖</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">implementation</span> <span class="err">'</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">boot</span><span class="o">:</span><span class="n">spring</span><span class="o">-</span><span class="n">boot</span><span class="o">-</span><span class="n">starter</span><span class="o">-</span><span class="n">web</span><span class="err">'</span>
+</code></pre></div></div>
+<p>在Springboot启动器的web包下包含了<code class="highlighter-rouge">javax.validation.Valid</code>所以无需添加多余的依赖</p>
+
+<h3 id="valid相关注解的使用方式">Valid相关注解的使用方式</h3>
+
+<h5 id="1在相关的实体类的相关字段添加用于充当验证条件的注解">1.在相关的实体类的相关字段添加用于充当验证条件的注解</h5>
+
+<p>示例:</p>
+
+<ul>
+  <li>字段:
+<strong>(ps:这里只是为了演示,大家要注意命名规范)</strong>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NotNull</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"用户名不能为空"</span><span class="o">)</span>
+<span class="nd">@Email</span><span class="o">(</span><span class="n">message</span> <span class="o">=</span> <span class="s">"邮箱不正确"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+</code></pre></div>    </div>
+    <p>实体类
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class RegisterUser {</p>
+
+    <p>@Min(value = 1000000)
+  @NotNull(message = “ID不能为空”)
+  private Long userId;</p>
+
+    <p>@NotNull(message = “用户名不能为空”)
+  @Email(message = “邮箱不正确”)
+  private String username;</p>
+
+    <p>/**</p>
+    <ul>
+      <li>教师职称
+   */
+  private String position;</li>
+    </ul>
+
+    <p>/**</p>
+    <ul>
+      <li>教师所属教研室
+   */
+  private String office;
+}
+2.在controller层的方法的要校验的参数上添加@Valid注解</li>
+    </ul>
+  </li>
+</ul>
+
+<p>@PostMapping(“/action/register”)
+    public Result registerByForm(@Valid @RequestBody RegisterUser registerUser){
+        return userService.register(registerUser);
+    }
+3.编写全局异常捕捉类</p>
+
+<p>@Slf4j
+@ControllerAdvice
+public class GlobalExceptionHandler {</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private final static String EXCEPTION_MSG_KEY = "Exception message : ";
+
+@ResponseBody
+@ExceptionHandler(MethodArgumentNotValidException.class)
+public Result handleValidException(MethodArgumentNotValidException e){
+            //日志记录错误信息
+            log.error(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+            //将错误信息返回给前台
+            return Result.error(103, Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+} }
+</code></pre></div></div>
+
+<p>相关代码类</p>
+
+<p>Result类
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Result<T> {
+    private Integer code;
+    private String message;
+    private T data;</T></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public Result() {
+    this.code = 200;
+    this.message = "操作成功";
+}
+
+/**
+ * 用于错误处理
+ * @param code 错误码
+ * @param message 错误提示信息
+ */
+public Result(Integer code,String message){
+    this.code = code;
+    this.message = message;
+}
+
+public static  Result&lt;String&gt; error(Integer code,String msg){
+    return new Result&lt;&gt;(code,msg);
+} } 非法字段验证结果
+</code></pre></div></div>
+
+<p>相关注解</p>
+
+<p>@Null 限制只能为null
+@NotNull 限制必须不为null
+@AssertFalse 限制必须为false
+@AssertTrue 限制必须为true
+@DecimalMax(value) 限制必须为一个不大于指定值的数字
+@DecimalMin(value) 限制必须为一个不小于指定值的数字
+@Digits(integer,fraction) 限制必须为一个小数，且整数部分的位数不能超过integer，小数部分的位数不能超过fraction
+@Future 限制必须是一个将来的日期
+@Max(value) 限制必须为一个不大于指定值的数字
+@Min(value) 限制必须为一个不小于指定值的数字
+@Past 限制必须是一个过去的日期
+@Pattern(value) 限制必须符合指定的正则表达式
+@Size(max,min) 限制字符长度必须在min到max之间
+@Past 验证注解的元素值（日期类型）比当前时间早
+@NotEmpty 验证注解的元素值不为null且不为空（字符串长度不为0、集合大小不为0）
+@NotBlank 验证注解的元素值不为空（不为null、去除首位空格后长度为0），不同于@NotEmpty，@NotBlank只应用于字符串且在比较时会去除字符串的空格
+@Email 验证注解的元素值是Email，也可以通过正则表达式和flag指定自定义的email格式
+需要注意每个注解对应的数据类型</p>
+
+<p>作者：叫我胖虎大人
+链接：https://www.jianshu.com/p/c8686fa5ef63
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+:ET

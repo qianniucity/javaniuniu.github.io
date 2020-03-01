@@ -1,0 +1,220 @@
+I"R<h2 id="redirect重定向流程">redirect重定向流程</h2>
+<p>客户发送一个请求到服务器，服务器匹配servlet，这都和请求转发一样，servlet处理完之后调用了sendRedirect()这个方法，这个方法是response的方法，所以，当这个servlet处理完之后，看到response.senRedirect()方法，立即向客户端返回这个响应，响应行告诉客户端你必须要再发送一个请求，去访问test.jsp，紧接着客户端受到这个请求后，立刻发出一个新的请求，去请求test.jsp,这里两个请求互不干扰，相互独立，在前面request里面setAttribute()的任何东西，在后面的request里面都获得不了。可见，在sendRedirect()里面是两个请求，两个响应。</p>
+
+<h3 id="重定向场景">重定向场景</h3>
+<p>Spring MVC中做form表单功能提交时，防止用户客户端后退或者刷新时重复提交问题，需要在服务端进行重定向跳转,其中redirect是直接跳转到其他页面，有以下3种方法进行重定向。</p>
+
+<h3 id="1-responsesendredirect重定向跳转">1. response.sendRedirect重定向跳转</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/testredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span> <span class="nc">ModelAndView</span> <span class="nf">testredirect</span><span class="o">(</span><span class="nc">HttpServletResponse</span> <span class="n">response</span><span class="o">){</span>  
+    <span class="n">response</span><span class="o">.</span><span class="na">sendRedirect</span><span class="o">(</span><span class="s">"/index"</span><span class="o">);</span>
+    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="2-viewresolver直接跳转">2. ViewResolver直接跳转</h3>
+<p>不带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/testredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span>  <span class="nc">String</span> <span class="nf">testredirect</span><span class="o">(</span><span class="nc">HttpServletResponse</span> <span class="n">response</span><span class="o">){</span>  
+    <span class="k">return</span> <span class="s">"redirect:/index"</span><span class="o">;</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/testredirect"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nc">String</span> <span class="nf">testredirect</span><span class="o">(</span><span class="nc">Model</span> <span class="n">model</span><span class="o">,</span> <span class="nc">RedirectAttributes</span> <span class="n">attr</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">attr</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">"test"</span><span class="o">,</span> <span class="s">"51gjie"</span><span class="o">);</span><span class="c1">//跳转地址带上test参数</span>
+    <span class="n">attr</span><span class="o">.</span><span class="na">addFlashAttribute</span><span class="o">(</span><span class="s">"u2"</span><span class="o">,</span> <span class="s">"51gjie"</span><span class="o">);</span><span class="c1">//跳转地址不带上u2参数</span>
+	<span class="k">return</span> <span class="s">"redirect:/user/users"</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="3-modelandview重定向">3. ModelAndView重定向</h3>
+<p>不带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/restredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span>  <span class="nc">ModelAndView</span> <span class="nf">restredirect</span><span class="o">(</span><span class="nc">String</span> <span class="n">userName</span><span class="o">){</span>  
+    <span class="nc">ModelAndView</span>  <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ModelAndView</span><span class="o">(</span><span class="s">"redirect:/main/index"</span><span class="o">);</span>    
+    <span class="k">return</span> <span class="n">model</span><span class="o">;</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>带参数</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">"/toredirect"</span><span class="o">,</span><span class="n">method</span> <span class="o">=</span> <span class="o">{</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span> <span class="o">})</span>  
+<span class="kd">public</span>  <span class="nc">ModelAndView</span> <span class="nf">toredirect</span><span class="o">(</span><span class="nc">String</span> <span class="n">userName</span><span class="o">){</span>  
+    <span class="nc">ModelAndView</span>  <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ModelAndView</span><span class="o">(</span><span class="s">"redirect:/main/index"</span><span class="o">);</span>   
+    <span class="n">model</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">"userName"</span><span class="o">,</span> <span class="n">userName</span><span class="o">);</span>  <span class="c1">//把userName参数带入到controller的RedirectAttributes</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">;</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="其他return-形态">其他return 形态</h2>
+<h5 id="带参数跳转到adminnewsnewsdetail页面">带参数，跳转到admin/news/newsDetail页面</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/news/{id}"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">ModelAndView</span> <span class="nf">newsView</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">,</span><span class="nc">ModelAndView</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">News</span> <span class="n">news</span> <span class="o">=</span> <span class="n">newsService</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">addObject</span><span class="o">(</span><span class="s">"news"</span><span class="o">,</span> <span class="n">news</span><span class="o">);</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">setViewName</span><span class="o">(</span><span class="s">"admin/news/newsDetail"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">model</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="不带参数跳转到-adminadminreg-页面">不带参数，跳转到 admin/adminReg 页面</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/reg"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">reg</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"admin/adminReg"</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="返回指定数据到前端jsonresult">返回指定数据到前端，JsonResult</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/news/delete/{id}"</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="nc">JsonResult</span> <span class="nf">newsDelete</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">newsService</span><span class="o">.</span><span class="na">delNews</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+        <span class="nc">JsonResult</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JsonResult</span><span class="o">();</span>
+        <span class="n">result</span><span class="o">.</span><span class="na">setToSuccess</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="modelandview">ModelAndView</h2>
+
+<h3 id="概述">概述</h3>
+
+<p>控制器处理方法的返回值如果为 ModelAndView, 则其既包含视图信息，也包含模型数据信息。</p>
+
+<h4 id="添加模型数据">添加模型数据:</h4>
+<ul>
+  <li>MoelAndView addObject(String attributeName, Object attributeValue)</li>
+  <li>ModelAndView addAllObject(Map&lt; String, ?&gt; modelMap )</li>
+</ul>
+
+<p>####设置视图:</p>
+<ul>
+  <li>void setView(View view )</li>
+  <li>void setViewName(String viewName)</li>
+</ul>
+
+<h4 id="示例">示例</h4>
+
+<ul>
+  <li>register_form.jsp
+```html
+&lt;!DOCTYPE HTML&gt;</li>
+</ul>
+<html>
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <form action="model/register" method="post">
+        username: <input type="text" name="username" />
+        <br />
+        password: <input type="password" name="password" />
+        <br />
+        email: <input type="text" name="email" />
+        <br />
+        age: <input type="text" name="age" />
+        <br />
+        province: <input type="text" name="address.province" />
+        <br />
+        city: <input type="text" name="address.city" />
+        <br />
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">-</span> <span class="n">ModelController</span><span class="p">.</span><span class="n">java</span>
+<span class="p">```</span><span class="n">java</span>
+<span class="k">package</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch3</span><span class="p">;</span>
+
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">stereotype</span><span class="p">.</span><span class="n">Controller</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">bind</span><span class="p">.</span><span class="n">annotation</span><span class="p">.</span><span class="n">RequestMapping</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">servlet</span><span class="p">.</span><span class="n">ModelAndView</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch2</span><span class="p">.</span><span class="k">model</span><span class="p">.</span><span class="n">User</span><span class="p">;</span>
+
+<span class="p">@</span><span class="n">Controller</span>
+<span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"model"</span><span class="p">)</span>
+<span class="k">public</span> <span class="n">class</span> <span class="n">ModelController</span> <span class="p">{</span>
+
+    <span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"register"</span><span class="p">)</span>
+    <span class="k">public</span> <span class="n">ModelAndView</span> <span class="n">register</span><span class="p">(</span><span class="n">User</span> <span class="n">user</span><span class="p">){</span>
+
+        <span class="n">ModelAndView</span> <span class="n">mv</span> <span class="p">=</span> <span class="n">new</span> <span class="n">ModelAndView</span><span class="p">(</span><span class="s2">"home"</span><span class="p">);</span>
+        <span class="n">mv</span><span class="p">.</span><span class="n">addObject</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+
+        <span class="n">return</span> <span class="n">mv</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>home.jsp
+```html
+&lt;%@ page language=”java” contentType=”text/html; charset=UTF-8”
+  pageEncoding=”UTF-8”%&gt;
+&lt;!DOCTYPE html PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “http://www.w3.org/TR/html4/loose.dtd”&gt;</li>
+</ul>
+<html>
+<body>
+<h2>Welcome ${requestScope.user.username }!</h2>
+</body>
+</html>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+<span class="p">##</span> <span class="n">Map</span> <span class="err">及</span> <span class="k">Model</span>
+
+<span class="p">###</span> <span class="err">概述</span>    
+<span class="n">Spring</span> <span class="n">MVC</span> <span class="err">在内部使用了一个</span><span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">ui</span><span class="p">.</span><span class="k">Model</span> <span class="err">接口存储模型数据。</span>
+
+<span class="n">Spring</span> <span class="n">MVC</span> <span class="err">在调用方法前会创建一个–隐含的模型对象作为模型数据的存储容器。如果方法的入参为</span> <span class="n">Map</span> <span class="err">或</span> <span class="k">Model</span> <span class="err">类型，</span><span class="n">Spring</span> <span class="n">MVC</span> <span class="err">会隐含模型的引用传递给这些入参。在方法体内，开发者可以通过这个入参对象访问到模型中的所有数据，也可以向模型中添加新的属性数据。</span>
+
+<span class="p">####</span> <span class="err">示例</span>
+<span class="p">-</span> <span class="m">1</span><span class="err">、</span><span class="n">Map</span>
+<span class="p">```</span><span class="n">java</span>
+<span class="k">package</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch3</span><span class="p">;</span>
+
+<span class="n">import</span> <span class="n">java</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">Map</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">stereotype</span><span class="p">.</span><span class="n">Controller</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">org</span><span class="p">.</span><span class="n">springframework</span><span class="p">.</span><span class="n">web</span><span class="p">.</span><span class="n">bind</span><span class="p">.</span><span class="n">annotation</span><span class="p">.</span><span class="n">RequestMapping</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">com</span><span class="p">.</span><span class="n">ricky</span><span class="p">.</span><span class="n">codelab</span><span class="p">.</span><span class="n">webapp</span><span class="p">.</span><span class="n">ch2</span><span class="p">.</span><span class="k">model</span><span class="p">.</span><span class="n">User</span><span class="p">;</span>
+
+<span class="p">@</span><span class="n">Controller</span>
+<span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"model"</span><span class="p">)</span>
+<span class="k">public</span> <span class="n">class</span> <span class="n">ModelController</span> <span class="p">{</span>
+
+    <span class="p">@</span><span class="n">RequestMapping</span><span class="p">(</span><span class="s2">"register"</span><span class="p">)</span>
+    <span class="k">public</span> <span class="k">String</span> <span class="n">register</span><span class="p">(</span><span class="n">User</span> <span class="n">user</span><span class="p">,</span> <span class="n">Map</span><span class="p">&lt;</span><span class="k">String</span><span class="p">,</span> <span class="n">Object</span><span class="p">&gt;</span> <span class="n">map</span><span class="p">){</span>
+
+        <span class="n">map</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"user"</span><span class="p">,</span> <span class="n">user</span><span class="p">);</span>
+
+        <span class="n">return</span> <span class="s2">"home"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>2、Model
+```java
+package com.ricky.codelab.webapp.ch3;</li>
+</ul>
+
+<p>import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;</p>
+
+<p>import com.ricky.codelab.webapp.ch2.model.User;</p>
+
+<p>@Controller
+@RequestMapping(“model”)
+public class ModelController {</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@RequestMapping("register")
+public String register(User user, Model model){
+
+    model.addAttribute("user", user);
+
+    return "home";
+} } ```
+</code></pre></div></div>
+:ET
