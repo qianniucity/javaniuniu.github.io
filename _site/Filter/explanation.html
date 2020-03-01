@@ -361,44 +361,44 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <p><strong>init</strong></p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">init</span><span class="err">（</span><span class="nc">FilterConfig</span>  <span class="n">filterConfig</span><span class="err">）</span>
-   <span class="err">抛出</span><span class="nc">ServletException</span>
-<span class="n">Web</span><span class="err">容器调用以指示过滤器已投入使用。</span>
-<span class="err">实例化过滤器后，</span><span class="n">servlet</span><span class="err">容器仅调用一次</span><span class="n">init</span><span class="err">方法。在要求过滤器执行任何过滤工作之前，必须成功完成</span><span class="n">init</span><span class="err">方法。</span>
+   <span class="n">抛出ServletException</span>
+<span class="nc">Web容器调用以指示过滤器已投入使用</span><span class="err">。</span>
+<span class="n">实例化过滤器后</span><span class="err">，</span><span class="n">servlet容器仅调用一次init方法</span><span class="err">。</span><span class="n">在要求过滤器执行任何过滤工作之前</span><span class="err">，</span><span class="n">必须成功完成init方法</span><span class="err">。</span>
 
-<span class="err">如果使用</span><span class="n">init</span><span class="err">方法，则</span><span class="n">Web</span><span class="err">容器无法将过滤器投入使用</span>
+<span class="n">如果使用init方法</span><span class="err">，</span><span class="n">则Web容器无法将过滤器投入使用</span>
 
-<span class="err">抛出</span><span class="nc">ServletException</span>
-<span class="err">在</span><span class="n">Web</span><span class="err">容器定义的时间段内不返回</span>
-<span class="err">抛出：</span>
+<span class="n">抛出ServletException</span>
+<span class="n">在Web容器定义的时间段内不返回</span>
+<span class="n">抛出</span><span class="err">：</span>
 <span class="nc">ServletException</span><span class="o">|</span>
 </code></pre></div></div>
 
 <p><strong>doFilter</strong></p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">doFilter</span><span class="err">（</span><span class="nc">ServletRequest</span>  <span class="err">请求，</span>
-               <span class="nc">ServletResponse</span>  <span class="err">响应，</span>
-               <span class="nc">FilterChain</span>  <span class="err">链）</span>
-       <span class="err">抛出</span><span class="nc">IOException</span><span class="err">，</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">doFilter</span><span class="err">（</span><span class="nc">ServletRequest</span>  <span class="n">请求</span><span class="err">，</span>
+               <span class="nc">ServletResponse</span>  <span class="n">响应</span><span class="err">，</span>
+               <span class="nc">FilterChain</span>  <span class="n">链</span><span class="err">）</span>
+       <span class="n">抛出IOException</span><span class="err">，</span>
                <span class="nc">ServletException</span>
-<span class="n">doFilter</span><span class="err">每当客户端对链末端的资源提出请求时，每次通过链传递请求</span><span class="o">/</span><span class="err">响应对时，容器都会调用</span><span class="nc">Filter</span> <span class="err">的方法。传入此方法的</span><span class="n">FilterChain</span><span class="err">允许</span><span class="n">Filter</span><span class="err">将请求和响应传递给链中的下一个实体。</span>
-<span class="err">此方法的典型实现将遵循以下模式：</span>
+<span class="n">doFilter每当客户端对链末端的资源提出请求时</span><span class="err">，</span><span class="n">每次通过链传递请求</span><span class="o">/</span><span class="n">响应对时</span><span class="err">，</span><span class="n">容器都会调用Filter</span> <span class="n">的方法</span><span class="err">。</span><span class="n">传入此方法的FilterChain允许Filter将请求和响应传递给链中的下一个实体</span><span class="err">。</span>
+<span class="n">此方法的典型实现将遵循以下模式</span><span class="err">：</span>
 
-<span class="err">检查请求</span>
-<span class="err">（可选）使用自定义实现包装请求对象，以过滤内容或标头以进行输入过滤</span>
-<span class="err">（可选）使用自定义实现包装响应对象，以过滤内容或标头以进行输出过滤</span>
-<span class="err">或者调用中使用</span><span class="n">FilterChain</span><span class="err">对象链中的下一个实体（</span><span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">()</span><span class="err">），</span>
-<span class="err">或不将请求</span><span class="o">/</span><span class="err">响应对传递给过滤器链中的下一个实体以阻止请求处理</span>
-<span class="err">调用过滤器链中的下一个实体后，直接在响应上设置标头。</span>
-<span class="err">抛出：</span>
+<span class="n">检查请求</span>
+<span class="err">（</span><span class="n">可选</span><span class="err">）</span><span class="n">使用自定义实现包装请求对象</span><span class="err">，</span><span class="n">以过滤内容或标头以进行输入过滤</span>
+<span class="err">（</span><span class="n">可选</span><span class="err">）</span><span class="n">使用自定义实现包装响应对象</span><span class="err">，</span><span class="n">以过滤内容或标头以进行输出过滤</span>
+<span class="n">或者调用中使用FilterChain对象链中的下一个实体</span><span class="err">（</span><span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">()</span><span class="err">），</span>
+<span class="n">或不将请求</span><span class="o">/</span><span class="n">响应对传递给过滤器链中的下一个实体以阻止请求处理</span>
+<span class="n">调用过滤器链中的下一个实体后</span><span class="err">，</span><span class="n">直接在响应上设置标头</span><span class="err">。</span>
+<span class="n">抛出</span><span class="err">：</span>
 <span class="nc">IOException</span>
 <span class="nc">ServletException</span>
 </code></pre></div></div>
 <p><strong>destroy</strong></p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">destroy</span><span class="err">（）</span>
-<span class="err">由</span><span class="n">Web</span><span class="err">容器调用，以指示过滤器已停止使用。</span>
-<span class="err">仅在过滤器的</span><span class="n">doFilter</span><span class="err">方法中的所有线程都已退出或经过超时时间后，才调用此方法。</span><span class="n">Web</span><span class="err">容器调用此方法后，将不再在该过滤器实例上再次调用</span><span class="n">doFilter</span><span class="err">方法。</span>
+<span class="n">由Web容器调用</span><span class="err">，</span><span class="n">以指示过滤器已停止使用</span><span class="err">。</span>
+<span class="n">仅在过滤器的doFilter方法中的所有线程都已退出或经过超时时间后</span><span class="err">，</span><span class="n">才调用此方法</span><span class="err">。</span><span class="nc">Web容器调用此方法后</span><span class="err">，</span><span class="n">将不再在该过滤器实例上再次调用doFilter方法</span><span class="err">。</span>
 
-<span class="err">此方法使筛选器有机会清理所持有的所有资源（例如，内存，文件句柄，线程），并确保任何持久状态都与筛选器在内存中的当前状态同步。</span>
+<span class="n">此方法使筛选器有机会清理所持有的所有资源</span><span class="err">（</span><span class="n">例如</span><span class="err">，</span><span class="n">内存</span><span class="err">，</span><span class="n">文件句柄</span><span class="err">，</span><span class="n">线程</span><span class="err">），</span><span class="n">并确保任何持久状态都与筛选器在内存中的当前状态同步</span><span class="err">。</span>
 </code></pre></div></div>
 </div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-19T00:00:00+08:00"><!-- start custom article footer snippet -->
 

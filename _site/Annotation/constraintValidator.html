@@ -422,19 +422,19 @@ MFrGw6cAAAAASUVORK5CYII=" />
         <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="na">matches</span><span class="o">();</span>
     <span class="o">}</span>
 <span class="o">}</span>
-<span class="mi">1</span><span class="o">.</span> <span class="n">LoginVO</span><span class="err">类为一个普通的实体类，其中的</span><span class="n">mobile</span><span class="err">属性添加了自定义注解。</span>
-<span class="mi">2</span><span class="o">.</span> <span class="n">IsMobile</span><span class="err">类为自定义的字段注解，未了解过注解的同学请自行百度，在此不做基础介绍。该自定义注解类中用到了四种元注解，最后一个</span><span class="nd">@Constraint</span><span class="err">指定了校验类，也就是接下来的</span><span class="n">IsMobileValidator</span><span class="err">类。值得一提的是除了自定义的</span><span class="n">message</span><span class="err">、</span><span class="n">require</span><span class="err">属性外，下面的</span><span class="n">groups</span><span class="err">和</span><span class="n">payload</span><span class="err">也是必须添加的。</span>
-<span class="mi">3</span><span class="o">.</span> <span class="n">ValidatorUtils</span><span class="err">为一个工具类，简单校验了是否为手机号，没有了解过的可以看我之前的一篇博文：</span><span class="nl">https:</span><span class="c1">//blog.csdn.net/qq_38439885/article/details/80230753</span>
-<span class="mi">4</span><span class="o">.</span> <span class="n">IsMobileValidator</span><span class="err">为自定义注解的校验类。</span>
-<span class="err">校验类需要实现</span><span class="n">ConstraintValidator</span><span class="err">接口。</span>
-<span class="err">接口使用了泛型，需要指定两个参数，第一个自定义注解类，第二个为需要校验的数据类型。</span>
-<span class="err">实现接口后要</span><span class="n">override</span><span class="err">两个方法，分别为</span><span class="n">initialize</span><span class="err">方法和</span><span class="n">isValid</span><span class="err">方法。其中</span><span class="n">initialize</span><span class="err">为初始化方法，可以在里面做一些初始化操作，</span><span class="n">isValid</span><span class="err">方法就是我们最终需要的校验方法了。可以在该方法中实现具体的校验步骤。本示例中进行了简单的手机号校验。</span>
+<span class="mi">1</span><span class="o">.</span> <span class="nc">LoginVO类为一个普通的实体类</span><span class="err">，</span><span class="n">其中的mobile属性添加了自定义注解</span><span class="err">。</span>
+<span class="mi">2</span><span class="o">.</span> <span class="nc">IsMobile类为自定义的字段注解</span><span class="err">，</span><span class="n">未了解过注解的同学请自行百度</span><span class="err">，</span><span class="n">在此不做基础介绍</span><span class="err">。</span><span class="n">该自定义注解类中用到了四种元注解</span><span class="err">，</span><span class="n">最后一个</span><span class="nd">@Constraint指定了校验类</span><span class="err">，</span><span class="n">也就是接下来的IsMobileValidator类</span><span class="err">。</span><span class="n">值得一提的是除了自定义的message</span><span class="err">、</span><span class="n">require属性外</span><span class="err">，</span><span class="n">下面的groups和payload也是必须添加的</span><span class="err">。</span>
+<span class="mi">3</span><span class="o">.</span> <span class="nc">ValidatorUtils为一个工具类</span><span class="err">，</span><span class="n">简单校验了是否为手机号</span><span class="err">，</span><span class="n">没有了解过的可以看我之前的一篇博文</span><span class="err">：</span><span class="nl">https:</span><span class="c1">//blog.csdn.net/qq_38439885/article/details/80230753</span>
+<span class="mi">4</span><span class="o">.</span> <span class="nc">IsMobileValidator为自定义注解的校验类</span><span class="err">。</span>
+<span class="n">校验类需要实现ConstraintValidator接口</span><span class="err">。</span>
+<span class="n">接口使用了泛型</span><span class="err">，</span><span class="n">需要指定两个参数</span><span class="err">，</span><span class="n">第一个自定义注解类</span><span class="err">，</span><span class="n">第二个为需要校验的数据类型</span><span class="err">。</span>
+<span class="n">实现接口后要override两个方法</span><span class="err">，</span><span class="n">分别为initialize方法和isValid方法</span><span class="err">。</span><span class="n">其中initialize为初始化方法</span><span class="err">，</span><span class="n">可以在里面做一些初始化操作</span><span class="err">，</span><span class="n">isValid方法就是我们最终需要的校验方法了</span><span class="err">。</span><span class="n">可以在该方法中实现具体的校验步骤</span><span class="err">。</span><span class="n">本示例中进行了简单的手机号校验</span><span class="err">。</span>
 
-<span class="err">完成这几部分之后，一个简单的自定义校验注解就完成啦，不要忘记在使用的时候加上</span><span class="nd">@Valid</span><span class="err">注解开启</span><span class="n">valid</span><span class="err">校验。</span>
+<span class="n">完成这几部分之后</span><span class="err">，</span><span class="n">一个简单的自定义校验注解就完成啦</span><span class="err">，</span><span class="n">不要忘记在使用的时候加上</span><span class="nd">@Valid注解开启valid校验</span><span class="err">。</span>
 
-<span class="err">那么如何获取在注解中定义的</span><span class="n">message</span><span class="err">信息呢？</span>
+<span class="n">那么如何获取在注解中定义的message信息呢</span><span class="err">？</span>
 
-<span class="err">在</span><span class="n">valid</span><span class="err">校验中，如果校验不通过，会产生</span><span class="n">BindException</span><span class="err">异常，捕捉到异常后可以获取到</span><span class="n">defaultMessage</span><span class="err">也就是自定义注解中定义的内容，具体实现如下：</span>
+<span class="n">在valid校验中</span><span class="err">，</span><span class="n">如果校验不通过</span><span class="err">，</span><span class="n">会产生BindException异常</span><span class="err">，</span><span class="n">捕捉到异常后可以获取到defaultMessage也就是自定义注解中定义的内容</span><span class="err">，</span><span class="n">具体实现如下</span><span class="err">：</span>
 <span class="err">```</span><span class="n">java</span>
     <span class="nc">BindException</span> <span class="n">ex</span> <span class="o">=</span> <span class="o">(</span><span class="nc">BindException</span><span class="o">)</span><span class="n">e</span><span class="o">;</span>
     <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ObjectError</span><span class="o">&gt;</span> <span class="n">errors</span> <span class="o">=</span> <span class="n">ex</span><span class="o">.</span><span class="na">getAllErrors</span><span class="o">();</span>
