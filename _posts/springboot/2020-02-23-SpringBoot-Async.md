@@ -6,7 +6,7 @@ sidebar:
   nav: docs-en-Spring
 ---
 源码地址
-[springboot-async](https://github.com/minplemon/springboot-buckets/tree/master/springboot-async)
+[springboot-async](https://github.com/javaniuniu/springboot-buckets/tree/master/springboot-async)
 
 
 ## 异步线程池-三种方式

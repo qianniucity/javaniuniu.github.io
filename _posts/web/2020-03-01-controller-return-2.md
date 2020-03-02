@@ -7,7 +7,7 @@ show_date: true
 sidebar:
   nav: docs-en-web
 ---
-[GitHub源码](https://github.com/minplemon/shops/tree/master/src/main/java/com/javaniuniu/shops/controller)
+[GitHub源码](https://github.com/javaniuniu/shops/tree/master/src/main/java/com/javaniuniu/shops/controller)
 
 ### 直接返回所需要的数据
 ```js

@@ -312,7 +312,7 @@ public class CustomHandlerInterceptor implements HandlerInterceptor {
 ```
 
 参考代码
-- [WebMvcConfigurer](https://github.com/minplemon/sc-whorl/blob/master/sc-whorl-web/src/main/java/sc/whorl/system/config/GlobalConfig.java)
+- [WebMvcConfigurer](https://github.com/javaniuniu/sc-whorl/blob/master/sc-whorl-web/src/main/java/sc/whorl/system/config/GlobalConfig.java)
 
 参考链接
 - [Springboot2(5)WebMvcConfigurer讲解](https://blog.csdn.net/cowbin2012/article/details/85194353)

@@ -7,7 +7,7 @@ show_date: true
 sidebar:
   nav: docs-en-code
 ---
-[Github源码](https://github.com/minplemon/springboot-buckets/springboot-aop-transactional)
+[Github源码](https://github.com/javaniuniu/springboot-buckets/springboot-aop-transactional)
 
 ```java
 package com.javaniuniu.scshorlsweb.system.commons.preventresubmit;

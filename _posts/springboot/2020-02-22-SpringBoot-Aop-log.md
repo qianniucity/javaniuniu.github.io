@@ -7,7 +7,7 @@ sidebar:
 ---
 
 源码地址
-[springboot-aop](https://github.com/minplemon/springboot-buckets/tree/master/springboot-aop)
+[springboot-aop](https://github.com/javaniuniu/springboot-buckets/tree/master/springboot-aop)
 
 一句话简介知识点
 Spring AOP面向切面编程，可以用来配置 **事务**、**做日志**、**权限验证**、**在用户请求时做一些处理**等等   
