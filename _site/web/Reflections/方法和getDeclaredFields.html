@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Springboot 使用BindingResult校验参数 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>JAVA反射中的getFields()方法和getDeclaredFields ()方法的区别 - JAVA 牛牛</title>
 
-<meta name="description" content="配合@Valid一起使用1、创建一个参数对象import java.util.List;import javax.validation.constraints.Min;import javax.validation.constraints.Size;import org.hibernate.validator.c...">
-<link rel="canonical" href="http://localhost:4000/web/Controller/BindingResult"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="关于获取类的字段有两种方式：getFields()和getDeclaredFields()。我们先来看看这两者的区别吧：getFields()：获得某个类的所有的公共（public）的字段，包括父类中的字段。getDeclaredFields()：获得某个类的所有声明的字段，即包括public、private和p...">
+<link rel="canonical" href="http://localhost:4000/web/Reflections/方法和getDeclaredFields"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">过滤器</li><li class="toc-h2"><a href="/Filter/explanation">Filter类方法详解</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/explanation">FilterRegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/example">FilterRegistrationBean示例</a></li><li class="toc-h2"><a href="/Filter/RegistrationBean/explanation">RegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/CharacterEncodingFilter/explanation">CharacterEncodingFilter类方法说明</a></li><li class="toc-h2"><a href="/Filter/OncePerRequestFilter/explanation">OncePerRequestFilter类方法说明</a></li><li class="toc-h1">解析器</li><li class="toc-h2"><a href="/Handler/DefaultServletHandlerConfigurer/explanation">DefaultServletHandlerConfigurer解析器说明</a></li><li class="toc-h2"><a href="/Handler/HandlerMethodArgumentResolver/explanation">HandlerMethodArgumentResolver类说明</a></li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">拦截器</li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">反射</li><li class="toc-h2"><a href="/web/Reflections/util">反射工具类(Reflections)</a></li><li class="toc-h2"><a href="/web/Reflections/explanation">Java反射说明</a></li><li class="toc-h2"><a href="/web/Reflections/方法和getDeclaredFields">JAVA反射中的getFields()方法和getDeclaredFields ()方法的区别</a></li><li class="toc-h1">控制类</li><li class="toc-h2"><a href="/web/Controller/retrurn">控制类中，return的几种形态</a></li><li class="toc-h2 active"><a href="/web/Controller/BindingResult">Springboot 使用BindingResult校验参数</a></li><li class="toc-h2"><a href="/web/Annotation/Valid">Valid介绍及相关注解</a></li><li class="toc-h2"><a href="/web/Controller/retrurn/2">Controller 数据处理示例(Model ModelAndView redirect)</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">过滤器</li><li class="toc-h2"><a href="/Filter/explanation">Filter类方法详解</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/explanation">FilterRegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/FilterRegistrationBean/example">FilterRegistrationBean示例</a></li><li class="toc-h2"><a href="/Filter/RegistrationBean/explanation">RegistrationBean类说明</a></li><li class="toc-h2"><a href="/Filter/CharacterEncodingFilter/explanation">CharacterEncodingFilter类方法说明</a></li><li class="toc-h2"><a href="/Filter/OncePerRequestFilter/explanation">OncePerRequestFilter类方法说明</a></li><li class="toc-h1">解析器</li><li class="toc-h2"><a href="/Handler/DefaultServletHandlerConfigurer/explanation">DefaultServletHandlerConfigurer解析器说明</a></li><li class="toc-h2"><a href="/Handler/HandlerMethodArgumentResolver/explanation">HandlerMethodArgumentResolver类说明</a></li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">拦截器</li><li class="toc-h2"><a href="/Handler/HandlerInterceptorAdapter/explanation">HandlerInterceptorAdapter解析器说明</a></li><li class="toc-h1">反射</li><li class="toc-h2"><a href="/web/Reflections/util">反射工具类(Reflections)</a></li><li class="toc-h2"><a href="/web/Reflections/explanation">Java反射说明</a></li><li class="toc-h2 active"><a href="/web/Reflections/方法和getDeclaredFields">JAVA反射中的getFields()方法和getDeclaredFields ()方法的区别</a></li><li class="toc-h1">控制类</li><li class="toc-h2"><a href="/web/Controller/retrurn">控制类中，return的几种形态</a></li><li class="toc-h2"><a href="/web/Controller/BindingResult">Springboot 使用BindingResult校验参数</a></li><li class="toc-h2"><a href="/web/Annotation/Valid">Valid介绍及相关注解</a></li><li class="toc-h2"><a href="/web/Controller/retrurn/2">Controller 数据处理示例(Model ModelAndView redirect)</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -334,147 +334,170 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Springboot 使用BindingResult校验参数</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>JAVA反射中的getFields()方法和getDeclaredFields ()方法的区别</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/web/2020-03-01-BindingResult.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Springboot 使用BindingResult校验参数"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/web/Reflections/2020-03-03-getDeclaredFields.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="JAVA反射中的getFields()方法和getDeclaredFields ()方法的区别"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=CodeMark">CodeMark</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 01, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-01T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeMark"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%8F%8D%E5%B0%84%E7%B1%BB">反射类</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 03, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-03T00:00:00+08:00">
+    <meta itemprop="keywords" content="CodeMark,反射类,工具类"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p><a href="/Annotation/Valid">配合@Valid一起使用</a></p>
+<div class="article__content" itemprop="articleBody"><p>关于获取类的字段有两种方式：getFields()和getDeclaredFields()。我们先来看看这两者的区别吧：</p>
 
-<p>1、创建一个参数对象</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<p>getFields()：获得某个类的所有的公共（public）的字段，包括父类中的字段。
+getDeclaredFields()：获得某个类的所有声明的字段，即包括public、private和proteced，但是不包括父类的申明字段。</p>
 
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Min</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.validation.constraints.Size</span><span class="o">;</span>
+<p>同样类似的还有getConstructors()和getDeclaredConstructors()、getMethods()和getDeclaredMethods()，这两者分别表示获取某个类的方法、构造函数。</p>
 
-<span class="kn">import</span> <span class="nn">org.hibernate.validator.constraints.Email</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.hibernate.validator.constraints.NotBlank</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.hibernate.validator.constraints.NotEmpty</span><span class="o">;</span>
+<p>具体编码如下：</p>
 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Parameter</span> <span class="o">{</span>
+<p>我们先创建一个POJO</p>
 
-	<span class="nd">@NotEmpty</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"姓名不能为空"</span><span class="o">)</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
+	<span class="kd">private</span> <span class="kt">long</span> <span class="n">id</span><span class="o">;</span>
 	<span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
 
-	<span class="nd">@Min</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="mi">18</span><span class="o">,</span> <span class="n">message</span> <span class="o">=</span> <span class="s">"年龄必须大于18岁"</span><span class="o">)</span>
-	<span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="kt">long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+	<span class="o">}</span>
 
-	<span class="nd">@NotEmpty</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"hobbies不能为空"</span><span class="o">)</span>
-	<span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">hobbies</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+	<span class="o">}</span>
 
-	<span class="nd">@NotBlank</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"账号不能为空"</span><span class="o">)</span>
-	<span class="kd">private</span> <span class="nc">String</span> <span class="n">account</span><span class="o">;</span>
-
-	<span class="nd">@Size</span><span class="o">(</span><span class="n">min</span><span class="o">=</span><span class="mi">5</span><span class="o">,</span><span class="n">max</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span><span class="n">message</span><span class="o">=</span><span class="s">"密码的长度应该在5和10之间"</span><span class="o">)</span>
-	<span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-
-	<span class="nd">@Email</span><span class="o">(</span><span class="n">message</span><span class="o">=</span><span class="s">"邮箱格式错误"</span><span class="o">)</span>
-	<span class="kd">private</span> <span class="nc">String</span> <span class="n">email</span><span class="o">;</span>
+	<span class="kd">public</span> <span class="kt">long</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+	<span class="o">}</span>
 
 	<span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
 		<span class="k">return</span> <span class="n">name</span><span class="o">;</span>
 	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+<p>再来获取此类中的所有字段
+Field[] fields = User.class.getDeclaredFields();
+获取字段的名称</p>
+
+<p>String fieldName = field.getName();</p>
+
+<p>获取字段的修饰符</p>
+
+<p>int fieldValue = field.getModifiers();//如：private、static、final等</p>
+
+<p>与某个具体的修饰符进行比较</p>
+
+<p>Modifier.isStatic(fieldValue)//看此修饰符是否为静态(static)</p>
+
+<p>获取字段的声明类型</p>
+
+<p>field.getType()；//返回的是一个class</p>
+
+<p>与某个类型进行比较</p>
+
+<p>field.getType() == Timestamp.class</p>
+
+<p>获取指定对象中此字段的值</p>
+
+<p>Object fieldObject= field.get(user);//user可以看做是从数据库中查找出来的对象</p>
+
+<p>如果POJO类中有一个集合类型的字段，我们该如何获取字段中中的值呢？</p>
+
+<p>首先创建一个POJO类</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Bean</span> <span class="o">{</span>
+
+	<span class="kd">private</span> <span class="nc">String</span><span class="o">[]</span> <span class="n">love</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="nc">String</span><span class="o">[]</span> <span class="nf">getLove</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">love</span><span class="o">;</span>
 	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">getHobbies</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">hobbies</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setHobbies</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">hobbies</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">hobbies</span> <span class="o">=</span> <span class="n">hobbies</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAccount</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">account</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAccount</span><span class="o">(</span><span class="nc">String</span> <span class="n">account</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">account</span> <span class="o">=</span> <span class="n">account</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="nc">String</span> <span class="nf">getPassword</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">password</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setPassword</span><span class="o">(</span><span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="nc">String</span> <span class="nf">getEmail</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">email</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEmail</span><span class="o">(</span><span class="nc">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">email</span> <span class="o">=</span> <span class="n">email</span><span class="o">;</span>
+
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setLove</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">love</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">love</span> <span class="o">=</span> <span class="n">love</span><span class="o">;</span>
 	<span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div></div>
-<p>2、controller控制层写参数接收的入口，需要注意的是@Valid 和 BindingResult 是一 一对应的，如果有多个@Valid，那么每个@Valid后面都需要添加BindingResult用于接收bean中的校验信息</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/test"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="n">produces</span> <span class="o">=</span> <span class="nc">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON_VALUE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="nd">@ResponseBody</span> <span class="nc">ResponseEntity</span><span class="o">&lt;</span><span class="nc">Pesponsibles</span><span class="o">&gt;</span> <span class="nf">testBindingResult</span><span class="o">(</span><span class="nd">@Valid</span> <span class="nd">@RequestBody</span> <span class="nc">Parameter</span> <span class="n">parameter</span><span class="o">,</span><span class="nc">BindingResult</span> <span class="n">bindingResult</span><span class="o">)</span>
-			<span class="o">{</span>
-		<span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"test start"</span><span class="o">);</span>
-		<span class="nc">Pesponsibles</span> <span class="n">pesponsibles</span><span class="o">=</span><span class="k">new</span> <span class="nc">Pesponsibles</span><span class="o">();</span>
-		<span class="k">if</span><span class="o">(</span><span class="n">bindingResult</span><span class="o">.</span><span class="na">hasErrors</span><span class="o">()){</span>
-			 <span class="nc">List</span><span class="o">&lt;</span><span class="nc">FieldError</span><span class="o">&gt;</span> <span class="n">fieldErrors</span> <span class="o">=</span> <span class="n">bindingResult</span><span class="o">.</span><span class="na">getFieldErrors</span><span class="o">();</span>
-			 <span class="n">fieldErrors</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">fieldError</span> <span class="o">-&gt;</span> <span class="o">{</span>
-                   <span class="c1">//日志打印不符合校验的字段名和错误提示</span>
-                   <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"error field is : {} ,message is : {}"</span><span class="o">,</span> <span class="n">fieldError</span><span class="o">.</span><span class="na">getField</span><span class="o">(),</span> <span class="n">fieldError</span><span class="o">.</span><span class="na">getDefaultMessage</span><span class="o">());</span>
-                 <span class="o">});</span>
-			 <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">fieldErrors</span><span class="o">.</span><span class="na">size</span><span class="o">();</span><span class="n">i</span><span class="o">++){</span>
-                    <span class="c1">//控制台打印不符合校验的字段名和错误提示</span>
-			<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"error field is :"</span><span class="o">+</span><span class="n">fieldErrors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getField</span><span class="o">()+</span><span class="s">",message is :"</span><span class="o">+</span><span class="n">fieldErrors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getDefaultMessage</span><span class="o">());</span>
-			 <span class="o">}</span>
-			<span class="c1">// pesponsibles.setError_msg(fieldErrors);</span>
-			<span class="k">return</span> <span class="k">new</span> <span class="nc">ResponseEntity</span><span class="o">&lt;&gt;(</span><span class="n">pesponsibles</span><span class="o">,</span> <span class="nc">HttpStatus</span><span class="o">.</span><span class="na">BAD_REQUEST</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>创建一个操作类</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Admin</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="k">try</span> <span class="o">{</span>
+
+			<span class="c1">// 赋值</span>
+			<span class="nc">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="nc">Bean</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">newInstance</span><span class="o">();</span>
+			<span class="nc">Class</span> <span class="n">paramClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">"[Ljava.lang.String;"</span><span class="o">);</span>
+			<span class="nc">String</span><span class="o">[]</span> <span class="n">param</span> <span class="o">=</span> <span class="o">{</span> <span class="s">"吃"</span><span class="o">,</span> <span class="s">"喝"</span><span class="o">,</span> <span class="s">"玩"</span><span class="o">,</span> <span class="s">"乐"</span> <span class="o">};</span>
+			<span class="nc">Method</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">Bean</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">"setLove"</span><span class="o">,</span> <span class="n">paramClass</span><span class="o">);</span>
+			<span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="o">(</span><span class="nc">Object</span><span class="o">)</span> <span class="n">param</span><span class="o">);</span>
+
+			<span class="c1">// 取值</span>
+			<span class="nc">Bean</span> <span class="n">bean</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Bean</span><span class="o">)</span> <span class="n">obj</span><span class="o">;</span>
+			<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">bean</span><span class="o">.</span><span class="na">getLove</span><span class="o">().</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+				<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">bean</span><span class="o">.</span><span class="na">getLove</span><span class="o">()[</span><span class="n">i</span><span class="o">]);</span>
+			<span class="o">}</span>
+			<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
 		<span class="o">}</span>
-		<span class="k">return</span> <span class="k">new</span> <span class="nc">ResponseEntity</span><span class="o">&lt;&gt;(</span><span class="n">pesponsibles</span><span class="o">,</span> <span class="nc">HttpStatus</span><span class="o">.</span><span class="na">OK</span><span class="o">);</span>
+	<span class="o">}</span>
 <span class="o">}</span>
 
 
 </code></pre></div></div>
 
-<p>3、常用校验注解</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Null 只能是null
-@NotNull 不能为null 注意用在基本类型上无效，基本类型有默认初始值
-@AssertFalse 必须为false
-@AssertTrue 必须是true
+<p>得到的结果为：
+吃
+喝
+玩
+乐</p>
 
-字符串/数组/集合检查：(字符串本身就是个数组)
-@Pattern(regexp="reg") 验证字符串满足正则
-@Size(max, min) 验证字符串、数组、集合长度范围
-@NotEmpty 验证字符串不为空或者null
-@NotBlank 验证字符串不为null或者trim()后不为空
+<p>关于field还有一种情况我们需要注意，就是当字段修饰符为private时，我们需要加上：</p>
 
-数值检查：同时能验证一个字符串是否是满足限制的数字的字符串
-@Max 规定值得上限int
-@Min 规定值得下限
-@DecimalMax("10.8") 以传入字符串构建一个BigDecimal，规定值要小于这个值 
-@DecimalMin 可以用来限制浮点数大小
-@Digits(int1, int2) 限制一个小数，整数精度小于int1；小数部分精度小于int2
-@Digits 无参数，验证字符串是否合法
-@Range(min=long1,max=long2) 检查数字是否在范围之间
-这些都包括边界值
+<p>field.setAccessible(true);</p>
 
-日期检查：Date/Calendar
-@Post 限定一个日期，日期必须是过去的日期
-@Future 限定一个日期，日期必须是未来的日期
+<p>判断方法是：if (!field.isAccessible())</p>
 
-其他验证：
-@Vaild 递归验证，用于对象、数组和集合，会对对象的元素、数组的元素进行一一校验
-@Email 用于验证一个字符串是否是一个合法的右键地址，空字符串或null算验证通过
-@URL(protocol=,host=,port=,regexp=,flags=) 用于校验一个字符串是否是合法UR
+<p>更详细的解释请点击</p>
 
-</code></pre></div></div>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-03-01T00:00:00+08:00"><!-- start custom article footer snippet -->
+<p>接下来补充一下在Java中使用正则表达式</p>
+
+<p>先创建一个正则表达式对象</p>
+
+<p>Pattern pattern = Pattern.compile(“[A-Z][a-z]* “);</p>
+
+<p>指定为字符串的正则表达式必须首先被编译为此类的实例</p>
+
+<p>Matcher matcher = pattern.matcher(fieldName);</p>
+
+<p>尝试查找与该模式匹配的输入序列的下一个子序列</p>
+
+<p>boolean isMatcher = matcher.find();</p>
+
+<p>返回由以前匹配操作所匹配的输入子序列</p>
+
+<p>String str = matcher.group();</p>
+
+<p>实现非终端添加和替换步骤,以’_ ‘连接各个字段</p>
+
+<p>matcher.appendReplacement(sb, str + “_ “);</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-03-03T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -485,7 +508,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/web/Controller/retrurn">控制类中，return的几种形态</a></div><div class="next"><span>NEXT</span><a href="/web/Annotation/Valid">Valid介绍及相关注解</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/web/Reflections/explanation">Java反射说明</a></div><div class="next"><span>NEXT</span><a href="/web/Controller/retrurn">控制类中，return的几种形态</a></div></div></div>
 
 </div>
 

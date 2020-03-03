@@ -1,11 +1,11 @@
 ---
 title: 反射工具类(Reflections)
-permalink: /java-util-code/Reflections
+permalink: /web/Reflections/util
 tags: CodeMark 反射类 工具类
 pageview: true
 show_date: true
 sidebar:
-  nav: docs-en-code
+  nav: docs-en-web
 ---
 ##### 一句话简介   
 JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；这种动态获取信息以及动态调用对象方法的功能称为java语言的反射机制
@@ -335,3 +335,4 @@ public class Reflections
 **参考链接**  
 - [Java高级特性——反射](https://www.jianshu.com/p/9be58ee20dee)
 - [【java反射】反射是啥？是干啥用的？](https://blog.csdn.net/qsbbl/article/details/85801571)
+- [JAVA反射中的getFields()方法和getDeclaredFields ()方法的区别](https://www.cnblogs.com/JackZed/p/6888668.html)
