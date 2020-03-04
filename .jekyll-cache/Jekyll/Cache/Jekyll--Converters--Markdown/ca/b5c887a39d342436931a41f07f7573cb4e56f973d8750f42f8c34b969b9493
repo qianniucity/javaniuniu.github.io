@@ -1,0 +1,225 @@
+I"= <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//</span>
+<span class="c1">// Source code recreated from a .class file by IntelliJ IDEA</span>
+<span class="c1">// (powered by Fernflower decompiler)</span>
+<span class="c1">//</span>
+
+<span class="kn">package</span> <span class="nn">org.springframework.http</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.charset.Charset</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collection</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Collections</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Comparator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.Assert</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.InvalidMimeTypeException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.MimeType</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.MimeTypeUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.StringUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.MimeType.SpecificityComparator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.util.comparator.CompoundComparator</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MediaType</span> <span class="kd">extends</span> <span class="nc">MimeType</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">2069937152339670231L</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">ALL</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"*/*"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">ALL_VALUE</span> <span class="o">=</span> <span class="s">"*/*"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">APPLICATION_ATOM_XML</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"application/atom+xml"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">APPLICATION_ATOM_XML_VALUE</span> <span class="o">=</span> <span class="s">"application/atom+xml"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">APPLICATION_FORM_URLENCODED</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"application/x-www-form-urlencoded"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">APPLICATION_FORM_URLENCODED_VALUE</span> <span class="o">=</span> <span class="s">"application/x-www-form-urlencoded"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">APPLICATION_JSON</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"application/json"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">APPLICATION_JSON_VALUE</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">APPLICATION_OCTET_STREAM</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"application/octet-stream"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">APPLICATION_OCTET_STREAM_VALUE</span> <span class="o">=</span> <span class="s">"application/octet-stream"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">APPLICATION_XHTML_XML</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"application/xhtml+xml"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">APPLICATION_XHTML_XML_VALUE</span> <span class="o">=</span> <span class="s">"application/xhtml+xml"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">APPLICATION_XML</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"application/xml"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">APPLICATION_XML_VALUE</span> <span class="o">=</span> <span class="s">"application/xml"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">IMAGE_GIF</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"image/gif"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">IMAGE_GIF_VALUE</span> <span class="o">=</span> <span class="s">"image/gif"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">IMAGE_JPEG</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"image/jpeg"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">IMAGE_JPEG_VALUE</span> <span class="o">=</span> <span class="s">"image/jpeg"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">IMAGE_PNG</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"image/png"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">IMAGE_PNG_VALUE</span> <span class="o">=</span> <span class="s">"image/png"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">MULTIPART_FORM_DATA</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"multipart/form-data"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">MULTIPART_FORM_DATA_VALUE</span> <span class="o">=</span> <span class="s">"multipart/form-data"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">TEXT_HTML</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"text/html"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">TEXT_HTML_VALUE</span> <span class="o">=</span> <span class="s">"text/html"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">TEXT_PLAIN</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"text/plain"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">TEXT_PLAIN_VALUE</span> <span class="o">=</span> <span class="s">"text/plain"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">MediaType</span> <span class="no">TEXT_XML</span> <span class="o">=</span> <span class="n">valueOf</span><span class="o">(</span><span class="s">"text/xml"</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">TEXT_XML_VALUE</span> <span class="o">=</span> <span class="s">"text/xml"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">PARAM_QUALITY_FACTOR</span> <span class="o">=</span> <span class="s">"q"</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="no">QUALITY_VALUE_COMPARATOR</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="nc">MediaType</span> <span class="n">mediaType1</span><span class="o">,</span> <span class="nc">MediaType</span> <span class="n">mediaType2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">double</span> <span class="n">quality1</span> <span class="o">=</span> <span class="n">mediaType1</span><span class="o">.</span><span class="na">getQualityValue</span><span class="o">();</span>
+            <span class="kt">double</span> <span class="n">quality2</span> <span class="o">=</span> <span class="n">mediaType2</span><span class="o">.</span><span class="na">getQualityValue</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">qualityComparison</span> <span class="o">=</span> <span class="nc">Double</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">quality2</span><span class="o">,</span> <span class="n">quality1</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">qualityComparison</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">qualityComparison</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">mediaType1</span><span class="o">.</span><span class="na">isWildcardType</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mediaType2</span><span class="o">.</span><span class="na">isWildcardType</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">mediaType2</span><span class="o">.</span><span class="na">isWildcardType</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mediaType1</span><span class="o">.</span><span class="na">isWildcardType</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">mediaType1</span><span class="o">.</span><span class="na">getType</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">mediaType2</span><span class="o">.</span><span class="na">getType</span><span class="o">()))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">mediaType1</span><span class="o">.</span><span class="na">isWildcardSubtype</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mediaType2</span><span class="o">.</span><span class="na">isWildcardSubtype</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">mediaType2</span><span class="o">.</span><span class="na">isWildcardSubtype</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mediaType1</span><span class="o">.</span><span class="na">isWildcardSubtype</span><span class="o">())</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="n">mediaType1</span><span class="o">.</span><span class="na">getSubtype</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">mediaType2</span><span class="o">.</span><span class="na">getSubtype</span><span class="o">()))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">paramsSize1</span> <span class="o">=</span> <span class="n">mediaType1</span><span class="o">.</span><span class="na">getParameters</span><span class="o">().</span><span class="na">size</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">paramsSize2</span> <span class="o">=</span> <span class="n">mediaType2</span><span class="o">.</span><span class="na">getParameters</span><span class="o">().</span><span class="na">size</span><span class="o">();</span>
+                <span class="k">return</span> <span class="n">paramsSize2</span> <span class="o">&lt;</span> <span class="n">paramsSize1</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="o">(</span><span class="n">paramsSize2</span> <span class="o">==</span> <span class="n">paramsSize1</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Comparator</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="no">SPECIFICITY_COMPARATOR</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SpecificityComparator</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="kd">protected</span> <span class="kt">int</span> <span class="nf">compareParameters</span><span class="o">(</span><span class="nc">MediaType</span> <span class="n">mediaType1</span><span class="o">,</span> <span class="nc">MediaType</span> <span class="n">mediaType2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">double</span> <span class="n">quality1</span> <span class="o">=</span> <span class="n">mediaType1</span><span class="o">.</span><span class="na">getQualityValue</span><span class="o">();</span>
+            <span class="kt">double</span> <span class="n">quality2</span> <span class="o">=</span> <span class="n">mediaType2</span><span class="o">.</span><span class="na">getQualityValue</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">qualityComparison</span> <span class="o">=</span> <span class="nc">Double</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">quality2</span><span class="o">,</span> <span class="n">quality1</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">qualityComparison</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">qualityComparison</span> <span class="o">:</span> <span class="kd">super</span><span class="o">.</span><span class="na">compareParameters</span><span class="o">(</span><span class="n">mediaType1</span><span class="o">,</span> <span class="n">mediaType2</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="kd">public</span> <span class="nf">MediaType</span><span class="o">(</span><span class="nc">String</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MediaType</span><span class="o">(</span><span class="nc">String</span> <span class="n">type</span><span class="o">,</span> <span class="nc">String</span> <span class="n">subtype</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">subtype</span><span class="o">,</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">emptyMap</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MediaType</span><span class="o">(</span><span class="nc">String</span> <span class="n">type</span><span class="o">,</span> <span class="nc">String</span> <span class="n">subtype</span><span class="o">,</span> <span class="nc">Charset</span> <span class="n">charset</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">subtype</span><span class="o">,</span> <span class="n">charset</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MediaType</span><span class="o">(</span><span class="nc">String</span> <span class="n">type</span><span class="o">,</span> <span class="nc">String</span> <span class="n">subtype</span><span class="o">,</span> <span class="kt">double</span> <span class="n">qualityValue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">subtype</span><span class="o">,</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">singletonMap</span><span class="o">(</span><span class="s">"q"</span><span class="o">,</span> <span class="nc">Double</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">qualityValue</span><span class="o">)));</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MediaType</span><span class="o">(</span><span class="nc">MediaType</span> <span class="n">other</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">other</span><span class="o">.</span><span class="na">getType</span><span class="o">(),</span> <span class="n">other</span><span class="o">.</span><span class="na">getSubtype</span><span class="o">(),</span> <span class="n">parameters</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nf">MediaType</span><span class="o">(</span><span class="nc">String</span> <span class="n">type</span><span class="o">,</span> <span class="nc">String</span> <span class="n">subtype</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">parameters</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">subtype</span><span class="o">,</span> <span class="n">parameters</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">checkParameters</span><span class="o">(</span><span class="nc">String</span> <span class="n">attribute</span><span class="o">,</span> <span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">checkParameters</span><span class="o">(</span><span class="n">attribute</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="s">"q"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">attribute</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">unquote</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+            <span class="kt">double</span> <span class="n">d</span> <span class="o">=</span> <span class="nc">Double</span><span class="o">.</span><span class="na">parseDouble</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+            <span class="nc">Assert</span><span class="o">.</span><span class="na">isTrue</span><span class="o">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="no">D</span> <span class="o">&amp;&amp;</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="no">D</span><span class="o">,</span> <span class="s">"Invalid quality value \""</span> <span class="o">+</span> <span class="n">value</span> <span class="o">+</span> <span class="s">"\": should be between 0.0 and 1.0"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getQualityValue</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">qualityFactory</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"q"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">qualityFactory</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">?</span> <span class="nc">Double</span><span class="o">.</span><span class="na">parseDouble</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">unquote</span><span class="o">(</span><span class="n">qualityFactory</span><span class="o">))</span> <span class="o">:</span> <span class="mf">1.0</span><span class="no">D</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">includes</span><span class="o">(</span><span class="nc">MediaType</span> <span class="n">other</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">includes</span><span class="o">(</span><span class="n">other</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isCompatibleWith</span><span class="o">(</span><span class="nc">MediaType</span> <span class="n">other</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">isCompatibleWith</span><span class="o">(</span><span class="n">other</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">MediaType</span> <span class="nf">copyQualityValue</span><span class="o">(</span><span class="nc">MediaType</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="n">mediaType</span><span class="o">.</span><span class="na">getParameters</span><span class="o">().</span><span class="na">containsKey</span><span class="o">(</span><span class="s">"q"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedHashMap</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getParameters</span><span class="o">());</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"q"</span><span class="o">,</span> <span class="n">mediaType</span><span class="o">.</span><span class="na">getParameters</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="s">"q"</span><span class="o">));</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">MediaType</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">params</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">MediaType</span> <span class="nf">removeQualityValue</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="na">getParameters</span><span class="o">().</span><span class="na">containsKey</span><span class="o">(</span><span class="s">"q"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">params</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedHashMap</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getParameters</span><span class="o">());</span>
+            <span class="n">params</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="s">"q"</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">MediaType</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">params</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">MediaType</span> <span class="nf">valueOf</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">parseMediaType</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">MediaType</span> <span class="nf">parseMediaType</span><span class="o">(</span><span class="nc">String</span> <span class="n">mediaType</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">MimeType</span> <span class="n">type</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">type</span> <span class="o">=</span> <span class="nc">MimeTypeUtils</span><span class="o">.</span><span class="na">parseMimeType</span><span class="o">(</span><span class="n">mediaType</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InvalidMimeTypeException</span> <span class="n">var4</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidMediaTypeException</span><span class="o">(</span><span class="n">var4</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">MediaType</span><span class="o">(</span><span class="n">type</span><span class="o">.</span><span class="na">getType</span><span class="o">(),</span> <span class="n">type</span><span class="o">.</span><span class="na">getSubtype</span><span class="o">(),</span> <span class="n">type</span><span class="o">.</span><span class="na">getParameters</span><span class="o">());</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IllegalArgumentException</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidMediaTypeException</span><span class="o">(</span><span class="n">mediaType</span><span class="o">,</span> <span class="n">var3</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="nf">parseMediaTypes</span><span class="o">(</span><span class="nc">String</span> <span class="n">mediaTypes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">hasLength</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">emptyList</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="nc">String</span><span class="o">[]</span> <span class="n">tokens</span> <span class="o">=</span> <span class="n">mediaTypes</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">",\\s*"</span><span class="o">);</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">(</span><span class="n">tokens</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+            <span class="nc">String</span><span class="o">[]</span> <span class="n">var3</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">var4</span> <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">var5</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">var5</span> <span class="o">&lt;</span> <span class="n">var4</span><span class="o">;</span> <span class="o">++</span><span class="n">var5</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">var3</span><span class="o">[</span><span class="n">var5</span><span class="o">];</span>
+                <span class="n">result</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">parseMediaType</span><span class="o">(</span><span class="n">token</span><span class="o">));</span>
+            <span class="o">}</span>
+
+            <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">(</span><span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">mediaTypes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">MimeTypeUtils</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortBySpecificity</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">mediaTypes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">,</span> <span class="s">"'mediaTypes' must not be null"</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mediaTypes</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">,</span> <span class="no">SPECIFICITY_COMPARATOR</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortByQualityValue</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">mediaTypes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">,</span> <span class="s">"'mediaTypes' must not be null"</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mediaTypes</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">,</span> <span class="no">QUALITY_VALUE_COMPARATOR</span><span class="o">);</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">sortBySpecificityAndQuality</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">MediaType</span><span class="o">&gt;</span> <span class="n">mediaTypes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Assert</span><span class="o">.</span><span class="na">notNull</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">,</span> <span class="s">"'mediaTypes' must not be null"</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">mediaTypes</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">mediaTypes</span><span class="o">,</span> <span class="k">new</span> <span class="nc">CompoundComparator</span><span class="o">(</span><span class="k">new</span> <span class="nc">Comparator</span><span class="o">[]{</span><span class="no">SPECIFICITY_COMPARATOR</span><span class="o">,</span> <span class="no">QUALITY_VALUE_COMPARATOR</span><span class="o">}));</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+:ET
