@@ -7,6 +7,9 @@ show_date: true
 sidebar:
   nav: docs-en-code
 ---
+
+![图片pic1]({{"/assets/images/Annotation/25200814-475cf2f3a8d24e0bb3b4c442a4b44734.jpg"}})
+
 #### 一、注解(annotations)列表
 
 @SpringBootApplication：包含了@ComponentScan、@Configuration和@EnableAutoConfiguration注解。其中@ComponentScan让spring Boot扫描到Configuration类并把它加入到程序上下文。
