@@ -119,3 +119,5 @@ public class EntityObjectConverter {
 
 参考链接
 - 对象之间属性数据拷贝 [Bean转换工具DozerBeanMapper](https://blog.csdn.net/weixin_41835612/article/details/83775374)
+- [各类对象属性拷贝工具性能测试对比（BeanCopier、BeanUtils、DozerBeanMapper、PropertyUtils）](https://blog.csdn.net/u012534326/article/details/102611483?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)
+- [对象拷贝类PropertyUtils，BeanUtils，BeanCopier的技术沉淀](https://blog.csdn.net/zlb824/article/details/7577385?depth_1-utm_source=distribute.pc_relevant.none-task&utm_source=distribute.pc_relevant.none-task)

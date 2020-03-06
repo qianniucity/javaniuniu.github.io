@@ -1,0 +1,115 @@
+I"�<h4 id="dozer是什么">dozer是什么？</h4>
+
+<p>在开发过程中，常常会涉及到对象之间的转换，bean到dto到vo等等，dozer便是很好的一个对象转换的组件。它可以将一个对象递归拷贝到另外一个对象。既支持简单的对象映射，也支持复杂的对象映射。</p>
+
+<h4 id="对象映射">对象映射</h4>
+
+<p>dozer支持两种映射方式，调用api的简单映射方式和使用xml的映射方式。api调用的方式约束我们定义的 <code class="highlighter-rouge">两个bean中的成员变量名要一样</code>，方便自动映射，至于类型可以不一样，比如类A的成员变量 Integer num 和类B的 String num 是可以直接映射的。xml的方式是通过编写xml文件来定义映射规则。</p>
+
+<h4 id="dozer使用">dozer使用</h4>
+
+<p>使用dozer时，只需要加上dozer的依赖即可，下面以maven为例（版本号可以根据最新的做修改）：</p>
+<pre><code class="language-xmlns">&lt;dependency&gt;
+    &lt;groupId&gt;com.github.dozermapper&lt;/groupId&gt;
+    &lt;artifactId&gt;dozer-core&lt;/artifactId&gt;
+    &lt;version&gt;6.2.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<h4 id="实例">实例</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * @Title: EntityObjectConverter.java
+ * @Package com.joyce.util
+ * @Copyright: Copyright (c) 2013
+ *
+ * @author Comsys-LZP
+ * @date 2013-11-4 上午09:55:14
+ * @version V2.0
+ */</span>
+<span class="kn">package</span> <span class="nn">com.joyce.util</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">net.sf.dozer.util.mapping.DozerBeanMapper</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @Description: 两个对象间，相同属性名之间进行转换
+ *
+ * @ClassName: EntityObjectConverter
+ * @Copyright: Copyright (c) 2013
+ *
+ * @author Comsys-LZP
+ * @date 2013-11-4 上午09:55:14
+ * @version V2.0
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EntityObjectConverter</span> <span class="o">{</span>
+	<span class="cm">/*
+	 * 实例化对象
+	 */</span>
+	<span class="kd">private</span> <span class="kd">static</span> <span class="nc">DozerBeanMapper</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DozerBeanMapper</span><span class="o">();</span>
+
+	<span class="cm">/**
+	 * @Description: 将目标对象转换为指定对象，相同属性名进行属性值复制
+	 *
+	 * @Title: EntityObjectConverter.java
+	 * @Copyright: Copyright (c) 2013
+	 *
+	 * @author Comsys-LZP
+	 * @date 2013-11-4 下午02:32:34
+	 * @version V2.0
+	 */</span>
+	<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="no">T</span> <span class="nf">getObject</span><span class="o">(</span><span class="nc">Object</span> <span class="n">source</span><span class="o">,</span><span class="nc">Class</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">cls</span><span class="o">){</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">source</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="o">(</span><span class="no">T</span><span class="o">)</span> <span class="n">map</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">cls</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * @Description: 两个对象之间相同属性名的属性值复制
+	 *
+	 * @Title: EntityObjectConverter.java
+	 * @Copyright: Copyright (c) 2013
+	 *
+	 * @author Comsys-LZP
+	 * @date 2013-11-4 下午02:33:56
+	 * @version V2.0
+	 */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setObject</span><span class="o">(</span><span class="nc">Object</span> <span class="n">source</span><span class="o">,</span><span class="nc">Object</span> <span class="n">target</span><span class="o">){</span>
+		<span class="n">map</span><span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">source</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
+	<span class="o">}</span>
+
+	<span class="cm">/**
+	 * @Description: 对象集合中对象相同属性名的属性值复制
+	 *
+	 * @Title: EntityObjectConverter.java
+	 *
+	 * @Copyright: Copyright (c) 2013
+	 * @author Comsys-LZP
+	 * @date 2013-11-4 下午02:34:26
+	 * @version V2.0
+	 */</span>
+	<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"unchecked"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">List</span> <span class="nf">getList</span><span class="o">(</span><span class="nc">List</span> <span class="n">source</span><span class="o">,</span><span class="nc">Class</span> <span class="n">cls</span><span class="o">){</span>
+		<span class="nc">List</span> <span class="n">listTarget</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">source</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+			<span class="k">for</span> <span class="o">(</span><span class="nc">Object</span> <span class="n">object</span> <span class="o">:</span> <span class="n">source</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nc">Object</span> <span class="n">objTarget</span> <span class="o">=</span> <span class="nc">EntityObjectConverter</span><span class="o">.</span><span class="na">getObject</span><span class="o">(</span><span class="n">object</span><span class="o">,</span> <span class="n">cls</span><span class="o">);</span>
+				<span class="n">listTarget</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">objTarget</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">listTarget</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>参考链接</p>
+<ul>
+  <li>对象之间属性数据拷贝 <a href="https://blog.csdn.net/weixin_41835612/article/details/83775374">Bean转换工具DozerBeanMapper</a></li>
+  <li><a href="https://blog.csdn.net/u012534326/article/details/102611483?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task">各类对象属性拷贝工具性能测试对比（BeanCopier、BeanUtils、DozerBeanMapper、PropertyUtils）</a></li>
+  <li><a href="https://blog.csdn.net/zlb824/article/details/7577385?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task">对象拷贝类PropertyUtils，BeanUtils，BeanCopier的技术沉淀</a></li>
+</ul>
+:ET

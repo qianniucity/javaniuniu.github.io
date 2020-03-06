@@ -36,3 +36,8 @@ sidebar:
 24. [spring boot实现AOP，Filter，Interceptor以及3个之间的区别和使用场景](https://blog.csdn.net/sinat_18114869/article/details/80181648)
 25. spring filter，过滤器使用，一般做乱码处理、权限控制等操作，可以预先在过滤中加载
 26. [Docker安装Zookeeper并进行操作](https://blog.csdn.net/qq_26641781/article/details/80886831)
+27. commons-lang3的方法，开发中常用到里面的StringUtils判断字符串的方法
+28. dependencyManagement 用于版本管理，在其子类中也要引用jar 才能被注入
+29. 自写get set 方法 扩展更强，可对方法再编辑
+30. [@SuppressWarnings注解](https://www.cnblogs.com/liaojie970/p/9009199.html)
+31. [如何解决idea Language level默认为5.0问题](https://www.jianshu.com/p/862b5394f7fb)
