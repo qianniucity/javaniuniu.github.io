@@ -41,3 +41,7 @@ sidebar:
 29. 自写get set 方法 扩展更强，可对方法再编辑
 30. [@SuppressWarnings注解](https://www.cnblogs.com/liaojie970/p/9009199.html)
 31. [如何解决idea Language level默认为5.0问题](https://www.jianshu.com/p/862b5394f7fb)
+32. [mybatis 中针对指定区间内的时间的查询](https://blog.csdn.net/qq_38061755/article/details/79826532)
+33. [MySQL中count(1)、count(*) 与 count(列名) 的执行区别](https://blog.csdn.net/weixin_45794138/article/details/102904543)
+34. [MYSQL FIND_IN_SET函数](https://www.jianshu.com/p/b2c1ba0ba34f)
+35. 事务使用的地方很少，其使用场景主要包括，1.设计到金融或金钱，2.多表操作 [什么时候使用mysql事务](https://blog.csdn.net/lmy_1/article/details/54381565)
