@@ -47,3 +47,4 @@ sidebar:
 35. 事务使用的地方很少，其使用场景主要包括，1.设计到金融或金钱，2.多表操作 [什么时候使用mysql事务](https://blog.csdn.net/lmy_1/article/details/54381565)
 36. [Spring 之 BeanFactory 核心：getBean 方法的流程——前言](https://blog.csdn.net/ajianyingxiaoqinghan/article/details/81989735)
 37. [shiro完整学习文档](https://www.iteye.com/category/352932)
+38. [详解SpringBoot中异步请求和异步调用](https://www.jb51.net/article/159256.htm)
