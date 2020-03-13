@@ -1,0 +1,24 @@
+I"}<h4 id="github"><a href="https://github.com/youzhibing">github</a></h4>
+
+<h2 id="前情回顾">前情回顾</h2>
+
+<p>shiro的session创建与session的查询、更新、过期、删除中，shiro对session的操作基本都讲到了，但还缺一个session共享没有讲解；session共享的原理其实在自定义session管理一文已经讲过了，本文不讲原理，只看看shiro的session共享的实现。</p>
+
+<h3 id="为何需要session共享">为何需要session共享</h3>
+
+<p>　　　　如果是单机应用，那么谈不上session共享，session放哪都无所谓，不在乎放到默认的servlet容器中，还是抽出来放到单独的地方；</p>
+
+<p>　　　　也就是说session共享是针对集群（或分布式、或分布式集群）的；如果不做session共享，仍然采用默认的方式（session存放到默认的servlet容器），当我们的应用是以集群的方式发布的时候，同个用户的请求会被分发到不同的集群节点（分发依赖具体的负载均衡规则），那么每个处理同个用户请求的节点都会重新生成该用户的session，这些session之间是毫无关联的。那么同个用户的请求会被当成多个不同用户的请求，这肯定是不行的。</p>
+
+<h3 id="如何实现session共享">如何实现session共享</h3>
+
+<p>　　　　实现方式其实有很多，甚至可以不做session共享，具体有哪些，大家自行去查资料。本文提供一种方式：redis实现session共享，就是将session从servlet容器抽出来，放到redis中存储，所有集群节点都从redis中对session进行操作。</p>
+
+<h2 id="sessiondao">SessionDAO</h2>
+
+<p>　　SessionDAO其实是用于session持久化的，但里面有缓存部分，具体细节我们往下看</p>
+
+<p>　　shiro已有SessionDAO的实现如下</p>
+
+<p><img src="assets/images/shiro/juake9scgl.jpg" alt="图片pic1" /></p>
+:ET

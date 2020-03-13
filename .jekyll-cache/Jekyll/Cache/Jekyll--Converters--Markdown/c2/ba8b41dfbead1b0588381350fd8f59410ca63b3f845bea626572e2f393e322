@@ -1,0 +1,43 @@
+I"n
+<p>这个类提供的很多方法对于我们的平时开发都很有帮助，并不仅仅是shiro内部的应用。</p>
+
+<ol>
+  <li>
+    <p>getPathWithinApplication(HttpServletRequest)，取得不包含应用路径的路径。</p>
+  </li>
+  <li>
+    <p>normalize(String path)将路径修改之后正常显示，去掉或者是替换比如”/”“/.”“/../”“\”等。</p>
+  </li>
+  <li>
+    <p>issueRedirect(ServletRequest, ServletResponse, String)，重定向到指定的url。</p>
+  </li>
+  <li>
+    <p>saveRequest(ServletRequest request)，将访问的request保存起来，但是注意仅仅保存了url，method和queryString（这个值在post方式提交时是空，所以如果是post时没用，不要保存，因为没法保存参数）</p>
+  </li>
+  <li>
+    <p>redirectToSavedRequest重定向到以前保存的request的路径，但是注意这个方法只对get方式的有效，post方式无效。如果是get的方法会将参数传过去。他是用一个SavedRequest类封装的，里面有三个属性：</p>
+  </li>
+</ol>
+
+<p>private String method;</p>
+
+<p>private String queryString;</p>
+
+<p>private String requestURI;</p>
+
+<p>举个例子：xxx?a=b</p>
+
+<p>其中queryString记录了a=b，</p>
+
+<p>requestURI表示xxx，</p>
+
+<p>在这个类的getRequestUrl可以发现是将queryString和requestURI组合起来了，源码如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">String</span> <span class="nf">getRequestUrl</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">StringBuilder</span> <span class="n">requestUrl</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">(</span><span class="n">getRequestURI</span><span class="o">());</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">getQueryString</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">requestUrl</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"?"</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">getQueryString</span><span class="o">());</span><span class="c1">//将所有的参数都带上，但是只对get方法有效。</span>
+    <span class="o">}</span>
+    <span class="n">returnrequestUrl</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+:ET
