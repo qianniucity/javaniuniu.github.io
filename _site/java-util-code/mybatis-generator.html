@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Autowired的使用:推荐对构造函数进行注释 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>利用mybatis-generator自动生成代码 - JAVA 牛牛</title>
 
-<meta name="description" content="在编写代码的时候，使用@Autowired注解是，发现IDE报的一个警告，如下：Spring Team recommends “Always use constructor based dependency injection in your beans. Always use assertions for ma...">
-<link rel="canonical" href="http://localhost:4000/java-code-design/autowired"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="1、mybatis-generator 概述MyBatis官方提供了逆向工程 mybatis-generator，可以针对数据库表自动生成MyBatis执行所需要的代码（如Mapper.java、Mapper.xml、POJO）。mybatis-generator 有三种用法：命令行、eclipse插件、mave...">
+<link rel="canonical" href="http://localhost:4000/java-util-code/mybatis-generator"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/java-code-design/java">java代码设计</a></li><li class="toc-h2"><a href="/java-code-design/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/java-code-design/token/jwt">token设计至jwt</a></li><li class="toc-h2"><a href="/java-code-design/xml/application">application.properties文件常用配置</a></li><li class="toc-h2"><a href="/java-util-code/Reflections/explanation">Java反射说明</a></li><li class="toc-h2"><a href="/java-util-code/Reflections">反射工具类(Reflections)</a></li><li class="toc-h2"><a href="/java-util-code/TimeUnit">时间类(TimeUnit)</a></li><li class="toc-h2"><a href="/java-util-code/LocalDateTime">LocalDateTime在spring boot中的格式化配置</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/java-util-code/date">date工具</a></li><li class="toc-h2"><a href="/java-util-code/FastJson">FastJson工具包</a></li><li class="toc-h2"><a href="/java-util-code/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/java-util-code/ResultUtil">对返回给前端的数据进行格式封装处理-MVC</a></li><li class="toc-h2"><a href="/java-util-code/MsgResponseBody">对返回给前端的数据进行格式封装处理-SpringBoot</a></li><li class="toc-h2"><a href="/java-util-code/Validate">三款数据校验的类(Validate)</a></li><li class="toc-h2"><a href="/java-util-code/MultipartResolver/explanation">处理文件上传(MultipartResolver)</a></li><li class="toc-h2"><a href="/java-util-code/Docket/explanation">Docket(Swagger2中应用)</a></li><li class="toc-h2"><a href="/java-util-code/logback">logback配置</a></li><li class="toc-h2"><a href="/java-util-code/Hamcrest">单元测试的框架Hamcrest</a></li><li class="toc-h2"><a href="/java-util-code/HttpHeaders">HttpHeaders源码</a></li><li class="toc-h2"><a href="/java-util-code/MediaType">MediaType源码</a></li><li class="toc-h2"><a href="/java-util-code/HttpStatus">HttpStatus源码</a></li><li class="toc-h2"><a href="/java-util-code/compare">if中的判断条件</a></li><li class="toc-h2"><a href="/java-util-code/mybatis-generator">利用mybatis-generator自动生成代码</a></li><li class="toc-h1">注解类</li><li class="toc-h2"><a href="/Annotation/Annotation">SpringBoot注解大全</a></li><li class="toc-h2"><a href="/Annotation/Annotation/2">SpringBoot注解大全(2)</a></li><li class="toc-h2"><a href="/Annotation/Lombok">Lombok 实战</a></li><li class="toc-h2"><a href="/Annotation/myself">自定义注释</a></li><li class="toc-h2"><a href="/Annotation/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h2"><a href="/Annotation/ComponentAndBean">注解中@Component和@Bean的区别</a></li><li class="toc-h2"><a href="/Annotation/Annotation/Controller">Controller和@RestController的区别？</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/java-code-design/java">java代码设计</a></li><li class="toc-h2"><a href="/java-code-design/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/java-code-design/token/jwt">token设计至jwt</a></li><li class="toc-h2"><a href="/java-code-design/xml/application">application.properties文件常用配置</a></li><li class="toc-h2"><a href="/java-util-code/Reflections/explanation">Java反射说明</a></li><li class="toc-h2"><a href="/java-util-code/Reflections">反射工具类(Reflections)</a></li><li class="toc-h2"><a href="/java-util-code/TimeUnit">时间类(TimeUnit)</a></li><li class="toc-h2"><a href="/java-util-code/LocalDateTime">LocalDateTime在spring boot中的格式化配置</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/java-util-code/date">date工具</a></li><li class="toc-h2"><a href="/java-util-code/FastJson">FastJson工具包</a></li><li class="toc-h2"><a href="/java-util-code/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/java-util-code/ResultUtil">对返回给前端的数据进行格式封装处理-MVC</a></li><li class="toc-h2"><a href="/java-util-code/MsgResponseBody">对返回给前端的数据进行格式封装处理-SpringBoot</a></li><li class="toc-h2"><a href="/java-util-code/Validate">三款数据校验的类(Validate)</a></li><li class="toc-h2"><a href="/java-util-code/MultipartResolver/explanation">处理文件上传(MultipartResolver)</a></li><li class="toc-h2"><a href="/java-util-code/Docket/explanation">Docket(Swagger2中应用)</a></li><li class="toc-h2"><a href="/java-util-code/logback">logback配置</a></li><li class="toc-h2"><a href="/java-util-code/Hamcrest">单元测试的框架Hamcrest</a></li><li class="toc-h2"><a href="/java-util-code/HttpHeaders">HttpHeaders源码</a></li><li class="toc-h2"><a href="/java-util-code/MediaType">MediaType源码</a></li><li class="toc-h2"><a href="/java-util-code/HttpStatus">HttpStatus源码</a></li><li class="toc-h2"><a href="/java-util-code/compare">if中的判断条件</a></li><li class="toc-h2 active"><a href="/java-util-code/mybatis-generator">利用mybatis-generator自动生成代码</a></li><li class="toc-h1">注解类</li><li class="toc-h2"><a href="/Annotation/Annotation">SpringBoot注解大全</a></li><li class="toc-h2"><a href="/Annotation/Annotation/2">SpringBoot注解大全(2)</a></li><li class="toc-h2"><a href="/Annotation/Lombok">Lombok 实战</a></li><li class="toc-h2"><a href="/Annotation/myself">自定义注释</a></li><li class="toc-h2"><a href="/Annotation/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h2"><a href="/Annotation/ComponentAndBean">注解中@Component和@Bean的区别</a></li><li class="toc-h2"><a href="/Annotation/Annotation/Controller">Controller和@RestController的区别？</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -334,93 +334,175 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Autowired的使用:推荐对构造函数进行注释</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>利用mybatis-generator自动生成代码</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/java-code-design/2020-02-14-autowired.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Autowired的使用:推荐对构造函数进行注释"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/java-util-code/2020-03-18-mybatis-generator.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="利用mybatis-generator自动生成代码"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeDesign">CodeDesign</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 14, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="Spring注解,CodeDesign"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 18, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-18T00:00:00+08:00">
+    <meta itemprop="keywords" content="工具类"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>在编写代码的时候，使用@Autowired注解是，发现IDE报的一个警告，如下：</p>
+<div class="article__content" itemprop="articleBody"><h3 id="1mybatis-generator-概述">1、mybatis-generator 概述</h3>
+<p>MyBatis官方提供了逆向工程 mybatis-generator，可以针对数据库表自动生成MyBatis执行所需要的代码（如Mapper.java、Mapper.xml、POJO）。mybatis-generator 有三种用法：命令行、eclipse插件、maven插件。而maven插件的方式比较通用，本文也将概述maven插件的使用方式。</p>
 
-<p class="error">Spring Team recommends “Always use constructor based dependency injection in your beans. Always use assertions for mandatory dependencies”.</p>
-<p>翻译：Spring建议”总是在您的bean中使用构造函数建立依赖注入。总是使用断言强制依赖”。</p>
+<h3 id="2pomxml中配置plugin">2、pom.xml中配置plugin</h3>
+<p>（官方文档：<a href="http://www.mybatis.org/generator/running/runningWithMaven.html">Running MyBatis Generator With Maven</a>）</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.mybatis.generator<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>mybatis-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>1.3.7<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;configurationFile&gt;</span>
+                        mybatis-generator/generatorConfig.xml
+                    <span class="nt">&lt;/configurationFile&gt;</span>
+                    <span class="nt">&lt;overwrite&gt;</span>true<span class="nt">&lt;/overwrite&gt;</span>
+                    <span class="nt">&lt;verbose&gt;</span>true<span class="nt">&lt;/verbose&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+                <span class="nt">&lt;dependencies&gt;</span>
+                    <span class="nt">&lt;dependency&gt;</span>
+                        <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+                        <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+                        <span class="nt">&lt;version&gt;</span>5.1.47<span class="nt">&lt;/version&gt;</span>
+                    <span class="nt">&lt;/dependency&gt;</span>
+                    <span class="nt">&lt;dependency&gt;</span>
+                        <span class="nt">&lt;groupId&gt;</span>com.itfsw<span class="nt">&lt;/groupId&gt;</span>
+                        <span class="nt">&lt;artifactId&gt;</span>mybatis-generator-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                        <span class="nt">&lt;version&gt;</span>1.3.8<span class="nt">&lt;/version&gt;</span>
+                    <span class="nt">&lt;/dependency&gt;</span>
+                <span class="nt">&lt;/dependencies&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+</code></pre></div></div>
+<h3 id="3generatorconfigxml配置文件">3、generatorConfig.xml配置文件</h3>
+<p>（官方文档：<a href="http://www.mybatis.org/generator/configreference/xmlconfig.html">MyBatis GeneratorXML Configuration File Reference</a>）</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"&gt;</span>
 
-<p>这段代码警告原来的写法是：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
-<span class="kd">private</span> <span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">;</span>
+<span class="nt">&lt;generatorConfiguration&gt;</span>
+
+    <span class="nt">&lt;context</span> <span class="na">id=</span><span class="s">"mysqlgenerator"</span> <span class="na">targetRuntime=</span><span class="s">"MyBatis3"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"autoDelimitKeywords"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!--可以使用``包括字段名，避免字段名与sql保留字冲突报错--&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"beginningDelimiter"</span> <span class="na">value=</span><span class="s">"`"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"endingDelimiter"</span> <span class="na">value=</span><span class="s">"`"</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 自动生成toString方法 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"org.mybatis.generator.plugins.ToStringPlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 自动生成equals方法和hashcode方法 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"org.mybatis.generator.plugins.EqualsHashCodePlugin"</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 非官方插件 https://github.com/itfsw/mybatis-generator-plugin --&gt;</span>
+        <span class="c">&lt;!-- 查询单条数据插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 查询结果选择性返回插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- Example Criteria 增强插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 数据Model属性对应Column获取插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 逻辑删除插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.LogicalDeletePlugin"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- 这里配置的是全局逻辑删除列和逻辑删除值，当然在table中配置的值会覆盖该全局配置 --&gt;</span>
+            <span class="c">&lt;!-- 逻辑删除列类型只能为数字、字符串或者布尔类型 --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"logicalDeleteColumn"</span> <span class="na">value=</span><span class="s">"deleted"</span><span class="nt">/&gt;</span>
+            <span class="c">&lt;!-- 逻辑删除-已删除值 --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"logicalDeleteValue"</span> <span class="na">value=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+            <span class="c">&lt;!-- 逻辑删除-未删除值 --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"logicalUnDeleteValue"</span> <span class="na">value=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+
+        <span class="nt">&lt;commentGenerator&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"suppressDate"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="c">&lt;!--&lt;property name="suppressAllComments" value="true"/&gt;--&gt;</span>
+        <span class="nt">&lt;/commentGenerator&gt;</span>
+
+        <span class="c">&lt;!--数据库连接信息--&gt;</span>
+        <span class="nt">&lt;jdbcConnection</span> <span class="na">driverClass=</span><span class="s">"com.mysql.jdbc.Driver"</span>
+                        <span class="na">connectionURL=</span><span class="s">"jdbc:mysql://127.0.0.1:3306/litemall?useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;amp;serverTimezone=UTC&amp;amp;verifyServerCertificate=false&amp;amp;useSSL=false"</span>
+                        <span class="na">userId=</span><span class="s">"litemall"</span>
+                        <span class="na">password=</span><span class="s">"litemall123456"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;javaTypeResolver&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"useJSR310Types"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/javaTypeResolver&gt;</span>
+
+        <span class="nt">&lt;javaModelGenerator</span> <span class="na">targetPackage=</span><span class="s">"org.linlinjava.litemall.db.domain"</span> <span class="na">targetProject=</span><span class="s">"src/main/java"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;sqlMapGenerator</span> <span class="na">targetPackage=</span><span class="s">"org.linlinjava.litemall.db.dao"</span> <span class="na">targetProject=</span><span class="s">"src/main/resources"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;javaClientGenerator</span> <span class="na">type=</span><span class="s">"XMLMAPPER"</span> <span class="na">targetPackage=</span><span class="s">"org.linlinjava.litemall.db.dao"</span>
+                             <span class="na">targetProject=</span><span class="s">"src/main/java"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!--表名--&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_ad"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_address"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_admin"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"role_ids"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_goods"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"gallery"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_goods_product"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"specifications"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_issue"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_order_goods"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"specifications"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"comments"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_topic"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"goods"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_coupon"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"goods_value"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_notice_admin"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_aftersale"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"pictures"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+    <span class="nt">&lt;/context&gt;</span>
+<span class="nt">&lt;/generatorConfiguration&gt;</span>
 </code></pre></div></div>
 
-<p>建议后写成下面的样子：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">;</span>
-
-<span class="nd">@Autowired</span>
-<span class="kd">public</span> <span class="nf">EnterpriseDbController</span><span class="o">(</span><span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
-   <span class="k">this</span><span class="o">.</span><span class="na">service</span> <span class="o">=</span> <span class="n">service</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>奇怪，为何会有这样的建议。?
-我们知道：@Autowired 可以对成员变量、方法以及构造函数进行注释。那么对成员变量和构造函数进行注释又有什么区别呢？</p>
-
-<p>@Autowired注入bean，相当于在配置文件中配置bean，并且使用setter注入。而对构造函数进行注释，就相当于是使用构造函数进行依赖注入了吧。莫非是这两种注入方法的不同。</p>
-
-<p>以下是：@Autowired和构造方法执行的顺序解析</p>
-
-<p>先看一段代码，下面的代码能运行成功吗？</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
-<span class="kd">private</span> <span class="nc">User</span> <span class="n">user</span><span class="o">;</span>
-<span class="kd">private</span> <span class="nc">String</span> <span class="n">school</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="nf">UserAccountServiceImpl</span><span class="o">(){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getSchool</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>答案是不能。</p>
-
-<p>因为Java类会先执行构造方法，然后再给注解了@Autowired 的user注入值，所以在执行构造方法的时候，就会报错。</p>
-
-<p>报错信息可能会像下面：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">　　</span><span class="nc">Exception</span> <span class="n">in</span> <span class="n">thread</span> <span class="s">"main"</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">factory</span><span class="o">.</span><span class="na">BeanCreationException</span><span class="o">:</span> <span class="nc">Error</span> <span class="n">creating</span> <span class="n">bean</span> <span class="n">with</span> <span class="n">name</span> <span class="err">'</span><span class="o">...</span><span class="err">'</span> <span class="n">defined</span> <span class="n">in</span> <span class="n">file</span> <span class="o">[....</span><span class="na">class</span><span class="o">]:</span> <span class="nc">Instantiation</span> <span class="n">of</span> <span class="n">bean</span> <span class="n">failed</span><span class="o">;</span> <span class="n">nested</span> <span class="n">exception</span> <span class="n">is</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">BeanInstantiationException</span><span class="o">:</span> <span class="nc">Failed</span> <span class="n">to</span> <span class="n">instantiate</span> <span class="o">[...]:</span> <span class="nc">Constructor</span> <span class="n">threw</span> <span class="n">exception</span><span class="o">;</span> <span class="n">nested</span> <span class="n">exception</span> <span class="n">is</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">NullPointerException</span>
-</code></pre></div></div>
-<p>报错信息说：创建Bean时出错，出错原因是实例化bean失败，因为bean时构造方法出错，在构造方法里抛出了空指针异常。</p>
-
-<p>解决办法是，使用构造器注入，如下：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="nc">User</span> <span class="n">user</span><span class="o">;</span>
-<span class="kd">private</span> <span class="nc">String</span> <span class="n">school</span><span class="o">;</span>
-
-<span class="nd">@Autowired</span>
-<span class="kd">public</span> <span class="nf">UserAccountServiceImpl</span><span class="o">(</span><span class="nc">User</span> <span class="n">user</span><span class="o">){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">user</span> <span class="o">=</span> <span class="n">user</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getSchool</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>可以看出，<strong>使用构造器注入的方法，可以明确成员变量的加载顺序。</strong></p>
-
-<p>PS：Java变量的初始化顺序为：静态变量或静态语句块–&gt;实例变量或初始化语句块–&gt;构造方法–&gt;@Autowired</p>
-
-<h5 id="那么最开始spring建议为何要将成员变量加上final类型呢">那么最开始Spring建议，为何要将成员变量加上final类型呢？</h5>
-
-<p>网上有解释如下：spring配置默认的bean的scope是singleton，也就是启动后一直有。通过设置bean的scope属性为prototype来声明该对象为动态创建。但是，如果你的service本身是singleton，注入只执行一次。</p>
-
-<p>@Autowired本身就是单例模式，只会在程序启动时执行一次，即使不定义final也不会初始化第二次，所以这个final是没有意义的吧。</p>
-
-<p>可能是为了防止，在程序运行的时候，又执行了一遍构造函数；</p>
-
-<p>或者是更容易让人理解的意思，加上final只会在程序启动的时候初始化一次，并且在程序运行的时候不会再改变。</p>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-14T00:00:00+08:00"><!-- start custom article footer snippet -->
+<p>参考文档</p>
+<ul>
+  <li><a href="https://www.cnblogs.com/deng-cc/p/9340748.html">利用mybatis-generator自动生成代码</a></li>
+  <li><a href="https://blog.csdn.net/john1337/article/details/87286571">mybatis generator columnOverride</a></li>
+  <li><a href="https://blog.csdn.net/AOBO516/article/details/90245203">使用mybatis-generator生成Mybatis代码</a></li>
+  <li><a href="https://blog.csdn.net/java_tzx/article/details/82147032">Mybatis对于类转换器TypeHandler的简单使用</a></li>
+  <li><a href="https://github.com/itfsw/mybatis-generator-plugin">mybatis-generator-plugin</a></li>
+</ul>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-03-18T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -431,7 +513,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/Annotation/Annotation/Controller">Controller和@RestController的区别？</a></div><div class="next"><span>NEXT</span><a href="/Annotation/ComponentAndBean">注解中@Component和@Bean的区别</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-util-code/compare">if中的判断条件</a></div><div class="next"><span>NEXT</span><a href="/Annotation/Annotation">SpringBoot注解大全</a></div></div></div>
 
 </div>
 

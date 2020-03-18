@@ -1,0 +1,148 @@
+I"G<h3 id="1mybatis-generator-概述">1、mybatis-generator 概述</h3>
+<p>MyBatis官方提供了逆向工程 mybatis-generator，可以针对数据库表自动生成MyBatis执行所需要的代码（如Mapper.java、Mapper.xml、POJO）。mybatis-generator 有三种用法：命令行、eclipse插件、maven插件。而maven插件的方式比较通用，本文也将概述maven插件的使用方式。</p>
+
+<h3 id="2pomxml中配置plugin">2、pom.xml中配置plugin</h3>
+<p>（官方文档：<a href="http://www.mybatis.org/generator/running/runningWithMaven.html">Running MyBatis Generator With Maven</a>）</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.mybatis.generator<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>mybatis-generator-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>1.3.7<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;configuration&gt;</span>
+                    <span class="nt">&lt;configurationFile&gt;</span>
+                        mybatis-generator/generatorConfig.xml
+                    <span class="nt">&lt;/configurationFile&gt;</span>
+                    <span class="nt">&lt;overwrite&gt;</span>true<span class="nt">&lt;/overwrite&gt;</span>
+                    <span class="nt">&lt;verbose&gt;</span>true<span class="nt">&lt;/verbose&gt;</span>
+                <span class="nt">&lt;/configuration&gt;</span>
+                <span class="nt">&lt;dependencies&gt;</span>
+                    <span class="nt">&lt;dependency&gt;</span>
+                        <span class="nt">&lt;groupId&gt;</span>mysql<span class="nt">&lt;/groupId&gt;</span>
+                        <span class="nt">&lt;artifactId&gt;</span>mysql-connector-java<span class="nt">&lt;/artifactId&gt;</span>
+                        <span class="nt">&lt;version&gt;</span>5.1.47<span class="nt">&lt;/version&gt;</span>
+                    <span class="nt">&lt;/dependency&gt;</span>
+                    <span class="nt">&lt;dependency&gt;</span>
+                        <span class="nt">&lt;groupId&gt;</span>com.itfsw<span class="nt">&lt;/groupId&gt;</span>
+                        <span class="nt">&lt;artifactId&gt;</span>mybatis-generator-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                        <span class="nt">&lt;version&gt;</span>1.3.8<span class="nt">&lt;/version&gt;</span>
+                    <span class="nt">&lt;/dependency&gt;</span>
+                <span class="nt">&lt;/dependencies&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+</code></pre></div></div>
+<h3 id="3generatorconfigxml配置文件">3、generatorConfig.xml配置文件</h3>
+<p>（官方文档：<a href="http://www.mybatis.org/generator/configreference/xmlconfig.html">MyBatis GeneratorXML Configuration File Reference</a>）</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"&gt;</span>
+
+<span class="nt">&lt;generatorConfiguration&gt;</span>
+
+    <span class="nt">&lt;context</span> <span class="na">id=</span><span class="s">"mysqlgenerator"</span> <span class="na">targetRuntime=</span><span class="s">"MyBatis3"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"autoDelimitKeywords"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!--可以使用``包括字段名，避免字段名与sql保留字冲突报错--&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"beginningDelimiter"</span> <span class="na">value=</span><span class="s">"`"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"endingDelimiter"</span> <span class="na">value=</span><span class="s">"`"</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 自动生成toString方法 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"org.mybatis.generator.plugins.ToStringPlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 自动生成equals方法和hashcode方法 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"org.mybatis.generator.plugins.EqualsHashCodePlugin"</span><span class="nt">/&gt;</span>
+
+        <span class="c">&lt;!-- 非官方插件 https://github.com/itfsw/mybatis-generator-plugin --&gt;</span>
+        <span class="c">&lt;!-- 查询单条数据插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 查询结果选择性返回插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- Example Criteria 增强插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 数据Model属性对应Column获取插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!-- 逻辑删除插件 --&gt;</span>
+        <span class="nt">&lt;plugin</span> <span class="na">type=</span><span class="s">"com.itfsw.mybatis.generator.plugins.LogicalDeletePlugin"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- 这里配置的是全局逻辑删除列和逻辑删除值，当然在table中配置的值会覆盖该全局配置 --&gt;</span>
+            <span class="c">&lt;!-- 逻辑删除列类型只能为数字、字符串或者布尔类型 --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"logicalDeleteColumn"</span> <span class="na">value=</span><span class="s">"deleted"</span><span class="nt">/&gt;</span>
+            <span class="c">&lt;!-- 逻辑删除-已删除值 --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"logicalDeleteValue"</span> <span class="na">value=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+            <span class="c">&lt;!-- 逻辑删除-未删除值 --&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"logicalUnDeleteValue"</span> <span class="na">value=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+
+        <span class="nt">&lt;commentGenerator&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"suppressDate"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="c">&lt;!--&lt;property name="suppressAllComments" value="true"/&gt;--&gt;</span>
+        <span class="nt">&lt;/commentGenerator&gt;</span>
+
+        <span class="c">&lt;!--数据库连接信息--&gt;</span>
+        <span class="nt">&lt;jdbcConnection</span> <span class="na">driverClass=</span><span class="s">"com.mysql.jdbc.Driver"</span>
+                        <span class="na">connectionURL=</span><span class="s">"jdbc:mysql://127.0.0.1:3306/litemall?useUnicode=true&amp;amp;characterEncoding=UTF-8&amp;amp;serverTimezone=UTC&amp;amp;verifyServerCertificate=false&amp;amp;useSSL=false"</span>
+                        <span class="na">userId=</span><span class="s">"litemall"</span>
+                        <span class="na">password=</span><span class="s">"litemall123456"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;javaTypeResolver&gt;</span>
+            <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"useJSR310Types"</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/javaTypeResolver&gt;</span>
+
+        <span class="nt">&lt;javaModelGenerator</span> <span class="na">targetPackage=</span><span class="s">"org.linlinjava.litemall.db.domain"</span> <span class="na">targetProject=</span><span class="s">"src/main/java"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;sqlMapGenerator</span> <span class="na">targetPackage=</span><span class="s">"org.linlinjava.litemall.db.dao"</span> <span class="na">targetProject=</span><span class="s">"src/main/resources"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;javaClientGenerator</span> <span class="na">type=</span><span class="s">"XMLMAPPER"</span> <span class="na">targetPackage=</span><span class="s">"org.linlinjava.litemall.db.dao"</span>
+                             <span class="na">targetProject=</span><span class="s">"src/main/java"</span><span class="nt">/&gt;</span>
+        <span class="c">&lt;!--表名--&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_ad"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_address"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_admin"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"role_ids"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_goods"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"gallery"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_goods_product"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"specifications"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_issue"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_order_goods"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"specifications"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"comments"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_topic"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"goods"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_coupon"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"goods_value"</span> <span class="na">javaType=</span><span class="s">"java.lang.Integer[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_notice_admin"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+        <span class="nt">&lt;table</span> <span class="na">tableName=</span><span class="s">"litemall_aftersale"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;generatedKey</span> <span class="na">column=</span><span class="s">"id"</span> <span class="na">sqlStatement=</span><span class="s">"MySql"</span> <span class="na">identity=</span><span class="s">"true"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;columnOverride</span> <span class="na">column=</span><span class="s">"pictures"</span> <span class="na">javaType=</span><span class="s">"java.lang.String[]"</span>
+                            <span class="na">typeHandler=</span><span class="s">"org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/table&gt;</span>
+    <span class="nt">&lt;/context&gt;</span>
+<span class="nt">&lt;/generatorConfiguration&gt;</span>
+</code></pre></div></div>
+:ET
