@@ -1,0 +1,52 @@
+I"t<h3 id="题目-最长回文串">题目 <a href="https://leetcode-cn.com/problems/longest-palindrome/">最长回文串</a></h3>
+<p>给定一个包含大写字母和小写字母的字符串，找到通过这些字母构造成的最长的回文串。 <br />
+在构造过程中，请注意区分大小写。比如 “Aa” 不能当做一个回文字符串。</p>
+
+<p>注意: <br />
+假设字符串的长度不会超过 1010。</p>
+<h3 id="示例">示例</h3>
+<p>输入:
+“abccccdd”</p>
+
+<p>输出:
+7</p>
+
+<p>解释:
+我们可以构造的最长的回文串是”dccaccd”, 它的长度是 7。</p>
+<h3 id="自己的思路">自己的思路</h3>
+<ul>
+  <li>参考了 <a href="/leetcode/2020/0317">拼写单词</a> 构造长度为58的每个元素分别代表一个字母的数组，来简化计算</li>
+  <li>含大小写 长度58，只有大写或小写大小26</li>
+  <li><strong>友情提示</strong>：遇到有提示字符串仅包含小写（或者大写）英文字母的题,都可以试着考虑能不能构造长度为26的每个元素分别代表一个字母的数组，来简化计算
+    <h3 id="官方解题思路">官方解题思路</h3>
+  </li>
+</ul>
+
+<h3 id="代码">代码</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">longestPalindrome</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">58</span><span class="o">];</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">char</span> <span class="nl">cc:</span><span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">c</span><span class="o">[(</span><span class="kt">int</span><span class="o">)</span><span class="n">cc</span><span class="o">-</span><span class="sc">'A'</span><span class="o">]+=</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">boolean</span> <span class="n">flg</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">58</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">]%</span><span class="mi">2</span><span class="o">==</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">]!=</span><span class="mi">0</span><span class="o">){</span>
+                <span class="n">res</span><span class="o">+=</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="c1">// flg = true;</span>
+            <span class="o">}</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">]%</span><span class="mi">2</span><span class="o">==</span><span class="mi">1</span><span class="o">){</span>
+                <span class="n">res</span><span class="o">+=</span><span class="n">c</span><span class="o">[</span><span class="n">i</span><span class="o">]-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="n">flg</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">flg</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+:ET
