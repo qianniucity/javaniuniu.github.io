@@ -7,6 +7,7 @@ show_date: true
 sidebar:
   nav: docs-en-code
 ---
+## [示例用法](/java-util-code/properties/PropertySource/demo)
 
 ## 一、PropertySource 简介
 **org.springframework.context.annotation.PropertySource** 是一个注解，可以标记在类上、接口上、枚举上，在运行时起作用。而@Repeatable(value = PropertySources.class) 表示在PropertySources 中此注解时可以重复使用的。如下：

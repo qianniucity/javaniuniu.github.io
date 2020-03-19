@@ -1,0 +1,448 @@
+I"��<h2 id="示例用法"><a href="/java-util-code/properties/PropertySource/demo">示例用法</a></h2>
+
+<h2 id="一propertysource-简介">一、PropertySource 简介</h2>
+<p><strong>org.springframework.context.annotation.PropertySource</strong> 是一个注解，可以标记在类上、接口上、枚举上，在运行时起作用。而@Repeatable(value = PropertySources.class) 表示在PropertySources 中此注解时可以重复使用的。如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">({</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Repeatable</span><span class="o">(</span><span class="nc">PropertySources</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">PropertySource</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="nf">name</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+
+    <span class="nc">String</span><span class="o">[]</span> <span class="nf">value</span><span class="o">();</span>
+
+    <span class="kt">boolean</span> <span class="nf">ignoreResourceNotFound</span><span class="o">()</span> <span class="k">default</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="nc">String</span> <span class="nf">encoding</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+
+    <span class="nc">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">PropertySourceFactory</span><span class="o">&gt;</span> <span class="nf">factory</span><span class="o">()</span> <span class="k">default</span> <span class="nc">PropertySourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="二propertysource与environment读取配置文件">二、@PropertySource与Environment读取配置文件</h2>
+<p>此注解@PropertySource 为Spring 中的 Environment提供方便和声明机制，通常与Configuration一起搭配使用。</p>
+<ul>
+  <li>新建一个maven 项目，添加pom.xml 依赖：</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+
+    <span class="nt">&lt;groupId&gt;</span>com.spring.propertysource<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-propertysource<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>spring-propertysource<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
+
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+        <span class="nt">&lt;spring.version&gt;</span>4.3.13.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+
+    <span class="nt">&lt;dependencies&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+    <span class="nt">&lt;/dependencies&gt;</span>
+
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;pluginManagement&gt;</span>
+            <span class="nt">&lt;plugins&gt;</span>
+                <span class="nt">&lt;plugin&gt;</span>
+                    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                    <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                    <span class="nt">&lt;version&gt;</span>3.2<span class="nt">&lt;/version&gt;</span>
+                    <span class="nt">&lt;configuration&gt;</span>
+                        <span class="nt">&lt;source&gt;</span>1.6<span class="nt">&lt;/source&gt;</span>
+                        <span class="nt">&lt;target&gt;</span>1.6<span class="nt">&lt;/target&gt;</span>
+                    <span class="nt">&lt;/configuration&gt;</span>
+                <span class="nt">&lt;/plugin&gt;</span>
+            <span class="nt">&lt;/plugins&gt;</span>
+        <span class="nt">&lt;/pluginManagement&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>一般把版本名称统一定义在 标签中，便于统一管理，如上可以通过${…} 来获取指定版本。</li>
+  <li>定义一个application.properties 来写入如下配置</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>com.spring.name=liuXuan
+com.spring.age=18
+</code></pre></div></div>
+
+<ul>
+  <li>新建一个TestBean，定义几个属性</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestBean</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">age</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"TestBean{"</span> <span class="o">+</span>
+                <span class="s">"name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="s">", age="</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span>
+                <span class="sc">'}'</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>新建一个main class ，用来演示@PropertySource 的使用</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nd">@Configuration</span>
+  <span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"classpath:application.properties"</span><span class="o">,</span><span class="n">ignoreResourceNotFound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringPropertysourceApplication</span> <span class="o">{</span>
+
+    <span class="nd">@Resource</span>
+    <span class="nc">Environment</span> <span class="n">environment</span><span class="o">;</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">TestBean</span> <span class="nf">testBean</span><span class="o">(){</span>
+      <span class="nc">TestBean</span> <span class="n">testBean</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TestBean</span><span class="o">();</span>
+      <span class="c1">// 读取application.properties中的name</span>
+      <span class="n">testBean</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"com.spring.name"</span><span class="o">));</span>
+      <span class="c1">// 读取application.properties中的age</span>
+      <span class="n">testBean</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"com.spring.age"</span><span class="o">)));</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"testBean = "</span> <span class="o">+</span> <span class="n">testBean</span><span class="o">);</span>
+      <span class="k">return</span> <span class="n">testBean</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">ApplicationContext</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="nc">SpringPropertysourceApplication</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+      <span class="nc">TestBean</span> <span class="n">testBean</span> <span class="o">=</span> <span class="o">(</span><span class="nc">TestBean</span><span class="o">)</span><span class="n">applicationContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"testBean"</span><span class="o">);</span>
+
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>输出：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>testBean = TestBean{name='liuXuan', age=18}
+Refreshing the spring context
+</code></pre></div></div>
+
+<ul>
+  <li>@Configuration : 相当于 标签，注意不是，一个配置类可以有多个bean，但是只能有一个</li>
+  <li>@PropertySource: 用于引入外部属性配置，和Environment 配合一起使用。其中ignoreResourceNotFound 表示没有找到文件是否会报错，默认为false，就是会报错，一般开发情况应该使用默认值，设置为true相当于生吞异常，增加排查问题的复杂性.</li>
+  <li>引入PropertySource，注入Environment，然后就能用environment 获取配置文件中的value值。</li>
+</ul>
+
+<h2 id="三propertysource与value读取配置文件">三、@PropertySource与@Value读取配置文件</h2>
+<h3 id="value-基本使用">@Value 基本使用</h3>
+<p>我们以DB的配置文件为例，来看一下如何使用@Value读取配置文件</p>
+<ul>
+  <li>首先新建一个DBConnection，具体代码如下：</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 组件bean</span>
+  <span class="nd">@Component</span>
+  <span class="nd">@PropertySource</span><span class="o">(</span><span class="s">"classpath:db.properties"</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConnection</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_DRIVER_CLASS}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">driverClass</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_URL}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">dbUrl</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_USERNAME}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">userName</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_PASSWORD}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DBConnection</span><span class="o">(){}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printDBConfigs</span><span class="o">(){</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db Driver Class = "</span> <span class="o">+</span> <span class="n">driverClass</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db url = "</span> <span class="o">+</span> <span class="n">dbUrl</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db username = "</span> <span class="o">+</span> <span class="n">userName</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db password = "</span> <span class="o">+</span> <span class="n">password</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>类上加入@Component 表示这是一个组件bean，需要被spring进行管理，@PropertySource 用于获取类路径下的db.properties 配置文件，@Value用于获取properties中的key 对应的value值，printDBConfigs方法打印出来对应的值。</p>
+  </li>
+  <li>
+    <p>新建一个db.properties，具体文件如下</p>
+  </li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#MYSQL Database Configurations
+DB_DRIVER_CLASS=com.mysql.jdbc.Driver
+DB_URL=jdbc:mysql://localhost:3306/test
+DB_USERNAME=cxuan
+DB_PASSWORD=111111
+APP_NAME=PropertySourceExample
+</code></pre></div></div>
+
+<ul>
+  <li>这是一个MYSQL连接数据库驱动的配置文件。</li>
+  <li>新建一个SpringMainClass，用于测试DBConection中是否能够获取到@Value的值</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringMainClass</span> <span class="o">{</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">AnnotationConfigApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnnotationConfigApplicationContext</span><span class="o">();</span>
+            <span class="c1">// 注解扫描，和@ComponentScan 和 基于XML的配置&lt;context:component-scan base-package&gt;相同</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">scan</span><span class="o">(</span><span class="s">"com.spring.propertysource.app"</span><span class="o">);</span>
+
+            <span class="c1">// 刷新上下文环境</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">refresh</span><span class="o">();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Refreshing the spring context"</span><span class="o">);</span>
+
+            <span class="c1">// 获取DBConnection这个Bean，调用其中的方法</span>
+            <span class="nc">DBConnection</span> <span class="n">dbConnection</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">DBConnection</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+            <span class="n">dbConnection</span><span class="o">.</span><span class="na">printDBConfigs</span><span class="o">();</span>
+
+            <span class="c1">// 关闭容器(可以省略，容器可以自动关闭)</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>输出：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Refreshing the spring context
+Db Driver Class = com.mysql.jdbc.Driver
+Db url = jdbc:mysql://localhost:3306/test
+Db username = cxuan
+Db password = 111111
+</code></pre></div></div>
+
+<h3 id="value-高级用法">@Value 高级用法</h3>
+
+<p>在实现了上述的例子之后，我们再来看一下@Value 的高级用法：</p>
+
+<ul>
+  <li>@Value 可以直接为字段赋值，例如:</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Value</span><span class="o">(</span><span class="s">"cxuan"</span><span class="o">)</span>
+<span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+<span class="nd">@Value</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="nc">Integer</span> <span class="n">age</span><span class="o">;</span>
+
+<span class="nd">@Value</span><span class="o">(</span><span class="s">"${APP_NAME_NOT_FOUND:Default}"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">String</span> <span class="n">defaultAppName</span><span class="o">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>@Value 可以直接获取系统属性，例如：</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Value</span><span class="o">(</span><span class="s">"${java.home}"</span><span class="o">)</span>
+<span class="c1">// @Value("#{systemProperties['java.home']}") SPEL 表达式</span>
+<span class="nc">String</span> <span class="n">javaHome</span><span class="o">;</span>
+
+<span class="nd">@Value</span><span class="o">(</span><span class="s">"${HOME}"</span><span class="o">)</span>
+<span class="nc">String</span> <span class="n">dir</span><span class="o">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>@Value 可以注解在方法和参数上</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Value</span><span class="o">(</span><span class="s">"Test"</span><span class="o">)</span> <span class="c1">// 可以直接使用Test 进行单元测试</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">printValues</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nd">@Value</span><span class="o">(</span><span class="s">"another variable"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>修改DBConnection后的代码如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConnection</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_DRIVER_CLASS}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">driverClass</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_URL}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">dbUrl</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_USERNAME}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">userName</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_PASSWORD}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DBConnection</span><span class="o">(){}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printDBConfigs</span><span class="o">(){</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db Driver Class = "</span> <span class="o">+</span> <span class="n">driverClass</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db url = "</span> <span class="o">+</span> <span class="n">dbUrl</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db username = "</span> <span class="o">+</span> <span class="n">userName</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db password = "</span> <span class="o">+</span> <span class="n">password</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>在com.spring.propertysource.app 下 新增DBConfiguration，作用是配置管理类，管理DBConnection，并读取配置文件，代码如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@PropertySources</span><span class="o">({</span>
+        <span class="nd">@PropertySource</span><span class="o">(</span><span class="s">"classpath:db.properties"</span><span class="o">),</span>
+        <span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"classpath:root.properties"</span><span class="o">,</span> <span class="n">ignoreResourceNotFound</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"Default DBConfiguration"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">defaultName</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"true"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">defaultBoolean</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"10"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">defaultInt</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${APP_NAME_NOT_FOUND:Default}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">defaultAppName</span><span class="o">;</span>
+
+     <span class="nd">@Value</span><span class="o">(</span><span class="s">"#{systemProperties['java.home']}"</span><span class="o">)</span>
+<span class="c1">//    @Value("${java.home}")</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">javaHome</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${HOME}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">homeDir</span><span class="o">;</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">DBConnection</span> <span class="nf">getDBConnection</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">DBConnection</span> <span class="n">dbConnection</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DBConnection</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">dbConnection</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"Test"</span><span class="o">)</span> <span class="c1">// 开启测试</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printValues</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nd">@Value</span><span class="o">(</span><span class="s">"another variable"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Input Argument 1 = "</span> <span class="o">+</span> <span class="n">s</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Input Argument 2 = "</span> <span class="o">+</span> <span class="n">v</span><span class="o">);</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Home Directory = "</span> <span class="o">+</span> <span class="n">homeDir</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Default Configuration Name = "</span> <span class="o">+</span> <span class="n">defaultName</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Default App Name = "</span> <span class="o">+</span> <span class="n">defaultAppName</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Java Home = "</span> <span class="o">+</span> <span class="n">javaHome</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Home dir = "</span> <span class="o">+</span> <span class="n">homeDir</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Boolean = "</span> <span class="o">+</span> <span class="n">defaultBoolean</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Int = "</span> <span class="o">+</span> <span class="n">defaultInt</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>使用SpringMainClass 进行测试，测试结果如下：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input Argument 1 = Test
+Input Argument 2 = another variable
+Home Directory = /Users/mr.l
+Default Configuration Name = Default DBConfiguration
+Default App Name = Default
+Java Home = /Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre
+Home dir = /Users/mr.l
+Boolean = true
+Int = 10
+Refreshing the spring context
+
+Db Driver Class = com.mysql.jdbc.Driver
+Db url = jdbc:mysql://localhost:3306/test
+Db username = cxuan
+Db password = 111111
+</code></pre></div></div>
+
+<ul>
+  <li>可以看到上述代码并没有显示调用printValues 方法，默认是以单元测试的方式进行的。</li>
+</ul>
+
+<h2 id="四propertysource-与-import">四、@PropertySource 与 @Import</h2>
+<p>@Import 可以用来导入 @PropertySource 标注的类，具体代码如下：</p>
+
+<ul>
+  <li>新建一个PropertySourceReadApplication 类，用于读取配置文件并测试，具体代码如下：</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 导入BasicPropertyWithJavaConfig类</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="nc">BasicPropertyWithJavaConfig</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PropertySourceReadApplication</span> <span class="o">{</span>
+
+    <span class="nd">@Resource</span>
+    <span class="kd">private</span> <span class="nc">Environment</span> <span class="n">env</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${com.spring.name}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+    <span class="nd">@Bean</span><span class="o">(</span><span class="s">"context"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">PropertySourceReadApplication</span> <span class="nf">contextLoadInitialized</span><span class="o">(){</span>
+        <span class="c1">// 用environment 读取配置文件</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"com.spring.age"</span><span class="o">));</span>
+        <span class="c1">// 用@Value 读取配置文件</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name = "</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// AnnotationConnfigApplicationContext 内部会注册Bean</span>
+        <span class="k">new</span> <span class="nf">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="nc">PropertySourceReadApplication</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ul>
+  <li>新建一个BasicPropertyWithJavaConfig 类，用于配置类并加载配置文件</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"classpath:application.properties"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BasicPropertyWithJavaConfig</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">BasicPropertyWithJavaConfig</span><span class="o">(){</span>
+        <span class="kd">super</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>启动PropertySourceReadApplication ，console能够发现读取到配置文件中的value值</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>18
+name = cxuan
+</code></pre></div></div>
+:ET
