@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Lombok 实战 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>浅析PropertySource 基本使用 - JAVA 牛牛</title>
 
-<meta name="description" content="@Data ： 注在类上，提供类的get、set、equals、hashCode、canEqual、toString方法  @AllArgsConstructor ： 注在类上，提供类的全参构造  @NoArgsConstructor ： 注在类上，提供类的无参构造  @Setter ： 注在属性上，提供 set...">
-<link rel="canonical" href="http://localhost:4000/Annotation/Lombok"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="一、PropertySource 简介org.springframework.context.annotation.PropertySource 是一个注解，可以标记在类上、接口上、枚举上，在运行时起作用。而@Repeatable(value = PropertySources.class) 表示在Propert...">
+<link rel="canonical" href="http://localhost:4000/java-util-code/properties/PropertySource"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/java-code-design/java">java代码设计</a></li><li class="toc-h2"><a href="/java-code-design/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/java-code-design/token/jwt">token设计至jwt</a></li><li class="toc-h2"><a href="/java-code-design/xml/application">application.properties文件常用配置</a></li><li class="toc-h2"><a href="/java-util-code/Reflections/explanation">Java反射说明</a></li><li class="toc-h2"><a href="/java-util-code/Reflections">反射工具类(Reflections)</a></li><li class="toc-h2"><a href="/java-util-code/TimeUnit">时间类(TimeUnit)</a></li><li class="toc-h2"><a href="/java-util-code/LocalDateTime">LocalDateTime在spring boot中的格式化配置</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/java-util-code/date">date工具</a></li><li class="toc-h2"><a href="/java-util-code/FastJson">FastJson工具包</a></li><li class="toc-h2"><a href="/java-util-code/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/java-util-code/ResultUtil">对返回给前端的数据进行格式封装处理-MVC</a></li><li class="toc-h2"><a href="/java-util-code/MsgResponseBody">对返回给前端的数据进行格式封装处理-SpringBoot</a></li><li class="toc-h2"><a href="/java-util-code/Validate">三款数据校验的类(Validate)</a></li><li class="toc-h2"><a href="/java-util-code/MultipartResolver/explanation">处理文件上传(MultipartResolver)</a></li><li class="toc-h2"><a href="/java-util-code/Docket/explanation">Docket(Swagger2中应用)</a></li><li class="toc-h2"><a href="/java-util-code/logback">logback配置</a></li><li class="toc-h2"><a href="/java-util-code/Hamcrest">单元测试的框架Hamcrest</a></li><li class="toc-h2"><a href="/java-util-code/HttpHeaders">HttpHeaders源码</a></li><li class="toc-h2"><a href="/java-util-code/MediaType">MediaType源码</a></li><li class="toc-h2"><a href="/java-util-code/HttpStatus">HttpStatus源码</a></li><li class="toc-h2"><a href="/java-util-code/compare">if中的判断条件</a></li><li class="toc-h2"><a href="/java-util-code/mybatis-generator">利用mybatis-generator自动生成代码</a></li><li class="toc-h2"><a href="/java-util-code/properties/PropertySource">浅析PropertySource 基本使用</a></li><li class="toc-h1">注解类</li><li class="toc-h2"><a href="/Annotation/Annotation">SpringBoot注解大全</a></li><li class="toc-h2"><a href="/Annotation/Annotation/2">SpringBoot注解大全(2)</a></li><li class="toc-h2 active"><a href="/Annotation/Lombok">Lombok 实战</a></li><li class="toc-h2"><a href="/Annotation/myself">自定义注释</a></li><li class="toc-h2"><a href="/Annotation/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h2"><a href="/Annotation/ComponentAndBean">注解中@Component和@Bean的区别</a></li><li class="toc-h2"><a href="/Annotation/Annotation/Controller">Controller和@RestController的区别？</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">JAVA代码设计</li><li class="toc-h2"><a href="/java-code-design/java">java代码设计</a></li><li class="toc-h2"><a href="/java-code-design/Autowired">Autowired的使用：推荐对构造函数进行注释</a></li><li class="toc-h2"><a href="/java-code-design/token/jwt">token设计至jwt</a></li><li class="toc-h2"><a href="/java-code-design/xml/application">application.properties文件常用配置</a></li><li class="toc-h2"><a href="/java-util-code/Reflections/explanation">Java反射说明</a></li><li class="toc-h2"><a href="/java-util-code/Reflections">反射工具类(Reflections)</a></li><li class="toc-h2"><a href="/java-util-code/TimeUnit">时间类(TimeUnit)</a></li><li class="toc-h2"><a href="/java-util-code/LocalDateTime">LocalDateTime在spring boot中的格式化配置</a></li><li class="toc-h1">工具类</li><li class="toc-h2"><a href="/java-util-code/date">date工具</a></li><li class="toc-h2"><a href="/java-util-code/FastJson">FastJson工具包</a></li><li class="toc-h2"><a href="/java-util-code/BeanMapper">Dozer BeanMapper 对象转换</a></li><li class="toc-h2"><a href="/java-util-code/ResultUtil">对返回给前端的数据进行格式封装处理-MVC</a></li><li class="toc-h2"><a href="/java-util-code/MsgResponseBody">对返回给前端的数据进行格式封装处理-SpringBoot</a></li><li class="toc-h2"><a href="/java-util-code/Validate">三款数据校验的类(Validate)</a></li><li class="toc-h2"><a href="/java-util-code/MultipartResolver/explanation">处理文件上传(MultipartResolver)</a></li><li class="toc-h2"><a href="/java-util-code/Docket/explanation">Docket(Swagger2中应用)</a></li><li class="toc-h2"><a href="/java-util-code/logback">logback配置</a></li><li class="toc-h2"><a href="/java-util-code/Hamcrest">单元测试的框架Hamcrest</a></li><li class="toc-h2"><a href="/java-util-code/HttpHeaders">HttpHeaders源码</a></li><li class="toc-h2"><a href="/java-util-code/MediaType">MediaType源码</a></li><li class="toc-h2"><a href="/java-util-code/HttpStatus">HttpStatus源码</a></li><li class="toc-h2"><a href="/java-util-code/compare">if中的判断条件</a></li><li class="toc-h2"><a href="/java-util-code/mybatis-generator">利用mybatis-generator自动生成代码</a></li><li class="toc-h2 active"><a href="/java-util-code/properties/PropertySource">浅析PropertySource 基本使用</a></li><li class="toc-h1">注解类</li><li class="toc-h2"><a href="/Annotation/Annotation">SpringBoot注解大全</a></li><li class="toc-h2"><a href="/Annotation/Annotation/2">SpringBoot注解大全(2)</a></li><li class="toc-h2"><a href="/Annotation/Lombok">Lombok 实战</a></li><li class="toc-h2"><a href="/Annotation/myself">自定义注释</a></li><li class="toc-h2"><a href="/Annotation/constraintValidator">通过实现ConstraintValidator完成自定义校验注解</a></li><li class="toc-h2"><a href="/Annotation/ComponentAndBean">注解中@Component和@Bean的区别</a></li><li class="toc-h2"><a href="/Annotation/Annotation/Controller">Controller和@RestController的区别？</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -334,307 +334,464 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Lombok 实战</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>浅析PropertySource 基本使用</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/Annotation/2020-02-21-Lombok.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Lombok 实战"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/java-util-code/2020-03-19-PropertySource.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="浅析PropertySource 基本使用"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B3%A8%E8%A7%A3">注解</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Lombok">Lombok</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 21, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-21T00:00:00+08:00">
-    <meta itemprop="keywords" content="注解,Lombok"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">配置文件</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 19, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-19T00:00:00+08:00">
+    <meta itemprop="keywords" content="配置文件"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><ul>
-  <li>@Data ： 注在类上，提供类的get、set、equals、hashCode、canEqual、toString方法</li>
-  <li>@AllArgsConstructor ： 注在类上，提供类的全参构造</li>
-  <li>@NoArgsConstructor ： 注在类上，提供类的无参构造</li>
-  <li>@Setter ： 注在属性上，提供 set 方法</li>
-  <li>@Getter ： 注在属性上，提供 get 方法</li>
-  <li>@EqualsAndHashCode ： 注在类上，提供对应的 equals 和 hashCode 方法</li>
-  <li>@Log4j/@Slf4j ： 注在类上，提供对应的 Logger 对象，变量名为 log   ，private static final Logger log = LoggerFactory.getLogger(UserController.class);</li>
-  <li>@EqualsAndHashCode(callSuper = false) 作用就是自动的给model bean实现equals方法和hashcode方法，callSuper = false 表示生成的 hashcode 包括父类属性 <a href="https://blog.csdn.net/qq_27093465/article/details/90056695">详情参考</a></li>
+<div class="article__content" itemprop="articleBody"><h2 id="一propertysource-简介">一、PropertySource 简介</h2>
+<p><strong>org.springframework.context.annotation.PropertySource</strong> 是一个注解，可以标记在类上、接口上、枚举上，在运行时起作用。而@Repeatable(value = PropertySources.class) 表示在PropertySources 中此注解时可以重复使用的。如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">({</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Repeatable</span><span class="o">(</span><span class="nc">PropertySources</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">PropertySource</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="nf">name</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+
+    <span class="nc">String</span><span class="o">[]</span> <span class="nf">value</span><span class="o">();</span>
+
+    <span class="kt">boolean</span> <span class="nf">ignoreResourceNotFound</span><span class="o">()</span> <span class="k">default</span> <span class="kc">false</span><span class="o">;</span>
+
+    <span class="nc">String</span> <span class="nf">encoding</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
+
+    <span class="nc">Class</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="nc">PropertySourceFactory</span><span class="o">&gt;</span> <span class="nf">factory</span><span class="o">()</span> <span class="k">default</span> <span class="nc">PropertySourceFactory</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="二propertysource与environment读取配置文件">二、@PropertySource与Environment读取配置文件</h2>
+<p>此注解@PropertySource 为Spring 中的 Environment提供方便和声明机制，通常与Configuration一起搭配使用。</p>
+<ul>
+  <li>新建一个maven 项目，添加pom.xml 依赖：</li>
 </ul>
 
-<p>今天主要说下@NoArgsConstructor, @RequiredArgsConstructor, @AllArgsConstructor</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
 
-<ol>
-  <li>@NoArgsConstructor</li>
-</ol>
+    <span class="nt">&lt;groupId&gt;</span>com.spring.propertysource<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-propertysource<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>spring-propertysource<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Demo project for Spring Boot<span class="nt">&lt;/description&gt;</span>
 
-<p>1.1 @NoArgsConstructor 实战使用</p>
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+        <span class="nt">&lt;spring.version&gt;</span>4.3.13.RELEASE<span class="nt">&lt;/spring.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
 
-<p><code class="highlighter-rouge">@NoArgsConstructor</code>在类上使用，它可以提供一个无参构造器，比如：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="nt">&lt;dependencies&gt;</span>
 
-    <span class="kd">public</span> <span class="nf">User</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
-<span class="o">}</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-core<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${spring.version}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+    <span class="nt">&lt;/dependencies&gt;</span>
+
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;pluginManagement&gt;</span>
+            <span class="nt">&lt;plugins&gt;</span>
+                <span class="nt">&lt;plugin&gt;</span>
+                    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+                    <span class="nt">&lt;artifactId&gt;</span>maven-compiler-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                    <span class="nt">&lt;version&gt;</span>3.2<span class="nt">&lt;/version&gt;</span>
+                    <span class="nt">&lt;configuration&gt;</span>
+                        <span class="nt">&lt;source&gt;</span>1.6<span class="nt">&lt;/source&gt;</span>
+                        <span class="nt">&lt;target&gt;</span>1.6<span class="nt">&lt;/target&gt;</span>
+                    <span class="nt">&lt;/configuration&gt;</span>
+                <span class="nt">&lt;/plugin&gt;</span>
+            <span class="nt">&lt;/plugins&gt;</span>
+        <span class="nt">&lt;/pluginManagement&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+
+<span class="nt">&lt;/project&gt;</span>
 </code></pre></div></div>
 
-<p>当然，有时候我们会使用到单例模式，这个时候我们需要将构造器私有化，那么就可以使用这样一个属性<code class="highlighter-rouge">access</code>设置构造器的权限：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">access</span> <span class="o">=</span> <span class="nc">AccessLevel</span><span class="o">.</span><span class="na">PRIVATE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+<ul>
+  <li>一般把版本名称统一定义在 标签中，便于统一管理，如上可以通过${…} 来获取指定版本。</li>
+  <li>定义一个application.properties 来写入如下配置</li>
+</ul>
 
-    <span class="kd">private</span> <span class="nf">User</span><span class="o">()</span> <span class="o">{</span>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>com.spring.name=liuXuan
+com.spring.age=18
+</code></pre></div></div>
+
+<ul>
+  <li>新建一个TestBean，定义几个属性</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestBean</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">age</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Integer</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"TestBean{"</span> <span class="o">+</span>
+                <span class="s">"name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="s">", age="</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span>
+                <span class="sc">'}'</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>当类中有final字段没有被初始化时，编译器会报错，但是也可用<code class="highlighter-rouge">@NoArgsConstructor(force = true)</code>，那么Lombok就会为没有初始化的<code class="highlighter-rouge">final</code>字段设置默认值<code class="highlighter-rouge"> 0 / false / null</code>, 这样编译器就不会报错，如下所示：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">force</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+<ul>
+  <li>新建一个main class ，用来演示@PropertySource 的使用</li>
+</ul>
 
-    <span class="kd">public</span> <span class="nf">User</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="nd">@Configuration</span>
+  <span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"classpath:application.properties"</span><span class="o">,</span><span class="n">ignoreResourceNotFound</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringPropertysourceApplication</span> <span class="o">{</span>
 
-<p>对于具有约束的字段（例如使用了<code class="highlighter-rouge">@NonNull</code>注解的字段），不会生成字段检查，如下所示：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">force</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="nd">@NonNull</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="nd">@NonNull</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="nd">@Resource</span>
+    <span class="nc">Environment</span> <span class="n">environment</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">User</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">TestBean</span> <span class="nf">testBean</span><span class="o">(){</span>
+      <span class="nc">TestBean</span> <span class="n">testBean</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TestBean</span><span class="o">();</span>
+      <span class="c1">// 读取application.properties中的name</span>
+      <span class="n">testBean</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"com.spring.name"</span><span class="o">));</span>
+      <span class="c1">// 读取application.properties中的age</span>
+      <span class="n">testBean</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">environment</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"com.spring.age"</span><span class="o">)));</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"testBean = "</span> <span class="o">+</span> <span class="n">testBean</span><span class="o">);</span>
+      <span class="k">return</span> <span class="n">testBean</span><span class="o">;</span>
     <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
 
-<p>1.2 @NoArgsConstructor 配置详解</p>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">ApplicationContext</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="nc">SpringPropertysourceApplication</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+      <span class="nc">TestBean</span> <span class="n">testBean</span> <span class="o">=</span> <span class="o">(</span><span class="nc">TestBean</span><span class="o">)</span><span class="n">applicationContext</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"testBean"</span><span class="o">);</span>
 
-<p>首先来看看 <code class="highlighter-rouge">@NoArgsConstructor</code> 注解源码部分的实现：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
-<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">NoArgsConstructor</span> <span class="o">{</span>
-
-	<span class="nc">String</span> <span class="nf">staticName</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
-    <span class="c1">// 在构造方法的入参上添加注解。e.g. @NonNull</span>
-    <span class="c1">// up to JDK7: @EqualsAndHashCode(onParam=@__({@AnnotationsGoHere}))</span>
-    <span class="c1">// from JDK8: @EqualsAndHashCode(onParam_={@AnnotationsGohere})</span>
-	<span class="nc">AnyAnnotation</span><span class="o">[]</span> <span class="nf">onConstructor</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
-	<span class="c1">// 设置构造方法的访问权限，默认是 public</span>
-	<span class="nc">AccessLevel</span> <span class="nf">access</span><span class="o">()</span> <span class="k">default</span> <span class="n">lombok</span><span class="o">.</span><span class="na">AccessLevel</span><span class="o">.</span><span class="na">PUBLIC</span><span class="o">;</span>
-	<span class="c1">// 是否强制对未赋值的final字段初始化值。</span>
-	<span class="kt">boolean</span> <span class="nf">force</span><span class="o">()</span> <span class="k">default</span> <span class="kc">false</span><span class="o">;</span>
-
-	<span class="nd">@Deprecated</span>
-	<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
-	<span class="nd">@Target</span><span class="o">({})</span>
-	<span class="nd">@interface</span> <span class="nc">AnyAnnotation</span> <span class="o">{}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>看到有这样一个注解属性：<code class="highlighter-rouge">staticName</code>，是代表什么意思呢？  <br />
-也就是说是否生成静态的构造方法，如果生成静态的构造方法，那么原来的实例构造方法将会被私有（private），然后创建一个你指定名称的静态构造方法，并且是public的，如下所示：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">staticName</span> <span class="o">=</span> <span class="s">"UserHa"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="nf">User</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">User</span> <span class="nf">UserHa</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">User</span><span class="o">();</span>
     <span class="o">}</span>
-<span class="o">}</span>
+  <span class="o">}</span>
+
 </code></pre></div></div>
 
-<ol>
-  <li>@RequiredArgsConstructor</li>
-</ol>
+<p>输出：</p>
 
-<p>2.1 @RequiredArgsConstructor 实战使用</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>testBean = TestBean{name='liuXuan', age=18}
+Refreshing the spring context
+</code></pre></div></div>
 
-<p><code class="highlighter-rouge">@RequiredArgsConstructor</code>也是在类上使用，但是这个注解可以生成带参或者不带参的构造方法。</p>
+<ul>
+  <li>@Configuration : 相当于 标签，注意不是，一个配置类可以有多个bean，但是只能有一个</li>
+  <li>@PropertySource: 用于引入外部属性配置，和Environment 配合一起使用。其中ignoreResourceNotFound 表示没有找到文件是否会报错，默认为false，就是会报错，一般开发情况应该使用默认值，设置为true相当于生吞异常，增加排查问题的复杂性.</li>
+  <li>引入PropertySource，注入Environment，然后就能用environment 获取配置文件中的value值。</li>
+</ul>
 
-<p>若带参数，只能是类中所有带有 @NonNull注解的和以final修饰的未经初始化的字段，如下所示：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequiredArgsConstructor</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="nd">@NonNull</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+<h2 id="三propertysource与value读取配置文件">三、@PropertySource与@Value读取配置文件</h2>
+<h3 id="value-基本使用">@Value 基本使用</h3>
+<p>我们以DB的配置文件为例，来看一下如何使用@Value读取配置文件</p>
+<ul>
+  <li>首先新建一个DBConnection，具体代码如下：</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 组件bean</span>
+  <span class="nd">@Component</span>
+  <span class="nd">@PropertySource</span><span class="o">(</span><span class="s">"classpath:db.properties"</span><span class="o">)</span>
+  <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConnection</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_DRIVER_CLASS}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">driverClass</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_URL}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">dbUrl</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_USERNAME}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">userName</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_PASSWORD}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
 
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="nd">@NonNull</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">DBConnection</span><span class="o">(){}</span>
 
-    <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">gender</span><span class="o">,</span> <span class="nd">@NonNull</span> <span class="nc">String</span> <span class="n">username</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">username</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">(</span><span class="s">"username is marked @NonNull but is null"</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">gender</span> <span class="o">=</span> <span class="n">gender</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printDBConfigs</span><span class="o">(){</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db Driver Class = "</span> <span class="o">+</span> <span class="n">driverClass</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db url = "</span> <span class="o">+</span> <span class="n">dbUrl</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db username = "</span> <span class="o">+</span> <span class="n">userName</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db password = "</span> <span class="o">+</span> <span class="n">password</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>类上加入@Component 表示这是一个组件bean，需要被spring进行管理，@PropertySource 用于获取类路径下的db.properties 配置文件，@Value用于获取properties中的key 对应的value值，printDBConfigs方法打印出来对应的值。</p>
+  </li>
+  <li>
+    <p>新建一个db.properties，具体文件如下</p>
+  </li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#MYSQL Database Configurations
+DB_DRIVER_CLASS=com.mysql.jdbc.Driver
+DB_URL=jdbc:mysql://localhost:3306/test
+DB_USERNAME=cxuan
+DB_PASSWORD=111111
+APP_NAME=PropertySourceExample
+</code></pre></div></div>
+
+<ul>
+  <li>这是一个MYSQL连接数据库驱动的配置文件。</li>
+  <li>新建一个SpringMainClass，用于测试DBConection中是否能够获取到@Value的值</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringMainClass</span> <span class="o">{</span>
+
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">AnnotationConfigApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AnnotationConfigApplicationContext</span><span class="o">();</span>
+            <span class="c1">// 注解扫描，和@ComponentScan 和 基于XML的配置&lt;context:component-scan base-package&gt;相同</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">scan</span><span class="o">(</span><span class="s">"com.spring.propertysource.app"</span><span class="o">);</span>
+
+            <span class="c1">// 刷新上下文环境</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">refresh</span><span class="o">();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Refreshing the spring context"</span><span class="o">);</span>
+
+            <span class="c1">// 获取DBConnection这个Bean，调用其中的方法</span>
+            <span class="nc">DBConnection</span> <span class="n">dbConnection</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">DBConnection</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+            <span class="n">dbConnection</span><span class="o">.</span><span class="na">printDBConfigs</span><span class="o">();</span>
+
+            <span class="c1">// 关闭容器(可以省略，容器可以自动关闭)</span>
+            <span class="n">context</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
         <span class="o">}</span>
     <span class="o">}</span>
+</code></pre></div></div>
+
+<p>输出：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Refreshing the spring context
+Db Driver Class = com.mysql.jdbc.Driver
+Db url = jdbc:mysql://localhost:3306/test
+Db username = cxuan
+Db password = 111111
+</code></pre></div></div>
+
+<h3 id="value-高级用法">@Value 高级用法</h3>
+
+<p>在实现了上述的例子之后，我们再来看一下@Value 的高级用法：</p>
+
+<ul>
+  <li>@Value 可以直接为字段赋值，例如:</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Value</span><span class="o">(</span><span class="s">"cxuan"</span><span class="o">)</span>
+<span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+<span class="nd">@Value</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="nc">Integer</span> <span class="n">age</span><span class="o">;</span>
+
+<span class="nd">@Value</span><span class="o">(</span><span class="s">"${APP_NAME_NOT_FOUND:Default}"</span><span class="o">)</span>
+<span class="kd">private</span> <span class="nc">String</span> <span class="n">defaultAppName</span><span class="o">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>@Value 可以直接获取系统属性，例如：</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Value</span><span class="o">(</span><span class="s">"${java.home}"</span><span class="o">)</span>
+<span class="c1">// @Value("#{systemProperties['java.home']}") SPEL 表达式</span>
+<span class="nc">String</span> <span class="n">javaHome</span><span class="o">;</span>
+
+<span class="nd">@Value</span><span class="o">(</span><span class="s">"${HOME}"</span><span class="o">)</span>
+<span class="nc">String</span> <span class="n">dir</span><span class="o">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>@Value 可以注解在方法和参数上</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Value</span><span class="o">(</span><span class="s">"Test"</span><span class="o">)</span> <span class="c1">// 可以直接使用Test 进行单元测试</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">printValues</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nd">@Value</span><span class="o">(</span><span class="s">"another variable"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+    <span class="o">...</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>如果针对User类使用<code class="highlighter-rouge">@RequiredArgsConstructor</code>注解实现空参构造方法，那么我们就要这样定义实体类：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequiredArgsConstructor</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span> <span class="o">=</span> <span class="s">"男"</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
+<p>修改DBConnection后的代码如下：</p>
 
-<p>当然如果我们要是想生成空参构造，仅适用上一个注解<code class="highlighter-rouge">@NoArgsConstructor</code>就可以了。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConnection</span> <span class="o">{</span>
 
-<p>2.2 @RequiredArgsConstructor 配置详解</p>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_DRIVER_CLASS}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">driverClass</span><span class="o">;</span>
 
-<p>先撸注解源码：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
-<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">RequiredArgsConstructor</span> <span class="o">{</span>
-	<span class="c1">// 是否使用静态构造器，并制定静态构造器的名称</span>
-	<span class="nc">String</span> <span class="nf">staticName</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
-	<span class="c1">// 构造器入参添加注解</span>
-	<span class="nc">AnyAnnotation</span><span class="o">[]</span> <span class="nf">onConstructor</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_URL}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">dbUrl</span><span class="o">;</span>
 
-	<span class="nd">@Deprecated</span>
-	<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
-	<span class="nd">@Target</span><span class="o">({})</span>
-	<span class="nd">@interface</span> <span class="nc">AnyAnnotation</span> <span class="o">{}</span>
-<span class="o">}</span>
-</code></pre></div></div>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_USERNAME}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">userName</span><span class="o">;</span>
 
-<p>没什么好说的，可以参见@NoArgsConstructor</p>
-<ol>
-  <li>@AllArgsConstructor</li>
-</ol>
-
-<p>3.1 @AllArgsConstructor 实战使用</p>
-
-<p>@AllArgsConstructor同样是在类上使用，该注解提供一个全参数的构造方法，默认不提供无参构造。</p>
-
-<p>需要注意的是，这里的全参不包括已初始化的final字段（主要是final字段，一旦被赋值不允许再被修改）。</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@AllArgsConstructor</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${DB_PASSWORD}"</span><span class="o">)</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
 
-    <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">gender</span><span class="o">,</span> <span class="nc">String</span> <span class="n">username</span><span class="o">,</span> <span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">gender</span> <span class="o">=</span> <span class="n">gender</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">DBConnection</span><span class="o">(){}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printDBConfigs</span><span class="o">(){</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db Driver Class = "</span> <span class="o">+</span> <span class="n">driverClass</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db url = "</span> <span class="o">+</span> <span class="n">dbUrl</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db username = "</span> <span class="o">+</span> <span class="n">userName</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Db password = "</span> <span class="o">+</span> <span class="n">password</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>3.2 @AllArgsConstructor 配置详解</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
-<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
-<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">AllArgsConstructor</span> <span class="o">{</span>
-	<span class="c1">// 是否使用静态构造器，并制定静态构造器的名称</span>
-	<span class="nc">String</span> <span class="nf">staticName</span><span class="o">()</span> <span class="k">default</span> <span class="s">""</span><span class="o">;</span>
-	<span class="c1">// 构造器入参添加注解</span>
-	<span class="nc">AnyAnnotation</span><span class="o">[]</span> <span class="nf">onConstructor</span><span class="o">()</span> <span class="k">default</span> <span class="o">{};</span>
-	<span class="c1">// 设置构造器的访问权限</span>
-	<span class="nc">AccessLevel</span> <span class="nf">access</span><span class="o">()</span> <span class="k">default</span> <span class="n">lombok</span><span class="o">.</span><span class="na">AccessLevel</span><span class="o">.</span><span class="na">PUBLIC</span><span class="o">;</span>
+<p>在com.spring.propertysource.app 下 新增DBConfiguration，作用是配置管理类，管理DBConnection，并读取配置文件，代码如下：</p>
 
-	<span class="nd">@Deprecated</span>
-	<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
-	<span class="nd">@Target</span><span class="o">({})</span>
-	<span class="nd">@interface</span> <span class="nc">AnyAnnotation</span> <span class="o">{}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@PropertySources</span><span class="o">({</span>
+        <span class="nd">@PropertySource</span><span class="o">(</span><span class="s">"classpath:db.properties"</span><span class="o">),</span>
+        <span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"classpath:root.properties"</span><span class="o">,</span> <span class="n">ignoreResourceNotFound</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+<span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DBConfiguration</span> <span class="o">{</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"Default DBConfiguration"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">defaultName</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"true"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">defaultBoolean</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"10"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">defaultInt</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${APP_NAME_NOT_FOUND:Default}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">defaultAppName</span><span class="o">;</span>
+
+     <span class="nd">@Value</span><span class="o">(</span><span class="s">"#{systemProperties['java.home']}"</span><span class="o">)</span>
+<span class="c1">//    @Value("${java.home}")</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">javaHome</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${HOME}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">homeDir</span><span class="o">;</span>
+
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">DBConnection</span> <span class="nf">getDBConnection</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">DBConnection</span> <span class="n">dbConnection</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DBConnection</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">dbConnection</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"Test"</span><span class="o">)</span> <span class="c1">// 开启测试</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printValues</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="nd">@Value</span><span class="o">(</span><span class="s">"another variable"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Input Argument 1 = "</span> <span class="o">+</span> <span class="n">s</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Input Argument 2 = "</span> <span class="o">+</span> <span class="n">v</span><span class="o">);</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Home Directory = "</span> <span class="o">+</span> <span class="n">homeDir</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Default Configuration Name = "</span> <span class="o">+</span> <span class="n">defaultName</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Default App Name = "</span> <span class="o">+</span> <span class="n">defaultAppName</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Java Home = "</span> <span class="o">+</span> <span class="n">javaHome</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Home dir = "</span> <span class="o">+</span> <span class="n">homeDir</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Boolean = "</span> <span class="o">+</span> <span class="n">defaultBoolean</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Int = "</span> <span class="o">+</span> <span class="n">defaultInt</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>同样这几个属性配置方式，也可以参见<code class="highlighter-rouge">@NoArgsConstructor</code></p>
-<ol>
-  <li>Constructor 全局配置
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 如果设置为true，则lombok将向生成的构造函数添加 @java.beans.ConstructorProperties。
-lombok.anyConstructor.addConstructorProperties = [true | false] (default: false)
-# 是否禁用这几种构造器注解
-lombok.[allArgsConstructor|requiredArgsConstructor|noArgsConstructor].flagUsage = [warning | error] (default: not set)
-lombok.anyConstructor.flagUsage = [warning | error] (default: not set)
-# 是否支持复制现有的注解，在本类中使用。e.g. @Nullable/@NonNull annotations
-lombok.copyableAnnotations = [A list of fully qualified types] (default: empty list)
-</code></pre></div>    </div>
-  </li>
-</ol>
+<p>使用SpringMainClass 进行测试，测试结果如下：</p>
 
-<p>测试 <code class="highlighter-rouge">addConstructorProperties</code></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Input Argument 1 = Test
+Input Argument 2 = another variable
+Home Directory = /Users/mr.l
+Default Configuration Name = Default DBConfiguration
+Default App Name = Default
+Java Home = /Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/jre
+Home dir = /Users/mr.l
+Boolean = true
+Int = 10
+Refreshing the spring context
 
-<p>全局配置文件内容</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.stopBubbling = true
-# 首先清除原有配置
-clear lombok.anyConstructor.addConstructorProperties
-# 设置新的配置
-lombok.anyConstructor.addConstructorProperties = true
+Db Driver Class = com.mysql.jdbc.Driver
+Db url = jdbc:mysql://localhost:3306/test
+Db username = cxuan
+Db password = 111111
 </code></pre></div></div>
 
-<p>实体类</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@AllArgsConstructor</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 编译后：</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">password</span><span class="o">;</span>
+<ul>
+  <li>可以看到上述代码并没有显示调用printValues 方法，默认是以单元测试的方式进行的。</li>
+</ul>
 
-    <span class="nd">@ConstructorProperties</span><span class="o">({</span><span class="s">"username"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">})</span>		<span class="c1">// 被添加</span>
-    <span class="kd">public</span> <span class="nf">User</span><span class="o">(</span><span class="nc">String</span> <span class="n">username</span><span class="o">,</span> <span class="nc">String</span> <span class="n">password</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">username</span> <span class="o">=</span> <span class="n">username</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="o">;</span>
+<h2 id="四propertysource-与-import">四、@PropertySource 与 @Import</h2>
+<p>@Import 可以用来导入 @PropertySource 标注的类，具体代码如下：</p>
+
+<ul>
+  <li>新建一个PropertySourceReadApplication 类，用于读取配置文件并测试，具体代码如下：</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 导入BasicPropertyWithJavaConfig类</span>
+<span class="nd">@Import</span><span class="o">(</span><span class="nc">BasicPropertyWithJavaConfig</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PropertySourceReadApplication</span> <span class="o">{</span>
+
+    <span class="nd">@Resource</span>
+    <span class="kd">private</span> <span class="nc">Environment</span> <span class="n">env</span><span class="o">;</span>
+
+    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${com.spring.name}"</span><span class="o">)</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+    <span class="nd">@Bean</span><span class="o">(</span><span class="s">"context"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">PropertySourceReadApplication</span> <span class="nf">contextLoadInitialized</span><span class="o">(){</span>
+        <span class="c1">// 用environment 读取配置文件</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">env</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s">"com.spring.age"</span><span class="o">));</span>
+        <span class="c1">// 用@Value 读取配置文件</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name = "</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// AnnotationConnfigApplicationContext 内部会注册Bean</span>
+        <span class="k">new</span> <span class="nf">AnnotationConfigApplicationContext</span><span class="o">(</span><span class="nc">PropertySourceReadApplication</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
-</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-21T00:00:00+08:00"><!-- start custom article footer snippet -->
+<ul>
+  <li>新建一个BasicPropertyWithJavaConfig 类，用于配置类并加载配置文件</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@PropertySource</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"classpath:application.properties"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BasicPropertyWithJavaConfig</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">BasicPropertyWithJavaConfig</span><span class="o">(){</span>
+        <span class="kd">super</span><span class="o">();</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>启动PropertySourceReadApplication ，console能够发现读取到配置文件中的value值</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>18
+name = cxuan
+</code></pre></div></div>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-03-19T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
@@ -645,7 +802,7 @@ lombok.anyConstructor.addConstructorProperties = true
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/Annotation/Annotation/2">SpringBoot注解大全(2)</a></div><div class="next"><span>NEXT</span><a href="/Annotation/myself">自定义注释</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-util-code/mybatis-generator">利用mybatis-generator自动生成代码</a></div><div class="next"><span>NEXT</span><a href="/Annotation/Annotation">SpringBoot注解大全</a></div></div></div>
 
 </div>
 
