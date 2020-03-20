@@ -324,6 +324,63 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java-code-design-data/lock"><h2 itemprop="headline" class="item__header">Spring data jpa @Version注解及自定义数据库乐观锁实现</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">在数据库并发操作时，为了保证数据的正确性，经常要对数据加锁，加锁有两种方式：悲观锁、乐观锁
+
+悲观锁：把所需要的数据全部加锁，不允许其他事务对数据做修改 
+update xxx where xxxx for update
+
+乐观锁：对数据进行版本校验，如果版本不一致，则操作数据失败   
+update xxx,version+1  where xxxx and version=x
+ ```
+
+- @Version注解可以在实体 bean 中使用,通过这种方式可添加对乐观锁定的支持  
+- 一个类中只能有一个@Version注解  
+- 注意此属性 不能用 String  可取值 int Integer Long
+- 在jpa中，@Version注解，可以实现乐观锁功能
+
+实体类Acco...</div><p><a href="/java-code-design-data/lock">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=jpa">jpa</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=jpa%E9%94%81">jpa锁</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="jpa,Spring注解,jpa锁"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java-code-design-data/builder"><h2 itemprop="headline" class="item__header">建造模式</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">@Builder
+###1. @Builder 实战使用
+
+
+  
+    如果对建造者设计模式不太清楚的，可以先了解一下：建造这模式
+  
+
+
+@Builder注释为你的类生成相对略微复杂的构建器API。@Builder可以让你以下面显示的那样调用你的代码，来初始化你的实例对象：
+Person.builder()
+    .name("Adam Savage")
+    .city("San Francisco")
+    .job("Mythbusters")
+    .job("Unchained Reaction")
+    .build();
+
+
+@Builder可以放在类，构造函数或方法上。 虽然放在类上和放在构造函数上这两种模式是最常见的用例，但@Builder最容易用放...</div><p><a href="/java-code-design-data/builder">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%BB%BA%E9%80%A0%E8%BF%99%E6%A8%A1%E5%BC%8F">建造这模式</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="Spring注解,建造这模式"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/Annotation/Annotation/2"><h2 itemprop="headline" class="item__header">SpringBoot注解大全(2)</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">声明Bean的注解:
 
@@ -488,61 +545,8 @@ assertThat(str1, is(s...</div><p><a href="/java-util-code/Hamcrest">Read more</a
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 23, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-23T00:00:00+08:00">
     <meta itemprop="keywords" content="工具类,单元测试"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringBoot/Ansync"><h2 itemprop="headline" class="item__header">SpringBoot Ansync 异步线程池-三种方式</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">源码地址
-springboot-async
-
-异步线程池-三种方式
-
-  @Ansync
-  DeferredResult
-  WebAsyncTask
-
-
-演示在SpringBoot中如何使用异步线程池
-
-主要类
-
-  AsyncUncaughtExceptionHandler 处理异常 通过继承 AsyncConfigurer 可得
-  ThreadPoolTaskExecutor 线程池配置 ，异步处理伴随着多请求，少不了线程处理
-
-
-主要注解
-
-  @Ansync 方法注解
-  @EnableAsync 类注解，可在配置类中添加</div><p><a href="/SpringBoot/Ansync">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringBootAnsync">SpringBootAnsync</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringBootAnsync"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringBoot/Aop/log"><h2 itemprop="headline" class="item__header">SpringBoot AOP演示项目-日志篇</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">源码地址
-springboot-aop
-
-一句话简介知识点
-Spring AOP面向切面编程，可以用来配置 事务、做日志、权限验证、在用户请求时做一些处理等等 
-CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先数据的加载
-
-面向切面编程主要知识点
-
-
-  执行点（Executepoint） - 类初始化，方法调用。
-  连接点（Joinpoint）    - 执行点+方位的组合，可确定Joinpoint，比如类开始初始化前，类初始化后，方法调用前，方法调用后。
-  切点（Pointcut）       - 在众多执行点中，定位感兴趣的执行点。Executepoint相当于数据库表中的记录，而Pointcut相当于查询条件。
-  增强（Advice）    ...</div><p><a href="/SpringBoot/Aop/log">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringBootAop">SpringBootAop</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%89%93%E5%8D%B0%E6%97%A5%E5%BF%97">打印日志</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 22, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-22T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringBootAop,打印日志"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>104 post articles, 13 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>106 post articles, 14 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page3">
             <i class="fas fa-angle-left"></i>
@@ -555,7 +559,7 @@ CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先�
             </li><li>
                   <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/page13"><span>13</span></a>
+                  <a class="button button--secondary button--circle" href="/page14"><span>14</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/page5">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>

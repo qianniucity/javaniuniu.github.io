@@ -1,0 +1,92 @@
+I"�<h2 id="题目-买卖股票的最佳时机">题目 <a href="https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/">买卖股票的最佳时机</a></h2>
+<p>给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。</p>
+
+<p>如果你最多只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算你所能获取的最大利润。</p>
+
+<p>注意：你不能在买入股票前卖出股票。</p>
+
+<h2 id="示例">示例</h2>
+
+<h3 id="示例-1">示例 1:</h3>
+
+<p>输入: [7,1,5,3,6,4] <br />
+输出: 5 <br />
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。</p>
+<h3 id="示例-2">示例 2:</h3>
+
+<p>输入: [7,6,4,3,1] <br />
+输出: 0 <br />
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。</p>
+
+<h2 id="自己的思路">自己的思路</h2>
+<ul>
+  <li>暴力法
+    <h3 id="用时">用时</h3>
+    <p>15分钟</p>
+    <h2 id="自己的代码">自己的代码</h2>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">lass</span> <span class="nc">Solution</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxProfit</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">prices</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">prices</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+          <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">prices</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+              <span class="kt">int</span> <span class="n">subtract</span> <span class="o">=</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">]-</span><span class="n">prices</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+              <span class="k">if</span><span class="o">(</span><span class="n">subtract</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">subtract</span><span class="o">&lt;</span><span class="n">res</span><span class="o">)</span> <span class="o">{</span>
+                  <span class="n">res</span> <span class="o">=</span> <span class="n">subtract</span><span class="o">;</span>
+              <span class="o">}</span>
+          <span class="o">}</span>
+      <span class="o">}</span>
+      <span class="k">return</span> <span class="o">-</span><span class="n">res</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+    <h3 id="复杂度分析">复杂度分析</h3>
+  </li>
+</ul>
+
+<p>时间复杂度：O(n^2)O(n
+2
+ )。循环运行 \dfrac{n (n-1)}{2}
+2
+n(n−1)
+​
+  次。
+空间复杂度：O(1)O(1)。只使用了常数个变量。</p>
+<h2 id="官方解题思路">官方解题思路</h2>
+<h3 id="方法二一次遍历">方法二：一次遍历</h3>
+<p>算法</p>
+
+<p>假设给定的数组为：[7, 1, 5, 3, 6, 4]</p>
+
+<p>如果我们在图表上绘制给定数组中的数字，我们将会得到：</p>
+
+<p><img src="/assets/images/leetcode/0320/cc4ef55d97cfef6f9215285c7573027c4b265c31101dd54e8555a7021c95c927-file_1555699418271.png" alt="pic1" /></p>
+
+<p>我们来假设自己来购买股票。随着时间的推移，每天我们都可以选择出售股票与否。那么，假设在第 i 天，如果我们要在今天卖股票，那么我们能赚多少钱呢？</p>
+
+<p>显然，如果我们真的在买卖股票，我们肯定会想：如果我是在历史最低点买的股票就好了！太好了，在题目中，我们只要用一个变量记录一个历史最低价格 minprice，我们就可以假设自己的股票是在那天买的。那么我们在第 i 天卖出股票能得到的利润就是 prices[i] - minprice。</p>
+
+<p>因此，我们只需要遍历价格数组一遍，记录历史最低点，然后在每一天考虑这么一个问题：如果我是在历史最低点买进的，那么我今天卖出能赚多少钱？当考虑完所有天数之时，我们就得到了最好的答案。</p>
+
+<h2 id="官方代码">官方代码</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxProfit</span><span class="o">(</span><span class="kt">int</span> <span class="n">prices</span><span class="o">[])</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">minprice</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">maxprofit</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">prices</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">minprice</span><span class="o">)</span>
+                <span class="n">minprice</span> <span class="o">=</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">minprice</span> <span class="o">&gt;</span> <span class="n">maxprofit</span><span class="o">)</span>
+                <span class="n">maxprofit</span> <span class="o">=</span> <span class="n">prices</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">-</span> <span class="n">minprice</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">maxprofit</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析-1">复杂度分析</h3>
+<ul>
+  <li>时间复杂度：O(n)O(n)，只需要遍历一次。</li>
+  <li>空间复杂度：O(1)O(1)，只使用了常数个变量。</li>
+</ul>
+:ET
