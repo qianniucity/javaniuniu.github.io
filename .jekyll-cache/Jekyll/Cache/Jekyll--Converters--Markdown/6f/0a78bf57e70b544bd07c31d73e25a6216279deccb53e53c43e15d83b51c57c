@@ -1,0 +1,86 @@
+I"_!<h3 id="题目-最小的k个数">题目 <a href="https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/">最小的k个数</a></h3>
+
+<h3 id="示例">示例</h3>
+<h3 id="示例-1">示例 1：</h3>
+
+<p>输入：arr = [3,2,1], k = 2 <br />
+输出：[1,2] 或者 [2,1]
+###示例 2：</p>
+
+<p>输入：arr = [0,1,2,1], k = 1 <br />
+输出：[0]</p>
+
+<h3 id="自己的思路">自己的思路</h3>
+<ul>
+  <li>给数组排序</li>
+</ul>
+
+<h4 id="用时">用时</h4>
+<p>08:08-09:09 (1小时)</p>
+
+<h3 id="代码">代码</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">getLeastNumbers</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nl">a:</span><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+                        <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                        <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">;</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">continue</span> <span class="n">a</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">q</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">q</span><span class="o">&lt;</span><span class="n">k</span><span class="o">;</span><span class="n">q</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">res</span><span class="o">[</span><span class="n">q</span><span class="o">]=</span><span class="n">arr</span><span class="o">[</span><span class="n">q</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="官方解题思路">官方解题思路</h3>
+<h4 id="方法一排序">方法一：排序</h4>
+<p>思路和算法</p>
+
+<p>对原数组从小到大排序后取出前 kk 个数即可。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getLeastNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="s">"""
+        :type arr: List[int]
+        :type k: int
+        :rtype: List[int]
+        """</span>
+        <span class="n">arr</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h4 id="方法二堆">方法二：堆</h4>
+<p>比较直观的想法是使用堆数据结构来辅助得到最小的 k 个数。堆的性质是每次可以找出最大或最小的元素。我们可以使用一个大小为 k 的最大堆（大顶堆），将数组中的元素依次入堆，当堆的大小超过 k 时，便将多出的元素从堆顶弹出。我们以数组 [5, 4, 1, 3, 6, 2, 9][5,4,1,3,6,2,9]， k=3k=3 为例展示元素入堆的过程，如下面动图所示：</p>
+
+<p><img src="/assets/images/leetcode/0320/797ffd061a00ad948f4aad33496f455e7cf97da50377d35fead3e9470c00ca3a.gif" alt="pic1" /></p>
+
+<h3 id="官方代码">官方代码</h3>
+
+<h3 id="复杂度分析">复杂度分析</h3>
+<ul>
+  <li>
+    <p>时间复杂度：O(n\log n)，其中 n 是数组 arr 的长度。算法的时间复杂度即排序的时间复杂度。</p>
+  </li>
+  <li>
+    <p>空间复杂度：O(\log n)，排序所需额外的空间复杂度为 O(\log n)。</p>
+  </li>
+</ul>
+:ET

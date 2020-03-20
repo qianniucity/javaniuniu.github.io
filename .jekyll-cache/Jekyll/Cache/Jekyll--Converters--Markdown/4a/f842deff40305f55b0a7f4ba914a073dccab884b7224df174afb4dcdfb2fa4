@@ -1,0 +1,204 @@
+I"_<h3 id="题目-最小的k个数">题目 <a href="https://leetcode-cn.com/problems/zui-xiao-de-kge-shu-lcof/">最小的k个数</a></h3>
+
+<h3 id="示例">示例</h3>
+<h5 id="示例-1">示例 1：</h5>
+
+<p>输入：arr = [3,2,1], k = 2 <br />
+输出：[1,2] 或者 [2,1]</p>
+<h5 id="示例-2">示例 2：</h5>
+
+<p>输入：arr = [0,1,2,1], k = 1 <br />
+输出：[0]</p>
+
+<h3 id="自己的思路">自己的思路</h3>
+<ul>
+  <li>给数组排序</li>
+</ul>
+
+<h4 id="用时">用时</h4>
+<p>08:08-09:09 (1小时)</p>
+
+<h3 id="代码">代码</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">getLeastNumbers</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">arr</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+            <span class="n">arr</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nl">a:</span><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="n">arr</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span><span class="o">--)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                        <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+                        <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                        <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">;</span>
+                        <span class="k">continue</span><span class="o">;</span>
+                    <span class="o">}</span>
+                    <span class="k">continue</span> <span class="n">a</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">q</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">q</span><span class="o">&lt;</span><span class="n">k</span><span class="o">;</span><span class="n">q</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">res</span><span class="o">[</span><span class="n">q</span><span class="o">]=</span><span class="n">arr</span><span class="o">[</span><span class="n">q</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="官方解题思路">官方解题思路</h3>
+
+<h4 id="方法一排序">方法一：排序</h4>
+<p>思路和算法</p>
+
+<p>对原数组从小到大排序后取出前 kk 个数即可。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getLeastNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
+        <span class="s">"""
+        :type arr: List[int]
+        :type k: int
+        :rtype: List[int]
+        """</span>
+        <span class="n">arr</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[:</span><span class="n">k</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h4 id="方法二堆">方法二：堆</h4>
+<p>比较直观的想法是使用堆数据结构来辅助得到最小的 k 个数。堆的性质是每次可以找出最大或最小的元素。我们可以使用一个大小为 k 的最大堆（大顶堆），将数组中的元素依次入堆，当堆的大小超过 k 时，便将多出的元素从堆顶弹出。我们以数组 [5, 4, 1, 3, 6, 2, 9][5,4,1,3,6,2,9]， k=3k=3 为例展示元素入堆的过程，如下面动图所示：</p>
+
+<p><img src="/assets/images/leetcode/0320/797ffd061a00ad948f4aad33496f455e7cf97da50377d35fead3e9470c00ca3a.gif" alt="pic1" /></p>
+
+<p>这样，<strong>由于每次从堆顶弹出的数都是堆中最大的，最小的 k 个元素一定会留在堆里</strong>。这样，把数组中的元素全部入堆之后，堆中剩下的 k 个元素就是最大的 k 个数了。</p>
+
+<p>注意在动画中，我们并没有画出堆的内部结构，因为这部分内容并不重要。我们只需要知道堆每次会弹出最大的元素即可。在写代码的时候，我们使用的也是库函数中的优先队列数据结构，如 Java 中的 PriorityQueue。在面试中，我们不需要实现堆的内部结构，把数据结构使用好，会分析其复杂度即可。</p>
+
+<p>以下是题解代码：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">getLeastNumbers</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+    <span class="o">}</span>
+    <span class="c1">// 使用一个最大堆（大顶堆）</span>
+    <span class="c1">// Java 的 PriorityQueue 默认是小顶堆，添加 comparator 参数使其变成最大堆</span>
+    <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">heap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;(</span><span class="n">k</span><span class="o">,</span> <span class="o">(</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">i2</span><span class="o">,</span> <span class="n">i1</span><span class="o">));</span>
+
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">e</span> <span class="o">:</span> <span class="n">arr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">heap</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">heap</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">heap</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span> <span class="c1">// 删除堆顶最大元素</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 将堆中的元素存入数组</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">heap</span><span class="o">.</span><span class="na">size</span><span class="o">()];</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">e</span> <span class="o">:</span> <span class="n">heap</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">res</span><span class="o">[</span><span class="n">j</span><span class="o">++]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="方法三分治">方法三：分治</h4>
+<p>Top K 问题的另一个分治解法就比较难想到，需要在平时有算法的积累。实际上，“查找第 k 大的元素”是一类算法问题，称为选择问题。找第 k 大的数，或者找前 k 大的数，有一个经典的 quick select（快速选择）算法。这个名字和 quick sort（快速排序）看起来很像，算法的思想也和快速排序类似，都是分治法的思想。</p>
+
+<p>让我们回顾快速排序的思路。快速排序中有一步很重要的操作是 partition（划分），从数组中随机选取一个枢纽元素 v，然后原地移动数组中的元素，使得比 v 小的元素在 v 的左边，比 v 大的元素在 v 的右边，如下图所示：</p>
+
+<p><img src="/assets/images/leetcode/0320/7daa58223e1c766e319819becffcc023276de2f68e927ef6cca9e289c892c646.jpg" alt="pic2" /></p>
+
+<p>这个 partition 操作是原地进行的，需要 O(n)O(n) 的时间，接下来，快速排序会递归地排序左右两侧的数组。而快速选择（quick select）算法的不同之处在于，接下来只需要递归地选择一侧的数组。快速选择算法想当于一个“不完全”的快速排序，因为我们只需要知道最小的 k 个数是哪些，并不需要知道它们的顺序。</p>
+
+<p>我们的目的是寻找最小的 kk 个数。假设经过一次 partition 操作，枢纽元素位于下标 mm，也就是说，左侧的数组有 mm 个元素，是原数组中最小的 mm 个数。那么：</p>
+
+<ul>
+  <li>若 k = mk=m，我们就找到了最小的 kk 个数，就是左侧的数组；</li>
+  <li>若 k&lt;mk&lt;m ，则最小的 kk 个数一定都在左侧数组中，我们只需要对左侧数组递归地 parition 即可；</li>
+  <li>若 k&gt;mk&gt;m，则左侧数组中的 mm 个数都属于最小的 kk 个数，我们还需要在右侧数组中寻找最小的 k-mk−m 个数，对右侧数组递归地 partition 即可。
+这种方法需要多加领会思想，如果你对快速排序掌握得很好，那么稍加推导应该不难掌握 quick select 的要领。</li>
+</ul>
+
+<p>以下是题解代码：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">getLeastNumbers</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// 原地不断划分数组</span>
+    <span class="n">partitionArray</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+
+    <span class="c1">// 数组的前 k 个数此时就是最小的 k 个数，将其存入结果</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">k</span><span class="o">];</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">partitionArray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span><span class="o">,</span> <span class="kt">int</span> <span class="n">lo</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hi</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 做一次 partition 操作</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">partition</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">lo</span><span class="o">,</span> <span class="n">hi</span><span class="o">);</span>
+    <span class="c1">// 此时数组前 m 个数，就是最小的 m 个数</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 正好找到最小的 k(m) 个数</span>
+        <span class="k">return</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 最小的 k 个数一定在前 m 个数中，递归划分</span>
+        <span class="n">partitionArray</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">lo</span><span class="o">,</span> <span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="c1">// 在右侧数组中寻找最小的 k-m 个数</span>
+        <span class="n">partitionArray</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="o">,</span> <span class="n">hi</span><span class="o">,</span> <span class="n">k</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// partition 函数和快速排序中相同，具体可参考快速排序相关的资料</span>
+<span class="c1">// 代码参考 Sedgewick 的《算法4》</span>
+<span class="kt">int</span> <span class="nf">partition</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">lo</span><span class="o">,</span> <span class="kt">int</span> <span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">lo</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">hi</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">lo</span><span class="o">];</span>
+    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">a</span><span class="o">[++</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">a</span><span class="o">[--</span><span class="n">j</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">v</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">lo</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">swap</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">swap</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">lo</span><span class="o">,</span> <span class="n">j</span><span class="o">);</span>
+
+    <span class="c1">// a[lo .. j-1] &lt;= a[j] &lt;= a[j+1 .. hi]</span>
+    <span class="k">return</span> <span class="n">j</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="kt">void</span> <span class="nf">swap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="kt">int</span> <span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+    <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+    <span class="n">a</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="复杂度分析">复杂度分析</h3>
+<ul>
+  <li>
+    <p>时间复杂度：O(n\log n)，其中 n 是数组 arr 的长度。算法的时间复杂度即排序的时间复杂度。</p>
+  </li>
+  <li>
+    <p>空间复杂度：O(\log n)，排序所需额外的空间复杂度为 O(\log n)。</p>
+  </li>
+</ul>
+:ET
