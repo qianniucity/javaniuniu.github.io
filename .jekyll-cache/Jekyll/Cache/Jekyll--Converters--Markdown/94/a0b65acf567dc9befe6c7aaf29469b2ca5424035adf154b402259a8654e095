@@ -1,0 +1,73 @@
+I"�<p>偶然在力扣（LeetCode）参加了一个活动，每天一题，坚持60天   <br />
+今天是2020-03-17 <strong>第一天</strong></p>
+
+<h2 id="模版">模版</h2>
+
+<h2 id="题目-多数元素">题目 <a href="https://leetcode-cn.com/problems/majority-element/">多数元素</a></h2>
+<p>给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。</p>
+
+<p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。</p>
+
+<h2 id="示例">示例</h2>
+<h3 id="示例-1">示例 1:</h3>
+
+<p>输入: [3,2,3]
+输出: 3</p>
+<h3 id="示例-2">示例 2:</h3>
+
+<p>输入: [2,2,1,1,1,2,2]
+输出: 2</p>
+
+<h2 id="自己的思路">自己的思路</h2>
+
+<h2 id="自己的代码">自己的代码</h2>
+<p>python</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">majorityElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="s">"""
+        :type nums: List[int]
+        :rtype: int
+        """</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">dic</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+        <span class="k">for</span> <span class="n">di</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">di</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">di</span>
+</code></pre></div></div>
+
+<p>java</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">majorityElement</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">cmap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="nl">i:</span><span class="n">nums</span><span class="o">){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cmap</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">i</span><span class="o">))</span> <span class="o">{</span>
+               <span class="kt">int</span> <span class="n">v</span><span class="o">=</span>  <span class="n">cmap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)+</span><span class="mi">1</span><span class="o">;</span>
+               <span class="n">cmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">i</span><span class="o">,</span><span class="n">v</span><span class="o">);</span>
+            <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+                <span class="n">cmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">i</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">for</span><span class="o">(</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span> <span class="nl">entry:</span><span class="n">cmap</span><span class="o">.</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">((</span><span class="kt">int</span><span class="o">)</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">()&gt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">/</span><span class="mi">2</span><span class="o">){</span>
+                <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="用时">用时</h3>
+<p>30分钟</p>
+
+<h2 id="官方解题思路">官方解题思路</h2>
+
+<h2 id="官方代码">官方代码</h2>
+
+<h2 id="复杂度分析">复杂度分析</h2>
+:ET

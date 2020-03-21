@@ -324,6 +324,34 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/web/Controller/retrurn"><h2 itemprop="headline" class="item__header">控制类中，return的几种形态</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">redirect重定向流程
+客户发送一个请求到服务器，服务器匹配servlet，这都和请求转发一样，servlet处理完之后调用了sendRedirect()这个方法，这个方法是response的方法，所以，当这个servlet处理完之后，看到response.senRedirect()方法，立即向客户端返回这个响应，响应行告诉客户端你必须要再发送一个请求，去访问test.jsp，紧接着客户端受到这个请求后，立刻发出一个新的请求，去请求test.jsp,这里两个请求互不干扰，相互独立，在前面request里面setAttribute()的任何东西，在后面的request里面都获得不了。可见，在sendRedirect()里面是两个请求，两个响应。
+
+重定向场景
+Spring MVC中做...</div><p><a href="/web/Controller/retrurn">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=CodeMark">CodeMark</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 29, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-29T00:00:00+08:00">
+    <meta itemprop="keywords" content="CodeMark"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/Annotation/Annotation/Controller"><h2 itemprop="headline" class="item__header">Controller和@RestController的区别？</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">知识点：@RestController注解相当于@ResponseBody ＋ @Controller合在一起的作用。
+
+1) 如果只是使用@RestController注解Controller，则Controller中的方法无法返回jsp页面，或者html，配置的视图解析器 InternalResourceViewResolver不起作用，返回的内容就是Return 里的内容。
+
+2) 如果需要返回到指定页面，则需要用 @Controller配合视图解析器InternalResourceViewResolver才行。如果需要返回JSON，XML或自定义mediaType内容到页面，则需要在对应的方法上加上@ResponseBody注解。
+
+例如：
+
+1.使用@Controller 注...</div><p><a href="/Annotation/Annotation/Controller">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%B3%A8%E8%A7%A3">注解</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 29, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-29T00:00:00+08:00">
+    <meta itemprop="keywords" content="注解"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java-code-design-data/lock"><h2 itemprop="headline" class="item__header">Spring data jpa @Version注解及自定义数据库乐观锁实现</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">在数据库并发操作时，为了保证数据的正确性，经常要对数据加锁，加锁有两种方式：悲观锁、乐观锁
 
@@ -490,63 +518,8 @@ DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的�
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 25, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-25T00:00:00+08:00">
     <meta itemprop="keywords" content="jpa,Spring注解,数据库"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-redis/KeyGenerator"><h2 itemprop="headline" class="item__header">Spring Cache – KeyGenerator自定义rediskey</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. 概述
-在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。
-
-2. KeyGenerator
-这负责为缓存中的每个数据项生成每个键，这些键将用于在检索时查找数据项。
-
-此处的默认实现是SimpleKeyGenerator –它使用提供的方法参数来生成密钥。这意味着，如果我们有两个使用相同的缓存名称和参数类型集的方法，则很有可能会导致冲突。
-
-它还意味着缓存数据可以由另一种方法覆盖。
-
-3. 自定义密钥生成器
-密钥生成器只需要实现一个方法：
-
-Object generate(Object object, Method method, Object... params)
-
-如果未正确实现或使用，则可能导致覆盖缓存数据。
-
-让我们来看看实现：
-
-public...</div><p><a href="/java-code-redis/KeyGenerator">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Redis">Redis</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 24, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-24T00:00:00+08:00">
-    <meta itemprop="keywords" content="Redis"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/Hamcrest"><h2 itemprop="headline" class="item__header">单元测试的框架Hamcrest</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">一句话介绍
-Hamcrest是用于Java的单元测试的框架，它使用matcher匹配器来进行断言。在Spring-boot-starter中集成了Hamcrest,无需而外引入。
-
-核心API
-
-
-  is
-    
-      使用is匹配器使得程序更加易懂
-        String str1 = "text";
-String str2 = " text ";
-assertThat(str1, is(equalToIgnoringWhiteSpace(str2)));
-        
-      
-      用于简单数据类型的判断
-        String str1 = "text";
-String str2 = "text";
-assertThat(str1, is(s...</div><p><a href="/java-util-code/Hamcrest">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95">单元测试</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="工具类,单元测试"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>106 post articles, 14 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>108 post articles, 14 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page3">
             <i class="fas fa-angle-left"></i>
