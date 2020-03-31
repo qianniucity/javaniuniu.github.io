@@ -1,4 +1,4 @@
-I"�<h2 id="前言">前言</h2>
+I"�<h2 id="前言">前言</h2>
 <p>排序算法在计算机科学入门课程中很普遍，在学习排序算法的时候，涉及到大量的各种核心算法概念，例如大O表示法，分治法，堆和二叉树之类的数据结构，随机算法，最佳、最差和平均情况分析，时空权衡以及上限和下限，本文就介绍了十二种排序算法供大家学习。</p>
 
 <h2 id="简介">简介</h2>
@@ -360,6 +360,28 @@
 <p>计数排序的过程是创建一个长度为数组中最小和最大元素之差的数组，分别对应数组中的每个元素，然后用这个新的数组来统计每个元素出现的频率，然后遍历新的数组，根据每个元素出现的频率把元素放回到老的数组中，得到已经排好序的数组。</p>
 
 <p><img src="/assets/images/leetcode/0331/62d30d36c216dae812d4b17b3545c3a2f2e872805fef3635ad12e1b59d20d453-counting-sort.gif" alt="pic11" /></p>
+
+<p>简单代码实现：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">countSort</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>            <span class="c1">// 找到最大最小值</span>
+        <span class="n">min</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">min</span><span class="o">,</span> <span class="n">num</span><span class="o">);</span>
+        <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span> <span class="n">num</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">count</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">max</span><span class="o">-</span><span class="n">min</span><span class="o">+</span><span class="mi">1</span><span class="o">];</span> <span class="c1">// 建立新数组</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>            <span class="c1">// 统计每个元素出现频率</span>
+        <span class="n">count</span><span class="o">[</span><span class="n">num</span><span class="o">-</span><span class="n">min</span><span class="o">]++;</span>
+    <span class="o">}</span>
+    <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>  <span class="c1">// 根据出现频率把计数数组中的元素放回到旧数组中</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">count</span><span class="o">[</span><span class="n">i</span><span class="o">]&gt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">nums</span><span class="o">[</span><span class="n">cur</span><span class="o">++]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="n">min</span><span class="o">;</span>
+            <span class="n">count</span><span class="o">[</span><span class="n">i</span><span class="o">]--;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
 <p>计数排序能够将时间复杂度降低到O(n+r)（r为数组元素变化范围），不过这是对于数组元素的变化范围不是特别大。随着范围的变大，计数排序的性能就会逐渐降低。</p>
 
