@@ -1,4 +1,4 @@
-I"��<h2 id="一参数校验">一、参数校验</h2>
+I"��<h2 id="一参数校验">一、参数校验</h2>
 <p>在开发中经常需要写一些字段校验的代码，比如字段非空，字段长度限制，邮箱格式验证等等，写这些与业务逻辑关系不大的代码个人感觉有两个麻烦：</p>
 
 <ul>
@@ -257,7 +257,7 @@ hibernate validator <a href="http://hibernate.org/validator/documentation/">（�
         <span class="n">demo2</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="s">"111"</span><span class="o">);</span>
         <span class="n">demo2</span><span class="o">.</span><span class="na">setHigh</span><span class="o">(</span><span class="mi">150</span><span class="o">);</span>
         <span class="n">demo2</span><span class="o">.</span><span class="na">setLength</span><span class="o">(</span><span class="s">"ABCDE"</span><span class="o">);</span>
-        <span class="n">demo2</span><span class="o">.</span><span class="na">setList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;());</span>
+        <span class="n">demo2</span><span class="o">.</span><span class="na">setList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;()</span><span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">{</span><span class="n">add</span><span class="o">(</span><span class="s">"111"</span><span class="o">);</span><span class="n">add</span><span class="o">(</span><span class="s">"222"</span><span class="o">);</span><span class="n">add</span><span class="o">(</span><span class="s">"333"</span><span class="o">);}});</span>
         <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">ConstraintViolation</span><span class="o">&lt;</span><span class="nc">Demo2</span><span class="o">&gt;&gt;</span> <span class="n">violationSet</span> <span class="o">=</span> <span class="n">validator</span><span class="o">.</span><span class="na">validate</span><span class="o">(</span><span class="n">demo2</span><span class="o">);</span>
         <span class="k">for</span> <span class="o">(</span><span class="nc">ConstraintViolation</span><span class="o">&lt;</span><span class="nc">Demo2</span><span class="o">&gt;</span> <span class="n">model</span> <span class="o">:</span> <span class="n">violationSet</span><span class="o">)</span> <span class="o">{</span>
             <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">model</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
@@ -293,7 +293,7 @@ hibernate validator <a href="http://hibernate.org/validator/documentation/">（�
     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"/demo3"</span><span class="o">)</span>
     <span class="kd">public</span> <span class="kt">void</span> <span class="nf">demo3</span><span class="o">(){</span>
         <span class="nc">Demo2</span> <span class="n">demo2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Demo2</span><span class="o">();</span>
-        <span class="n">demo2</span><span class="o">.</span><span class="na">setList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;());</span>
+        <span class="n">demo2</span><span class="o">.</span><span class="na">setList</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;()</span><span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">{</span><span class="n">add</span><span class="o">(</span><span class="s">"111"</span><span class="o">);</span><span class="n">add</span><span class="o">(</span><span class="s">"222"</span><span class="o">);</span><span class="n">add</span><span class="o">(</span><span class="s">"333"</span><span class="o">);}});</span>
 
         <span class="nc">Demo3</span> <span class="n">demo3</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Demo3</span><span class="o">();</span>
         <span class="n">demo3</span><span class="o">.</span><span class="na">setExtField</span><span class="o">(</span><span class="s">"22"</span><span class="o">);</span>

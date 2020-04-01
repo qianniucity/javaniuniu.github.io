@@ -289,7 +289,7 @@ public class Demo2 {
         demo2.setAge("111");
         demo2.setHigh(150);
         demo2.setLength("ABCDE");
-        demo2.setList(new ArrayList<String>(){{add("111");add("222");add("333");}});
+        demo2.setList(new ArrayList<String>()\{\{add("111");add("222");add("333");}});
         Set<ConstraintViolation<Demo2>> violationSet = validator.validate(demo2);
         for (ConstraintViolation<Demo2> model : violationSet) {
             System.out.println(model.getMessage());
@@ -328,7 +328,7 @@ public class Demo3 {
     @RequestMapping("/demo3")
     public void demo3(){
         Demo2 demo2 = new Demo2();
-        demo2.setList(new ArrayList<String>(){{add("111");add("222");add("333");}});
+        demo2.setList(new ArrayList<String>()\{\{add("111");add("222");add("333");}});
 
         Demo3 demo3 = new Demo3();
         demo3.setExtField("22");

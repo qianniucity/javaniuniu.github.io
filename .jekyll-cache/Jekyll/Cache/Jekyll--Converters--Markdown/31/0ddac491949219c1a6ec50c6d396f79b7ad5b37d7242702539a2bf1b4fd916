@@ -1,0 +1,102 @@
+I"t%<h2 id="题目-有效括号的嵌套深度">题目 <a href="https://leetcode-cn.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/">有效括号的嵌套深度</a></h2>
+<p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。</p>
+
+<p>有效字符串需满足：</p>
+
+<p>左括号必须用相同类型的右括号闭合。 <br />
+左括号必须以正确的顺序闭合。  <br />
+注意空字符串可被认为是有效字符串。</p>
+
+<h2 id="示例">示例</h2>
+<h3 id="示例-1">示例 1:</h3>
+
+<p>输入: “()”
+输出: true</p>
+<h3 id="示例2">示例 2:</h3>
+
+<p>输入: “()[]{}”
+输出: true</p>
+<h3 id="示例3">示例 3:</h3>
+
+<p>输入: “(]”
+输出: false</p>
+<h3 id="示例4">示例 4:</h3>
+
+<p>输入: “([)]”
+输出: false</p>
+<h3 id="示例5">示例 5:</h3>
+
+<p>输入: “{[]}”
+输出: true</p>
+
+<h2 id="自己的思路">自己的思路</h2>
+
+<h2 id="自己的代码">自己的代码</h2>
+
+<h3 id="用时">用时</h3>
+
+<h2 id="官方解题思路">官方解题思路</h2>
+<h3 id="解题思路">解题思路：</h3>
+<h3 id="--算法原理">- 算法原理</h3>
+<ul>
+  <li>栈先入后出特点恰好与本题括号排序特点一致，即若遇到左括号入栈，遇到右括号时将对应栈顶左括号出栈，则遍历完所有括号后 stack 仍然为空；</li>
+  <li>建立哈希表 dic 构建左右括号对应关系：keykey 左括号，valuevalue 右括号；这样查询 22 个括号是否对应只需 O(1) 时间复杂度；建立栈 stack，遍历字符串 s 并按照算法流程一一判断。</li>
+  <li>算法流程
+    <ol>
+      <li>如果 c 是左括号，则入栈 pushpush；</li>
+      <li>否则通过哈希表判断括号对应关系，若 stack 栈顶出栈括号 stack.pop() 与当前遍历括号 c 不对应，则提前返回 falsefalse。
+        <h3 id="--提前返回-false">- 提前返回 false</h3>
+        <ul>
+          <li>提前返回优点： 在迭代过程中，提前发现不符合的括号并且返回，提升算法效率。</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>解决边界问题：
+    <ul>
+      <li>栈 stack 为空： 此时 stack.pop() 操作会报错；因此，我们采用一个取巧方法，给 stack 赋初值 ?? ，并在哈希表 dic 中建立 key: ‘?’，value:’?’key:′?′，value:′?′的对应关系予以配合。此时当 stack 为空且 c 为右括号时，可以正常提前返回 falsefalse；</li>
+      <li>字符串 s 以左括号结尾： 此情况下可以正常遍历完整个 s，但 stack 中遗留未出栈的左括号；因此，最后需返回 len(stack) == 1，以判断是否是有效的括号组合。</li>
+    </ul>
+  </li>
+  <li>复杂度分析
+    <ul>
+      <li>时间复杂度 O(N)：正确的括号组合需要遍历 11 遍 s；</li>
+      <li>空间复杂度 O(N)：哈希表和栈使用线性的空间大小。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="官方代码">官方代码</h2>
+
+<p>Python3:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isValid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s">'{'</span><span class="p">:</span> <span class="s">'{'</span><span class="p">,</span> <span class="s">'['</span><span class="p">:</span> <span class="s">']'</span><span class="p">,</span> <span class="s">'('</span><span class="p">:</span> <span class="s">')'</span><span class="p">,</span> <span class="s">'?'</span><span class="p">:</span> <span class="s">'?'</span><span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="s">'?'</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">dic</span><span class="p">[</span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()]</span> <span class="o">!=</span> <span class="n">c</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div></div>
+<p>Java:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span><span class="nc">Character</span><span class="o">&gt;()</span><span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">{</span>
+        <span class="n">put</span><span class="o">(</span><span class="sc">'{'</span><span class="o">,</span><span class="sc">'}'</span><span class="o">);</span> <span class="n">put</span><span class="o">(</span><span class="sc">'['</span><span class="o">,</span><span class="sc">']'</span><span class="o">);</span> <span class="n">put</span><span class="o">(</span><span class="sc">'('</span><span class="o">,</span><span class="sc">')'</span><span class="o">);</span> <span class="n">put</span><span class="o">(</span><span class="sc">'?'</span><span class="o">,</span><span class="sc">'?'</span><span class="o">);</span>
+    <span class="o">}};</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">)))</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="nc">LinkedList</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;()</span> <span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">{</span> <span class="n">add</span><span class="o">(</span><span class="sc">'?'</span><span class="o">);</span> <span class="o">}};</span>
+        <span class="k">for</span><span class="o">(</span><span class="nc">Character</span> <span class="n">c</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">()){</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">c</span><span class="o">))</span> <span class="n">stack</span><span class="o">.</span><span class="na">addLast</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">removeLast</span><span class="o">())</span> <span class="o">!=</span> <span class="n">c</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="复杂度分析">复杂度分析</h2>
+:ET
