@@ -267,7 +267,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">leetcode</li><li class="toc-h2"><a href="/leetcode/about">关于力扣(leetcode)</a></li><li class="toc-h2"><a href="/leetcode/2020/0317">拼写单词</a></li><li class="toc-h2"><a href="/leetcode/2020/0318">矩形重叠</a></li><li class="toc-h2"><a href="/leetcode/2020/0319">最长回文串</a></li><li class="toc-h2"><a href="/leetcode/2020/0320">最小的k个数</a></li><li class="toc-h2"><a href="/leetcode/2020/0320/2">买卖股票的最佳时机</a></li><li class="toc-h2"><a href="/leetcode/2020/0321/1">水壶问题</a></li><li class="toc-h2"><a href="/leetcode/2020/0321/2">多数元素</a></li><li class="toc-h2"><a href="/leetcode/2020/0322/006">按既定顺序创建目标数组</a></li><li class="toc-h2"><a href="/leetcode/2020/0322/007">两个数组间的距离值</a></li><li class="toc-h2"><a href="/leetcode/2020/0331/011">十二种排序算法</a></li><li class="toc-h2"><a href="/leetcode/2020/0401/012">有效括号的嵌套深度</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">leetcode</li><li class="toc-h2"><a href="/leetcode/about">关于力扣(leetcode)</a></li><li class="toc-h2"><a href="/leetcode/2020/0317">拼写单词</a></li><li class="toc-h2"><a href="/leetcode/2020/0318">矩形重叠</a></li><li class="toc-h2"><a href="/leetcode/2020/0319">最长回文串</a></li><li class="toc-h2"><a href="/leetcode/2020/0320">最小的k个数</a></li><li class="toc-h2"><a href="/leetcode/2020/0320/2">买卖股票的最佳时机</a></li><li class="toc-h2"><a href="/leetcode/2020/0321/1">水壶问题</a></li><li class="toc-h2"><a href="/leetcode/2020/0321/2">多数元素</a></li><li class="toc-h2"><a href="/leetcode/2020/0322/006">按既定顺序创建目标数组</a></li><li class="toc-h2"><a href="/leetcode/2020/0322/007">两个数组间的距离值</a></li><li class="toc-h2"><a href="/leetcode/2020/0331/011">十二种排序算法</a></li><li class="toc-h2"><a href="/leetcode/2020/0401/012">有效括号的嵌套深度</a></li><li class="toc-h2"><a href="/leetcode/2020/0402/013">图解动态规划的解题四步骤</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -388,12 +388,10 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <p>「状态转移方程」可以理解为「不同阶段之间的联系」。</p>
 
 <ul>
-  <li>
-    <p>今天只和昨天的状态相关，依然是分类讨论：</p>
-  </li>
-  <li>
-    <p>今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：<em>dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])</em>；
-今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：<em>dp[i][1] = dp[i - 1][0] + nums[i]</em>。</p>
+  <li>今天只和昨天的状态相关，依然是分类讨论：
+z</li>
+  <li>今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：<em>dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])</em>；
+今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：<em>dp[i][1] = dp[i - 1][0] + nums[i]</em>。
     <h4 id="第-3-步考虑初始化">第 3 步：考虑初始化</h4>
     <p>从第 2 天开始，每天的状态值只与前一天有关，因此第 1 天就只好老老实实算了。好在不难判断：<em>dp[0][0] = 0 与 dp[0][1] = nums[0]</em>；</p>
   </li>
@@ -435,9 +433,29 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <span class="o">}</span>
 </code></pre></div></div>
+<p>同 <a href="https://leetcode-cn.com/problems/house-robber/">打家劫舍</a></p>
+<h3 id="方法二-递推方程">方法二 递推方程</h3>
+<p>递推方程：dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]</p>
 
-<h2 id="复杂度分析">复杂度分析</h2>
-<p>-</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">rob</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">],</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 </div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-03-24T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
@@ -449,7 +467,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/leetcode/2020/0401/012">有效括号的嵌套深度</a></div><div class="next"><span>NEXT</span><a href="/java-util-code/date">date工具</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/leetcode/2020/0402/013">图解动态规划的解题四步骤</a></div><div class="next"><span>NEXT</span><a href="/java-util-code/date">date工具</a></div></div></div>
 
 </div>
 

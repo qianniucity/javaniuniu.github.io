@@ -1,4 +1,4 @@
-I"�#<h2 id="题目-按摩师">题目 <a href="https://leetcode-cn.com/problems/the-masseuse-lcci/">按摩师</a></h2>
+I"�1<h2 id="题目-按摩师">题目 <a href="https://leetcode-cn.com/problems/the-masseuse-lcci/">按摩师</a></h2>
 <p>一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。</p>
 
 <h2 id="示例">示例</h2>
@@ -40,12 +40,10 @@
 <p>「状态转移方程」可以理解为「不同阶段之间的联系」。</p>
 
 <ul>
-  <li>
-    <p>今天只和昨天的状态相关，依然是分类讨论：</p>
-  </li>
-  <li>
-    <p>今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：<em>dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])</em>；
-今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：<em>dp[i][1] = dp[i - 1][0] + nums[i]</em>。</p>
+  <li>今天只和昨天的状态相关，依然是分类讨论：
+z</li>
+  <li>今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：<em>dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])</em>；
+今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：<em>dp[i][1] = dp[i - 1][0] + nums[i]</em>。
     <h4 id="第-3-步考虑初始化">第 3 步：考虑初始化</h4>
     <p>从第 2 天开始，每天的状态值只与前一天有关，因此第 1 天就只好老老实实算了。好在不难判断：<em>dp[0][0] = 0 与 dp[0][1] = nums[0]</em>；</p>
   </li>
@@ -87,7 +85,27 @@
 
 <span class="o">}</span>
 </code></pre></div></div>
+<p>同 <a href="https://leetcode-cn.com/problems/house-robber/">打家劫舍</a></p>
+<h3 id="方法二-递推方程">方法二 递推方程</h3>
+<p>递推方程：dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]</p>
 
-<h2 id="复杂度分析">复杂度分析</h2>
-<p>-</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">rob</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">],</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 :ET

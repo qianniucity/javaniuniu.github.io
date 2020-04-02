@@ -1,5 +1,139 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-04-01T21:15:00+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">有效括号的嵌套深度</title><link href="http://localhost:4000/leetcode/2020/0401/012" rel="alternate" type="text/html" title="有效括号的嵌套深度" /><published>2020-04-01T00:00:00+08:00</published><updated>2020-04-01T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0401/012</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0401/012">&lt;h2 id=&quot;题目-有效括号的嵌套深度&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/&quot;&gt;有效括号的嵌套深度&lt;/a&gt;&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-04-02T20:30:22+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">图解动态规划的解题四步骤</title><link href="http://localhost:4000/leetcode/2020/0402/013" rel="alternate" type="text/html" title="图解动态规划的解题四步骤" /><published>2020-04-02T00:00:00+08:00</published><updated>2020-04-02T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0402/013</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0402/013">&lt;h2 id=&quot;图解动态规划的解题四步骤&quot;&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/house-robber/solution/dong-tai-gui-hua-jie-ti-si-bu-zou-xiang-jie-cjavap/&quot;&gt;图解动态规划的解题四步骤&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;如果你对于动态规划还不是很了解，或者没怎么做过动态规划的题目的话，那么 House Robber （小偷问题）这道题是一个非常好的入门题目。本文会以 House Robber 题目为例子，讲解动态规划题目的四个基本步骤。&lt;/p&gt;
+
+&lt;p&gt;动态规划的的四个解题步骤是：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;定义子问题&lt;/li&gt;
+  &lt;li&gt;写出子问题的递推关系&lt;/li&gt;
+  &lt;li&gt;确定 DP 数组的计算顺序&lt;/li&gt;
+  &lt;li&gt;空间优化（可选）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下面我们一步一步地进行讲解。&lt;/p&gt;
+
+&lt;h3 id=&quot;步骤一定义子问题&quot;&gt;步骤一：定义子问题&lt;/h3&gt;
+&lt;p&gt;稍微接触过一点动态规划的朋友都知道动态规划有一个“子问题”的定义。什么是子问题？子问题是和原问题相似，但规模较小的问题。例如这道小偷问题，原问题是“从全部房子中能偷到的最大金额”，将问题的规模缩小，子问题就是“从 k 个房子中能偷到的最大金额”，用 f(k) 表示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0402/91c71fba111b52580bd0f99bd77f386ae26055b6ffb015c3df9dc26204e8465a.jpg&quot; alt=&quot;pic1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看到，子问题是参数化的，我们定义的子问题中有参数 kk。假设一共有 nn 个房子的话，就一共有 nn 个子问题。动态规划实际上就是通过求这一堆子问题的解，来求出原问题的解。这要求子问题需要具备两个性质：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;原问题要能由子问题表示。例如这道小偷问题中，k=nk=n 时实际上就是原问题。否则，解了半天子问题还是解不出原问题，那子问题岂不是白解了。&lt;/li&gt;
+  &lt;li&gt;一个子问题的解要能通过其他子问题的解求出。例如这道小偷问题中，f(k)f(k) 可以由 f(k-1)f(k−1) 和 f(k-2)f(k−2) 求出，具体原理后面会解释。这个性质就是教科书中所说的“最优子结构”。如果定义不出这样的子问题，那么这道题实际上没法用动态规划解。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;小偷问题由于比较简单，定义子问题实际上是很直观的。一些比较难的动态规划题目可能需要一些定义子问题的技巧。&lt;/p&gt;
+
+&lt;h3 id=&quot;步骤二写出子问题的递推关系&quot;&gt;步骤二：写出子问题的递推关系&lt;/h3&gt;
+&lt;p&gt;这一步是求解动态规划问题最关键的一步。然而，这一步也是最无法在代码中体现出来的一步。在做题的时候，最好把这一步的思路用注释的形式写下来。做动态规划题目不要求快，而要确保无误。否则，写代码五分钟，找 bug 半小时，岂不美哉？&lt;/p&gt;
+
+&lt;p&gt;我们来分析一下这道小偷问题的递推关系：&lt;/p&gt;
+
+&lt;p&gt;假设一共有 nn 个房子，每个房子的金额分别是 H0, H1, …,Hn-1,子问题 f(k)f(k) 表示从前 k 个房子（即 H0, H1,…Hk-1,中能偷到的最大金额。那么，偷 k 个房子有两种偷法：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0402/ccceac397062b8ac6d369506f5481be5e473d4f9b35751da7861a681bbecc3e8.jpg&quot; alt=&quot;pic2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;k 个房子中最后一个房子是 Hk-1。如果不偷这个房子，那么问题就变成在前 k-1个房子中偷到最大的金额，也就是子问题 f(k-1)。如果偷这个房子，那么前一个房子 Hk-2显然不能偷，其他房子不受影响。那么问题就变成在前 k-2 个房子中偷到的最大的金额。两种情况中，选择金额较大的一种结果。&lt;/p&gt;
+
+&lt;p&gt;f(k) = max{f(k-1), Hk-1 + f(k-2)}&lt;/p&gt;
+
+&lt;p&gt;在写递推关系的时候，要注意写上 k=0k=0 和 k=1k=1 的基本情况：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;当 k=0 时，没有房子，所以 f(0) =0。&lt;/li&gt;
+  &lt;li&gt;当 k=1 时，只有一个房子，偷这个房子即可，所以 f(1) = H0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这样才能构成完整的递推关系，后面写代码也不容易在边界条件上出错。&lt;/p&gt;
+
+&lt;h3 id=&quot;步骤三确定-dp-数组的计算顺序&quot;&gt;步骤三：确定 DP 数组的计算顺序&lt;/h3&gt;
+&lt;p&gt;在确定了子问题的递推关系之后，下一步就是依次计算出这些子问题了。在很多教程中都会写，动态规划有两种计算顺序，一种是自顶向下的、使用备忘录的递归方法，一种是自底向上的、使用 dp 数组的循环方法。不过在 &lt;strong&gt;普通的动态规划题目中，99% 的情况我们都不需要用到备忘录方法&lt;/strong&gt;，所以我们最好坚持用自底向上的 dp 数组。&lt;/p&gt;
+
+&lt;p&gt;DP 数组也可以叫”子问题数组”，因为 DP 数组中的每一个元素都对应一个子问题。如下图所示，dp[k] 对应子问题 f(k)，即偷前 kk 间房子的最大金额。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0402/a0d29f1322a7938733fd62f3b2de8b04f678591e40cdf4062810e8d9608e4b5e.jpg&quot; alt=&quot;pic3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;那么，只要搞清楚了子问题的计算顺序，就可以确定 DP 数组的计算顺序。对于小偷问题，我们分析子问题的依赖关系，发现每个 f(k) 依赖 f(k-1) 和 f(k−2)。也就是说，dp[k] 依赖 dp[k-1] 和 dp[k-2]，如下图所示。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0402/daa19672855195ae1496f6a3f112dbe9fe0e16e9541238002acaac44f22be613.jpg&quot; alt=&quot;pic4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;那么，既然 DP 数组中的依赖关系都是向右指的，DP 数组的计算顺序就是从左向右。这样我们可以保证，计算一个子问题的时候，它所依赖的那些子问题已经计算出来了。&lt;/p&gt;
+
+&lt;p&gt;确定了 DP 数组的计算顺序之后，我们就可以写出题解代码了：&lt;/p&gt;
+
+&lt;p&gt;Java:&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rob&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 子问题：&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// f(k) = 偷 [0..k) 房间中的最大金额&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// f(0) = 0&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// f(1) = nums[0]&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// f(k) = max{ rob(k-1), nums[k-1] + rob(k-2) }&lt;/span&gt;
+
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;N&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;N&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;步骤四空间优化&quot;&gt;步骤四：空间优化&lt;/h3&gt;
+&lt;p&gt;空间优化是动态规划问题的进阶内容了。对于初学者来说，可以不掌握这部分内容。&lt;/p&gt;
+
+&lt;p&gt;空间优化的基本原理是，很多时候我们并不需要始终持有全部的 DP 数组。对于小偷问题，我们发现，最后一步计算 f(n) 的时候，实际上只用到了 f(n-1) 和 f(n-2) 的结果。n-3 之前的子问题，实际上早就已经用不到了。那么，我们可以只用两个变量保存两个子问题的结果，就可以依次计算出所有的子问题。下面的动图比较了空间优化前和优化后的对比关系：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0402/3dcbb1028ed9cdac95fdc8c8348ccc6f2e4c50b3fd8222e5690257d6b495090a.gif&quot; alt=&quot;pic5&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这样一来，空间复杂度也从 O(n)O(n) 降到了 O(1)O(1)。优化后的代码如下所示：&lt;/p&gt;
+
+&lt;p&gt;Java:&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rob&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// 每次循环，计算“偷到当前房子为止的最大金额”&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 循环开始时，curr 表示 dp[k-1]，prev 表示 dp[k-2]&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// dp[k] = max{ dp[k-1], dp[k-2] + i }&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;prev&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// 循环结束时，curr 表示 dp[k]，prev 表示 dp[k-1]&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;题目-打家劫舍&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/house-robber/&quot;&gt;打家劫舍&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。&lt;/p&gt;
+
+&lt;p&gt;给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。&lt;/p&gt;
+
+&lt;h2 id=&quot;示例&quot;&gt;示例&lt;/h2&gt;
+&lt;h3 id=&quot;示例-1&quot;&gt;示例 1:&lt;/h3&gt;
+
+&lt;p&gt;输入: [1,2,3,1] &lt;br /&gt;
+输出: 4 &lt;br /&gt;
+解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。 &lt;br /&gt;
+     偷窃到的最高金额 = 1 + 3 = 4 。&lt;/p&gt;
+&lt;h3 id=&quot;示例-2&quot;&gt;示例 2:&lt;/h3&gt;
+
+&lt;p&gt;输入: [2,7,9,3,1] &lt;br /&gt;
+输出: 12  &lt;br /&gt;
+解释: 偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。 &lt;br /&gt;
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><category term="动态规划" /><summary type="html">图解动态规划的解题四步骤 如果你对于动态规划还不是很了解，或者没怎么做过动态规划的题目的话，那么 House Robber （小偷问题）这道题是一个非常好的入门题目。本文会以 House Robber 题目为例子，讲解动态规划题目的四个基本步骤。 动态规划的的四个解题步骤是： 定义子问题 写出子问题的递推关系 确定 DP 数组的计算顺序 空间优化（可选） 下面我们一步一步地进行讲解。 步骤一：定义子问题 稍微接触过一点动态规划的朋友都知道动态规划有一个“子问题”的定义。什么是子问题？子问题是和原问题相似，但规模较小的问题。例如这道小偷问题，原问题是“从全部房子中能偷到的最大金额”，将问题的规模缩小，子问题就是“从 k 个房子中能偷到的最大金额”，用 f(k) 表示。 可以看到，子问题是参数化的，我们定义的子问题中有参数 kk。假设一共有 nn 个房子的话，就一共有 nn 个子问题。动态规划实际上就是通过求这一堆子问题的解，来求出原问题的解。这要求子问题需要具备两个性质： 原问题要能由子问题表示。例如这道小偷问题中，k=nk=n 时实际上就是原问题。否则，解了半天子问题还是解不出原问题，那子问题岂不是白解了。 一个子问题的解要能通过其他子问题的解求出。例如这道小偷问题中，f(k)f(k) 可以由 f(k-1)f(k−1) 和 f(k-2)f(k−2) 求出，具体原理后面会解释。这个性质就是教科书中所说的“最优子结构”。如果定义不出这样的子问题，那么这道题实际上没法用动态规划解。 小偷问题由于比较简单，定义子问题实际上是很直观的。一些比较难的动态规划题目可能需要一些定义子问题的技巧。 步骤二：写出子问题的递推关系 这一步是求解动态规划问题最关键的一步。然而，这一步也是最无法在代码中体现出来的一步。在做题的时候，最好把这一步的思路用注释的形式写下来。做动态规划题目不要求快，而要确保无误。否则，写代码五分钟，找 bug 半小时，岂不美哉？ 我们来分析一下这道小偷问题的递推关系： 假设一共有 nn 个房子，每个房子的金额分别是 H0, H1, …,Hn-1,子问题 f(k)f(k) 表示从前 k 个房子（即 H0, H1,…Hk-1,中能偷到的最大金额。那么，偷 k 个房子有两种偷法： k 个房子中最后一个房子是 Hk-1。如果不偷这个房子，那么问题就变成在前 k-1个房子中偷到最大的金额，也就是子问题 f(k-1)。如果偷这个房子，那么前一个房子 Hk-2显然不能偷，其他房子不受影响。那么问题就变成在前 k-2 个房子中偷到的最大的金额。两种情况中，选择金额较大的一种结果。 f(k) = max{f(k-1), Hk-1 + f(k-2)} 在写递推关系的时候，要注意写上 k=0k=0 和 k=1k=1 的基本情况： 当 k=0 时，没有房子，所以 f(0) =0。 当 k=1 时，只有一个房子，偷这个房子即可，所以 f(1) = H0 这样才能构成完整的递推关系，后面写代码也不容易在边界条件上出错。 步骤三：确定 DP 数组的计算顺序 在确定了子问题的递推关系之后，下一步就是依次计算出这些子问题了。在很多教程中都会写，动态规划有两种计算顺序，一种是自顶向下的、使用备忘录的递归方法，一种是自底向上的、使用 dp 数组的循环方法。不过在 普通的动态规划题目中，99% 的情况我们都不需要用到备忘录方法，所以我们最好坚持用自底向上的 dp 数组。 DP 数组也可以叫”子问题数组”，因为 DP 数组中的每一个元素都对应一个子问题。如下图所示，dp[k] 对应子问题 f(k)，即偷前 kk 间房子的最大金额。 那么，只要搞清楚了子问题的计算顺序，就可以确定 DP 数组的计算顺序。对于小偷问题，我们分析子问题的依赖关系，发现每个 f(k) 依赖 f(k-1) 和 f(k−2)。也就是说，dp[k] 依赖 dp[k-1] 和 dp[k-2]，如下图所示。 那么，既然 DP 数组中的依赖关系都是向右指的，DP 数组的计算顺序就是从左向右。这样我们可以保证，计算一个子问题的时候，它所依赖的那些子问题已经计算出来了。 确定了 DP 数组的计算顺序之后，我们就可以写出题解代码了： Java: public int rob(int[] nums) { if (nums.length == 0) { return 0; } // 子问题： // f(k) = 偷 [0..k) 房间中的最大金额 // f(0) = 0 // f(1) = nums[0] // f(k) = max{ rob(k-1), nums[k-1] + rob(k-2) } int N = nums.length; int[] dp = new int[N+1]; dp[0] = 0; dp[1] = nums[0]; for (int k = 2; k &amp;lt;= N; k++) { dp[k] = Math.max(dp[k-1], nums[k-1] + dp[k-2]); } return dp[N]; } 步骤四：空间优化 空间优化是动态规划问题的进阶内容了。对于初学者来说，可以不掌握这部分内容。 空间优化的基本原理是，很多时候我们并不需要始终持有全部的 DP 数组。对于小偷问题，我们发现，最后一步计算 f(n) 的时候，实际上只用到了 f(n-1) 和 f(n-2) 的结果。n-3 之前的子问题，实际上早就已经用不到了。那么，我们可以只用两个变量保存两个子问题的结果，就可以依次计算出所有的子问题。下面的动图比较了空间优化前和优化后的对比关系： 这样一来，空间复杂度也从 O(n)O(n) 降到了 O(1)O(1)。优化后的代码如下所示： Java: public int rob(int[] nums) { int prev = 0; int curr = 0; // 每次循环，计算“偷到当前房子为止的最大金额” for (int i : nums) { // 循环开始时，curr 表示 dp[k-1]，prev 表示 dp[k-2] // dp[k] = max{ dp[k-1], dp[k-2] + i } int temp = Math.max(curr, prev + i); prev = curr; curr = temp; // 循环结束时，curr 表示 dp[k]，prev 表示 dp[k-1] } return curr; } 题目 打家劫舍 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。 给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。 示例 示例 1: 输入: [1,2,3,1] 输出: 4 解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。   偷窃到的最高金额 = 1 + 3 = 4 。 示例 2: 输入: [2,7,9,3,1] 输出: 12 解释: 偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。   偷窃到的最高金额 = 2 + 9 + 1 = 12 。</summary></entry><entry><title type="html">有效括号的嵌套深度</title><link href="http://localhost:4000/leetcode/2020/0401/012" rel="alternate" type="text/html" title="有效括号的嵌套深度" /><published>2020-04-01T00:00:00+08:00</published><updated>2020-04-01T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0401/012</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0401/012">&lt;h2 id=&quot;题目-有效括号的嵌套深度&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/&quot;&gt;有效括号的嵌套深度&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。&lt;/p&gt;
 
 &lt;p&gt;有效字符串需满足：&lt;/p&gt;
@@ -1245,12 +1379,10 @@ private String message;
 &lt;p&gt;「状态转移方程」可以理解为「不同阶段之间的联系」。&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;今天只和昨天的状态相关，依然是分类讨论：&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：&lt;em&gt;dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])&lt;/em&gt;；
-今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：&lt;em&gt;dp[i][1] = dp[i - 1][0] + nums[i]&lt;/em&gt;。&lt;/p&gt;
+  &lt;li&gt;今天只和昨天的状态相关，依然是分类讨论：
+z&lt;/li&gt;
+  &lt;li&gt;今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：&lt;em&gt;dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])&lt;/em&gt;；
+今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：&lt;em&gt;dp[i][1] = dp[i - 1][0] + nums[i]&lt;/em&gt;。
     &lt;h4 id=&quot;第-3-步考虑初始化&quot;&gt;第 3 步：考虑初始化&lt;/h4&gt;
     &lt;p&gt;从第 2 天开始，每天的状态值只与前一天有关，因此第 1 天就只好老老实实算了。好在不难判断：&lt;em&gt;dp[0][0] = 0 与 dp[0][1] = nums[0]&lt;/em&gt;；&lt;/p&gt;
   &lt;/li&gt;
@@ -1292,9 +1424,29 @@ private String message;
 
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;同 &lt;a href=&quot;https://leetcode-cn.com/problems/house-robber/&quot;&gt;打家劫舍&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;方法二-递推方程&quot;&gt;方法二 递推方程&lt;/h3&gt;
+&lt;p&gt;递推方程：dp[i] = max(dp[i - 1], dp[i - 2] + nums[i]&lt;/p&gt;
 
-&lt;h2 id=&quot;复杂度分析&quot;&gt;复杂度分析&lt;/h2&gt;
-&lt;p&gt;-&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 按摩师 一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。 示例 示例 1： 输入： [1,2,3,1] 输出： 4 解释： 选择 1 号预约和 3 号预约，总时长 = 1 + 3 = 4。 示例 2： 输入： [2,7,9,3,1] 输出： 12 解释： 选择 1 号预约、 3 号预约和 5 号预约，总时长 = 2 + 9 + 1 = 12。 示例 3： 输入： [2,1,4,5,3,1,1,3] 输出： 12 解释： 选择 1 号预约、 3 号预约、 5 号预约和 8 号预约，总时长 = 2 + 4 + 3 + 3 = 12。 官方解题思路 方法一：设计二维状态变量 第 1 步：设计状态 「状态」这个词可以理解为「记录了求解问题到了哪一个阶段」。 由于当前这一天有按摩师有两种选择：（1）接预约；（2）不接预约。但根据题意，今天是否接预约，是受到昨天影响的。为了消除这种影响，我们在状态数组要设置这个维度。 dp[i][0] 表示：区间 [0，i] 里接受预约请求，并且下标为 i 的这一天不接受预约的最大时长； dp[i][1] 表示：区间 [0，i] 里接受预约请求，并且下标为 i 的这一天接受预约的最大时长。 说明：这个定义是 有前缀性质的，即当前的状态值考虑了（或者说综合了）之前的相关的状态值，第 2 维保存了当前最优值的决策，这种通过增加维度，消除后效性的操作在「动态规划」问题里是非常常见的。 无后效性的理解：1、后面的决策不会影响到前面的决策； 2、之前的状态怎么来的并不重要。 一般的情况是，只要有约束，就可以增加一个维度消除这种约束带来的影响，再具体一点说，就是把「状态」定义得清楚、准确，「状态转移方程」就容易得到了。「力扣」的几道股票问题基本都是这个思路，而且设置状态的思想和这道题是完全一致的。 第 2 步：状态转移方程 「状态转移方程」可以理解为「不同阶段之间的联系」。 今天只和昨天的状态相关，依然是分类讨论： 今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])； 今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：dp[i][1] = dp[i - 1][0] + nums[i]。 第 3 步：考虑初始化 从第 2 天开始，每天的状态值只与前一天有关，因此第 1 天就只好老老实实算了。好在不难判断：dp[0][0] = 0 与 dp[0][1] = nums[0]； 这里有一种技巧，可以把状态数组多设置一行，这样可以减少对第 1 天的初始化，这样的代码把第 1 天的情况考虑了进去，但编码的时候要注意状态数组下标的设置， 请见题解最后的「参考代码 3」。 第 4 步：考虑输出 由于状态值的定义是前缀性质的，因此最后一天的状态值就考虑了之前所有的天数的情况。按摩师最后一天可以接受预约，也可以不接受预约，取二者最大值。 第 5 步：考虑是否可以状态压缩 由于今天只参考昨天的值，状态可以压缩，可以使用「滚动数组」完成，状态压缩的代码丢失了一定可读性，也会给编码增加一点点难度，请见题解后的「参考代码 4」。 官方代码 public class Solution { public int massage(int[] nums) { int len = nums.length; if (len == 0) { return 0; } if (len == 1) { return nums[0]; } // dp[i][0]：区间 [0, i] 里接受预约请求，并且下标为 i 的这一天不接受预约的最大时长 // dp[i][1]：区间 [0, i] 里接受预约请求，并且下标为 i 的这一天接受预约的最大时长 int[][] dp = new int[len][2]; dp[0][0] = 0; dp[0][1] = nums[0]; for (int i = 1; i &amp;lt; len; i++) { dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]); dp[i][1] = dp[i - 1][0] + nums[i]; } return Math.max(dp[len - 1][0], dp[len - 1][1]); } } 复杂度分析 -</summary></entry><entry><title type="html">链表的中间结点</title><link href="http://localhost:4000/leetcode/2020/0323/008" rel="alternate" type="text/html" title="链表的中间结点" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0323/008</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0323/008">&lt;h2 id=&quot;题目-链表的中间结点&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/middle-of-the-linked-list/&quot;&gt;链表的中间结点&lt;/a&gt;&lt;/h2&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;rob&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 按摩师 一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。 示例 示例 1： 输入： [1,2,3,1] 输出： 4 解释： 选择 1 号预约和 3 号预约，总时长 = 1 + 3 = 4。 示例 2： 输入： [2,7,9,3,1] 输出： 12 解释： 选择 1 号预约、 3 号预约和 5 号预约，总时长 = 2 + 9 + 1 = 12。 示例 3： 输入： [2,1,4,5,3,1,1,3] 输出： 12 解释： 选择 1 号预约、 3 号预约、 5 号预约和 8 号预约，总时长 = 2 + 4 + 3 + 3 = 12。 官方解题思路 方法一：设计二维状态变量 第 1 步：设计状态 「状态」这个词可以理解为「记录了求解问题到了哪一个阶段」。 由于当前这一天有按摩师有两种选择：（1）接预约；（2）不接预约。但根据题意，今天是否接预约，是受到昨天影响的。为了消除这种影响，我们在状态数组要设置这个维度。 dp[i][0] 表示：区间 [0，i] 里接受预约请求，并且下标为 i 的这一天不接受预约的最大时长； dp[i][1] 表示：区间 [0，i] 里接受预约请求，并且下标为 i 的这一天接受预约的最大时长。 说明：这个定义是 有前缀性质的，即当前的状态值考虑了（或者说综合了）之前的相关的状态值，第 2 维保存了当前最优值的决策，这种通过增加维度，消除后效性的操作在「动态规划」问题里是非常常见的。 无后效性的理解：1、后面的决策不会影响到前面的决策； 2、之前的状态怎么来的并不重要。 一般的情况是，只要有约束，就可以增加一个维度消除这种约束带来的影响，再具体一点说，就是把「状态」定义得清楚、准确，「状态转移方程」就容易得到了。「力扣」的几道股票问题基本都是这个思路，而且设置状态的思想和这道题是完全一致的。 第 2 步：状态转移方程 「状态转移方程」可以理解为「不同阶段之间的联系」。 今天只和昨天的状态相关，依然是分类讨论： z 今天不接受预约：或者是昨天不接受预约，或者是昨天接受了预约，取二者最大值，即：dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])； 今天接受预约：只需要从昨天不接受预约转移而来，加上今天的时常，即：dp[i][1] = dp[i - 1][0] + nums[i]。 第 3 步：考虑初始化 从第 2 天开始，每天的状态值只与前一天有关，因此第 1 天就只好老老实实算了。好在不难判断：dp[0][0] = 0 与 dp[0][1] = nums[0]； 这里有一种技巧，可以把状态数组多设置一行，这样可以减少对第 1 天的初始化，这样的代码把第 1 天的情况考虑了进去，但编码的时候要注意状态数组下标的设置， 请见题解最后的「参考代码 3」。 第 4 步：考虑输出 由于状态值的定义是前缀性质的，因此最后一天的状态值就考虑了之前所有的天数的情况。按摩师最后一天可以接受预约，也可以不接受预约，取二者最大值。 第 5 步：考虑是否可以状态压缩 由于今天只参考昨天的值，状态可以压缩，可以使用「滚动数组」完成，状态压缩的代码丢失了一定可读性，也会给编码增加一点点难度，请见题解后的「参考代码 4」。 官方代码 public class Solution { public int massage(int[] nums) { int len = nums.length; if (len == 0) { return 0; } if (len == 1) { return nums[0]; } // dp[i][0]：区间 [0, i] 里接受预约请求，并且下标为 i 的这一天不接受预约的最大时长 // dp[i][1]：区间 [0, i] 里接受预约请求，并且下标为 i 的这一天接受预约的最大时长 int[][] dp = new int[len][2]; dp[0][0] = 0; dp[0][1] = nums[0]; for (int i = 1; i &amp;lt; len; i++) { dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1]); dp[i][1] = dp[i - 1][0] + nums[i]; } return Math.max(dp[len - 1][0], dp[len - 1][1]); } } 同 打家劫舍 方法二 递推方程 递推方程：dp[i] = max(dp[i - 1], dp[i - 2] + nums[i] class Solution { public int rob(int[] nums) { int n = nums.length; if (n == 0) { return 0; } if (n == 1) { return nums[0]; } int[] dp = new int[n]; dp[0] = nums[0]; dp[1] = Math.max(nums[0], nums[1]); for (int i = 2; i &amp;lt; n; i++) { dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]); } return dp[n - 1]; } }</summary></entry><entry><title type="html">链表的中间结点</title><link href="http://localhost:4000/leetcode/2020/0323/008" rel="alternate" type="text/html" title="链表的中间结点" /><published>2020-03-23T00:00:00+08:00</published><updated>2020-03-23T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0323/008</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0323/008">&lt;h2 id=&quot;题目-链表的中间结点&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/middle-of-the-linked-list/&quot;&gt;链表的中间结点&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;给定一个带有头结点 head 的非空单链表，返回链表的中间结点。&lt;/p&gt;
 
 &lt;p&gt;如果有两个中间结点，则返回第二个中间结点。&lt;/p&gt;
@@ -1419,84 +1571,7 @@ ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next 
 
 &lt;p&gt;另一方面， &lt;em&gt;ArrayList&lt;/em&gt; 花费O（N）时间来使用顺序访问来查找索引，但是要删除元素，我们只需要修改指针。&lt;/p&gt;
 
-&lt;p&gt;由于移位是比迭代更昂贵的操作，因此如果我们想要逐个删除元素， &lt;em&gt;ArrayList&lt;/em&gt; 会更有效。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="CodeMark" /><summary type="html">ArrayList 和 ArrayList 是Java集合框架中经常使用的类。如果你只知道从基本性能比较 ArrayList 和 ArrayList ，那么请仔细阅读这篇文章。 ArrayList 应该在需要更多搜索操作的地方使用，并且 ArrayList 应该在需要更多插入和删除操作的地方使用。 ArrayList 使用 Array 数据结构， ArrayList 使用 DoublyArrayList 数据结构。在这里，我们要讨论基础数据结构如何影响插入，搜索的性能，以及删除操作 ArrayList 和 ArrayList 。下面是使用 ArrayList 和 LinkedList 不同操作的示例:下面我们将比较 ArrayList 和 LinkedList 的操作，看哪一个在性能方面更有效。 在最后索引处插入值（块1和2） 当我们在最后一个索引处插入一个值时， ArrayList 必须 ： 检查基础数组是否已满。 如果数组已满，则将数据从旧数组复制到新数组（大小比旧数组大两倍）， 然后在最后一个索引处添加值。 另一方面， LinkedList 只是在底层 DoublyLinkedList 的尾部添加该值。 两者都具有时间复杂度O（1），但是由于在 ArrayList 中创建新数组的附加步骤，其最坏情况复杂度达到N的顺序，这就是为什么我们更喜欢使用 LinkedList . 在给定指数处插入值（第3和第4块） 当我们在给定索引处插入值时，ArrayList必须 : 检查基础数组是否已满。 如果数组已满，则将数据从旧数组复制到新数组（大小为旧数组的两倍）。 之后，从给定索引开始，将值移动一个索引以为新值创建空间。 然后在给定索引处添加值。 另一方面， LinkedList 只是通过重新排列底层 DoublyLinkedList 的指针来查找索引并在给定索引处添加该值。 两者都具有时间复杂度O（N），但是由于在 ArrayList 中创建新数组并将现有值复制到新索引的附加步骤，我们更喜欢使用LinkedList. 按值搜索（第5和第6块） 当我们在 ArrayList 或LinkedList中搜索任何值时，我们必须遍历所有元素。该操作具有O（N）时间复杂度。看起来像 ArrayList 和LinkedList都具有相同的性能。 这里我们需要注意的是，数组（ ArrayList 的底层数据结构）将所有值存储在连续的内存位置，但是 DoublyArrayList 将每个节点存储在一个随机的内存位置。迭代连续内存位置比随机内存位置更具性能效率，这就是为什么我们在按值搜索时更喜欢使用 ArrayList 而不是 ArrayList 。 按索引获取元素（第7和第8块） 当我们通过Index获得元素时， ArrayList 是一个明显效果更好。 ArrayList 可以为您提供O（1）复杂度的任何元素，因为该数组具有随机访问属性。您可以直接访问任何索引而无需遍历整个数组。 ArrayList 具有顺序访问属性。它需要迭代每个元素以达到给定的索引，因此从 ArrayList 通过索引获取值的时间复杂度是O（N）。 按值删除（块9和10） 它类似于在给定索引处添加值。要在 ArrayList 和 ArrayList 中按值删除元素，我们需要迭代每个元素以到达该索引，然后删除该值。该操作具有O（N）复杂度。 不同的是，要从 ArrayList 中删除一个元素，我们只需要修改指针，但是在 ArrayList 中，我们需要在删除值的索引之后移动所有元素以填充创建的间隙。 由于移位是昂贵的操作然后修改指针，因此即使在相同的总体复杂度O（N）之后，我们更喜欢 ArrayList ，其中需要更多按值操作删除。 按索引删除（第11和12栏） 为了通过索引删除， ArrayList 使用O（1）复杂度中的随机访问来查找该索引，但是在移除元素之后，移位其余元素会导致整体O（N）时间复杂度。 另一方面， ArrayList 花费O（N）时间来使用顺序访问来查找索引，但是要删除元素，我们只需要修改指针。 由于移位是比迭代更昂贵的操作，因此如果我们想要逐个删除元素， ArrayList 会更有效。</summary></entry><entry><title type="html">按既定顺序创建目标数组</title><link href="http://localhost:4000/leetcode/2020/0322/006" rel="alternate" type="text/html" title="按既定顺序创建目标数组" /><published>2020-03-22T00:00:00+08:00</published><updated>2020-03-22T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0322/006</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0322/006">&lt;h2 id=&quot;题目-按既定顺序创建目标数组&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/contest/weekly-contest-181/problems/create-target-array-in-the-given-order/&quot;&gt;按既定顺序创建目标数组&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;目标数组 target 最初为空。&lt;/li&gt;
-  &lt;li&gt;按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。&lt;/li&gt;
-  &lt;li&gt;重复上一步，直到在 nums 和 index 中都没有要读取的元素。
-请你返回目标数组。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;题目保证数字插入位置总是存在。&lt;/p&gt;
-
-&lt;h2 id=&quot;示例&quot;&gt;示例&lt;/h2&gt;
-&lt;h3 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h3&gt;
-
-&lt;p&gt;输入：nums = [0,1,2,3,4], index = [0,1,2,2,1]  &lt;br /&gt;
-输出：[0,4,1,3,2]  &lt;br /&gt;
-解释： &lt;br /&gt;
-nums       index     target &lt;br /&gt;
-0            0        [0] &lt;br /&gt;
-1            1        [0,1] &lt;br /&gt;
-2            2        [0,1,2] &lt;br /&gt;
-3            2        [0,1,3,2] &lt;br /&gt;
-4            1        [0,4,1,3,2]&lt;/p&gt;
-&lt;h3 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h3&gt;
-
-&lt;p&gt;输入：nums = [1,2,3,4,0], index = [0,1,2,3,0]  &lt;br /&gt;
-输出：[0,1,2,3,4]  &lt;br /&gt;
-解释： &lt;br /&gt;
-nums       index     target &lt;br /&gt;
-1            0        [1] &lt;br /&gt;
-2            1        [1,2]     &lt;br /&gt;
-3            2        [1,2,3] &lt;br /&gt;
-4            3        [1,2,3,4] &lt;br /&gt;
-0            0        [0,1,2,3,4]&lt;/p&gt;
-&lt;h3 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h3&gt;
-
-&lt;p&gt;输入：nums = [1], index = [0]  &lt;br /&gt;
-输出：[1]&lt;/p&gt;
-
-&lt;h2 id=&quot;自己的思路&quot;&gt;自己的思路&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1
-    &lt;h2 id=&quot;自己的代码&quot;&gt;自己的代码&lt;/h2&gt;
-    &lt;h3 id=&quot;java&quot;&gt;java&lt;/h3&gt;
-    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lass&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createTargetArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-      &lt;span class=&quot;c1&quot;&gt;// 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1&lt;/span&gt;
-      &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-      &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-              &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-    &lt;h3 id=&quot;python&quot;&gt;python&lt;/h3&gt;
-    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createTargetArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
-          &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;insert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;用时&quot;&gt;用时&lt;/h3&gt;
-&lt;p&gt;做题用时：1 h  &lt;br /&gt;
-执行用时：1 ms     &lt;br /&gt;
-内存消耗：37.9 MB&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 按既定顺序创建目标数组 给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组： 目标数组 target 最初为空。 按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。 重复上一步，直到在 nums 和 index 中都没有要读取的元素。 请你返回目标数组。 题目保证数字插入位置总是存在。 示例 示例 1： 输入：nums = [0,1,2,3,4], index = [0,1,2,2,1] 输出：[0,4,1,3,2] 解释： nums index target 0 0 [0] 1 1 [0,1] 2 2 [0,1,2] 3 2 [0,1,3,2] 4 1 [0,4,1,3,2] 示例 2： 输入：nums = [1,2,3,4,0], index = [0,1,2,3,0] 输出：[0,1,2,3,4] 解释： nums index target 1 0 [1] 2 1 [1,2] 3 2 [1,2,3] 4 3 [1,2,3,4] 0 0 [0,1,2,3,4] 示例 3： 输入：nums = [1], index = [0] 输出：[1] 自己的思路 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1 自己的代码 java public lass Solution { public int[] createTargetArray(int[] nums, int[] index) { // 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1 List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;&amp;gt;(); int[] res = new int[nums.length]; for (int i = 0; i &amp;lt; nums.length; i++) { if (i&amp;gt;=index.length) { break; } list.add(index[i],nums[i]); } for (int j=0;j&amp;lt;list.size();j++) { res[j]=list.get(j); } return res; } } python class Solution: def createTargetArray(self, nums: List[int], index: List[int]) -&amp;gt; List[int]: for i in range(len(nums)): nums.insert(index[i], nums.pop(i)) return nums 用时 做题用时：1 h 执行用时：1 ms 内存消耗：37.9 MB</summary></entry><entry><title type="html">两个数组间的距离值</title><link href="http://localhost:4000/leetcode/2020/0322/007" rel="alternate" type="text/html" title="两个数组间的距离值" /><published>2020-03-22T00:00:00+08:00</published><updated>2020-03-22T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0322/007</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0322/007">&lt;h2 id=&quot;题目-两个数组间的距离值&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/find-the-distance-value-between-two-arrays/&quot;&gt;两个数组间的距离值&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;由于移位是比迭代更昂贵的操作，因此如果我们想要逐个删除元素， &lt;em&gt;ArrayList&lt;/em&gt; 会更有效。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="CodeMark" /><summary type="html">ArrayList 和 ArrayList 是Java集合框架中经常使用的类。如果你只知道从基本性能比较 ArrayList 和 ArrayList ，那么请仔细阅读这篇文章。 ArrayList 应该在需要更多搜索操作的地方使用，并且 ArrayList 应该在需要更多插入和删除操作的地方使用。 ArrayList 使用 Array 数据结构， ArrayList 使用 DoublyArrayList 数据结构。在这里，我们要讨论基础数据结构如何影响插入，搜索的性能，以及删除操作 ArrayList 和 ArrayList 。下面是使用 ArrayList 和 LinkedList 不同操作的示例:下面我们将比较 ArrayList 和 LinkedList 的操作，看哪一个在性能方面更有效。 在最后索引处插入值（块1和2） 当我们在最后一个索引处插入一个值时， ArrayList 必须 ： 检查基础数组是否已满。 如果数组已满，则将数据从旧数组复制到新数组（大小比旧数组大两倍）， 然后在最后一个索引处添加值。 另一方面， LinkedList 只是在底层 DoublyLinkedList 的尾部添加该值。 两者都具有时间复杂度O（1），但是由于在 ArrayList 中创建新数组的附加步骤，其最坏情况复杂度达到N的顺序，这就是为什么我们更喜欢使用 LinkedList . 在给定指数处插入值（第3和第4块） 当我们在给定索引处插入值时，ArrayList必须 : 检查基础数组是否已满。 如果数组已满，则将数据从旧数组复制到新数组（大小为旧数组的两倍）。 之后，从给定索引开始，将值移动一个索引以为新值创建空间。 然后在给定索引处添加值。 另一方面， LinkedList 只是通过重新排列底层 DoublyLinkedList 的指针来查找索引并在给定索引处添加该值。 两者都具有时间复杂度O（N），但是由于在 ArrayList 中创建新数组并将现有值复制到新索引的附加步骤，我们更喜欢使用LinkedList. 按值搜索（第5和第6块） 当我们在 ArrayList 或LinkedList中搜索任何值时，我们必须遍历所有元素。该操作具有O（N）时间复杂度。看起来像 ArrayList 和LinkedList都具有相同的性能。 这里我们需要注意的是，数组（ ArrayList 的底层数据结构）将所有值存储在连续的内存位置，但是 DoublyArrayList 将每个节点存储在一个随机的内存位置。迭代连续内存位置比随机内存位置更具性能效率，这就是为什么我们在按值搜索时更喜欢使用 ArrayList 而不是 ArrayList 。 按索引获取元素（第7和第8块） 当我们通过Index获得元素时， ArrayList 是一个明显效果更好。 ArrayList 可以为您提供O（1）复杂度的任何元素，因为该数组具有随机访问属性。您可以直接访问任何索引而无需遍历整个数组。 ArrayList 具有顺序访问属性。它需要迭代每个元素以达到给定的索引，因此从 ArrayList 通过索引获取值的时间复杂度是O（N）。 按值删除（块9和10） 它类似于在给定索引处添加值。要在 ArrayList 和 ArrayList 中按值删除元素，我们需要迭代每个元素以到达该索引，然后删除该值。该操作具有O（N）复杂度。 不同的是，要从 ArrayList 中删除一个元素，我们只需要修改指针，但是在 ArrayList 中，我们需要在删除值的索引之后移动所有元素以填充创建的间隙。 由于移位是昂贵的操作然后修改指针，因此即使在相同的总体复杂度O（N）之后，我们更喜欢 ArrayList ，其中需要更多按值操作删除。 按索引删除（第11和12栏） 为了通过索引删除， ArrayList 使用O（1）复杂度中的随机访问来查找该索引，但是在移除元素之后，移位其余元素会导致整体O（N）时间复杂度。 另一方面， ArrayList 花费O（N）时间来使用顺序访问来查找索引，但是要删除元素，我们只需要修改指针。 由于移位是比迭代更昂贵的操作，因此如果我们想要逐个删除元素， ArrayList 会更有效。</summary></entry><entry><title type="html">两个数组间的距离值</title><link href="http://localhost:4000/leetcode/2020/0322/007" rel="alternate" type="text/html" title="两个数组间的距离值" /><published>2020-03-22T00:00:00+08:00</published><updated>2020-03-22T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0322/007</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0322/007">&lt;h2 id=&quot;题目-两个数组间的距离值&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/find-the-distance-value-between-two-arrays/&quot;&gt;两个数组间的距离值&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;给你两个整数数组 arr1 ， arr2 和一个整数 d ，请你返回两个数组之间的 距离值 。&lt;/p&gt;
 
 &lt;table&gt;
@@ -1576,6 +1651,81 @@ nums       index     target &lt;br /&gt;
 &lt;h3 id=&quot;用时&quot;&gt;用时&lt;/h3&gt;
 &lt;p&gt;做题用时：30 min &lt;br /&gt;
 执行用时：3 ms &lt;br /&gt;
-内存消耗：41.2 MB&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 两个数组间的距离值 给你两个整数数组 arr1 ， arr2 和一个整数 d ，请你返回两个数组之间的 距离值 。 「距离值」 定义为符合此描述的元素数目：对于元素 arr1[i] ，不存在任何元素 arr2[j] 满足 arr1[i]-arr2[j] &amp;lt;= d 。 示例 示例 1： 输入：arr1 = [4,5,8], arr2 = [10,9,1,8], d = 2 输出：2 解释： 对于 arr1[0]=4 我们有： |4-10|=6 &amp;gt; d=2 |4-9|=5 &amp;gt; d=2 |4-1|=3 &amp;gt; d=2 |4-8|=4 &amp;gt; d=2 对于 arr1[1]=5 我们有： |5-10|=5 &amp;gt; d=2 |5-9|=4 &amp;gt; d=2 |5-1|=4 &amp;gt; d=2 |5-8|=3 &amp;gt; d=2 对于 arr1[2]=8 我们有： |8-10|=2 &amp;lt;= d=2 |8-9|=1 &amp;lt;= d=2 |8-1|=7 &amp;gt; d=2 |8-8|=0 &amp;lt;= d=2 示例 2： 输入：arr1 = [1,4,2,3], arr2 = [-4,-3,6,10,20,30], d = 3 输出：2 示例 3： 输入：arr1 = [2,1,100,3], arr2 = [-5,-2,10,-3,7], d = 6 输出：1 自己的思路 暴力循环 自己的代码 java public class Solution { public int findTheDistanceValue(int[] arr1, int[] arr2, int d) { int res = 0; a: for (int i=0;i&amp;lt;arr1.length;i++) { for (int j=0;j&amp;lt;arr2.length;j++) { if (Math.abs(arr1[i] -arr2[j])&amp;lt;=d) { continue a; } } res++; } return res; } } python class Solution: def findTheDistanceValue(self, arr1: List[int], arr2: List[int], d: int) -&amp;gt; int: res = 0 for num in arr1: if all([abs(num - num2) &amp;gt; d for num2 in arr2]): res +=1 return res 用时 做题用时：30 min 执行用时：3 ms 内存消耗：41.2 MB</summary></entry><entry><title type="html">一句话概念(python）</title><link href="http://localhost:4000/mark/AWord/python" rel="alternate" type="text/html" title="一句话概念(python）" /><published>2020-03-21T00:00:00+08:00</published><updated>2020-03-21T00:00:00+08:00</updated><id>http://localhost:4000/mark/AWord/AWard-web</id><content type="html" xml:base="http://localhost:4000/mark/AWord/python">&lt;ol&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.cnblogs.com/chuangshaogreat/p/7821409.html&quot;&gt;webstorm项目运行到apache服务器&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="概念" /><summary type="html">webstorm项目运行到apache服务器</summary></entry></feed>
+内存消耗：41.2 MB&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 两个数组间的距离值 给你两个整数数组 arr1 ， arr2 和一个整数 d ，请你返回两个数组之间的 距离值 。 「距离值」 定义为符合此描述的元素数目：对于元素 arr1[i] ，不存在任何元素 arr2[j] 满足 arr1[i]-arr2[j] &amp;lt;= d 。 示例 示例 1： 输入：arr1 = [4,5,8], arr2 = [10,9,1,8], d = 2 输出：2 解释： 对于 arr1[0]=4 我们有： |4-10|=6 &amp;gt; d=2 |4-9|=5 &amp;gt; d=2 |4-1|=3 &amp;gt; d=2 |4-8|=4 &amp;gt; d=2 对于 arr1[1]=5 我们有： |5-10|=5 &amp;gt; d=2 |5-9|=4 &amp;gt; d=2 |5-1|=4 &amp;gt; d=2 |5-8|=3 &amp;gt; d=2 对于 arr1[2]=8 我们有： |8-10|=2 &amp;lt;= d=2 |8-9|=1 &amp;lt;= d=2 |8-1|=7 &amp;gt; d=2 |8-8|=0 &amp;lt;= d=2 示例 2： 输入：arr1 = [1,4,2,3], arr2 = [-4,-3,6,10,20,30], d = 3 输出：2 示例 3： 输入：arr1 = [2,1,100,3], arr2 = [-5,-2,10,-3,7], d = 6 输出：1 自己的思路 暴力循环 自己的代码 java public class Solution { public int findTheDistanceValue(int[] arr1, int[] arr2, int d) { int res = 0; a: for (int i=0;i&amp;lt;arr1.length;i++) { for (int j=0;j&amp;lt;arr2.length;j++) { if (Math.abs(arr1[i] -arr2[j])&amp;lt;=d) { continue a; } } res++; } return res; } } python class Solution: def findTheDistanceValue(self, arr1: List[int], arr2: List[int], d: int) -&amp;gt; int: res = 0 for num in arr1: if all([abs(num - num2) &amp;gt; d for num2 in arr2]): res +=1 return res 用时 做题用时：30 min 执行用时：3 ms 内存消耗：41.2 MB</summary></entry><entry><title type="html">按既定顺序创建目标数组</title><link href="http://localhost:4000/leetcode/2020/0322/006" rel="alternate" type="text/html" title="按既定顺序创建目标数组" /><published>2020-03-22T00:00:00+08:00</published><updated>2020-03-22T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0322/006</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0322/006">&lt;h2 id=&quot;题目-按既定顺序创建目标数组&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/contest/weekly-contest-181/problems/create-target-array-in-the-given-order/&quot;&gt;按既定顺序创建目标数组&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;目标数组 target 最初为空。&lt;/li&gt;
+  &lt;li&gt;按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。&lt;/li&gt;
+  &lt;li&gt;重复上一步，直到在 nums 和 index 中都没有要读取的元素。
+请你返回目标数组。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;题目保证数字插入位置总是存在。&lt;/p&gt;
+
+&lt;h2 id=&quot;示例&quot;&gt;示例&lt;/h2&gt;
+&lt;h3 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h3&gt;
+
+&lt;p&gt;输入：nums = [0,1,2,3,4], index = [0,1,2,2,1]  &lt;br /&gt;
+输出：[0,4,1,3,2]  &lt;br /&gt;
+解释： &lt;br /&gt;
+nums       index     target &lt;br /&gt;
+0            0        [0] &lt;br /&gt;
+1            1        [0,1] &lt;br /&gt;
+2            2        [0,1,2] &lt;br /&gt;
+3            2        [0,1,3,2] &lt;br /&gt;
+4            1        [0,4,1,3,2]&lt;/p&gt;
+&lt;h3 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h3&gt;
+
+&lt;p&gt;输入：nums = [1,2,3,4,0], index = [0,1,2,3,0]  &lt;br /&gt;
+输出：[0,1,2,3,4]  &lt;br /&gt;
+解释： &lt;br /&gt;
+nums       index     target &lt;br /&gt;
+1            0        [1] &lt;br /&gt;
+2            1        [1,2]     &lt;br /&gt;
+3            2        [1,2,3] &lt;br /&gt;
+4            3        [1,2,3,4] &lt;br /&gt;
+0            0        [0,1,2,3,4]&lt;/p&gt;
+&lt;h3 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h3&gt;
+
+&lt;p&gt;输入：nums = [1], index = [0]  &lt;br /&gt;
+输出：[1]&lt;/p&gt;
+
+&lt;h2 id=&quot;自己的思路&quot;&gt;自己的思路&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1
+    &lt;h2 id=&quot;自己的代码&quot;&gt;自己的代码&lt;/h2&gt;
+    &lt;h3 id=&quot;java&quot;&gt;java&lt;/h3&gt;
+    &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lass&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createTargetArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;c1&quot;&gt;// 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1&lt;/span&gt;
+      &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+      &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+              &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+    &lt;h3 id=&quot;python&quot;&gt;python&lt;/h3&gt;
+    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;createTargetArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)):&lt;/span&gt;
+          &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;insert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;用时&quot;&gt;用时&lt;/h3&gt;
+&lt;p&gt;做题用时：1 h  &lt;br /&gt;
+执行用时：1 ms     &lt;br /&gt;
+内存消耗：37.9 MB&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 按既定顺序创建目标数组 给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组： 目标数组 target 最初为空。 按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。 重复上一步，直到在 nums 和 index 中都没有要读取的元素。 请你返回目标数组。 题目保证数字插入位置总是存在。 示例 示例 1： 输入：nums = [0,1,2,3,4], index = [0,1,2,2,1] 输出：[0,4,1,3,2] 解释： nums index target 0 0 [0] 1 1 [0,1] 2 2 [0,1,2] 3 2 [0,1,3,2] 4 1 [0,4,1,3,2] 示例 2： 输入：nums = [1,2,3,4,0], index = [0,1,2,3,0] 输出：[0,1,2,3,4] 解释： nums index target 1 0 [1] 2 1 [1,2] 3 2 [1,2,3] 4 3 [1,2,3,4] 0 0 [0,1,2,3,4] 示例 3： 输入：nums = [1], index = [0] 输出：[1] 自己的思路 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1 自己的代码 java public lass Solution { public int[] createTargetArray(int[] nums, int[] index) { // 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1 List&amp;lt;Integer&amp;gt; list = new ArrayList&amp;lt;&amp;gt;(); int[] res = new int[nums.length]; for (int i = 0; i &amp;lt; nums.length; i++) { if (i&amp;gt;=index.length) { break; } list.add(index[i],nums[i]); } for (int j=0;j&amp;lt;list.size();j++) { res[j]=list.get(j); } return res; } } python class Solution: def createTargetArray(self, nums: List[int], index: List[int]) -&amp;gt; List[int]: for i in range(len(nums)): nums.insert(index[i], nums.pop(i)) return nums 用时 做题用时：1 h 执行用时：1 ms 内存消耗：37.9 MB</summary></entry></feed>

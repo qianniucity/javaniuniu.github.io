@@ -324,6 +324,22 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/web/shiro/session"><h2 itemprop="headline" class="item__header">shiro源码篇 - shiro的session共享</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">github
+
+前情回顾
+shiro的session创建与session的查询、更新、过期、删除中，shiro对session的操作基本都讲到了，但还缺一个session共享没有讲解；session共享的原理其实在自定义session管理一文已经讲过了，本文不讲原理，只看看shiro的session共享的实现。
+
+为何需要session共享
+如果是单机应用，那么谈不上session共享，session放哪都无所谓，不在乎放到默认的servlet容器中，还是抽出来放到单独的地方；
+
+也就是说session共享是针对集群（或分布式、或分布式集群）的；如果不做session共享，仍然采用默认的方式（session存放到默认的servlet容器），当我们的应用是以集群的方式发布的时候，同个用户...</div><p><a href="/web/shiro/session">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90">源码解析</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 13, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-13T00:00:00+08:00">
+    <meta itemprop="keywords" content="源码解析"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/web/shiro/webutils"><h2 itemprop="headline" class="item__header">shiro的工具类-webUtils</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody">这个类提供的很多方法对于我们的平时开发都很有帮助，并不仅仅是shiro内部的应用。
 
@@ -466,42 +482,8 @@ public class User {
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 03, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-03T00:00:00+08:00">
     <meta itemprop="keywords" content="CodeMark,反射类,工具类"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/web/Annotation/Valid"><h2 itemprop="headline" class="item__header">Valid介绍及相关注解</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">主要用途
-主要用于表单验证,减轻了代码量
-
-相关依赖
-implementation 'org.springframework.boot:spring-boot-starter-web'
-
-在Springboot启动器的web包下包含了javax.validation.Valid所以无需添加多余的依赖
-
-Valid相关注解的使用方式
-
-1.在相关的实体类的相关字段添加用于充当验证条件的注解
-
-示例:
-
-
-  字段:
-
-
-(ps:这里只是为了演示,大家要注意命名规范)
-@NotNull(message = "用户名不能为空")
-@Email(message = "邮箱不正确")
-private String username;
-
-
-  实体类
-    @Data
-@AllArgsConst...</div><p><a href="/web/Annotation/Valid">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B3%A8%E8%A7%A3">注解</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 01, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-01T00:00:00+08:00">
-    <meta itemprop="keywords" content="注解"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>118 post articles, 15 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>119 post articles, 15 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page3">
             <i class="fas fa-angle-left"></i>
