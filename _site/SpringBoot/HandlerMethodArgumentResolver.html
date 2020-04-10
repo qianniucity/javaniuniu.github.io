@@ -1,11 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Home - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>springboot自定义参数解析HandlerMethodArgumentResolver - JAVA 牛牛</title>
 
-<meta name="description" content="记录在java的道路能走多远
-">
-<link rel="canonical" href="http://localhost:4000/page6/"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="简介自定义解析器需要实现 HandlerMethodArgumentResolver 接口， HandlerMethodArgumentResolver 接口包含两个接口函数：public interface HandlerMethodArgumentResolver {    boolean supportsP...">
+<link rel="canonical" href="http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -257,7 +256,18 @@
 </head>
   <body>
     <div class="root" data-is-touch="false">
-      <div class="layout--page js-page-root"><div class="page__main js-page-main page__viewport cell cell--auto">
+      <div class="layout--page layout--page--sidebar clearfix js-page-root">
+  <div class="page__mask d-print-none js-page-mask js-sidebar-hide"></div>
+  <div class="page__viewport">
+    <div class="page__actions d-print-none">
+      <div class="button button--circle button--lg box-shadow-2 sidebar-button js-sidebar-show">
+        <i class="fas fa-bars icon--show"></i>
+      </div>
+    </div>
+
+    <div class="grid page__grid">
+
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">SpringSecurity</li><li class="toc-h2"><a href="/SpringSecurity/class">SpringSecurity用到的类</a></li><li class="toc-h2"><a href="/SpringSecurity/User">User</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetails">UserDetails</a></li><li class="toc-h2"><a href="/SpringSecurity/UserDetailsService">UserDetailsService</a></li><li class="toc-h2"><a href="/SpringSecurity/GrantedAuthority">GrantedAuthority</a></li><li class="toc-h2"><a href="/SpringSecurity/SecurityContextHolder">SecurityContextHolder</a></li><li class="toc-h2"><a href="/SpringSecurity/SecurityContext">SecurityContext使用实例</a></li><li class="toc-h2"><a href="/SpringSecurity/WebSecurityConfigurerAdapter">WebSecurityConfigurerAdapter</a></li><li class="toc-h2"><a href="/SpringSecurity/authenticationException">AuthenticationException 使用及所有子类</a></li><li class="toc-h2"><a href="/SpringSecurity/RequestMatcher">RequestMatcher(配置忽略url和认证的url)</a></li><li class="toc-h1">SpringBoot</li><li class="toc-h2"><a href="/SpringBoot/Aop/log">SpringBoot AOP演示项目-日志篇</a></li><li class="toc-h2"><a href="/SpringBoot/Ansync">SpringBoot Ansync 异步线程池-三种方式</a></li><li class="toc-h2"><a href="/SpringBoot/Aoc">SpringBoot Aoc</a></li><li class="toc-h2"><a href="/SpringBoot/Di">SpringBoot Di</a></li><li class="toc-h2"><a href="/Spring/OncePerRequestFilter/example">OncePerRequestFilter示例</a></li><li class="toc-h2"><a href="/SpringBoot/WebMvcConfigurer">WebMvcConfigurer讲解</a></li><li class="toc-h1">Spring</li><li class="toc-h2"><a href="/Spring/Aop">Spring Aop</a></li><li class="toc-h2"><a href="/Spring/Aoc">Spring Aoc</a></li><li class="toc-h2"><a href="/Spring/Di">Spring Di</a></li><li class="toc-h2"><a href="/Spring/Aspect/explanation">Aspect配置说明</a></li><li class="toc-h2"><a href="/Spring/Aspect/JoinPoint">JoinPoint的用法</a></li><li class="toc-h2"><a href="/Spring/Aspect">Aspect实现样例</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -318,256 +328,187 @@ MFrGw6cAAAAASUVORK5CYII=" />
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
 
-              <div class="col-aside d-print-none js-col-aside"></div>
+              <div class="col-aside d-print-none js-col-aside"><aside class="page__aside js-page-aside"><div class="toc-aside js-toc-root"></div>
+</aside></div>
 
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/Annotation/Annotation/2"><h2 itemprop="headline" class="item__header">SpringBoot注解大全(2)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">声明Bean的注解:
-
-  @Component : 组件,没有明确的角色
-  @Service : 在业务逻辑层(service层)使用
-  @Repository : 在数据访问层(dao层)使用.
-  @Controller : 在展现层(MVC–SpringMVC)使用
-
-
-注入Bean的注解:
-
-  @Aautowired : Spring提供的注解. 实例化接口
-  @Inject : JSR-330提供的注解
-  @Resource : JSR-250提供的注解
-
-
-配置文件的注解:
-
-  @Configuration : 声明当前类是个配置类,相当于一个Spring配置的xml文件.
-  @ComponentScan (cn.test.demo): 自动扫描包名下所有使...</div><p><a href="/Annotation/Annotation/2">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>springboot自定义参数解析HandlerMethodArgumentResolver</h1></header><span class="split-space">&nbsp;</span>
+          <a class="edit-on-github"
+            title="Edit on Github"
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/SpringBoot/2020-04-10-HandlerMethodArgumentResolver.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="springboot自定义参数解析HandlerMethodArgumentResolver"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B3%A8%E8%A7%A3">注解</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 28, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-28T00:00:00+08:00">
-    <meta itemprop="keywords" content="注解"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/Exception/all"><h2 itemprop="headline" class="item__header">项目中遇到的Exception</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">测试过程
-异常：No runnable methods
-原因：@Test时import的是@org.testng.annotations.Test所以会报错
-解决方法:改为import org.junit.Test
+                href="/archive.html?tag=SpringBoot">SpringBoot</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 10, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-10T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringBoot"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
+<!-- end custom article top snippet -->
+<div class="article__content" itemprop="articleBody"><h2 id="简介">简介</h2>
+<p>自定义解析器需要实现 <em>HandlerMethodArgumentResolver</em> 接口， <em>HandlerMethodArgumentResolver</em> 接口包含两个接口函数：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">HandlerMethodArgumentResolver</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">var1</span><span class="o">);</span>
 
-异常：JPA连接MySQL报错Table 'test.hibernate_sequence' doesn't exist
-原因：设计数据库时（DDL），没有设置 id 自增
-解决方法：@GeneratedValue(strategy = GenerationType.AUTO) 改成GenerationType.IDENTITY
+    <span class="nd">@Nullable</span>
+    <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">var1</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nc">ModelAndViewContainer</span> <span class="n">var2</span><span class="o">,</span> <span class="nc">NativeWebRequest</span> <span class="n">var3</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nc">WebDataBinderFactory</span> <span class="n">var4</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
-异常：password (should be mapped with insert="false" update="false")
-原因：某...</div><p><a href="/Exception/all">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Exception">Exception</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%BF%90%E8%A1%8C%E5%BC%82%E5%B8%B8">运行异常</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 26, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-26T00:00:00+08:00">
-    <meta itemprop="keywords" content="Exception,运行异常"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design-data/jpa"><h2 itemprop="headline" class="item__header">JPA相关注解(@Table @Entity @MappedSuperclass)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">Github源码地址
+<h2 id="自定义一个解析器currentusermethodargumentresolver">自定义一个解析器CurrentUserMethodArgumentResolver</h2>
 
-一句话简介
-Java Persistence API定义了一种定义，可以将常规的普通Java对象（有时被称作POJO）映射到数据库
+<p>我们在解析器中返回一个固定的 <em>UserBeannew UserBean(1L,”admin”)</em> ，实际情况是从Session、数据库或者缓存中查。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.core.MethodParameter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.support.WebDataBinderFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.NativeWebRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.method.support.HandlerMethodArgumentResolver</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.method.support.ModelAndViewContainer</span><span class="o">;</span>
 
-映射规则：
+<span class="cm">/**
+ * 用于绑定@CurrentUser的方法参数解析器
+ *
+ * @author lism
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CurrentUserMethodArgumentResolver</span> <span class="kd">implements</span> <span class="nc">HandlerMethodArgumentResolver</span> <span class="o">{</span>
 
-  实体类__必须__用 @javax.persistence.Entity 进行注解；
-  必须__使用 @javax.persistence.__Id 来注解一个主键；
-  实体类必须拥有一个 public 或者 protected 的 无参 构造函数，之外实体类还可以拥有其他的构造函数；
-  实体类必须是一个 顶级类（top-level class）。一个枚举（enum）或者一个接口（interface）不能被注解为一个实体；
-  实体类不能是 final 类型的，也 不能有 final 类型的方法；
-  如果...</div><p><a href="/java-code-design-data/jpa">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=jpa">jpa</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 25, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-25T00:00:00+08:00">
-    <meta itemprop="keywords" content="jpa,Spring注解,数据库"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design-data/jpa/DynamicUpdate"><h2 itemprop="headline" class="item__header">DynamicUpdate正确使用方式</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">原理
-DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的字段。说白了, 就是在更新某条记录之前, 先把这条记录从数据库查出来, 那么这条数据就在session(一级缓存)中, 我们再去修改这个对象的数据即可;
+    <span class="kd">public</span> <span class="nf">CurrentUserMethodArgumentResolver</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
 
-@DynamicUpdate正确使用方式
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parameter</span><span class="o">.</span><span class="na">getParameterType</span><span class="o">().</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="nc">UserBean</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">parameter</span><span class="o">.</span><span class="na">hasParameterAnnotation</span><span class="o">(</span><span class="nc">CurrentUser</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
 
-  在做 update实体类的某个属性之前，先做findById操作
-  将需要修改的字段做 set 操作
-  做 save 操作
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">,</span> <span class="nc">ModelAndViewContainer</span> <span class="n">mavContainer</span><span class="o">,</span> <span class="nc">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="nc">WebDataBinderFactory</span> <span class="n">binderFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="nc">CurrentUser</span> <span class="n">currentUserAnnotation</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getParameterAnnotation</span><span class="o">(</span><span class="nc">CurrentUser</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="c1">//从Session 获取用户</span>
+        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="n">webRequest</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">currentUserAnnotation</span><span class="o">.</span><span class="na">value</span><span class="o">(),</span> <span class="nc">NativeWebRequest</span><span class="o">.</span><span class="na">SCOPE_SESSION</span><span class="o">);</span>
+<span class="c1">//从  accessToken获得用户信息</span>
+       <span class="k">if</span> <span class="o">(</span><span class="n">object</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">webRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">token</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">token</span> <span class="o">=</span> <span class="n">webRequest</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"accessToken"</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="c1">//为了测试先写死用户名</span>
+            <span class="c1">//TODO: 取真实用户</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">UserBean</span><span class="o">(</span><span class="mi">1L</span><span class="o">,</span><span class="s">"admin"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">object</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
+<h2 id="自定义注解currentuser">自定义注解@CurrentUser</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.lang.annotation.*</span><span class="o">;</span>
 
-误区及经常出现的错误
+<span class="cm">/**
+ * &lt;p&gt;绑定当前登录的用户&lt;/p&gt;
+ * &lt;p&gt;不同于@ModelAttribute&lt;/p&gt;
+ *
+ * @author lism
+ */</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">CurrentUser</span> <span class="o">{</span>
 
-  更新数据时，只传入需要更新的数据，而没有操作findById操作,造成其他数据为null
+    <span class="cm">/**
+     * 当前用户在request中的名字
+     *
+     * @return
+     */</span>
+    <span class="nc">String</span> <span class="nf">value</span><span class="o">()</span> <span class="k">default</span> <span class="s">"user"</span><span class="o">;</span>
 
+<span class="o">}</span>
+</code></pre></div></div>
 
-举例
-先说明一下@DynamicUpdate注解用在实体类上   
-有 数据库 表tbl_foo和对应的实体类Foo，如下：
+<h2 id="在控制器中使用currentuser">在控制器中使用@CurrentUser</h2>
 
+<p>在控制器方法上加入 <em>@CurrentUser UserBean userBean</em> 即可自动注入userBean的值</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/test"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span>  <span class="o">{</span>
 
-  
-    
- ...</div><p><a href="/java-code-design-data/jpa/DynamicUpdate">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=jpa">jpa</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 25, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-25T00:00:00+08:00">
-    <meta itemprop="keywords" content="jpa,Spring注解,数据库"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-redis/KeyGenerator"><h2 itemprop="headline" class="item__header">Spring Cache – KeyGenerator自定义rediskey</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">1. 概述
-在此教程中，我们将演示如何使用 Spring Cache 创建自定义密钥生成器。
+    <span class="cm">/**
+     * 根据name查询
+     *
+     * @param request
+     * @return
+     */</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/testCurrentUser"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="n">produces</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">,</span> <span class="n">consumes</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">(</span><span class="nd">@CurrentUser</span> <span class="nc">UserBean</span> <span class="n">userBean</span><span class="o">,</span> <span class="nd">@RequestBody</span> <span class="nc">SubjectRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">createdBy</span> <span class="o">=</span> <span class="n">userBean</span><span class="o">.</span><span class="na">getUsername</span><span class="o">();</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">createdBy</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
-2. KeyGenerator
-这负责为缓存中的每个数据项生成每个键，这些键将用于在检索时查找数据项。
+<h2 id="user实体userbean">User实体UserBean</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">lombok.AllArgsConstructor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.NoArgsConstructor</span><span class="o">;</span>
 
-此处的默认实现是SimpleKeyGenerator –它使用提供的方法参数来生成密钥。这意味着，如果我们有两个使用相同的缓存名称和参数类型集的方法，则很有可能会导致冲突。
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
 
-它还意味着缓存数据可以由另一种方法覆盖。
+<span class="nd">@Data</span>
+<span class="nd">@NoArgsConstructor</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserBean</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
 
-3. 自定义密钥生成器
-密钥生成器只需要实现一个方法：
+<h2 id="总结">总结</h2>
 
-Object generate(Object object, Method method, Object... params)
+<p>我们可以通过实现 <em>HandlerMethodArgumentResolver</em> 接口来实现对自定义的参数进行解析。
+比如可以解析自定义的时间格式、自定义解析Map对象等这些spring原本不支持的对象格式。</p>
+</div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-04-10T00:00:00+08:00"><!-- start custom article footer snippet -->
 
-如果未正确实现或使用，则可能导致覆盖缓存数据。
+<!-- end custom article footer snippet -->
+<div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
+</div><div class="article__license"><div class="license">
+    <p>This work is licensed under a <a itemprop="license" rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">Attribution-NonCommercial 4.0 International</a> license.
+      <a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">
+        <img alt="Attribution-NonCommercial 4.0 International" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" />
+      </a>
+    </p>
+  </div></div></footer>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/Spring/Aspect">Aspect实现样例</a></div><div class="next"><span>NEXT</span><a href="/leetcode/2020/0402/013">图解动态规划的解题四步骤</a></div></div></div>
 
-让我们来看看实现：
+</div>
 
-public...</div><p><a href="/java-code-redis/KeyGenerator">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Redis">Redis</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 24, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-24T00:00:00+08:00">
-    <meta itemprop="keywords" content="Redis"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/Hamcrest"><h2 itemprop="headline" class="item__header">单元测试的框架Hamcrest</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">一句话介绍
-Hamcrest是用于Java的单元测试的框架，它使用matcher匹配器来进行断言。在Spring-boot-starter中集成了Hamcrest,无需而外引入。
+<script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    $(function() {
+      var $this ,$scroll;
+      var $articleContent = $('.js-article-content');
+      var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+      var scroll = hasSidebar ? '.js-page-main' : 'html, body';
+      $scroll = $(scroll);
 
-核心API
-
-
-  is
-    
-      使用is匹配器使得程序更加易懂
-        String str1 = "text";
-String str2 = " text ";
-assertThat(str1, is(equalToIgnoringWhiteSpace(str2)));
-        
-      
-      用于简单数据类型的判断
-        String str1 = "text";
-String str2 = "text";
-assertThat(str1, is(s...</div><p><a href="/java-util-code/Hamcrest">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95">单元测试</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="工具类,单元测试"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringBoot/Ansync"><h2 itemprop="headline" class="item__header">SpringBoot Ansync 异步线程池-三种方式</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">源码地址
-springboot-async
-
-异步线程池-三种方式
-
-  @Ansync
-  DeferredResult
-  WebAsyncTask
-
-
-演示在SpringBoot中如何使用异步线程池
-
-主要类
-
-  AsyncUncaughtExceptionHandler 处理异常 通过继承 AsyncConfigurer 可得
-  ThreadPoolTaskExecutor 线程池配置 ，异步处理伴随着多请求，少不了线程处理
-
-
-主要注解
-
-  @Ansync 方法注解
-  @EnableAsync 类注解，可在配置类中添加</div><p><a href="/SpringBoot/Ansync">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringBootAnsync">SpringBootAnsync</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringBootAnsync"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringBoot/Aop/log"><h2 itemprop="headline" class="item__header">SpringBoot AOP演示项目-日志篇</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">源码地址
-springboot-aop
-
-一句话简介知识点
-Spring AOP面向切面编程，可以用来配置 事务、做日志、权限验证、在用户请求时做一些处理等等 
-CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先数据的加载
-
-面向切面编程主要知识点
-
-
-  执行点（Executepoint） - 类初始化，方法调用。
-  连接点（Joinpoint）    - 执行点+方位的组合，可确定Joinpoint，比如类开始初始化前，类初始化后，方法调用前，方法调用后。
-  切点（Pointcut）       - 在众多执行点中，定位感兴趣的执行点。Executepoint相当于数据库表中的记录，而Pointcut相当于查询条件。
-  增强（Advice）    ...</div><p><a href="/SpringBoot/Aop/log">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringBootAop">SpringBootAop</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%89%93%E5%8D%B0%E6%97%A5%E5%BF%97">打印日志</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 22, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-22T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringBootAop,打印日志"></div>
-      </article></div>
-</div><div class="layout--home"><div class="pagination"><p>130 post articles, 17 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><a class="button button--secondary button--circle" href="/page5">
-            <i class="fas fa-angle-left"></i>
-          </a></li><li>
-              <a class="button button--secondary button--circle" href="/"><span>1</span></a>
-            </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/page5"><span>5</span></a>
-                </li><li>
-              <div class="button button--primary button--circle focus"><span>6</span></div>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/page7"><span>7</span></a>
-                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/page17"><span>17</span></a>
-                </li><li><a class="button button--secondary button--circle" href="/page7">
-            <i class="fas fa-angle-right"></i>
-          </a></li></ul>
-    </div>
-  </div></div>
-<script>/*(function () {
-
-})();*/
+      $articleContent.find('.highlight').each(function() {
+        $this = $(this);
+        $this.attr('data-lang', $this.find('code').attr('data-lang'));
+      });
+      $articleContent.find('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]').each(function() {
+        $this = $(this);
+        $this.append($('<a class="anchor d-print-none" aria-hidden="true"></a>').html('<i class="fas fa-anchor"></i>'));
+      });
+      $articleContent.on('click', '.anchor', function() {
+        $scroll.scrollToAnchor('#' + $(this).parent().attr('id'), 400);
+      });
+    });
+  });
+})();
 </script>
-
-
-
 </div><section class="page__comments d-print-none"></section></article><!-- start custom main bottom snippet -->
 
 <!-- end custom main bottom snippet -->
@@ -612,7 +553,7 @@ CommandLineRunner,实现在项目启动后执行的功能可以用来做 预先�
   </div>
 </footer>
 </div></div>
-    </div><script>(function() {
+    </div></div></div><script>(function() {
   var SOURCES = window.TEXT_VARIABLES.sources;
   window.Lazyload.js(SOURCES.jquery, function() {
     var $body = $('body'), $window = $(window);
@@ -1129,6 +1070,98 @@ window.Lazyload.js([SOURCES.jquery, PAHTS.search_js], function() {
 /*(function () {
 
 })();*/
+</script><script>(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $pageMask = $('.js-page-mask');
+    var $pageRoot = $('.js-page-root');
+    var $sidebarShow = $('.js-sidebar-show');
+    var $sidebarHide = $('.js-sidebar-hide');
+
+    function freeze(e) {
+      if (e.target === $pageMask[0]) {
+        e.preventDefault();
+      }
+    }
+    function stopBodyScrolling(bool) {
+      if (bool === true) {
+        window.addEventListener('touchmove', freeze, { passive: false });
+      } else {
+        window.removeEventListener('touchmove', freeze, { passive: false });
+      }
+    }
+
+    $sidebarShow.on('click', function() {
+      stopBodyScrolling(true); $pageRoot.addClass('show-sidebar');
+    });
+    $sidebarHide.on('click', function() {
+      stopBodyScrolling(false); $pageRoot.removeClass('show-sidebar');
+    });
+  });
+})();
+</script><script>
+  /* toc must before affix, since affix need to konw toc' height. */(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  var TOC_SELECTOR = window.TEXT_VARIABLES.site.toc.selectors;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window);
+    var $articleContent = $('.js-article-content');
+    var $tocRoot = $('.js-toc-root'), $col2 = $('.js-col-aside');
+    var toc;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+    var hasToc = $articleContent.find(TOC_SELECTOR).length > 0;
+
+    function disabled() {
+      return $col2.css('display') === 'none' || !hasToc;
+    }
+
+    tocDisabled = disabled();
+
+    toc = $tocRoot.toc({
+      selectors: TOC_SELECTOR,
+      container: $articleContent,
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      tocDisabled = disabled();
+      toc && toc.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+  });
+})();
+(function() {
+  var SOURCES = window.TEXT_VARIABLES.sources;
+  window.Lazyload.js(SOURCES.jquery, function() {
+    var $window = $(window), $pageFooter = $('.js-page-footer');
+    var $pageAside = $('.js-page-aside');
+    var affix;
+    var tocDisabled = false;
+    var hasSidebar = $('.js-page-root').hasClass('layout--page--sidebar');
+
+    affix = $pageAside.affix({
+      offsetBottom: $pageFooter.outerHeight(),
+      scrollTarget: hasSidebar ? '.js-page-main' : null,
+      scroller: hasSidebar ? '.js-page-main' : null,
+      scroll: hasSidebar ? $('.js-page-main').children() : null,
+      disabled: tocDisabled
+    });
+
+    $window.on('resize', window.throttle(function() {
+      affix && affix.setOptions({
+        disabled: tocDisabled
+      });
+    }, 100));
+
+    window.pageAsideAffix = affix;
+  });
+})();
 </script><script>
   window.Lazyload.js(['https://cdn.bootcss.com/jquery/3.1.1/jquery.min.js', 'https://cdn.bootcss.com/Chart.js/2.7.2/Chart.bundle.min.js'], function() {
     var $canvas = null, $this = null, _ctx = null, _text = '';

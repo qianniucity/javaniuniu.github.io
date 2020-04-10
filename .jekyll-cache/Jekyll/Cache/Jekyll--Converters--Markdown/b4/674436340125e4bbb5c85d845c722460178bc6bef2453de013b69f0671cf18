@@ -1,0 +1,124 @@
+I"}/<h2 id="简介">简介</h2>
+<p>自定义解析器需要实现 <em>HandlerMethodArgumentResolver</em> 接口， <em>HandlerMethodArgumentResolver</em> 接口包含两个接口函数：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">HandlerMethodArgumentResolver</span> <span class="o">{</span>
+    <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">var1</span><span class="o">);</span>
+
+    <span class="nd">@Nullable</span>
+    <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">var1</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nc">ModelAndViewContainer</span> <span class="n">var2</span><span class="o">,</span> <span class="nc">NativeWebRequest</span> <span class="n">var3</span><span class="o">,</span> <span class="nd">@Nullable</span> <span class="nc">WebDataBinderFactory</span> <span class="n">var4</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="自定义一个解析器currentusermethodargumentresolver">自定义一个解析器CurrentUserMethodArgumentResolver</h2>
+
+<p>我们在解析器中返回一个固定的 <em>UserBeannew UserBean(1L,”admin”)</em> ，实际情况是从Session、数据库或者缓存中查。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">org.springframework.core.MethodParameter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.support.WebDataBinderFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.NativeWebRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.method.support.HandlerMethodArgumentResolver</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.method.support.ModelAndViewContainer</span><span class="o">;</span>
+
+<span class="cm">/**
+ * 用于绑定@CurrentUser的方法参数解析器
+ *
+ * @author lism
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CurrentUserMethodArgumentResolver</span> <span class="kd">implements</span> <span class="nc">HandlerMethodArgumentResolver</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="nf">CurrentUserMethodArgumentResolver</span><span class="o">()</span> <span class="o">{</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">supportsParameter</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">parameter</span><span class="o">.</span><span class="na">getParameterType</span><span class="o">().</span><span class="na">isAssignableFrom</span><span class="o">(</span><span class="nc">UserBean</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">parameter</span><span class="o">.</span><span class="na">hasParameterAnnotation</span><span class="o">(</span><span class="nc">CurrentUser</span><span class="o">.</span><span class="na">class</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">resolveArgument</span><span class="o">(</span><span class="nc">MethodParameter</span> <span class="n">parameter</span><span class="o">,</span> <span class="nc">ModelAndViewContainer</span> <span class="n">mavContainer</span><span class="o">,</span> <span class="nc">NativeWebRequest</span> <span class="n">webRequest</span><span class="o">,</span> <span class="nc">WebDataBinderFactory</span> <span class="n">binderFactory</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="nc">CurrentUser</span> <span class="n">currentUserAnnotation</span> <span class="o">=</span> <span class="n">parameter</span><span class="o">.</span><span class="na">getParameterAnnotation</span><span class="o">(</span><span class="nc">CurrentUser</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="c1">//从Session 获取用户</span>
+        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="n">webRequest</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">currentUserAnnotation</span><span class="o">.</span><span class="na">value</span><span class="o">(),</span> <span class="nc">NativeWebRequest</span><span class="o">.</span><span class="na">SCOPE_SESSION</span><span class="o">);</span>
+<span class="c1">//从  accessToken获得用户信息</span>
+       <span class="k">if</span> <span class="o">(</span><span class="n">object</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">webRequest</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">token</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">token</span> <span class="o">=</span> <span class="n">webRequest</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"accessToken"</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="c1">//为了测试先写死用户名</span>
+            <span class="c1">//TODO: 取真实用户</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">UserBean</span><span class="o">(</span><span class="mi">1L</span><span class="o">,</span><span class="s">"admin"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">object</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="自定义注解currentuser">自定义注解@CurrentUser</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.lang.annotation.*</span><span class="o">;</span>
+
+<span class="cm">/**
+ * &lt;p&gt;绑定当前登录的用户&lt;/p&gt;
+ * &lt;p&gt;不同于@ModelAttribute&lt;/p&gt;
+ *
+ * @author lism
+ */</span>
+<span class="nd">@Target</span><span class="o">({</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">PARAMETER</span><span class="o">})</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">CurrentUser</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 当前用户在request中的名字
+     *
+     * @return
+     */</span>
+    <span class="nc">String</span> <span class="nf">value</span><span class="o">()</span> <span class="k">default</span> <span class="s">"user"</span><span class="o">;</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="在控制器中使用currentuser">在控制器中使用@CurrentUser</h2>
+
+<p>在控制器方法上加入 <em>@CurrentUser UserBean userBean</em> 即可自动注入userBean的值</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/test"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span>  <span class="o">{</span>
+
+    <span class="cm">/**
+     * 根据name查询
+     *
+     * @param request
+     * @return
+     */</span>
+    <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"/testCurrentUser"</span><span class="o">,</span> <span class="n">method</span> <span class="o">=</span> <span class="nc">RequestMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="n">produces</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">,</span> <span class="n">consumes</span> <span class="o">=</span> <span class="s">"application/json"</span><span class="o">)</span>
+    <span class="nd">@ResponseBody</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">(</span><span class="nd">@CurrentUser</span> <span class="nc">UserBean</span> <span class="n">userBean</span><span class="o">,</span> <span class="nd">@RequestBody</span> <span class="nc">SubjectRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">String</span> <span class="n">createdBy</span> <span class="o">=</span> <span class="n">userBean</span><span class="o">.</span><span class="na">getUsername</span><span class="o">();</span>
+        <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="n">createdBy</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="user实体userbean">User实体UserBean</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">lombok.AllArgsConstructor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">lombok.NoArgsConstructor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+
+<span class="nd">@Data</span>
+<span class="nd">@NoArgsConstructor</span>
+<span class="nd">@AllArgsConstructor</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserBean</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="总结">总结</h2>
+
+<p>我们可以通过实现 <em>HandlerMethodArgumentResolver</em> 接口来实现对自定义的参数进行解析。
+比如可以解析自定义的时间格式、自定义解析Map对象等这些spring原本不支持的对象格式。</p>
+:ET
