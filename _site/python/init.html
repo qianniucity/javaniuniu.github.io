@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>init - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Python杂谈 init的作用 - JAVA 牛牛</title>
 
-<meta name="description" content="">
+<meta name="description" content="我们经常在python的模块目录中会看到 “init.py”  这个文件，那么它到底有什么作用呢？1. 标识该目录是一个python的模块包（module package）如果你是使用python的相关IDE来进行开发，那么如果目录中存在该文件，该目录就会被识别为 module package 。  简化模块导入...">
 <link rel="canonical" href="http://localhost:4000/python/init"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -334,11 +334,11 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>init</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Python杂谈 init的作用</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
             href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/_posts/python/2020-04-11-init.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="init"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Python杂谈 init的作用"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=python">python</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 11, 2020</span>
@@ -346,7 +346,159 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <meta itemprop="keywords" content="python"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody">
+<div class="article__content" itemprop="articleBody"><blockquote>
+  <p>我们经常在python的模块目录中会看到 “<strong>init</strong>.py”  这个文件，那么它到底有什么作用呢？</p>
+</blockquote>
+
+<h2 id="1-标识该目录是一个python的模块包module-package">1. 标识该目录是一个python的模块包（module package）</h2>
+
+<p>如果你是使用python的相关IDE来进行开发，那么如果目录中存在该文件，该目录就会被识别为 module package 。</p>
+
+<ol>
+  <li>简化模块导入操作
+    <h2 id="假设我们的模块包的目录结构如下">假设我们的模块包的目录结构如下：</h2>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>└── mypackage
+    ├── subpackage_1
+    │   ├── test11.py
+    │   └── test12.py
+    ├── subpackage_2
+    │   ├── test21.py
+    │   └── test22.py
+    └── subpackage_3
+        ├── test31.py
+        └── test32.py
+</code></pre></div></div>
+<p>　　</p>
+
+<p>如果我们使用最直接的导入方式，将整个文件拷贝到工程目录下，然后直接导入：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from mypackage.subpackage_1 import test11
+from mypackage.subpackage_1 import test12
+from mypackage.subpackage_2 import test21
+from mypackage.subpackage_2 import test22
+from mypackage.subpackage_3 import test31
+from mypackage.subpackage_3 import test32
+</code></pre></div></div>
+
+<p>当然这个例子里面文件比较少，如果模块比较大，目录比较深的话，可能自己都记不清该如何导入。（很有可能，哪怕只想导入一个模块都要在目录中找很久）</p>
+
+<p>这种情况下，<strong>init</strong>.py 就很有作用了。我们先来看看该文件是如何工作的。</p>
+
+<h3 id="21-initpy-是怎么工作的">2.1 <strong>init</strong>.py 是怎么工作的？</h3>
+<p>实际上，如果目录中包含了 <strong>init</strong>.py 时，当用 import 导入该目录时，会执行 <strong>init</strong>.py 里面的代码。</p>
+
+<p>我们在mypackage目录下增加一个 <strong>init</strong>.py 文件来做一个实验：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>└── mypackage
+    ├── __init__.py
+    ├── subpackage_1
+    │   ├── test11.py
+    │   └── test12.py
+    ├── subpackage_2
+    │   ├── test21.py
+    │   └── test22.py
+    └── subpackage_3
+        ├── test31.py
+        └── test32.py
+</code></pre></div></div>
+
+<p>mypackage/<strong>init</strong>.py 里面加一个print，如果执行了该文件就会输出：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>print("You have imported mypackage")
+</code></pre></div></div>
+
+<p>下面直接用交互模式进行 import</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; import mypackage
+You have imported mypackage
+</code></pre></div></div>
+
+<p>很显然，<strong>init</strong>.py 在包被导入时会被执行。</p>
+
+<h3 id="22--控制模块导入">2.2  控制模块导入</h3>
+
+<p>我们再做一个实验，在 mypackage/<strong>init</strong>.py 添加以下语句：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from subpackage_1 import test11
+</code></pre></div></div>
+
+<p>我们导入 mypackage 试试:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; import mypackage
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "/home/taopeng/Workspace/Test/mypackage/__init__.py", line 2, in &lt;module&gt;
+    from subpackage_1 import test11
+ImportError: No module named 'subpackage_1'
+</code></pre></div></div>
+
+<p>报错了。。。怎么回事？</p>
+
+<p>原来，在我们执行import时，当前目录是不会变的（就算是执行子目录的文件），还是需要完整的包名。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from mypackage.subpackage_1 import test11
+</code></pre></div></div>
+
+<p>综上，我们可以在__init__.py 指定默认需要导入的模块　　</p>
+
+<h3 id="23--偷懒的导入方法">2.3  偷懒的导入方法</h3>
+
+<p>有时候我们在做导入时会偷懒，将包中的所有内容导入</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from mypackage import *
+</code></pre></div></div>
+
+<p>这是怎么实现的呢？ <strong>all</strong> 变量就是干这个工作的。</p>
+
+<p><strong>all</strong> 关联了一个模块列表，当执行 from xx import * 时，就会导入列表中的模块。我们将 <strong>init</strong>.py 修改为 。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__all__ = ['subpackage_1', 'subpackage_2']
+</code></pre></div></div>
+
+<p>这里没有包含 subpackage_3，是为了证明 <strong>all</strong> 起作用了，而不是导入了所有子目录。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; from mypackage import *
+&gt;&gt;&gt; dir()
+['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'subpackage_1', 'subpackage_2']
+&gt;&gt;&gt;
+&gt;&gt;&gt; dir(subpackage_1)
+['__doc__', '__loader__', '__name__', '__package__', '__path__', '__spec__']
+</code></pre></div></div>
+
+<p>子目录的中的模块没有导入！！！</p>
+
+<p>该例子中的导入等价于</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from mypackage import subpackage_1, subpackage_2
+</code></pre></div></div>
+
+<p>因此，导入操作会继续查找 subpackage_1 和 subpackage_2 中的 <strong>init</strong>.py 并执行。（但是此时不会执行 import * ）</p>
+
+<p>我们在 subpackage_1 下添加 <strong>init</strong>.py 文件:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__all__ = ['test11', 'test12']
+
+# 默认只导入test11
+from mypackage.subpackage_1 import test11
+</code></pre></div></div>
+
+<p>再来导入试试</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; from mypackage import *
+&gt;&gt;&gt; dir()
+['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'subpackage_1', 'subpackage_2']
+&gt;&gt;&gt;
+&gt;&gt;&gt; dir(subpackage_1)
+['__all__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', 'test11']
+</code></pre></div></div>
+
+<p>如果想要导入子包的所有模块，则需要更精确指定。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; from mypackage.subpackage_1 import *
+&gt;&gt;&gt; dir()
+['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'test11', 'test12']
+</code></pre></div></div>
+<h2 id="3-配置模块的初始化操作">3. 配置模块的初始化操作</h2>
+
+<p>在了解了 <strong>init</strong>.py 的工作原理后，应该能理解该文件就是一个正常的python代码文件。</p>
+
+<p>因此可以将初始化代码放入该文件中。</p>
 </div><section class="article__sharing d-print-none"></section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-04-11T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->

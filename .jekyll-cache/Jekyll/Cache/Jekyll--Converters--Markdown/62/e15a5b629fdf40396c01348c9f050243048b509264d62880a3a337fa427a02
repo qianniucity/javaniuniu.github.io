@@ -1,0 +1,177 @@
+I"<blockquote>
+  <p>我们经常在python的模块目录中会看到 “<strong>init</strong>.py”  这个文件，那么它到底有什么作用呢？</p>
+</blockquote>
+
+<h2 id="1-标识该目录是一个python的模块包module-package">1. 标识该目录是一个python的模块包（module package）</h2>
+<p>如果你是使用python的相关IDE来进行开发，那么如果目录中存在该文件，该目录就会被识别为 module package 。</p>
+
+<ol>
+  <li>简化模块导入操作
+    <h2 id="假设我们的模块包的目录结构如下">假设我们的模块包的目录结构如下：</h2>
+  </li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>└── mypackage
+    ├── subpackage_1
+    │   ├── test11.py
+    │   └── test12.py
+    ├── subpackage_2
+    │   ├── test21.py
+    │   └── test22.py
+    └── subpackage_3
+        ├── test31.py
+        └── test32.py
+</code></pre></div></div>
+<p>　　</p>
+
+<p>如果我们使用最直接的导入方式，将整个文件拷贝到工程目录下，然后直接导入：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from mypackage.subpackage_1 import test11
+from mypackage.subpackage_1 import test12
+from mypackage.subpackage_2 import test21
+from mypackage.subpackage_2 import test22
+from mypackage.subpackage_3 import test31
+from mypackage.subpackage_3 import test32
+</code></pre></div></div>
+
+<p>当然这个例子里面文件比较少，如果模块比较大，目录比较深的话，可能自己都记不清该如何导入。（很有可能，哪怕只想导入一个模块都要在目录中找很久）</p>
+
+<p>　　这种情况下，<strong>init</strong>.py 就很有作用了。我们先来看看该文件是如何工作的。</p>
+
+<p>2.1 <strong>init</strong>.py 是怎么工作的？</p>
+
+<p>　　实际上，如果目录中包含了 <strong>init</strong>.py 时，当用 import 导入该目录时，会执行 <strong>init</strong>.py 里面的代码。</p>
+
+<p>　　我们在mypackage目录下增加一个 <strong>init</strong>.py 文件来做一个实验：</p>
+
+<p>复制代码
+.
+└── mypackage
+    ├── <strong>init</strong>.py
+    ├── subpackage_1
+    │   ├── test11.py
+    │   └── test12.py
+    ├── subpackage_2
+    │   ├── test21.py
+    │   └── test22.py
+    └── subpackage_3
+        ├── test31.py
+        └── test32.py
+复制代码
+　　mypackage/<strong>init</strong>.py 里面加一个print，如果执行了该文件就会输出：</p>
+
+<p>print(“You have imported mypackage”)
+　　下面直接用交互模式进行 import</p>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>import mypackage
+You have imported mypackage
+　　很显然，<strong>init</strong>.py 在包被导入时会被执行。</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>2.2  控制模块导入</p>
+
+<p>　　我们再做一个实验，在 mypackage/<strong>init</strong>.py 添加以下语句：</p>
+
+<p>from subpackage_1 import test11
+　　我们导入 mypackage 试试:</p>
+
+<p>复制代码</p>
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>import mypackage
+Traceback (most recent call last):
+  File “<stdin>", line 1, in <module>
+  File "/home/taopeng/Workspace/Test/mypackage/__init__.py", line 2, in <module>
+    from subpackage_1 import test11
+ImportError: No module named 'subpackage_1'
+复制代码
+　　报错了。。。怎么回事？</module></module></stdin></p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>　　原来，在我们执行import时，当前目录是不会变的（就算是执行子目录的文件），还是需要完整的包名。</p>
+
+<p>from mypackage.subpackage_1 import test11
+　　综上，我们可以在__init__.py 指定默认需要导入的模块　　</p>
+
+<p>2.3  偷懒的导入方法</p>
+
+<p>　　有时候我们在做导入时会偷懒，将包中的所有内容导入</p>
+
+<p>from mypackage import *
+　　这是怎么实现的呢？ <strong>all</strong> 变量就是干这个工作的。</p>
+
+<p>　　<strong>all</strong> 关联了一个模块列表，当执行 from xx import * 时，就会导入列表中的模块。我们将 <strong>init</strong>.py 修改为 。</p>
+
+<p><strong>all</strong> = [‘subpackage_1’, ‘subpackage_2’]
+　　这里没有包含 subpackage_3，是为了证明 <strong>all</strong> 起作用了，而不是导入了所有子目录。</p>
+
+<p>复制代码</p>
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>from mypackage import *
+dir()
+[‘<strong>builtins</strong>’, ‘<strong>doc</strong>’, ‘<strong>loader</strong>’, ‘<strong>name</strong>’, ‘<strong>package</strong>’, ‘<strong>spec</strong>’, ‘subpackage_1’, ‘subpackage_2’]</p>
+
+      <p>dir(subpackage_1)
+[‘<strong>doc</strong>’, ‘<strong>loader</strong>’, ‘<strong>name</strong>’, ‘<strong>package</strong>’, ‘<strong>path</strong>’, ‘<strong>spec</strong>’]
+复制代码
+　　子目录的中的模块没有导入！！！</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>　　该例子中的导入等价于</p>
+
+<p>from mypackage import subpackage_1, subpackage_2
+　　因此，导入操作会继续查找 subpackage_1 和 subpackage_2 中的 <strong>init</strong>.py 并执行。（但是此时不会执行 import *）</p>
+
+<p>　　我们在 subpackage_1 下添加 <strong>init</strong>.py 文件:</p>
+
+<p><strong>all</strong> = [‘test11’, ‘test12’]</p>
+
+<h1 id="默认只导入test11">默认只导入test11</h1>
+<p>from mypackage.subpackage_1 import test11
+　　再来导入试试</p>
+
+<p>复制代码</p>
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>from mypackage import *
+dir()
+[‘<strong>builtins</strong>’, ‘<strong>doc</strong>’, ‘<strong>loader</strong>’, ‘<strong>name</strong>’, ‘<strong>package</strong>’, ‘<strong>spec</strong>’, ‘subpackage_1’, ‘subpackage_2’]</p>
+
+      <p>dir(subpackage_1)
+[‘<strong>all</strong>’, ‘<strong>builtins</strong>’, ‘<strong>cached</strong>’, ‘<strong>doc</strong>’, ‘<strong>file</strong>’, ‘<strong>loader</strong>’, ‘<strong>name</strong>’, ‘<strong>package</strong>’, ‘<strong>path</strong>’, ‘<strong>spec</strong>’, ‘test11’]
+复制代码
+　　如果想要导入子包的所有模块，则需要更精确指定。</p>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<blockquote>
+  <blockquote>
+    <blockquote>
+      <p>from mypackage.subpackage_1 import *
+dir()
+[‘<strong>builtins</strong>’, ‘<strong>doc</strong>’, ‘<strong>loader</strong>’, ‘<strong>name</strong>’, ‘<strong>package</strong>’, ‘<strong>spec</strong>’, ‘test11’, ‘test12’]</p>
+      <ol>
+        <li>配置模块的初始化操作</li>
+      </ol>
+    </blockquote>
+  </blockquote>
+</blockquote>
+
+<p>　　在了解了 <strong>init</strong>.py 的工作原理后，应该能理解该文件就是一个正常的python代码文件。</p>
+
+<p>　　因此可以将初始化代码放入该文件中。</p>
+:ET

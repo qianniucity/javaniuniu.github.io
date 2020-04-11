@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-04-11T17:30:18+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-04-11T19:34:10+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>记录在java的道路能走多远
 </subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">面试题29. 顺时针打印矩阵(模拟、设定边界，清晰图解)</title><link href="http://localhost:4000/leetcode/2020/0411/014" rel="alternate" type="text/html" title="面试题29. 顺时针打印矩阵(模拟、设定边界，清晰图解)" /><published>2020-04-11T00:00:00+08:00</published><updated>2020-04-11T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0411/014</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0411/014">&lt;h2 id=&quot;题目-顺时针打印矩阵&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/&quot;&gt;顺时针打印矩阵&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。&lt;/p&gt;
 
@@ -132,7 +132,159 @@
 &lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
             &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 顺时针打印矩阵 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。 示例 示例 1： 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]] 输出：[1,2,3,6,9,8,7,4,5] 示例 2： 输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]] 输出：[1,2,3,4,8,12,11,10,9,5,6,7] 限制： 0 &amp;lt;= matrix.length &amp;lt;= 100 0 &amp;lt;= matrix[i].length &amp;lt;= 100 解题思路： 根据题目示例 matrix = [[1,2,3],[4,5,6],[7,8,9]] 的对应输出 [1,2,3,6,9,8,7,4,5] 可以发现，顺时针打印矩阵的顺序是 “从左向右、从上向下、从右向左、从下向上” 循环。 因此，考虑设定矩阵的“左、上、右、下”四个边界，模拟以上矩阵遍历顺序。 算法流程： 空值处理： 当 matrix 为空时，直接返回空列表 [] 即可。 初始化： 矩阵 左、右、上、下 四个边界 l , r , t , b ，用于打印的结果列表 res 。 循环打印： “从左向右、从上向下、从右向左、从下向上” 四个方向循环，每个方向打印中做以下三件事 （各方向的具体信息见下表） ； 1). 根据边界打印，即将元素按顺序添加至列表 res 尾部； 2). 边界向内收缩 11 （代表已被打印）； 3). 判断是否打印完毕（边界是否相遇），若打印完毕则跳出。 返回值： 返回 res 即可。 打印方向 1. 根据边界打印 2. 边界向内收缩 3. 是否打印完毕 从左向右 左边界l ，右边界 r 上边界 t 加 11 是否 t &amp;gt; b 从上向下 上边界 t ，下边界b 右边界 r 减 11 是否 l &amp;gt; r 从右向左 右边界 r ，左边界l 下边界 b 减 11 是否 t &amp;gt; b 从下向上 下边界 b ，上边界t 左边界 l 加 11 是否 l &amp;gt; r 复杂度分析： 时间复杂度 O(MN)O(MN) ： M, NM,N 分别为矩阵行数和列数。 空间复杂度 O(1)O(1) ： 四个边界 l , r , t , b 使用常数大小的 额外 空间（ res 为必须使用的空间）。 代码 java class Solution { public int[] spiralOrder(int[][] matrix) { if(matrix.length == 0) return new int[0]; int l = 0, r = matrix[0].length - 1, t = 0, b = matrix.length - 1, x = 0; int[] res = new int[(r + 1) * (b + 1)]; while(true) { for(int i = l; i &amp;lt;= r; i++) res[x++] = matrix[t][i]; // left to right. if(++t &amp;gt; b) break; for(int i = t; i &amp;lt;= b; i++) res[x++] = matrix[i][r]; // top to bottom. if(l &amp;gt; --r) break; for(int i = r; i &amp;gt;= l; i--) res[x++] = matrix[b][i]; // right to left. if(t &amp;gt; --b) break; for(int i = b; i &amp;gt;= t; i--) res[x++] = matrix[i][l]; // bottom to top. if(++l &amp;gt; r) break; } return res; } } python class Solution: def spiralOrder(self, matrix:[[int]]) -&amp;gt; [int]: if not matrix: return [] l, r, t, b, res = 0, len(matrix[0]) - 1, 0, len(matrix) - 1, [] while True: for i in range(l, r + 1): res.append(matrix[t][i]) # left to right t += 1 if t &amp;gt; b: break for i in range(t, b + 1): res.append(matrix[i][r]) # top to bottom r -= 1 if l &amp;gt; r: break for i in range(r, l - 1, -1): res.append(matrix[b][i]) # right to left b -= 1 if t &amp;gt; b: break for i in range(b, t - 1, -1): res.append(matrix[i][l]) # bottom to top l += 1 if l &amp;gt; r: break return res</summary></entry><entry><title type="html">关于shiro</title><link href="http://localhost:4000/shiro/about" rel="alternate" type="text/html" title="关于shiro" /><published>2020-04-11T00:00:00+08:00</published><updated>2020-04-11T00:00:00+08:00</updated><id>http://localhost:4000/shiro/shiro-about</id><content type="html" xml:base="http://localhost:4000/shiro/about">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="shiro" /><summary type="html">TODO</summary></entry><entry><title type="html">init</title><link href="http://localhost:4000/python/init" rel="alternate" type="text/html" title="init" /><published>2020-04-11T00:00:00+08:00</published><updated>2020-04-11T00:00:00+08:00</updated><id>http://localhost:4000/python/init</id><content type="html" xml:base="http://localhost:4000/python/init"></content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="python" /><summary type="html"></summary></entry><entry><title type="html">springboot自定义参数解析HandlerMethodArgumentResolver</title><link href="http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver" rel="alternate" type="text/html" title="springboot自定义参数解析HandlerMethodArgumentResolver" /><published>2020-04-10T00:00:00+08:00</published><updated>2020-04-10T00:00:00+08:00</updated><id>http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver</id><content type="html" xml:base="http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver">&lt;h2 id=&quot;简介&quot;&gt;简介&lt;/h2&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="leetcode" /><summary type="html">题目 顺时针打印矩阵 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。 示例 示例 1： 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]] 输出：[1,2,3,6,9,8,7,4,5] 示例 2： 输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]] 输出：[1,2,3,4,8,12,11,10,9,5,6,7] 限制： 0 &amp;lt;= matrix.length &amp;lt;= 100 0 &amp;lt;= matrix[i].length &amp;lt;= 100 解题思路： 根据题目示例 matrix = [[1,2,3],[4,5,6],[7,8,9]] 的对应输出 [1,2,3,6,9,8,7,4,5] 可以发现，顺时针打印矩阵的顺序是 “从左向右、从上向下、从右向左、从下向上” 循环。 因此，考虑设定矩阵的“左、上、右、下”四个边界，模拟以上矩阵遍历顺序。 算法流程： 空值处理： 当 matrix 为空时，直接返回空列表 [] 即可。 初始化： 矩阵 左、右、上、下 四个边界 l , r , t , b ，用于打印的结果列表 res 。 循环打印： “从左向右、从上向下、从右向左、从下向上” 四个方向循环，每个方向打印中做以下三件事 （各方向的具体信息见下表） ； 1). 根据边界打印，即将元素按顺序添加至列表 res 尾部； 2). 边界向内收缩 11 （代表已被打印）； 3). 判断是否打印完毕（边界是否相遇），若打印完毕则跳出。 返回值： 返回 res 即可。 打印方向 1. 根据边界打印 2. 边界向内收缩 3. 是否打印完毕 从左向右 左边界l ，右边界 r 上边界 t 加 11 是否 t &amp;gt; b 从上向下 上边界 t ，下边界b 右边界 r 减 11 是否 l &amp;gt; r 从右向左 右边界 r ，左边界l 下边界 b 减 11 是否 t &amp;gt; b 从下向上 下边界 b ，上边界t 左边界 l 加 11 是否 l &amp;gt; r 复杂度分析： 时间复杂度 O(MN)O(MN) ： M, NM,N 分别为矩阵行数和列数。 空间复杂度 O(1)O(1) ： 四个边界 l , r , t , b 使用常数大小的 额外 空间（ res 为必须使用的空间）。 代码 java class Solution { public int[] spiralOrder(int[][] matrix) { if(matrix.length == 0) return new int[0]; int l = 0, r = matrix[0].length - 1, t = 0, b = matrix.length - 1, x = 0; int[] res = new int[(r + 1) * (b + 1)]; while(true) { for(int i = l; i &amp;lt;= r; i++) res[x++] = matrix[t][i]; // left to right. if(++t &amp;gt; b) break; for(int i = t; i &amp;lt;= b; i++) res[x++] = matrix[i][r]; // top to bottom. if(l &amp;gt; --r) break; for(int i = r; i &amp;gt;= l; i--) res[x++] = matrix[b][i]; // right to left. if(t &amp;gt; --b) break; for(int i = b; i &amp;gt;= t; i--) res[x++] = matrix[i][l]; // bottom to top. if(++l &amp;gt; r) break; } return res; } } python class Solution: def spiralOrder(self, matrix:[[int]]) -&amp;gt; [int]: if not matrix: return [] l, r, t, b, res = 0, len(matrix[0]) - 1, 0, len(matrix) - 1, [] while True: for i in range(l, r + 1): res.append(matrix[t][i]) # left to right t += 1 if t &amp;gt; b: break for i in range(t, b + 1): res.append(matrix[i][r]) # top to bottom r -= 1 if l &amp;gt; r: break for i in range(r, l - 1, -1): res.append(matrix[b][i]) # right to left b -= 1 if t &amp;gt; b: break for i in range(b, t - 1, -1): res.append(matrix[i][l]) # bottom to top l += 1 if l &amp;gt; r: break return res</summary></entry><entry><title type="html">关于shiro</title><link href="http://localhost:4000/shiro/about" rel="alternate" type="text/html" title="关于shiro" /><published>2020-04-11T00:00:00+08:00</published><updated>2020-04-11T00:00:00+08:00</updated><id>http://localhost:4000/shiro/shiro-about</id><content type="html" xml:base="http://localhost:4000/shiro/about">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="shiro" /><summary type="html">TODO</summary></entry><entry><title type="html">Python杂谈 init的作用</title><link href="http://localhost:4000/python/init" rel="alternate" type="text/html" title="Python杂谈 init的作用" /><published>2020-04-11T00:00:00+08:00</published><updated>2020-04-11T00:00:00+08:00</updated><id>http://localhost:4000/python/init</id><content type="html" xml:base="http://localhost:4000/python/init">&lt;blockquote&gt;
+  &lt;p&gt;我们经常在python的模块目录中会看到 “&lt;strong&gt;init&lt;/strong&gt;.py”  这个文件，那么它到底有什么作用呢？&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;1-标识该目录是一个python的模块包module-package&quot;&gt;1. 标识该目录是一个python的模块包（module package）&lt;/h2&gt;
+
+&lt;p&gt;如果你是使用python的相关IDE来进行开发，那么如果目录中存在该文件，该目录就会被识别为 module package 。&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;简化模块导入操作
+    &lt;h2 id=&quot;假设我们的模块包的目录结构如下&quot;&gt;假设我们的模块包的目录结构如下：&lt;/h2&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;└── mypackage
+    ├── subpackage_1
+    │   ├── test11.py
+    │   └── test12.py
+    ├── subpackage_2
+    │   ├── test21.py
+    │   └── test22.py
+    └── subpackage_3
+        ├── test31.py
+        └── test32.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;　　&lt;/p&gt;
+
+&lt;p&gt;如果我们使用最直接的导入方式，将整个文件拷贝到工程目录下，然后直接导入：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from mypackage.subpackage_1 import test11
+from mypackage.subpackage_1 import test12
+from mypackage.subpackage_2 import test21
+from mypackage.subpackage_2 import test22
+from mypackage.subpackage_3 import test31
+from mypackage.subpackage_3 import test32
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;当然这个例子里面文件比较少，如果模块比较大，目录比较深的话，可能自己都记不清该如何导入。（很有可能，哪怕只想导入一个模块都要在目录中找很久）&lt;/p&gt;
+
+&lt;p&gt;这种情况下，&lt;strong&gt;init&lt;/strong&gt;.py 就很有作用了。我们先来看看该文件是如何工作的。&lt;/p&gt;
+
+&lt;h3 id=&quot;21-initpy-是怎么工作的&quot;&gt;2.1 &lt;strong&gt;init&lt;/strong&gt;.py 是怎么工作的？&lt;/h3&gt;
+&lt;p&gt;实际上，如果目录中包含了 &lt;strong&gt;init&lt;/strong&gt;.py 时，当用 import 导入该目录时，会执行 &lt;strong&gt;init&lt;/strong&gt;.py 里面的代码。&lt;/p&gt;
+
+&lt;p&gt;我们在mypackage目录下增加一个 &lt;strong&gt;init&lt;/strong&gt;.py 文件来做一个实验：&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;└── mypackage
+    ├── __init__.py
+    ├── subpackage_1
+    │   ├── test11.py
+    │   └── test12.py
+    ├── subpackage_2
+    │   ├── test21.py
+    │   └── test22.py
+    └── subpackage_3
+        ├── test31.py
+        └── test32.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;mypackage/&lt;strong&gt;init&lt;/strong&gt;.py 里面加一个print，如果执行了该文件就会输出：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;print(&quot;You have imported mypackage&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;下面直接用交互模式进行 import&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import mypackage
+You have imported mypackage
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;很显然，&lt;strong&gt;init&lt;/strong&gt;.py 在包被导入时会被执行。&lt;/p&gt;
+
+&lt;h3 id=&quot;22--控制模块导入&quot;&gt;2.2  控制模块导入&lt;/h3&gt;
+
+&lt;p&gt;我们再做一个实验，在 mypackage/&lt;strong&gt;init&lt;/strong&gt;.py 添加以下语句：&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from subpackage_1 import test11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我们导入 mypackage 试试:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; import mypackage
+Traceback (most recent call last):
+  File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt;
+  File &quot;/home/taopeng/Workspace/Test/mypackage/__init__.py&quot;, line 2, in &amp;lt;module&amp;gt;
+    from subpackage_1 import test11
+ImportError: No module named 'subpackage_1'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;报错了。。。怎么回事？&lt;/p&gt;
+
+&lt;p&gt;原来，在我们执行import时，当前目录是不会变的（就算是执行子目录的文件），还是需要完整的包名。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from mypackage.subpackage_1 import test11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;综上，我们可以在__init__.py 指定默认需要导入的模块　　&lt;/p&gt;
+
+&lt;h3 id=&quot;23--偷懒的导入方法&quot;&gt;2.3  偷懒的导入方法&lt;/h3&gt;
+
+&lt;p&gt;有时候我们在做导入时会偷懒，将包中的所有内容导入&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from mypackage import *
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这是怎么实现的呢？ &lt;strong&gt;all&lt;/strong&gt; 变量就是干这个工作的。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;all&lt;/strong&gt; 关联了一个模块列表，当执行 from xx import * 时，就会导入列表中的模块。我们将 &lt;strong&gt;init&lt;/strong&gt;.py 修改为 。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;__all__ = ['subpackage_1', 'subpackage_2']
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这里没有包含 subpackage_3，是为了证明 &lt;strong&gt;all&lt;/strong&gt; 起作用了，而不是导入了所有子目录。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; from mypackage import *
+&amp;gt;&amp;gt;&amp;gt; dir()
+['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'subpackage_1', 'subpackage_2']
+&amp;gt;&amp;gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; dir(subpackage_1)
+['__doc__', '__loader__', '__name__', '__package__', '__path__', '__spec__']
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;子目录的中的模块没有导入！！！&lt;/p&gt;
+
+&lt;p&gt;该例子中的导入等价于&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from mypackage import subpackage_1, subpackage_2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;因此，导入操作会继续查找 subpackage_1 和 subpackage_2 中的 &lt;strong&gt;init&lt;/strong&gt;.py 并执行。（但是此时不会执行 import * ）&lt;/p&gt;
+
+&lt;p&gt;我们在 subpackage_1 下添加 &lt;strong&gt;init&lt;/strong&gt;.py 文件:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;__all__ = ['test11', 'test12']
+
+# 默认只导入test11
+from mypackage.subpackage_1 import test11
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;再来导入试试&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; from mypackage import *
+&amp;gt;&amp;gt;&amp;gt; dir()
+['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'subpackage_1', 'subpackage_2']
+&amp;gt;&amp;gt;&amp;gt;
+&amp;gt;&amp;gt;&amp;gt; dir(subpackage_1)
+['__all__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', 'test11']
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;如果想要导入子包的所有模块，则需要更精确指定。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; from mypackage.subpackage_1 import *
+&amp;gt;&amp;gt;&amp;gt; dir()
+['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'test11', 'test12']
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h2 id=&quot;3-配置模块的初始化操作&quot;&gt;3. 配置模块的初始化操作&lt;/h2&gt;
+
+&lt;p&gt;在了解了 &lt;strong&gt;init&lt;/strong&gt;.py 的工作原理后，应该能理解该文件就是一个正常的python代码文件。&lt;/p&gt;
+
+&lt;p&gt;因此可以将初始化代码放入该文件中。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="python" /><summary type="html">我们经常在python的模块目录中会看到 “init.py” 这个文件，那么它到底有什么作用呢？ 1. 标识该目录是一个python的模块包（module package） 如果你是使用python的相关IDE来进行开发，那么如果目录中存在该文件，该目录就会被识别为 module package 。 简化模块导入操作 假设我们的模块包的目录结构如下： └── mypackage ├── subpackage_1 │ ├── test11.py │ └── test12.py ├── subpackage_2 │ ├── test21.py │ └── test22.py └── subpackage_3 ├── test31.py └── test32.py 　　 如果我们使用最直接的导入方式，将整个文件拷贝到工程目录下，然后直接导入： from mypackage.subpackage_1 import test11 from mypackage.subpackage_1 import test12 from mypackage.subpackage_2 import test21 from mypackage.subpackage_2 import test22 from mypackage.subpackage_3 import test31 from mypackage.subpackage_3 import test32 当然这个例子里面文件比较少，如果模块比较大，目录比较深的话，可能自己都记不清该如何导入。（很有可能，哪怕只想导入一个模块都要在目录中找很久） 这种情况下，init.py 就很有作用了。我们先来看看该文件是如何工作的。 2.1 init.py 是怎么工作的？ 实际上，如果目录中包含了 init.py 时，当用 import 导入该目录时，会执行 init.py 里面的代码。 我们在mypackage目录下增加一个 init.py 文件来做一个实验： └── mypackage ├── __init__.py ├── subpackage_1 │ ├── test11.py │ └── test12.py ├── subpackage_2 │ ├── test21.py │ └── test22.py └── subpackage_3 ├── test31.py └── test32.py mypackage/init.py 里面加一个print，如果执行了该文件就会输出： print(&quot;You have imported mypackage&quot;) 下面直接用交互模式进行 import &amp;gt;&amp;gt;&amp;gt; import mypackage You have imported mypackage 很显然，init.py 在包被导入时会被执行。 2.2 控制模块导入 我们再做一个实验，在 mypackage/init.py 添加以下语句： from subpackage_1 import test11 我们导入 mypackage 试试: &amp;gt;&amp;gt;&amp;gt; import mypackage Traceback (most recent call last): File &quot;&amp;lt;stdin&amp;gt;&quot;, line 1, in &amp;lt;module&amp;gt; File &quot;/home/taopeng/Workspace/Test/mypackage/__init__.py&quot;, line 2, in &amp;lt;module&amp;gt; from subpackage_1 import test11 ImportError: No module named 'subpackage_1' 报错了。。。怎么回事？ 原来，在我们执行import时，当前目录是不会变的（就算是执行子目录的文件），还是需要完整的包名。 from mypackage.subpackage_1 import test11 综上，我们可以在__init__.py 指定默认需要导入的模块　　 2.3 偷懒的导入方法 有时候我们在做导入时会偷懒，将包中的所有内容导入 from mypackage import * 这是怎么实现的呢？ all 变量就是干这个工作的。 all 关联了一个模块列表，当执行 from xx import * 时，就会导入列表中的模块。我们将 init.py 修改为 。 __all__ = ['subpackage_1', 'subpackage_2'] 这里没有包含 subpackage_3，是为了证明 all 起作用了，而不是导入了所有子目录。 &amp;gt;&amp;gt;&amp;gt; from mypackage import * &amp;gt;&amp;gt;&amp;gt; dir() ['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'subpackage_1', 'subpackage_2'] &amp;gt;&amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt; dir(subpackage_1) ['__doc__', '__loader__', '__name__', '__package__', '__path__', '__spec__'] 子目录的中的模块没有导入！！！ 该例子中的导入等价于 from mypackage import subpackage_1, subpackage_2 因此，导入操作会继续查找 subpackage_1 和 subpackage_2 中的 init.py 并执行。（但是此时不会执行 import * ） 我们在 subpackage_1 下添加 init.py 文件: __all__ = ['test11', 'test12'] # 默认只导入test11 from mypackage.subpackage_1 import test11 再来导入试试 &amp;gt;&amp;gt;&amp;gt; from mypackage import * &amp;gt;&amp;gt;&amp;gt; dir() ['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'subpackage_1', 'subpackage_2'] &amp;gt;&amp;gt;&amp;gt; &amp;gt;&amp;gt;&amp;gt; dir(subpackage_1) ['__all__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', 'test11'] 如果想要导入子包的所有模块，则需要更精确指定。 &amp;gt;&amp;gt;&amp;gt; from mypackage.subpackage_1 import * &amp;gt;&amp;gt;&amp;gt; dir() ['__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'test11', 'test12'] 3. 配置模块的初始化操作 在了解了 init.py 的工作原理后，应该能理解该文件就是一个正常的python代码文件。 因此可以将初始化代码放入该文件中。</summary></entry><entry><title type="html">springboot自定义参数解析HandlerMethodArgumentResolver</title><link href="http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver" rel="alternate" type="text/html" title="springboot自定义参数解析HandlerMethodArgumentResolver" /><published>2020-04-10T00:00:00+08:00</published><updated>2020-04-10T00:00:00+08:00</updated><id>http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver</id><content type="html" xml:base="http://localhost:4000/SpringBoot/HandlerMethodArgumentResolver">&lt;h2 id=&quot;简介&quot;&gt;简介&lt;/h2&gt;
 &lt;p&gt;自定义解析器需要实现 &lt;em&gt;HandlerMethodArgumentResolver&lt;/em&gt; 接口， &lt;em&gt;HandlerMethodArgumentResolver&lt;/em&gt; 接口包含两个接口函数：&lt;/p&gt;
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HandlerMethodArgumentResolver&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;supportsParameter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;MethodParameter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;var1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
