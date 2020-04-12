@@ -3,6 +3,7 @@ title: 快速开始
 permalink: /queststart
 tags: TeXt Jekyll
 key: queststart-201200214
+key: 2018-06-06-new-template
 pageview: true
 show_date: true
 sidebar:
