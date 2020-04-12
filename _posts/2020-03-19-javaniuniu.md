@@ -2,7 +2,6 @@
 title: javaniuniu 图标banner
 permalink: /java/javaniuniu
 tags: TODO
-comments: true
 pageview: true
 show_date: true
 sidebar:
