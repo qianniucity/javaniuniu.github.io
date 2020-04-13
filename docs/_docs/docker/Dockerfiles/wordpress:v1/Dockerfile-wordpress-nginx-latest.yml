@@ -1,0 +1,48 @@
+version: '3.2'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: wordpress-nginx
+    #volumes:
+    #  - wordpress:/var/www/html
+    ports:
+      - 8001:80
+    depends_on:
+      - wordpress
+    networks:
+      - web
+    restart: unless-stopped
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-alpine-cli
+    volumes:
+      - wordpress:/var/www/html
+    env_file:
+      - wordpress.env
+    depends_on:
+      - db
+    networks:
+      - database
+      - web
+    restart: unless-stopped
+
+  db:
+    image: mariadb:latest
+    container_name: wordpress-mariadb
+    volumes:
+      - db-data:/var/lib/mysql
+    env_file:
+      - mariadb.env
+    networks:
+      - database
+    restart: unless-stopped
+
+networks:
+  web:
+  database:
+
+volumes:
+  wordpress:
+  db-data:

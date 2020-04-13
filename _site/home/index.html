@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Home - JAVA 牛牛</title>
 
-<meta name="description" content="记录在java的道路能走多远
+<meta name="description" content="主要是想看下自己能在技术这条路上能坚持多久
 ">
 <link rel="canonical" href="http://localhost:4000/home/"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
@@ -13,8 +13,6 @@
 <!-- end favicons snippet --><link rel="stylesheet" href="/assets/css/main.css"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" ><!-- start custom head snippets -->
 
 <!-- end custom head snippets -->
-<!-- 配置Google Analytics
--->
 <script>(function() {
   window.isArray = function(val) {
     return Object.prototype.toString.call(val) === '[object Array]';
@@ -244,7 +242,7 @@
       },
       site: {
         toc: {
-          selectors: 'h1,h2,h3,h4,h5'
+          selectors: 'h1,h2,h3,h4,h5,h6'
         }
       },
       paths: {
@@ -311,9 +309,9 @@ XUjxoyj8R1X9/5X9LyYAaZZSxzC6AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTAyLTA5VDIzOjMw
 OjAwLTA3OjAwK5t7GwAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wMi0wOVQyMzozMDowMC0wNzow
 MFrGw6cAAAAASUVORK5CYII=" />
 </svg>
-<a title="记录在java的道路能走多远
+<a title="主要是想看下自己能在技术这条路上能坚持多久
 " href="/">JAVA 牛牛</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item navigation__item--active"><a href="/home/">Home</a></li><li class="navigation__item"><a href="/SpringSecurity/class">Spring</a></li><li class="navigation__item"><a href="/Filter/explanation">WEB</a></li><li class="navigation__item"><a href="/java-code-design/java">CODE</a></li><li class="navigation__item"><a href="/java-code-redis/RedisTemplate/opsForValue">DATA</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/leetcode/about">力扣(leetcode)</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/docker/about">Docker</a></li><li class="navigation__item"><a href="/python/init">Python</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+        <ul><li class="navigation__item navigation__item--active"><a href="/home/">Home</a></li><li class="navigation__item"><a href="/spring.html">Spring</a></li><li class="navigation__item"><a href="/leetcode/about">leetcode(力扣)</a></li><li class="navigation__item"><a href="/docker/about">Docker</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/python/init">Python</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/javaniuniu">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
@@ -324,272 +322,57 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/shiro/about"><h2 itemprop="headline" class="item__header">关于shiro</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">TODO</div><p><a href="/shiro/about">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+          <header><a href="/java-code-design/Exception"><h2 itemprop="headline" class="item__header">Checked Exception还是Unchecked Exception?</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h5 id="一句话简介">一句话简介</h5>
+<ul>
+  <li>Checked异常必须被显式地捕获或者传递，如Basic try-catch-finally Exception Handling一文中所说。而unchecked异常则可以不必捕获或抛出。</li>
+  <li>Checked异常继承java.lang.Exception类。Unchecked异常继承自java.lang.RuntimeException类。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/**
+	 * 将反射时的checked exception转换为unchecked exception.
+	 */</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">RuntimeException</span> <span class="nf">convertReflectionExceptionToUnchecked</span><span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">((</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">IllegalAccessException</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">IllegalArgumentException</span><span class="o">)</span>
+				<span class="o">||</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">NoSuchMethodException</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">InvocationTargetException</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(((</span><span class="nc">InvocationTargetException</span><span class="o">)</span> <span class="n">e</span><span class="o">).</span><span class="na">getTargetException</span><span class="o">());</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">RuntimeException</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="o">(</span><span class="nc">RuntimeException</span><span class="o">)</span> <span class="n">e</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"Unexpected Checked Exception."</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+	<span class="o">}</span>
+
+  <span class="cm">/**
+  	 * 将CheckedException转换为UncheckedException.
+  	 */</span>
+  	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">RuntimeException</span> <span class="nf">unchecked</span><span class="o">(</span><span class="nc">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+  		<span class="k">if</span> <span class="o">(</span><span class="n">ex</span> <span class="k">instanceof</span> <span class="nc">RuntimeException</span><span class="o">)</span> <span class="o">{</span>
+  			<span class="k">return</span> <span class="o">(</span><span class="nc">RuntimeException</span><span class="o">)</span> <span class="n">ex</span><span class="o">;</span>
+  		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+  			<span class="k">return</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
+  		<span class="o">}</span>
+  	<span class="o">}</span>
+</code></pre></div></div>
+<p><strong>参考链接</strong></p>
+<ul>
+  <li><a href="https://blog.csdn.net/kingzone_2008/article/details/8535287">Java异常：选择Checked Exception还是Unchecked Exception?</a></li>
+</ul>
+</div><p><a href="/java-code-design/Exception">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=shiro">shiro</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 11, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-11T00:00:00+08:00">
-    <meta itemprop="keywords" content="shiro"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/python/init"><h2 itemprop="headline" class="item__header">Python中 init的作用</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">我们经常在python的模块目录中会看到 “init.py”  这个文件，那么它到底有什么作用呢？
-
-
-1. 标识该目录是一个python的模块包（module package）
-
-如果你是使用python的相关IDE来进行开发，那么如果目录中存在该文件，该目录就会被识别为 module package 。
-
-
-  简化模块导入操作
-    假设我们的模块包的目录结构如下：
-  
-
-
-└── mypackage
-    ├── subpackage_1
-    │   ├── test11.py
-    │   └── test12.py
-    ├── subpackage_2
-    │   ├── test21.py
-    │   └── test22.py
-    └── s...</div><p><a href="/python/init">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=python">python</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 11, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-11T00:00:00+08:00">
-    <meta itemprop="keywords" content="python"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0411/014"><h2 itemprop="headline" class="item__header">面试题29. 顺时针打印矩阵(模拟、设定边界，清晰图解)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">题目 顺时针打印矩阵
-输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
-
-示例
-
-  示例 1：
-    输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
-输出：[1,2,3,6,9,8,7,4,5]  
-    
-  
-  示例 2：
-
-
-输入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
-输出：[1,2,3,4,8,12,11,10,9,5,6,7]
-
-
-
-  限制：
-    0 &lt;= matrix.length &lt;= 100
-0 &lt;= matrix[i].length &lt;= 100
-    
-  
-
-
-解题思路：
-根据题目示例 matrix = [[1,2,3],[4,5,6...</div><p><a href="/leetcode/2020/0411/014">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 11, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-11T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/SpringBoot/HandlerMethodArgumentResolver"><h2 itemprop="headline" class="item__header">springboot自定义参数解析HandlerMethodArgumentResolver</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">简介
-自定义解析器需要实现 HandlerMethodArgumentResolver 接口， HandlerMethodArgumentResolver 接口包含两个接口函数：
-public interface HandlerMethodArgumentResolver {
-    boolean supportsParameter(MethodParameter var1);
-
-    @Nullable
-    Object resolveArgument(MethodParameter var1, @Nullable ModelAndViewContainer var2, NativeWebRequest var3, @Nullable WebDataBinderFactory...</div><p><a href="/SpringBoot/HandlerMethodArgumentResolver">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringBoot">SpringBoot</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 10, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-10T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringBoot"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0402/013"><h2 itemprop="headline" class="item__header">图解动态规划的解题四步骤</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">图解动态规划的解题四步骤
-
-如果你对于动态规划还不是很了解，或者没怎么做过动态规划的题目的话，那么 House Robber （小偷问题）这道题是一个非常好的入门题目。本文会以 House Robber 题目为例子，讲解动态规划题目的四个基本步骤。
-
-动态规划的的四个解题步骤是：
-
-
-  定义子问题
-  写出子问题的递推关系
-  确定 DP 数组的计算顺序
-  空间优化（可选）
-
-
-下面我们一步一步地进行讲解。
-
-步骤一：定义子问题
-稍微接触过一点动态规划的朋友都知道动态规划有一个“子问题”的定义。什么是子问题？子问题是和原问题相似，但规模较小的问题。例如这道小偷问题，原问题是“从全部房子中能偷到的最大金额”，将问题的规模缩小，子问题就是“从 k 个房子中能偷到的最大金额”，用 f(k...</div><p><a href="/leetcode/2020/0402/013">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
+                href="/archive.html?tag=CodeDesign">CodeDesign</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 02, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-02T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,动态规划"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0401/012"><h2 itemprop="headline" class="item__header">有效括号的嵌套深度</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">题目 有效括号的嵌套深度
-给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。
-
-有效字符串需满足：
-
-左括号必须用相同类型的右括号闭合。 
-左括号必须以正确的顺序闭合。  
-注意空字符串可被认为是有效字符串。
-
-示例
-示例 1:
-
-输入: “()”
-输出: true
-示例 2:
-
-输入: “()[]{}”
-输出: true
-示例 3:
-
-输入: “(]”
-输出: false
-示例 4:
-
-输入: “([)]”
-输出: false
-示例 5:
-
-输入: “{[]}”
-输出: true
-
-自己的思路
-
-自己的代码
-
-用时
-
-官方解题思路
-解题思路：
-- 算法原理
-
-  栈先入后出特点恰好与本题括号排序特点一致，即若遇到左括号入栈，遇到右括号时将对...</div><p><a href="/leetcode/2020/0401/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+                href="/archive.html?tag=%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86">异常处理</a>
+            </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 01, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-01T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0331/011"><h2 itemprop="headline" class="item__header">十二种排序算法</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">前言
-排序算法在计算机科学入门课程中很普遍，在学习排序算法的时候，涉及到大量的各种核心算法概念，例如大O表示法，分治法，堆和二叉树之类的数据结构，随机算法，最佳、最差和平均情况分析，时空权衡以及上限和下限，本文就介绍了十二种排序算法供大家学习。
-
-简介
-排序算法是用来根据元素对应的比较运算符重新排列给定的数组的算法，输出的数组是一个根据比较符从小到大或者从大到小依次排列的数组。比较运算符是用于确定相应数据结构中元素的新顺序，比如在整数数组里面，对应的比较符号就是大于或者小于号，用户也可以自己定义对应的比较运算符。
-
-比如如果输入是 [4,2,3,1]，按照从小到大输出，结果应该是 [1,2,3,4]
-
-特性
-稳定性
-如果在数组中有两个元素是相等的，在经过某个排序算法之后，原来在前面的的...</div><p><a href="/leetcode/2020/0331/011">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 31, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-31T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-util-code/hibernate/validator"><h2 itemprop="headline" class="item__header">springboot使用hibernate validator校验</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">一、参数校验
-在开发中经常需要写一些字段校验的代码，比如字段非空，字段长度限制，邮箱格式验证等等，写这些与业务逻辑关系不大的代码个人感觉有两个麻烦：
-
-
-  验证代码繁琐，重复劳动
-  方法内代码显得冗长
-  每次要看哪些参数验证是否完整，需要去翻阅验证逻辑代码
-hibernate validator （官方文档）提供了一套比较完善、便捷的验证实现方式。
-
-
-spring-boot-starter-web包里面有hibernate-validator包，不需要引用hibernate validator依赖。
-
-二、hibernate validator校验demo
-先来看一个简单的demo，添加了Validator的注解：
-import org.hibernate.validator....</div><p><a href="/java-util-code/hibernate/validator">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8F%82%E6%95%B0%E6%A0%A1%E9%AA%8C">参数校验</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 30, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-30T00:00:00+08:00">
-    <meta itemprop="keywords" content="参数校验"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/about"><h2 itemprop="headline" class="item__header">关于力扣(leetcode)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">偶然在力扣（LeetCode）参加了一个活动，每天一题，坚持60天   
-今天是2020-03-17 第一天
-
-模版
-
-题目 
-
-示例
-
-官方解题思路
-
-官方代码
-
-复杂度分析</div><p><a href="/leetcode/about">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 25, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-25T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0324/009"><h2 itemprop="headline" class="item__header">按摩师</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">题目 按摩师
-一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。
-
-示例
-示例 1：
-
-输入： [1,2,3,1] 
-输出： 4 
-解释： 选择 1 号预约和 3 号预约，总时长 = 1 + 3 = 4。
-示例 2：
-
-输入： [2,7,9,3,1] 
-输出： 12  
-解释： 选择 1 号预约、 3 号预约和 5 号预约，总时长 = 2 + 9 + 1 = 12。
-示例 3：
-
-输入： [2,1,4,5,3,1,1,3] 
-输出： 12  
-解释： 选择 1 号预约、 3 号预约、 5 号预约和 8 号预约，总时长 = 2 ...</div><p><a href="/leetcode/2020/0324/009">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 24, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-24T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"></div>
+                href="/archive.html?tag=Exception">Exception</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 17, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-Exception">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-17T00:00:00+08:00">
+    <meta itemprop="keywords" content="CodeDesign,异常处理,Exception"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>133 post articles, 14 pages.</p>
-    <div class="pagination__menu">
-      <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
-            <i class="fas fa-angle-left"></i>
-          </div></li><li>
-              <div class="button button--primary button--circle focus"><span>1</span></div>
-            </li><li>
-                  <a class="button button--secondary button--circle" href="/home/page2"><span>2</span></a>
-                </li><li>
-                  <a class="button button--secondary button--circle" href="/home/page3"><span>3</span></a>
-                </li><li>
-                  <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
-                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page14"><span>14</span></a>
-                </li><li><a class="button button--secondary button--circle" href="/home/page2">
-            <i class="fas fa-angle-right"></i>
-          </a></li></ul>
-    </div>
-  </div></div>
+</div><div class="layout--home"></div>
 <script>/*(function () {
 
 })();*/
@@ -604,7 +387,8 @@ import org.hibernate.validator....</div><p><a href="/java-util-code/hibernate/va
             </div></div></div><div class="page__footer d-print-none">
 <footer class="footer py-4 js-page-footer">
   <div class="main"><div itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="java牛牛"><meta itemprop="url" content="/javaniuniu.com"><meta itemprop="description" content="I am an amazing person."><div class="footer__author-links"><div class="author-links">
+      <meta itemprop="name" content="java牛牛"><meta itemprop="url" content="/javaniuniu.com"><meta itemprop="description" content="I am an amazing person.
+"><div class="footer__author-links"><div class="author-links">
   <ul class="menu menu--nowrap menu--inline"><link itemprop="url" href="javaniuniu.com"><li title="Send me an Email.">
       <a class="button button--circle mail-button" itemprop="email" href="mailto:king101125s@gmail.com" target="_blank">
         <i class="fas fa-envelope"></i>

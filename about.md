@@ -1,6 +1,6 @@
 ---
 layout: article
-titles: 
+titles:
   # @start locale config
   en      : &EN       About
   en-GB   : *EN
@@ -24,14 +24,38 @@ titles:
   fr-LU   : *FR
   # @end locale config
 key: page-about
-article_header:
-  type: overlay
-  theme: dark
-  background_color: '#123'
-  background_image: false
+show_title: false
 ---
+<style>
+  .hero-example p {
+    margin: .5rem 0;
+  }
+  .hero-example--height {
+    height: 500px;
+  }
+  .hero-fill-example {
+    background-color: #ccc;
+  }
+  .hero-fill-example--dark {
+    background-color: #123;
+  }
+  .hero-bg-image-example {
+    background-image: url("/docs/assets/images/cover3.jpg");
+  }
+  .hero-bg-image-example--linear-gradient {
+    background-image: linear-gradient(135deg, rgba(255, 69, 0, .5), rgba(255, 197, 0, .2)), url("/docs/assets/images/cover3.jpg");
+  }
+</style>
 
-简历不值一提，主要是想看下自己能在技术这条路上能坚持多久 (#123).
+<div class="hero hero-example hero--dark hero-bg-image-example my-3">
+  <div class="hero__content">
+    <h3>about</h3>
+    <p>主要是想看下自己能在技术这条路上能坚持多久</p>
+  </div>
+</div>
+
+
+
 
 #### Name
 CN: 闵鹏（MinPeng） ｜ EN: Keith ｜ 花名:蚂蚁
@@ -44,9 +68,9 @@ Java Development
 
 2019 - 2022年 南昌大学
 
-一直在服务于金融行业，在易宝支付和恒生电子待过
+一直在服务于金融行业，曾就职于易宝支付和恒生电子
 
-在家带娃，顺便做个博客
+现在找工作
 
 #### Contact
 Email: king101125s@gmail.com
