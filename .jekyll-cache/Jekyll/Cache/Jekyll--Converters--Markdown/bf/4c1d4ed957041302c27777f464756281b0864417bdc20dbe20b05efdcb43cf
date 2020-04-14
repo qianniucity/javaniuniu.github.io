@@ -1,0 +1,54 @@
+I"�<h2 id="题目-445-两数相加-ii">题目 <a href="https://leetcode-cn.com/problems/add-two-numbers-ii/">445. 两数相加 II</a></h2>
+<p>给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。</p>
+
+<p>你可以假设除了数字 0 之外，这两个数字都不会以零开头。</p>
+
+<h2 id="示例">示例</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：(7 -&gt; 2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+输出：7 -&gt; 8 -&gt; 0 -&gt; 7
+</code></pre></div></div>
+
+<h2 id="解题思路">解题思路</h2>
+<ol>
+  <li>使用堆保存链表,保存结果如[1,2,3,4]</li>
+  <li>通过堆的pop方法从尾部依次获取数据</li>
+</ol>
+
+<h2 id="代码">代码</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">addTwoNumbers</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">l1</span><span class="o">,</span> <span class="nc">ListNode</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">stack1</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">l1</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">stack2</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">l2</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">stack1</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">stack2</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">carry</span><span class="o">;</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">stack1</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()?</span> <span class="mi">0</span><span class="o">:</span> <span class="n">stack1</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">stack2</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()?</span> <span class="mi">0</span><span class="o">:</span> <span class="n">stack2</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="nc">ListNode</span> <span class="n">node</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">sum</span> <span class="o">%</span> <span class="mi">10</span><span class="o">);</span>
+            <span class="n">node</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">node</span><span class="o">;</span>
+            <span class="n">carry</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="mi">10</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+:ET
