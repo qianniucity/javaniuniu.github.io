@@ -1,0 +1,88 @@
+I"�(<h2 id="题目-56-合并区间">题目 <a href="https://leetcode-cn.com/problems/merge-intervals/">56. 合并区间</a></h2>
+<p>给出一个区间的集合，请合并所有重叠的区间。</p>
+
+<h2 id="示例">示例</h2>
+<h3 id="示例-1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [[1,3],[2,6],[8,10],[15,18]]
+输出: [[1,6],[8,10],[15,18]]
+解释: 区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+</code></pre></div></div>
+<h3 id="示例2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [[1,4],[4,5]]
+输出: [[1,5]]
+解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。
+</code></pre></div></div>
+
+<h2 id="思路">思路</h2>
+<p>2 个区间的关系有以下 6 种，但是其实可以变成上面 3 种情况（只需要假设 第一个区间的起始位置 ≤ 第二个区间的起始位置，如果不满足这个假设，交换这两个区间）。这 3 种情况的合并的逻辑都很好写。</p>
+
+<p><img src="" alt="pic1" /></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[][]</span> <span class="nf">merge</span><span class="o">(</span><span class="kt">int</span><span class="o">[][]</span> <span class="n">intervals</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 先按照区间起始位置排序</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">intervals</span><span class="o">,</span> <span class="o">(</span><span class="n">v1</span><span class="o">,</span> <span class="n">v2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">v1</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">-</span> <span class="n">v2</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="c1">// 遍历区间</span>
+        <span class="kt">int</span><span class="o">[][]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">intervals</span><span class="o">.</span><span class="na">length</span><span class="o">][</span><span class="mi">2</span><span class="o">];</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="nl">interval:</span> <span class="n">intervals</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 如果结果数组是空的，或者当前区间的起始位置 &gt; 结果数组中最后区间的终止位置，</span>
+            <span class="c1">// 则不合并，直接将当前区间加入结果数组。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">idx</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span> <span class="n">interval</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">res</span><span class="o">[</span><span class="n">idx</span><span class="o">][</span><span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">[++</span><span class="n">idx</span><span class="o">]</span> <span class="o">=</span> <span class="n">interval</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 反之将当前区间合并至结果数组的最后区间</span>
+                <span class="n">res</span><span class="o">[</span><span class="n">idx</span><span class="o">][</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">res</span><span class="o">[</span><span class="n">idx</span><span class="o">][</span><span class="mi">1</span><span class="o">],</span> <span class="n">interval</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">res</span><span class="o">,</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h2 id="思路二">思路二</h2>
+<ul>
+  <li>按照左端点升序排序，然后遍历。
+    <ul>
+      <li>如果当前遍历到的区间的左端点 &gt; 结果集中最后一个区间的右端点，说明它们没有交集，此时把区间添加到结果集；</li>
+      <li>如果当前遍历到的区间的左端点 &lt;= 结果集中最后一个区间的右端点，说明它们有交集，此时产生合并操作，即：对结果集中最后一个区间的右端点更新（取两个区间的最大值）。</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">intervals</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">intervals</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 按照起点排序</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">intervals</span><span class="o">,</span> <span class="nc">Comparator</span><span class="o">.</span><span class="na">comparingInt</span><span class="o">(</span><span class="n">o</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span>
+
+        <span class="nc">List</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">[]&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+        <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">intervals</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">curInterval</span> <span class="o">=</span> <span class="n">intervals</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="c1">// 每次新遍历到的列表与当前结果集中的最后一个区间的末尾端点进行比较</span>
+            <span class="kt">int</span><span class="o">[]</span> <span class="n">peek</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">res</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">curInterval</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">peek</span><span class="o">[</span><span class="mi">1</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">curInterval</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 注意，这里应该取最大</span>
+                <span class="n">peek</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">curInterval</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">peek</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">res</span><span class="o">.</span><span class="na">size</span><span class="o">()][]);</span>
+</code></pre></div></div>
+
+<h2 id="知识点">知识点</h2>
+<ul>
+  <li><a href="https://blog.csdn.net/qq_37786775/article/details/97821671">java 使用Arrays对二维数组个性化排序</a>
+    <ul>
+      <li>Arrays.sort(people, Comparator.comparingInt(o -&gt; o[0]));  按照index0 排序</li>
+      <li>Arrays.sort(people, Comparator.comparingInt(o -&gt; o[1]));  按照index1 排序</li>
+    </ul>
+  </li>
+  <li><a href="https://blog.csdn.net/qq_25131363/article/details/85001414">Arrays.copyOf() 用法</a></li>
+</ul>
+:ET
