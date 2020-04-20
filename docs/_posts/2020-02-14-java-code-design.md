@@ -3,6 +3,10 @@ title: java代码设计
 permalink: /java-code-design/java
 tags: CodeDesign
 key: java-code-design-java
+articles:
+  show_excerpt: true
+  show_readmore: true
+  show_info: true
 ---
 ## 数据库设计
 使用tk.mybits

@@ -3,6 +3,10 @@ title: Checked Exception还是Unchecked Exception?
 permalink: /java-code-design/Exception
 tags: CodeDesign 异常处理 Exception
 key: java-code-design-Exception
+articles:
+  show_excerpt: true
+  show_readmore: true
+  show_info: true
 ---
 ##### 一句话简介
 - Checked异常必须被显式地捕获或者传递，如Basic try-catch-finally Exception Handling一文中所说。而unchecked异常则可以不必捕获或抛出。

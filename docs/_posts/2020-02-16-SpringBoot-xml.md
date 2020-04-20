@@ -3,6 +3,10 @@ title: application.properties文件常用配置
 permalink: /java-code-design/xml/application
 tags: SpringBoot CodeDesign XML application.properties
 key: java-code-design-java
+articles:
+  show_excerpt: true
+  show_readmore: true
+  show_info: true
 ---
 ```xml
 #数据库配置

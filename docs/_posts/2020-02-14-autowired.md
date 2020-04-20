@@ -3,6 +3,10 @@ title: Autowired的使用:推荐对构造函数进行注释
 permalink: /java-code-design/autowired
 tags: Spring注解 CodeDesign
 key: java-code-design-autowired
+articles:
+  show_excerpt: true
+  show_readmore: true
+  show_info: true
 ---
 在编写代码的时候，使用@Autowired注解是，发现IDE报的一个警告，如下：
 
