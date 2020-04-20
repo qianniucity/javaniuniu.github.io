@@ -1,8 +1,8 @@
 ---
 title: DynamicUpdate正确使用方式
-permalink: /java-code-design-data/jpa/DynamicUpdate
+permalink: /docs-data-jpa/jpa/DynamicUpdate
 tags: jpa Spring注解 数据库
-key: java-code-design-data-jpa-DynamicUpdate
+key: docs-data-jpa-DynamicUpdate
 ---
 #### 原理
 DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的字段。说白了, 就是在更新某条记录之前, 先把这条记录从数据库查出来, 那么这条数据就在session(一级缓存)中, 我们再去修改这个对象的数据即可;
@@ -51,4 +51,5 @@ update tbl_foo set name=?, col3=?, col4=?, col5=? where id=?
 ```sql
 update tbl_foo set name=? where id=?
 ```
+
 以上两种情况对数据库更新的结果是`等效`的，但是`使用@DynamicUpdate性能会好一些`。因为不使用@DynamicUpdate时，即使没有改变的字段也会被更新。如果进行频繁的更新操作，并且每次只更新少数字段，那么@DynamicUpdate对性能的优化效果还是很好的。

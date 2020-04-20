@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>java中BO的使用 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Spring data jpa @Version注解及自定义数据库乐观锁实现 - JAVA 牛牛</title>
 
-<meta name="description" content="TODO">
-<link rel="canonical" href="http://localhost:4000/java-code-design-data/BO"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="在数据库并发操作时，为了保证数据的正确性，经常要对数据加锁，加锁有两种方式：悲观锁、乐观锁悲观锁：把所需要的数据全部加锁，不允许其他事务对数据做修改 update xxx where xxxx for update乐观锁：对数据进行版本校验，如果版本不一致，则操作数据失败   update xxx,version...">
+<link rel="canonical" href="http://localhost:4000/docs-data-jpa/lock"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -265,7 +265,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">领域驱动设计</li><li class="toc-h2"><a href="/java-code-design-data/dasign-data">领域驱动设计详解</a></li><li class="toc-h2"><a href="/java-code-design-data/vo">VO视图对象</a></li><li class="toc-h2"><a href="/java-code-design-data/dto">DTO数据传输对象</a></li><li class="toc-h2"><a href="/java-code-design-data/POJO">java中POJO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/PO">java中PO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/DO">java中DO的使用</a></li><li class="toc-h2 active"><a href="/java-code-design-data/BO">java中BO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/builder">建造模式</a></li><li class="toc-h2"><a href="/docs-model-design/VOorDTO">VO与DTO的区别</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">Jpa</li><li class="toc-h2"><a href="/docs-data-jpa/sql">jpa中sql常见语句使用</a></li><li class="toc-h2"><a href="/docs-data-jpa/vo">jpa 多表查询，返回到VO</a></li><li class="toc-h2"><a href="/docs-data-jpa/nativeQuery">有nativeQuery = true和没有的区别</a></li><li class="toc-h2"><a href="/docs-data-jpa/jpa/DynamicUpdate">DynamicUpdate正确使用方式</a></li><li class="toc-h2 active"><a href="/docs-data-jpa/lock">Spring data jpa @Version注解及自定义数据库乐观锁实现</a></li><li class="toc-h1">Redis</li><li class="toc-h2"><a href="/java-code-redis/RedisTemplate/opsForValue">RedisTemplate之opsForValue使用说明</a></li><li class="toc-h2"><a href="/java-code-redis/keyset">redis key处理（增删查改）</a></li><li class="toc-h2"><a href="/java-code-redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/java-code-redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h2"><a href="/java-code-redis/KeyGenerator">Spring Cache – KeyGenerator自定义rediskey</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -332,20 +332,133 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>java中BO的使用</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>Spring data jpa @Version注解及自定义数据库乐观锁实现</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/docs/_docs/docs-model-design/2020-02-16-BO.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="java中BO的使用"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/docs/_docs/docs-data/docs-data-jpa/2020-02-28-jpa-lock.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="Spring data jpa @Version注解及自定义数据库乐观锁实现"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1">领域驱动设计</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-data-bo">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="领域驱动设计"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=jpa">jpa</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=jpa%E9%94%81">jpa锁</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-lock">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="jpa,Spring注解,jpa锁"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>TODO</p>
-</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-16T00:00:00+08:00"><!-- start custom article footer snippet -->
+<div class="article__content" itemprop="articleBody"><p>在数据库并发操作时，为了保证数据的正确性，经常要对数据加锁，加锁有两种方式：悲观锁、乐观锁</p>
+
+<p>悲观锁：把所需要的数据全部加锁，不允许其他事务对数据做修改 </p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">update</span> <span class="n">xxx</span> <span class="k">where</span> <span class="n">xxxx</span> <span class="k">for</span> <span class="k">update</span>
+</code></pre></div></div>
+<p>乐观锁：对数据进行版本校验，如果版本不一致，则操作数据失败   </p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">update</span> <span class="n">xxx</span><span class="p">,</span><span class="k">version</span><span class="o">+</span><span class="mi">1</span>  <span class="k">where</span> <span class="n">xxxx</span> <span class="k">and</span> <span class="k">version</span><span class="o">=</span><span class="n">x</span>
+<span class="err"> </span><span class="nv">`</span><span class="se">``</span><span class="nv">
+
+- @Version注解可以在实体 bean 中使用,通过这种方式可添加对乐观锁定的支持  
+- 一个类中只能有一个@Version注解  
+- 注意此属性 不能用 String  可取值 int Integer Long
+- 在jpa中，@Version注解，可以实现乐观锁功能
+
+实体类Account，version属性上加@Version注解
+</span><span class="se">``</span><span class="nv">`</span><span class="n">java</span>
+<span class="n">package</span> <span class="n">com</span><span class="p">.</span><span class="n">xhx</span><span class="p">.</span><span class="n">springboot</span><span class="p">.</span><span class="n">entity</span><span class="p">;</span>
+
+<span class="n">import</span> <span class="n">javax</span><span class="p">.</span><span class="n">persistence</span><span class="p">.</span><span class="n">Entity</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">javax</span><span class="p">.</span><span class="n">persistence</span><span class="p">.</span><span class="n">Id</span><span class="p">;</span>
+<span class="n">import</span> <span class="n">javax</span><span class="p">.</span><span class="n">persistence</span><span class="p">.</span><span class="k">Version</span><span class="p">;</span>
+
+<span class="cm">/**
+ * @author xuhaixing
+ * @date 2018/4/28 10:29
+ */</span>
+<span class="o">@</span><span class="n">Entity</span>
+<span class="k">public</span> <span class="k">class</span> <span class="n">Account</span> <span class="err">{</span>
+    <span class="o">@</span><span class="n">Id</span>
+    <span class="n">private</span> <span class="nb">int</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">private</span> <span class="n">String</span> <span class="n">name</span><span class="p">;</span>
+    <span class="n">private</span> <span class="nb">Double</span> <span class="n">money</span><span class="p">;</span>
+    <span class="o">@</span><span class="k">Version</span>
+    <span class="n">private</span> <span class="nb">int</span> <span class="k">version</span><span class="p">;</span>
+
+
+    <span class="k">public</span> <span class="nb">int</span> <span class="n">getVersion</span><span class="p">()</span> <span class="err">{</span>
+        <span class="k">return</span> <span class="k">version</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="n">void</span> <span class="n">setVersion</span><span class="p">(</span><span class="nb">int</span> <span class="k">version</span><span class="p">)</span> <span class="err">{</span>
+        <span class="n">this</span><span class="p">.</span><span class="k">version</span> <span class="o">=</span> <span class="k">version</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="nb">int</span> <span class="n">getId</span><span class="p">()</span> <span class="err">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="n">void</span> <span class="n">setId</span><span class="p">(</span><span class="nb">int</span> <span class="n">id</span><span class="p">)</span> <span class="err">{</span>
+        <span class="n">this</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="n">String</span> <span class="n">getName</span><span class="p">()</span> <span class="err">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="n">void</span> <span class="n">setName</span><span class="p">(</span><span class="n">String</span> <span class="n">name</span><span class="p">)</span> <span class="err">{</span>
+        <span class="n">this</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="nb">Double</span> <span class="n">getMoney</span><span class="p">()</span> <span class="err">{</span>
+        <span class="k">return</span> <span class="n">money</span><span class="p">;</span>
+    <span class="err">}</span>
+
+    <span class="k">public</span> <span class="n">void</span> <span class="n">setMoney</span><span class="p">(</span><span class="nb">Double</span> <span class="n">money</span><span class="p">)</span> <span class="err">{</span>
+        <span class="n">this</span><span class="p">.</span><span class="n">money</span> <span class="o">=</span> <span class="n">money</span><span class="p">;</span>
+    <span class="err">}</span>
+<span class="err">}</span>
+</code></pre></div></div>
+<p>在更新数据时，需要用jpa自己实现的save方法</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="no">S</span> <span class="kd">extends</span> <span class="no">T</span><span class="o">&gt;</span> <span class="no">S</span> <span class="nf">save</span><span class="o">(</span><span class="no">S</span> <span class="n">var1</span><span class="o">);</span>
+<span class="o">&lt;</span><span class="no">S</span> <span class="kd">extends</span> <span class="no">T</span><span class="o">&gt;</span> <span class="nc">Iterable</span><span class="o">&lt;</span><span class="no">S</span><span class="o">&gt;</span> <span class="nf">saveAll</span><span class="o">(</span><span class="nc">Iterable</span><span class="o">&lt;</span><span class="no">S</span><span class="o">&gt;</span> <span class="n">var1</span><span class="o">);</span>
+</code></pre></div></div>
+<p>如果是自己写的update方法，下面这样，是不生效的</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Repository</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AccountDao</span> <span class="kd">extends</span> <span class="nc">JpaRepository</span><span class="o">&lt;</span><span class="nc">Account</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="nd">@Modifying</span>
+    <span class="nd">@Query</span><span class="o">(</span><span class="s">"update Account set name=:name, money=:money where id=:id"</span><span class="o">)</span>
+    <span class="kt">int</span> <span class="nf">updateAccount</span><span class="o">(</span><span class="nd">@Param</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">,</span><span class="nd">@Param</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nd">@Param</span><span class="o">(</span><span class="s">"money"</span><span class="o">)</span> <span class="kt">double</span> <span class="n">money</span><span class="o">);</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+<p> </p>
+
+<p>数据库数据如下：</p>
+
+<p><img src="/assets/images/java_code_design_data/20180801221658471.jpg" alt="1" /></p>
+
+<p>我们更新id是10的数据，数据库中版本是0，我们设置版本1</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Account</span> <span class="n">account</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Account</span><span class="o">();</span>
+<span class="n">account</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+<span class="n">account</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"eeee"</span><span class="o">);</span>
+<span class="n">account</span><span class="o">.</span><span class="na">setMoney</span><span class="o">(</span><span class="mf">7999.0</span><span class="o">);</span>
+<span class="n">account</span><span class="o">.</span><span class="na">setVersion</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+<span class="n">accountController</span><span class="o">.</span><span class="na">update</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</code></pre></div></div>
+<p>报如下错误：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">orm</span><span class="o">.</span><span class="na">ObjectOptimisticLockingFailureException</span><span class="o">:</span> <span class="nc">Object</span> <span class="n">of</span> <span class="kd">class</span> <span class="err">[</span><span class="nc">com</span><span class="o">.</span><span class="na">xhx</span><span class="o">.</span><span class="na">springboot</span><span class="o">.</span><span class="na">entity</span><span class="o">.</span><span class="na">Account</span><span class="o">]</span> <span class="n">with</span> <span class="n">identifier</span> <span class="o">[</span><span class="mi">10</span><span class="o">]:</span> <span class="n">optimistic</span> <span class="n">locking</span> <span class="n">failed</span><span class="o">;</span> <span class="n">nested</span> <span class="n">exception</span> <span class="n">is</span> <span class="n">org</span><span class="o">.</span><span class="na">hibernate</span><span class="o">.</span><span class="na">StaleObjectStateException</span><span class="o">:</span> <span class="nc">Row</span> <span class="n">was</span> <span class="n">updated</span> <span class="n">or</span> <span class="n">deleted</span> <span class="n">by</span> <span class="n">another</span> <span class="nf">transaction</span> <span class="o">(</span><span class="n">or</span> <span class="n">unsaved</span><span class="o">-</span><span class="n">value</span> <span class="n">mapping</span> <span class="n">was</span> <span class="n">incorrect</span><span class="o">)</span> <span class="o">:</span> <span class="o">[</span><span class="n">com</span><span class="o">.</span><span class="na">xhx</span><span class="o">.</span><span class="na">springboot</span><span class="o">.</span><span class="na">entity</span><span class="o">.</span><span class="na">Account</span><span class="err">#</span><span class="mi">10</span><span class="o">]</span>
+
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">orm</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">vendor</span><span class="o">.</span><span class="na">HibernateJpaDialect</span><span class="o">.</span><span class="na">convertHibernateAccessException</span><span class="o">(</span><span class="nc">HibernateJpaDialect</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">298</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">orm</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">vendor</span><span class="o">.</span><span class="na">HibernateJpaDialect</span><span class="o">.</span><span class="na">translateExceptionIfPossible</span><span class="o">(</span><span class="nc">HibernateJpaDialect</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">225</span><span class="o">)</span>
+	<span class="n">at</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">orm</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">AbstractEntityManagerFactoryBean</span><span class="o">.</span><span class="na">translateExceptionIfPossible</span><span class="o">(</span><span class="nc">AbstractEntityManagerFactoryBean</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">527</span><span class="o">)</span>
+</code></pre></div></div>
+<p>把版本号改成0，再更新，数据库中执行如下语句，更新成功
+<img src="/assets/images/java_code_design_data/20180801221954428.jpg" alt="2" /></p>
+
+<p>再看数据库，版本号+1了
+<img src="/assets/images/java_code_design_data/20180801222021385.jpg" alt="3" /></p>
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-28T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__license"><div class="license">
@@ -355,7 +468,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-code-design-data/DO">java中DO的使用</a></div><div class="next"><span>NEXT</span><a href="/java-code-design-data/builder">建造模式</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/docs-data-jpa/jpa/DynamicUpdate">DynamicUpdate正确使用方式</a></div><div class="next"><span>NEXT</span><a href="/java-code-redis/RedisTemplate/opsForValue">RedisTemplate之opsForValue使用说明</a></div></div></div>
 
 </div>
 

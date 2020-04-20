@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>DynamicUpdate正确使用方式 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>java中DO的使用 - JAVA 牛牛</title>
 
-<meta name="description" content="原理DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的字段。说白了, 就是在更新某条记录之前, 先把这条记录从数据库查出来, 那么这条数据就在session(一级缓存)中, 我们再去修改这个对象的数据即可;@DynamicUpdate正确使用方式  在做 update实体类的某个属...">
-<link rel="canonical" href="http://localhost:4000/java-code-design-data/jpa/DynamicUpdate"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="TODO">
+<link rel="canonical" href="http://localhost:4000/docs-model-design/DO"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -265,7 +265,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">领域驱动设计</li><li class="toc-h2"><a href="/java-code-design-data/dasign-data">领域驱动设计详解</a></li><li class="toc-h2"><a href="/java-code-design-data/vo">VO视图对象</a></li><li class="toc-h2"><a href="/java-code-design-data/dto">DTO数据传输对象</a></li><li class="toc-h2"><a href="/java-code-design-data/POJO">java中POJO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/PO">java中PO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/DO">java中DO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/BO">java中BO的使用</a></li><li class="toc-h2"><a href="/java-code-design-data/builder">建造模式</a></li><li class="toc-h2"><a href="/docs-model-design/VOorDTO">VO与DTO的区别</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">领域驱动设计</li><li class="toc-h2"><a href="/docs-model-design/dasign-data">领域驱动设计详解</a></li><li class="toc-h2"><a href="/docs-model-design/vo">VO视图对象</a></li><li class="toc-h2"><a href="/docs-model-design/dto">DTO数据传输对象</a></li><li class="toc-h2"><a href="/docs-model-design/POJO">java中POJO的使用</a></li><li class="toc-h2"><a href="/docs-model-design/PO">java中PO的使用</a></li><li class="toc-h2 active"><a href="/docs-model-design/DO">java中DO的使用</a></li><li class="toc-h2"><a href="/docs-model-design/BO">java中BO的使用</a></li><li class="toc-h2"><a href="/docs-model-design/builder">建造模式</a></li><li class="toc-h2"><a href="/docs-model-design/VOorDTO">VO与DTO的区别</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -332,93 +332,20 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>DynamicUpdate正确使用方式</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>java中DO的使用</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/docs/_docs/docs-model-design/2020-02-25-JPA-DynamicUpdate.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="DynamicUpdate正确使用方式"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/docs/_docs/docs-model-design/2020-02-16-DO.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="java中DO的使用"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=jpa">jpa</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%95%B0%E6%8D%AE%E5%BA%93">数据库</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 25, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-data-jpa-DynamicUpdate">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-25T00:00:00+08:00">
-    <meta itemprop="keywords" content="jpa,Spring注解,数据库"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1">领域驱动设计</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-model-design-DO">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
+    <meta itemprop="keywords" content="领域驱动设计"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h4 id="原理">原理</h4>
-<p>DynamicUpdate: 在只更新同一个session里面，同一个对象有改变的字段。说白了, 就是在更新某条记录之前, 先把这条记录从数据库查出来, 那么这条数据就在session(一级缓存)中, 我们再去修改这个对象的数据即可;</p>
-
-<h4 id="dynamicupdate正确使用方式">@DynamicUpdate正确使用方式</h4>
-<ol>
-  <li>在做 update实体类的某个属性之前，先做findById操作</li>
-  <li>将需要修改的字段做 set 操作</li>
-  <li>做 save 操作</li>
-</ol>
-
-<h4 id="误区及经常出现的错误">误区及经常出现的错误</h4>
-<ol>
-  <li>更新数据时，只传入需要更新的数据，而没有操作findById操作,造成其他数据为null</li>
-</ol>
-
-<h4 id="举例">举例</h4>
-<p>先说明一下@DynamicUpdate注解用在实体类上   <br />
-有 数据库 表tbl_foo和对应的实体类Foo，如下：</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">id</th>
-      <th style="text-align: left">name</th>
-      <th style="text-align: left">col3</th>
-      <th style="text-align: left">col4</th>
-      <th style="text-align: left">col5</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">1</td>
-      <td style="text-align: left">毕加索</td>
-      <td style="text-align: left">1770</td>
-      <td style="text-align: left">奥地利</td>
-      <td style="text-align: left">男</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Foo</span><span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">col3</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">col4</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">col5</span><span class="o">;</span>
-    <span class="n">getter</span><span class="o">...</span>
-    <span class="n">setter</span><span class="o">...</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>在Service中更新id=1记录的name属性，代码如下：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Foo</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">fooDao</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-<span class="n">foo</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"贝多芬"</span><span class="o">);</span>
-<span class="n">fooDao</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">foo</span><span class="o">);</span>
-</code></pre></div></div>
-
-<p><strong>两种情况：</strong></p>
-<ol>
-  <li>在entity类中未使用@DynamicUpdate注解或使用了@DynamicUpdate(false)，那么Hibernate底层执行的sql如:
-    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">update</span> <span class="n">tbl_foo</span> <span class="k">set</span> <span class="n">name</span><span class="o">=?</span><span class="p">,</span> <span class="n">col3</span><span class="o">=?</span><span class="p">,</span> <span class="n">col4</span><span class="o">=?</span><span class="p">,</span> <span class="n">col5</span><span class="o">=?</span> <span class="k">where</span> <span class="n">id</span><span class="o">=?</span>
-</code></pre></div>    </div>
-  </li>
-  <li>在entity类中使用了@DynamicUpdate注解(或@DynamicUpdate(true))，Hibernate底层执行的sql如:
-    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">update</span> <span class="n">tbl_foo</span> <span class="k">set</span> <span class="n">name</span><span class="o">=?</span> <span class="k">where</span> <span class="n">id</span><span class="o">=?</span>
-</code></pre></div>    </div>
-    <p>以上两种情况对数据库更新的结果是<code class="highlighter-rouge">等效</code>的，但是<code class="highlighter-rouge">使用@DynamicUpdate性能会好一些</code>。因为不使用@DynamicUpdate时，即使没有改变的字段也会被更新。如果进行频繁的更新操作，并且每次只更新少数字段，那么@DynamicUpdate对性能的优化效果还是很好的。</p>
-  </li>
-</ol>
-</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-25T00:00:00+08:00"><!-- start custom article footer snippet -->
+<div class="article__content" itemprop="articleBody"><p>TODO</p>
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-02-16T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__license"><div class="license">
@@ -428,7 +355,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/docs-model-design/VOorDTO">VO与DTO的区别</a></div><div class="next"><span>NEXT</span><a href="/SpringBoot/WebMvcConfigurer">WebMvcConfigurer讲解</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/docs-model-design/PO">java中PO的使用</a></div><div class="next"><span>NEXT</span><a href="/docs-model-design/BO">java中BO的使用</a></div></div></div>
 
 </div>
 
