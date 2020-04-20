@@ -1,0 +1,39 @@
+I"�<h3 id="分页异常">分页异常</h3>
+<ol>
+  <li>
+    <p>出现过的错误，分页查询报错， <code class="highlighter-rouge">Unknown column 'me' in 'field list' </code>
+可通过自己写 <code class="highlighter-rouge">countQuery = </code> 解决</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">No converter found capable of converting from type [org.springframework.data.jpa.repository....</code>
+<strong>只能返回CheckDayInfo</strong> JpaRepository&lt;CheckDayInfo, Long&gt; 而我的方法返回的是 <code class="highlighter-rouge">CheckDayVO</code></p>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CheckDayInfoRepository</span> <span class="kd">extends</span> <span class="nc">JpaRepository</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">,</span> <span class="nc">Long</span><span class="o">&gt;,</span> <span class="nc">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="o">{</span>
+ <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="nf">findAllByDate</span><span class="o">(</span><span class="nc">String</span> <span class="n">date</span><span class="o">);</span>
+
+ <span class="nd">@Query</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"SELECT me.address as address,me.totalChecked as totalChecked,info.checked as checked,me.avatar as avatar,info.checkedTime as checkedTime,"</span> <span class="o">+</span>
+         <span class="s">"info.upvoteNumber as upvoteNumber,me.username as username"</span> <span class="o">+</span>
+         <span class="s">" FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE date= ?1 ) info  ON me.username=info.username WHERE me.status= 0 "</span> <span class="o">+</span>
+         <span class="s">"ORDER by info.checked DESC , info.checkedTime DESC"</span><span class="o">,</span>
+         <span class="n">countQuery</span> <span class="o">=</span> <span class="s">"select COUNT(*) FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE  date= ?1 ) info  "</span> <span class="o">+</span>
+                 <span class="s">"ON me.username=info.username WHERE me.status= 0"</span><span class="o">,</span>
+         <span class="n">nativeQuery</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+ <span class="nc">Page</span><span class="o">&lt;</span><span class="nc">CheckDayVO</span><span class="o">&gt;</span> <span class="nf">selectCheckInfoByDate</span><span class="o">(</span><span class="nc">String</span> <span class="n">date</span><span class="o">,</span> <span class="nc">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
+ <span class="c1">// 查询条件 meusername</span>
+ <span class="nd">@Query</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"SELECT new com.ojeveryday.backend.pojo.dto.CheckDayVO(me.address,me.totalChecked,info.checked,me.avatar,info.checkedTime,info.upvoteNumber,me.username) "</span> <span class="o">+</span>
+         <span class="s">"FROM CheckDayInfo info LEFT JOIN Member me ON info.username = me.username and me.status= 0 and info.date = ?1 ORDER by info.checked DESC, info.checkedTime ASC"</span><span class="o">)</span>
+ <span class="nc">Page</span><span class="o">&lt;</span><span class="nc">CheckDayVO</span><span class="o">&gt;</span> <span class="nf">selectAllByDate</span><span class="o">(</span><span class="nc">String</span> <span class="n">date</span><span class="o">,</span> <span class="nc">Pageable</span> <span class="n">pageable</span><span class="o">);</span>
+ <span class="o">....</span>
+</code></pre></div>    </div>
+    <p>```java
+Hibernate: SELECT me.address as address,me.totalChecked as totalChecked,info.checked as checked,me.avatar as avatar,info.checkedTime as checkedTime,info.upvoteNumber as upvoteNumber,me.username as username FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE date= ? ) info  ON me.username=info.username WHERE me.status= 0 ORDER by info.checked DESC , info.checkedTime DESC limit ?
+Hibernate: select COUNT(*) FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE  date= ? ) info  ON me.username=info.username WHERE me.status= 0
+2020-04-21 01:49:27.398 ERROR 56349 — [p-nio-80-exec-1] c.o.b.c.handler.GlobalExceptionHandler   : [everyday]-[unknown error happen]-No converter found capable of converting from type [org.springframework.data.jpa.repository.query.AbstractJpaQuery$TupleConverter$TupleBackedMap] to type [com.ojeveryday.backend.pojo.dto.CheckDayVO]</p>
+  </li>
+</ol>
+
+<p>org.springframework.core.convert.ConverterNotFoundException: No converter found capable of converting from type [org.springframework.data.jpa.repository.query.AbstractJpaQuery$TupleConverter$TupleBackedMap] to type [com.ojeveryday.backend.pojo.dto.CheckDayVO]
+```</p>
+<ul>
+  <li><a href="https://blog.csdn.net/moshowgame/article/details/80537196">JPA错误之Failed to convert from type [java.lang.Object[]] to type</a></li>
+</ul>
+:ET
