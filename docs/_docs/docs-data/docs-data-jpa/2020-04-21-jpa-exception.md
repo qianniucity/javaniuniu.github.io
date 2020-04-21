@@ -43,5 +43,9 @@ org.springframework.core.convert.ConverterNotFoundException: No converter found 
 
 ## 3. 在`nativeQuery = false` 情况下可以指定实体类返回
 
+## 4. org.springframework.data.mapping.PropertyReferenceException: No property xxxx found for type Xxxx
+
 ## 参考链接
 - [JPA错误之Failed to convert from type [java.lang.Object[]] to type](https://blog.csdn.net/moshowgame/article/details/80537196)
+- [org.springframework.data.mapping.PropertyReferenceException: No property xxxx found for type Xxxx](https://my.oschina.net/anxiaole/blog/873695)
+- [jpa2.x的getOne()/findOne()/findById()的区别及使用](https://blog.csdn.net/zx110503/article/details/81356735)
