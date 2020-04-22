@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en">
   <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>876. 链表的中间结点 - JAVA 牛牛</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>JPA通过querydsl做连表查询 - JAVA 牛牛</title>
 
-<meta name="description" content="题目 链表的中间结点给定一个带有头结点 head 的非空单链表，返回链表的中间结点。如果有两个中间结点，则返回第二个中间结点。示例示例 1：输入：[1,2,3,4,5]  输出：此列表中的结点 3 (序列化形式：[3,4,5])  返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。 注意，...">
-<link rel="canonical" href="http://localhost:4000/leetcode/2020/0323/008"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
+<meta name="description" content="结论：  jpa只适合单表操作  通过 querydsl 实现复杂的sql （在复杂的连表面前也难办）  jpa 是个大坑，做链表查询会把人累死  首选 mybitas  有哪个大神能做出来 记得@下需要实现sqlselect me.address as address, me.totalChecked as t...">
+<link rel="canonical" href="http://localhost:4000/docs-data-jpa/querydsl/join"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
 
@@ -265,7 +265,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">leetcode</li><li class="toc-h2"><a href="/leetcode/about">关于力扣(leetcode)</a></li><li class="toc-h2"><a href="/leetcode/2020/0331/011">十二种排序算法</a></li><li class="toc-h2"><a href="/leetcode/2020/0317/001">1160. 拼写单词</a></li><li class="toc-h2"><a href="/leetcode/2020/0318/002">836. 矩形重叠</a></li><li class="toc-h2"><a href="/leetcode/2020/0319/003">409. 最长回文串</a></li><li class="toc-h2"><a href="/leetcode/2020/0320/004">面试题40. 最小的k个数</a></li><li class="toc-h2"><a href="/leetcode/2020/0321/005">365. 水壶问题</a></li><li class="toc-h2"><a href="/leetcode/2020/0322/006">1389. 按既定顺序创建目标数组</a></li><li class="toc-h2"><a href="/leetcode/2020/0322/007">1385. 两个数组间的距离值</a></li><li class="toc-h2 active"><a href="/leetcode/2020/0323/008">876. 链表的中间结点</a></li><li class="toc-h2"><a href="/leetcode/2020/0324/009">面试题 17.16. 按摩师</a></li><li class="toc-h2"><a href="/leetcode/2020/0325/010">169. 多数元素</a></li><li class="toc-h2"><a href="/leetcode/2020/0401/012">1111. 有效括号的嵌套深度</a></li><li class="toc-h2"><a href="/leetcode/2020/0402/013">面试题29. 图解动态规划的解题四步骤</a></li><li class="toc-h2"><a href="/leetcode/2020/0411/014">面试题29. 顺时针打印矩阵</a></li><li class="toc-h2"><a href="/leetcode/2020/0412/015">121. 买卖股票的最佳时机</a></li><li class="toc-h2"><a href="/leetcode/2020/0414/016">445. 两数相加 II</a></li><li class="toc-h2"><a href="/leetcode/2020/0415/017">7. 整数反转</a></li><li class="toc-h2"><a href="/leetcode/2020/0415/018">724. 寻找数组的中心索引</a></li><li class="toc-h2"><a href="/leetcode/2020/0415/018">56. 合并区间</a></li><li class="toc-h2"><a href="/leetcode/2020/0417/020">55. 跳跃游戏</a></li><li class="toc-h2"><a href="/leetcode/2020/0418/021">11. 盛最多水的容器</a></li><li class="toc-h2"><a href="/leetcode/2020/0419/022">704. 二分查找</a></li><li class="toc-h2"><a href="/docs-data-jpa/querydsl/join"></a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">Jpa</li><li class="toc-h2"><a href="/docs-data-jpa/sql">jpa中sql常见语句使用</a></li><li class="toc-h2"><a href="/docs-data-jpa/vo">jpa 多表查询，返回到VO</a></li><li class="toc-h2"><a href="/docs-data-jpa/nativeQuery">有nativeQuery = true和没有的区别</a></li><li class="toc-h2"><a href="/docs-data-jpa/jpa/DynamicUpdate">DynamicUpdate正确使用方式</a></li><li class="toc-h2"><a href="/docs-data-jpa/lock">Spring data jpa @Version注解及自定义数据库乐观锁实现</a></li><li class="toc-h2"><a href="/docs-data-jpa/exception">jpa应用中出现的exception</a></li><li class="toc-h2"><a href="/docs-data-jpa/JpaSpecificationExecutor">jpa-JpaSpecificationExecutor子查询等功能使用</a></li><li class="toc-h1">Redis</li><li class="toc-h2"><a href="/java-code-redis/RedisTemplate/opsForValue">RedisTemplate之opsForValue使用说明</a></li><li class="toc-h2"><a href="/java-code-redis/keyset">redis key处理（增删查改）</a></li><li class="toc-h2"><a href="/java-code-redis/distributed">基于redis的分布式锁</a></li><li class="toc-h2"><a href="/java-code-redis/distributed/2">使用Redis实现分布式lock</a></li><li class="toc-h2"><a href="/java-code-redis/KeyGenerator">Spring Cache – KeyGenerator自定义rediskey</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -321,7 +321,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </svg>
 <a title="主要是想看下自己能在技术这条路上能坚持多久
 " href="/">JAVA 牛牛</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item"><a href="/home/">Home</a></li><li class="navigation__item"><a href="/spring.html">Spring</a></li><li class="navigation__item navigation__item--active"><a href="/leetcode/about">leetcode(力扣)</a></li><li class="navigation__item"><a href="/docker/about">Docker</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/python/init">Python</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/javaniuniu">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+        <ul><li class="navigation__item"><a href="/home/">Home</a></li><li class="navigation__item"><a href="/spring.html">Spring</a></li><li class="navigation__item"><a href="/leetcode/about">leetcode(力扣)</a></li><li class="navigation__item"><a href="/docker/about">Docker</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/python/init">Python</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/javaniuniu">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
@@ -332,69 +332,276 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>876. 链表的中间结点</h1></header><span class="split-space">&nbsp;</span>
+<article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>JPA通过querydsl做连表查询</h1></header><span class="split-space">&nbsp;</span>
           <a class="edit-on-github"
             title="Edit on Github"
-            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/docs/_docs/leetcode/2020-03-23-008.md">
-            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="876. 链表的中间结点"><div class="article__info clearfix"><ul class="left-col menu"><li>
+            href="https://github.com/javaniuniu/javaniuniu.github.io/tree/master/docs/_docs/docs-data/docs-data-jpa/2020-04-22-jpa-join.md">
+            <i class="far fa-edit"></i></a></div><meta itemprop="headline" content="JPA通过querydsl做连表查询"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0323-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+                href="/archive.html?tag=JPA">JPA</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 22, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-querydsl-join">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-22T00:00:00+08:00">
+    <meta itemprop="keywords" content="JPA"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h2 id="题目-链表的中间结点">题目 <a href="https://leetcode-cn.com/problems/middle-of-the-linked-list/">链表的中间结点</a></h2>
-<p>给定一个带有头结点 head 的非空单链表，返回链表的中间结点。</p>
+<div class="article__content" itemprop="articleBody"><h2 id="结论">结论：</h2>
+<ul>
+  <li>jpa只适合单表操作</li>
+  <li>通过 querydsl 实现复杂的sql （在复杂的连表面前也难办）</li>
+  <li>jpa 是个大坑，做链表查询会把人累死</li>
+  <li>首选 mybitas</li>
+  <li>有哪个大神能做出来 记得@下</li>
+</ul>
 
-<p>如果有两个中间结点，则返回第二个中间结点。</p>
-
-<h2 id="示例">示例</h2>
-
-<h3 id="示例-1">示例 1：</h3>
-
-<p>输入：[1,2,3,4,5]  <br />
-输出：此列表中的结点 3 (序列化形式：[3,4,5])  <br />
-返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。 <br />
-注意，我们返回了一个 ListNode 类型的对象 ans，这样： <br />
-ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.</p>
-<h3 id="示例2">示例 2：</h3>
-
-<p>输入：[1,2,3,4,5,6]  <br />
-输出：此列表中的结点 4 (序列化形式：[4,5,6])  <br />
-由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。  <br />
- </p>
-
-<p>提示：</p>
-
-<p>给定链表的结点数介于 1 和 100 之间。</p>
-
-<h2 id="官方解题思路">官方解题思路</h2>
-<h3 id="方法一数组">方法一：数组</h3>
-<p>思路和算法</p>
-
-<p>链表的缺点在于不能通过下标访问对应的元素。因此我们可以考虑对链表进行遍历，同时将遍历到的元素依次放入数组 A 中。如果我们遍历到了 N 个元素，那么链表以及数组的长度也为 N，对应的中间节点即为 A[N/2]。</p>
-
-<h2 id="官方代码">官方代码</h2>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">middleNode</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">ListNode</span><span class="o">[]</span> <span class="no">A</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">[</span><span class="mi">100</span><span class="o">];</span>
-        <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">head</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="no">A</span><span class="o">[</span><span class="n">t</span><span class="o">++]</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
-            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="no">A</span><span class="o">[</span><span class="n">t</span> <span class="o">/</span> <span class="mi">2</span><span class="o">];</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<h2 id="需要实现sql">需要实现sql</h2>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">me</span><span class="p">.</span><span class="n">address</span> <span class="k">as</span> <span class="n">address</span><span class="p">,</span> <span class="n">me</span><span class="p">.</span><span class="n">totalChecked</span> <span class="k">as</span> <span class="n">totalChecked</span><span class="p">,</span> <span class="n">me</span><span class="p">.</span><span class="n">avatar</span> <span class="k">as</span> <span class="n">avatar</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="k">checked</span> <span class="k">as</span> <span class="k">checked</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">checkedTime</span> <span class="k">as</span> <span class="n">checkedTime</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">upvoteNumber</span> <span class="k">as</span> <span class="n">upvoteNumber</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">username</span> <span class="k">as</span> <span class="n">username</span>
+<span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="n">member1</span><span class="p">.</span><span class="n">address</span><span class="p">,</span> <span class="n">member1</span><span class="p">.</span><span class="n">totalChecked</span><span class="p">,</span> <span class="n">member1</span><span class="p">.</span><span class="n">avatar</span><span class="p">,</span> <span class="n">member1</span><span class="p">.</span><span class="n">username</span>
+<span class="k">from</span> <span class="n">Member</span> <span class="n">member1</span>
+<span class="k">where</span> <span class="n">member1</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">me</span>
+<span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="k">select</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="n">username</span><span class="p">,</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="k">checked</span><span class="p">,</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="n">checkedTime</span><span class="p">,</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="n">upvoteNumber</span>
+<span class="k">from</span> <span class="n">CheckDayInfo</span> <span class="n">checkDayInfo</span>
+<span class="k">where</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="nb">date</span> <span class="o">=</span> <span class="s1">'2020-04-17'</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">info</span>
+<span class="k">on</span> <span class="n">me</span><span class="p">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">info</span><span class="p">.</span><span class="n">username</span>
+<span class="k">order</span> <span class="k">by</span> <span class="n">info</span><span class="p">.</span><span class="k">checked</span> <span class="k">desc</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">checkedTime</span> <span class="k">asc</span>
 </code></pre></div></div>
 
-<h2 id="复杂度分析">复杂度分析</h2>
-<ul>
-  <li>时间复杂度：O(N)，其中 N 是给定链表中的结点数目。</li>
-  <li>空间复杂度：O(N)，即数组 A 用去的空间。</li>
-</ul>
-</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-03-23T00:00:00+08:00"><!-- start custom article footer snippet -->
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">com.querydsl.core.BooleanBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.QueryModifiers</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.QueryResults</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.types.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.types.dsl.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.jpa.impl.JPAQuery</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.jpa.impl.JPAQueryFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.jpa.sql.JPASQLQuery</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.sql.DerbyTemplates</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.sql.SQLExpressions</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.sql.SQLTemplates</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.domain.PageRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.domain.Pageable</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.annotation.PostConstruct</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.persistence.EntityManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.stream.Collectors</span><span class="o">;</span>
+
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PageTest</span> <span class="kd">extends</span> <span class="nc">SpringbootJpaApplicationTests</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">EntityManager</span> <span class="n">entityManager</span><span class="o">;</span>
+
+    <span class="c1">//查询工厂实体</span>
+    <span class="kd">private</span> <span class="nc">JPAQueryFactory</span> <span class="n">queryFactory</span><span class="o">;</span>
+
+
+    <span class="c1">//实例化控制器完成后执行该方法实例化JPAQueryFactory</span>
+    <span class="nd">@PostConstruct</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">queryFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPAQueryFactory</span><span class="o">(</span><span class="n">entityManager</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 普通查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getcheckDayInfo</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">queryFactory</span>
+                <span class="o">.</span><span class="na">selectFrom</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="s">"javaniuniu"</span><span class="o">),</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">fetch</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * BooleanBuilder 绑定条件进行查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfos</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 使用 QueryDSL 进行查询</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="c1">// 定于获取条件</span>
+        <span class="nc">BooleanBuilder</span> <span class="n">booleanBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BooleanBuilder</span><span class="o">();</span>
+        <span class="c1">// 放入要查询的条件信息</span>
+        <span class="n">booleanBuilder</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"javaniuniu"</span><span class="o">));</span>
+        <span class="c1">// queryFactory 是上方定义的工厂实体</span>
+        <span class="c1">// select（生成的实体类的字段）.from（生成实体类的名称）.where（上方要查询的条件）.orderBy（排序）.fetch（）进行查询</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfoList</span> <span class="o">=</span> <span class="n">queryFactory</span><span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">booleanBuilder</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">date</span><span class="o">.</span><span class="na">asc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetch</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfoList</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 分页查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfoPage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">QueryResults</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">queryFactory</span>
+                <span class="o">.</span><span class="na">selectFrom</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getOffset</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetchResults</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 通过 JPASQLQuery 做分页查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getbCheckDayInfoPageByJPASQLQuery</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">SQLTemplates</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DerbyTemplates</span><span class="o">();</span>
+
+        <span class="nc">JPASQLQuery</span><span class="o">&lt;?&gt;</span> <span class="n">jpasqlQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPASQLQuery</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;(</span><span class="n">entityManager</span><span class="o">,</span> <span class="n">templates</span><span class="o">);</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">QueryResults</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">jpasqlQuery</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getOffset</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetchResults</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 返回数据到DTO
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfoDTO</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfoDTO</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">queryFactory</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">upvoteNumber</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+<span class="c1">//                .where(</span>
+<span class="c1">//                        qCheckDayInfo.checked.eq(1)</span>
+<span class="c1">//                )</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">.</span><span class="na">asc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getOffset</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetch</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="nc">CheckDayInfoDTO</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                        <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">checked</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">checkedTime</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">upvoteNumber</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">upvoteNumber</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">build</span><span class="o">()</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="nc">Collectors</span><span class="o">.</span><span class="na">toList</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 通过 JPAQuery 做连表查询
+     * 但是不能分页
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfoDTOPages</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="nc">SQLTemplates</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DerbyTemplates</span><span class="o">();</span>
+
+        <span class="nc">JPASQLQuery</span><span class="o">&lt;?&gt;</span> <span class="n">jpasqlQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPASQLQuery</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;(</span><span class="n">entityManager</span><span class="o">,</span> <span class="n">templates</span><span class="o">);</span>
+
+        <span class="nc">JPAQuery</span> <span class="n">jpaQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPAQuery</span><span class="o">(</span><span class="n">entityManager</span><span class="o">);</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+
+        <span class="nc">String</span> <span class="n">date</span> <span class="o">=</span> <span class="s">"2020-04-17"</span><span class="o">;</span>
+        <span class="nc">QMember</span> <span class="n">qMember</span> <span class="o">=</span> <span class="nc">QMember</span><span class="o">.</span><span class="na">member</span><span class="o">;</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+
+        <span class="nc">StringPath</span> <span class="n">me</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">stringPath</span><span class="o">(</span><span class="s">"me"</span><span class="o">);</span>
+        <span class="nc">StringPath</span> <span class="n">info</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">stringPath</span><span class="o">(</span><span class="s">"info"</span><span class="o">);</span>
+
+
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">address</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.address"</span><span class="o">);</span>
+        <span class="nc">NumberTemplate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">totalChecked</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">numberTemplate</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.totalChecked"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">avatar</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.avatar"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">me_username</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.username"</span><span class="o">);</span>
+
+        <span class="nc">NumberTemplate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">checked</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">numberTemplate</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checked"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">checkedTime</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checkedTime"</span><span class="o">);</span>
+        <span class="nc">NumberTemplate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">upvoteNumber</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">numberTemplate</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.upvoteNumber"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">username</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.username"</span><span class="o">);</span>
+
+        <span class="nc">OrderSpecifier</span> <span class="n">orderByChecked</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OrderSpecifier</span><span class="o">(</span><span class="nc">Order</span><span class="o">.</span><span class="na">DESC</span><span class="o">,</span>
+                <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checked"</span><span class="o">));</span>
+
+        <span class="nc">OrderSpecifier</span> <span class="n">orderByCheckedTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OrderSpecifier</span><span class="o">(</span><span class="nc">Order</span><span class="o">.</span><span class="na">ASC</span><span class="o">,</span>
+                <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checkedTime"</span><span class="o">));</span>
+
+<span class="c1">//        long l1 = 2;</span>
+<span class="c1">//        long l2 = 1;</span>
+<span class="c1">//</span>
+<span class="c1">//        QueryModifiers queryModifiers = new QueryModifiers(l1, l2);</span>
+
+        <span class="nc">SubQueryExpression</span> <span class="n">queryCheckByDate</span> <span class="o">=</span> <span class="nc">SQLExpressions</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">upvoteNumber</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">date</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">date</span><span class="o">));</span>
+
+        <span class="nc">SubQueryExpression</span> <span class="n">queryMember</span> <span class="o">=</span> <span class="nc">SQLExpressions</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">address</span><span class="o">,</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">totalChecked</span><span class="o">,</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">avatar</span><span class="o">,</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">username</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qMember</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">qMember</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+
+        <span class="nc">QueryResults</span><span class="o">&lt;</span><span class="nc">CheckDayInfoDTO</span><span class="o">&gt;</span> <span class="n">checkDayInfoDTOS</span> <span class="o">=</span> <span class="n">jpasqlQuery</span><span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                <span class="nc">Projections</span><span class="o">.</span><span class="na">bean</span><span class="o">(</span>
+                        <span class="nc">CheckDayInfoDTO</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+                        <span class="n">address</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"address"</span><span class="o">),</span> <span class="n">totalChecked</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"totalChecked"</span><span class="o">),</span> <span class="n">avatar</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"avatar"</span><span class="o">),</span> <span class="n">checked</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"checked"</span><span class="o">),</span>
+                        <span class="n">checkedTime</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"checkedTime"</span><span class="o">),</span>
+                        <span class="n">upvoteNumber</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"upvoteNumber"</span><span class="o">),</span> <span class="n">username</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"username"</span><span class="o">)))</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qMember</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">leftJoin</span><span class="o">(</span><span class="n">queryCheckByDate</span><span class="o">,</span> <span class="n">info</span><span class="o">).</span><span class="na">on</span><span class="o">(</span><span class="n">me_username</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">username</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">orderByChecked</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">orderByCheckedTime</span><span class="o">)</span>
+<span class="c1">//                .limit(pageable.getPageSize()) // 做不了分页</span>
+<span class="c1">//                .offset(pageable.getOffset())</span>
+<span class="c1">//                .restrict(queryModifiers)</span>
+                <span class="o">.</span><span class="na">fetchResults</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfoDTOS</span><span class="o">);</span>
+
+
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-04-22T00:00:00+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__license"><div class="license">
@@ -404,7 +611,7 @@ ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next 
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/leetcode/2020/0322/007">1385. 两个数组间的距离值</a></div><div class="next"><span>NEXT</span><a href="/leetcode/2020/0324/009">面试题 17.16. 按摩师</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/java-code-redis/KeyGenerator">Spring Cache – KeyGenerator自定义rediskey</a></div><div class="next"><span>NEXT</span><a href="/docs-data-jpa/JpaSpecificationExecutor">jpa-JpaSpecificationExecutor子查询等功能使用</a></div></div></div>
 
 </div>
 
