@@ -13,7 +13,8 @@
 #|__/==============================================
 #
 
-# config file for development,  DELETE IT IF YOU WANT.
+
+
 
 
 ## => Site Settings
@@ -188,6 +189,7 @@ markdown    : kramdown
 highlighter : rouge
 permalink   : date
 
+
 exclude:
   - CHANGELOG.md
   - HOW_TO_RELEASE.md
@@ -200,15 +202,14 @@ exclude:
   - jekyll-text-theme.gemspec
   - package-lock.json
   - package.json
+  # - /home
   # - /docs
   - /node_modules
-  # - /screenshots
-  # - /home
+  - /screenshots
+  - /test
   - /vendor
-  - /_posts
-  - /index.html
 
-collections_dir: docs
+
 collections:
   docs:
     output: true
@@ -260,6 +261,11 @@ collections:
     output: true
   docs-algo:
     output: true
+  docs-other-code:
+    output: true
+  algo:
+    output: true
+
 
 defaults:
   ## home
@@ -268,7 +274,21 @@ defaults:
     values:
       articles:
         excerpt_type: html
-  ## posts
+
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: article
+      sharing: true
+      license: true
+      aside:
+        toc: true
+      show_edit_on_github: true
+      show_subscribe: true
+      pageview: true
+
+## posts
   - scope:
       path: ""
       type: posts
@@ -304,7 +324,7 @@ defaults:
       show_date: false
   ## docs
   - scope:
-      path: "_docs/en"
+      path: "_posts/en"
     values:
       layout: article
       nav_key: docs
@@ -317,7 +337,7 @@ defaults:
       show_date: false
       lightbox: true
   - scope:
-      path: "_docs/zh"
+      path: "_posts/zh"
     values:
       layout: article
       nav_key: docs
@@ -332,7 +352,7 @@ defaults:
       lightbox: true
   ## todo
   - scope:
-      path: "_docs/todo"
+      path: "_posts/todo"
     values:
       layout: article
       nav_key: todo
@@ -347,7 +367,7 @@ defaults:
       lightbox: true
   ## python
   - scope:
-      path: "_docs/python"
+      path: "_posts/python"
     values:
       layout: article
       nav_key: python
@@ -361,7 +381,7 @@ defaults:
       lightbox: true
   ## leetcode
   - scope:
-      path: "_docs/leetcode"
+      path: "_posts/leetcode"
     values:
       layout: article
       nav_key: leetcode
@@ -376,7 +396,7 @@ defaults:
       lightbox: true
   ## docker
   - scope:
-      path: "_docs/docker"
+      path: "_posts/docker"
     values:
       layout: article
       nav_key: docker
@@ -391,7 +411,7 @@ defaults:
       lightbox: true
   # spring
   - scope:
-      path: "_docs/spring"
+      path: "_posts/spring"
     values:
       layout: article
       nav_key: spring
@@ -406,7 +426,7 @@ defaults:
       lightbox: true
   ## springboot
   - scope:
-      path: "_docs/springboot"
+      path: "_posts/springboot"
     values:
       layout: article
       nav_key: springboot
@@ -421,7 +441,7 @@ defaults:
       lightbox: true
   # springsecurity
   - scope:
-      path: "_docs/springsecurity"
+      path: "_posts/springsecurity"
     values:
       layout: article
       nav_key: springsecurity
@@ -436,7 +456,7 @@ defaults:
       lightbox: true
   ## shiro
   - scope:
-      path: "_docs/shiro"
+      path: "_posts/shiro"
     values:
       layout: article
       nav_key: shiro
@@ -451,7 +471,7 @@ defaults:
       lightbox: true
   ## docs-code-design
   # - scope:
-  #     path: "_docs/java-code-design"
+  #     path: "_posts/java-code-design"
   #   values:
   #     layout: article
   #     nav_key: docs_code_design
@@ -466,7 +486,7 @@ defaults:
   #     lightbox: true
   ## docs-model-design
   - scope:
-      path: "_docs/docs-model-design"
+      path: "_posts/docs-model-design"
     values:
       layout: article
       nav_key: docs-model-design
@@ -481,7 +501,7 @@ defaults:
       lightbox: true
   # ## docs-data-redis
   # - scope:
-  #     path: "_docs/java-code-redis"
+  #     path: "_posts/java-code-redis"
   #   values:
   #     layout: article
   #     nav_key: docs-data-redis
@@ -496,7 +516,7 @@ defaults:
   #     lightbox: true
   ## docs-data
   - scope:
-      path: "_docs/docs-data"
+      path: "_posts/docs-data"
     values:
       layout: article
       nav_key: docs-data
@@ -511,7 +531,7 @@ defaults:
       lightbox: true
   ## docs-annotation
   - scope:
-      path: "_docs/annotation"
+      path: "_posts/annotation"
     values:
       layout: article
       nav_key: docs-annotation
@@ -526,7 +546,7 @@ defaults:
       lightbox: true
   ## docs-util
   - scope:
-      path: "_docs/docs-util"
+      path: "_posts/docs-util"
     values:
       layout: article
       nav_key: docs-util
@@ -541,7 +561,7 @@ defaults:
       lightbox: true
   ## docs-java-core
   - scope:
-      path: "_docs/java-core"
+      path: "_posts/java-core"
     values:
       layout: article
       nav_key: docs-java-core
@@ -556,7 +576,7 @@ defaults:
       lightbox: true
   ## docs-arts
   - scope:
-      path: "_docs/arts"
+      path: "_posts/arts"
     values:
       layout: article
       nav_key: docs-arts
@@ -571,12 +591,27 @@ defaults:
       lightbox: true
   ## docs-algo
   - scope:
-      path: "_docs/algo"
+      path: "_posts/algo"
     values:
       layout: article
       nav_key: docs-algo
       sidebar:
         nav: docs-algo
+      license: true
+      aside:
+        toc: true
+      show_edit_on_github: true
+      show_date: true
+      pageview: true
+      lightbox: true
+  ## docs-other-code
+  - scope:
+      path: "_posts/docs-other-code"
+    values:
+      layout: article
+      nav_key: docs-other-code
+      sidebar:
+        nav: docs-other-code
       license: true
       aside:
         toc: true
@@ -593,5 +628,3 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
   - jemoji
-
-data_dir: /docs/_data

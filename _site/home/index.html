@@ -311,7 +311,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </svg>
 <a title="主要是想看下自己能在技术这条路上能坚持多久
 " href="/">JAVA 牛牛</a></div><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></div><nav class="navigation">
-        <ul><li class="navigation__item navigation__item--active"><a href="/home/">Home</a></li><li class="navigation__item"><a href="/spring.html">Spring</a></li><li class="navigation__item"><a href="/leetcode/about">leetcode(力扣)</a></li><li class="navigation__item"><a href="/algo/about">关于algo(算法)</a></li><li class="navigation__item"><a href="/docker/about">Docker</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/python/init">Python</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/javaniuniu">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
+        <ul><li class="navigation__item navigation__item--active"><a href="/home/">Home</a></li><li class="navigation__item"><a href="/module.html">模块</a></li><li class="navigation__item"><a href="/leetcode/about">leetcode(力扣)</a></li><li class="navigation__item"><a href="/algo/about">algo(算法)</a></li><li class="navigation__item"><a href="/docker/about">Docker</a></li><li class="navigation__item"><a href="/todo">TODO</a></li><li class="navigation__item"><a href="/python/command">Python</a></li><li class="navigation__item"><a href="/archive.html">Archive</a></li><li class="navigation__item"><a href="/about.html">About</a></li><li class="navigation__item"><a href="https://github.com/javaniuniu">GitHub</a></li><li><button class="button button--secondary button--circle search-button js-search-toggle"><i class="fas fa-search"></i></button></li></ul>
       </nav></div>
   </header>
 </div><div class="page__content"><div class ="main"><div class="grid grid--reverse">
@@ -322,509 +322,847 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design/Exception"><h2 itemprop="headline" class="item__header">Checked Exception还是Unchecked Exception?</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h5 id="一句话简介">一句话简介</h5>
+          <header><a href="/leetcode/2020/0423/024"><h2 itemprop="headline" class="item__header">34. 在排序数组中查找元素的第一个和最后一个位置</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目34-在排序数组中查找元素的第一个和最后一个位置">题目<a href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/">34. 在排序数组中查找元素的第一个和最后一个位置</a></h2>
+
+<p>给定一个按照升序排列的整数数组 <code class="highlighter-rouge">nums</code>，和一个目标值 <code class="highlighter-rouge">target</code>。找出给定目标值在数组中的开始位置和结束位置。</p>
+
+<p>你的算法时间复杂度必须是 <code class="highlighter-rouge">O(log n)</code> 级别。</p>
+
+<p>如果数组中不存在目标值，返回 [-1, -1]。</p>
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [5,7,7,8,8,10], target = 8
+输出: [3,4]
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [5,7,7,8,8,10], target = 6
+输出: [-1,-1]
+</code></pre></div></div>
+
+<h3 id="解题思路">解题思路</h3>
 <ul>
-  <li>Checked异常必须被显式地捕获或者传递，如Basic try-catch-finally Exception Handling一文中所说。而unchecked异常则可以不必捕获或抛出。</li>
-  <li>Checked异常继承java.lang.Exception类。Unchecked异常继承自java.lang.RuntimeException类。</li>
+  <li>对于有边界的题，需要考虑左边界和有边界</li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="cm">/**
-	 * 将反射时的checked exception转换为unchecked exception.
-	 */</span>
-	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">RuntimeException</span> <span class="nf">convertReflectionExceptionToUnchecked</span><span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">if</span> <span class="o">((</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">IllegalAccessException</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">IllegalArgumentException</span><span class="o">)</span>
-				<span class="o">||</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">NoSuchMethodException</span><span class="o">))</span> <span class="o">{</span>
-			<span class="k">return</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">InvocationTargetException</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">return</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(((</span><span class="nc">InvocationTargetException</span><span class="o">)</span> <span class="n">e</span><span class="o">).</span><span class="na">getTargetException</span><span class="o">());</span>
-		<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="k">instanceof</span> <span class="nc">RuntimeException</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">return</span> <span class="o">(</span><span class="nc">RuntimeException</span><span class="o">)</span> <span class="n">e</span><span class="o">;</span>
-		<span class="o">}</span>
-		<span class="k">return</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"Unexpected Checked Exception."</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
-	<span class="o">}</span>
+<h3 id="对于-letf-right--1-的说明-可参考">对于 letf right +-1 的说明 可参考</h3>
+<p><a href="https://leetcode-cn.com/problems/binary-search/solution/er-fen-cha-zhao-xiang-jie-by-labuladong/">二分查找细节详解，顺便赋诗一首</a></p>
 
-  <span class="cm">/**
-  	 * 将CheckedException转换为UncheckedException.
-  	 */</span>
-  	<span class="kd">public</span> <span class="kd">static</span> <span class="nc">RuntimeException</span> <span class="nf">unchecked</span><span class="o">(</span><span class="nc">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-  		<span class="k">if</span> <span class="o">(</span><span class="n">ex</span> <span class="k">instanceof</span> <span class="nc">RuntimeException</span><span class="o">)</span> <span class="o">{</span>
-  			<span class="k">return</span> <span class="o">(</span><span class="nc">RuntimeException</span><span class="o">)</span> <span class="n">ex</span><span class="o">;</span>
-  		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-  			<span class="k">return</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
-  		<span class="o">}</span>
-  	<span class="o">}</span>
-</code></pre></div></div>
-<p><strong>参考链接</strong></p>
-<ul>
-  <li><a href="https://blog.csdn.net/kingzone_2008/article/details/8535287">Java异常：选择Checked Exception还是Unchecked Exception?</a></li>
-</ul>
-</div><p><a href="/java-code-design/Exception">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeDesign">CodeDesign</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86">异常处理</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Exception">Exception</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 17, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-Exception">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-17T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeDesign,异常处理,Exception"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design/xml/application"><h2 itemprop="headline" class="item__header">application.properties文件常用配置</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#数据库配置
-spring.datasource.url=jdbc:mysql://192.168.0.106:3306/springboot_database?useUnicode=true<span class="err">&amp;</span>characterEncoding=utf8
-spring.datasource.username=developer
-spring.datasource.password=1q@W3e$R
-# spring.datasource.driver-class-name=com.mysql.jdbc.Driver
-#指定数据连接池的类型
-spring.datasource.type=org.apache.commons.dbcp2.BasicDataSource
-#最大等待连接中的数量，设置0为没有限
-spring.datasource.dbcp2.max-idle=10
-#最大连接活动数
-spring.datasource.dbcp2.max-total=50
-#最大等待毫秒数，单位ms，超过时间会出错误信息
-spring.datasource.dbcp2.max-wait-millis=10000
-#数据库连接池初始化连接数
-spring.datasource.dbcp2.initial-size=5
-#设置默认的隔离级别为读写提交
-spring.datasource.dbcp2.default-transaction-isolation=2
+<h3 id="代码">代码</h3>
 
-# mybatis配置
-mybatis.mapper-locations=classpath:mapper/*.xml
-mybatis.type-aliases-package: com.lay.redis.entity
-# 配置typehandler类型转换的扫描包
-mybatis.type-handlers-package=com.lay.redis.typehandler
-#驼峰命名转换
-mybatis.configuration.mapUnderscoreToCamelCase=true
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">searchRange</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{-</span><span class="mi">1</span><span class="o">,-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+        <span class="c1">// 先找左边界</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&gt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
 
-# 配置redis连接池属性
-spring.redis.jedis.pool.max-active=10
-spring.redis.jedis.pool.max-idle=10
-spring.redis.jedis.pool.max-wait=2000
-spring.redis.jedis.pool.min-idle=5
-
-#配置redis服务器属性
-spring.redis.port=6379
-spring.redis.host=192.168.0.106
-spring.redis.password=123456
-#redis连接超时时间
-spring.redis.timeout=1000
-
-#springmvc字符集
-spring.http.encoding.charset=UTF-8
-spring.http.encoding.enabled=true
-spring.http.encoding.force=true
-
-# redis缓存管理配置
-spring.cache.type=redis
-spring.cache.cache-names=redisCache
-
-#日志级别
-logging.level.root=debug
-logging.level.org.springframework=debug
-logging.level.org.org.org.mybatis=debug
-</code></pre></div></div>
-</div><p><a href="/java-code-design/xml/application">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=SpringBoot">SpringBoot</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeDesign">CodeDesign</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=XML">XML</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=application.properties">application.properties</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-java">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="SpringBoot,CodeDesign,XML,application.properties"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design/java"><h2 itemprop="headline" class="item__header">java代码设计</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="数据库设计">数据库设计</h2>
-<p>使用tk.mybits
-使用example 代替mapper.xml条件查询
-使用范型 实现通用sql操作</p>
-
-<h2 id="services设计">Services设计</h2>
-<p>service 在Controller 的调用用 private 修饰</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">UserService</span> <span class="n">userService</span><span class="o">;</span>
-</code></pre></div></div>
-
-<h2 id="autowired的使用推荐对构造函数进行注释">@Autowired的使用:推荐对构造函数进行注释</h2>
-
-<p>建议后写成下面的样子：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">;</span>
-
-<span class="nd">@Autowired</span>
-<span class="kd">public</span> <span class="nf">EnterpriseDbController</span><span class="o">(</span><span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
-   <span class="k">this</span><span class="o">.</span><span class="na">service</span> <span class="o">=</span> <span class="n">service</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="切面编程">切面编程</h3>
-<p><strong>使用场景</strong> 将日志记录，性能统计，安全控制，事务处理，异常处理等代码从业务逻辑代码中划分出来
-<strong>代码实现</strong> 1. 用自定义注解的方式实现</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Around</span><span class="o">(</span><span class="s">"execution(public * *(..)) &amp;&amp; @annotation(sc.whorl.system.commons.limitrate.Limit)"</span><span class="o">)</span>
-</code></pre></div></div>
-
-<h3 id="对返回给前端的数据进行格式封装处理">对返回给前端的数据进行格式封装处理</h3>
-<p>当代码中已经有 <a href="/java-util-code/MsgResponseBody">MsgResponseBody</a> 作为<code class="highlighter-rouge">Response</code>封装类时，项目中还用到 <a href="/java-util-code/ResultUtil">ResultUtil</a> 作为<code class="highlighter-rouge">Response</code>的封装,看了下源码，<code class="highlighter-rouge">MsgResponseBody</code>都出现在被<code class="highlighter-rouge">@RestController</code> 注释的控制类中，而@RestController 是注释了 <code class="highlighter-rouge">@ResponseBody</code>的，而其他非控制类，则乖乖的使用<code class="highlighter-rouge">Response</code>挨个处理</p>
-</div><p><a href="/java-code-design/java">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeDesign">CodeDesign</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 14, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-java">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeDesign"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design/autowired"><h2 itemprop="headline" class="item__header">Autowired的使用:推荐对构造函数进行注释</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>在编写代码的时候，使用@Autowired注解是，发现IDE报的一个警告，如下：</p>
-
-<p class="error">Spring Team recommends “Always use constructor based dependency injection in your beans. Always use assertions for mandatory dependencies”.</p>
-<p>翻译：Spring建议”总是在您的bean中使用构造函数建立依赖注入。总是使用断言强制依赖”。</p>
-
-<p>这段代码警告原来的写法是：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
-<span class="kd">private</span> <span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">;</span>
-</code></pre></div></div>
-
-<p>建议后写成下面的样子：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">;</span>
-
-<span class="nd">@Autowired</span>
-<span class="kd">public</span> <span class="nf">EnterpriseDbController</span><span class="o">(</span><span class="nc">EnterpriseDbService</span> <span class="n">service</span><span class="o">)</span> <span class="o">{</span>
-   <span class="k">this</span><span class="o">.</span><span class="na">service</span> <span class="o">=</span> <span class="n">service</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>奇怪，为何会有这样的建议。?
-我们知道：@Autowired 可以对成员变量、方法以及构造函数进行注释。那么对成员变量和构造函数进行注释又有什么区别呢？</p>
-
-<p>@Autowired注入bean，相当于在配置文件中配置bean，并且使用setter注入。而对构造函数进行注释，就相当于是使用构造函数进行依赖注入了吧。莫非是这两种注入方法的不同。</p>
-
-<p>以下是：@Autowired和构造方法执行的顺序解析</p>
-
-<p>先看一段代码，下面的代码能运行成功吗？</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Autowired</span>
-<span class="kd">private</span> <span class="nc">User</span> <span class="n">user</span><span class="o">;</span>
-<span class="kd">private</span> <span class="nc">String</span> <span class="n">school</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="nf">UserAccountServiceImpl</span><span class="o">(){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getSchool</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>答案是不能。</p>
-
-<p>因为Java类会先执行构造方法，然后再给注解了@Autowired 的user注入值，所以在执行构造方法的时候，就会报错。</p>
-
-<p>报错信息可能会像下面：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">　　</span><span class="nc">Exception</span> <span class="n">in</span> <span class="n">thread</span> <span class="s">"main"</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">factory</span><span class="o">.</span><span class="na">BeanCreationException</span><span class="o">:</span> <span class="nc">Error</span> <span class="n">creating</span> <span class="n">bean</span> <span class="n">with</span> <span class="n">name</span> <span class="err">'</span><span class="o">...</span><span class="err">'</span> <span class="n">defined</span> <span class="n">in</span> <span class="n">file</span> <span class="o">[....</span><span class="na">class</span><span class="o">]:</span> <span class="nc">Instantiation</span> <span class="n">of</span> <span class="n">bean</span> <span class="n">failed</span><span class="o">;</span> <span class="n">nested</span> <span class="n">exception</span> <span class="n">is</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">beans</span><span class="o">.</span><span class="na">BeanInstantiationException</span><span class="o">:</span> <span class="nc">Failed</span> <span class="n">to</span> <span class="n">instantiate</span> <span class="o">[...]:</span> <span class="nc">Constructor</span> <span class="n">threw</span> <span class="n">exception</span><span class="o">;</span> <span class="n">nested</span> <span class="n">exception</span> <span class="n">is</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">NullPointerException</span>
-</code></pre></div></div>
-<p>报错信息说：创建Bean时出错，出错原因是实例化bean失败，因为bean时构造方法出错，在构造方法里抛出了空指针异常。</p>
-
-<p>解决办法是，使用构造器注入，如下：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="nc">User</span> <span class="n">user</span><span class="o">;</span>
-<span class="kd">private</span> <span class="nc">String</span> <span class="n">school</span><span class="o">;</span>
-
-<span class="nd">@Autowired</span>
-<span class="kd">public</span> <span class="nf">UserAccountServiceImpl</span><span class="o">(</span><span class="nc">User</span> <span class="n">user</span><span class="o">){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">user</span> <span class="o">=</span> <span class="n">user</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">school</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getSchool</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>可以看出，<strong>使用构造器注入的方法，可以明确成员变量的加载顺序。</strong></p>
-
-<p>PS：Java变量的初始化顺序为：静态变量或静态语句块–&gt;实例变量或初始化语句块–&gt;构造方法–&gt;@Autowired</p>
-
-<h5 id="那么最开始spring建议为何要将成员变量加上final类型呢">那么最开始Spring建议，为何要将成员变量加上final类型呢？</h5>
-
-<p>网上有解释如下：spring配置默认的bean的scope是singleton，也就是启动后一直有。通过设置bean的scope属性为prototype来声明该对象为动态创建。但是，如果你的service本身是singleton，注入只执行一次。</p>
-
-<p>@Autowired本身就是单例模式，只会在程序启动时执行一次，即使不定义final也不会初始化第二次，所以这个final是没有意义的吧。</p>
-
-<p>可能是为了防止，在程序运行的时候，又执行了一遍构造函数；</p>
-
-<p>或者是更容易让人理解的意思，加上final只会在程序启动的时候初始化一次，并且在程序运行的时候不会再改变。</p>
-</div><p><a href="/java-code-design/autowired">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Spring%E6%B3%A8%E8%A7%A3">Spring注解</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeDesign">CodeDesign</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 14, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-autowired">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="Spring注解,CodeDesign"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java-code-design/token/jwt"><h2 itemprop="headline" class="item__header">Token设计之JWT</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">sc.whorl.logic.service.user</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">com.github.pagehelper.PageHelper</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">com.github.pagehelper.PageInfo</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Value</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.AuthenticationManager</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.authentication.UsernamePasswordAuthenticationToken</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.core.Authentication</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.core.context.SecurityContextHolder</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.transaction.annotation.Transactional</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.util.ObjectUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.context.WebApplicationContext</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.RequestContextHolder</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.web.context.request.ServletRequestAttributes</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.TimeUnit</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">javax.servlet.ServletContext</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">javax.servlet.http.HttpServletResponse</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">lombok.extern.slf4j.Slf4j</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.dao.auth.UserMapper</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.model.auth.User</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.logic.domain.model.auth.UserRole</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.MsgResponseBody</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.PageResponse</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.SenUnitDic</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.SenUnitException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.base.BaseService</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.commons.lock.RedisLock</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.config.jwt.JWTUserDetail</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.config.jwt.JwtTokenUtil</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.utils.ErrorCodeEnum</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.config.springsecurity.utils.UserAuthInfoUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.ScUtils</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.redis.RedisUtil</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.system.utils.spring.SpringUtil</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.web.vo.system.UserListQueryRequest</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">sc.whorl.web.vo.user.UserVo</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">tk.mybatis.mapper.entity.Example</span><span class="o">;</span>
-
-<span class="cm">/**
- * &lt;一句话功能简述&gt; &lt;功能详细描述&gt;
- *
- * @see: [相关类/方法]（可选）
- * @since [产品/模块版本] （可选）
- */</span>
-<span class="nd">@Service</span>
-<span class="nd">@Slf4j</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserService</span> <span class="kd">extends</span> <span class="nc">BaseService</span><span class="o">&lt;</span><span class="nc">UserMapper</span><span class="o">,</span> <span class="nc">User</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">RedisUtil</span> <span class="n">redisUtil</span><span class="o">;</span>
-    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">BCryptPasswordEncoder</span> <span class="n">bCryptPasswordEncoder</span><span class="o">;</span>
-    <span class="nd">@Autowired</span>
-    <span class="kd">private</span> <span class="nc">JwtTokenUtil</span> <span class="n">jwtTokenUtil</span><span class="o">;</span>
-    <span class="nd">@Value</span><span class="o">(</span><span class="s">"${jwt.access_token:#{30*24*60*60}}"</span><span class="o">)</span>
-    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">access_token_expiration</span><span class="o">;</span>
-
-    <span class="nd">@Autowired</span>
-    <span class="nc">AuthenticationManager</span> <span class="n">authenticationManager</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">upUser</span><span class="o">(</span><span class="nc">Long</span> <span class="n">userId</span><span class="o">,</span> <span class="nc">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">user</span><span class="o">.</span><span class="na">setTid</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
-        <span class="n">updateByPrimaryKeySelective</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
-        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="s">"用户更新成功!"</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Transactional</span><span class="o">(</span><span class="n">rollbackFor</span> <span class="o">=</span> <span class="nc">Exception</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">dblUser</span><span class="o">(</span><span class="nc">Long</span> <span class="n">userId</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
-        <span class="n">user</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">SenUnitDic</span><span class="o">.</span><span class="na">USER_STATUS_DBL</span><span class="o">);</span>
-        <span class="n">user</span><span class="o">.</span><span class="na">setTid</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">updateByPrimaryKeySelective</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
-        <span class="nc">UserRole</span> <span class="n">userRole</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UserRole</span><span class="o">();</span>
-        <span class="n">userRole</span><span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
-        <span class="n">userRole</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">SenUnitDic</span><span class="o">.</span><span class="na">USER_STATUS_DBL</span><span class="o">);</span>
-        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="s">"用户禁用成功!"</span><span class="o">);</span>
-    <span class="o">}</span>
-
-
-    <span class="kd">public</span> <span class="nc">PageResponse</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="nf">searchListUser</span><span class="o">(</span><span class="nc">UserListQueryRequest</span> <span class="n">userRequest</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">PageHelper</span><span class="o">.</span><span class="na">startPage</span><span class="o">(</span><span class="n">userRequest</span><span class="o">.</span><span class="na">getPageIndex</span><span class="o">(),</span> <span class="n">userRequest</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">());</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">userList</span> <span class="o">=</span> <span class="n">selectListAll</span><span class="o">();</span>
-        <span class="nc">PageInfo</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">pageInfo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PageInfo</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;(</span><span class="n">userList</span><span class="o">);</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">PageResponse</span><span class="o">(</span><span class="n">pageInfo</span><span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sample</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">//获取spring上下文</span>
-        <span class="nc">WebApplicationContext</span> <span class="n">wac</span> <span class="o">=</span> <span class="o">(</span><span class="nc">WebApplicationContext</span><span class="o">)</span> <span class="nc">SpringUtil</span><span class="o">.</span><span class="na">getApplicationContext</span><span class="o">();</span>
-        <span class="c1">//获取请求上下文</span>
-        <span class="nc">HttpServletRequest</span> <span class="n">httpRequest</span> <span class="o">=</span> <span class="o">((</span><span class="nc">ServletRequestAttributes</span><span class="o">)</span> <span class="nc">RequestContextHolder</span><span class="o">.</span><span class="na">currentRequestAttributes</span><span class="o">()).</span><span class="na">getRequest</span><span class="o">();</span>
-        <span class="nc">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">httpRequest</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
-        <span class="c1">//获取响应上下文</span>
-        <span class="nc">HttpServletResponse</span> <span class="n">httpResponse</span> <span class="o">=</span> <span class="o">((</span><span class="nc">ServletRequestAttributes</span><span class="o">)</span> <span class="nc">RequestContextHolder</span><span class="o">.</span><span class="na">currentRequestAttributes</span><span class="o">()).</span><span class="na">getResponse</span><span class="o">();</span>
-        <span class="c1">//获取用户登陆后的信息</span>
-        <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUser</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">register</span><span class="o">(</span><span class="nc">UserVo</span> <span class="n">userVo</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Example</span> <span class="n">example</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Example</span><span class="o">(</span><span class="nc">User</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="n">example</span><span class="o">.</span><span class="na">createCriteria</span><span class="o">().</span><span class="na">andEqualTo</span><span class="o">(</span><span class="s">"loginName"</span><span class="o">,</span> <span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">()).</span><span class="na">orEqualTo</span><span class="o">(</span><span class="s">"mobile"</span><span class="o">,</span> <span class="n">userVo</span><span class="o">.</span><span class="na">getUserPhone</span><span class="o">());</span>
-        <span class="nc">RedisLock</span><span class="o">.</span><span class="na">tryLock</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">userList</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">selectByExample</span><span class="o">(</span><span class="n">example</span><span class="o">);</span>
-        <span class="nc">RedisLock</span><span class="o">.</span><span class="na">unLock</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="nc">ScUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userList</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nf">SenUnitException</span><span class="o">(</span><span class="nc">SenUnitDic</span><span class="o">.</span><span class="na">RESULT_CODE_SERVICE_UNAVAILABLE</span><span class="o">,</span> <span class="s">"账户已存在!"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="nc">User</span> <span class="n">users</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
-        <span class="n">users</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
-        <span class="n">users</span><span class="o">.</span><span class="na">setPassWord</span><span class="o">(</span><span class="n">bCryptPasswordEncoder</span><span class="o">.</span><span class="na">encode</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()));</span>
-        <span class="n">users</span><span class="o">.</span><span class="na">setMobile</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getUserPhone</span><span class="o">());</span>
-        <span class="n">users</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="s">"EBL"</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="n">users</span><span class="o">);</span>
-    <span class="o">}</span>
-
-
-    <span class="cm">/**
-     * 用户登陆相关,主要验证用户用户密码以及设置jwt和用户缓存相关,并返回jwt的凭证
-     *
-     * @param userVo
-     * @return
-     */</span>
-    <span class="kd">public</span> <span class="nc">MsgResponseBody</span><span class="o">&lt;</span><span class="nc">JWTUserDetail</span><span class="o">&gt;</span> <span class="nf">login</span><span class="o">(</span><span class="nc">UserVo</span> <span class="n">userVo</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">User</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">();</span>
-        <span class="n">user</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">());</span>
-        <span class="nc">User</span> <span class="n">userOne</span> <span class="o">=</span> <span class="n">selectOne</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nc">ObjectUtils</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">(</span><span class="n">userOne</span><span class="o">))</span> <span class="o">{</span>
-            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户不存在!"</span><span class="o">);</span>
-            <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getCode</span><span class="o">()).</span><span class="na">setResult</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="n">bCryptPasswordEncoder</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">(),</span> <span class="n">userOne</span><span class="o">.</span><span class="na">getPassWord</span><span class="o">()))</span> <span class="o">{</span>
-            <span class="n">log</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"用户登陆密码错误!"</span><span class="o">);</span>
-            <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getCode</span><span class="o">()).</span><span class="na">setResult</span><span class="o">(</span><span class="nc">ErrorCodeEnum</span><span class="o">.</span><span class="na">LOGIN_INCORRECT</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="nc">Authentication</span> <span class="n">authentication</span> <span class="o">=</span> <span class="n">authenticationManager</span><span class="o">.</span><span class="na">authenticate</span><span class="o">(</span>
-                <span class="k">new</span> <span class="nf">UsernamePasswordAuthenticationToken</span><span class="o">(</span>
-                        <span class="n">userVo</span><span class="o">.</span><span class="na">getAccountname</span><span class="o">(),</span>
-                        <span class="n">userVo</span><span class="o">.</span><span class="na">getPassword</span><span class="o">()</span>
-                <span class="o">)</span>
-        <span class="o">);</span>
-        <span class="nc">SecurityContextHolder</span><span class="o">.</span><span class="na">getContext</span><span class="o">().</span><span class="na">setAuthentication</span><span class="o">(</span><span class="n">authentication</span><span class="o">);</span>
-        <span class="c1">//使用jwt生成token 用于权限效验</span>
-        <span class="nc">JWTUserDetail</span> <span class="n">jwtUserDetail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JWTUserDetail</span><span class="o">();</span>
-        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setLoginName</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getLoginName</span><span class="o">());</span>
-        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setLoginTime</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
-        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userOne</span><span class="o">.</span><span class="na">getTid</span><span class="o">());</span>
-        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setUserType</span><span class="o">(</span><span class="nc">JWTUserDetail</span><span class="o">.</span><span class="na">UserType</span><span class="o">.</span><span class="na">User</span><span class="o">);</span>
-        <span class="nc">String</span> <span class="n">token</span> <span class="o">=</span> <span class="n">jwtTokenUtil</span><span class="o">.</span><span class="na">generateToken</span><span class="o">(</span><span class="n">jwtUserDetail</span><span class="o">);</span>
-        <span class="n">jwtUserDetail</span><span class="o">.</span><span class="na">setJwtToken</span><span class="o">(</span><span class="n">token</span><span class="o">);</span>
-        <span class="k">return</span> <span class="nc">MsgResponseBody</span><span class="o">.</span><span class="na">success</span><span class="o">().</span><span class="na">setResult</span><span class="o">(</span><span class="n">jwtUserDetail</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">logout</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">redisUtil</span><span class="o">.</span><span class="na">setEx</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="nc">JwtTokenUtil</span><span class="o">.</span><span class="na">JWT_TOKEN_PREFIX</span><span class="o">,</span> <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUserType</span><span class="o">(),</span> <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUserId</span><span class="o">()),</span> <span class="nc">UserAuthInfoUtils</span><span class="o">.</span><span class="na">getUser</span><span class="o">().</span><span class="na">getJwtToken</span><span class="o">(),</span> <span class="n">access_token_expiration</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.javaniuniu.scshorlsweb.system.config.jwt</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">com.alibaba.fastjson.JSONObject</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">lombok.Data</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">lombok.EqualsAndHashCode</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
-
-<span class="nd">@EqualsAndHashCode</span><span class="o">(</span><span class="n">callSuper</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
-<span class="nd">@Data</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">JWTUserDetail</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
-    <span class="cm">/**
-     * 登陆用户编号
-     */</span>
-    <span class="kd">private</span> <span class="kt">long</span> <span class="n">userId</span><span class="o">;</span>
-    <span class="cm">/**
-     * 登陆用户账户名称(可能为手机号邮箱或者名称用户维度唯一)
-     */</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">loginName</span><span class="o">;</span>
-    <span class="cm">/**
-     * 登陆用户类型
-     */</span>
-    <span class="kd">private</span> <span class="nc">UserType</span> <span class="n">userType</span><span class="o">;</span>
-    <span class="cm">/**
-     * 登陆用户凭证
-     */</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">jwtToken</span><span class="o">;</span>
-    <span class="cm">/**
-     * 登陆时间
-     */</span>
-    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">loginTime</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="kd">enum</span> <span class="nc">UserType</span> <span class="o">{</span>
-        <span class="nc">User</span><span class="o">(</span><span class="s">"USER"</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span>
-        <span class="nc">Operator</span><span class="o">(</span><span class="s">"OPT"</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span>
-        <span class="nc">Erp</span><span class="o">(</span><span class="s">"ERP"</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
-
-        <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-        <span class="kd">private</span> <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>
-
-        <span class="kd">private</span> <span class="nf">UserType</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="nc">UserType</span> <span class="n">c</span> <span class="o">:</span> <span class="nc">UserType</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">getIndex</span><span class="o">()</span> <span class="o">==</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">return</span> <span class="n">c</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
-                <span class="o">}</span>
             <span class="o">}</span>
-            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+        <span class="c1">// 先找右边界</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&lt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">else</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0423/024">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0423-024">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二分查找"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0423/023"><h2 itemprop="headline" class="item__header">69. x 的平方根</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-69-x-的平方根">题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a></h2>
+<p>实现 <code class="highlighter-rouge">int sqrt(int x)</code> 函数。</p>
+
+<p>计算并返回 x 的平方根，其中 x 是非负整数。</p>
+
+<p>由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。</p>
+
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 4
+输出: 2
+</code></pre></div></div>
+<h4 id="示例-2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 8
+输出: 2
+说明: 8 的平方根是 2.82842...,
+     由于返回类型是整数，小数部分将被舍去。
+</code></pre></div></div>
+
+<h3 id="解题思路">解题思路</h3>
+<p>查找或者搜索型的题目，很自然的会往 <code class="highlighter-rouge">二叉树</code> <code class="highlighter-rouge">DFS</code> <code class="highlighter-rouge">BFS</code> 等上面套</p>
+<h3 id="几个坑点">几个坑点</h3>
+<ol>
+  <li>对于输入参数的判断，可以先处理</li>
+  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
+  <li>平方需要用的结果需要转long，防止溢出 int</li>
+</ol>
+
+<h3 id="代码">代码</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// x 一定大于 x/2</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
+                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getIndex</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">index</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0423/023">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0423-023">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二分查找"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/alog/2020/0423/003"><h2 itemprop="headline" class="item__header">深度优先搜索(DFS)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="解题步骤">解题步骤</h3>
+<p><strong>DFS 通用解题步骤</strong></p>
+<ol>
+  <li>截止条件</li>
+  <li>遍历候选节点</li>
+  <li>筛选</li>
+</ol>
+
+<h3 id="dfs搜索执行顺序">DFS搜索执行顺序</h3>
+<ul>
+  <li>如下图</li>
+</ul>
+
+<p><img src="/docs/assets/images/algo/Jietu20200422-195425@2x.jpg" alt="dfs" /></p>
+
+<h3 id="力扣对应题目">力扣对应题目</h3>
+<p><a href="https://leetcode-cn.com/problems/permutation-i-lcci/">面试题 08.07. 无重复字符串的排列组合</a></p>
+
+<h3 id="通用dfs解题代码">通用DFS解题代码</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span><span class="o">,</span><span class="nc">Stack</span> <span class="n">stack</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 1.截止条件</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()==</span><span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+            <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
         <span class="o">}</span>
+
+        <span class="c1">// 2.遍历候选节点</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="c1">// 2.1 筛选</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]!=</span><span class="sc">'0'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+                <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'0'</span><span class="o">;</span>
+                <span class="n">dfs</span><span class="o">(</span><span class="n">chars</span><span class="o">,</span><span class="n">stack</span><span class="o">);</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+                <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="参考视频">参考视频</h3>
+<ul>
+  <li><a href="https://www.bilibili.com/video/BV1qE411E7di?from=search&amp;seid=1863457748201838862">[算法]dfs介绍</a></li>
+  <li><a href="https://www.bilibili.com/video/BV1Ks411579J/?spm_id_from=333.788.videocard.1">[Python] BFS和DFS算法（第1讲）</a></li>
+  <li><a href="https://www.bilibili.com/video/BV1Ks411575U/?spm_id_from=333.788.videocard.0">[Python] BFS和DFS算法（第2讲）</a></li>
+  <li><a href="https://www.bilibili.com/video/BV1ts41157Sy/?spm_id_from=333.788.videocard.0">[Python] BFS和DFS算法（第3讲）—— 从BFS到Dijkstra算法</a></li>
+</ul>
+</div><p><a href="/alog/2020/0423/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%28DFS%29">深度优先搜索(DFS)</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0423-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,深度优先搜索(DFS)"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/docs-data-jpa/querydsl/join"><h2 itemprop="headline" class="item__header">JPA通过querydsl做连表查询</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="结论">结论：</h2>
+<ul>
+  <li>jpa只适合单表操作</li>
+  <li>通过 querydsl 实现复杂的sql （在复杂的连表面前也难办）</li>
+  <li>jpa 是个大坑，做链表查询会把人累死</li>
+  <li>首选 mybitas</li>
+  <li>有哪个大神能做出来 记得@下</li>
+</ul>
+
+<h2 id="需要实现sql">需要实现sql</h2>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">me</span><span class="p">.</span><span class="n">address</span> <span class="k">as</span> <span class="n">address</span><span class="p">,</span> <span class="n">me</span><span class="p">.</span><span class="n">totalChecked</span> <span class="k">as</span> <span class="n">totalChecked</span><span class="p">,</span> <span class="n">me</span><span class="p">.</span><span class="n">avatar</span> <span class="k">as</span> <span class="n">avatar</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="k">checked</span> <span class="k">as</span> <span class="k">checked</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">checkedTime</span> <span class="k">as</span> <span class="n">checkedTime</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">upvoteNumber</span> <span class="k">as</span> <span class="n">upvoteNumber</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">username</span> <span class="k">as</span> <span class="n">username</span>
+<span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="n">member1</span><span class="p">.</span><span class="n">address</span><span class="p">,</span> <span class="n">member1</span><span class="p">.</span><span class="n">totalChecked</span><span class="p">,</span> <span class="n">member1</span><span class="p">.</span><span class="n">avatar</span><span class="p">,</span> <span class="n">member1</span><span class="p">.</span><span class="n">username</span>
+<span class="k">from</span> <span class="n">Member</span> <span class="n">member1</span>
+<span class="k">where</span> <span class="n">member1</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">me</span>
+<span class="k">left</span> <span class="k">join</span> <span class="p">(</span>
+<span class="k">select</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="n">username</span><span class="p">,</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="k">checked</span><span class="p">,</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="n">checkedTime</span><span class="p">,</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="n">upvoteNumber</span>
+<span class="k">from</span> <span class="n">CheckDayInfo</span> <span class="n">checkDayInfo</span>
+<span class="k">where</span> <span class="n">checkDayInfo</span><span class="p">.</span><span class="nb">date</span> <span class="o">=</span> <span class="s1">'2020-04-17'</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">info</span>
+<span class="k">on</span> <span class="n">me</span><span class="p">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">info</span><span class="p">.</span><span class="n">username</span>
+<span class="k">order</span> <span class="k">by</span> <span class="n">info</span><span class="p">.</span><span class="k">checked</span> <span class="k">desc</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">checkedTime</span> <span class="k">asc</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">com.querydsl.core.BooleanBuilder</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.QueryModifiers</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.QueryResults</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.types.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.core.types.dsl.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.jpa.impl.JPAQuery</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.jpa.impl.JPAQueryFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.jpa.sql.JPASQLQuery</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.sql.DerbyTemplates</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.sql.SQLExpressions</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.querydsl.sql.SQLTemplates</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.domain.PageRequest</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.data.domain.Pageable</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.annotation.PostConstruct</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.persistence.EntityManager</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.stream.Collectors</span><span class="o">;</span>
+
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PageTest</span> <span class="kd">extends</span> <span class="nc">SpringbootJpaApplicationTests</span> <span class="o">{</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">private</span> <span class="nc">EntityManager</span> <span class="n">entityManager</span><span class="o">;</span>
+
+    <span class="c1">//查询工厂实体</span>
+    <span class="kd">private</span> <span class="nc">JPAQueryFactory</span> <span class="n">queryFactory</span><span class="o">;</span>
+
+
+    <span class="c1">//实例化控制器完成后执行该方法实例化JPAQueryFactory</span>
+    <span class="nd">@PostConstruct</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">initFactory</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">queryFactory</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPAQueryFactory</span><span class="o">(</span><span class="n">entityManager</span><span class="o">);</span>
     <span class="o">}</span>
 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">JWTUserDetail</span> <span class="nf">fromJson</span><span class="o">(</span><span class="nc">String</span> <span class="n">json</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nc">JSONObject</span><span class="o">.</span><span class="na">parseObject</span><span class="o">(</span><span class="n">json</span><span class="o">,</span> <span class="nc">JWTUserDetail</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * 普通查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getcheckDayInfo</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">queryFactory</span>
+                <span class="o">.</span><span class="na">selectFrom</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="s">"javaniuniu"</span><span class="o">),</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">fetch</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
     <span class="o">}</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toJson</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nc">JSONObject</span><span class="o">.</span><span class="na">toJSONString</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * BooleanBuilder 绑定条件进行查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfos</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// 使用 QueryDSL 进行查询</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="c1">// 定于获取条件</span>
+        <span class="nc">BooleanBuilder</span> <span class="n">booleanBuilder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">BooleanBuilder</span><span class="o">();</span>
+        <span class="c1">// 放入要查询的条件信息</span>
+        <span class="n">booleanBuilder</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="s">"javaniuniu"</span><span class="o">));</span>
+        <span class="c1">// queryFactory 是上方定义的工厂实体</span>
+        <span class="c1">// select（生成的实体类的字段）.from（生成实体类的名称）.where（上方要查询的条件）.orderBy（排序）.fetch（）进行查询</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfoList</span> <span class="o">=</span> <span class="n">queryFactory</span><span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">booleanBuilder</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">date</span><span class="o">.</span><span class="na">asc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetch</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfoList</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 分页查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfoPage</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">QueryResults</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">queryFactory</span>
+                <span class="o">.</span><span class="na">selectFrom</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getOffset</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetchResults</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 通过 JPASQLQuery 做分页查询
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getbCheckDayInfoPageByJPASQLQuery</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">SQLTemplates</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DerbyTemplates</span><span class="o">();</span>
+
+        <span class="nc">JPASQLQuery</span><span class="o">&lt;?&gt;</span> <span class="n">jpasqlQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPASQLQuery</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;(</span><span class="n">entityManager</span><span class="o">,</span> <span class="n">templates</span><span class="o">);</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">QueryResults</span><span class="o">&lt;</span><span class="nc">CheckDayInfo</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">jpasqlQuery</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getOffset</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetchResults</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 返回数据到DTO
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfoDTO</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">CheckDayInfoDTO</span><span class="o">&gt;</span> <span class="n">checkDayInfo</span> <span class="o">=</span> <span class="n">queryFactory</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">upvoteNumber</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+<span class="c1">//                .where(</span>
+<span class="c1">//                        qCheckDayInfo.checked.eq(1)</span>
+<span class="c1">//                )</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">.</span><span class="na">desc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">.</span><span class="na">asc</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getOffset</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">limit</span><span class="o">(</span><span class="n">pageable</span><span class="o">.</span><span class="na">getPageSize</span><span class="o">())</span>
+                <span class="o">.</span><span class="na">fetch</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">tuple</span> <span class="o">-&gt;</span> <span class="nc">CheckDayInfoDTO</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+                        <span class="o">.</span><span class="na">username</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">checked</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">checkedTime</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">upvoteNumber</span><span class="o">(</span><span class="n">tuple</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">upvoteNumber</span><span class="o">))</span>
+                        <span class="o">.</span><span class="na">build</span><span class="o">()</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="nc">Collectors</span><span class="o">.</span><span class="na">toList</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfo</span><span class="o">);</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * 通过 JPAQuery 做连表查询
+     * 但是不能分页
+     */</span>
+    <span class="nd">@Test</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getCheckDayInfoDTOPages</span><span class="o">()</span> <span class="o">{</span>
+
+        <span class="nc">SQLTemplates</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DerbyTemplates</span><span class="o">();</span>
+
+        <span class="nc">JPASQLQuery</span><span class="o">&lt;?&gt;</span> <span class="n">jpasqlQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPASQLQuery</span><span class="o">&lt;</span><span class="nc">Void</span><span class="o">&gt;(</span><span class="n">entityManager</span><span class="o">,</span> <span class="n">templates</span><span class="o">);</span>
+
+        <span class="nc">JPAQuery</span> <span class="n">jpaQuery</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPAQuery</span><span class="o">(</span><span class="n">entityManager</span><span class="o">);</span>
+        <span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="nc">PageRequest</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+
+        <span class="nc">String</span> <span class="n">date</span> <span class="o">=</span> <span class="s">"2020-04-17"</span><span class="o">;</span>
+        <span class="nc">QMember</span> <span class="n">qMember</span> <span class="o">=</span> <span class="nc">QMember</span><span class="o">.</span><span class="na">member</span><span class="o">;</span>
+        <span class="nc">QCheckDayInfo</span> <span class="n">qCheckDayInfo</span> <span class="o">=</span> <span class="nc">QCheckDayInfo</span><span class="o">.</span><span class="na">checkDayInfo</span><span class="o">;</span>
+
+        <span class="nc">StringPath</span> <span class="n">me</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">stringPath</span><span class="o">(</span><span class="s">"me"</span><span class="o">);</span>
+        <span class="nc">StringPath</span> <span class="n">info</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">stringPath</span><span class="o">(</span><span class="s">"info"</span><span class="o">);</span>
+
+
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">address</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.address"</span><span class="o">);</span>
+        <span class="nc">NumberTemplate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">totalChecked</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">numberTemplate</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.totalChecked"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">avatar</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.avatar"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">me_username</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"me.username"</span><span class="o">);</span>
+
+        <span class="nc">NumberTemplate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">checked</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">numberTemplate</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checked"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">checkedTime</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checkedTime"</span><span class="o">);</span>
+        <span class="nc">NumberTemplate</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">upvoteNumber</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">numberTemplate</span><span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.upvoteNumber"</span><span class="o">);</span>
+        <span class="nc">SimpleTemplate</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">username</span> <span class="o">=</span> <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.username"</span><span class="o">);</span>
+
+        <span class="nc">OrderSpecifier</span> <span class="n">orderByChecked</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OrderSpecifier</span><span class="o">(</span><span class="nc">Order</span><span class="o">.</span><span class="na">DESC</span><span class="o">,</span>
+                <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checked"</span><span class="o">));</span>
+
+        <span class="nc">OrderSpecifier</span> <span class="n">orderByCheckedTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OrderSpecifier</span><span class="o">(</span><span class="nc">Order</span><span class="o">.</span><span class="na">ASC</span><span class="o">,</span>
+                <span class="nc">Expressions</span><span class="o">.</span><span class="na">template</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="s">"info.checkedTime"</span><span class="o">));</span>
+
+<span class="c1">//        long l1 = 2;</span>
+<span class="c1">//        long l2 = 1;</span>
+<span class="c1">//</span>
+<span class="c1">//        QueryModifiers queryModifiers = new QueryModifiers(l1, l2);</span>
+
+        <span class="nc">SubQueryExpression</span> <span class="n">queryCheckByDate</span> <span class="o">=</span> <span class="nc">SQLExpressions</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">username</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checked</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">checkedTime</span><span class="o">,</span>
+                        <span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">upvoteNumber</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">qCheckDayInfo</span><span class="o">.</span><span class="na">date</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">date</span><span class="o">));</span>
+
+        <span class="nc">SubQueryExpression</span> <span class="n">queryMember</span> <span class="o">=</span> <span class="nc">SQLExpressions</span>
+                <span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">address</span><span class="o">,</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">totalChecked</span><span class="o">,</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">avatar</span><span class="o">,</span>
+                        <span class="n">qMember</span><span class="o">.</span><span class="na">username</span>
+                <span class="o">)</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qMember</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">qMember</span><span class="o">.</span><span class="na">status</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+
+        <span class="nc">QueryResults</span><span class="o">&lt;</span><span class="nc">CheckDayInfoDTO</span><span class="o">&gt;</span> <span class="n">checkDayInfoDTOS</span> <span class="o">=</span> <span class="n">jpasqlQuery</span><span class="o">.</span><span class="na">select</span><span class="o">(</span>
+                <span class="nc">Projections</span><span class="o">.</span><span class="na">bean</span><span class="o">(</span>
+                        <span class="nc">CheckDayInfoDTO</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+                        <span class="n">address</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"address"</span><span class="o">),</span> <span class="n">totalChecked</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"totalChecked"</span><span class="o">),</span> <span class="n">avatar</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"avatar"</span><span class="o">),</span> <span class="n">checked</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"checked"</span><span class="o">),</span>
+                        <span class="n">checkedTime</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"checkedTime"</span><span class="o">),</span>
+                        <span class="n">upvoteNumber</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"upvoteNumber"</span><span class="o">),</span> <span class="n">username</span><span class="o">.</span><span class="na">as</span><span class="o">(</span><span class="s">"username"</span><span class="o">)))</span>
+                <span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="n">qMember</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">leftJoin</span><span class="o">(</span><span class="n">queryCheckByDate</span><span class="o">,</span> <span class="n">info</span><span class="o">).</span><span class="na">on</span><span class="o">(</span><span class="n">me_username</span><span class="o">.</span><span class="na">eq</span><span class="o">(</span><span class="n">username</span><span class="o">))</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">orderByChecked</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">orderBy</span><span class="o">(</span><span class="n">orderByCheckedTime</span><span class="o">)</span>
+<span class="c1">//                .limit(pageable.getPageSize()) // 做不了分页</span>
+<span class="c1">//                .offset(pageable.getOffset())</span>
+<span class="c1">//                .restrict(queryModifiers)</span>
+                <span class="o">.</span><span class="na">fetchResults</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">checkDayInfoDTOS</span><span class="o">);</span>
+
+
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+</div><p><a href="/docs-data-jpa/querydsl/join">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=JPA">JPA</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 22, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-querydsl-join">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-22T00:00:00+08:00">
+    <meta itemprop="keywords" content="JPA"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/alog/2020/0422/002"><h2 itemprop="headline" class="item__header">二分查找</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="通用解题模板">通用解题模板：</h3>
+
+<p><strong>区间定义：[l, r)</strong> 左闭右开</p>
+
+<ul>
+  <li><code class="highlighter-rouge">f(m)函数</code> 满足该条件，可直接返回对应位置</li>
+  <li><code class="highlighter-rouge">g(m)函数</code> 满足该条件，可移动右边界</li>
+  <li>同理，在else中移动左边界</li>
+  <li>如果没有这个条件的判断就是 <code class="highlighter-rouge">lowwer_bound</code>和<code class="highlighter-rouge">higher_bound</code>.
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+  <span class="k">while</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">:</span>
+      <span class="n">m</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+      <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>    <span class="c1"># 判断找了没有，optional
+</span>          <span class="k">return</span> <span class="n">m</span>
+      <span class="k">if</span> <span class="n">g</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+          <span class="n">r</span> <span class="o">=</span> <span class="n">m</span>   <span class="c1"># new range [l, m)
+</span>      <span class="k">else</span><span class="p">:</span>
+          <span class="n">l</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># new range [m+1, r)
+</span>  <span class="k">return</span> <span class="n">l</span>    <span class="c1"># or not found
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><code class="highlighter-rouge">lower bound</code>: find index of i, such that A[i] &gt;= x</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">lowwer_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="c1"># find in range [left, right)
+</span>    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="k">return</span> <span class="n">left</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">upper bound</code>: find index of i, such that A[i] &gt; x</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">higher_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="c1"># find in range [left, right)
+</span>    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="k">return</span> <span class="n">left</span>
+</code></pre></div></div>
+<h3 id="例题">例题</h3>
+<ol>
+  <li>题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a>
+    <h4 id="几个坑点">几个坑点</h4>
+  </li>
+  <li>对于输入参数的判断，可以先处理</li>
+  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
+  <li>平方需要用的结果需要转long，防止溢出 int</li>
+</ol>
+
+<h4 id="示例代码java">示例代码java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// x 一定大于 x/2</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
+                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p><a href="https://github.com/Senssic/sc-whorl/tree/master/sc-whorl-web/src/main/java/sc/whorl/system/config/jwt">参考链接</a></p>
-</div><p><a href="/java-code-design/token/jwt">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<ol>
+  <li>题目<a href="https://blog.csdn.net/fuxuemingzhu/article/details/83273084">34. 在排序数组中查找元素的第一个和最后一个位置</a>
+    <h3 id="解题思路">解题思路</h3>
+    <ul>
+      <li>对于有边界的题，需要考虑左边界和有边界</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="对于-letf-right--1-的说明-可参考">对于 letf right +-1 的说明 可参考</h3>
+<p><a href="https://leetcode-cn.com/problems/binary-search/solution/er-fen-cha-zhao-xiang-jie-by-labuladong/">二分查找细节详解，顺便赋诗一首</a></p>
+
+<h3 id="示例代码">示例代码</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">searchRange</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{-</span><span class="mi">1</span><span class="o">,-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+        <span class="c1">// 先找左边界</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&gt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+
+            <span class="o">}</span>
+            <span class="k">else</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 先找右边界</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&lt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">else</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="参考视频">参考视频</h3>
+<ul>
+  <li>花花酱的二分查找专题视频：https://www.youtube.com/watch?v=v57lNF2mb_s</li>
+</ul>
+</div><p><a href="/alog/2020/0422/002">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeMark">CodeMark</a>
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=CodeDesign">CodeDesign</a>
-            </li><li>
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 22, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0422-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-22T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,二分查找"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/docs-data-jpa/exception"><h2 itemprop="headline" class="item__header">JPA应用中出现的Exception</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="java代码">java代码</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public interface CheckDayInfoRepository extends JpaRepository&lt;CheckDayInfo, Long&gt;, JpaSpecificationExecutor&lt;CheckDayInfo&gt; {
+    List&lt;CheckDayInfo&gt; findAllByDate(String date);
+
+    @Query(value = "SELECT me.address as address,me.totalChecked as totalChecked,info.checked as checked,me.avatar as avatar,info.checkedTime as checkedTime," +
+            "info.upvoteNumber as upvoteNumber,me.username as username" +
+            " FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE date= ?1 ) info  ON me.username=info.username WHERE me.status= 0 " +
+            "ORDER by info.checked DESC , info.checkedTime DESC",
+            countQuery = "select COUNT(*) FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE  date= ?1 ) info  " +
+                    "ON me.username=info.username WHERE me.status= 0",
+            nativeQuery = true)
+    Page&lt;CheckDayVO&gt; selectCheckInfoByDate(String date, Pageable pageable);
+    // 查询条件 meusername
+    @Query(value = "SELECT new com.ojeveryday.backend.pojo.dto.CheckDayVO(me.address,me.totalChecked,info.checked,me.avatar,info.checkedTime,info.upvoteNumber,me.username) " +
+            "FROM CheckDayInfo info LEFT JOIN Member me ON info.username = me.username and me.status= 0 and info.date = ?1 ORDER by info.checked DESC, info.checkedTime ASC")
+    Page&lt;CheckDayVO&gt; selectAllByDate(String date, Pageable pageable);
+</code></pre></div></div>
+
+<h2 id="1-分页异常">1. 分页异常</h2>
+<p><strong>错误异常</strong>，分页查询报错， <code class="highlighter-rouge">Unknown column 'me' in 'field list' </code>   <br />
+<strong>解决方法</strong> 可通过自己写 <code class="highlighter-rouge">countQuery = </code> 解决</p>
+
+<h2 id="2-no-converter-found-capable-of-converting-from-type-orgspringframeworkdatajparepository">2. No converter found capable of converting from type [org.springframework.data.jpa.repository….</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">Hibernate:</span> <span class="no">SELECT</span> <span class="n">me</span><span class="o">.</span><span class="na">address</span> <span class="n">as</span> <span class="n">address</span><span class="o">,</span><span class="n">me</span><span class="o">.</span><span class="na">totalChecked</span> <span class="n">as</span> <span class="n">totalChecked</span><span class="o">,</span><span class="n">info</span><span class="o">.</span><span class="na">checked</span> <span class="n">as</span> <span class="n">checked</span><span class="o">,</span><span class="n">me</span><span class="o">.</span><span class="na">avatar</span> <span class="n">as</span> <span class="n">avatar</span><span class="o">,</span><span class="n">info</span><span class="o">.</span><span class="na">checkedTime</span> <span class="n">as</span> <span class="n">checkedTime</span><span class="o">,</span><span class="n">info</span><span class="o">.</span><span class="na">upvoteNumber</span> <span class="n">as</span> <span class="n">upvoteNumber</span><span class="o">,</span><span class="n">me</span><span class="o">.</span><span class="na">username</span> <span class="n">as</span> <span class="n">username</span> <span class="no">FROM</span> <span class="nc">Member</span> <span class="n">me</span> <span class="no">LEFT</span>  <span class="nf">JOIN</span>  <span class="o">(</span><span class="no">SELECT</span> <span class="o">*</span> <span class="no">FROM</span> <span class="nc">CheckDayInfo</span>  <span class="no">WHERE</span> <span class="n">date</span><span class="o">=</span> <span class="o">?</span> <span class="o">)</span> <span class="n">info</span>  <span class="no">ON</span> <span class="n">me</span><span class="o">.</span><span class="na">username</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="na">username</span> <span class="no">WHERE</span> <span class="n">me</span><span class="o">.</span><span class="na">status</span><span class="o">=</span> <span class="mi">0</span> <span class="no">ORDER</span> <span class="n">by</span> <span class="n">info</span><span class="o">.</span><span class="na">checked</span> <span class="no">DESC</span> <span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">checkedTime</span> <span class="no">DESC</span> <span class="n">limit</span> <span class="o">?</span>
+<span class="nl">Hibernate:</span> <span class="n">select</span> <span class="nf">COUNT</span><span class="o">(*)</span> <span class="no">FROM</span> <span class="nc">Member</span> <span class="n">me</span> <span class="no">LEFT</span>  <span class="nf">JOIN</span>  <span class="o">(</span><span class="no">SELECT</span> <span class="o">*</span> <span class="no">FROM</span> <span class="nc">CheckDayInfo</span>  <span class="no">WHERE</span>  <span class="n">date</span><span class="o">=</span> <span class="o">?</span> <span class="o">)</span> <span class="n">info</span>  <span class="no">ON</span> <span class="n">me</span><span class="o">.</span><span class="na">username</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="na">username</span> <span class="no">WHERE</span> <span class="n">me</span><span class="o">.</span><span class="na">status</span><span class="o">=</span> <span class="mi">0</span>
+<span class="mi">2020</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">21</span> <span class="mo">01</span><span class="o">:</span><span class="mi">49</span><span class="o">:</span><span class="mf">27.398</span> <span class="no">ERROR</span> <span class="mi">56349</span> <span class="o">---</span> <span class="o">[</span><span class="n">p</span><span class="o">-</span><span class="n">nio</span><span class="o">-</span><span class="mi">80</span><span class="o">-</span><span class="n">exec</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="n">c</span><span class="o">.</span><span class="na">o</span><span class="o">.</span><span class="na">b</span><span class="o">.</span><span class="na">c</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">GlobalExceptionHandler</span>   <span class="o">:</span> <span class="o">[</span><span class="n">everyday</span><span class="o">]-[</span><span class="n">unknown</span> <span class="n">error</span> <span class="n">happen</span><span class="o">]-</span><span class="nc">No</span> <span class="n">converter</span> <span class="n">found</span> <span class="n">capable</span> <span class="n">of</span> <span class="n">converting</span> <span class="n">from</span> <span class="n">type</span> <span class="o">[</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">data</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">repository</span><span class="o">.</span><span class="na">query</span><span class="o">.</span><span class="na">AbstractJpaQuery</span><span class="n">$TupleConverter$TupleBackedMap</span><span class="o">]</span> <span class="n">to</span> <span class="n">type</span> <span class="o">[</span><span class="n">com</span><span class="o">.</span><span class="na">ojeveryday</span><span class="o">.</span><span class="na">backend</span><span class="o">.</span><span class="na">pojo</span><span class="o">.</span><span class="na">dto</span><span class="o">.</span><span class="na">CheckDayVO</span><span class="o">]</span>
+
+<span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">convert</span><span class="o">.</span><span class="na">ConverterNotFoundException</span><span class="o">:</span> <span class="nc">No</span> <span class="n">converter</span> <span class="n">found</span> <span class="n">capable</span> <span class="n">of</span> <span class="n">converting</span> <span class="n">from</span> <span class="n">type</span> <span class="o">[</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">data</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">repository</span><span class="o">.</span><span class="na">query</span><span class="o">.</span><span class="na">AbstractJpaQuery</span><span class="n">$TupleConverter$TupleBackedMap</span><span class="o">]</span> <span class="n">to</span> <span class="n">type</span> <span class="o">[</span><span class="n">com</span><span class="o">.</span><span class="na">ojeveryday</span><span class="o">.</span><span class="na">backend</span><span class="o">.</span><span class="na">pojo</span><span class="o">.</span><span class="na">dto</span><span class="o">.</span><span class="na">CheckDayVO</span><span class="o">]</span>
+</code></pre></div></div>
+
+<p><strong>错误原因</strong> 在 <code class="highlighter-rouge">nativeQuery = true</code>只能返回 JpaRepository&lt;CheckDayInfo, Long&gt; 中的 <code class="highlighter-rouge">CheckDayInfo</code> 而我的方法返回的是 <code class="highlighter-rouge">CheckDayVO</code></p>
+
+<h2 id="3-在nativequery--false-情况下可以指定实体类返回">3. 在<code class="highlighter-rouge">nativeQuery = false</code> 情况下可以指定实体类返回</h2>
+
+<h2 id="4-orgspringframeworkdatamappingpropertyreferenceexception-no-property-xxxx-found-for-type-xxxx">4. org.springframework.data.mapping.PropertyReferenceException: No property xxxx found for type Xxxx</h2>
+
+<h2 id="参考链接">参考链接</h2>
+<ul>
+  <li><a href="https://blog.csdn.net/moshowgame/article/details/80537196">JPA错误之Failed to convert from type [java.lang.Object[]] to type</a></li>
+  <li><a href="https://my.oschina.net/anxiaole/blog/873695">org.springframework.data.mapping.PropertyReferenceException: No property xxxx found for type Xxxx</a></li>
+  <li><a href="https://blog.csdn.net/zx110503/article/details/81356735">jpa2.x的getOne()/findOne()/findById()的区别及使用</a></li>
+</ul>
+</div><p><a href="/docs-data-jpa/exception">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=JWT">JWT</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Feb 12, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-design-token-jwt">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-02-12T00:00:00+08:00">
-    <meta itemprop="keywords" content="CodeMark,CodeDesign,JWT"></div>
+                href="/archive.html?tag=JPA">JPA</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 21, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-exception">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-21T00:00:00+08:00">
+    <meta itemprop="keywords" content="JPA"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/docs-data-jpa/about"><h2 itemprop="headline" class="item__header">关于使用JPA说明</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li>复杂的sql通过本地sql完成 <strong>(nativeQuery = true)</strong></li>
+  <li>jpa只适合单表操作</li>
+  <li>
+    <p>通过 querydsl 实现复杂的sql （在复杂的连表面前也难办）</p>
+  </li>
+  <li>jpa 是个大坑，做链表查询会把人累死</li>
+  <li>首选 mybitas</li>
+</ul>
+</div><p><a href="/docs-data-jpa/about">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=JPA">JPA</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 21, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-ahout">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-21T00:00:00+08:00">
+    <meta itemprop="keywords" content="JPA"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/docs-data-jpa/JpaSpecificationExecutor"><h2 itemprop="headline" class="item__header">jpa-JpaSpecificationExecutor子查询等功能使用</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="jpaspecificationexecutor接口该接口提供了如下一些方法">JpaSpecificationExecutor接口，该接口提供了如下一些方法：</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">JpaSpecificationExecutor</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="o">{</span>
+
+    <span class="no">T</span> <span class="nf">findOne</span><span class="o">(</span><span class="nc">Specification</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">);</span><span class="c1">//根据sql获取单个对象数据</span>
+
+    <span class="nc">List</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="nc">Specification</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">);</span><span class="c1">//根据sql查询所有数据</span>
+
+    <span class="nc">Page</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="nc">Specification</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">,</span> <span class="nc">Pageable</span> <span class="n">pageable</span><span class="o">);</span><span class="c1">//根据sql分页查询数据</span>
+
+    <span class="nc">List</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">findAll</span><span class="o">(</span><span class="nc">Specification</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">,</span> <span class="nc">Sort</span> <span class="n">sort</span><span class="o">);</span> <span class="c1">//根据sql查询数据，并根据参数进行排序</span>
+
+    <span class="kt">long</span> <span class="nf">count</span><span class="o">(</span><span class="nc">Specification</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">spec</span><span class="o">);</span> <span class="c1">//根据sql查询数据总数</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h2 id="sort-的构造函数如下">Sort 的构造函数如下</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//可以输入多个Sort.Order对象，在进行多个值排序时有用</span>
+<span class="kd">public</span> <span class="nf">Sort</span><span class="o">(</span><span class="nc">Sort</span><span class="o">.</span><span class="na">Order</span><span class="o">...</span> <span class="n">orders</span><span class="o">);</span>
+
+<span class="c1">//和上面的方法一样，无非把多个参数换成了一个List</span>
+<span class="kd">public</span> <span class="nf">Sort</span><span class="o">(</span><span class="nc">List</span> <span class="n">orders</span><span class="o">);</span>
+
+<span class="c1">//当排序方向固定时，使用这个比较方便，第一个参数是排序方向，第二个开始就是排序的字段.</span>
+<span class="kd">public</span> <span class="nf">Sort</span><span class="o">(</span><span class="nc">Sort</span><span class="o">.</span><span class="na">Direction</span> <span class="n">direction</span><span class="o">,</span> <span class="nc">String</span><span class="o">...</span> <span class="n">properties</span><span class="o">);</span>
+
+<span class="c1">//第一个参数是排序方向,还有一个方法第二个参数是list，原理相同</span>
+<span class="kd">public</span> <span class="nf">Sort</span><span class="o">(</span><span class="nc">Direction</span> <span class="n">direction</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">properties</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h2 id="pageable-是一个接口提供了分页一组方法的声明如第几页每页多少条记录排序信息等">Pageable 是一个接口，提供了分页一组方法的声明，如第几页，每页多少条记录，排序信息等</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">getPageNumber</span><span class="o">();</span>
+
+<span class="kt">int</span> <span class="nf">getPageSize</span><span class="o">();</span>
+
+<span class="kt">int</span> <span class="nf">getOffset</span><span class="o">();</span>
+
+<span class="nc">Sort</span> <span class="nf">getSort</span><span class="o">();</span>
+
+<span class="nc">Pageable</span> <span class="nf">next</span><span class="o">();</span>
+
+<span class="nc">Pageable</span> <span class="nf">previousOrFirst</span><span class="o">();</span>
+
+<span class="nc">Pageable</span> <span class="nf">first</span><span class="o">();</span>
+
+<span class="kt">boolean</span> <span class="nf">hasPrevious</span><span class="o">();</span>
+</code></pre></div></div>
+
+<h2 id="pagerequest-它是-pageable-的实现类它提供三个构造方法">PageRequest  它是 Pageable 的实现类，它提供三个构造方法</h2>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//这个构造方法构造出来的分页对象不具备排序功能</span>
+<span class="kd">public</span> <span class="nf">PageRequest</span><span class="o">(</span><span class="kt">int</span> <span class="n">page</span><span class="o">,</span> <span class="kt">int</span> <span class="n">size</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">(</span><span class="n">page</span><span class="o">,</span> <span class="n">size</span><span class="o">,</span> <span class="o">(</span><span class="nc">Sort</span><span class="o">)</span><span class="kc">null</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="c1">//Direction和properties用来做排序操作</span>
+<span class="kd">public</span> <span class="nf">PageRequest</span><span class="o">(</span><span class="kt">int</span> <span class="n">page</span><span class="o">,</span> <span class="kt">int</span> <span class="n">size</span><span class="o">,</span> <span class="nc">Direction</span> <span class="n">direction</span><span class="o">,</span> <span class="nc">String</span><span class="o">...</span> <span class="n">properties</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">(</span><span class="n">page</span><span class="o">,</span> <span class="n">size</span><span class="o">,</span> <span class="k">new</span> <span class="nc">Sort</span><span class="o">(</span><span class="n">direction</span><span class="o">,</span> <span class="n">properties</span><span class="o">));</span>
+<span class="o">}</span>
+<span class="c1">//此构造方法是自定义一个排序的操作</span>
+<span class="kd">public</span> <span class="nf">PageRequest</span><span class="o">(</span><span class="kt">int</span> <span class="n">page</span><span class="o">,</span> <span class="kt">int</span> <span class="n">size</span><span class="o">,</span> <span class="nc">Sort</span> <span class="n">sort</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">page</span><span class="o">,</span> <span class="n">size</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">sort</span> <span class="o">=</span> <span class="n">sort</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>Spring Data Jpa 支持 Criteria 查询方式，使用这种方式需要继承JpaSpecificationExecutor，通过实现 Specification
+中的 toPredicate方法来定义动态查询，通过 CriteriaBuilder 来创建查询条件</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Specification</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">specification</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Specification</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;(){</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="nc">Root</span><span class="o">&lt;</span><span class="nc">MessageItem</span><span class="o">&gt;</span> <span class="n">root</span><span class="o">,</span> <span class="nc">CriteriaQuery</span><span class="o">&lt;?&gt;</span> <span class="n">query</span><span class="o">,</span> <span class="nc">CriteriaBuilder</span> <span class="n">cb</span><span class="o">){</span>
+    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Predicate</span><span class="o">&gt;</span> <span class="n">predicates</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">Predicate</span><span class="o">&gt;();</span>
+    <span class="c1">//root.get("name")表示获取name这个字段名称,like表示执行like查询,%zt%表示值</span>
+    <span class="nc">Predicate</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"name"</span><span class="o">),</span> <span class="s">"%ray%"</span><span class="o">);</span>
+    <span class="nc">Predicate</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">greaterThan</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"rid"</span><span class="o">),</span><span class="s">"3"</span><span class="o">);</span>
+    <span class="c1">//将两个查询条件联合起来之后返回Predicate对象</span>
+     <span class="c1">//建立子查询</span>
+     <span class="c1">//构建criteriaQuery对象</span>
+    <span class="nc">CriteriaQuery</span><span class="o">&lt;</span><span class="nc">Organization</span><span class="o">&gt;</span> <span class="n">criteriaQuery</span>  <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">createQuery</span><span class="o">(</span><span class="nc">Organization</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="c1">//获取子查询Subquery对象</span>
+    <span class="nc">Subquery</span><span class="o">&lt;</span><span class="nc">Organization</span><span class="o">&gt;</span> <span class="n">organizationSubQuery</span> <span class="o">=</span> <span class="n">criteriaQuery</span><span class="o">.</span><span class="na">subquery</span><span class="o">(</span><span class="nc">Organization</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="c1">//构建新的子查询字段Mapping对象</span>
+    <span class="nc">Root</span><span class="o">&lt;</span><span class="nc">Organization</span><span class="o">&gt;</span> <span class="n">organizationSubRoot</span> <span class="o">=</span>         <span class="n">organizationubQuery</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="nc">Organization</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="c1">//相当于sql中的select *，如需获取一个字段可以使用organizationSubRoot.get("字段").as(String.class).</span>
+    <span class="n">organizationSubQuery</span><span class="o">.</span><span class="na">select</span><span class="o">(</span><span class="n">organizationSubRoot</span><span class="o">);</span>
+    <span class="nc">Predicate</span> <span class="n">subqueryPredicate</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">cb</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">organizationSubRoot</span> <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"rid"</span><span class="o">).</span><span class="na">as</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">),</span> <span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"rid"</span><span class="o">).</span><span class="na">as</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">),</span>
+    <span class="n">cb</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">organizationSubRoot</span> <span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"orgName"</span><span class="o">).</span><span class="na">as</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">class</span><span class="o">),</span><span class="s">"部门名称"</span><span class="o">))</span><span class="err">；</span>
+    <span class="c1">//构建where条件</span>
+    <span class="n">organizationSubQuery</span> <span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">subqueryPredicate</span><span class="o">);</span>
+    <span class="c1">// exists的使用</span>
+    <span class="nc">Predicate</span> <span class="n">p3</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">exists</span><span class="o">(</span><span class="n">organizationSubQuery</span><span class="o">);</span>
+    <span class="c1">//相当于select rid,name...</span>
+    <span class="n">query</span><span class="o">.</span><span class="na">multiselect</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"rid"</span><span class="o">),</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span>
+    <span class="nc">Predicate</span> <span class="n">p4</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="na">and</span><span class="o">(</span><span class="n">p1</span><span class="o">,</span><span class="n">p2</span><span class="o">,</span><span class="n">p3</span><span class="o">);</span>
+    <span class="n">predicates</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p4</span><span class="o">)</span>
+    <span class="k">return</span> <span class="n">query</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">predicates</span><span class="o">.</span><span class="na">toArray</span><span class="o">(</span><span class="k">new</span>     <span class="nc">Predicate</span><span class="o">[</span><span class="n">predicates</span><span class="o">.</span><span class="na">size</span><span class="o">()])).</span><span class="na">getRestriction</span><span class="o">();</span>
+
+    <span class="o">}</span>
+<span class="o">};</span>
+</code></pre></div></div>
+
+<p>利用JpaSpecificationExecutor的findAl方法进行分页查询，例子如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Order</span> <span class="n">order</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Order</span><span class="o">(</span><span class="nc">Direction</span><span class="o">.</span><span class="na">ASC</span><span class="o">,</span><span class="s">"name"</span><span class="o">);</span>
+<span class="nc">Sort</span> <span class="n">sort</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Sort</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+<span class="nc">Pageable</span> <span class="n">pageable</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PageRequest</span><span class="o">(</span><span class="n">page</span><span class="o">,</span><span class="n">size</span><span class="o">,</span><span class="n">sort</span><span class="o">);</span><span class="c1">//page从0开始</span>
+<span class="nc">Page</span><span class="o">&lt;</span><span class="nc">User</span><span class="o">&gt;</span> <span class="n">resutls</span> <span class="o">=</span> <span class="nc">UserDao</span><span class="o">.</span><span class="na">findAll</span><span class="o">(</span><span class="n">specification</span><span class="o">,</span> <span class="n">pageable</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>PS:其中UserDao需要继承JpaSpecificationExecutor和Repository接口。</p>
+
+<p>其实也可以定义多个 Specification，然后通过 Specifications 对象将其连接起来,复杂sql可以这样做，使代码不会这么臃肿。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//第一个Specification定义了两个or的组合</span>
+<span class="nc">Specification</span> <span class="n">s1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Specification</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="nc">Root</span> <span class="n">root</span><span class="o">,</span> <span class="nc">CriteriaQuery</span> <span class="n">criteriaQuery</span><span class="o">,</span> <span class="nc">CriteriaBuilder</span> <span class="n">criteriaBuilder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Predicate</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">criteriaBuilder</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"rid"</span><span class="o">),</span><span class="s">"2"</span><span class="o">);</span>
+        <span class="nc">Predicate</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">criteriaBuilder</span><span class="o">.</span><span class="na">equal</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"rid"</span><span class="o">),</span><span class="s">"3"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">criteriaBuilder</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="n">p1</span><span class="o">,</span><span class="n">p2</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+<span class="c1">//第二个Specification定义了两个or的组合</span>
+<span class="nc">Specification</span> <span class="n">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Specification</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Predicate</span> <span class="nf">toPredicate</span><span class="o">(</span><span class="nc">Root</span> <span class="n">root</span><span class="o">,</span> <span class="nc">CriteriaQuery</span> <span class="n">criteriaQuery</span><span class="o">,</span> <span class="nc">CriteriaBuilder</span> <span class="n">criteriaBuilder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Predicate</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">criteriaBuilder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"name"</span><span class="o">),</span><span class="s">"r%"</span><span class="o">);</span>
+        <span class="nc">Predicate</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">criteriaBuilder</span><span class="o">.</span><span class="na">like</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"name"</span><span class="o">),</span><span class="s">"a%"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">criteriaBuilder</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="n">p1</span><span class="o">,</span><span class="n">p2</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">};</span>
+<span class="c1">//通过Specifications将两个Specification连接起来，第一个条件加where，第二个是and</span>
+<span class="nc">List</span> <span class="n">userList</span><span class="o">=</span> <span class="nc">UserDao</span><span class="o">.</span><span class="na">findAll</span><span class="o">(</span><span class="nc">Specifications</span><span class="o">.</span><span class="na">where</span><span class="o">(</span><span class="n">s1</span><span class="o">).</span><span class="na">and</span><span class="o">(</span><span class="n">s2</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p>这个代码生成的 SQL 是</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">t_user</span> <span class="k">where</span> <span class="p">(</span><span class="n">rid</span><span class="o">=</span><span class="s1">'2'</span> <span class="k">or</span> <span class="n">rid</span><span class="o">=</span><span class="s1">'3'</span><span class="p">)</span> <span class="k">and</span> <span class="p">(</span><span class="n">name</span> <span class="k">like</span> <span class="s1">'r%'</span> <span class="k">or</span> <span class="n">name</span> <span class="k">like</span> <span class="s1">'a%'</span><span class="p">);</span>
+</code></pre></div></div>
+</div><p><a href="/docs-data-jpa/JpaSpecificationExecutor">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=JPA">JPA</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 21, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-JpaSpecificationExecutor">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-21T00:00:00+08:00">
+    <meta itemprop="keywords" content="JPA"></div>
       </article></div>
-</div><div class="layout--home"></div>
+</div><div class="layout--home"><div class="pagination"><p>151 post articles, 19 pages.</p>
+    <div class="pagination__menu">
+      <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
+            <i class="fas fa-angle-left"></i>
+          </div></li><li>
+              <div class="button button--primary button--circle focus"><span>1</span></div>
+            </li><li>
+                  <a class="button button--secondary button--circle" href="/home/page2"><span>2</span></a>
+                </li><li>
+                  <a class="button button--secondary button--circle" href="/home/page3"><span>3</span></a>
+                </li><li>
+                  <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
+                </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
+                  <a class="button button--secondary button--circle" href="/home/page19"><span>19</span></a>
+                </li><li><a class="button button--secondary button--circle" href="/home/page2">
+            <i class="fas fa-angle-right"></i>
+          </a></li></ul>
+    </div>
+  </div></div>
 <script>/*(function () {
 
 })();*/
@@ -869,7 +1207,7 @@ logging.level.org.org.org.mybatis=debug
 </div>
 </div>
     </div><div class="site-info mt-2">
-      <div>© JAVA 牛牛 2020,<a href="http://www.beian.miit.gov.cn/">浙ICP备20011288号</a>,
+      <div>© JAVA 牛牛 2020,
         Powered by <a title="Jekyll is a simple, blog-aware, static site generator." href="http://jekyllrb.com/">Jekyll</a> & <a
         title="TeXt is a super customizable Jekyll theme." href="https://github.com/kitian616/jekyll-TeXt-theme">TeXt Theme</a>.
       </div>
