@@ -529,6 +529,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
   <li>jpa 是个大坑，做链表查询会把人累死</li>
   <li>首选 mybitas</li>
   <li>有哪个大神能做出来 记得@下</li>
+  <li>文章末尾有querydsl 相关配置</li>
 </ul>
 
 <h2 id="需要实现sql">需要实现sql</h2>
@@ -545,6 +546,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <span class="k">order</span> <span class="k">by</span> <span class="n">info</span><span class="p">.</span><span class="k">checked</span> <span class="k">desc</span><span class="p">,</span> <span class="n">info</span><span class="p">.</span><span class="n">checkedTime</span> <span class="k">asc</span>
 </code></pre></div></div>
 
+<h3 id="相关代码">相关代码</h3>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">com.querydsl.core.BooleanBuilder</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.querydsl.core.QueryModifiers</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">com.querydsl.core.QueryResults</span><span class="o">;</span>
@@ -778,6 +780,64 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <span class="o">}</span>
 
+</code></pre></div></div>
+
+<h3 id="querydsl-相关配置">querydsl 相关配置</h3>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- QueryDSL 相关依赖 --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>com.querydsl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>querydsl-jpa<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.1.4<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>com.querydsl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>querydsl-apt<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.3.1<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="c">&lt;!-- https://mvnrepository.com/artifact/com.querydsl/querydsl-sql --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>com.querydsl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>querydsl-sql<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.3.1<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+<span class="c">&lt;!--         https://mvnrepository.com/artifact/com.mysema.querydsl/querydsl-jdo--&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>com.mysema.querydsl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>querydsl-jdo<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>3.7.4<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="c">&lt;!-- https://mvnrepository.com/artifact/com.mysema.querydsl/querydsl-apt --&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>com.mysema.querydsl<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>querydsl-sql<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>3.7.4<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+
+        ...
+
+        <span class="c">&lt;!--因为是类型安全的，所以还需要加上Maven APT plugin，使用 APT 自动生成一些类:--&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>com.mysema.maven<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>apt-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+                <span class="nt">&lt;version&gt;</span>1.1.3<span class="nt">&lt;/version&gt;</span>
+                <span class="nt">&lt;executions&gt;</span>
+                    <span class="nt">&lt;execution&gt;</span>
+                        <span class="nt">&lt;phase&gt;</span>generate-sources<span class="nt">&lt;/phase&gt;</span>
+                        <span class="nt">&lt;goals&gt;</span>
+                            <span class="nt">&lt;goal&gt;</span>process<span class="nt">&lt;/goal&gt;</span>
+                        <span class="nt">&lt;/goals&gt;</span>
+                        <span class="nt">&lt;configuration&gt;</span>
+                            <span class="nt">&lt;outputDirectory&gt;</span>target/generated-sources<span class="nt">&lt;/outputDirectory&gt;</span>
+                            <span class="nt">&lt;processor&gt;</span>com.querydsl.apt.jpa.JPAAnnotationProcessor<span class="nt">&lt;/processor&gt;</span>
+                        <span class="nt">&lt;/configuration&gt;</span>
+                    <span class="nt">&lt;/execution&gt;</span>
+                <span class="nt">&lt;/executions&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
 </code></pre></div></div>
 </div><p><a href="/docs-data-jpa/querydsl/join">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
