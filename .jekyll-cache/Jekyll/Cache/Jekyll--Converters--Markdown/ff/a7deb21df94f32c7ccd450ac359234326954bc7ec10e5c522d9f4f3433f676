@@ -1,0 +1,139 @@
+I"P9<h3 id="通用解题模板">通用解题模板：</h3>
+
+<p><strong>区间定义：[l, r)</strong> 左闭右开</p>
+
+<ul>
+  <li><code class="highlighter-rouge">f(m)函数</code> 满足该条件，可直接返回对应位置</li>
+  <li><code class="highlighter-rouge">g(m)函数</code> 满足该条件，可移动右边界</li>
+  <li>同理，在else中移动左边界</li>
+  <li>如果没有这个条件的判断就是 <code class="highlighter-rouge">lowwer_bound</code>和<code class="highlighter-rouge">higher_bound</code>.
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">binary_search</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+  <span class="k">while</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">:</span>
+      <span class="n">m</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+      <span class="k">if</span> <span class="n">f</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>    <span class="c1"># 判断找了没有，optional
+</span>          <span class="k">return</span> <span class="n">m</span>
+      <span class="k">if</span> <span class="n">g</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+          <span class="n">r</span> <span class="o">=</span> <span class="n">m</span>   <span class="c1"># new range [l, m)
+</span>      <span class="k">else</span><span class="p">:</span>
+          <span class="n">l</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># new range [m+1, r)
+</span>  <span class="k">return</span> <span class="n">l</span>    <span class="c1"># or not found
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+
+<p><code class="highlighter-rouge">lower bound</code>: find index of i, such that A[i] &gt;= x</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">lowwer_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="c1"># find in range [left, right)
+</span>    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="k">return</span> <span class="n">left</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">upper bound</code>: find index of i, such that A[i] &gt; x</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">higher_bound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="c1"># find in range [left, right)
+</span>    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
+    <span class="k">return</span> <span class="n">left</span>
+</code></pre></div></div>
+<h3 id="例题">例题</h3>
+<ol>
+  <li>题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a>
+    <h4 id="几个坑点">几个坑点</h4>
+  </li>
+  <li>对于输入参数的判断，可以先处理</li>
+  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
+  <li>平方需要用的结果需要转long，防止溢出 int</li>
+</ol>
+
+<h4 id="示例代码java">示例代码java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// x 一定大于 x/2</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
+                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>题目<a href="https://blog.csdn.net/fuxuemingzhu/article/details/83273084">34. 在排序数组中查找元素的第一个和最后一个位置</a>
+    <h3 id="解题思路">解题思路</h3>
+    <ul>
+      <li>对于有边界的题，需要考虑左边界和有边界</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="对于-letf-right--1-的说明-可参考">对于 letf right +-1 的说明 可参考</h3>
+<p><a href="https://leetcode-cn.com/problems/binary-search/solution/er-fen-cha-zhao-xiang-jie-by-labuladong/">二分查找细节详解，顺便赋诗一首</a></p>
+
+<h3 id="示例代码">示例代码</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">searchRange</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{-</span><span class="mi">1</span><span class="o">,-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+        <span class="c1">// 先找左边界</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&gt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+
+            <span class="o">}</span>
+            <span class="k">else</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="c1">// 先找右边界</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&lt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">else</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="参考视频">参考视频</h3>
+<ul>
+  <li>花花酱的二分查找专题视频：https://www.youtube.com/watch?v=v57lNF2mb_s</li>
+</ul>
+:ET
