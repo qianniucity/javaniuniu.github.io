@@ -1,8 +1,8 @@
 ---
 title: 利用mybatis-generator自动生成代码
-permalink: /docs-util/mybatis-generator
-tags: 工具类
-key: docs-util-mybatis-generator
+permalink: /java-code-mybatis/mybatis-generator
+tags: 工具类 Mybatis
+key: java-code-mybatis-mybatis-generator
 ---
 
 ### 1、mybatis-generator 概述
@@ -51,39 +51,48 @@ MyBatis官方提供了逆向工程 mybatis-generator，可以针对数据库表�
 <generatorConfiguration>
 
     <context id="mysqlgenerator" targetRuntime="MyBatis3">
-        <property name="autoDelimitKeywords" value="true"/>
-        <!--可以使用``包括字段名，避免字段名与sql保留字冲突报错-->
-        <property name="beginningDelimiter" value="`"/>
-        <property name="endingDelimiter" value="`"/>
+      <property name="autoDelimitKeywords" value="true"/>
+      <!--可以使用``包括字段名，避免字段名与sql保留字冲突报错-->
+      <property name="beginningDelimiter" value="`"/>
+      <property name="endingDelimiter" value="`"/>
 
-        <!-- 自动生成toString方法 -->
-        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
-        <!-- 自动生成equals方法和hashcode方法 -->
-        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+      <!-- 自动生成toString方法 -->
+      <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+      <!-- 自动生成equals方法和hashcode方法 -->
+      <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
 
-        <!-- 非官方插件 https://github.com/itfsw/mybatis-generator-plugin -->
-        <!-- 查询单条数据插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
-        <!-- 查询结果选择性返回插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"/>
-        <!-- Example Criteria 增强插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"/>
-        <!-- 数据Model属性对应Column获取插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"/>
-        <!-- 逻辑删除插件 -->
-        <plugin type="com.itfsw.mybatis.generator.plugins.LogicalDeletePlugin">
-            <!-- 这里配置的是全局逻辑删除列和逻辑删除值，当然在table中配置的值会覆盖该全局配置 -->
-            <!-- 逻辑删除列类型只能为数字、字符串或者布尔类型 -->
-            <property name="logicalDeleteColumn" value="deleted"/>
-            <!-- 逻辑删除-已删除值 -->
-            <property name="logicalDeleteValue" value="1"/>
-            <!-- 逻辑删除-未删除值 -->
-            <property name="logicalUnDeleteValue" value="0"/>
+      <!-- 非官方插件 https://github.com/itfsw/mybatis-generator-plugin -->
+      <!-- 查询单条数据插件 -->
+      <plugin type="com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
+      <!-- MySQL分页插件 -->
+      <plugin type="com.itfsw.mybatis.generator.plugins.LimitPlugin"/>
+      <!-- 查询结果选择性返回插件 -->
+      <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"/>
+      <!-- Example Criteria 增强插件 -->
+      <plugin type="com.itfsw.mybatis.generator.plugins.ExampleEnhancedPlugin"/>
+      <!-- 数据Model属性对应Column获取插件 -->
+      <plugin type="com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"/>
+      <!-- 逻辑删除插件 需配合数据库有对应的字段-->
+      <plugin type="com.itfsw.mybatis.generator.plugins.LogicalDeletePlugin">
+          <!-- 这里配置的是全局逻辑删除列和逻辑删除值，当然在table中配置的值会覆盖该全局配置 -->
+          <!-- 逻辑删除列类型只能为数字、字符串或者布尔类型 -->
+          <property name="logicalDeleteColumn" value="deleted"/>
+          <!-- 逻辑删除-已删除值 -->
+          <property name="logicalDeleteValue" value="1"/>
+          <!-- 逻辑删除-未删除值 -->
+          <property name="logicalUnDeleteValue" value="0"/>
+      </plugin>
+
+        <!-- Example 目标包修改插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ExampleTargetPlugin">
+            <!-- 修改Example类生成到目标包下 -->
+            <property name="targetPackage" value="org.linlinjava.litemall.db.domain.example"/>
         </plugin>
 
+        <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
         <commentGenerator>
             <property name="suppressDate" value="true"/>
-            <!--<property name="suppressAllComments" value="true"/>-->
+            <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
         <!--数据库连接信息-->
@@ -97,8 +106,8 @@ MyBatis官方提供了逆向工程 mybatis-generator，可以针对数据库表�
         </javaTypeResolver>
 
         <javaModelGenerator targetPackage="org.linlinjava.litemall.db.domain" targetProject="src/main/java"/>
-        <sqlMapGenerator targetPackage="org.linlinjava.litemall.db.dao" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="org.linlinjava.litemall.db.dao"
+        <sqlMapGenerator targetPackage="org.linlinjava.litemall.db.mapper" targetProject="src/main/resources"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="org.linlinjava.litemall.db.mapper"
                              targetProject="src/main/java"/>
         <!--表名-->
         <table tableName="litemall_ad">

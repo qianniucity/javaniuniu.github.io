@@ -322,6 +322,158 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java-code-mybatis/mybatis/Example"><h2 itemprop="headline" class="item__header">Mybatis Example的高级用法</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一-mapper接口中的函数及方法">一. mapper接口中的函数及方法</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">方法名</th>
+      <th style="text-align: left">功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">int countByExample(UserExample example)</td>
+      <td style="text-align: left">按条件计数</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int deleteByPrimaryKey(Integer id)</td>
+      <td style="text-align: left">按主键删除</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int deleteByExample(UserExample example)</td>
+      <td style="text-align: left">按条件查询</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">String/Integer insert(User record)</td>
+      <td style="text-align: left">插入数据（返回值为ID）</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">User selectByPrimaryKey(Integer id)</td>
+      <td style="text-align: left">按主键查询</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ListselectByExample(UserExample example)</td>
+      <td style="text-align: left">按条件查询</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">ListselectByExampleWithBLOGs(UserExample example)</td>
+      <td style="text-align: left">按条件查询（包括BLOB字段）。只有当数据表中的字段类型有为二进制的才会产生。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int updateByPrimaryKey(User record)</td>
+      <td style="text-align: left">按主键更新</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int updateByPrimaryKeySelective(User record)</td>
+      <td style="text-align: left">按主键更新值不为null的字段</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int updateByExample(User record, UserExample example)</td>
+      <td style="text-align: left">按条件更新</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">int updateByExampleSelective(User record, UserExample example)</td>
+      <td style="text-align: left">按条件更新值不为null的字段</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="二-example实例方法">二. example实例方法</h3>
+<blockquote>
+  <p>example 用于添加条件，相当于where后面的部分，理论上单表的任何复杂条件查询都可以使用example来完成。</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">方法名</th>
+      <th style="text-align: left">功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">example.setOrderByClause(“字段名 ASC”)</td>
+      <td style="text-align: left">添加升序排列条件，DESC为降序</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">example.setDistinct(false)</td>
+      <td style="text-align: left">去除重复，boolean型，true为选择不重复的记录。</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">example.and(Criteria criteria)</td>
+      <td style="text-align: left">为example添加criteria查询条件，关系为与</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">example.or(Criteria criteria)	为example添加criteria查询条件，关系为或</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxIsNull	添加字段xxx为null的条件</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxIsNotNull	添加字段xxx不为null的条件</td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxEqualTo(value)</td>
+      <td style="text-align: left">添加xxx字段等于value条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxNotEqualTo(value)</td>
+      <td style="text-align: left">添加xxx字段不等于value条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxGreaterThan(value)</td>
+      <td style="text-align: left">添加xxx字段大于value条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxGreaterThanOrEqualTo(value)</td>
+      <td style="text-align: left">添加xxx字段大于等于value条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxLessThan(value)</td>
+      <td style="text-align: left">添加xxx字段小于value条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxLessThanOrEqualTo(value)</td>
+      <td style="text-align: left">添加xxx字段小于等于value条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxIn(List&lt;？&gt;)</td>
+      <td style="text-align: left">添加xxx字段值在List&lt;？&gt;条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxNotIn(List&lt;？&gt;)</td>
+      <td style="text-align: left">添加xxx字段值不在List&lt;？&gt;条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxLike(“%”+value+”%”)</td>
+      <td style="text-align: left">添加xxx字段值为value的模糊查询条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxNotLike(“%”+value+”%”)</td>
+      <td style="text-align: left">添加xxx字段值不为value的模糊查询条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxBetween(value1,value2)</td>
+      <td style="text-align: left">添加xxx字段值在value1和value2之间条件</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">criteria.andXxxNotBetween(value1,value2)</td>
+      <td style="text-align: left">添加xxx字段值不在value1和value2之间条件</td>
+    </tr>
+  </tbody>
+</table>
+</div><p><a href="/java-code-mybatis/mybatis/Example">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=Mybatis">Mybatis</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-mybatis-mybatis-Example">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
+    <meta itemprop="keywords" content="Mybatis"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0425/025"><h2 itemprop="headline" class="item__header">46. 全排列</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目46-全排列">题目<a href="https://leetcode-cn.com/problems/permutations/">46. 全排列</a></h2>
 <p>给定一个 <strong>没有重复</strong> 数字的序列，返回其所有可能的全排列。</p>
@@ -1251,58 +1403,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 22, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0422-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-22T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,二分查找"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/docs-data-jpa/exception"><h2 itemprop="headline" class="item__header">JPA应用中出现的Exception</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="java代码">java代码</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public interface CheckDayInfoRepository extends JpaRepository&lt;CheckDayInfo, Long&gt;, JpaSpecificationExecutor&lt;CheckDayInfo&gt; {
-    List&lt;CheckDayInfo&gt; findAllByDate(String date);
-
-    @Query(value = "SELECT me.address as address,me.totalChecked as totalChecked,info.checked as checked,me.avatar as avatar,info.checkedTime as checkedTime," +
-            "info.upvoteNumber as upvoteNumber,me.username as username" +
-            " FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE date= ?1 ) info  ON me.username=info.username WHERE me.status= 0 " +
-            "ORDER by info.checked DESC , info.checkedTime DESC",
-            countQuery = "select COUNT(*) FROM Member me LEFT  JOIN  (SELECT * FROM CheckDayInfo  WHERE  date= ?1 ) info  " +
-                    "ON me.username=info.username WHERE me.status= 0",
-            nativeQuery = true)
-    Page&lt;CheckDayVO&gt; selectCheckInfoByDate(String date, Pageable pageable);
-    // 查询条件 meusername
-    @Query(value = "SELECT new com.ojeveryday.backend.pojo.dto.CheckDayVO(me.address,me.totalChecked,info.checked,me.avatar,info.checkedTime,info.upvoteNumber,me.username) " +
-            "FROM CheckDayInfo info LEFT JOIN Member me ON info.username = me.username and me.status= 0 and info.date = ?1 ORDER by info.checked DESC, info.checkedTime ASC")
-    Page&lt;CheckDayVO&gt; selectAllByDate(String date, Pageable pageable);
-</code></pre></div></div>
-
-<h2 id="1-分页异常">1. 分页异常</h2>
-<p><strong>错误异常</strong>，分页查询报错， <code class="highlighter-rouge">Unknown column 'me' in 'field list' </code>   <br />
-<strong>解决方法</strong> 可通过自己写 <code class="highlighter-rouge">countQuery = </code> 解决</p>
-
-<h2 id="2-no-converter-found-capable-of-converting-from-type-orgspringframeworkdatajparepository">2. No converter found capable of converting from type [org.springframework.data.jpa.repository….</h2>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nl">Hibernate:</span> <span class="no">SELECT</span> <span class="n">me</span><span class="o">.</span><span class="na">address</span> <span class="n">as</span> <span class="n">address</span><span class="o">,</span><span class="n">me</span><span class="o">.</span><span class="na">totalChecked</span> <span class="n">as</span> <span class="n">totalChecked</span><span class="o">,</span><span class="n">info</span><span class="o">.</span><span class="na">checked</span> <span class="n">as</span> <span class="n">checked</span><span class="o">,</span><span class="n">me</span><span class="o">.</span><span class="na">avatar</span> <span class="n">as</span> <span class="n">avatar</span><span class="o">,</span><span class="n">info</span><span class="o">.</span><span class="na">checkedTime</span> <span class="n">as</span> <span class="n">checkedTime</span><span class="o">,</span><span class="n">info</span><span class="o">.</span><span class="na">upvoteNumber</span> <span class="n">as</span> <span class="n">upvoteNumber</span><span class="o">,</span><span class="n">me</span><span class="o">.</span><span class="na">username</span> <span class="n">as</span> <span class="n">username</span> <span class="no">FROM</span> <span class="nc">Member</span> <span class="n">me</span> <span class="no">LEFT</span>  <span class="nf">JOIN</span>  <span class="o">(</span><span class="no">SELECT</span> <span class="o">*</span> <span class="no">FROM</span> <span class="nc">CheckDayInfo</span>  <span class="no">WHERE</span> <span class="n">date</span><span class="o">=</span> <span class="o">?</span> <span class="o">)</span> <span class="n">info</span>  <span class="no">ON</span> <span class="n">me</span><span class="o">.</span><span class="na">username</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="na">username</span> <span class="no">WHERE</span> <span class="n">me</span><span class="o">.</span><span class="na">status</span><span class="o">=</span> <span class="mi">0</span> <span class="no">ORDER</span> <span class="n">by</span> <span class="n">info</span><span class="o">.</span><span class="na">checked</span> <span class="no">DESC</span> <span class="o">,</span> <span class="n">info</span><span class="o">.</span><span class="na">checkedTime</span> <span class="no">DESC</span> <span class="n">limit</span> <span class="o">?</span>
-<span class="nl">Hibernate:</span> <span class="n">select</span> <span class="nf">COUNT</span><span class="o">(*)</span> <span class="no">FROM</span> <span class="nc">Member</span> <span class="n">me</span> <span class="no">LEFT</span>  <span class="nf">JOIN</span>  <span class="o">(</span><span class="no">SELECT</span> <span class="o">*</span> <span class="no">FROM</span> <span class="nc">CheckDayInfo</span>  <span class="no">WHERE</span>  <span class="n">date</span><span class="o">=</span> <span class="o">?</span> <span class="o">)</span> <span class="n">info</span>  <span class="no">ON</span> <span class="n">me</span><span class="o">.</span><span class="na">username</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="na">username</span> <span class="no">WHERE</span> <span class="n">me</span><span class="o">.</span><span class="na">status</span><span class="o">=</span> <span class="mi">0</span>
-<span class="mi">2020</span><span class="o">-</span><span class="mo">04</span><span class="o">-</span><span class="mi">21</span> <span class="mo">01</span><span class="o">:</span><span class="mi">49</span><span class="o">:</span><span class="mf">27.398</span> <span class="no">ERROR</span> <span class="mi">56349</span> <span class="o">---</span> <span class="o">[</span><span class="n">p</span><span class="o">-</span><span class="n">nio</span><span class="o">-</span><span class="mi">80</span><span class="o">-</span><span class="n">exec</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="n">c</span><span class="o">.</span><span class="na">o</span><span class="o">.</span><span class="na">b</span><span class="o">.</span><span class="na">c</span><span class="o">.</span><span class="na">handler</span><span class="o">.</span><span class="na">GlobalExceptionHandler</span>   <span class="o">:</span> <span class="o">[</span><span class="n">everyday</span><span class="o">]-[</span><span class="n">unknown</span> <span class="n">error</span> <span class="n">happen</span><span class="o">]-</span><span class="nc">No</span> <span class="n">converter</span> <span class="n">found</span> <span class="n">capable</span> <span class="n">of</span> <span class="n">converting</span> <span class="n">from</span> <span class="n">type</span> <span class="o">[</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">data</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">repository</span><span class="o">.</span><span class="na">query</span><span class="o">.</span><span class="na">AbstractJpaQuery</span><span class="n">$TupleConverter$TupleBackedMap</span><span class="o">]</span> <span class="n">to</span> <span class="n">type</span> <span class="o">[</span><span class="n">com</span><span class="o">.</span><span class="na">ojeveryday</span><span class="o">.</span><span class="na">backend</span><span class="o">.</span><span class="na">pojo</span><span class="o">.</span><span class="na">dto</span><span class="o">.</span><span class="na">CheckDayVO</span><span class="o">]</span>
-
-<span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">core</span><span class="o">.</span><span class="na">convert</span><span class="o">.</span><span class="na">ConverterNotFoundException</span><span class="o">:</span> <span class="nc">No</span> <span class="n">converter</span> <span class="n">found</span> <span class="n">capable</span> <span class="n">of</span> <span class="n">converting</span> <span class="n">from</span> <span class="n">type</span> <span class="o">[</span><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">data</span><span class="o">.</span><span class="na">jpa</span><span class="o">.</span><span class="na">repository</span><span class="o">.</span><span class="na">query</span><span class="o">.</span><span class="na">AbstractJpaQuery</span><span class="n">$TupleConverter$TupleBackedMap</span><span class="o">]</span> <span class="n">to</span> <span class="n">type</span> <span class="o">[</span><span class="n">com</span><span class="o">.</span><span class="na">ojeveryday</span><span class="o">.</span><span class="na">backend</span><span class="o">.</span><span class="na">pojo</span><span class="o">.</span><span class="na">dto</span><span class="o">.</span><span class="na">CheckDayVO</span><span class="o">]</span>
-</code></pre></div></div>
-
-<p><strong>错误原因</strong> 在 <code class="highlighter-rouge">nativeQuery = true</code>只能返回 JpaRepository&lt;CheckDayInfo, Long&gt; 中的 <code class="highlighter-rouge">CheckDayInfo</code> 而我的方法返回的是 <code class="highlighter-rouge">CheckDayVO</code></p>
-
-<h2 id="3-在nativequery--false-情况下可以指定实体类返回">3. 在<code class="highlighter-rouge">nativeQuery = false</code> 情况下可以指定实体类返回</h2>
-
-<h2 id="4-orgspringframeworkdatamappingpropertyreferenceexception-no-property-xxxx-found-for-type-xxxx">4. org.springframework.data.mapping.PropertyReferenceException: No property xxxx found for type Xxxx</h2>
-
-<h2 id="参考链接">参考链接</h2>
-<ul>
-  <li><a href="https://blog.csdn.net/moshowgame/article/details/80537196">JPA错误之Failed to convert from type [java.lang.Object[]] to type</a></li>
-  <li><a href="https://my.oschina.net/anxiaole/blog/873695">org.springframework.data.mapping.PropertyReferenceException: No property xxxx found for type Xxxx</a></li>
-  <li><a href="https://blog.csdn.net/zx110503/article/details/81356735">jpa2.x的getOne()/findOne()/findById()的区别及使用</a></li>
-</ul>
-</div><p><a href="/docs-data-jpa/exception">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=JPA">JPA</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 21, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-data-jpa-exception">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-21T00:00:00+08:00">
-    <meta itemprop="keywords" content="JPA"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>153 post articles, 20 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>154 post articles, 20 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
