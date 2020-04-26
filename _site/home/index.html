@@ -322,107 +322,6 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0426/026"><h2 itemprop="headline" class="item__header">5392. 分割字符串的最大得分</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-5392-分割字符串的最大得分">题目 <a href="https://leetcode-cn.com/problems/maximum-score-after-splitting-a-string/">5392. 分割字符串的最大得分</a></h2>
-
-<p>给你一个由若干 0 和 1 组成的字符串 s ，请你计算并返回将该字符串分割成两个 非空 子字符串（即 左 子字符串和 右 子字符串）所能获得的最大得分。</p>
-
-<p>「分割字符串的得分」为 左 子字符串中 0 的数量加上 右 子字符串中 1 的数量。</p>
-
-<p> </p>
-<h3 id="示例">示例</h3>
-<h4 id="示例-1">示例 1：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：s = "011101"
-输出：5
-解释：
-将字符串 s 划分为两个非空子字符串的可行方案有：
-左子字符串 = "0" 且 右子字符串 = "11101"，得分 = 1 + 4 = 5
-左子字符串 = "01" 且 右子字符串 = "1101"，得分 = 1 + 3 = 4
-左子字符串 = "011" 且 右子字符串 = "101"，得分 = 1 + 2 = 3
-左子字符串 = "0111" 且 右子字符串 = "01"，得分 = 1 + 1 = 2
-左子字符串 = "01110" 且 右子字符串 = "1"，得分 = 2 + 1 = 3
-</code></pre></div></div>
-<h4 id="示例-2">示例 2：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：s = "00111"
-输出：5
-解释：当 左子字符串 = "00" 且 右子字符串 = "111" 时，我们得到最大得分 = 2 + 3 = 5
-示例 3：
-
-输入：s = "1111"
-输出：3
-</code></pre></div></div>
-
-<h3 id="提示">提示：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2 &lt;= s.length &lt;= 500
-字符串 s 仅由字符 '0' 和 '1' 组成。
-</code></pre></div></div>
-
-<h3 id="解题思路一--分割字符串">解题思路一  分割字符串</h3>
-
-<h4 id="代码">代码</h4>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScore</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">zeroCount</span> <span class="o">=</span> <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"0"</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span>
-        <span class="kt">int</span> <span class="n">oneCount</span> <span class="o">=</span> <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"1"</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>
-        <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="kt">int</span> <span class="n">zero</span> <span class="o">=</span> <span class="n">zeroCount</span> <span class="o">-</span>  <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"0"</span><span class="o">,</span><span class="n">i</span><span class="o">);</span><span class="c1">// 总0出现个数-后面0出现个数</span>
-            <span class="kt">int</span> <span class="n">one</span>  <span class="o">=</span> <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"1"</span><span class="o">,</span><span class="n">i</span><span class="o">);</span><span class="c1">// 后面1出现的个数</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span><span class="n">zero</span><span class="o">+</span><span class="n">one</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">max</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">count</span><span class="o">(</span><span class="nc">String</span> <span class="n">str</span><span class="o">,</span><span class="nc">String</span> <span class="n">target</span><span class="o">,</span><span class="kt">int</span> <span class="n">fromIndex</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">){</span>
-            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="n">target</span><span class="o">,</span><span class="n">fromIndex</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">index</span><span class="o">!=-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">fromIndex</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span><span class="mi">1</span><span class="o">;</span>
-                <span class="n">count</span> <span class="o">++;</span>
-            <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
-                <span class="k">break</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="解题思路二-java-线性扫描on">解题思路二 java 线性扫描O(N)</h3>
-
-<h4 id="代码-1">代码</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScore</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cnt1</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cnt0</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>        <span class="c1">//cnt1统计右边1的个数，同理cnt0左边0的个数</span>
-        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">cnt1</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)-</span><span class="sc">'0'</span><span class="o">;</span>            <span class="c1">//先统计1的个数</span>
-        <span class="o">}</span>                                       <span class="c1">//由于左右区域的数至少为1，所以i不能等于len-1</span>
-        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>  <span class="c1">//点i分为左右两个区域        </span>
-            <span class="k">if</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'0'</span><span class="o">)</span> <span class="n">cnt0</span><span class="o">++;</span>      <span class="c1">//遇到01就统计，动态更新左右区域01个数</span>
-            <span class="k">else</span> <span class="n">cnt1</span><span class="o">--;</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">res</span><span class="o">,</span> <span class="n">cnt0</span><span class="o">+</span><span class="n">cnt1</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0426/026">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%88%86%E5%89%B2%E5%AD%97%E7%AC%A6%E4%B8%B2">分割字符串</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%BA%BF%E6%80%A7%E6%89%AB%E6%8F%8F">线性扫描</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-026">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,分割字符串,线性扫描"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0426/025"><h2 itemprop="headline" class="item__header">5393. 可获得的最大点数</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-5393-可获得的最大点数">题目 <a href="https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/">5393. 可获得的最大点数</a></h2>
 <p>几张卡牌 <strong>排成一行</strong>，每张卡牌都有一个对应的点数。点数由整数数组 <code class="highlighter-rouge">cardPoints</code> 给出。</p>
@@ -530,6 +429,107 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,前缀和,滑动窗口"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0426/026"><h2 itemprop="headline" class="item__header">5392. 分割字符串的最大得分</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-5392-分割字符串的最大得分">题目 <a href="https://leetcode-cn.com/problems/maximum-score-after-splitting-a-string/">5392. 分割字符串的最大得分</a></h2>
+
+<p>给你一个由若干 0 和 1 组成的字符串 s ，请你计算并返回将该字符串分割成两个 非空 子字符串（即 左 子字符串和 右 子字符串）所能获得的最大得分。</p>
+
+<p>「分割字符串的得分」为 左 子字符串中 0 的数量加上 右 子字符串中 1 的数量。</p>
+
+<p> </p>
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：s = "011101"
+输出：5
+解释：
+将字符串 s 划分为两个非空子字符串的可行方案有：
+左子字符串 = "0" 且 右子字符串 = "11101"，得分 = 1 + 4 = 5
+左子字符串 = "01" 且 右子字符串 = "1101"，得分 = 1 + 3 = 4
+左子字符串 = "011" 且 右子字符串 = "101"，得分 = 1 + 2 = 3
+左子字符串 = "0111" 且 右子字符串 = "01"，得分 = 1 + 1 = 2
+左子字符串 = "01110" 且 右子字符串 = "1"，得分 = 2 + 1 = 3
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：s = "00111"
+输出：5
+解释：当 左子字符串 = "00" 且 右子字符串 = "111" 时，我们得到最大得分 = 2 + 3 = 5
+示例 3：
+
+输入：s = "1111"
+输出：3
+</code></pre></div></div>
+
+<h3 id="提示">提示：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2 &lt;= s.length &lt;= 500
+字符串 s 仅由字符 '0' 和 '1' 组成。
+</code></pre></div></div>
+
+<h3 id="解题思路一--分割字符串">解题思路一  分割字符串</h3>
+
+<h4 id="代码">代码</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScore</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">zeroCount</span> <span class="o">=</span> <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"0"</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">oneCount</span> <span class="o">=</span> <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"1"</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">zero</span> <span class="o">=</span> <span class="n">zeroCount</span> <span class="o">-</span>  <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"0"</span><span class="o">,</span><span class="n">i</span><span class="o">);</span><span class="c1">// 总0出现个数-后面0出现个数</span>
+            <span class="kt">int</span> <span class="n">one</span>  <span class="o">=</span> <span class="n">count</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="s">"1"</span><span class="o">,</span><span class="n">i</span><span class="o">);</span><span class="c1">// 后面1出现的个数</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span><span class="n">zero</span><span class="o">+</span><span class="n">one</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">max</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">count</span><span class="o">(</span><span class="nc">String</span> <span class="n">str</span><span class="o">,</span><span class="nc">String</span> <span class="n">target</span><span class="o">,</span><span class="kt">int</span> <span class="n">fromIndex</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">indexOf</span><span class="o">(</span><span class="n">target</span><span class="o">,</span><span class="n">fromIndex</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">index</span><span class="o">!=-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">fromIndex</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+                <span class="n">count</span> <span class="o">++;</span>
+            <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+                <span class="k">break</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="解题思路二-java-线性扫描on">解题思路二 java 线性扫描O(N)</h3>
+
+<h4 id="代码-1">代码</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScore</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cnt1</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cnt0</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>        <span class="c1">//cnt1统计右边1的个数，同理cnt0左边0的个数</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">cnt1</span> <span class="o">+=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)-</span><span class="sc">'0'</span><span class="o">;</span>            <span class="c1">//先统计1的个数</span>
+        <span class="o">}</span>                                       <span class="c1">//由于左右区域的数至少为1，所以i不能等于len-1</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>  <span class="c1">//点i分为左右两个区域        </span>
+            <span class="k">if</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="sc">'0'</span><span class="o">)</span> <span class="n">cnt0</span><span class="o">++;</span>      <span class="c1">//遇到01就统计，动态更新左右区域01个数</span>
+            <span class="k">else</span> <span class="n">cnt1</span><span class="o">--;</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">res</span><span class="o">,</span> <span class="n">cnt0</span><span class="o">+</span><span class="n">cnt1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0426/026">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%88%86%E5%89%B2%E5%AD%97%E7%AC%A6%E4%B8%B2">分割字符串</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%BA%BF%E6%80%A7%E6%89%AB%E6%8F%8F">线性扫描</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-026">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,分割字符串,线性扫描"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java-code-mybatis/mybatis/Example"><h2 itemprop="headline" class="item__header">Mybatis Example的高级用法</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一-mapper接口中的函数及方法">一. mapper接口中的函数及方法</h3>
@@ -682,6 +682,11 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-mybatis-mybatis-Example">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
     <meta itemprop="keywords" content="Mybatis"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/post/2020/04/26/%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85.html"><h2 itemprop="headline" class="item__header">完全背包</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">
+</div><p><a href="/post/2020/04/26/%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85.html">Read more</a></p></div><div class="article__info clearfix"><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0425/025"><h2 itemprop="headline" class="item__header">46. 全排列</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目46-全排列">题目<a href="https://leetcode-cn.com/problems/permutations/">46. 全排列</a></h2>
@@ -931,6 +936,71 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-util-swagger-Authorization">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-25T00:00:00+08:00">
     <meta itemprop="keywords" content="Swagger2,工具类"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0423/023"><h2 itemprop="headline" class="item__header">69. x 的平方根</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-69-x-的平方根">题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a></h2>
+<p>实现 <code class="highlighter-rouge">int sqrt(int x)</code> 函数。</p>
+
+<p>计算并返回 x 的平方根，其中 x 是非负整数。</p>
+
+<p>由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。</p>
+
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 4
+输出: 2
+</code></pre></div></div>
+<h4 id="示例-2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 8
+输出: 2
+说明: 8 的平方根是 2.82842...,
+     由于返回类型是整数，小数部分将被舍去。
+</code></pre></div></div>
+
+<h3 id="解题思路">解题思路</h3>
+<p>查找或者搜索型的题目，很自然的会往 <code class="highlighter-rouge">二叉树</code> <code class="highlighter-rouge">DFS</code> <code class="highlighter-rouge">BFS</code> 等上面套</p>
+<h3 id="几个坑点">几个坑点</h3>
+<ol>
+  <li>对于输入参数的判断，可以先处理</li>
+  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
+  <li>平方需要用的结果需要转long，防止溢出 int</li>
+</ol>
+
+<h3 id="代码">代码</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// x 一定大于 x/2</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
+                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0423/023">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0423-023">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二分查找"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0423/024"><h2 itemprop="headline" class="item__header">34. 在排序数组中查找元素的第一个和最后一个位置</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目34-在排序数组中查找元素的第一个和最后一个位置">题目<a href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/">34. 在排序数组中查找元素的第一个和最后一个位置</a></h2>
 
@@ -1003,134 +1073,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0423-024">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,二分查找"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0423/023"><h2 itemprop="headline" class="item__header">69. x 的平方根</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-69-x-的平方根">题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a></h2>
-<p>实现 <code class="highlighter-rouge">int sqrt(int x)</code> 函数。</p>
-
-<p>计算并返回 x 的平方根，其中 x 是非负整数。</p>
-
-<p>由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。</p>
-
-<h3 id="示例">示例</h3>
-<h4 id="示例-1">示例 1:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 4
-输出: 2
-</code></pre></div></div>
-<h4 id="示例-2">示例 2:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 8
-输出: 2
-说明: 8 的平方根是 2.82842...,
-     由于返回类型是整数，小数部分将被舍去。
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<p>查找或者搜索型的题目，很自然的会往 <code class="highlighter-rouge">二叉树</code> <code class="highlighter-rouge">DFS</code> <code class="highlighter-rouge">BFS</code> 等上面套</p>
-<h3 id="几个坑点">几个坑点</h3>
-<ol>
-  <li>对于输入参数的判断，可以先处理</li>
-  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
-  <li>平方需要用的结果需要转long，防止溢出 int</li>
-</ol>
-
-<h3 id="代码">代码</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
-            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="c1">// x 一定大于 x/2</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
-
-        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
-            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
-                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
-                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
-            <span class="k">else</span>
-                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0423/023">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0423-023">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,二分查找"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/alog/2020/0423/003"><h2 itemprop="headline" class="item__header">深度优先搜索(DFS)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="解题步骤">解题步骤</h3>
-<p><strong>DFS 通用解题步骤</strong></p>
-<ol>
-  <li>截止条件</li>
-  <li>遍历候选节点</li>
-  <li>筛选</li>
-</ol>
-
-<h3 id="dfs搜索执行顺序">DFS搜索执行顺序</h3>
-<ul>
-  <li>如下图</li>
-</ul>
-
-<p><img src="/assets/images/algo/Jietu20200422-195425@2x.jpg" alt="dfs" /></p>
-
-<h3 id="力扣对应题目">力扣对应题目</h3>
-<p><a href="https://leetcode-cn.com/problems/permutation-i-lcci/">面试题 08.07. 无重复字符串的排列组合</a></p>
-
-<h3 id="通用dfs解题代码">通用DFS解题代码</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span><span class="o">,</span><span class="nc">Stack</span> <span class="n">stack</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 1.截止条件</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()==</span><span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-            <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-        <span class="o">}</span>
-
-        <span class="c1">// 2.遍历候选节点</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-            <span class="c1">// 2.1 筛选</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]!=</span><span class="sc">'0'</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
-                <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="sc">'0'</span><span class="o">;</span>
-                <span class="n">dfs</span><span class="o">(</span><span class="n">chars</span><span class="o">,</span><span class="n">stack</span><span class="o">);</span>
-                <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
-                <span class="n">chars</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="参考视频">参考视频</h3>
-<ul>
-  <li><a href="https://www.bilibili.com/video/BV1qE411E7di?from=search&amp;seid=1863457748201838862">[算法]dfs介绍</a></li>
-  <li><a href="https://www.bilibili.com/video/BV1Ks411579J/?spm_id_from=333.788.videocard.1">[Python] BFS和DFS算法（第1讲）</a></li>
-  <li><a href="https://www.bilibili.com/video/BV1Ks411575U/?spm_id_from=333.788.videocard.0">[Python] BFS和DFS算法（第2讲）</a></li>
-  <li><a href="https://www.bilibili.com/video/BV1ts41157Sy/?spm_id_from=333.788.videocard.0">[Python] BFS和DFS算法（第3讲）—— 从BFS到Dijkstra算法</a></li>
-</ul>
-</div><p><a href="/alog/2020/0423/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%28DFS%29">深度优先搜索(DFS)</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0423-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,深度优先搜索(DFS)"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>156 post articles, 20 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>157 post articles, 20 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
