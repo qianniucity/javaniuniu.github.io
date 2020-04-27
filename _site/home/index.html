@@ -322,6 +322,118 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0427/027/01"><h2 itemprop="headline" class="item__header">33. 搜索旋转排序数组</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-33-搜索旋转排序数组">题目 <a href="https://leetcode-cn.com/problems/search-in-rotated-sorted-array/">33. 搜索旋转排序数组</a></h2>
+<p>假设按照升序排序的数组在预先未知的某个点上进行了旋转。</p>
+
+<p>( 例如，数组 <code class="highlighter-rouge">[0,1,2,4,5,6,7]</code> 可能变为 <code class="highlighter-rouge">[4,5,6,7,0,1,2]</code> )。</p>
+
+<p>搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。</p>
+
+<p>你可以假设数组中不存在重复的元素。</p>
+
+<p>你的算法时间复杂度必须是 O(log n) 级别。</p>
+
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [4,5,6,7,0,1,2], target = 0
+输出: 4
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [4,5,6,7,0,1,2], target = 3
+输出: -1
+</code></pre></div></div>
+<h3 id="解题思路一-直接对旋转数组进行二分查找">解题思路一 直接对旋转数组进行二分查找。</h3>
+<p>题目要求 O(logN) 的时间复杂度，基本可以断定本题是需要使用二分查找，怎么分是关键。 <br />
+由于题目说数字了无重复，举个例子： <br />
+1 2 3 4 5 6 7 可以大致分为两类， <br />
+第一类 2 3 4 5 6 7 1 这种，也就是 nums[left] &lt;= nums[mid]。此例子中就是 2 &lt;= 5。 <br />
+这种情况下，前半部分有序。因此如果 nums[left] &lt;=target&lt;nums[mid]，则在前半部分找，否则去后半部分找。 <br />
+第二类 6 7 1 2 3 4 5 这种，也就是 nums[left] &gt; nums[mid]。此例子中就是 6 &gt; 2。 <br />
+这种情况下，后半部分有序。因此如果 nums[mid] &lt;target&lt;=nums[right]，则在后半部分找，否则去前半部分找。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">search</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">==</span><span class="kc">null</span><span class="o">||</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="o">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">])</span> <span class="o">{</span><span class="c1">// mid的左半部分升序</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">target</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">])</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">else</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">target</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">])</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="k">else</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="解题思路二-将旋转数组查找目标值-转化成-有序数组查找目标值">解题思路二 将「旋转数组查找目标值」 转化成 「有序数组查找目标值」</h3>
+<p>对于旋转数组 <code class="highlighter-rouge">nums = [4,5,6,7,0,1,2]</code>
+首先根据 <code class="highlighter-rouge">nums[0]</code> 与 <code class="highlighter-rouge">target</code> 的关系判断 <code class="highlighter-rouge">target</code> 是在左段还是右段。</p>
+<ul>
+  <li>例如 <code class="highlighter-rouge">target = 5</code>, 目标值在左半段，因此在 <code class="highlighter-rouge">[4, 5, 6, 7, inf, inf, inf]</code> 这个有序数组里找就行了；</li>
+  <li>例如 <code class="highlighter-rouge">target = 1</code>, 目标值在右半段，因此在 <code class="highlighter-rouge">[-inf, -inf, -inf, -inf, 0, 1, 2]</code> 这个有序数组里找就行了。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">search</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">lo</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">+</span> <span class="o">(</span><span class="n">hi</span> <span class="o">-</span> <span class="n">lo</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="c1">// 先根据 nums[0] 与 target 的关系判断目标值是在左半段还是右半段</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">target</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">{</span>
+                <span class="c1">// 目标值在左半段时，若 mid 在右半段，则将 mid 索引的值改成 inf</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 目标值在右半段时，若 mid 在左半段，则将 mid 索引的值改成 -inf</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">{</span>
+                    <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0427/027/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84">旋转数组</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 27, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0427-027-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二分查找,旋转数组"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0426/026/03"><h2 itemprop="headline" class="item__header">面试题 08.11. 硬币</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-面试题-0811-硬币">题目 <a href="https://leetcode-cn.com/problems/coin-lcci/">面试题 08.11. 硬币</a></h2>
 <p>硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)</p>
@@ -1087,73 +1199,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 25, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-util-swagger-Authorization">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-25T00:00:00+08:00">
     <meta itemprop="keywords" content="Swagger2,工具类"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0423/023"><h2 itemprop="headline" class="item__header">69. x 的平方根</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-69-x-的平方根">题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a></h2>
-<p>实现 <code class="highlighter-rouge">int sqrt(int x)</code> 函数。</p>
-
-<p>计算并返回 x 的平方根，其中 x 是非负整数。</p>
-
-<p>由于返回类型是整数，结果只保留整数的部分，小数部分将被舍去。</p>
-
-<h3 id="示例">示例</h3>
-<h4 id="示例-1">示例 1:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 4
-输出: 2
-</code></pre></div></div>
-<h4 id="示例-2">示例 2:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 8
-输出: 2
-说明: 8 的平方根是 2.82842...,
-     由于返回类型是整数，小数部分将被舍去。
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<p>查找或者搜索型的题目，很自然的会往 <code class="highlighter-rouge">二叉树</code> <code class="highlighter-rouge">DFS</code> <code class="highlighter-rouge">BFS</code> 等上面套</p>
-<h3 id="几个坑点">几个坑点</h3>
-<ol>
-  <li>对于输入参数的判断，可以先处理</li>
-  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
-  <li>平方需要用的结果需要转long，防止溢出 int</li>
-</ol>
-
-<h3 id="代码">代码</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
-            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="c1">// x 一定大于 x/2</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
-
-        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
-            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
-                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
-                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
-            <span class="k">else</span>
-                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0423/023">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 23, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0423-023">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-23T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,二分查找"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>158 post articles, 20 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>159 post articles, 20 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
