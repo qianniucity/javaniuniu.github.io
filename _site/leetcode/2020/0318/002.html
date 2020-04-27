@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>836. 矩形重叠 - JAVA 牛牛</title>
 
-<meta name="description" content="题目 矩形重叠矩形以列表 [x1, y1, x2, y2] 的形式表示，其中 (x1, y1) 为左下角的坐标，(x2, y2) 是右上角的坐标。如果相交的面积为正，则称两矩形重叠。需要明确的是，只在角或边接触的两个矩形不构成重叠。给出两个矩形，判断它们是否重叠并返回结果自己的思路  清楚需要通过x y 轴对比，...">
+<meta name="description" content="难度：简单  本题涉及算法：  思路：检查位置 检查区域  类似题型:题目 矩形重叠矩形以列表 [x1, y1, x2, y2] 的形式表示，其中 (x1, y1) 为左下角的坐标，(x2, y2) 是右上角的坐标。如果相交的面积为正，则称两矩形重叠。需要明确的是，只在角或边接触的两个矩形不构成重叠。给出两个矩形...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0318/002"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -335,25 +335,96 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>836. 矩形重叠</h1></header></div><meta itemprop="headline" content="836. 矩形重叠"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%A3%80%E6%9F%A5%E4%BD%8D%E7%BD%AE">检查位置</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%A3%80%E6%9F%A5%E5%8C%BA%E5%9F%9F">检查区域</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Mar 18, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0318-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-03-18T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+    <meta itemprop="keywords" content="leetcode,检查位置,检查区域"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h3 id="题目-矩形重叠">题目 <a href="https://leetcode-cn.com/problems/rectangle-overlap/">矩形重叠</a></h3>
-<p>矩形以列表 [x1, y1, x2, y2] 的形式表示，其中 (x1, y1) 为左下角的坐标，(x2, y2) 是右上角的坐标。</p>
+<div class="article__content" itemprop="articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>：</li>
+  <li><strong>思路</strong>：<code class="info highlighter-rouge">检查位置</code> <code class="info highlighter-rouge">检查区域</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+<h3 id="题目-矩形重叠">题目 <a href="https://leetcode-cn.com/problems/rectangle-overlap/">矩形重叠</a></h3>
+<p>矩形以列表 <code class="highlighter-rouge">[x1, y1, x2, y2]</code> 的形式表示，其中 <code class="highlighter-rouge">(x1, y1)</code> 为左下角的坐标，<code class="highlighter-rouge">(x2, y2)</code> 是右上角的坐标。</p>
 
 <p>如果相交的面积为正，则称两矩形重叠。需要明确的是，只在角或边接触的两个矩形不构成重叠。</p>
 
 <p>给出两个矩形，判断它们是否重叠并返回结果</p>
 
-<h3 id="自己的思路">自己的思路</h3>
+<h3 id="解题思路一-三种情况">解题思路一 三种情况</h3>
 <ul>
-  <li>清楚需要通过x y 轴对比，但是对比的模型，一直很模糊，通过看解题思路，模型立马清晰起来</li>
-  <li>通过求面积的方式，模型也是模糊</li>
+  <li>
+    <ol>
+      <li>rec1[0]&gt;=rec2[2] 不可能相交</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>rec1[2]&lt;=rec2[0] 不可能相交</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>x轴相交情况下 在判断 y 轴 y轴也有三种情况 判断方法一样</li>
+    </ol>
+  </li>
 </ul>
 
-<h3 id="解题思路">解题思路</h3>
+<h3 id="代码">代码</h3>
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">isRectangleOverlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rec1</span><span class="p">,</span> <span class="n">rec2</span><span class="p">):</span>
+        <span class="s">"""
+        :type rec1: List[int]
+        :type rec2: List[int]
+        :rtype: bool
+        """</span>
+        <span class="k">if</span> <span class="n">rec1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">rec2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rec1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">rec2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rec1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">rec2</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">or</span> <span class="n">rec1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">rec2</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">True</span>
+
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isRectangleOverlap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">rec1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">rec2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">!(</span><span class="n">rec1</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">||</span>   <span class="c1">// left</span>
+                 <span class="n">rec1</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">||</span>   <span class="c1">// bottom</span>
+                 <span class="n">rec1</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">||</span>   <span class="c1">// right</span>
+                 <span class="n">rec1</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">3</span><span class="o">]);</span>    <span class="c1">// top</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="解题思路二-检查区域">解题思路二 检查区域</h3>
+<ul>
+  <li>当 <code class="highlighter-rouge">min(rec1[2], rec2[2]) &gt; max(rec1[0], rec2[0])</code> 时，这两条线段有交集</li>
+  <li>同理可以得到，当 <code class="highlighter-rouge">min(rec1[3], rec2[3]) &gt; max(rec1[1], rec2[1])</code> 时，这两条线段有交集
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isRectangleOverlap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">rec1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">rec2</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">rec1</span><span class="o">[</span><span class="mi">2</span><span class="o">],</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">2</span><span class="o">])</span> <span class="o">&gt;</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">rec1</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">0</span><span class="o">])</span> <span class="o">&amp;&amp;</span>
+              <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">rec1</span><span class="o">[</span><span class="mi">3</span><span class="o">],</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">3</span><span class="o">])</span> <span class="o">&gt;</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">rec1</span><span class="o">[</span><span class="mi">1</span><span class="o">],</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="解题思路三">解题思路三</h3>
 <p>矩形重叠要考虑的情况很多，两个矩形的重叠可能有好多种不同的形态。这道题如果用蛮力做的话，很容易遗漏掉某些情况，导致出错。</p>
 
 <p>矩形重叠是二维的问题，所以情况很多，比较复杂。为了简化问题，我们可以考虑将二维问题转化为一维问题。既然题目中的矩形都是平行于坐标轴的，我们将矩形投影到坐标轴上：</p>
@@ -382,7 +453,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <p>这样，我们就可以写出判断矩形重叠的代码了：</p>
 
-<h3 id="代码">代码</h3>
+<h3 id="代码-1">代码</h3>
+<h4 id="java-1">java</h4>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isRectangleOverlap</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">rec1</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">rec2</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">boolean</span> <span class="n">x_overlap</span> <span class="o">=</span> <span class="o">!(</span><span class="n">rec1</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">||</span> <span class="n">rec2</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">rec1</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
