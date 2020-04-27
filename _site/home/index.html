@@ -536,6 +536,115 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0427-027-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,二分查找,旋转数组"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/alog/2020/0427/004"><h2 itemprop="headline" class="item__header">动态规范(dp)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="文案">文案</h3>
+<p>TODO</p>
+
+<h2 id="例题">例题</h2>
+<h3 id="题一">题一</h3>
+<p>在数组中找出和为s的数，有则返回 <code class="highlighter-rouge">True</code>，没有则返回 <code class="highlighter-rouge">False</code></p>
+<h3 id="示例">示例</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arr = [3,34,4,12,5,2]
+k = 9
+结果 为True (4+5=9)
+</code></pre></div></div>
+
+<h3 id="解题思路">解题思路</h3>
+
+<p><img src="/assets/images/algo/0427/Jietu20200427-161932@2x.jpg" alt="pic1" /></p>
+
+<h4 id="方法一-递归写法">方法一 递归写法</h4>
+<h4 id="代码">代码</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="c1"># 递归写法
+</span><span class="k">def</span> <span class="nf">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
+    <span class="c1"># 找出口
+</span>    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">s</span>
+    <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">s</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="o">-</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c1">#选择arr[i]
+</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">)</span> <span class="c1"># 不选arr[i]
+</span>        <span class="k">return</span> <span class="n">a</span> <span class="ow">or</span> <span class="n">b</span>
+</code></pre></div></div>
+
+<h4 id="方法二-动态规划">方法二 动态规划</h4>
+<h4 id="代码-1">代码</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="k">def</span> <span class="nf">dp_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">),</span><span class="n">S</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">)</span>
+    <span class="n">subset</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">subset</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="n">subset</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">S</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">s</span><span class="p">:</span>
+                <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="o">-</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="c1">#选择arr[i]
+</span>                <span class="n">b</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="c1"># 不选arr[i]
+</span>                <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="ow">or</span> <span class="n">b</span>
+    <span class="n">r</span> <span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">return</span> <span class="n">subset</span><span class="p">[</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="题二">题二</h3>
+<p>在数组中找出两数相加的最大数，其中两个数不能是相邻的两个数</p>
+
+<h4 id="示例-1">示例</h4>
+<p>arr = [1,2,4,1,7,8,3]
+返回最大数为 15 [1,4,8]</p>
+
+<h3 id="解题思路-1">解题思路</h3>
+
+<p><img src="/assets/images/algo/0427/Jietu20200427-165758@2x.jpg" alt="pic2" /></p>
+
+<h4 id="方法一-递归写法-1">方法一 递归写法</h4>
+<h4 id="代码-2">代码</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rec_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="p">):</span>
+    <span class="c1"># 找出口
+</span>    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">rec_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="c1">#选择arr[i]
+</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">rec_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1"># 不选arr[i]
+</span>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="方法二-动态规划-1">方法二 动态规划</h4>
+<h4 id="代码-3">代码</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">dp_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+    <span class="n">opt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">opt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="c1">#选择arr[i]
+</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">opt</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h3 id="参考视频">参考视频</h3>
+
+<ul>
+  <li><a href="https://www.bilibili.com/video/BVc18x411V7fm">动态规划 (第1讲)</a></li>
+  <li><a href="https://www.bilibili.com/video/BV12W411v7rd/?spm_id_from=333.788.videocard.0">动态规划 (第2讲)</a></li>
+</ul>
+</div><p><a href="/alog/2020/0427/004">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E8%8C%83%28dp%29">动态规范(dp)</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 27, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0427-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,动态规范(dp)"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0426/026/03"><h2 itemprop="headline" class="item__header">面试题 08.11. 硬币</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">动态规划(dp)</code></li>
@@ -1077,107 +1186,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0426-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,完全背包问题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0425/025"><h2 itemprop="headline" class="item__header">46. 全排列</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">深度优先搜索(DFS)</code></li>
-  <li><strong>思路</strong>：<code class="info highlighter-rouge">深度优先搜索(DFS)</code></li>
-</ul>
-
-<hr />
-
-<h2 id="题目46-全排列">题目<a href="https://leetcode-cn.com/problems/permutations/">46. 全排列</a></h2>
-<p>给定一个 <strong>没有重复</strong> 数字的序列，返回其所有可能的全排列。</p>
-
-<h3 id="示例">示例:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,2,3]
-输出:
-[
-  [1,2,3],
-  [1,3,2],
-  [2,1,3],
-  [2,3,1],
-  [3,1,2],
-  [3,2,1]
-]
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<p>DFS 通用解题步骤</p>
-<ol>
-  <li>截止条件</li>
-  <li>遍历候选节点</li>
-  <li>筛选</li>
-</ol>
-
-<h3 id="dfs搜索执行顺序">DFS搜索执行顺序</h3>
-<p>如下图</p>
-
-<p><img src="/assets/images/algo/Jietu20200422-195425@2x.jpg" alt="dfs" /></p>
-
-<h3 id="注意点">注意点</h3>
-<ol>
-  <li><code class="highlighter-rouge">res.add(new ArrayList&lt;&gt;(list))</code>  和<code class="highlighter-rouge">res.add(list)</code> 这两个的区别，楼主在这里花了很多时间，读者可以复制在自己的编辑器中看看效果</li>
-  <li>当直接发回list 结果为 [] [] [] [] [] [] ,因为是list 只是引用，在遍历的过程中还会继续对list操作</li>
-  <li>也就是说，当在返回数据类型为引用类型，需要通过new的方式做返回</li>
-</ol>
-
-<h3 id="参考视频">参考视频</h3>
-<ul>
-  <li><a href="https://www.bilibili.com/video/BV1qE411E7di?from=search&amp;seid=1863457748201838862">[算法]dfs介绍</a></li>
-  <li><a href="https://www.bilibili.com/video/BV1Ks411579J/?spm_id_from=333.788.videocard.1">[Python] BFS和DFS算法（第1讲）</a></li>
-  <li><a href="https://www.bilibili.com/video/BV1Ks411575U/?spm_id_from=333.788.videocard.0">[Python] BFS和DFS算法（第2讲）</a></li>
-  <li><a href="https://www.bilibili.com/video/BV1ts41157Sy/?spm_id_from=333.788.videocard.0">[Python] BFS和DFS算法（第3讲）—— 从BFS到Dijkstra算法</a></li>
-</ul>
-
-<h3 id="代码">代码</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;();</span>
-    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">permute</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">used</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">];</span><span class="c1">// 添加判断条件</span>
-        <span class="no">DFS</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span><span class="n">list</span><span class="o">,</span><span class="n">used</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">DFS</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">,</span><span class="kt">boolean</span><span class="o">[]</span> <span class="n">used</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 1.截止条件</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">()==</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">//    res.add(list); // 这里是重点</span>
-            <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;(</span><span class="n">list</span><span class="o">));</span> <span class="c1">// 这里是重点</span>
-            <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="c1">// 2.遍历候选节点</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-            <span class="c1">// 2.1 筛选</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">used</span><span class="o">[</span><span class="n">i</span><span class="o">]!=</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
-                <span class="n">used</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-                <span class="no">DFS</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span><span class="n">list</span><span class="o">,</span><span class="n">used</span><span class="o">);</span>
-                <span class="n">list</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">()-</span><span class="mi">1</span><span class="o">);</span>
-                <span class="n">used</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0425/025">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%28DFS%29">深度优先搜索(DFS)</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 25, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0425-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-25T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,深度优先搜索(DFS)"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>160 post articles, 20 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>161 post articles, 21 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1190,7 +1200,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page20"><span>20</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page21"><span>21</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
