@@ -531,6 +531,32 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<h3 id="解题思路三-深度优先搜索dfs">解题思路三 深度优先搜索(DFS)</h3>
+<p>从最开始的节点出发，要么选左，要么选右，选择了一边之后如果还能选，那再继续上述过程，这不就是一棵树，然后就按dfs写的，但在用例较长的情况下超时了，只通过了 15/40 的样例。思路1只是提供一种思考的思路，耗时过多，没法通过本题。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScoredfs</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">cardPoints</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">cardPoints</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">max</span> <span class="o">+=</span> <span class="n">num</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="kt">int</span> <span class="n">scores</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">max</span> <span class="o">=</span> <span class="n">dfscard</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">,</span> <span class="n">k</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">scores</span><span class="o">);</span>
+
+        <span class="k">return</span> <span class="n">max</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">dfscard</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">cardPoints</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">scores</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="c1">// 边界条件，只能选一次的话，就选左或者右中的较大者</span>
+            <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">[</span><span class="n">l</span><span class="o">],</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">r</span><span class="o">]);</span>
+        <span class="kt">int</span> <span class="n">l_max</span> <span class="o">=</span> <span class="n">dfscard</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">scores</span><span class="o">)</span> <span class="o">+</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">l</span><span class="o">];</span><span class="c1">// 选择左边的情况，并继续向下dfs</span>
+        <span class="kt">int</span> <span class="n">r_max</span> <span class="o">=</span> <span class="n">dfscard</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">scores</span><span class="o">)</span> <span class="o">+</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">r</span><span class="o">];</span><span class="c1">// 选择右边的情况，并继续向下dfs</span>
+        <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">l_max</span><span class="o">,</span> <span class="n">r_max</span><span class="o">);</span> <span class="c1">// 返回选左或者选右的较大者</span>
+    <span class="o">}</span>
+</code></pre></div></div>
 </div><p><a href="/leetcode/2020/0426/025">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=leetcode">leetcode</a>
@@ -540,9 +566,12 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%28DFS%29">深度优先搜索(DFS)</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,前缀和,滑动窗口"></div>
+    <meta itemprop="keywords" content="leetcode,前缀和,滑动窗口,深度优先搜索(DFS)"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0426/026"><h2 itemprop="headline" class="item__header">5392. 分割字符串的最大得分</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-5392-分割字符串的最大得分">题目 <a href="https://leetcode-cn.com/problems/maximum-score-after-splitting-a-string/">5392. 分割字符串的最大得分</a></h2>
