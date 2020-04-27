@@ -322,6 +322,79 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0427/027/02"><h2 itemprop="headline" class="item__header">81. 搜索旋转排序数组 II</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-81-搜索旋转排序数组-ii">题目 <a href="https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/">81. 搜索旋转排序数组 II</a></h2>
+<p>假设按照升序排序的数组在预先未知的某个点上进行了旋转。</p>
+
+<p>( 例如，数组 <code class="highlighter-rouge">[0,0,1,2,2,5,6]</code> 可能变为 <code class="highlighter-rouge">[2,5,6,0,0,1,2]</code> )。</p>
+
+<p>编写一个函数来判断给定的目标值是否存在于数组中。若存在返回 true，否则返回 false。</p>
+
+<h3 id="示例">示例</h3>
+<h4 id="示例1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [2,5,6,0,0,1,2], target = 0
+输出: true
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [2,5,6,0,0,1,2], target = 3
+输出: false
+</code></pre></div></div>
+<h4 id="进阶">进阶:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这是 搜索旋转排序数组 的延伸题目，本题中的 nums  可能包含重复元素。
+这会影响到程序的时间复杂度吗？会有怎样的影响，为什么？
+</code></pre></div></div>
+
+<h3 id="类似题型-33-搜索旋转排序数组">类似题型 <a href="/leetcode/2020/0427/027/01">33. 搜索旋转排序数组</a></h3>
+
+<h3 id="解题思路">解题思路</h3>
+<ul>
+  <li>被旋转的值肯定小于 nums[0]</li>
+  <li>注意对 [1,3,1,1,1]做特殊处理</li>
+</ul>
+
+<h3 id="代码">代码</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">search</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;=</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 有些字段会重复出现，所以需要 &lt;=</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="o">((</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)&gt;&gt;</span><span class="mi">1</span><span class="o">);</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]==</span><span class="n">target</span><span class="o">)</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">])</span> <span class="o">{</span> <span class="c1">// 对数组如 [1,3,1,1,1]做特殊处理</span>
+                <span class="n">left</span><span class="o">++;</span>
+                <span class="n">right</span><span class="o">--;</span>
+            <span class="o">}</span><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&gt;=</span><span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">])</span> <span class="o">{</span><span class="c1">// mid的左半部分升序</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">target</span><span class="o">&gt;=</span><span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">]&amp;&amp;</span><span class="n">target</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">])</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+                <span class="k">else</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">target</span><span class="o">&lt;=</span><span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">]&amp;&amp;</span><span class="n">target</span><span class="o">&gt;</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">])</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+                <span class="k">else</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0427/027/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84">旋转数组</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 27, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0427-027-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二分查找,旋转数组"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0427/027/01"><h2 itemprop="headline" class="item__header">33. 搜索旋转排序数组</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="题目-33-搜索旋转排序数组">题目 <a href="https://leetcode-cn.com/problems/search-in-rotated-sorted-array/">33. 搜索旋转排序数组</a></h2>
 <p>假设按照升序排序的数组在预先未知的某个点上进行了旋转。</p>
@@ -343,6 +416,11 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: nums = [4,5,6,7,0,1,2], target = 3
 输出: -1
 </code></pre></div></div>
+<h3 id="解题思路">解题思路</h3>
+<ul>
+  <li>被旋转的值肯定小于 nums[0]</li>
+</ul>
+
 <h3 id="解题思路一-直接对旋转数组进行二分查找">解题思路一 直接对旋转数组进行二分查找。</h3>
 <p>题目要求 O(logN) 的时间复杂度，基本可以断定本题是需要使用二分查找，怎么分是关键。 <br />
 由于题目说数字了无重复，举个例子： <br />
@@ -1043,164 +1121,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 25, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0425-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-25T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,DFS"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/docs-util/swagger/Authorization"><h2 itemprop="headline" class="item__header">SpringBoot添加swagger2接口文档并添加全局Authorization参数</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="依赖包">依赖包</h3>
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>io.springfox<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>springfox-swagger2<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.6.1<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-
-<span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>io.springfox<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>springfox-swagger-ui<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>2.6.1<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</code></pre></div></div>
-
-<h3 id="配置类securityschemes与securitycontexts作用为配置全局authorization参数">配置类（securitySchemes与securityContexts作用为配置全局Authorization参数）</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
-<span class="nd">@EnableSwagger2</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SwaggerConfig</span> <span class="o">{</span>
-    <span class="c1">//http://localhost:9007/swagger-ui.html</span>
-    <span class="nd">@Bean</span>
-    <span class="kd">public</span> <span class="nc">Docket</span> <span class="nf">createRestApi</span><span class="o">()</span> <span class="o">{</span>
-
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">Docket</span><span class="o">(</span><span class="nc">DocumentationType</span><span class="o">.</span><span class="na">SWAGGER_2</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">apiInfo</span><span class="o">(</span><span class="n">apiInfo</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">select</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">apis</span><span class="o">(</span><span class="nc">RequestHandlerSelectors</span><span class="o">.</span><span class="na">basePackage</span><span class="o">(</span><span class="s">"cn.com.dinglisec.iot.uaa.api"</span><span class="o">))</span>
-                <span class="o">.</span><span class="na">paths</span><span class="o">(</span><span class="nc">PathSelectors</span><span class="o">.</span><span class="na">any</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">build</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">securitySchemes</span><span class="o">(</span><span class="n">securitySchemes</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">securityContexts</span><span class="o">(</span><span class="n">securityContexts</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="nc">ApiInfo</span> <span class="nf">apiInfo</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">ApiInfoBuilder</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">title</span><span class="o">(</span><span class="s">"springboot利用swagger构建api文档"</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">description</span><span class="o">(</span><span class="s">"简单优雅的restful风格"</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">termsOfServiceUrl</span><span class="o">(</span><span class="s">""</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">version</span><span class="o">(</span><span class="s">"1.0"</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ApiKey</span><span class="o">&gt;</span> <span class="nf">securitySchemes</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ApiKey</span><span class="o">&gt;</span> <span class="n">apiKeys</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">apiKeys</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">,</span> <span class="s">"Authorization"</span><span class="o">,</span> <span class="s">"header"</span><span class="o">));</span>
-        <span class="k">return</span> <span class="n">apiKeys</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">SecurityContext</span><span class="o">&gt;</span> <span class="nf">securityContexts</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">SecurityContext</span><span class="o">&gt;</span> <span class="n">securityContexts</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">securityContexts</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">SecurityContext</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
-                <span class="o">.</span><span class="na">securityReferences</span><span class="o">(</span><span class="n">defaultAuth</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">forPaths</span><span class="o">(</span><span class="nc">PathSelectors</span><span class="o">.</span><span class="na">regex</span><span class="o">(</span><span class="s">"^(?!auth).*$"</span><span class="o">)).</span><span class="na">build</span><span class="o">());</span>
-        <span class="k">return</span> <span class="n">securityContexts</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">SecurityReference</span><span class="o">&gt;</span> <span class="nf">defaultAuth</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">AuthorizationScope</span> <span class="n">authorizationScope</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AuthorizationScope</span><span class="o">(</span><span class="s">"global"</span><span class="o">,</span> <span class="s">"accessEverything"</span><span class="o">);</span>
-        <span class="nc">AuthorizationScope</span><span class="o">[]</span> <span class="n">authorizationScopes</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AuthorizationScope</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
-        <span class="n">authorizationScopes</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">authorizationScope</span><span class="o">;</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">SecurityReference</span><span class="o">&gt;</span> <span class="n">securityReferences</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">securityReferences</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">SecurityReference</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">,</span> <span class="n">authorizationScopes</span><span class="o">));</span>
-        <span class="k">return</span> <span class="n">securityReferences</span><span class="o">;</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="配置跳过过滤器-解决swagger2不能获取页面的问题">配置跳过过滤器 解决swagger2不能获取页面的问题</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">JwtAuthenticationFilter</span> <span class="kd">extends</span> <span class="nc">OncePerRequestFilter</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">PathMatcher</span> <span class="n">pathMatcher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AntPathMatcher</span><span class="o">();</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">doFilterInternal</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="nc">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">filterChain</span><span class="o">)</span>
-            <span class="kd">throws</span> <span class="nc">ServletException</span><span class="o">,</span> <span class="nc">IOException</span> <span class="o">{</span>
-
-        <span class="k">if</span> <span class="o">(</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">(),</span> <span class="s">"swagger"</span><span class="o">)</span>
-                <span class="o">||</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">(),</span> <span class="s">"webjars"</span><span class="o">)</span>
-                <span class="o">||</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">(),</span> <span class="s">"v2"</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getServerName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="s">"localhost"</span><span class="o">))</span> <span class="o">{</span>
-                <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">isExceededUrl</span><span class="o">(</span><span class="n">request</span><span class="o">))</span> <span class="o">{</span>
-                <span class="c1">// 登录注册请求直接放行</span>
-                <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="c1">// 获取请求头中的Authorization信息</span>
-                <span class="nc">String</span> <span class="n">tokenHeader</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="nc">TokenConstants</span><span class="o">.</span><span class="na">TOKEN_HEADER</span><span class="o">);</span>
-
-                <span class="c1">// token不存在则返回</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nc">StringUtils</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">tokenHeader</span><span class="o">)</span> <span class="o">||</span> <span class="o">!</span><span class="n">tokenHeader</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="nc">TokenConstants</span><span class="o">.</span><span class="na">TOKEN_PREFIX</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="nc">ServletOutputStream</span> <span class="n">out</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">();</span>
-                    <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">ResponseConstants</span><span class="o">.</span><span class="na">TOKEN_IS_INVALID</span><span class="o">);</span>
-                    <span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-                    <span class="k">return</span><span class="o">;</span>
-                <span class="o">}</span>
-
-                <span class="c1">// token过期返回</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nc">JwtUtil</span><span class="o">.</span><span class="na">isExpiration</span><span class="o">(</span><span class="nc">JwtUtil</span><span class="o">.</span><span class="na">getTokenByHeader</span><span class="o">(</span><span class="n">tokenHeader</span><span class="o">)))</span> <span class="o">{</span>
-                    <span class="nc">ServletOutputStream</span> <span class="n">out</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">getOutputStream</span><span class="o">();</span>
-                    <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="nc">ResponseConstants</span><span class="o">.</span><span class="na">TOKEN_IS_INVALID</span><span class="o">);</span>
-                    <span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-                    <span class="k">return</span><span class="o">;</span>
-                <span class="o">}</span>
-
-                <span class="nc">String</span> <span class="n">uid</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
-                <span class="k">try</span> <span class="o">{</span>
-                    <span class="n">uid</span> <span class="o">=</span> <span class="nc">JwtUtil</span><span class="o">.</span><span class="na">getUidByTokenHeader</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getHeader</span><span class="o">(</span><span class="nc">TokenConstants</span><span class="o">.</span><span class="na">TOKEN_HEADER</span><span class="o">));</span>
-                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-                <span class="o">}</span>
-                <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"uid"</span><span class="o">,</span> <span class="n">uid</span><span class="o">);</span>
-
-                <span class="nc">HttpServletRequest</span> <span class="n">req</span> <span class="o">=</span> <span class="o">(</span><span class="nc">HttpServletRequest</span><span class="o">)</span> <span class="n">request</span><span class="o">;</span>
-                <span class="nc">MutableHttpServletRequest</span> <span class="n">mutableRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MutableHttpServletRequest</span><span class="o">(</span><span class="n">req</span><span class="o">);</span>
-                <span class="n">mutableRequest</span><span class="o">.</span><span class="na">putHeader</span><span class="o">(</span><span class="s">"uid"</span><span class="o">,</span> <span class="n">uid</span><span class="o">);</span>
-                <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * @Description:我们只对地址 /api 开头的api检查jwt. 不然的话登录/login也需要jwt 做url匹配，参考
-     *                     https://www.cnblogs.com/zhangxiaoguang/p/5855113.html
-     * @param request
-     * @return boolean
-     */</span>
-    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isProtectedUrl</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">pathMatcher</span><span class="o">.</span><span class="na">match</span><span class="o">(</span><span class="s">"/**"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * @Description:登录注册不做校验
-     * @param request
-     * @return boolean
-     */</span>
-    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isExceededUrl</span><span class="o">(</span><span class="nc">HttpServletRequest</span> <span class="n">request</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">pathMatcher</span><span class="o">.</span><span class="na">match</span><span class="o">(</span><span class="s">"/user/login"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">())</span>
-                <span class="o">||</span> <span class="n">pathMatcher</span><span class="o">.</span><span class="na">match</span><span class="o">(</span><span class="s">"/user/register"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">());</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-
-</code></pre></div></div>
-</div><p><a href="/docs-util/swagger/Authorization">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=Swagger2">Swagger2</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%B7%A5%E5%85%B7%E7%B1%BB">工具类</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 25, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-util-swagger-Authorization">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-25T00:00:00+08:00">
-    <meta itemprop="keywords" content="Swagger2,工具类"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>159 post articles, 20 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>160 post articles, 20 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
