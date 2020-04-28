@@ -322,69 +322,178 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/web/skill/arithmetic"><h2 itemprop="headline" class="item__header">异或运算符的使用（同样适用与其他语言）</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3>|=</h3>
-<p>关于 <code class="highlighter-rouge">|= 运算符</code>：<code class="highlighter-rouge">|= 运算符</code>和 <code class="highlighter-rouge">+=</code> 这一类的运算符一样，拆解开就是 <code class="highlighter-rouge">a = a | b</code>；</p>
+          <header><a href="/web/skill/arithmetic"><h2 itemprop="headline" class="item__header">按位与、或、异或等运算方法</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="按位与运算符">按位与运算符（&amp;）</h3>
+<blockquote>
+  <p>参加运算的两个数据，按二进制位进行“与”运算。</p>
+</blockquote>
 
-<p>代码如下：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>运算规则：0&amp;0=0;   0&amp;1=0;    1&amp;0=0;     1&amp;1=1;
+即：两位同时为“1”，结果才为“1”，否则为0
+</code></pre></div></div>
+<p><strong>例如</strong>：3&amp;5  即 0000 0011 &amp; 0000 0101 = 0000 0001   因此，3&amp;5的值得1。</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">strictfp</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<p><em>另，负数按补码形式参加按位与运算。</em></p>
 
-   <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="c1">// 0000 0101</span>
-   <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 0000 0011</span>
-   <span class="n">a</span> <span class="o">|=</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 0000 00111</span>
-   <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<h4 id="与运算的特殊用途">“与运算”的特殊用途：</h4>
+<ul>
+  <li>清零。如果想将一个单元清零，即使其全部二进制位为0，只要与一个各位都为零的数值相与，结果为零。</li>
+  <li>取一个数中指定位
+    <ul>
+      <li><strong>方法</strong>：找一个数，对应X要取的位，该数的对应位为1，其余位为零，此数与X进行“与运算”可以得到X中的指定位。</li>
+    </ul>
+  </li>
+</ul>
 
-<span class="o">}</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例：设X=10101110，
+    取X的低4位，用 X &amp; 0000 1111 = 0000 1110 即可得到；
+    还可用来取X的2、4、6位。
 </code></pre></div></div>
 
-<p>具体规则为：两个二进制对应位为0时该位为0，否则为1。拿5的二进制 0000 0101 和 3的二进制 0000 0011 进行|运算，后三位的的对应位都不是同时等于0，所以最终结果为 0000 0111 也就是7的二进制。</p>
+<h3 id="按位或运算符">按位或运算符（|）</h3>
+<blockquote>
+  <p>参加运算的两个对象，按二进制位进行“或”运算。</p>
+</blockquote>
 
-<h3 id="-1">&amp;=</h3>
-<p><code class="highlighter-rouge">&amp;=</code> 和 <code class="highlighter-rouge">|=</code> 基本是一样的，只不过对于比较同位方式不同。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>运算规则：0|0=0；   0|1=1；   1|0=1；    1|1=1；
+即 ：参加运算的两个对象只要有一个为1，其值为1。
+</code></pre></div></div>
+<p>例如:3|5　即 0000 0011 | 0000 0101 = 0000 0111   因此，3|5的值得7。　</p>
 
-<p>代码如下：</p>
+<p><em>另，负数按补码形式参加按位或运算。</em></p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">strictfp</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<h4 id="或运算特殊作用">“或运算”特殊作用：</h4>
+<ul>
+  <li>常用来对一个数据的某些位置1。
+<strong>方法</strong>：找到一个数，对应X要置1的位，该数的对应位为1，其余位为零。此数与X相或可使X中的某些位置1。</li>
+</ul>
 
-    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="c1">// 0000 0101</span>
-    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 0000 0011</span>
-    <span class="n">a</span> <span class="o">&amp;=</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 0000 0001</span>
-    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
-<span class="o">}</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例：将X=10100000的低4位置1 ，用 X | 0000 1111 = 1010 1111即可得到。
 </code></pre></div></div>
 
-<p>具体规则为：两个二进制对应位都为1时，结果为1，否则结果为都0。拿5的二进制 0000 0101 和 3的二进制 0000 0011 进行&amp;运算，只有最后一位都为1，则最终结果为 0000 0001 也就是1的二进制。</p>
+<h3 id="异或运算符">异或运算符（^）</h3>
+<blockquote>
+  <p>参加运算的两个数据，按二进制位进行“异或”运算。</p>
+</blockquote>
 
-<h3 id="-2">^=</h3>
-<p>运算规则还是同上。</p>
-
-<p>代码如下：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">strictfp</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="c1">// 0000 0101</span>
-    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 0000 0011</span>
-    <span class="n">a</span> <span class="o">^=</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 0000 0110</span>
-    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
-<span class="o">}</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>运算规则：0^0=0；   0^1=1；   1^0=1；   1^1=0；
+即：参加运算的两个对象，如果两个相应位为“异”（值不同），则该位结果为1，否则为0。
 </code></pre></div></div>
-<p>具体规则为：两个二进制对应位相同时，结果为0，否则结果为1。拿5的二进制 0000 0101 和 3的二进制 0000 0011 进行^运算，1-5位对应位都是0所以1-5位都为0，第8位都为1所以第8位也为0，其他的对应位都不相等所以为1，则最终结果为 0000 0110 也就是6的二进制。</p>
+<p> </p>
+<h4 id="异或运算的特殊作用">“异或运算”的特殊作用：</h4>
+<ul>
+  <li>使特定位翻转找一个数，对应X要翻转的各位，该数的对应位为1，其余位为零，此数与X对应位异或即可。</li>
+</ul>
 
-<p>总结：</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例：X=10101110，使X低4位翻转，用X ^ 0000 1111 = 1010 0001即可得到。
+</code></pre></div></div>
+<ul>
+  <li>与0相异或，保留原值 ，X ^ 0000 0000 = 1010 1110。</li>
+</ul>
 
-<p>|=：两个二进制对应位都为0时，结果等于0，否则结果等于1；</p>
+<p>从上面的例题可以清楚的看到这一点。</p>
 
-<p>&amp;=：两个二进制的对应位都为1时，结果为1，否则结果等于0；</p>
+<h3 id="取反运算符">取反运算符（~）</h3>
+<blockquote>
+  <p>参加运算的一个数据，按二进制位进行“取反”运算。</p>
+</blockquote>
 
-<p>^=：两个二进制的对应位相同，结果为0，否则结果为1。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>运算规则：~1=0；   ~0=1；
+即：对一个二进制数按位取反，即将0变1，1变0。
+</code></pre></div></div>
+<p>使一个数的最低位为零，可以表示为：a&amp;~1。</p>
+
+<p>~1的值为1111111111111110，再按“与”运算，最低位一定为0。因为“~”运算符的优先级比算术运算符、关系运算符、逻辑运算符和其他运算符都高。</p>
+
+<h3 id="左移运算符">左移运算符（«）</h3>
+<blockquote>
+  <p>将一个运算对象的各二进制位全部左移若干位（左边的二进制位丢弃，右边补0）。</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例：a = a &lt;&lt; 2 将a的二进制位左移2位，右补0，
+左移1位后a = a * 2; 
+</code></pre></div></div>
+<p>若左移时舍弃的高位不包含1，则每左移一位，相当于该数乘以2。</p>
+
+<h3 id="右移运算符">右移运算符（»）</h3>
+<blockquote>
+  <p>将一个数的各二进制位全部右移若干位，正数左补0，负数左补1，右边丢弃。</p>
+</blockquote>
+
+<p>操作数每右移一位，相当于该数除以2。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例如：a = a &gt;&gt; 2 将a的二进制位右移2位，
+左补0 or 补1 得看被移数是正还是负。
+</code></pre></div></div>
+<p>&gt;&gt; 运算符把 expression1 的所有位向右移 expression2 指定的位数。expression1 的符号位被用来填充右移后左边空出来的位。向右移出的位被丢弃。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例如，下面的代码被求值后，temp 的值是 -4：
+-14 （即二进制的 11110010）右移两位等于 -4 （即二进制的 11111100）。
+var temp = -14 &gt;&gt; 2
+</code></pre></div></div>
+<p> </p>
+<h3 id="无符号右移运算符">无符号右移运算符（»&gt;）</h3>
+
+<p>&gt;&gt;&gt; 运算符把 expression1 的各个位向右移 expression2 指定的位数。右移后左边空出的位用零来填充。移出右边的位被丢弃。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>例如：var temp = -14 &gt;&gt;&gt; 2
+</code></pre></div></div>
+<p>变量 temp 的值为 -14 （即二进制的 11111111 11111111 11111111 11110010），向右移两位后等于 1073741820 （即二进制的 00111111 11111111 11111111 11111100）。</p>
+
+<h3 id="复合赋值运算符">复合赋值运算符</h3>
+
+<p>位运算符与赋值运算符结合，组成新的复合赋值运算符，它们是：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&amp;=    例：a &amp;= b        相当于a=a &amp; b
+
+|=    例：a |= b        相当于a=a | b
+
+&gt;&gt;=   例：a &gt;&gt;= b       相当于a=a &gt;&gt; b
+
+&lt;&lt;= 例：a &lt;&lt;= b       相当于a=a &lt;&lt; b
+
+^=   例：a ^= b       相当于a=a ^ b
+</code></pre></div></div>
+
+<p>运算规则：和前面讲的复合赋值运算符的运算规则相似。</p>
+
+<ul>
+  <li>
+    <p>|=：两个二进制对应位都为0时，结果等于0，否则结果等于1；</p>
+  </li>
+  <li>
+    <p>&amp;=：两个二进制的对应位都为1时，结果为1，否则结果等于0；</p>
+  </li>
+  <li>
+    <p>^=：两个二进制的对应位相同，结果为0，否则结果为1。</p>
+  </li>
+</ul>
+
+<p>不同长度的数据进行位运算</p>
+
+<p>如果两个不同长度的数据进行位运算时，系统会将二者按右端对齐，然后进行位运算。</p>
+
+<p>以“与”运算为例说明如下：我们知道在C语言中long型占4个字节，int型占2个字节，如果一个long型数据与一个int型数据进行“与”运算，右端对齐后，左边不足的位依下面三种情况补足，</p>
+<ul>
+  <li>如果整型数据为正数，左边补16个0。</li>
+  <li>如果整型数据为负数，左边补16个1。</li>
+  <li>如果整形数据为无符号数，左边也补16个0。</li>
+</ul>
+
+<p>如：long a=123;int b=1;计算a &amp; b。</p>
+
+<p>如：long a=123;int b=-1;计算a &amp; b。</p>
+
+<p>如：long a=123;unsigned int b=1;计算a &amp; b。</p>
 </div><p><a href="/web/skill/arithmetic">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7">开发技巧</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%7C%3D%E3%80%81%26%3D%E3%80%81%5E%3D">|=、&=、^=</a>
+                href="/archive.html?tag=%E6%8C%89%E4%BD%8D%E4%B8%8E%E8%BF%90%E7%AE%97%E7%AC%A6">按位与运算符</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 28, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="web-skill-arithmetic">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-28T00:00:00+08:00">
-    <meta itemprop="keywords" content="开发技巧,|=、&=、^="></div>
+    <meta itemprop="keywords" content="开发技巧,按位与运算符"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/web/skill/common"><h2 itemprop="headline" class="item__header">常用技巧</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="左右移动运算符">左右移动运算符</h3>
@@ -392,6 +501,10 @@ MFrGw6cAAAAASUVORK5CYII=" />
 &gt;&gt; : 右移运算符，num &gt;&gt; 1，相当于num除以2
 &gt;&gt;&gt; : 无符号右移运算符，num &gt;&gt;&gt; 1，相当于num除以2，忽略符号位，空位都以0补齐
 
+</code></pre></div></div>
+
+<h3 id="python">python</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tertools.permutations(list）这个库。。自动返回列表的全排列啊
 </code></pre></div></div>
 </div><p><a href="/web/skill/common">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
@@ -403,12 +516,130 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="web-skill-common">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-28T00:00:00+08:00">
     <meta itemprop="keywords" content="开发技巧,|=、&=、^="></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0427/028/03"><h2 itemprop="headline" class="item__header">136. 只出现一次的数字</h2></a></header>
+          <header><a href="/leetcode/2020/0428/028/04"><h2 itemprop="headline" class="item__header">面试题56 - I. 数组中数字出现的次数</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">简单</code></li>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">异或运算</code>  <code class="success highlighter-rouge">二分查找</code></li>
+  <li><strong>思路</strong>：<code class="success highlighter-rouge">异或运算</code>  <code class="success highlighter-rouge">二分查找</code></li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0428/028/03">136. 只出现一次的数字</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="题目-面试题56---i-数组中数字出现的次数">题目 <a href="https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-lcof/">面试题56 - I. 数组中数字出现的次数</a></h2>
+<p>一个整型数组 <code class="highlighter-rouge">nums</code> 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是<code class="highlighter-rouge">O(n)</code>，空间复杂度是<code class="highlighter-rouge">O(1)</code>。</p>
+
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [4,1,4,6]
+输出：[1,6] 或 [6,1]
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [1,2,10,4,1,4,3,3]
+输出：[2,10] 或 [10,2]
+</code></pre></div></div>
+
+<h4 id="限制">限制：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2 &lt;= nums &lt;= 10000
+</code></pre></div></div>
+
+<h3 id="方法二-二分法">方法二 二分法</h3>
+<ul>
+  <li>知识提供一种思路，这个代码在leetcode 运行会超时</li>
+  <li>一个很棒的概念 只要符合单调，就可以二分</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">singleNumbers</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span><span class="mi">0</span> <span class="o">,</span><span class="n">min</span><span class="o">=</span><span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span> <span class="n">max</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">,</span><span class="n">zeroCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="nl">num:</span><span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span>
+                <span class="n">zeroCount</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="n">min</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">min</span><span class="o">,</span><span class="n">num</span><span class="o">);</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span><span class="n">num</span><span class="o">);</span>
+            <span class="n">sum</span> <span class="o">^=</span> <span class="n">num</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 需要特判一下某个数是0的情况。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">zeroCount</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">sum</span><span class="o">,</span><span class="mi">0</span><span class="o">};</span>
+        <span class="kt">int</span> <span class="n">lo</span> <span class="o">=</span><span class="n">min</span><span class="o">,</span><span class="n">hi</span> <span class="o">=</span> <span class="n">max</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">lo</span><span class="o">&lt;=</span><span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">?</span><span class="n">lo</span><span class="o">+</span><span class="n">hi</span> <span class="o">&gt;&gt;</span><span class="mi">1</span> <span class="o">:</span><span class="n">lo</span><span class="o">+(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="o">)&gt;&gt;</span><span class="mi">1</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">loSum</span> <span class="o">=</span><span class="mi">0</span><span class="o">,</span><span class="n">hiSum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="nl">num:</span><span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&lt;=</span><span class="n">mid</span><span class="o">)</span>
+                    <span class="n">loSum</span> <span class="o">^=</span> <span class="n">num</span><span class="o">;</span>
+                <span class="k">else</span>
+                    <span class="n">hiSum</span> <span class="o">^=</span> <span class="n">num</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">loSum</span><span class="o">!=</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">hiSum</span><span class="o">!=</span><span class="mi">0</span><span class="o">)</span>
+                <span class="c1">// 两个都不为0，说明 p 和 q 分别落到2个数组里了。</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">loSum</span><span class="o">,</span><span class="n">hiSum</span><span class="o">};</span>
+
+            <span class="k">if</span> <span class="o">(</span><span class="n">loSum</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span>
+                <span class="c1">// 说明 p 和 q 都比 mid 大，所以比 mid 小的数的异或和变为0了。</span>
+                <span class="n">lo</span> <span class="o">=</span><span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="c1">// 说明 p 和 q 都不超过 mid</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+
+        <span class="o">}</span>
+        <span class="c1">// 其实如果输入是符合要求的，程序不会执行到这里，为了防止compile error加一下</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="解题思路--分组异或-需要对位运算符理解很深刻">解题思路  分组异或 (需要对位运算符理解很深刻)</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">singleNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="s">"""
+        :type nums: List[int]
+        :rtype: List[int]
+        """</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">^</span> <span class="n">y</span><span class="p">,</span> <span class="n">nums</span><span class="p">)</span> <span class="c1"># 运算规则：0^0=0；   0^1=1；   1^0=1；   1^1=0；
+</span>        <span class="c1"># 获得ret中最低位的1 0&amp;0=0;   0&amp;1=0;    1&amp;0=0;     1&amp;1=1;
+</span>        <span class="n">div</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">div</span> <span class="o">&amp;</span> <span class="n">ret</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">div</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="n">div</span><span class="p">:</span>
+                <span class="n">a</span> <span class="o">^=</span> <span class="n">n</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">b</span> <span class="o">^=</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">]</span>
+
+
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0428/028/04">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97">异或运算</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0428-029-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,异或运算,二分查找"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0428/028/03"><h2 itemprop="headline" class="item__header">136. 只出现一次的数字</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
   <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">异或运算</code> <code class="success highlighter-rouge">暴力遍历</code> <code class="success highlighter-rouge">哈希表</code></li>
   <li><strong>思路</strong>：<code class="info highlighter-rouge">异或运算</code> <code class="info highlighter-rouge">暴力遍历</code> <code class="info highlighter-rouge">哈希表</code></li>
-  <li><strong>类似题型</strong>:</li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0428/028/04">面试题56 - I. 数组中数字出现的次数</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -496,7 +727,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
-</div><p><a href="/leetcode/2020/0427/028/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+</div><p><a href="/leetcode/2020/0428/028/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=leetcode">leetcode</a>
             </li><li>
@@ -509,7 +740,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 28, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0427-028-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-28T00:00:00+08:00">
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0428-028-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-28T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,异或运算,暴力遍历,哈希表"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0427/027/02"><h2 itemprop="headline" class="item__header">81. 搜索旋转排序数组 II</h2></a></header>
@@ -959,155 +1190,8 @@ k = 9
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,动态规划(dp),完全背包问题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0426/025"><h2 itemprop="headline" class="item__header">5393. 可获得的最大点数</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">深度优先搜索(DFS)</code></li>
-  <li><strong>思路</strong>：<code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">滑动窗口</code> <code class="info highlighter-rouge">深度优先搜索(DFS)</code></li>
-</ul>
-
-<hr />
-
-<h2 id="题目-5393-可获得的最大点数">题目 <a href="https://leetcode-cn.com/problems/maximum-points-you-can-obtain-from-cards/">5393. 可获得的最大点数</a></h2>
-<p>几张卡牌 <strong>排成一行</strong>，每张卡牌都有一个对应的点数。点数由整数数组 <code class="highlighter-rouge">cardPoints</code> 给出。</p>
-
-<p>每次行动，你可以从行的开头或者末尾拿一张卡牌，最终你必须正好拿 k 张卡牌。</p>
-
-<p>你的点数就是你拿到手中的所有卡牌的点数之和。</p>
-
-<p>给你一个整数数组 <code class="highlighter-rouge">cardPoints</code> 和整数 <code class="highlighter-rouge">k</code>，请你返回可以获得的最大点数。</p>
-
-<h3 id="示例">示例</h3>
-<h4 id="示例-1">示例 1：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：cardPoints = [1,2,3,4,5,6,1], k = 3
-输出：12
-解释：第一次行动，不管拿哪张牌，你的点数总是 1 。但是，先拿最右边的卡牌将会最大化你的可获得点数。最优策略是拿右边的三张牌，最终点数为 1 + 6 + 5 = 12 。
-</code></pre></div></div>
-<h4 id="示例-2">示例 2：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：cardPoints = [2,2,2], k = 2
-输出：4
-解释：无论你拿起哪两张卡牌，可获得的点数总是 4 。
-</code></pre></div></div>
-<h4 id="示例-3">示例 3：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：cardPoints = [9,7,7,9,7,7,9], k = 7
-输出：55
-解释：你必须拿起所有卡牌，可以获得的点数为所有卡牌的点数之和。
-</code></pre></div></div>
-<h4 id="示例-4">示例 4：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：cardPoints = [1,1000,1], k = 1
-输出：1
-解释：你无法拿到中间那张卡牌，所以可以获得的最大点数为 1 。
-</code></pre></div></div>
-<h4 id="示例-5">示例 5：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：cardPoints = [1,79,80,1,1,1,200,1], k = 3
-输出：202
-</code></pre></div></div>
-
-<h3 id="提示">提示：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= cardPoints.length &lt;= 10^5
-1 &lt;= cardPoints[i] &lt;= 10^4
-1 &lt;= k &lt;= cardPoints.length
-</code></pre></div></div>
-
-<h3 id="解题思路-sum--left--right">解题思路 sum = left + right</h3>
-<ul>
-  <li>先求的右边k个数总和</li>
-  <li>在用 sum = left + right 遍历k次;</li>
-  <li>比较每次大小</li>
-</ul>
-
-<h4 id="代码">代码</h4>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScore</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">cardPoints</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">rightsum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">c</span><span class="o">=</span><span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span><span class="n">c</span><span class="o">&gt;=</span><span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">k</span><span class="o">;</span><span class="n">c</span><span class="o">--)</span> <span class="o">{</span>
-            <span class="n">rightsum</span> <span class="o">+=</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">c</span><span class="o">];</span>
-        <span class="o">}</span>
-        <span class="n">max</span> <span class="o">=</span> <span class="n">rightsum</span><span class="o">;</span>
-
-        <span class="kt">int</span> <span class="n">leftsum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">leftsum</span> <span class="o">+=</span>  <span class="n">cardPoints</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-            <span class="n">rightsum</span> <span class="o">=</span> <span class="n">rightsum</span> <span class="o">-</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">k</span><span class="o">+</span><span class="n">i</span><span class="o">];</span>
-            <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span><span class="n">rightsum</span><span class="o">+</span><span class="n">leftsum</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">max</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="解题思路二-滑动窗口">解题思路二 滑动窗口</h3>
-<ul>
-  <li>滑动窗口，维护一个len-k的窗口，保证窗口里面和最小，然后剩余的k个数的和就是最大</li>
-</ul>
-
-<h4 id="代码-1">代码</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScore</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">cardPoints</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span><span class="o">,</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="nl">cardPoint:</span> <span class="n">cardPoints</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">sum</span> <span class="o">+=</span> <span class="n">cardPoint</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">len</span> <span class="o">-</span> <span class="n">k</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">temp</span> <span class="o">+=</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">temp</span> <span class="o">-=</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">length</span><span class="o">];</span>
-            <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span>
-                <span class="n">min</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">min</span><span class="o">,</span> <span class="n">temp</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">sum</span> <span class="o">-</span> <span class="n">min</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="解题思路三-深度优先搜索dfs">解题思路三 深度优先搜索(DFS)</h3>
-<p>从最开始的节点出发，要么选左，要么选右，选择了一边之后如果还能选，那再继续上述过程，这不就是一棵树，然后就按dfs写的，但在用例较长的情况下超时了，只通过了 15/40 的样例。思路1只是提供一种思考的思路，耗时过多，没法通过本题。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxScoredfs</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">cardPoints</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">cardPoints</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">max</span> <span class="o">+=</span> <span class="n">num</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-
-        <span class="kt">int</span> <span class="n">scores</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="n">max</span> <span class="o">=</span> <span class="n">dfscard</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">,</span> <span class="n">k</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">cardPoints</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">scores</span><span class="o">);</span>
-
-        <span class="k">return</span> <span class="n">max</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">dfscard</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">cardPoints</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">,</span> <span class="kt">int</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">r</span><span class="o">,</span> <span class="kt">int</span> <span class="n">scores</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="c1">// 边界条件，只能选一次的话，就选左或者右中的较大者</span>
-            <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">[</span><span class="n">l</span><span class="o">],</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">r</span><span class="o">]);</span>
-        <span class="kt">int</span> <span class="n">l_max</span> <span class="o">=</span> <span class="n">dfscard</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">r</span><span class="o">,</span> <span class="n">scores</span><span class="o">)</span> <span class="o">+</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">l</span><span class="o">];</span><span class="c1">// 选择左边的情况，并继续向下dfs</span>
-        <span class="kt">int</span> <span class="n">r_max</span> <span class="o">=</span> <span class="n">dfscard</span><span class="o">(</span><span class="n">cardPoints</span><span class="o">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">l</span><span class="o">,</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="o">,</span> <span class="n">scores</span><span class="o">)</span> <span class="o">+</span> <span class="n">cardPoints</span><span class="o">[</span><span class="n">r</span><span class="o">];</span><span class="c1">// 选择右边的情况，并继续向下dfs</span>
-        <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">l_max</span><span class="o">,</span> <span class="n">r_max</span><span class="o">);</span> <span class="c1">// 返回选左或者选右的较大者</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0426/025">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%89%8D%E7%BC%80%E5%92%8C">前缀和</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%28DFS%29">深度优先搜索(DFS)</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,前缀和,滑动窗口,深度优先搜索(DFS)"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>164 post articles, 21 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>165 post articles, 21 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>

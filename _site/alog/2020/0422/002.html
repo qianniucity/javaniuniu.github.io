@@ -343,7 +343,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <meta itemprop="keywords" content="算法,二分查找"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h3 id="通用解题模板">通用解题模板：</h3>
+<div class="article__content" itemprop="articleBody"><h2 id="通用解题模板">通用解题模板：</h2>
 
 <p><strong>区间定义：[l, r)</strong> 左闭右开</p>
 
@@ -391,95 +391,108 @@ MFrGw6cAAAAASUVORK5CYII=" />
             <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
     <span class="k">return</span> <span class="n">left</span>
 </code></pre></div></div>
-<h3 id="例题">例题</h3>
-<ol>
-  <li>题目 <a href="https://leetcode-cn.com/problems/sqrtx/">69. x 的平方根</a>
-    <h4 id="几个坑点">几个坑点</h4>
-  </li>
-  <li>对于输入参数的判断，可以先处理</li>
-  <li>right 不能随便+1，有可能溢出 int 或者 long的长度</li>
-  <li>平方需要用的结果需要转long，防止溢出 int</li>
-</ol>
 
-<h4 id="示例代码java">示例代码java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">mySqrt</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span>
-            <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="c1">// x 一定大于 x/2</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+<h2 id="只要符合单调就可以二分">只要符合单调，就可以二分</h2>
+<ul>
+  <li>在题目 <a href="/leetcode/2020/0428/028/04">面试题56 - I. 数组中数字出现的次数</a> 有个很棒的概念  <strong>只要符合单调，就可以二分</strong>
+下面通过例子来说明</li>
+</ul>
 
-        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// 这个是需要注意的点，平放有可能会超出int范围</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
-            <span class="kt">long</span> <span class="n">num</span> <span class="o">=</span> <span class="o">(</span><span class="kt">long</span><span class="o">)</span><span class="n">mid</span> <span class="o">*</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">==</span><span class="n">x</span><span class="o">)</span>
-                <span class="k">return</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">num</span><span class="o">&gt;</span><span class="n">x</span><span class="o">)</span>
-                <span class="n">right</span><span class="o">=</span><span class="n">mid</span><span class="o">;</span>
-            <span class="k">else</span>
-                <span class="n">left</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">left</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
+<h3 id="题目1-面试题56---i-数组中数字出现的次数">题目1 面试题56 - I. 数组中数字出现的次数</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>一个整型数组 `nums` 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是`O(n)`，空间复杂度是`O(1)`。
 </code></pre></div></div>
+<p>如果我们对所有的数字进行异或，假设只出现一次的数字分别是 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code>，那么最终的结果  <code class="highlighter-rouge">p⊕q</code>，此时我们不知道 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 分别是什么。但是如果我们能把 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 从 数组里面区分开来呢？假设我们知道了某个数 <code class="highlighter-rouge">r</code>，<code class="highlighter-rouge">r</code> 是介于 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 之间，那么我们可以把整个数组分成两部分 —— a&lt;=r或 a&gt;r
+。并且，一个数组里有 <code class="highlighter-rouge">p</code>，另一个数组里有 <code class="highlighter-rouge">q</code>。那么对这两部分的数字分别求异或和，结果就变成了 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 。<strong>完美！这样就把问题转换成了我们已经解决的问题上了！</strong></p>
 
-<ol>
-  <li>题目<a href="https://blog.csdn.net/fuxuemingzhu/article/details/83273084">34. 在排序数组中查找元素的第一个和最后一个位置</a>
-    <h3 id="解题思路">解题思路</h3>
-    <ul>
-      <li>对于有边界的题，需要考虑左边界和有边界</li>
-    </ul>
-  </li>
-</ol>
+<blockquote>
+  <p>在某次消防演习中，消防员问一程序员如果公司着火要怎么办，程序员回答使用灭火器灭火。消防员再问，如果没有着火怎么办？程序员回答把公司点着，这样就把问题归结到一个已经解决的问题上了！手动划掉</p>
+</blockquote>
 
-<h3 id="对于-letf-right--1-的说明-可参考">对于 letf right +-1 的说明 可参考</h3>
-<p><a href="https://leetcode-cn.com/problems/binary-search/solution/er-fen-cha-zhao-xiang-jie-by-labuladong/">二分查找细节详解，顺便赋诗一首</a></p>
+<p>我举个栗子来说一下上面的想法： <br />
+我们看下数组 <code class="highlighter-rouge">[1,2,10,4,1,4,3,3]</code>，我们知道 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 是 2 和 10。
+中间的数字我们假设是 3，根据 <code class="highlighter-rouge">a&lt;=3</code> 和 <code class="highlighter-rouge">a&gt;3</code> 划分成了<code class="highlighter-rouge">[1,2,1,3,3]</code> 和 <code class="highlighter-rouge">[10,4,4]</code>。这两个数组分别异或就是 2 和 10。</p>
 
-<h3 id="示例代码">示例代码</h3>
+<p>但是还没有解决，怎么找到 pp 和 qq 中间的数字 rr 呢？</p>
+
+<h4 id="二分">二分！！！</h4>
+
+<p>为什么是 <strong>二分</strong> 呢？一个暴力的方法就是从数组最小的元素到最大的元素枚举所有可能的 <code class="highlighter-rouge">r</code>，然后根据 <code class="highlighter-rouge">a&lt;=r</code>和 <code class="highlighter-rouge">a&gt;r</code> 化成两个数组，再看两个数组的异或和是不是都不为 0，如果是，那我们就找到了 r。<strong>但是注意到，在枚举 r 的时候，两个数组的异或和是否为0这个性质是单调的！</strong></p>
+
+<p>下图是从数组最小的元素到最大的元素枚举 rr 的过程。</p>
+
+<p>为了更能体现出来单调的性质，我把 r=0 和 r=11 也加进来了。</p>
+
+<p><img src="/assets/images/algo/0428/2b3b1395592d907fdefb00659892ea91dbbcc95cdff9272c86887266d270f7c1-image.png" alt="pic1" /></p>
+
+<p>简单来说，</p>
+
+<ul>
+  <li>如果当前左边的数组异或和为 00, 右边不为 00，说明当前枚举的 rr 小了；</li>
+  <li>如果当前左边的数组异或和不为 00, 右边也不为 00，说明当前枚举的 rr 是符合要求的，左右数组异或的结果就是答案；</li>
+  <li>如果当前左边的数组异或和不为 00, 右边为 00，说明当前枚举的 rr 大了；</li>
+  <li>这就是单调的样子。所以可以二分。</li>
+</ul>
+
+<p><strong>记住，只要符合单调，就可以二分！！！</strong></p>
+
+<p>但是，你以为这完了吗？异或和为 0 其实并不代表 要找的元素不在这里面，<strong>因为有可能 00 只出现了 11 次！</strong> 所以这种思路需要特判一下某个数为 00 的情况。</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">searchRange</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{-</span><span class="mi">1</span><span class="o">,-</span><span class="mi">1</span><span class="o">};</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
-        <span class="c1">// 先找左边界</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
-                <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&gt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
-
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">singleNumbers</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">min</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span> <span class="n">max</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">,</span> <span class="n">zeroCount</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">zeroCount</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">else</span>
-                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="n">min</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">min</span><span class="o">,</span> <span class="n">num</span><span class="o">);</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span> <span class="n">num</span><span class="o">);</span>
+            <span class="n">sum</span> <span class="o">^=</span> <span class="n">num</span><span class="o">;</span>
         <span class="o">}</span>
-
-        <span class="c1">// 先找右边界</span>
-        <span class="n">right</span> <span class="o">=</span> <span class="n">len</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">left</span><span class="o">&lt;</span><span class="n">right</span><span class="o">){</span>
-            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span><span class="o">+(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
-                <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">mid</span><span class="o">]&lt;=</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="c1">// 需要特判一下某个数是0的情况。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">zeroCount</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">sum</span><span class="o">,</span> <span class="mi">0</span><span class="o">};</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">lo</span> <span class="o">=</span> <span class="n">min</span><span class="o">,</span> <span class="n">hi</span> <span class="o">=</span> <span class="n">max</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 根据 lo 的正负性来判断二分位置怎么写，防止越界。</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="n">lo</span> <span class="o">+</span> <span class="n">hi</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span> <span class="o">:</span> <span class="n">lo</span> <span class="o">+</span> <span class="o">(</span><span class="n">hi</span> <span class="o">-</span> <span class="n">lo</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="n">loSum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">hiSum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">loSum</span> <span class="o">^=</span> <span class="n">num</span><span class="o">;</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                    <span class="n">hiSum</span> <span class="o">^=</span> <span class="n">num</span><span class="o">;</span>
+                <span class="o">}</span>
             <span class="o">}</span>
-            <span class="k">else</span>
-                <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">loSum</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">hiSum</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 两个都不为0，说明 p 和 q 分别落到2个数组里了。</span>
+                <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="n">loSum</span><span class="o">,</span> <span class="n">hiSum</span><span class="o">};</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">loSum</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 说明 p 和 q 都比 mid 大，所以比 mid 小的数的异或和变为0了。</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="c1">// 说明 p 和 q 都不超过 mid</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="o">}</span>
         <span class="o">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+        <span class="c1">// 其实如果输入是符合要求的，程序不会执行到这里，为了防止compile error加一下</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">}</span>
+
 </code></pre></div></div>
+
+<h3 id="二分查找相关题目">二分查找相关题目</h3>
+<ul>
+  <li><a href="/leetcode/2020/0428/028/04">面试题56 - I. 数组中数字出现的次数</a></li>
+  <li><a href="/leetcode/2020/0423/023">69. x 的平方根</a></li>
+  <li><a href="/leetcode/2020/0423/024">34. 在排序数组中查找元素的第一个和最后一个位置</a></li>
+</ul>
 
 <h3 id="参考视频">参考视频</h3>
 <ul>
-  <li>花花酱的二分查找专题视频：https://www.youtube.com/watch?v=v57lNF2mb_s</li>
+  <li>花花酱的二分查找专题视频：<a href="https://www.youtube.com/watch?v=v57lNF2mb_s">https://www.youtube.com/watch?v=v57lNF2mb_s</a></li>
 </ul>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
