@@ -322,6 +322,70 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/web/skill/arithmetic"><h2 itemprop="headline" class="item__header">运算符的使用（同样适用与其他语言）</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3>|=</h3>
+<p>关于 <code class="highlighter-rouge">|= 运算符</code>：<code class="highlighter-rouge">|= 运算符</code>和 <code class="highlighter-rouge">+=</code> 这一类的运算符一样，拆解开就是 <code class="highlighter-rouge">a = a | b</code>；</p>
+
+<p>代码如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">strictfp</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+   <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="c1">// 0000 0101</span>
+   <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 0000 0011</span>
+   <span class="n">a</span> <span class="o">|=</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 0000 00111</span>
+   <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>具体规则为：两个二进制对应位为0时该位为0，否则为1。拿5的二进制 0000 0101 和 3的二进制 0000 0011 进行|运算，后三位的的对应位都不是同时等于0，所以最终结果为 0000 0111 也就是7的二进制。</p>
+
+<h3 id="-1">&amp;=</h3>
+<p><code class="highlighter-rouge">&amp;=</code> 和 <code class="highlighter-rouge">|=</code> 基本是一样的，只不过对于比较同位方式不同。</p>
+
+<p>代码如下：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">strictfp</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="c1">// 0000 0101</span>
+    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 0000 0011</span>
+    <span class="n">a</span> <span class="o">&amp;=</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 0000 0001</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>具体规则为：两个二进制对应位都为1时，结果为1，否则结果为都0。拿5的二进制 0000 0101 和 3的二进制 0000 0011 进行&amp;运算，只有最后一位都为1，则最终结果为 0000 0001 也就是1的二进制。</p>
+
+<h3 id="-2">^=</h3>
+<p>运算规则还是同上。</p>
+
+<p>代码如下：</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">strictfp</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span> <span class="c1">// 0000 0101</span>
+    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span> <span class="c1">// 0000 0011</span>
+    <span class="n">a</span> <span class="o">^=</span> <span class="n">b</span><span class="o">;</span> <span class="c1">// 0000 0110</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<p>具体规则为：两个二进制对应位相同时，结果为0，否则结果为1。拿5的二进制 0000 0101 和 3的二进制 0000 0011 进行^运算，1-5位对应位都是0所以1-5位都为0，第8位都为1所以第8位也为0，其他的对应位都不相等所以为1，则最终结果为 0000 0110 也就是6的二进制。</p>
+
+<p>总结：</p>
+
+<p>|=：两个二进制对应位都为0时，结果等于0，否则结果等于1；</p>
+
+<p>&amp;=：两个二进制的对应位都为1时，结果为1，否则结果等于0；</p>
+
+<p>^=：两个二进制的对应位相同，结果为0，否则结果为1。</p>
+</div><p><a href="/web/skill/arithmetic">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%BC%80%E5%8F%91%E6%8A%80%E5%B7%A7">开发技巧</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%7C%3D%E3%80%81%26%3D%E3%80%81%5E%3D">|=、&=、^=</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="web-skill-arithmetic">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="开发技巧,|=、&=、^="></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0427/027/02"><h2 itemprop="headline" class="item__header">81. 搜索旋转排序数组 II</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1177,22 +1241,8 @@ k = 9
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-code-mybatis-mybatis-Example">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
     <meta itemprop="keywords" content="Mybatis"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/alog/2020/0426/004"><h2 itemprop="headline" class="item__header">完全背包</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>TOTO</p>
-
-<p>看题目 <a href="/leetcode/2020/0426/026/03">面试题 08.11. 硬币</a></p>
-</div><p><a href="/alog/2020/0426/004">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98">完全背包问题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0426-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,完全背包问题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>161 post articles, 21 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>162 post articles, 21 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
