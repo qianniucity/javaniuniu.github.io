@@ -342,7 +342,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">欧几里得法(辗转相除法)</code></li>
+  <li><strong>本题涉及算法</strong>： <a href="/math/2020/0429/001"><code class="success highlighter-rouge">欧几里得法(辗转相除法)</code></a></li>
   <li><strong>思路</strong>：<code class="info highlighter-rouge">最大公约数</code></li>
   <li><strong>类似题型</strong>:</li>
 </ul>
@@ -371,6 +371,66 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: x = 2, y = 6, z = 5   
 输出: False
 </code></pre></div></div>
+
+<h3 id="解题思路">解题思路</h3>
+<ul>
+  <li>求最大公约数 官方叫做 欧几里得法(辗转相除法)</li>
+  <li>代码一目了然，不用文字赘述了</li>
+</ul>
+
+<h3 id="代码">代码</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">canMeasureWater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="c1"># 保证a&gt;b
+</span>        <span class="k">if</span> <span class="n">b</span><span class="o">&gt;</span><span class="n">a</span><span class="p">:</span>
+            <span class="n">a</span> <span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span> <span class="p">,</span><span class="n">a</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># 当c == 0 时 肯定满足
+</span>            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="n">c</span><span class="p">:</span> <span class="c1"># 这个条件 题目中没说清楚
+</span>            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># 当b=0时 a==c 才能满足条件
+</span>            <span class="k">return</span> <span class="n">a</span><span class="o">==</span><span class="n">c</span>
+        <span class="c1"># 求最大公约数，官方叫法 欧几里得法(辗转相除法)
+</span>        <span class="k">while</span> <span class="n">b</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">b</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">temp</span>
+        <span class="k">if</span> <span class="n">c</span><span class="o">%</span><span class="n">a</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canMeasureWater</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">z</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">z</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 当z == 0 时 肯定满足</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="o">&lt;</span><span class="n">z</span><span class="o">)</span> <span class="o">{</span> <span class="c1">//这个条件 题目中没说清楚</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 当x=0时 z==y 才能满足条件</span>
+            <span class="k">return</span> <span class="n">z</span><span class="o">==</span><span class="n">y</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// # 保证y&gt;x</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">x</span><span class="o">&gt;</span><span class="n">y</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">c</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 求最大公约数，官方叫法 欧几里得法(辗转相除法)</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">y</span><span class="o">%</span><span class="n">x</span><span class="o">!=</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">y</span><span class="o">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">c</span><span class="o">%</span><span class="n">x</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">z</span><span class="o">%</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h1 id="before-2020-04-29更新">before (2020-04-29更新)</h1>
+<hr />
 <h2 id="自己的思路">自己的思路</h2>
 <ul>
   <li>找到x,y的最大公约数能否z被整除</li>
