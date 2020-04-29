@@ -70,7 +70,7 @@ Java Development
 
 一直在服务于金融行业，曾就职于易宝支付和恒生电子
 
-现在找工作
+没在上班
 
 #### Contact
 Email: king101125s@gmail.com
