@@ -322,6 +322,143 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/math/2020/0429/001"><h2 itemprop="headline" class="item__header">最大公约数和最小公倍数</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li>相关题目
+    <ul>
+      <li><a href="/leetcode/2020/0321/005">365. 水壶问题</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="1-欧几里得法辗转相除法">1. 欧几里得法(辗转相除法)</h3>
+<p>这条算法基于一个定理：<strong>两个正整数a和b（a&gt;b），它们的最大公约数等于a除以b的余数c和b之间的最大公约数</strong>。比如10和25，25除以10商2余5，那么10和25的最大公约数，等同于10和5的最大公约数。</p>
+
+<ul>
+  <li>基于这条定理：</li>
+</ul>
+
+<p>首先，我们先计算出a除以b的余数c，把问题转化成求出b和c的最大公约数；然后计算出b除以c的余数d，把问题转化成求出c和d的最大公约数；再然后计算出c除以d的余数e，把问题转化成求出d和e的最大公约数……以此类推，逐渐把两个较大整数之间的运算简化成两个较小整数之间的运算，直到两个数可以整除，或者其中一个数减小到1为止。</p>
+
+<h4 id="贴代码">贴代码：</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">first_way</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="s">"""
+    第一种方法：欧几里得算法----辗转相除法
+    :param a: 第一个数
+    :param b: 第二个数
+    :return: 最大公约数
+    """</span>
+    <span class="c1"># 如果最终余数为0 公约数就计算出来了
+</span>    <span class="k">while</span><span class="p">(</span><span class="n">b</span><span class="o">!=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">%</span> <span class="n">b</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">temp</span>
+    <span class="k">return</span> <span class="n">a</span>
+</code></pre></div></div>
+
+<h3 id="2-穷举法一个一个除">2. 穷举法(一个一个除)</h3>
+<p>这个比较好理解。因为a,b两个数的最大公因数肯定小于等于相对更小的那个数，所以从两个数中较小数开始由大到小列举，直到找到公约数立即中断列举，得到的公约数便是最大公约数 。代码如下：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">second_way</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="s">"""
+    第二种方法：一个一个除
+    :param a: 第一个数
+    :param b: 第二个数
+    :return: 最大公约数
+    """</span>
+    <span class="c1"># 保证a&gt;b
+</span>    <span class="k">if</span><span class="p">(</span><span class="n">a</span><span class="o">&lt;</span><span class="n">b</span><span class="p">):</span>
+        <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span><span class="n">a</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">b</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">%</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">b</span><span class="o">%</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">value</span>
+</code></pre></div></div>
+
+<h3 id="3-stein算法">3. stein算法</h3>
+<p>看下面这两个结论</p>
+<ul>
+  <li>gcd(a, a) = a， 也就是一个数和他自己的公约数是其自身。</li>
+  <li>gcd(ka, kb) = k * gcd(a, b)，也就是最大公约数运算和倍乘运算可以交换，特殊的，<strong>当k=2时，说明两个偶数的最大公约数比如能被2整除。</strong></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">third_way</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="s">"""
+    第三种方法思想：stein算法
+        gcd(a,a)=a，也就是一个数和其自身的公约数仍是其自身。
+        gcd(ka,kb)=k gcd(a,b)，也就是最大公约数运算和倍乘运算可以交换。特殊地，当k=2时，说明两个偶数的最大公约数必然能被2整除。
+        当k与b互为质数，gcd(ka,b)=gcd(a,b)，也就是约掉两个数中只有其中一个含有的因子不影响最大公约数。特殊地，当k=2时，说明计算一个偶数
+    和一个奇数的最大公约数时，可以先将偶数除以2。
+    :param a: 第一个数
+    :param b: 第二个数
+    :return: 最大公约数
+    """</span>
+    <span class="c1">#保证b比a小
+</span>    <span class="k">if</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">:</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="c1"># a,b都是偶数 除2右移一位即可
+</span>    <span class="k">if</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">b</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">third_way</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># a是偶数
+</span>    <span class="k">if</span> <span class="n">a</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">third_way</span><span class="p">(</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="c1"># b是偶数
+</span>    <span class="k">if</span> <span class="n">b</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">third_way</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># 都是奇数
+</span>    <span class="k">return</span> <span class="n">third_way</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>求出a,b的最大公约数后，利用lcm(a,b) = (a*b)/gcd(a,b) 计算出两个数的 <strong>最小公倍数：</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 求两个数的最小公倍数
+</span><span class="k">def</span> <span class="nf">lcm</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">/</span> <span class="n">third_way</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="4-三个数的最大公约数和最小公倍数">4. 三个数的最大公约数和最小公倍数</h3>
+
+<p>计算三个数的最大公约数时，我是利用之前写好的计算2个数的最大公约数的方法，先算出a,b的公约数，再用a,b的公约数与c再代入方法，此时返回的值就是三个数的最大公约数了。</p>
+
+<p>同样，在计算三个数的最小公倍数时，多次嵌套，先求出两个数的最小公倍数，再求其与第三个数的最小公倍数。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">three_num</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">):</span>
+    <span class="s">"""
+    求三个数的最大公约数
+    :param a: 第一个数
+    :param b: 第二个数
+    :param c: 第三个数
+    :return: 这三个数的最大公约数
+    """</span>
+    <span class="c1"># 多次嵌套，返回3个数的最大公约数
+</span>    <span class="k">return</span> <span class="n">first_way</span><span class="p">(</span><span class="n">first_way</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">),</span><span class="n">c</span><span class="p">)</span>
+</code></pre></div></div>
+</div><p><a href="/math/2020/0429/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%95%B0%E5%AD%A6">数学</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E6%B3%95%28%E8%BE%97%E8%BD%AC%E7%9B%B8%E9%99%A4%E6%B3%95%29">欧几里得法(辗转相除法)</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%A9%B7%E4%B8%BE%E6%B3%95">穷举法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=stein%E7%AE%97%E6%B3%95">stein算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0%E5%92%8C%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0">最大公约数和最小公倍数</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%B8%89%E4%B8%AA%E6%95%B0%E7%9A%84%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0%E5%92%8C%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0">三个数的最大公约数和最小公倍数</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 29, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="math-2020-0429-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-29T00:00:00+08:00">
+    <meta itemprop="keywords" content="数学,欧几里得法(辗转相除法),穷举法,stein算法,最大公约数和最小公倍数,三个数的最大公约数和最小公倍数"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0429/029/05"><h2 itemprop="headline" class="item__header">1095. 山脉数组中查找目标值</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="error highlighter-rouge">困难</code></li>
@@ -1144,117 +1281,8 @@ a[::-1]</p>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 27, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0427-027-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,二分查找,旋转数组"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/alog/2020/0427/004"><h2 itemprop="headline" class="item__header">动态规范(dp)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="文案">文案</h3>
-<p>TODO</p>
-
-<h2 id="例题">例题</h2>
-<h3 id="题一">题一</h3>
-<p>在数组中找出和为s的数，有则返回 <code class="highlighter-rouge">True</code>，没有则返回 <code class="highlighter-rouge">False</code></p>
-<h3 id="示例">示例</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arr = [3,34,4,12,5,2]
-k = 9
-结果 为True (4+5=9)
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-
-<p><img src="/assets/images/algo/0427/Jietu20200427-161932@2x.jpg" alt="pic1" /></p>
-
-<h4 id="方法一-递归写法">方法一 递归写法</h4>
-<h4 id="代码">代码</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
-<span class="c1"># 递归写法
-</span><span class="k">def</span> <span class="nf">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
-    <span class="c1"># 找出口
-</span>    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">True</span>
-    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="n">s</span>
-    <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">s</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="o">-</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c1">#选择arr[i]
-</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">rec_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">)</span> <span class="c1"># 不选arr[i]
-</span>        <span class="k">return</span> <span class="n">a</span> <span class="ow">or</span> <span class="n">b</span>
-</code></pre></div></div>
-
-<h4 id="方法二-动态规划">方法二 动态规划</h4>
-<h4 id="代码-1">代码</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
-<span class="k">def</span> <span class="nf">dp_subset</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">S</span><span class="p">):</span>
-    <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">),</span><span class="n">S</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">dtype</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">)</span>
-    <span class="n">subset</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">subset</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="bp">False</span>
-    <span class="n">subset</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
-        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">S</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">s</span><span class="p">:</span>
-                <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">a</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="o">-</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="c1">#选择arr[i]
-</span>                <span class="n">b</span> <span class="o">=</span> <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="c1"># 不选arr[i]
-</span>                <span class="n">subset</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="ow">or</span> <span class="n">b</span>
-    <span class="n">r</span> <span class="p">,</span><span class="n">c</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">shape</span>
-    <span class="k">return</span> <span class="n">subset</span><span class="p">[</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</code></pre></div></div>
-
-<h3 id="题二">题二</h3>
-<p>在数组中找出两数相加的最大数，其中两个数不能是相邻的两个数</p>
-
-<h4 id="示例-1">示例</h4>
-<p>arr = [1,2,4,1,7,8,3]
-返回最大数为 15 [1,4,8]</p>
-
-<h3 id="解题思路-1">解题思路</h3>
-
-<p><img src="/assets/images/algo/0427/Jietu20200427-165758@2x.jpg" alt="pic2" /></p>
-
-<h4 id="方法一-递归写法-1">方法一 递归写法</h4>
-<h4 id="代码-2">代码</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">rec_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="p">):</span>
-    <span class="c1"># 找出口
-</span>    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">i</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">rec_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="c1">#选择arr[i]
-</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">rec_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1"># 不选arr[i]
-</span>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h4 id="方法二-动态规划-1">方法二 动态规划</h4>
-<h4 id="代码-3">代码</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">dp_opt</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
-    <span class="n">opt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
-    <span class="n">opt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">opt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)):</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="c1">#选择arr[i]
-</span>        <span class="n">b</span> <span class="o">=</span> <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">opt</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</code></pre></div></div>
-
-<h3 id="参考视频">参考视频</h3>
-
-<ul>
-  <li><a href="https://www.bilibili.com/video/BVc18x411V7fm">动态规划 (第1讲)</a></li>
-  <li><a href="https://www.bilibili.com/video/BV12W411v7rd/?spm_id_from=333.788.videocard.0">动态规划 (第2讲)</a></li>
-</ul>
-</div><p><a href="/alog/2020/0427/004">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E8%8C%83%28dp%29">动态规范(dp)</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 27, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0427-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,动态规范(dp)"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>166 post articles, 21 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>167 post articles, 21 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
