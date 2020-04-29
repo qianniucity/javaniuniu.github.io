@@ -322,6 +322,180 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0429/029/05"><h2 itemprop="headline" class="item__header">1095. 山脉数组中查找目标值</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="error highlighter-rouge">困难</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">二分查找</code></li>
+  <li><strong>思路</strong>： <code class="success highlighter-rouge">二分查找</code> <code class="success highlighter-rouge">找到峰顶</code>  <code class="success highlighter-rouge">分割数组</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h2 id="题目1095-山脉数组中查找目标值">题目<a href="https://leetcode-cn.com/problems/find-in-mountain-array/">1095. 山脉数组中查找目标值</a></h2>
+<p>(这是一个 交互式问题 ）</p>
+
+<p>给你一个 <strong>山脉数组</strong> <code class="highlighter-rouge">mountainArr</code>，请你返回能够使得 <code class="highlighter-rouge">mountainArr.get(index)</code> 等于 <code class="highlighter-rouge">target</code> 最小 的下标 <code class="highlighter-rouge">index</code> 值。</p>
+
+<p>如果不存在这样的下标 <code class="highlighter-rouge">index</code>，就请返回 -1。
+ </p>
+
+<p>何为山脉数组？如果数组 A 是一个山脉数组的话，那它满足如下条件：</p>
+
+<p><strong>首先</strong>，<code class="highlighter-rouge">A.length &gt;= 3</code></p>
+
+<p><strong>其次</strong>，在 0 &lt; i &lt; A.length - 1 条件下，存在 i 使得：</p>
+
+<ul>
+  <li><code class="highlighter-rouge">A[0] &lt; A[1] &lt; ... A[i-1] &lt; A[i]</code></li>
+  <li><code class="highlighter-rouge">A[i] &gt; A[i+1] &gt; ... &gt; A[A.length - 1]</code>
+ </li>
+</ul>
+
+<p>你将 不能直接访问该山脉数组，必须通过 MountainArray 接口来获取数据：</p>
+
+<ul>
+  <li>MountainArray.get(k) - 会返回数组中索引为k 的元素（下标从 0 开始）</li>
+  <li>MountainArray.length() - 会返回该数组的长度
+ </li>
+</ul>
+
+<h4 id="注意">注意：</h4>
+<ul>
+  <li>对 MountainArray.get 发起超过 100 次调用的提交将被视为错误答案。此外，任何试图规避判题系统的解决方案都将会导致比赛资格被取消。</li>
+  <li>为了帮助大家更好地理解交互式问题，我们准备了一个样例 “答案”：https://leetcode-cn.com/playground/RKhe3ave，请注意这 不是一个正确答案。</li>
+</ul>
+
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：array = [1,2,3,4,5,3,1], target = 3
+输出：2
+解释：3 在数组中出现了两次，下标分别为 2 和 5，我们返回最小的下标 2。
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：array = [0,1,2,4,2,1], target = 3
+输出：-1
+解释：3 在数组中没有出现，返回 -1。
+</code></pre></div></div>
+
+<h4 id="提示">提示：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>3 &lt;= mountain_arr.length() &lt;= 10000
+0 &lt;= target &lt;= 10^9
+0 &lt;= mountain_arr.get(index) &lt;= 10^9
+</code></pre></div></div>
+
+<h3 id="方法一">方法一</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li>搜索指定值 二分查找</li>
+  <li>对于这种 可以分成左右数组来获取值</li>
+  <li>先寻找峰值</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># 搜索指定值 二分查找
+</span>    <span class="c1"># 对于这种 可以分成左右数组来获取值
+</span>    <span class="c1"># 先寻找峰值
+</span>    <span class="k">def</span> <span class="nf">findInMountainArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mountain_arr</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">lo</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="n">top</span><span class="o">=</span><span class="mi">0</span>
+        <span class="c1"># 判断最高峰
+</span>        <span class="k">while</span> <span class="n">lo</span><span class="o">&lt;</span><span class="n">hi</span><span class="p">:</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">+</span> <span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+            <span class="k">if</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">-</span><span class="mi">1</span>
+
+
+        <span class="n">lo</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">top</span>
+
+        <span class="c1"># 左半
+</span>        <span class="k">while</span> <span class="n">lo</span><span class="o">&lt;</span><span class="n">hi</span><span class="p">:</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">+</span> <span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+            <span class="k">if</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">if</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">lo</span> <span class="o">=</span> <span class="n">top</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">length</span><span class="p">()</span>
+        <span class="c1"># 右半
+</span>        <span class="k">while</span> <span class="n">lo</span><span class="o">&lt;</span><span class="n">hi</span><span class="p">:</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">+</span> <span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+            <span class="k">if</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">mid</span>
+            <span class="k">if</span> <span class="n">mountain_arr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">mid</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">target</span><span class="p">:</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                 <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span>
+
+        <span class="k">if</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// java版会超时</span>
+<span class="kd">public</span> <span class="kt">int</span> <span class="nf">findInMountainArray</span><span class="o">(</span><span class="kt">int</span> <span class="n">target</span><span class="o">,</span> <span class="nc">MountainArray</span> <span class="n">mountainArr</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">lo</span> <span class="o">=</span><span class="mi">0</span><span class="o">,</span><span class="n">hi</span> <span class="o">=</span> <span class="n">mountainArr</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span><span class="n">top</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{-</span><span class="mi">1</span><span class="o">,-</span><span class="mi">1</span><span class="o">};</span>
+        <span class="c1">// 判断最高峰</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">lo</span><span class="o">&lt;</span><span class="n">hi</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">+</span> <span class="o">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">]&gt;</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="o">))</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">]&lt;</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="o">))</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+
+        <span class="o">}</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">lo</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+        <span class="n">lo</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">top</span><span class="o">;</span>
+
+        <span class="c1">// 左半</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">lo</span><span class="o">&lt;</span><span class="n">hi</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">+</span> <span class="o">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">)==</span><span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">)&gt;</span><span class="n">target</span><span class="o">)</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">mountainArr</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="n">lo</span> <span class="o">=</span> <span class="n">top</span><span class="o">;</span>
+        <span class="c1">// 右半</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">lo</span><span class="o">&lt;</span><span class="n">hi</span><span class="o">){</span>
+            <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">lo</span><span class="o">+</span> <span class="o">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="o">)/</span><span class="mi">2</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">)==</span><span class="n">target</span><span class="o">)</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">mountainArr</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">mid</span><span class="o">)&gt;</span><span class="n">target</span><span class="o">)</span>
+                <span class="n">lo</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="n">hi</span> <span class="o">=</span> <span class="n">mid</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]==-</span><span class="mi">1</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">];</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+
+    <span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0429/029/05">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE">二分查找</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 29, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0429-029-05">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-29T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二分查找"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/web/skill/arithmetic"><h2 itemprop="headline" class="item__header">按位与、或、异或等运算方法</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="按位与运算符">按位与运算符（&amp;）</h3>
 <blockquote>
@@ -1079,131 +1253,8 @@ k = 9
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 27, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0427-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-27T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,动态规范(dp)"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0426/026/03"><h2 itemprop="headline" class="item__header">面试题 08.11. 硬币</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">动态规划(dp)</code></li>
-  <li><strong>思路</strong>：<code class="info highlighter-rouge">完全背包问题</code></li>
-</ul>
-
-<hr />
-
-<h2 id="题目-面试题-0811-硬币">题目 <a href="https://leetcode-cn.com/problems/coin-lcci/">面试题 08.11. 硬币</a></h2>
-<p>硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)</p>
-<h3 id="示例">示例</h3>
-<h4 id="示例1">示例1:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: n = 5
-输出：2
-解释: 有两种方式可以凑成总金额:
-5=5
-5=1+1+1+1+1
-</code></pre></div></div>
-<h4 id="示例2">示例2:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: n = 10
-输出：4
-解释: 有四种方式可以凑成总金额:
-10=10
-10=5+5
-10=5+1+1+1+1+1
-10=1+1+1+1+1+1+1+1+1+1
-说明：
-</code></pre></div></div>
-<h4 id="注意">注意:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>你可以假设：
-
-0 &lt;= n (总金额) &lt;= 1000000
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<p>由于无限数量硬币的选择，应该是一个完全背包问题</p>
-
-<ul>
-  <li>
-    <p>dp 数组建立：dp[i][j] 表示 i 种硬币组成面值为 j 时的方法数</p>
-  </li>
-  <li>
-    <p>考虑 base case</p>
-
-    <ul>
-      <li>
-        <p>dp[0][j] 0 种硬币组成面值 j，不可能有方案，因此是 0， java 初始化时数组是 0，不用特殊处理</p>
-      </li>
-      <li>
-        <p>dp[i][0] 多种硬币组成面值 0，只有一种方案，就是一枚也不选</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>状态转移方程：</p>
-
-    <ul>
-      <li>
-        <p>dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i])</p>
-      </li>
-      <li>
-        <p>其中 dp[i - 1][j] 表示当前硬币不选，那么由 i - 1 种组成面值 j</p>
-      </li>
-      <li>
-        <p>dp[i][j - coins[i]) 表示当前硬币选了，那么还需要组成面额为 j - coins[i], 这都是已要组成的面值大于当前硬币值为前提的。</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p>因此可以先写出一个二维 dp 的代码，再进一步进行优化，状态压缩</p>
-
-<h4 id="代码-二维-dp">代码 二维 dp</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">waysToChange</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">coins</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">25</span><span class="o">};</span>
-        <span class="c1">// 1. dp 表示对应的方法数 比如 dp[i][j] 表示 i 种硬币组成面值为 j 时的方法数</span>
-        <span class="c1">// 2. 多开一个位置，0 空着不用 在下面对dp[0][j] dp[i][0] 做特殊处理</span>
-        <span class="kt">int</span><span class="o">[][]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">5</span><span class="o">][</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span><span class="c1">//</span>
-        <span class="c1">// 对dp[0][j] dp[i][0] 做特殊处理  且dp[0][j] 不存在</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
-            <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span> <span class="c1">// i表示 i种币值，正好也对于coins</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">n</span><span class="o">++)</span> <span class="o">{</span><span class="c1">// j表示 组成的面值</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">coins</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="c1">// 要组成的面值比当前硬币金额小，该硬币不可以选择</span>
-                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">%</span> <span class="mi">1000000007</span><span class="o">;</span> <span class="c1">// 只能由 i - 1 中硬币来组成面值 j</span>
-                <span class="k">else</span>
-                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span> <span class="o">-</span> <span class="n">coins</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">]])</span> <span class="o">%</span> <span class="mi">1000000007</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="mi">4</span><span class="o">][</span><span class="n">n</span><span class="o">];</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="代码-一维-dp">代码 一维 dp</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">waysToChange</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">coins</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]{</span><span class="mi">1</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">25</span><span class="o">};</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
-        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">coin</span> <span class="o">:</span> <span class="n">coins</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">coin</span><span class="o">])</span> <span class="o">%</span> <span class="mi">1000000007</span><span class="o">;</span> <span class="c1">// sum = sum+ 1 第一个sum 和第一个sum 相差一个状态</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">n</span><span class="o">];</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0426/026/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%28dp%29">动态规划(dp)</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98">完全背包问题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 26, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0426-025">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-26T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,动态规划(dp),完全背包问题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>165 post articles, 21 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>166 post articles, 21 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
