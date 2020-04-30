@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>1389. 按既定顺序创建目标数组 - JAVA 牛牛</title>
 
-<meta name="description" content="题目 按既定顺序创建目标数组给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：  目标数组 target 最初为空。  按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。  重复上一步，直到在 n...">
+<meta name="description" content="难度：简单  本题涉及算法： 数组  思路： 数组  类似题型:题目 按既定顺序创建目标数组给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：  目标数组 target 最初为空。  按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 inde...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0322/006"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -340,8 +340,17 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <meta itemprop="keywords" content="leetcode"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h2 id="题目-按既定顺序创建目标数组">题目 <a href="https://leetcode-cn.com/contest/weekly-contest-181/problems/create-target-array-in-the-given-order/">按既定顺序创建目标数组</a></h2>
-<p>给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：</p>
+<div class="article__content" itemprop="articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">数组</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">数组</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h2 id="题目-按既定顺序创建目标数组">题目 <a href="https://leetcode-cn.com/contest/weekly-contest-181/problems/create-target-array-in-the-given-order/">按既定顺序创建目标数组</a></h2>
+<p>给你两个整数数组 <code class="highlighter-rouge">nums</code> 和 <code class="highlighter-rouge">index</code>。你需要按照以下规则创建目标数组：</p>
 
 <ul>
   <li>目标数组 target 最初为空。</li>
@@ -352,72 +361,82 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <p>题目保证数字插入位置总是存在。</p>
 
-<h2 id="示例">示例</h2>
-<h3 id="示例-1">示例 1：</h3>
+<h3 id="示例">示例</h3>
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [0,1,2,3,4], index = [0,1,2,2,1]    
+输出：[0,4,1,3,2]    
+解释：   
+nums       index     target   
+0            0        [0]   
+1            1        [0,1]   
+2            2        [0,1,2]   
+3            2        [0,1,3,2]   
+4            1        [0,4,1,3,2]
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [1,2,3,4,0], index = [0,1,2,3,0]    
+输出：[0,1,2,3,4]    
+解释：   
+nums       index     target   
+1            0        [1]   
+2            1        [1,2]       
+3            2        [1,2,3]   
+4            3        [1,2,3,4]   
+0            0        [0,1,2,3,4]   
+</code></pre></div></div>
+<h4 id="示例-3">示例 3：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [1], index = [0]    
+输出：[1]    
+</code></pre></div></div>
 
-<p>输入：nums = [0,1,2,3,4], index = [0,1,2,2,1]  <br />
-输出：[0,4,1,3,2]  <br />
-解释： <br />
-nums       index     target <br />
-0            0        [0] <br />
-1            1        [0,1] <br />
-2            2        [0,1,2] <br />
-3            2        [0,1,3,2] <br />
-4            1        [0,4,1,3,2]</p>
-<h3 id="示例-2">示例 2：</h3>
-
-<p>输入：nums = [1,2,3,4,0], index = [0,1,2,3,0]  <br />
-输出：[0,1,2,3,4]  <br />
-解释： <br />
-nums       index     target <br />
-1            0        [1] <br />
-2            1        [1,2]     <br />
-3            2        [1,2,3] <br />
-4            3        [1,2,3,4] <br />
-0            0        [0,1,2,3,4]</p>
-<h3 id="示例-3">示例 3：</h3>
-
-<p>输入：nums = [1], index = [0]  <br />
-输出：[1]</p>
-
-<h2 id="自己的思路">自己的思路</h2>
+<h3 id="方法一">方法一</h3>
+<h4 id="解题思路">解题思路</h4>
 <ul>
-  <li>用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1
-    <h2 id="自己的代码">自己的代码</h2>
-    <h3 id="java">java</h3>
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="n">lass</span> <span class="nc">Solution</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">createTargetArray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
-      <span class="c1">// 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1</span>
-      <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-      <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
-      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-          <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">&gt;=</span><span class="n">index</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
-              <span class="k">break</span><span class="o">;</span>
-          <span class="o">}</span>
-          <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">index</span><span class="o">[</span><span class="n">i</span><span class="o">],</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
-      <span class="o">}</span>
-      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">();</span><span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
-          <span class="n">res</span><span class="o">[</span><span class="n">j</span><span class="o">]=</span><span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">j</span><span class="o">);</span>
-      <span class="o">}</span>
-      <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>    </div>
-    <h3 id="python">python</h3>
-    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-  <span class="k">def</span> <span class="nf">createTargetArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-      <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
-          <span class="n">nums</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-      <span class="k">return</span> <span class="n">nums</span>
-</code></pre></div>    </div>
-  </li>
+  <li>python 数组的 insert 方法可以指定位置插入数据，且元数据后移一位，在java中 listArray.add 同样的功能</li>
 </ul>
 
-<h3 id="用时">用时</h3>
-<p>做题用时：1 h  <br />
-执行用时：1 ms     <br />
-内存消耗：37.9 MB</p>
+<h4 id="代码">代码</h4>
+<p>第一版 需要另外开辟空间</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">createTargetArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">index</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="o">.</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+
+<ul>
+  <li>第二版 需要另外开辟空间
+``` python
+class Solution:
+  def createTargetArray(self, nums: List[int], index: List[int]) -&gt; List[int]:
+      for i in range(len(nums)):
+          nums.insert(index[i], nums.pop(i))</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+#### java
+```java
+public lass Solution {
+    public int[] createTargetArray(int[] nums, int[] index) {
+        // 用于在列表的指定位置插入指定元素，并将当前处于该位置的元素及其后续元素的索引加 1
+        List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+        int[] res = new int[nums.length];
+        for (int i = 0; i &lt; nums.length; i++) {
+            if (i&gt;=index.length) {
+                break;
+            }
+            list.add(index[i],nums[i]);
+        }
+        for (int j=0;j&lt;list.size();j++) {
+            res[j]=list.get(j);
+        }
+        return res;
+
+    }
+}
+</code></pre></div></div>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
