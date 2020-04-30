@@ -600,15 +600,54 @@ $$
 </code></pre></div></div>
 
 <h3 id="方法一-算数">方法一 算数</h3>
-<h4 id="解题思路">解题思路</h4>
+<h3 id="解题思路">解题思路</h3>
 <ul>
   <li>根据题意 ，可得出伪代码
     <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">getNum</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
   <span class="k">while</span> <span class="n">n</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
       <span class="n">a</span> <span class="o">=</span> <span class="n">n</span><span class="o">%</span><span class="mi">10</span>
       <span class="n">n</span> <span class="o">//=</span> <span class="mi">10</span>
+  <span class="k">return</span> <span class="n">a</span>
 </code></pre></div>    </div>
   </li>
+  <li>使用 divmod 方法
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_next</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+  <span class="n">total_sum</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">number</span><span class="p">,</span> <span class="n">digit</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+      <span class="n">total_sum</span> <span class="o">+=</span> <span class="n">digit</span> <span class="o">**</span> <span class="mi">2</span>
+  <span class="k">return</span> <span class="n">total_sum</span>
+</code></pre></div>    </div>
+  </li>
+  <li>根据题目发现判断条件
+    <ol>
+      <li>列出所有可能的条件</li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="代码">代码</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isHappy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+
+        <span class="n">cycle_members</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">145</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">20</span><span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">get_next</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+            <span class="n">total_sum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">number</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">number</span><span class="p">,</span> <span class="n">digit</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">number</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="n">total_sum</span> <span class="o">+=</span> <span class="n">digit</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="k">return</span> <span class="n">total_sum</span>
+
+        <span class="k">while</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cycle_members</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">get_next</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<h3 id="一路debug-得出的答案">一路debug 得出的答案</h3>
+<ul>
   <li>根据题目发现判断条件
     <ol>
       <li>当 sumNum = 1 返回True</li>
@@ -619,7 +658,7 @@ $$
   </li>
 </ul>
 
-<h4 id="代码">代码</h4>
+<h4 id="代码-1">代码</h4>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">isHappy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="n">sumNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -646,7 +685,7 @@ $$
 
 <ul>
   <li>检查数字是否在哈希集中需要 O(1) 的时间，而对于其他数据结构，则需要 O(n) 的时间
-    <h4 id="代码-1">代码</h4>
+    <h4 id="代码-2">代码</h4>
     <p>```python
 func isHappy(n int) bool {
   m := map[int]bool{}
