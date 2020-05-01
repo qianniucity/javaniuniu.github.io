@@ -1,6 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-01T13:14:25+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己能在技术这条路上能坚持多久
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">5. 最长回文串</title><link href="http://localhost:4000/leetcode/2020/0501/001/07" rel="alternate" type="text/html" title="5. 最长回文串" /><published>2020-05-01T00:00:00+08:00</published><updated>2020-05-01T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0501/001/5.%20%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0501/001/07">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-01T13:26:22+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己能在技术这条路上能坚持多久
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">21. 合并两个有序链表</title><link href="http://localhost:4000/leetcode/2020/0501/002" rel="alternate" type="text/html" title="21. 合并两个有序链表" /><published>2020-05-01T00:00:00+08:00</published><updated>2020-05-01T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0501/21.%20%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0501/002">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;递归&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;： &lt;code class=&quot;info highlighter-rouge&quot;&gt;递归&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;题目-21-合并两个有序链表&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/merge-two-sorted-lists/&quot;&gt;21. 合并两个有序链表&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 &lt;/p&gt;
+
+&lt;h3 id=&quot;示例&quot;&gt;示例：&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：1-&amp;gt;2-&amp;gt;4, 1-&amp;gt;3-&amp;gt;4
+输出：1-&amp;gt;1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;4
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-递归&quot;&gt;方法一 递归&lt;/h3&gt;
+
+&lt;h4 id=&quot;java&quot;&gt;java&lt;/h4&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;mergeTwoLists&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ListNode&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;val&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mergeTwoLists&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mergeTwoLists&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;l1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="递归" /><summary type="html">难度：简单 本题涉及算法： 递归 思路： 递归 类似题型: 题目 21. 合并两个有序链表 将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。  示例： 输入：1-&amp;gt;2-&amp;gt;4, 1-&amp;gt;3-&amp;gt;4 输出：1-&amp;gt;1-&amp;gt;2-&amp;gt;3-&amp;gt;4-&amp;gt;4 方法一 递归 java class Solution { public ListNode mergeTwoLists(ListNode l1, ListNode l2) { if (l1 == null) return l2; if (l2 == null) return l1; if (l1.val &amp;lt; l2.val) { l1.next = mergeTwoLists(l1.next, l2); return l1; } else { l2.next = mergeTwoLists(l1, l2.next); return l2; } } }</summary></entry><entry><title type="html">5. 最长回文串</title><link href="http://localhost:4000/leetcode/2020/0501/001/07" rel="alternate" type="text/html" title="5. 最长回文串" /><published>2020-05-01T00:00:00+08:00</published><updated>2020-05-01T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0501/001/5.%20%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E4%B8%B2</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0501/001/07">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;中心扩展算法&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;： &lt;code class=&quot;info highlighter-rouge&quot;&gt;中心扩展算法&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
@@ -132,7 +168,179 @@
     &lt;span class=&quot;n&quot;&gt;solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 有括号和没有括号的区别
 &lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;solution&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;longestPalindrome&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;st&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="中心扩展算法" /><summary type="html">难度：中等 本题涉及算法： 中心扩展算法 思路： 中心扩展算法 类似题型: 题目 5. 最长回文子串 给定一个字符串 s ，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。 示例 示例 1： 输入: &quot;babad&quot; 输出: &quot;bab&quot; 注意: &quot;aba&quot; 也是一个有效答案。 示例 2： 输入: &quot;cbbd&quot; 输出: &quot;bb&quot; 方法一 中心扩展算法 解题思路 首先，要明白 expandAroundCenter 函数作用是以一个中心向两侧扩展找到这个中心最长回文串的长度，参数 left 和 right 就是为了指定中心。 其次，中心可能是一个或两个字符。如：对于字符串“abcda”，“c”是中心；对于字符串“adccda”，“cc”是中心。 那么，expandAroundCenter(s, i, i) 就是在找以 i（一个字符）为中心的最长回文串的长度；expandAroundCenter(s, i, i + 1) 是在找以 i 和i+1（两个字符）为中心的最长回文串的长度。 将得到的两个长度和缓存的最长回文串长度相比较。若新得到的长度较长，表达式：$start = i - (len - 1) / 2$;$end = i + len / 2$; 就得出了新的最长回文串的开始和结束位置。 最后，for循环遍历了一遍，以一个字符为中心总共找了 n 次，以两个字符为中心总共找了 n-1 次，所以说“总共有2n−1 个这样的中心”。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 public String longestPalindrome(String s) { if (s == null || s.length() &amp;lt; 1) return &quot;&quot;; int start = 0, end = 0; for (int i = 0; i &amp;lt; s.length(); i++) { int len1 = expandAroundCenter(s, i, i); // 一个中心的情况 aba int len2 = expandAroundCenter(s, i, i + 1); // 两个中心的情况 abba int len = Math.max(len1, len2); if (len &amp;gt; end - start) { // 每次循环 判断最长的回文串首尾 start = i - (len - 1) / 2; // 当一个中心的情况 start = i - len/2 当两个中心的情况 i 右边做了 i+1 操作 所以 len -1 end = i + len / 2; // 这个还好理解 } } return s.substring(start, end + 1); } // 中心扩展算法 private int expandAroundCenter(String s, int left, int right) { while (left &amp;gt;= 0 &amp;amp;&amp;amp; right &amp;lt; s.length() &amp;amp;&amp;amp; s.charAt(left) == s.charAt(right)) { left--; right++; } return right - left - 1; } 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 class Solution: def longestPalindrome(self,s: str) -&amp;gt; str: start , end = 0 , 0 for i in range(len(s)-1): lenOne = self.expandAroundCenter(s,i,i) # 一个中心的情况 aba lenTwo = self.expandAroundCenter(s,i,i+1) # 两个中心的情况 abba lenMax = max(lenOne,lenTwo) if lenMax &amp;gt; end - start: # 每次循环 判断最长的回文串首尾 start = i - (lenMax-1)//2 # // 当一个中心的情况 start = i - len/2 当两个中心的情况 i 右边做了 i+1 操作 所以 len -1 end = i + lenMax//2 # 这个还好理解 return s[start:end+1] # 中心扩展算法 def expandAroundCenter(self,s:str ,left:int,right:int) -&amp;gt;int: while left &amp;gt;= 0 and right &amp;lt; len(s) and s[left] == s[right]: left = left -1 right = right +1 return right - left -1 if __name__ == &quot;__main__&quot;: st = 'abcba' solution = Solution() # 有括号和没有括号的区别 res = solution.longestPalindrome(st) print(res)</summary></entry><entry><title type="html">贪心</title><link href="http://localhost:4000/algo/2020/0430/006" rel="alternate" type="text/html" title="贪心" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E8%B4%AA%E5%BF%83</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/006">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="贪心" /><summary type="html">TODO</summary></entry><entry><title type="html">markdown常见数学符号和运算</title><link href="http://localhost:4000/mark/markdown/common" rel="alternate" type="text/html" title="markdown常见数学符号和运算" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/mark/markdown/markdown%E5%B8%B8%E8%A7%81%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7%E5%92%8C%E8%BF%90%E7%AE%97</id><content type="html" xml:base="http://localhost:4000/mark/markdown/common">&lt;p&gt;MarkDown常用数学符号
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="中心扩展算法" /><summary type="html">难度：中等 本题涉及算法： 中心扩展算法 思路： 中心扩展算法 类似题型: 题目 5. 最长回文子串 给定一个字符串 s ，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。 示例 示例 1： 输入: &quot;babad&quot; 输出: &quot;bab&quot; 注意: &quot;aba&quot; 也是一个有效答案。 示例 2： 输入: &quot;cbbd&quot; 输出: &quot;bb&quot; 方法一 中心扩展算法 解题思路 首先，要明白 expandAroundCenter 函数作用是以一个中心向两侧扩展找到这个中心最长回文串的长度，参数 left 和 right 就是为了指定中心。 其次，中心可能是一个或两个字符。如：对于字符串“abcda”，“c”是中心；对于字符串“adccda”，“cc”是中心。 那么，expandAroundCenter(s, i, i) 就是在找以 i（一个字符）为中心的最长回文串的长度；expandAroundCenter(s, i, i + 1) 是在找以 i 和i+1（两个字符）为中心的最长回文串的长度。 将得到的两个长度和缓存的最长回文串长度相比较。若新得到的长度较长，表达式：$start = i - (len - 1) / 2$;$end = i + len / 2$; 就得出了新的最长回文串的开始和结束位置。 最后，for循环遍历了一遍，以一个字符为中心总共找了 n 次，以两个字符为中心总共找了 n-1 次，所以说“总共有2n−1 个这样的中心”。 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 public String longestPalindrome(String s) { if (s == null || s.length() &amp;lt; 1) return &quot;&quot;; int start = 0, end = 0; for (int i = 0; i &amp;lt; s.length(); i++) { int len1 = expandAroundCenter(s, i, i); // 一个中心的情况 aba int len2 = expandAroundCenter(s, i, i + 1); // 两个中心的情况 abba int len = Math.max(len1, len2); if (len &amp;gt; end - start) { // 每次循环 判断最长的回文串首尾 start = i - (len - 1) / 2; // 当一个中心的情况 start = i - len/2 当两个中心的情况 i 右边做了 i+1 操作 所以 len -1 end = i + len / 2; // 这个还好理解 } } return s.substring(start, end + 1); } // 中心扩展算法 private int expandAroundCenter(String s, int left, int right) { while (left &amp;gt;= 0 &amp;amp;&amp;amp; right &amp;lt; s.length() &amp;amp;&amp;amp; s.charAt(left) == s.charAt(right)) { left--; right++; } return right - left - 1; } 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 class Solution: def longestPalindrome(self,s: str) -&amp;gt; str: start , end = 0 , 0 for i in range(len(s)-1): lenOne = self.expandAroundCenter(s,i,i) # 一个中心的情况 aba lenTwo = self.expandAroundCenter(s,i,i+1) # 两个中心的情况 abba lenMax = max(lenOne,lenTwo) if lenMax &amp;gt; end - start: # 每次循环 判断最长的回文串首尾 start = i - (lenMax-1)//2 # // 当一个中心的情况 start = i - len/2 当两个中心的情况 i 右边做了 i+1 操作 所以 len -1 end = i + lenMax//2 # 这个还好理解 return s[start:end+1] # 中心扩展算法 def expandAroundCenter(self,s:str ,left:int,right:int) -&amp;gt;int: while left &amp;gt;= 0 and right &amp;lt; len(s) and s[left] == s[right]: left = left -1 right = right +1 return right - left -1 if __name__ == &quot;__main__&quot;: st = 'abcba' solution = Solution() # 有括号和没有括号的区别 res = solution.longestPalindrome(st) print(res)</summary></entry><entry><title type="html">202. 快乐数</title><link href="http://localhost:4000/leetcode/2020/0430/030/06" rel="alternate" type="text/html" title="202. 快乐数" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0430/030/202.%20%E5%BF%AB%E4%B9%90%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0430/030/06">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;算数&lt;/code&gt; &lt;code class=&quot;success highlighter-rouge&quot;&gt;用HashSet检测循环&lt;/code&gt; &lt;code class=&quot;success highlighter-rouge&quot;&gt;快慢指针法&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;： &lt;code class=&quot;info highlighter-rouge&quot;&gt;算数&lt;/code&gt; &lt;code class=&quot;info highlighter-rouge&quot;&gt;用HashSet检测循环&lt;/code&gt; &lt;code class=&quot;info highlighter-rouge&quot;&gt;快慢指针法&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h1 id=&quot;题目-202-快乐数&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/happy-number/&quot;&gt;202. 快乐数&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;编写一个算法来判断一个数 n 是不是快乐数。&lt;/p&gt;
+
+&lt;p&gt;「快乐数」定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是 &lt;strong&gt;无限循环&lt;/strong&gt; 但始终变不到 1。如果 可以变为  1，那么这个数就是快乐数。&lt;/p&gt;
+
+&lt;p&gt;如果 n 是快乐数就返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;True&lt;/code&gt; ；不是，则返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;False&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;h3 id=&quot;示例&quot;&gt;示例：&lt;/h3&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：19
+输出：true
+解释：
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-算数&quot;&gt;方法一 算数&lt;/h3&gt;
+&lt;h3 id=&quot;解题思路&quot;&gt;解题思路&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;根据题意 ，可得出伪代码
+    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;使用 divmod 方法
+    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;divmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;根据题目发现判断条件
+    &lt;ol&gt;
+      &lt;li&gt;列出所有可能的条件&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;代码&quot;&gt;代码&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isHappy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;cycle_members&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;37&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;58&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;89&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;145&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;divmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cycle_members&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;一路debug-得出的答案&quot;&gt;一路debug 得出的答案&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;根据题目发现判断条件
+    &lt;ol&gt;
+      &lt;li&gt;当 sumNum = 1 返回True&lt;/li&gt;
+      &lt;li&gt;当 sumNum = 7 返回True 需要多 n = 1111111 单独判断&lt;/li&gt;
+      &lt;li&gt;当 1 &amp;lt; sumNum &amp;lt; 10 即  循环后 n = 2 和 3  的会出现 无限循环的情况&lt;/li&gt;
+      &lt;li&gt;当 sumNum &amp;gt; 10 ,则 赋值 n = sumNum 继续循环&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;代码-1&quot;&gt;代码&lt;/h4&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isHappy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法二-用-hashset-检测循环&quot;&gt;方法二 用 HashSet 检测循环&lt;/h3&gt;
+&lt;h4 id=&quot;解题思路-1&quot;&gt;解题思路&lt;/h4&gt;
+&lt;ol&gt;
+  &lt;li&gt;最终会得到 11。&lt;/li&gt;
+  &lt;li&gt;最终会进入循环。&lt;/li&gt;
+  &lt;li&gt;值会越来越大，最后接近无穷大。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;检查数字是否在哈希集中需要 O(1) 的时间，而对于其他数据结构，则需要 O(n) 的时间
+    &lt;h4 id=&quot;代码-2&quot;&gt;代码&lt;/h4&gt;
+    &lt;p&gt;```python
+func isHappy(n int) bool {
+  m := map[int]bool{}
+  for ; n != 1 &amp;amp;&amp;amp; !m[n]; n, m[n] = step(n), true { }
+  return n == 1
+}&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;func step(n int) int {
+    sum := 0
+    for n &amp;gt; 0 {
+        sum += (n%10) * (n%10)
+        n = n/10
+    }
+    return sum
+}&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;### 方法三 快慢指针法
+#### 解题思路
+通过反复调用 getNext(n) 得到的链是一个隐式的链表。隐式意味着我们没有实际的链表节点和指针，但数据仍然形成链表结构。起始数字是链表的头 “节点”，链中的所有其他数字都是节点。next 指针是通过调用 getNext(n) 函数获得。
+
+意识到我们实际有个链表，那么这个问题就可以转换为检测一个链表是否有环。因此我们在这里可以使用弗洛伊德循环查找算法。这个算法是两个奔跑选手，一个跑的快，一个跑得慢。在龟兔赛跑的寓言中，跑的快的称为 “乌龟”，跑得快的称为 “兔子”。
+
+不管乌龟和兔子在循环中从哪里开始，它们最终都会相遇。这是因为兔子每走一步就向乌龟靠近一个节点（在它们的移动方向上）。
+
+
+```python
+
+def isHappy(self, n: int) -&amp;gt; bool:  
+    def get_next(number):
+        total_sum = 0
+        while number &amp;gt; 0:
+            number, digit = divmod(number, 10)
+            total_sum += digit ** 2
+        return total_sum
+
+    slow_runner = n
+    fast_runner = get_next(n)
+    while fast_runner != 1 and slow_runner != fast_runner:
+        slow_runner = get_next(slow_runner)
+        fast_runner = get_next(get_next(fast_runner))
+    return fast_runner == 1
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="算数" /><summary type="html">难度：简单 本题涉及算法： 算数 用HashSet检测循环 快慢指针法 思路： 算数 用HashSet检测循环 快慢指针法 类似题型: 题目 202. 快乐数 编写一个算法来判断一个数 n 是不是快乐数。 「快乐数」定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。如果 可以变为  1，那么这个数就是快乐数。 如果 n 是快乐数就返回 True ；不是，则返回 False 。   示例： 输入：19 输出：true 解释： 12 + 92 = 82 82 + 22 = 68 62 + 82 = 100 12 + 02 + 02 = 1 方法一 算数 解题思路 根据题意 ，可得出伪代码 def getNum(n): while n!=0: a = n%10 n //= 10 return a 使用 divmod 方法 def get_next(number): total_sum = 0 while number &amp;gt; 0: number, digit = divmod(number, 10) total_sum += digit ** 2 return total_sum 根据题目发现判断条件 列出所有可能的条件 代码 class Solution: def isHappy(self, n: int) -&amp;gt; bool: cycle_members = {4, 16, 37, 58, 89, 145, 42, 20} def get_next(number): total_sum = 0 while number &amp;gt; 0: number, digit = divmod(number, 10) total_sum += digit ** 2 return total_sum while n != 1 and n not in cycle_members: n = get_next(n) return n == 1 一路debug 得出的答案 根据题目发现判断条件 当 sumNum = 1 返回True 当 sumNum = 7 返回True 需要多 n = 1111111 单独判断 当 1 &amp;lt; sumNum &amp;lt; 10 即 循环后 n = 2 和 3 的会出现 无限循环的情况 当 sumNum &amp;gt; 10 ,则 赋值 n = sumNum 继续循环 代码 class Solution: def isHappy(self, n: int) -&amp;gt; bool: sumNum = 0; while n!=0: sumNum += (n%10)*(n%10) n //= 10 if n == 0: if sumNum == 1 or sumNum==7: return True if sumNum&amp;lt;10: return False else : n = sumNum sumNum = 0 方法二 用 HashSet 检测循环 解题思路 最终会得到 11。 最终会进入循环。 值会越来越大，最后接近无穷大。 检查数字是否在哈希集中需要 O(1) 的时间，而对于其他数据结构，则需要 O(n) 的时间 代码 ```python func isHappy(n int) bool { m := map[int]bool{} for ; n != 1 &amp;amp;&amp;amp; !m[n]; n, m[n] = step(n), true { } return n == 1 } func step(n int) int { sum := 0 for n &amp;gt; 0 { sum += (n%10) * (n%10) n = n/10 } return sum } ### 方法三 快慢指针法 #### 解题思路 通过反复调用 getNext(n) 得到的链是一个隐式的链表。隐式意味着我们没有实际的链表节点和指针，但数据仍然形成链表结构。起始数字是链表的头 “节点”，链中的所有其他数字都是节点。next 指针是通过调用 getNext(n) 函数获得。 意识到我们实际有个链表，那么这个问题就可以转换为检测一个链表是否有环。因此我们在这里可以使用弗洛伊德循环查找算法。这个算法是两个奔跑选手，一个跑的快，一个跑得慢。在龟兔赛跑的寓言中，跑的快的称为 “乌龟”，跑得快的称为 “兔子”。 不管乌龟和兔子在循环中从哪里开始，它们最终都会相遇。这是因为兔子每走一步就向乌龟靠近一个节点（在它们的移动方向上）。 ```python def isHappy(self, n: int) -&amp;gt; bool: def get_next(number): total_sum = 0 while number &amp;gt; 0: number, digit = divmod(number, 10) total_sum += digit ** 2 return total_sum slow_runner = n fast_runner = get_next(n) while fast_runner != 1 and slow_runner != fast_runner: slow_runner = get_next(slow_runner) fast_runner = get_next(get_next(fast_runner)) return fast_runner == 1</summary></entry><entry><title type="html">贪心</title><link href="http://localhost:4000/algo/2020/0430/006" rel="alternate" type="text/html" title="贪心" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E8%B4%AA%E5%BF%83</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/006">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="贪心" /><summary type="html">TODO</summary></entry><entry><title type="html">线性扫描</title><link href="http://localhost:4000/algo/2020/0430/005" rel="alternate" type="text/html" title="线性扫描" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E7%BA%BF%E6%80%A7%E6%89%AB%E6%8F%8F</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/005">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="线性扫描" /><summary type="html">TODO</summary></entry><entry><title type="html">快慢指针</title><link href="http://localhost:4000/algo/2020/0430/007" rel="alternate" type="text/html" title="快慢指针" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/007">&lt;ul&gt;
+  &lt;li&gt;概念&lt;/li&gt;
+  &lt;li&gt;使用场景
+    &lt;ul&gt;
+      &lt;li&gt;判断循环就用快慢指针&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;示例
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/happy-number/solution/kuai-le-shu-by-leetcode-solution/&quot;&gt;202. 快乐数&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="快慢指针" /><summary type="html">概念 使用场景 判断循环就用快慢指针 示例 202. 快乐数</summary></entry><entry><title type="html">小根堆</title><link href="http://localhost:4000/algo/2020/0430/004" rel="alternate" type="text/html" title="小根堆" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%B0%8F%E6%A0%B9%E5%A0%86</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/004">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="小根堆" /><summary type="html">TODO</summary></entry><entry><title type="html">大根堆</title><link href="http://localhost:4000/algo/2020/0430/003" rel="alternate" type="text/html" title="大根堆" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%A4%A7%E6%A0%B9%E5%A0%86</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/003">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="大根堆" /><summary type="html">TODO</summary></entry><entry><title type="html">哈希表</title><link href="http://localhost:4000/algo/2020/0430/002" rel="alternate" type="text/html" title="哈希表" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%93%88%E5%B8%8C%E8%A1%A8</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/002">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="哈希表" /><summary type="html">TODO</summary></entry><entry><title type="html">markdown常见数学符号和运算</title><link href="http://localhost:4000/mark/markdown/common" rel="alternate" type="text/html" title="markdown常见数学符号和运算" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/mark/markdown/markdown%E5%B8%B8%E8%A7%81%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7%E5%92%8C%E8%BF%90%E7%AE%97</id><content type="html" xml:base="http://localhost:4000/mark/markdown/common">&lt;p&gt;MarkDown常用数学符号
 记得一定要加$$才可以显示效果&lt;/p&gt;
 
 &lt;h3 id=&quot;显示效果&quot;&gt;显示效果&lt;/h3&gt;
@@ -418,289 +626,4 @@ $$
    4 &amp; 5 &amp; 6 \\
    7 &amp; 8 &amp; 9
   \end{matrix}
-  \right] \tag{3} %]]&gt;&lt;/script&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="markdown常见数学符号和运算" /><summary type="html">MarkDown常用数学符号 记得一定要加$$才可以显示效果 显示效果 语法： $ 数学符号必须加在运算符号前后 上标 语法： $x^2$ $x^2$ 下标 $x_i$ $x_i$ 四则运算 加法运算，符号：$x+y=z$，如：$x+y=z$ 减法运算，符号：$x-y=z$ ，如：$x-y=z$ 加减运算，符号：$x \pm y=z$，如：$x \pm y=z$ 减甲运算，符号：$x \mp y=z$，如：$x \mp y=z$ 乘法运算，符号：$x \times y=z$，如：$x \times y=z$ 点乘运算，符号：$x \cdot y=z$，如：$x \cdot y=z$ 星乘运算，符号：$x \ast y=z$，如：$x \ast y=z$ 除法运算，符号：$x \div y=z$，如：$x \div y=z$ 斜法运算，符号：$x/y=z$，如：$x/y=z$ 分式表示，符号：$\frac{x+y}{y+z}$，如：$\frac{x+y}{y+z}$ 分式表示，符号：${x+y} \over {y+z}$，如：${x+y} \over {y+z}$ 绝对值表示，符号：如：$|x+y|$，如：$|x+y|$ 高级运算 平均数运算，符号：$\overline{xyz}$，如：$\overline{xyz}$ 开二次方运算，符号：$\sqrt x$，如：$\sqrt x$ 开方运算，符号：$\sqrt[3]{x+y}$，如：$\sqrt[3]{x+y}$ 对数运算，符号：$\log(x)$，如：$\log(x)$ 微分运算，符号：$\frac{\partial x}{\partial y}$，如：$\frac{\partial x}{\partial y}$ 矩阵表示，符号：$\left[ \begin{matrix} 1 &amp;amp;2 &amp;amp;\cdots &amp;amp;4\5 &amp;amp;6 &amp;amp;\cdots &amp;amp;8\\vdots &amp;amp;\vdots &amp;amp;\ddots &amp;amp;\vdots\13 &amp;amp;14 &amp;amp;\cdots &amp;amp;16\end{matrix} \right]$，如：$\left[ \begin{matrix} 1 &amp;amp;2 &amp;amp;\cdots &amp;amp;4\5 &amp;amp;6 &amp;amp;\cdots &amp;amp;8\vdots &amp;amp;\vdots &amp;amp;\ddots &amp;amp;\vdots\13 &amp;amp;14 &amp;amp;\cdots &amp;amp;16\end{matrix} \right]$ 逻辑运算 等于运算，符号：$x+y=z$，如：$x+y=z$ 大于运算，符号：$x+y&amp;gt;z$，如：$x+y&amp;gt;z$ 小于运算，符号：$x+y&amp;lt;z$，如：$x+y&amp;lt;z$ 大于等于运算，符号：$x+y \geq z$，如：$x+y \geq z$ 小于等于运算，符号：$x+y \leq z$，如：$x+y \leq z$ 不等于运算，符号：$x+y \neq z$，如：$x+y \neq z$ 不大于等于运算，符号：$x+y \ngeq z$，如：$x+y \ngeq z$ 不大于等于运算，符号：$x+y \not\geq z$，如：$x+y \not\geq z$ 不小于等于运算，符号：如：$x+y \nleq z$，如：$x+y \nleq z$ 不小于等于运算，符号：如：$x+y \not\leq z$，如：$x+y \not\leq z$ 约等于运算，符号：$x+y \approx z$，如：$x+y \approx z$ 恒定等于运算，符号：$x+y \equiv z$，如：$x+y \equiv z$ 包括整体 语法： $Z^{yx}$ $Z^{yx}$ 大括号 语法： $ \left(大括号)\right. $ $\left(大括号)\right.$ 分割线 语法： $\frac{ x }{ y } $\frac{ x }{ y }$ ​ 开方 语法： $ \sqrt{ x } $ $\sqrt{ x }$ ​ $ \sqrt[ 3 ]{ x } $ $\sqrt[ 3 ]{ x }$ ​ 省略号 语法： $ \ldots $ 表示与文本底线对齐的省略号，$ \cdots $ 表示与文本中线对齐的省略号 $\ldots $ $ \cdots$ 矢量 语法： $ \vec{ a } $ $\vec{ a }$ 积分 语法： $ \int_0^2 x^2 {\rm d}x $ $\int_0^2 x^2 {\rm d}x$ 极限 语法： $ \lim\limits_{n \rightarrow +\infty} \frac{1}{n(n+1)} $ $\lim\limits_{n \rightarrow +\infty} \frac{1}{n(n+1)}$ ​ 累加 语法： $\sum_{i=0}^n$ $\frac{1}{i^2} $ $\sum_{i=0}^n$ $\frac{1}{i^2}$ 累乘 语法： $\prod_{i=0}^n \frac{1}{i^2}$ $\prod_{i=0}^n \frac{1}{i^2}$ ​ 希腊字母 $\alpha$ $\alpha$ $\beta$ $\beta$ $\gamma$ $\gamma$ $\Gamma$ $\Gamma$ $\delta$ $\delta$ $\Delta$ $\Delta$ $\epsilon$ $\epsilon$ $\varepsilon$ $\varepsilon$ $\zeta$ $\zeta$ $\eta$ $\eta$ $\theta$ $\theta$ $\Theta$ $\Theta$ $\vartheta$ $\vartheta$ $\iota$ $\iota$ $\kappa$ $\kappa$ $\lambda$ $\lambda$ $\Lambda$ $\Lambda$ $\mu$ $\mu$ $\nu$ $\nu$ $\xi$ $\xi$ $\Xi$ $\Xi$ $\pi$ $\pi$ $\Pi$ $\Pi$ $\varpi$ $\varpi$ $\rho$ $\rho$ $\varrho$ $\varrho$ $\sigma$ $\sigma$ $\varsigma$ $\varsigma$ $\tau$ $\tau$ $\upsilon$ $\upsilon$ $\Upsilon$ $\Upsilon$ $\phi$ $\phi$ $\Phi$ $\Phi$ $\varphi$ $\varphi$ $\chi$ $\chi$ $\psi$ $\psi$ $\Psi$ $\Psi$ $\omega$ $\omega$ $\Omega$ $\Omega$ 关系运算符： $\pm$ $\pm$ $\times$ $\times$ $\div$ $\div$ $\mid$ $\mid$ $\nmid$ $\nmid$ $\cdot$ $\cdot$ $\circ$ $\circ$ $\ast$ $\ast$ $\bigodot$ $\bigodot$ $\bigotimes$ $\bigotimes$ $\bigoplus$ $\bigoplus$ $\leq$ $\leq$ $\geq$ $\geq$ $\neq$ $\neq$ $\approx$ $\approx$ $\equiv$ $\equiv$ $\sum$ $\sum$ $\prod$ $\prod$ $\coprod$ $\coprod$ 集合运算符： $\emptyset$ $\emptyset$ $\in$ $\in$ $\notin$ $\notin$ $\subset$ $\subset$ $\supset$ $\supset$ $\subseteq$ $\subseteq$ $\supseteq$ $\supseteq$ $\bigcap$ $\bigcap$ $\bigcup$ $\bigcup$ $\bigvee$ $\bigvee$ $\bigwedge$ $\bigwedge$ $\biguplus$ $\biguplus$ $\bigsqcup$ $\bigsqcup$ 对数运算符： $\log$ $\log$ $\lg$ $\lg$ $\ln$ $\ln$ 三角运算符： $\bot$ $\bot$ $\angle$ $\angle$ $30^\circ$ $30^\circ$ $\sin$ $\sin$ $\cos$ $\cos$ $\tan$ $\tan$ $\cot$ $\cot$ $\sec$ $\sec$ $\csc$ $\csc$ 微积分运算符： $\prime$ $\prime$ $\int$ $\int$ $\iint$ $\iint$ $\iiint$ $\iiint$ $\iiiint$ $\iiiint$ $\oint$ $\oint$ $\lim$ $\lim$ $\infty$ $\infty$ $\nabla$ $\nabla$ 逻辑运算符： $\because$ $\because$ $\therefore$ $\therefore$ $\forall$ $\forall$ $\exists$ $\exists$ $\not=$ $\not=$ $\not&amp;gt;$ $\not&amp;gt;$ $\not\subset$ $\not\subset$ 戴帽符号： $\hat{y}$ $\hat{y}$ $\check{y}$ $\check{y}$ $\breve{y}$ $\breve{y}$ $\bar{a}$ $\bar{a}$ $\tilde{a}$ $\tilde{a}$ $\widetilde{A}$ $\widetilde{A}$ $\vec{a}$ $\vec{a}$ $\dot$ $\dot $\ddot$ $\ddot 连线符号： $\overline{a+b+c+d}$ $\overline{a+b+c+d}$ ​ $\overbrace{a+\underbrace{b+c}{1.0}+d}^{2.0}$ $\overbrace{a+\underbrace{b+c}{1.0}+d}^{2.0}$ 箭头符号： $\uparrow$ $\uparrow$ $\downarrow$ $\downarrow$ $\Uparrow$ $\Uparrow$ $\Downarrow$ $\Downarrow$ $\rightarrow$ $\rightarrow$ $\leftarrow$ $\leftarrow$ $\Rightarrow$ $\Rightarrow$ $\Leftarrow$ $\Leftarrow$ $\longrightarrow$ $\longrightarrow$ $\longleftarrow$ $\longleftarrow$ $\Longrightarrow$ $\Longrightarrow$ $\Longleftarrow$ $\Longleftarrow$ 分段函数 $$ 函数名=\begin{cases} 公式1 &amp;amp; 条件1 \\ 公式2 &amp;amp; 条件2 \\ 公式3 &amp;amp; 条件3 \end{cases}$$ $$ \left[ \begin{matrix} 1 &amp;amp; 2 &amp;amp; 3 \\ 4 &amp;amp; 5 &amp;amp; 6 \\ 7 &amp;amp; 8 &amp;amp; 9 \end{matrix} \right] \tag{3} $$</summary></entry><entry><title type="html">线性扫描</title><link href="http://localhost:4000/algo/2020/0430/005" rel="alternate" type="text/html" title="线性扫描" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E7%BA%BF%E6%80%A7%E6%89%AB%E6%8F%8F</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/005">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="线性扫描" /><summary type="html">TODO</summary></entry><entry><title type="html">快慢指针</title><link href="http://localhost:4000/algo/2020/0430/007" rel="alternate" type="text/html" title="快慢指针" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/007">&lt;ul&gt;
-  &lt;li&gt;概念&lt;/li&gt;
-  &lt;li&gt;使用场景
-    &lt;ul&gt;
-      &lt;li&gt;判断循环就用快慢指针&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;示例
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/happy-number/solution/kuai-le-shu-by-leetcode-solution/&quot;&gt;202. 快乐数&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="快慢指针" /><summary type="html">概念 使用场景 判断循环就用快慢指针 示例 202. 快乐数</summary></entry><entry><title type="html">小根堆</title><link href="http://localhost:4000/algo/2020/0430/004" rel="alternate" type="text/html" title="小根堆" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%B0%8F%E6%A0%B9%E5%A0%86</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/004">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="小根堆" /><summary type="html">TODO</summary></entry><entry><title type="html">大根堆</title><link href="http://localhost:4000/algo/2020/0430/003" rel="alternate" type="text/html" title="大根堆" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%A4%A7%E6%A0%B9%E5%A0%86</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/003">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="大根堆" /><summary type="html">TODO</summary></entry><entry><title type="html">哈希表</title><link href="http://localhost:4000/algo/2020/0430/002" rel="alternate" type="text/html" title="哈希表" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/algo/2020/0430/%E5%93%88%E5%B8%8C%E8%A1%A8</id><content type="html" xml:base="http://localhost:4000/algo/2020/0430/002">&lt;p&gt;TODO&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="哈希表" /><summary type="html">TODO</summary></entry><entry><title type="html">202. 快乐数</title><link href="http://localhost:4000/leetcode/2020/0430/030/06" rel="alternate" type="text/html" title="202. 快乐数" /><published>2020-04-30T00:00:00+08:00</published><updated>2020-04-30T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0430/030/202.%20%E5%BF%AB%E4%B9%90%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0430/030/06">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;算数&lt;/code&gt; &lt;code class=&quot;success highlighter-rouge&quot;&gt;用HashSet检测循环&lt;/code&gt; &lt;code class=&quot;success highlighter-rouge&quot;&gt;快慢指针法&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;： &lt;code class=&quot;info highlighter-rouge&quot;&gt;算数&lt;/code&gt; &lt;code class=&quot;info highlighter-rouge&quot;&gt;用HashSet检测循环&lt;/code&gt; &lt;code class=&quot;info highlighter-rouge&quot;&gt;快慢指针法&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h1 id=&quot;题目-202-快乐数&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/happy-number/&quot;&gt;202. 快乐数&lt;/a&gt;&lt;/h1&gt;
-
-&lt;p&gt;编写一个算法来判断一个数 n 是不是快乐数。&lt;/p&gt;
-
-&lt;p&gt;「快乐数」定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是 &lt;strong&gt;无限循环&lt;/strong&gt; 但始终变不到 1。如果 可以变为  1，那么这个数就是快乐数。&lt;/p&gt;
-
-&lt;p&gt;如果 n 是快乐数就返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;True&lt;/code&gt; ；不是，则返回 &lt;code class=&quot;highlighter-rouge&quot;&gt;False&lt;/code&gt; 。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;h3 id=&quot;示例&quot;&gt;示例：&lt;/h3&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：19
-输出：true
-解释：
-12 + 92 = 82
-82 + 22 = 68
-62 + 82 = 100
-12 + 02 + 02 = 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一-算数&quot;&gt;方法一 算数&lt;/h3&gt;
-&lt;h3 id=&quot;解题思路&quot;&gt;解题思路&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;根据题意 ，可得出伪代码
-    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getNum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;使用 divmod 方法
-    &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;divmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-      &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;根据题目发现判断条件
-    &lt;ol&gt;
-      &lt;li&gt;列出所有可能的条件&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;代码&quot;&gt;代码&lt;/h3&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isHappy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-
-        &lt;span class=&quot;n&quot;&gt;cycle_members&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;37&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;58&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;89&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;145&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;42&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;divmod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;total_sum&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cycle_members&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;一路debug-得出的答案&quot;&gt;一路debug 得出的答案&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;根据题目发现判断条件
-    &lt;ol&gt;
-      &lt;li&gt;当 sumNum = 1 返回True&lt;/li&gt;
-      &lt;li&gt;当 sumNum = 7 返回True 需要多 n = 1111111 单独判断&lt;/li&gt;
-      &lt;li&gt;当 1 &amp;lt; sumNum &amp;lt; 10 即  循环后 n = 2 和 3  的会出现 无限循环的情况&lt;/li&gt;
-      &lt;li&gt;当 sumNum &amp;gt; 10 ,则 赋值 n = sumNum 继续循环&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;代码-1&quot;&gt;代码&lt;/h4&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;isHappy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt;
-                    &lt;span class=&quot;n&quot;&gt;sumNum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法二-用-hashset-检测循环&quot;&gt;方法二 用 HashSet 检测循环&lt;/h3&gt;
-&lt;h4 id=&quot;解题思路-1&quot;&gt;解题思路&lt;/h4&gt;
-&lt;ol&gt;
-  &lt;li&gt;最终会得到 11。&lt;/li&gt;
-  &lt;li&gt;最终会进入循环。&lt;/li&gt;
-  &lt;li&gt;值会越来越大，最后接近无穷大。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;检查数字是否在哈希集中需要 O(1) 的时间，而对于其他数据结构，则需要 O(n) 的时间
-    &lt;h4 id=&quot;代码-2&quot;&gt;代码&lt;/h4&gt;
-    &lt;p&gt;```python
-func isHappy(n int) bool {
-  m := map[int]bool{}
-  for ; n != 1 &amp;amp;&amp;amp; !m[n]; n, m[n] = step(n), true { }
-  return n == 1
-}&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;func step(n int) int {
-    sum := 0
-    for n &amp;gt; 0 {
-        sum += (n%10) * (n%10)
-        n = n/10
-    }
-    return sum
-}&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;### 方法三 快慢指针法
-#### 解题思路
-通过反复调用 getNext(n) 得到的链是一个隐式的链表。隐式意味着我们没有实际的链表节点和指针，但数据仍然形成链表结构。起始数字是链表的头 “节点”，链中的所有其他数字都是节点。next 指针是通过调用 getNext(n) 函数获得。
-
-意识到我们实际有个链表，那么这个问题就可以转换为检测一个链表是否有环。因此我们在这里可以使用弗洛伊德循环查找算法。这个算法是两个奔跑选手，一个跑的快，一个跑得慢。在龟兔赛跑的寓言中，跑的快的称为 “乌龟”，跑得快的称为 “兔子”。
-
-不管乌龟和兔子在循环中从哪里开始，它们最终都会相遇。这是因为兔子每走一步就向乌龟靠近一个节点（在它们的移动方向上）。
-
-
-```python
-
-def isHappy(self, n: int) -&amp;gt; bool:  
-    def get_next(number):
-        total_sum = 0
-        while number &amp;gt; 0:
-            number, digit = divmod(number, 10)
-            total_sum += digit ** 2
-        return total_sum
-
-    slow_runner = n
-    fast_runner = get_next(n)
-    while fast_runner != 1 and slow_runner != fast_runner:
-        slow_runner = get_next(slow_runner)
-        fast_runner = get_next(get_next(fast_runner))
-    return fast_runner == 1
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="算数" /><summary type="html">难度：简单 本题涉及算法： 算数 用HashSet检测循环 快慢指针法 思路： 算数 用HashSet检测循环 快慢指针法 类似题型: 题目 202. 快乐数 编写一个算法来判断一个数 n 是不是快乐数。 「快乐数」定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。如果 可以变为  1，那么这个数就是快乐数。 如果 n 是快乐数就返回 True ；不是，则返回 False 。   示例： 输入：19 输出：true 解释： 12 + 92 = 82 82 + 22 = 68 62 + 82 = 100 12 + 02 + 02 = 1 方法一 算数 解题思路 根据题意 ，可得出伪代码 def getNum(n): while n!=0: a = n%10 n //= 10 return a 使用 divmod 方法 def get_next(number): total_sum = 0 while number &amp;gt; 0: number, digit = divmod(number, 10) total_sum += digit ** 2 return total_sum 根据题目发现判断条件 列出所有可能的条件 代码 class Solution: def isHappy(self, n: int) -&amp;gt; bool: cycle_members = {4, 16, 37, 58, 89, 145, 42, 20} def get_next(number): total_sum = 0 while number &amp;gt; 0: number, digit = divmod(number, 10) total_sum += digit ** 2 return total_sum while n != 1 and n not in cycle_members: n = get_next(n) return n == 1 一路debug 得出的答案 根据题目发现判断条件 当 sumNum = 1 返回True 当 sumNum = 7 返回True 需要多 n = 1111111 单独判断 当 1 &amp;lt; sumNum &amp;lt; 10 即 循环后 n = 2 和 3 的会出现 无限循环的情况 当 sumNum &amp;gt; 10 ,则 赋值 n = sumNum 继续循环 代码 class Solution: def isHappy(self, n: int) -&amp;gt; bool: sumNum = 0; while n!=0: sumNum += (n%10)*(n%10) n //= 10 if n == 0: if sumNum == 1 or sumNum==7: return True if sumNum&amp;lt;10: return False else : n = sumNum sumNum = 0 方法二 用 HashSet 检测循环 解题思路 最终会得到 11。 最终会进入循环。 值会越来越大，最后接近无穷大。 检查数字是否在哈希集中需要 O(1) 的时间，而对于其他数据结构，则需要 O(n) 的时间 代码 ```python func isHappy(n int) bool { m := map[int]bool{} for ; n != 1 &amp;amp;&amp;amp; !m[n]; n, m[n] = step(n), true { } return n == 1 } func step(n int) int { sum := 0 for n &amp;gt; 0 { sum += (n%10) * (n%10) n = n/10 } return sum } ### 方法三 快慢指针法 #### 解题思路 通过反复调用 getNext(n) 得到的链是一个隐式的链表。隐式意味着我们没有实际的链表节点和指针，但数据仍然形成链表结构。起始数字是链表的头 “节点”，链中的所有其他数字都是节点。next 指针是通过调用 getNext(n) 函数获得。 意识到我们实际有个链表，那么这个问题就可以转换为检测一个链表是否有环。因此我们在这里可以使用弗洛伊德循环查找算法。这个算法是两个奔跑选手，一个跑的快，一个跑得慢。在龟兔赛跑的寓言中，跑的快的称为 “乌龟”，跑得快的称为 “兔子”。 不管乌龟和兔子在循环中从哪里开始，它们最终都会相遇。这是因为兔子每走一步就向乌龟靠近一个节点（在它们的移动方向上）。 ```python def isHappy(self, n: int) -&amp;gt; bool: def get_next(number): total_sum = 0 while number &amp;gt; 0: number, digit = divmod(number, 10) total_sum += digit ** 2 return total_sum slow_runner = n fast_runner = get_next(n) while fast_runner != 1 and slow_runner != fast_runner: slow_runner = get_next(slow_runner) fast_runner = get_next(get_next(fast_runner)) return fast_runner == 1</summary></entry><entry><title type="html">最大公约数和最小公倍数</title><link href="http://localhost:4000/math/2020/0429/001" rel="alternate" type="text/html" title="最大公约数和最小公倍数" /><published>2020-04-29T00:00:00+08:00</published><updated>2020-04-29T00:00:00+08:00</updated><id>http://localhost:4000/math/2020/0429/%E6%9C%80%E5%A4%A7%E5%85%AC%E7%BA%A6%E6%95%B0%E5%92%8C%E6%9C%80%E5%B0%8F%E5%85%AC%E5%80%8D%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/math/2020/0429/001">&lt;ul&gt;
-  &lt;li&gt;相关题目
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;/leetcode/2020/0321/005&quot;&gt;365. 水壶问题&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;1-欧几里得法辗转相除法&quot;&gt;1. 欧几里得法(辗转相除法)&lt;/h3&gt;
-&lt;p&gt;这条算法基于一个定理：&lt;strong&gt;两个正整数a和b（a&amp;gt;b），它们的最大公约数等于a除以b的余数c和b之间的最大公约数&lt;/strong&gt;。比如10和25，25除以10商2余5，那么10和25的最大公约数，等同于10和5的最大公约数。&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;基于这条定理：&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;首先，我们先计算出a除以b的余数c，把问题转化成求出b和c的最大公约数；然后计算出b除以c的余数d，把问题转化成求出c和d的最大公约数；再然后计算出c除以d的余数e，把问题转化成求出d和e的最大公约数……以此类推，逐渐把两个较大整数之间的运算简化成两个较小整数之间的运算，直到两个数可以整除，或者其中一个数减小到1为止。&lt;/p&gt;
-
-&lt;h4 id=&quot;贴代码&quot;&gt;贴代码：&lt;/h4&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;first_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-    第一种方法：欧几里得算法----辗转相除法
-    :param a: 第一个数
-    :param b: 第二个数
-    :return: 最大公约数
-    &quot;&quot;&quot;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# 如果最终余数为0 公约数就计算出来了
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;temp&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;2-穷举法一个一个除&quot;&gt;2. 穷举法(一个一个除)&lt;/h3&gt;
-&lt;p&gt;这个比较好理解。因为a,b两个数的最大公因数肯定小于等于相对更小的那个数，所以从两个数中较小数开始由大到小列举，直到找到公约数立即中断列举，得到的公约数便是最大公约数 。代码如下：&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;second_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-    第二种方法：一个一个除
-    :param a: 第一个数
-    :param b: 第二个数
-    :return: 最大公约数
-    &quot;&quot;&quot;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# 保证a&amp;gt;b
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;3-stein算法&quot;&gt;3. stein算法&lt;/h3&gt;
-&lt;p&gt;看下面这两个结论&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;gcd(a, a) = a， 也就是一个数和他自己的公约数是其自身。&lt;/li&gt;
-  &lt;li&gt;gcd(ka, kb) = k * gcd(a, b)，也就是最大公约数运算和倍乘运算可以交换，特殊的，&lt;strong&gt;当k=2时，说明两个偶数的最大公约数比如能被2整除。&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;third_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-    第三种方法思想：stein算法
-        gcd(a,a)=a，也就是一个数和其自身的公约数仍是其自身。
-        gcd(ka,kb)=k gcd(a,b)，也就是最大公约数运算和倍乘运算可以交换。特殊地，当k=2时，说明两个偶数的最大公约数必然能被2整除。
-        当k与b互为质数，gcd(ka,b)=gcd(a,b)，也就是约掉两个数中只有其中一个含有的因子不影响最大公约数。特殊地，当k=2时，说明计算一个偶数
-    和一个奇数的最大公约数时，可以先将偶数除以2。
-    :param a: 第一个数
-    :param b: 第二个数
-    :return: 最大公约数
-    &quot;&quot;&quot;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;#保证b比a小
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-
-    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# a,b都是偶数 除2右移一位即可
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;third_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# a是偶数
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;third_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# b是偶数
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;third_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# 都是奇数
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;third_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;求出a,b的最大公约数后，利用lcm(a,b) = (a*b)/gcd(a,b) 计算出两个数的 &lt;strong&gt;最小公倍数：&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# 求两个数的最小公倍数
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;lcm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;third_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;4-三个数的最大公约数和最小公倍数&quot;&gt;4. 三个数的最大公约数和最小公倍数&lt;/h3&gt;
-
-&lt;p&gt;计算三个数的最大公约数时，我是利用之前写好的计算2个数的最大公约数的方法，先算出a,b的公约数，再用a,b的公约数与c再代入方法，此时返回的值就是三个数的最大公约数了。&lt;/p&gt;
-
-&lt;p&gt;同样，在计算三个数的最小公倍数时，多次嵌套，先求出两个数的最小公倍数，再求其与第三个数的最小公倍数。&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;three_num&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
-    求三个数的最大公约数
-    :param a: 第一个数
-    :param b: 第二个数
-    :param c: 第三个数
-    :return: 这三个数的最大公约数
-    &quot;&quot;&quot;&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;# 多次嵌套，返回3个数的最大公约数
-&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;first_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;first_way&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="数学" /><category term="欧几里得法(辗转相除法)" /><category term="穷举法" /><category term="stein算法" /><category term="最大公约数和最小公倍数" /><category term="三个数的最大公约数和最小公倍数" /><summary type="html">相关题目 365. 水壶问题 1. 欧几里得法(辗转相除法) 这条算法基于一个定理：两个正整数a和b（a&amp;gt;b），它们的最大公约数等于a除以b的余数c和b之间的最大公约数。比如10和25，25除以10商2余5，那么10和25的最大公约数，等同于10和5的最大公约数。 基于这条定理： 首先，我们先计算出a除以b的余数c，把问题转化成求出b和c的最大公约数；然后计算出b除以c的余数d，把问题转化成求出c和d的最大公约数；再然后计算出c除以d的余数e，把问题转化成求出d和e的最大公约数……以此类推，逐渐把两个较大整数之间的运算简化成两个较小整数之间的运算，直到两个数可以整除，或者其中一个数减小到1为止。 贴代码： def first_way(a, b): &quot;&quot;&quot; 第一种方法：欧几里得算法----辗转相除法 :param a: 第一个数 :param b: 第二个数 :return: 最大公约数 &quot;&quot;&quot; # 如果最终余数为0 公约数就计算出来了 while(b!=0): temp = a % b a = b b = temp return a 2. 穷举法(一个一个除) 这个比较好理解。因为a,b两个数的最大公因数肯定小于等于相对更小的那个数，所以从两个数中较小数开始由大到小列举，直到找到公约数立即中断列举，得到的公约数便是最大公约数 。代码如下： def second_way(a, b): &quot;&quot;&quot; 第二种方法：一个一个除 :param a: 第一个数 :param b: 第二个数 :return: 最大公约数 &quot;&quot;&quot; # 保证a&amp;gt;b if(a&amp;lt;b): a,b = b,a for i in range(1,b+1): if (a%i==0) and (b%i==0): value = i; return value 3. stein算法 看下面这两个结论 gcd(a, a) = a， 也就是一个数和他自己的公约数是其自身。 gcd(ka, kb) = k * gcd(a, b)，也就是最大公约数运算和倍乘运算可以交换，特殊的，当k=2时，说明两个偶数的最大公约数比如能被2整除。 def third_way(a,b): &quot;&quot;&quot; 第三种方法思想：stein算法 gcd(a,a)=a，也就是一个数和其自身的公约数仍是其自身。 gcd(ka,kb)=k gcd(a,b)，也就是最大公约数运算和倍乘运算可以交换。特殊地，当k=2时，说明两个偶数的最大公约数必然能被2整除。 当k与b互为质数，gcd(ka,b)=gcd(a,b)，也就是约掉两个数中只有其中一个含有的因子不影响最大公约数。特殊地，当k=2时，说明计算一个偶数 和一个奇数的最大公约数时，可以先将偶数除以2。 :param a: 第一个数 :param b: 第二个数 :return: 最大公约数 &quot;&quot;&quot; #保证b比a小 if a &amp;lt; b: a, b = b, a if (0 == b): return a # a,b都是偶数 除2右移一位即可 if a % 2 == 0 and b % 2 == 0: return 2 * third_way(a &amp;gt;&amp;gt; 1, b &amp;gt;&amp;gt; 1) # a是偶数 if a % 2 == 0: return third_way(a &amp;gt;&amp;gt; 1, b) # b是偶数 if b % 2 == 0: return third_way(a, b &amp;gt;&amp;gt; 1) # 都是奇数 return third_way((a + b) &amp;gt;&amp;gt; 1, (a - b) &amp;gt;&amp;gt; 1) 求出a,b的最大公约数后，利用lcm(a,b) = (a*b)/gcd(a,b) 计算出两个数的 最小公倍数： # 求两个数的最小公倍数 def lcm(a,b): return a * b / third_way(a, b) 4. 三个数的最大公约数和最小公倍数 计算三个数的最大公约数时，我是利用之前写好的计算2个数的最大公约数的方法，先算出a,b的公约数，再用a,b的公约数与c再代入方法，此时返回的值就是三个数的最大公约数了。 同样，在计算三个数的最小公倍数时，多次嵌套，先求出两个数的最小公倍数，再求其与第三个数的最小公倍数。 def three_num(a,b,c): &quot;&quot;&quot; 求三个数的最大公约数 :param a: 第一个数 :param b: 第二个数 :param c: 第三个数 :return: 这三个数的最大公约数 &quot;&quot;&quot; # 多次嵌套，返回3个数的最大公约数 return first_way(first_way(a,b),c)</summary></entry></feed>
+  \right] \tag{3} %]]&gt;&lt;/script&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="markdown常见数学符号和运算" /><summary type="html">MarkDown常用数学符号 记得一定要加$$才可以显示效果 显示效果 语法： $ 数学符号必须加在运算符号前后 上标 语法： $x^2$ $x^2$ 下标 $x_i$ $x_i$ 四则运算 加法运算，符号：$x+y=z$，如：$x+y=z$ 减法运算，符号：$x-y=z$ ，如：$x-y=z$ 加减运算，符号：$x \pm y=z$，如：$x \pm y=z$ 减甲运算，符号：$x \mp y=z$，如：$x \mp y=z$ 乘法运算，符号：$x \times y=z$，如：$x \times y=z$ 点乘运算，符号：$x \cdot y=z$，如：$x \cdot y=z$ 星乘运算，符号：$x \ast y=z$，如：$x \ast y=z$ 除法运算，符号：$x \div y=z$，如：$x \div y=z$ 斜法运算，符号：$x/y=z$，如：$x/y=z$ 分式表示，符号：$\frac{x+y}{y+z}$，如：$\frac{x+y}{y+z}$ 分式表示，符号：${x+y} \over {y+z}$，如：${x+y} \over {y+z}$ 绝对值表示，符号：如：$|x+y|$，如：$|x+y|$ 高级运算 平均数运算，符号：$\overline{xyz}$，如：$\overline{xyz}$ 开二次方运算，符号：$\sqrt x$，如：$\sqrt x$ 开方运算，符号：$\sqrt[3]{x+y}$，如：$\sqrt[3]{x+y}$ 对数运算，符号：$\log(x)$，如：$\log(x)$ 微分运算，符号：$\frac{\partial x}{\partial y}$，如：$\frac{\partial x}{\partial y}$ 矩阵表示，符号：$\left[ \begin{matrix} 1 &amp;amp;2 &amp;amp;\cdots &amp;amp;4\5 &amp;amp;6 &amp;amp;\cdots &amp;amp;8\\vdots &amp;amp;\vdots &amp;amp;\ddots &amp;amp;\vdots\13 &amp;amp;14 &amp;amp;\cdots &amp;amp;16\end{matrix} \right]$，如：$\left[ \begin{matrix} 1 &amp;amp;2 &amp;amp;\cdots &amp;amp;4\5 &amp;amp;6 &amp;amp;\cdots &amp;amp;8\vdots &amp;amp;\vdots &amp;amp;\ddots &amp;amp;\vdots\13 &amp;amp;14 &amp;amp;\cdots &amp;amp;16\end{matrix} \right]$ 逻辑运算 等于运算，符号：$x+y=z$，如：$x+y=z$ 大于运算，符号：$x+y&amp;gt;z$，如：$x+y&amp;gt;z$ 小于运算，符号：$x+y&amp;lt;z$，如：$x+y&amp;lt;z$ 大于等于运算，符号：$x+y \geq z$，如：$x+y \geq z$ 小于等于运算，符号：$x+y \leq z$，如：$x+y \leq z$ 不等于运算，符号：$x+y \neq z$，如：$x+y \neq z$ 不大于等于运算，符号：$x+y \ngeq z$，如：$x+y \ngeq z$ 不大于等于运算，符号：$x+y \not\geq z$，如：$x+y \not\geq z$ 不小于等于运算，符号：如：$x+y \nleq z$，如：$x+y \nleq z$ 不小于等于运算，符号：如：$x+y \not\leq z$，如：$x+y \not\leq z$ 约等于运算，符号：$x+y \approx z$，如：$x+y \approx z$ 恒定等于运算，符号：$x+y \equiv z$，如：$x+y \equiv z$ 包括整体 语法： $Z^{yx}$ $Z^{yx}$ 大括号 语法： $ \left(大括号)\right. $ $\left(大括号)\right.$ 分割线 语法： $\frac{ x }{ y } $\frac{ x }{ y }$ ​ 开方 语法： $ \sqrt{ x } $ $\sqrt{ x }$ ​ $ \sqrt[ 3 ]{ x } $ $\sqrt[ 3 ]{ x }$ ​ 省略号 语法： $ \ldots $ 表示与文本底线对齐的省略号，$ \cdots $ 表示与文本中线对齐的省略号 $\ldots $ $ \cdots$ 矢量 语法： $ \vec{ a } $ $\vec{ a }$ 积分 语法： $ \int_0^2 x^2 {\rm d}x $ $\int_0^2 x^2 {\rm d}x$ 极限 语法： $ \lim\limits_{n \rightarrow +\infty} \frac{1}{n(n+1)} $ $\lim\limits_{n \rightarrow +\infty} \frac{1}{n(n+1)}$ ​ 累加 语法： $\sum_{i=0}^n$ $\frac{1}{i^2} $ $\sum_{i=0}^n$ $\frac{1}{i^2}$ 累乘 语法： $\prod_{i=0}^n \frac{1}{i^2}$ $\prod_{i=0}^n \frac{1}{i^2}$ ​ 希腊字母 $\alpha$ $\alpha$ $\beta$ $\beta$ $\gamma$ $\gamma$ $\Gamma$ $\Gamma$ $\delta$ $\delta$ $\Delta$ $\Delta$ $\epsilon$ $\epsilon$ $\varepsilon$ $\varepsilon$ $\zeta$ $\zeta$ $\eta$ $\eta$ $\theta$ $\theta$ $\Theta$ $\Theta$ $\vartheta$ $\vartheta$ $\iota$ $\iota$ $\kappa$ $\kappa$ $\lambda$ $\lambda$ $\Lambda$ $\Lambda$ $\mu$ $\mu$ $\nu$ $\nu$ $\xi$ $\xi$ $\Xi$ $\Xi$ $\pi$ $\pi$ $\Pi$ $\Pi$ $\varpi$ $\varpi$ $\rho$ $\rho$ $\varrho$ $\varrho$ $\sigma$ $\sigma$ $\varsigma$ $\varsigma$ $\tau$ $\tau$ $\upsilon$ $\upsilon$ $\Upsilon$ $\Upsilon$ $\phi$ $\phi$ $\Phi$ $\Phi$ $\varphi$ $\varphi$ $\chi$ $\chi$ $\psi$ $\psi$ $\Psi$ $\Psi$ $\omega$ $\omega$ $\Omega$ $\Omega$ 关系运算符： $\pm$ $\pm$ $\times$ $\times$ $\div$ $\div$ $\mid$ $\mid$ $\nmid$ $\nmid$ $\cdot$ $\cdot$ $\circ$ $\circ$ $\ast$ $\ast$ $\bigodot$ $\bigodot$ $\bigotimes$ $\bigotimes$ $\bigoplus$ $\bigoplus$ $\leq$ $\leq$ $\geq$ $\geq$ $\neq$ $\neq$ $\approx$ $\approx$ $\equiv$ $\equiv$ $\sum$ $\sum$ $\prod$ $\prod$ $\coprod$ $\coprod$ 集合运算符： $\emptyset$ $\emptyset$ $\in$ $\in$ $\notin$ $\notin$ $\subset$ $\subset$ $\supset$ $\supset$ $\subseteq$ $\subseteq$ $\supseteq$ $\supseteq$ $\bigcap$ $\bigcap$ $\bigcup$ $\bigcup$ $\bigvee$ $\bigvee$ $\bigwedge$ $\bigwedge$ $\biguplus$ $\biguplus$ $\bigsqcup$ $\bigsqcup$ 对数运算符： $\log$ $\log$ $\lg$ $\lg$ $\ln$ $\ln$ 三角运算符： $\bot$ $\bot$ $\angle$ $\angle$ $30^\circ$ $30^\circ$ $\sin$ $\sin$ $\cos$ $\cos$ $\tan$ $\tan$ $\cot$ $\cot$ $\sec$ $\sec$ $\csc$ $\csc$ 微积分运算符： $\prime$ $\prime$ $\int$ $\int$ $\iint$ $\iint$ $\iiint$ $\iiint$ $\iiiint$ $\iiiint$ $\oint$ $\oint$ $\lim$ $\lim$ $\infty$ $\infty$ $\nabla$ $\nabla$ 逻辑运算符： $\because$ $\because$ $\therefore$ $\therefore$ $\forall$ $\forall$ $\exists$ $\exists$ $\not=$ $\not=$ $\not&amp;gt;$ $\not&amp;gt;$ $\not\subset$ $\not\subset$ 戴帽符号： $\hat{y}$ $\hat{y}$ $\check{y}$ $\check{y}$ $\breve{y}$ $\breve{y}$ $\bar{a}$ $\bar{a}$ $\tilde{a}$ $\tilde{a}$ $\widetilde{A}$ $\widetilde{A}$ $\vec{a}$ $\vec{a}$ $\dot$ $\dot $\ddot$ $\ddot 连线符号： $\overline{a+b+c+d}$ $\overline{a+b+c+d}$ ​ $\overbrace{a+\underbrace{b+c}{1.0}+d}^{2.0}$ $\overbrace{a+\underbrace{b+c}{1.0}+d}^{2.0}$ 箭头符号： $\uparrow$ $\uparrow$ $\downarrow$ $\downarrow$ $\Uparrow$ $\Uparrow$ $\Downarrow$ $\Downarrow$ $\rightarrow$ $\rightarrow$ $\leftarrow$ $\leftarrow$ $\Rightarrow$ $\Rightarrow$ $\Leftarrow$ $\Leftarrow$ $\longrightarrow$ $\longrightarrow$ $\longleftarrow$ $\longleftarrow$ $\Longrightarrow$ $\Longrightarrow$ $\Longleftarrow$ $\Longleftarrow$ 分段函数 $$ 函数名=\begin{cases} 公式1 &amp;amp; 条件1 \\ 公式2 &amp;amp; 条件2 \\ 公式3 &amp;amp; 条件3 \end{cases}$$ $$ \left[ \begin{matrix} 1 &amp;amp; 2 &amp;amp; 3 \\ 4 &amp;amp; 5 &amp;amp; 6 \\ 7 &amp;amp; 8 &amp;amp; 9 \end{matrix} \right] \tag{3} $$</summary></entry></feed>

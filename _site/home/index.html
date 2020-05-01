@@ -324,7 +324,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0501/001/07"><h2 itemprop="headline" class="item__header">5. 最长回文串</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">中心扩展算法</code></li>
   <li><strong>思路</strong>： <code class="info highlighter-rouge">中心扩展算法</code></li>
   <li><strong>类似题型</strong>:</li>
@@ -467,6 +467,54 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 01, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0501-001-07">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-01T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,中心扩展算法"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0501/002"><h2 itemprop="headline" class="item__header">21. 合并两个有序链表</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">递归</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h2 id="题目-21-合并两个有序链表">题目 <a href="https://leetcode-cn.com/problems/merge-two-sorted-lists/">21. 合并两个有序链表</a></h2>
+<p>将两个升序链表合并为一个新的升序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
+
+<h3 id="示例">示例：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：1-&gt;2-&gt;4, 1-&gt;3-&gt;4
+输出：1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4
+</code></pre></div></div>
+
+<h3 id="方法一-递归">方法一 递归</h3>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">mergeTwoLists</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">l1</span><span class="o">,</span> <span class="nc">ListNode</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l1</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">l2</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">l1</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">l1</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">l2</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">l1</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">mergeTwoLists</span><span class="o">(</span><span class="n">l1</span><span class="o">.</span><span class="na">next</span><span class="o">,</span> <span class="n">l2</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">l1</span><span class="o">;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+            <span class="n">l2</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">mergeTwoLists</span><span class="o">(</span><span class="n">l1</span><span class="o">,</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
+            <span class="k">return</span> <span class="n">l2</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0501/002">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 01, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0501-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-01T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,递归"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mark/markdown/common"><h2 itemprop="headline" class="item__header">markdown常见数学符号和运算</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>MarkDown常用数学符号
@@ -994,20 +1042,8 @@ def isHappy(self, n: int) -&gt; bool:
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0430-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,小根堆"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/algo/2020/0430/003"><h2 itemprop="headline" class="item__header">大根堆</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>TODO</p>
-</div><p><a href="/algo/2020/0430/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%A4%A7%E6%A0%B9%E5%A0%86">大根堆</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0430-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,大根堆"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>177 post articles, 23 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>178 post articles, 23 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
