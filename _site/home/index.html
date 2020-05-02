@@ -418,6 +418,35 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<h3 id="方法二-滑动窗口二">方法二 滑动窗口二</h3>
+<ul>
+  <li>暴力解法时间复杂度较高，会达到 $O(n^2)$，故而采取滑动窗口的方法降低时间复杂度</li>
+  <li>定义一个 map 数据结构存储 (k, v)，其中 key 值为字符，value 值为字符位置 +1，加 1 表示从字符位置后一个才开始不重复</li>
+  <li>我们定义不重复子串的开始位置为 start，结束位置为 end</li>
+  <li>随着 end 不断遍历向后，会遇到与 [start, end] 区间内字符相同的情况，此时将字符作为 key 值，获取其 value 值，并更新 start，此时 [start, end] 区间内不存在重复字符</li>
+  <li>无论是否更新 start，都会更新其 map 数据结构和结果 ans。</li>
+  <li>时间复杂度：$O(n)$</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">end</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">end</span><span class="o">);</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">alpha</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">start</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">alpha</span><span class="o">),</span> <span class="n">start</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">end</span><span class="o">),</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+</code></pre></div></div>
 </div><p><a href="/leetcode/2020/0502/002/08">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=leetcode">leetcode</a>
@@ -428,36 +457,228 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0502-002-08">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,滑动窗口"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/algo/2020/0502/008"><h2 itemprop="headline" class="item__header">摩尔投票法思路</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="概念">概念</h2>
-<p>TODO</p>
-
-<h2 id="常见解题思路">常见解题思路</h2>
-<ol>
-  <li>数组中第一位数作为默认的候选人(cand_num)</li>
-  <li>依次向后遍历</li>
-  <li>当出现相同的数(cand_num) 则 投票数 count +1</li>
-  <li>当出现不同的数 则投票(count_num) 投票数 count -1</li>
-  <li>当 count ==0 ，则跟换候选人，并 count 重制为 1</li>
-  <li>遍历完后 count_num 则为最终答案
+          <header><a href="/leetcode/2020/0502/002/09"><h2 itemprop="headline" class="item__header">229. 求众数 II</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">摩尔投票法</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">摩尔投票法</code></li>
+  <li><strong>类似题型</strong>:
     <ul>
-      <li>类似题目有
-        <ul>
-          <li><a href="/leetcode/2020/0325/010">169. 多数元素</a></li>
-        </ul>
-      </li>
+      <li><a href="/leetcode/2020/0325/010">169. 多数元素</a></li>
     </ul>
   </li>
+</ul>
+
+<hr />
+
+<h3 id="题目-229-求众数-ii">题目 <a href="https://leetcode-cn.com/problems/majority-element-ii/">229. 求众数 II</a></h3>
+<p>给定一个大小为 n 的数组，找出其中所有出现超过 <code class="highlighter-rouge">n/3</code> 次的元素。</p>
+
+<p>说明: 要求算法的时间复杂度为 $O(n)$，空间复杂度为 $O(1)$。</p>
+
+<h3 id="示例1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [3,2,3]
+输出: [3]
+</code></pre></div></div>
+<h3 id="示例-2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,1,1,3,3,2,2,2]
+输出: [1,2]
+</code></pre></div></div>
+
+<h3 id="摩尔投票法的基本思想">摩尔投票法的基本思想</h3>
+<p>在每一轮投票过程中，从数组中找出一对不同的元素，将其从数组中删除。这样不断的删除直到无法再进行投票，如果数组为空，则没有任何元素出现的次数超过该数组长度的一半。如果只存在一种元素，那么这个元素则可能为目标元素。</p>
+
+<p>在算法执行过程中，我们使用常量空间实时记录一个候选元素c以及其出现次数 $f(c)$，c即为当前阶段出现次数超过半数的元素。根据这样的定义，我们也可以将摩尔投票法看作是一种动态规划算法。</p>
+
+<p>程序开始之前，元素c为空，$f(c)=0$。遍历数组A：</p>
+
+<ul>
+  <li>如果f(c)为0，表示截至到当前子数组，并没有候选元素。也就是说之前的遍历过程中并没有找到超过 <code class="highlighter-rouge">n/3</code> 的元素。那么，如果超过<code class="highlighter-rouge">n/3</code> 的元素c存在，那么c在剩下的子数组中，出现次数也一定超过<code class="highlighter-rouge">n/3</code>。因此我们可以将原始问题转化为它的子问题。此时c赋值为当前元素, 同时f(c)=1。</li>
+  <li>如果当前元素 <code class="highlighter-rouge">A[i] == c</code>, 那么 $f(c) += 1$。(没有找到不同元素，只需要把相同元素累计起来)</li>
+  <li>如果当前元素 <code class="highlighter-rouge">A[i] == c</code>, 那么 $f(c) += 1$。(没有找到不同元素，只需要把相同元素累计起来)</li>
+  <li>如果当前元素 <code class="highlighter-rouge">A[i] != c</code>，那么 $f(c) -= 1$ (相当于删除1个c)，不对A[i]做任何处理(相当于删除A[i])</li>
+</ul>
+
+<h3 id="解题思路">解题思路</h3>
+<ol>
+  <li>根据题型，需要返回出现次数超过 n/3 次的元素，可知最多有两个这样的元素</li>
+  <li>我们假设有两个这种元素，根据 <strong>摩尔投票法</strong> 设这两个元素为候选人</li>
 </ol>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">majorityElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 返回数组
+</span>        <span class="n">majorityO</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># 候选人1
+</span>        <span class="n">majorityT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># 候选人2
+</span>        <span class="n">countO</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 候选人1 票数
+</span>        <span class="n">countT</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 候选人2 票数
+</span>        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">countO</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num</span> <span class="o">!=</span> <span class="n">majorityT</span><span class="p">:</span>
+                <span class="n">majorityO</span> <span class="o">=</span> <span class="n">num</span>
+                <span class="n">countO</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">countT</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num</span> <span class="o">!=</span> <span class="n">majorityO</span><span class="p">:</span>
+                <span class="n">majorityT</span> <span class="o">=</span> <span class="n">num</span>
+                <span class="n">countT</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">majorityO</span> <span class="o">==</span> <span class="n">num</span><span class="p">:</span>
+                    <span class="n">countO</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">majorityT</span> <span class="o">==</span> <span class="n">num</span><span class="p">:</span>
+                    <span class="n">countT</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">countO</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="n">countT</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">counterO</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">counterT</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">countO</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="n">majorityO</span><span class="p">:</span>
+                    <span class="n">counterO</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">counterO</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">//</span><span class="mi">3</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">majorityO</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">countT</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="n">majorityT</span><span class="p">:</span>
+                    <span class="n">counterT</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">counterT</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">//</span><span class="mi">3</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">majorityT</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0502/002/09">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8%E6%B3%95">摩尔投票法</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 02, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0502-002-09">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,摩尔投票法"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/algo/2020/0502/008"><h2 itemprop="headline" class="item__header">摩尔投票法</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="概念">概念</h2>
+<h3 id="提问">提问</h3>
+<p>给定一个int型数组，找出该数组中 <strong>出现次数最多的int值</strong>。</p>
+
+<h3 id="解决方案">解决方案</h3>
+<p>遍历该数组，统计每个int值出现次数，再遍历该集合，取出出现次数最大的int值。</p>
+
+<p>这算是一个比较经典的解决办法，其中可能会用到Map来做统计。如果不使用Map，则时间复杂度会超过线性复杂度。除此之外，也没有什么特别好的办法。</p>
+
+<p>今天在leetcode上遇到这样一道题目，</p>
+
+<h3 id="提问-1">提问</h3>
+<p>给定一个int型数组，找出该数组中出现次数大于数组长度一半的int值。</p>
+
+<h3 id="解决方案-1">解决方案</h3>
+<p>遍历该数组，统计每个int值出现次数，再遍历该集合，找出出现次数大于数组长度一半的int值。</p>
+
+<p>同样的，该解决办法也要求使用Map，否则无法达到线性的时间复杂度。</p>
+
+<p>那么对于这个问题，<strong>有没有什么不使用Map的线性算法呢？</strong></p>
+
+<p>答案就是今天我们要提到的 <strong>摩尔投票法</strong>。利用该算法来解决这个问题，我们可以达到线性的时间复杂度以及常量级的空间复杂度。</p>
+
+<p>首先我们 <strong>注意到这样一个现象</strong>： 在任何数组中，出现次数大于该数组 <strong>长度一半的值只能有一个</strong>。</p>
+
+<p>通过数学知识，我们可以证明它的正确性，但是这并不在我们这篇博客里涉及。</p>
+
+<p><strong>摩尔投票法的基本思想很简单，在每一轮投票过程中，从数组中找出一对不同的元素，将其从数组中删除。这样不断的删除直到无法再进行投票，如果数组为空，则没有任何元素出现的次数超过该数组长度的一半。如果只存在一种元素，那么这个元素则可能为目标元素。</strong></p>
+
+<p>那么有没有可能出现最后有两种或两种以上元素呢？根据定义，这是不可能的，因为如果出现这种情况，则代表我们可以继续一轮投票。因此，最终只能是剩下零个或一个元素。</p>
+
+<p>在算法执行过程中，我们使用常量空间实时记录一个候选元素c以及其出现次数 $f(c)$，c即为当前阶段出现次数超过半数的元素。根据这样的定义，我们也可以将摩尔投票法看作是一种动态规划算法。</p>
+
+<p>程序开始之前，元素c为空，$f(c)=0$。遍历数组A：</p>
+
+<ul>
+  <li>如果f(c)为0，表示截至到当前子数组，并没有候选元素。也就是说之前的遍历过程中并没有找到超过半数的元素。那么，如果超过半数的元素c存在，那么c在剩下的子数组中，出现次数也一定超过半数。因此我们可以将原始问题转化为它的子问题。此时c赋值为当前元素, 同时f(c)=1。</li>
+  <li>如果当前元素 <code class="highlighter-rouge">A[i] == c</code>, 那么 $f(c) += 1$。(没有找到不同元素，只需要把相同元素累计起来)</li>
+  <li>如果当前元素 <code class="highlighter-rouge">A[i] == c</code>, 那么 $f(c) += 1$。(没有找到不同元素，只需要把相同元素累计起来)</li>
+  <li>如果当前元素 <code class="highlighter-rouge">A[i] != c</code>，那么 $f(c) -= 1$ (相当于删除1个c)，不对A[i]做任何处理(相当于删除A[i])</li>
+</ul>
+
+<p>如果遍历结束之后，f(c)不为0，则找到可能元素。</p>
+
+<p>再次遍历一遍数组，记录c真正出现的次数，从而验证c是否真的出现了超过半数。上述算法的时间复杂度为O(n)，而由于并不需要真的删除数组元素，我们也并不需要额外的空间来保存原始数组，空间复杂度为O(1)。</p>
+
+<p>看java代码示例，为了保证每一步骤的清晰性，代码没有经过优化。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 算法基础：摩尔投票法
+ * @param nums
+ * @return
+ */</span>  
+<span class="kd">public</span> <span class="kt">int</span> <span class="nf">majorityElement</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>  
+
+    <span class="kt">int</span> <span class="n">majority</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>  
+
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>  
+
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>  
+            <span class="n">majority</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>  
+            <span class="n">count</span><span class="o">++;</span>  
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>  
+            <span class="k">if</span> <span class="o">(</span><span class="n">majority</span> <span class="o">==</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>  
+                <span class="n">count</span><span class="o">++;</span>  
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>  
+                <span class="n">count</span><span class="o">--;</span>  
+            <span class="o">}</span>  
+        <span class="o">}</span>  
+    <span class="o">}</span>  
+
+    <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>  
+    <span class="k">if</span> <span class="o">(</span><span class="n">count</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>  
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>  
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>  
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">majority</span><span class="o">)</span> <span class="n">counter</span> <span class="o">++;</span>  
+        <span class="o">}</span>  
+    <span class="o">}</span>  
+
+    <span class="k">if</span> <span class="o">(</span><span class="n">counter</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">/</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">return</span> <span class="n">majority</span><span class="o">;</span>  
+    <span class="o">}</span>  
+
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>  
+<span class="o">}</span>  
+</code></pre></div></div>
+<p>其实这样的算法也可以衍生到其它频率的问题上，比如说，找出所有出现次数大于n/3的元素。同样可以以线性时间复杂度以及常量空间复杂度来实现。</p>
+
+<h2 id="常见解题思路">常见解题思路</h2>
+<ul>
+  <li>摩尔投票法。该算法用于1/2情况，它说：“在任何数组中，出现次数大于该数组长度一半的值只能有一个。”
+    <ol>
+      <li>数组中第一位数作为默认的候选人(cand_num)</li>
+      <li>依次向后遍历</li>
+      <li>当出现相同的数(cand_num) 则 投票数 count +1</li>
+      <li>当出现不同的数 则投票(count_num) 投票数 count -1</li>
+      <li>当 count ==0 ，则跟换候选人，并 count 重制为 1</li>
+      <li>遍历完后 count_num 则为最终答案
+        <ul>
+          <li>类似题目有
+            <ul>
+              <li><a href="/leetcode/2020/0325/010">169. 多数元素</a></li>
+              <li><a href="/leetcode/2020/0502/002/09">229. 求众数 II</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
 </div><p><a href="/algo/2020/0502/008">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8%E6%B3%95%E6%80%9D%E8%B7%AF">摩尔投票法思路</a>
+                href="/archive.html?tag=%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8%E6%B3%95">摩尔投票法</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 02, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0502-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,摩尔投票法思路"></div>
+    <meta itemprop="keywords" content="算法,摩尔投票法"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0501/001/07"><h2 itemprop="headline" class="item__header">5. 最长回文串</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
@@ -1155,20 +1376,8 @@ def isHappy(self, n: int) -&gt; bool:
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0430-030-06">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,算数,用HashSet检测循环,快慢指针法"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/algo/2020/0430/006"><h2 itemprop="headline" class="item__header">贪心</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>TODO</p>
-</div><p><a href="/algo/2020/0430/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%B4%AA%E5%BF%83">贪心</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0430-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,贪心"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>181 post articles, 23 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>182 post articles, 23 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
