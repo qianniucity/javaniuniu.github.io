@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>169. 多数元素 - JAVA 牛牛</title>
 
-<meta name="description" content="难度：简单  本题涉及算法： 排序 哈希表  思路： 排序 哈希表  类似题型:题目 多数元素给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ` n/2 ` 的元素。你可以假设数组是非空的，并且给定的数组总是存在多数元素。示例示例 1:输入: [3,2,3]输出: 3示例 2:输...">
+<meta name="description" content="难度：简单  本题涉及算法： 排序 哈希表 摩尔投票法思路  思路： 排序 哈希表 摩尔投票法思路  类似题型:题目 多数元素给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ` n/2 ` 的元素。你可以假设数组是非空的，并且给定的数组总是存在多数元素。示例示例 1:输入: [3...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0325/010"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -348,8 +348,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">排序</code> <code class="success highlighter-rouge">哈希表</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">排序</code> <code class="info highlighter-rouge">哈希表</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">排序</code> <code class="success highlighter-rouge">哈希表</code> <code class="success highlighter-rouge">摩尔投票法思路</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">排序</code> <code class="info highlighter-rouge">哈希表</code> <code class="info highlighter-rouge">摩尔投票法思路</code></li>
   <li><strong>类似题型</strong>:</li>
 </ul>
 
@@ -440,6 +440,43 @@ MFrGw6cAAAAASUVORK5CYII=" />
         <span class="k">for</span> <span class="n">di</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">dic</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">di</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">di</span>
+</code></pre></div></div>
+
+<h4 id="方法三-摩尔投票法思路-投票法">方法三 摩尔投票法思路 (投票法)</h4>
+<ul>
+  <li>候选人(<code class="highlighter-rouge">cand_num</code>)初始化为 <code class="highlighter-rouge">nums[0]</code>，票数 <code class="highlighter-rouge">count</code> 初始化为1。</li>
+  <li>当遇到与 <code class="highlighter-rouge">cand_num</code> 相同的数，则票数 <code class="highlighter-rouge">count = count + 1</code> ，否则票数 <code class="highlighter-rouge">count = count - 1</code>。</li>
+  <li>当票数 <code class="highlighter-rouge">count</code> 为0时，更换候选人，并将票数 <code class="highlighter-rouge">count</code> 重置为1。</li>
+  <li>遍历完数组后，<code class="highlighter-rouge">cand_num</code> 即为最终答案。</li>
+</ul>
+
+<h4 id="为何这行得通呢">为何这行得通呢？</h4>
+<ul>
+  <li>投票法是遇到相同的则票数 <code class="highlighter-rouge">+ 1</code>，遇到不同的则票数 <code class="highlighter-rouge">- 1</code>。</li>
+  <li>且“多数元素”的个数<code class="highlighter-rouge"> &gt; ⌊ n/2 ⌋</code>，其余元素的个数总和 <code class="highlighter-rouge">&lt;= ⌊ n/2 ⌋</code>。</li>
+  <li>因此“多数元素”的个数 - 其余元素的个数总和 的结果 肯定 <code class="highlighter-rouge">&gt;= 1</code>。</li>
+  <li>这就相当于每个“多数元素”和其他元素 两两相互抵消，抵消到最后肯定还剩余至少1个“多数元素”。</li>
+</ul>
+
+<p>无论数组是 <code class="highlighter-rouge">1 2 1 2 1</code>，亦或是 <code class="highlighter-rouge">1 2 2 1 1</code>，总能得到正确的候选人。</p>
+
+<h4 id="java-2">java</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">majorityElement</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">cand_num</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">cand_num</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])</span>
+                <span class="o">++</span><span class="n">count</span><span class="o">;</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(--</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 很鸡贼的一段代码 --count 是不是等于 0， 先减1 在说</span>
+                <span class="n">cand_num</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">cand_num</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
 </code></pre></div></div>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
