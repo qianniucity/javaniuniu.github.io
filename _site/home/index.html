@@ -322,6 +322,112 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0502/002/08"><h2 itemprop="headline" class="item__header">3. 无重复字符的最长子串</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">滑动窗口</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">滑动窗口</code></li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0426/025">5393. 可获得的最大点数</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="题目-3-无重复字符的最长子串">题目 <a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></h2>
+<p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
+
+<p>示例 1:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "abcabcbb"
+输出: 3
+解释 : 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+</code></pre></div></div>
+<p>示例 2:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "bbbbb"
+输出: 1
+解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+</code></pre></div></div>
+<p>示例 3:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "pwwkew"
+输出: 3
+解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+</code></pre></div></div>
+
+<h3 id="解题思路-滑动窗口">解题思路 滑动窗口</h3>
+<h4 id="什么是滑动窗口">什么是滑动窗口？</h4>
+<ul>
+  <li>其实就是一个队列(或一个集合)，比如例题中的 <code class="highlighter-rouge">abcabcbb</code>，进入这个队列（窗口）为 abc 满足题目要求，当再进入 <code class="highlighter-rouge">a</code>，队列变成了 <code class="highlighter-rouge">abca</code>，这时候不满足要求。所以，我们要移动这个队列！</li>
+</ul>
+
+<h4 id="如何移动">如何移动？</h4>
+<ul>
+  <li>我们只要把队列的左边的元素移出就行了，直到满足题目要求！(不在出现重复字符串)</li>
+  <li>
+    <p>一直维持这样的队列，找出队列出现最长的长度时候，求出解！</p>
+  </li>
+  <li>时间复杂度：$O(n)$</li>
+</ul>
+
+<h3 id="代码">代码</h3>
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span> <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">curLen</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 当前长度
+</span>        <span class="n">maxLen</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 最长字符串
+</span>        <span class="n">lookup</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># 用来存储滑动的字符串
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
+            <span class="n">curLen</span> <span class="o">+=</span><span class="mi">1</span>
+
+            <span class="c1"># 这里是while循环，当重复字符串一直在集合当中，会一直删除左边的字符串，直到删除重复字符串   
+</span>            <span class="k">while</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">:</span>
+                <span class="n">lookup</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">curLen</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="c1">#比较当前长度和最长长度
+</span>            <span class="k">if</span> <span class="n">curLen</span> <span class="o">&gt;</span> <span class="n">maxLen</span><span class="p">:</span><span class="n">maxLen</span><span class="o">=</span><span class="n">curLen</span>
+            <span class="n">lookup</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">maxLen</span>
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+       <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">lookup</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span> <span class="n">cul_len</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">max_len</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">cul_len</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">lookup</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="n">lookup</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">left</span><span class="o">));</span>
+                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
+                <span class="n">cul_len</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">;</span>
+            <span class="o">}</span>
+
+            <span class="k">if</span><span class="o">(</span><span class="n">cul_len</span><span class="o">&gt;</span><span class="n">max_len</span><span class="o">)</span>
+                <span class="n">max_len</span> <span class="o">=</span> <span class="n">cul_len</span><span class="o">;</span>
+            <span class="n">lookup</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">max_len</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0502/002/08">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 02, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0502-002-08">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,滑动窗口"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0501/001/07"><h2 itemprop="headline" class="item__header">5. 最长回文串</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -526,6 +632,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <ul>
       <li>类似题目有</li>
       <li><a href="/leetcode/2020/0426/025">5393. 可获得的最大点数</a></li>
+      <li><a href="/leetcode/2020/0502/002/08">3. 无重复字符的最长子串</a></li>
     </ul>
   </li>
 </ol>
@@ -839,7 +946,13 @@ $$
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">算数</code> <code class="success highlighter-rouge">用HashSet检测循环</code> <code class="success highlighter-rouge">快慢指针法</code></li>
   <li><strong>思路</strong>： <code class="info highlighter-rouge">算数</code> <code class="info highlighter-rouge">用HashSet检测循环</code> <code class="info highlighter-rouge">快慢指针法</code></li>
-  <li><strong>类似题型</strong>:</li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li>
+        <h2 id="876-链表的中间结点"><a href="/leetcode/2020/0323/008">876. 链表的中间结点</a></h2>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -1002,9 +1115,15 @@ def isHappy(self, n: int) -&gt; bool:
             </li><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E7%AE%97%E6%95%B0">算数</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%94%A8HashSet%E6%A3%80%E6%B5%8B%E5%BE%AA%E7%8E%AF">用HashSet检测循环</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E6%B3%95">快慢指针法</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0430-030-06">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,算数"></div>
+    <meta itemprop="keywords" content="leetcode,算数,用HashSet检测循环,快慢指针法"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/algo/2020/0430/006"><h2 itemprop="headline" class="item__header">贪心</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>TODO</p>
@@ -1029,32 +1148,8 @@ def isHappy(self, n: int) -&gt; bool:
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0430-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,线性扫描"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/algo/2020/0430/007"><h2 itemprop="headline" class="item__header">快慢指针</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li>概念</li>
-  <li>使用场景
-    <ul>
-      <li>判断循环就用快慢指针</li>
-    </ul>
-  </li>
-  <li>示例
-    <ul>
-      <li><a href="https://leetcode-cn.com/problems/happy-number/solution/kuai-le-shu-by-leetcode-solution/">202. 快乐数</a></li>
-    </ul>
-  </li>
-</ul>
-</div><p><a href="/algo/2020/0430/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88">快慢指针</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 30, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0430-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-30T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,快慢指针"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>179 post articles, 23 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>180 post articles, 23 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
