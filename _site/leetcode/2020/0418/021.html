@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>11. 盛最多水的容器 - JAVA 牛牛</title>
 
-<meta name="description" content="题目 11. 盛最多水的容器给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。说明：你不能倾斜容器，且 n 的值至少为...">
+<meta name="description" content="难度：中等  本题涉及算法：暴力 双向指针  思路：暴力 双向指针  类似题型：题目 11. 盛最多水的容器给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0418/021"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -343,8 +343,17 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <meta itemprop="keywords" content="leetcode,双向指针"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h3 id="题目-11-盛最多水的容器">题目 <a href="https://leetcode-cn.com/problems/container-with-most-water/">11. 盛最多水的容器</a></h3>
-<p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p>
+<div class="article__content" itemprop="articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">暴力</code> <code class="success highlighter-rouge">双向指针</code></li>
+  <li><strong>思路</strong>：<code class="info highlighter-rouge">暴力</code> <code class="info highlighter-rouge">双向指针</code></li>
+  <li><strong>类似题型</strong>：</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-11-盛最多水的容器">题目 <a href="https://leetcode-cn.com/problems/container-with-most-water/">11. 盛最多水的容器</a></h3>
+<p>给你 n 个非负整数 <code class="highlighter-rouge">a1，a2，...，an</code>，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p>
 
 <p>说明：你不能倾斜容器，且 n 的值至少为 2。</p>
 
@@ -352,12 +361,12 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <p>图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。</p>
 
-<h2 id="示例">示例</h2>
+<h3 id="示例">示例</h3>
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：[1,8,6,2,5,4,8,3,7]
 输出：49
 </code></pre></div></div>
 
-<h2 id="思路一-暴力">思路一 暴力</h2>
+<h3 id="方法一-暴力">方法一 暴力</h3>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxArea</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">height</span><span class="o">.</span><span class="na">length</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
@@ -376,7 +385,43 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h2 id="思路二-双向指针">思路二 双向指针</h2>
+<h3 id="方法二-双向指针">方法二 双向指针</h3>
+<ul>
+  <li>
+    <p><strong>算法流程：</strong> 设置双指针 $i$,$j$ 分别位于容器壁两端，根据规则移动指针（后续说明），并且更新面积最大值 <code class="highlighter-rouge">res</code>，直到 <code class="highlighter-rouge">i == j</code> 时返回 <code class="highlighter-rouge">res</code>。</p>
+  </li>
+  <li><strong>指针移动规则与证明：</strong> 每次选定围成水槽两板高度 $h[i]$,$h[j]$ 中的短板，向中间收窄 $1$ 格。以下证明：
+    <ul>
+      <li>设每一状态下水槽面积为 $S(i, j)$,$(0 &lt;= i &lt; j &lt; n)$，由于水槽的实际高度由两板中的短板决定，则可得面积公式 $S(i, j) = min(h[i], h[j]) × (j - i)$。</li>
+      <li>在每一个状态下，无论长板或短板收窄 $1$ 格，都会导致水槽 底边宽度 $-1$：
+        <ul>
+          <li>若向内移动短板，水槽的短板 $min(h[i], h[j])$ 可能变大，因此水槽面积 $S(i, j)$ 可能增大。</li>
+          <li>若向内移动长板，水槽的短板 $min(h[i], h[j])$ 不变或变小，下个水槽的面积一定小于当前水槽面积。</li>
+        </ul>
+      </li>
+      <li>因此，向内收窄短板可以获取面积最大值。换个角度理解：
+        <ul>
+          <li>若不指定移动规则，所有移动出现的 $S(i, j)$ 的状态数为 $C(n, 2)$，即暴力枚举出所有状态。</li>
+          <li>在状态 S(i, j)S(i,j) 下向内移动短板至 $S(i + 1, j)$（假设 $h[i] &lt; h[j]$ ），则相当于消去了 ${S(i, j - 1), S(i, j - 2), … , S(i, i + 1)}$ 状态集合。而所有消去状态的面积一定 $&lt;= S(i, j)$：
+            <ul>
+              <li>短板高度：相比 $S(i, j)$ 相同或更短（$&lt;= h[i]$）；</li>
+              <li>底边宽度：相比 $S(i, j)$ 更短。</li>
+            </ul>
+          </li>
+          <li>因此 <strong>所有消去的状态的面积都</strong> $&lt; S(i, j)$。通俗的讲，我们每次向内移动短板，所有的消去状态都 <strong>不会导致丢失面积最大值</strong> 。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析：</strong>
+    <ul>
+      <li>时间复杂度 $O(N)$，双指针遍历一次底边宽度 $N$ 。</li>
+      <li>空间复杂度 $O(1)$，指针使用常数额外空间。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="java">java</h4>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kt">int</span> <span class="nf">maxArea</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
         <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
@@ -395,6 +440,26 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">maxArea</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="n">left_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">right_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">height</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">left_index</span> <span class="o">!=</span> <span class="n">right_index</span><span class="p">:</span>
+            <span class="n">left_height</span> <span class="o">=</span> <span class="n">height</span><span class="p">[</span><span class="n">left_index</span><span class="p">]</span>
+            <span class="n">right_height</span> <span class="o">=</span> <span class="n">height</span><span class="p">[</span><span class="n">right_index</span><span class="p">]</span>
+            <span class="n">product</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">left_height</span> <span class="o">&gt;</span> <span class="n">right_height</span><span class="p">:</span>
+                <span class="n">product</span> <span class="o">=</span> <span class="p">(</span><span class="n">right_index</span> <span class="o">-</span> <span class="n">left_index</span><span class="p">)</span> <span class="o">*</span> <span class="n">right_height</span>
+                <span class="n">right_index</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">product</span> <span class="o">=</span> <span class="p">(</span><span class="n">right_index</span> <span class="o">-</span> <span class="n">left_index</span><span class="p">)</span> <span class="o">*</span> <span class="n">left_height</span>
+                <span class="n">left_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span><span class="n">product</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
@@ -405,7 +470,9 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </div>
 <script async src="https://static.addtoany.com/menu/page.js"></script>
 <!-- AddToAny END -->
-</section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-04-18T00:00:00+08:00"><!-- start custom article footer snippet -->
+</section><div class="d-print-none"><footer class="article__footer"><span>Last updated
+      <time itemprop="dateModified" datetime="2020-05-03T00:00:00+08:00">May 03, 2020</time>
+    </span><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
