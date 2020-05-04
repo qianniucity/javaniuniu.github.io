@@ -322,6 +322,150 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0504/012"><h2 itemprop="headline" class="item__header">20. 有效的括号</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">哈希表</code> <code class="success highlighter-rouge">暴力</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">哈希表</code> <code class="info highlighter-rouge">暴力</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-1111-有效括号的嵌套深度">题目 <a href="https://leetcode-cn.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/">1111. 有效括号的嵌套深度</a></h3>
+<p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。</p>
+
+<p>有效字符串需满足：</p>
+
+<p>左括号必须用相同类型的右括号闭合。 <br />
+左括号必须以正确的顺序闭合。  <br />
+注意空字符串可被认为是有效字符串。</p>
+
+<h3 id="示例-1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "()"
+输出: true
+</code></pre></div></div>
+<h3 id="示例2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "()[]{}"
+输出: true
+</code></pre></div></div>
+<h3 id="示例3">示例 3:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "(]"
+输出: false
+</code></pre></div></div>
+<h3 id="示例4">示例 4:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "([)]"
+输出: false
+</code></pre></div></div>
+<h3 id="示例5">示例 5:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "{[]}"
+输出: true
+</code></pre></div></div>
+<h3 id="方法一-暴力">方法一 暴力</h3>
+<h3 id="解题思路">解题思路</h3>
+<ul>
+  <li>当左括号 则记录对于的右括号 比如 字符串 ‘[]]’ ，出现 ‘[’ 则在数组 ‘s_list’ 中记录 ‘]’</li>
+  <li>通过 s_list.insert(0,’右括号’) 可以保证，每次插入的括号和 左括号对称</li>
+  <li>当出现 右括号 则先判断数组 ‘len(s_list) ==0 ‘ ，因为有可能出现 ‘[]]]’ 或 ‘]’ 的情况</li>
+  <li>当循环中 出现右括号 则和数组中 ‘s_list.pop(0)’ 进行对比，如果相同，则对于的删除，继续执行，否则返回false</li>
+  <li>时间复杂度 $O(n)$ 空间复杂度 $O(n)$
+    <h3 id="代码">代码</h3>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">isValid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="c1"># 初始化判断条件
+</span>        <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="c1"># 当左括号 则记录对于的右括号
+</span>        <span class="n">s_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="s">'('</span><span class="p">:</span>
+                <span class="n">s_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s">')'</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">a</span> <span class="o">==</span> <span class="s">'['</span><span class="p">:</span>
+                <span class="n">s_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s">']'</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">a</span> <span class="o">==</span> <span class="s">'{'</span><span class="p">:</span>
+                <span class="n">s_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s">'}'</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">s_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">a</span> <span class="o">==</span> <span class="n">s_list</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="c1"># len(s_list) != 0 出现 '[]]'清空的判断
+</span>                <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># 当 不匹配则 返回 False
+</span>                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span> <span class="c1"># 最后要清空 s_list 才是一个完整的闭环
+</span></code></pre></div></div>
+
+<h3 id="方法二-升级版-哈希表">方法二 升级版 哈希表</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isValid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span><span class="s">'{'</span><span class="p">:</span> <span class="s">'}'</span><span class="p">,</span>  <span class="s">'['</span><span class="p">:</span> <span class="s">']'</span><span class="p">,</span> <span class="s">'('</span><span class="p">:</span> <span class="s">')'</span><span class="p">,</span> <span class="s">'?'</span><span class="p">:</span> <span class="s">'?'</span><span class="p">}</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="s">'?'</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span> <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">dic</span><span class="p">[</span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()]</span> <span class="o">!=</span> <span class="n">c</span><span class="p">:</span> <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IsValid</span> <span class="o">{</span>
+    <span class="cm">/**
+     * 哈希表
+     *
+     * @param s
+     * @return
+     */</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span> <span class="nc">Character</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;()</span> <span class="o">{</span>
+        <span class="o">{</span>
+            <span class="n">put</span><span class="o">(</span><span class="sc">'['</span><span class="o">,</span> <span class="sc">']'</span><span class="o">);</span>
+            <span class="n">put</span><span class="o">(</span><span class="sc">'{'</span><span class="o">,</span> <span class="sc">'}'</span><span class="o">);</span>
+            <span class="n">put</span><span class="o">(</span><span class="sc">'('</span><span class="o">,</span> <span class="sc">')'</span><span class="o">);</span>
+            <span class="n">put</span><span class="o">(</span><span class="sc">'?'</span><span class="o">,</span> <span class="sc">'?'</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">LinkedList</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;()</span> <span class="o">{</span>
+            <span class="o">{</span>
+                <span class="n">add</span><span class="o">(</span><span class="sc">'?'</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">};</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Character</span> <span class="n">ch</span> <span class="o">:</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">ch</span><span class="o">))</span>
+                <span class="n">stack</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">removeLast</span><span class="o">())</span> <span class="o">!=</span> <span class="n">ch</span><span class="o">)</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="方法三-无敌版">方法三 无敌版</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isValid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="k">while</span> <span class="s">'{}'</span> <span class="ow">in</span> <span class="n">s</span> <span class="ow">or</span> <span class="s">'()'</span> <span class="ow">in</span> <span class="n">s</span> <span class="ow">or</span> <span class="s">'[]'</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'{}'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'[]'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'()'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="s">''</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0504/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0504-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,暴力,哈希表"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/python3/built/in/functions"><h2 itemprop="headline" class="item__header">Python3 内置函数</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="参考链接">参考链接</h3>
 <p><a href="https://www.runoob.com/python3/python3-built-in-functions.html">菜鸟Python3 内置函数</a></p>
@@ -957,152 +1101,6 @@ list.remove('abc')
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 02, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0502-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,摩尔投票法"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0501/001/07"><h2 itemprop="headline" class="item__header">5. 最长回文串</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">中心扩展算法</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">中心扩展算法</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-5-最长回文子串">题目 <a href="https://leetcode-cn.com/problems/longest-palindromic-substring/">5. 最长回文子串</a></h3>
-<p>给定一个字符串 <code class="highlighter-rouge">s</code> ，找到 <code class="highlighter-rouge">s</code>  中最长的回文子串。你可以假设 s 的最大长度为 1000。</p>
-
-<h3 id="示例">示例</h3>
-<h4 id="示例-1">示例 1：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "babad"
-输出: "bab"
-注意: "aba" 也是一个有效答案。
-</code></pre></div></div>
-<h4 id="示例-2">示例 2：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "cbbd"
-输出: "bb"
-</code></pre></div></div>
-
-<h3 id="方法一--中心扩展算法">方法一  中心扩展算法</h3>
-<h4 id="解题思路">解题思路</h4>
-<ol>
-  <li>首先，要明白 <code class="highlighter-rouge">expandAroundCenter</code> 函数作用是以一个中心向两侧扩展找到这个中心最长回文串的长度，参数 <code class="highlighter-rouge">left</code> 和 <code class="highlighter-rouge">right</code> 就是为了指定中心。</li>
-  <li>其次，中心可能是一个或两个字符。如：对于字符串“abcda”，“c”是中心；对于字符串“adccda”，“cc”是中心。</li>
-  <li>那么，<code class="highlighter-rouge">expandAroundCenter(s, i, i)</code> 就是在找以 i（一个字符）为中心的最长回文串的长度；<code class="highlighter-rouge">expandAroundCenter(s, i, i + 1)</code> 是在找以 i 和i+1（两个字符）为中心的最长回文串的长度。</li>
-  <li>将得到的两个长度和缓存的最长回文串长度相比较。若新得到的长度较长，表达式：$start = i - (len - 1) / 2$;$end = i + len / 2$; 就得出了新的最长回文串的开始和结束位置。</li>
-  <li>最后，for循环遍历了一遍，以一个字符为中心总共找了 n 次，以两个字符为中心总共找了 n-1 次，所以说“总共有2n−1 个这样的中心”。</li>
-</ol>
-
-<figure class="highlight"><pre><code class="language-java" data-lang="java"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-</pre></td><td class="code"><pre><span class="kd">public</span> <span class="nc">String</span> <span class="nf">longestPalindrome</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">)</span> <span class="k">return</span> <span class="s">""</span><span class="o">;</span>
-    <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">len1</span> <span class="o">=</span> <span class="n">expandAroundCenter</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span> <span class="c1">// 一个中心的情况 aba</span>
-        <span class="kt">int</span> <span class="n">len2</span> <span class="o">=</span> <span class="n">expandAroundCenter</span><span class="o">(</span><span class="n">s</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span> <span class="c1">// 两个中心的情况 abba</span>
-        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">len1</span><span class="o">,</span> <span class="n">len2</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// 每次循环 判断最长的回文串首尾</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="o">(</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span> <span class="c1">// 当一个中心的情况 start = i - len/2 当两个中心的情况 i 右边做了 i+1 操作 所以 len -1</span>
-            <span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span> <span class="c1">// 这个还好理解</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">start</span><span class="o">,</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="c1">// 中心扩展算法</span>
-<span class="kd">private</span> <span class="kt">int</span> <span class="nf">expandAroundCenter</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
-  <span class="k">while</span> <span class="o">(</span><span class="n">left</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">left</span><span class="o">)</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">right</span><span class="o">))</span> <span class="o">{</span>
-          <span class="n">left</span><span class="o">--;</span>
-          <span class="n">right</span><span class="o">++;</span>
-      <span class="o">}</span>
-      <span class="k">return</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
-<span class="o">}</span>
-</pre></td></tr></tbody></table></code></pre></figure>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-</pre></td><td class="code"><pre><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">longestPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">start</span> <span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-            <span class="n">lenOne</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expandAroundCenter</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="c1"># 一个中心的情况 aba
-</span>            <span class="n">lenTwo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">expandAroundCenter</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 两个中心的情况 abba
-</span>            <span class="n">lenMax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lenOne</span><span class="p">,</span><span class="n">lenTwo</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">lenMax</span> <span class="o">&gt;</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">:</span> <span class="c1"># 每次循环 判断最长的回文串首尾
-</span>                <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="p">(</span><span class="n">lenMax</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span> <span class="c1"># // 当一个中心的情况 start = i - len/2 当两个中心的情况 i 右边做了 i+1 操作 所以 len -1
-</span>                <span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">lenMax</span><span class="o">//</span><span class="mi">2</span> <span class="c1"># 这个还好理解
-</span>
-        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-    <span class="c1"># 中心扩展算法
-</span>    <span class="k">def</span> <span class="nf">expandAroundCenter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">s</span><span class="p">:</span><span class="nb">str</span> <span class="p">,</span><span class="n">left</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span><span class="n">right</span><span class="p">:</span><span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span><span class="nb">int</span><span class="p">:</span>
-        <span class="k">while</span> <span class="n">left</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">s</span><span class="p">[</span><span class="n">right</span><span class="p">]:</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">left</span> <span class="o">-</span><span class="mi">1</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">right</span> <span class="o">+</span><span class="mi">1</span>
-        <span class="k">return</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span><span class="mi">1</span>
-
-
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
-    <span class="n">st</span> <span class="o">=</span> <span class="s">'abcba'</span>
-    <span class="n">solution</span> <span class="o">=</span> <span class="n">Solution</span><span class="p">()</span> <span class="c1"># 有括号和没有括号的区别
-</span>    <span class="n">res</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">longestPalindrome</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</pre></td></tr></tbody></table></code></pre></figure>
-
-</div><p><a href="/leetcode/2020/0501/001/07">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%B8%AD%E5%BF%83%E6%89%A9%E5%B1%95%E7%AE%97%E6%B3%95">中心扩展算法</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 01, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0501-001-07">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-01T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,中心扩展算法"></div>
       </article></div>
 </div><div class="layout--home"><div class="pagination"><p>186 post articles, 24 pages.</p>
     <div class="pagination__menu">
