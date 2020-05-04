@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>55. 跳跃游戏 - JAVA 牛牛</title>
 
-<meta name="description" content="题目 55. 跳跃游戏给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。示例示例 1:输入: [2,3,1,1,4]输出: true解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个...">
+<meta name="description" content="题目 55. 跳跃游戏给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。示例 1:输入: [2,3,1,1,4]输出: true解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0417/020"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -347,36 +347,69 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <p>判断你是否能够到达最后一个位置。</p>
 
-<h2 id="示例">示例</h2>
 <h3 id="示例1">示例 1:</h3>
-
-<p>输入: [2,3,1,1,4]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [2,3,1,1,4]
 输出: true
-解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置。</p>
-
+解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置。
+</code></pre></div></div>
 <h3 id="示例2">示例 2:</h3>
-<p>输入: [3,2,1,0,4]
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [3,2,1,0,4]
 输出: false
-解释: 无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。</p>
+解释: 无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。
+</code></pre></div></div>
 
-<h2 id="思路">思路</h2>
+<h3 id="方法一-贪心算法">方法一 贪心算法</h3>
+<h4 id="解题思路">解题思路</h4>
 <ul>
-  <li>始终维护从起始点出发可以达到的最远坐标
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canJump</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
-      <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
-      <span class="kt">int</span> <span class="n">rightmost</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">rightmost</span><span class="o">)</span> <span class="o">{</span>
-              <span class="n">rightmost</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">rightmost</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
-              <span class="k">if</span> <span class="o">(</span><span class="n">rightmost</span> <span class="o">&gt;=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-                  <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-              <span class="o">}</span>
-          <span class="o">}</span>
-      <span class="o">}</span>
-      <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
+  <li>维护一个最远可达到的位置</li>
+  <li>时间复杂度 $O(n)$ 时间复杂度 $O(1)$
+    <pre><code class="language-python3">class Solution:
+  def canJump(self, nums: List[int]) -&gt; bool:
+      nums_len = len(nums) -1
+      distance_max = 0 # 记录从0开始能到到达的最远距离
+      for i in range(len(nums)):
+          if i &lt;= distance_max: # 说明 下标 i 是能涉足到
+              distance_max = max(distance_max,i + nums[i]) # i 这个下标能到达的最远距离 和 distance_max 比较
+              if distance_max &gt;= nums_len:
+                  return True
+      return False
+</code></pre>
+  </li>
+</ul>
+
+<h4 id="优化贪心算法">优化贪心算法</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">canJump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="s">"""
+        :type nums: List[int]
+        :rtype: bool
+        """</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<h3 id="方法二-暴力-会超时">方法二 暴力 (会超时)</h3>
+<h4 id="解题思路-1">解题思路</h4>
+<ul>
+  <li>从右向左推，记录能到达终点的上一个最远的距离，并记录当前的下标 作为下一个循环的目标</li>
+  <li>遍历到最后 如果  <code class="highlighter-rouge">i + nums[i] &lt; p</code> 即，<code class="highlighter-rouge">flag = False</code>,则返回 <code class="highlighter-rouge">False</code>,否则放回True</li>
+  <li>时间复杂度 $O(n^2)$ 时间复杂度 $O(1)$
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">canJump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+      <span class="n">p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span>
+      <span class="n">falg</span> <span class="o">=</span> <span class="bp">True</span>
+      <span class="k">while</span>  <span class="n">p</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">falg</span><span class="p">:</span>
+          <span class="n">falg</span> <span class="o">=</span> <span class="bp">False</span>
+          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+              <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">p</span><span class="p">:</span>
+                  <span class="n">p</span> <span class="o">=</span> <span class="n">i</span>
+                  <span class="n">falg</span> <span class="o">=</span> <span class="bp">True</span>
+                  <span class="k">break</span>
+      <span class="k">return</span> <span class="n">falg</span>
 </code></pre></div>    </div>
   </li>
 </ul>
