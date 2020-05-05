@@ -488,8 +488,11 @@ abs(curr\_max - curr\_min) <= limit & 判断数组中元素是否符合条件，
   <li>时间复杂度复杂度 $0(n)$ 空间复杂度 $0(n)$</li>
 </ol>
 
-<h4 id="代码">代码</h4>
+<h3 id="执行过程-举例-nums--1012472-limit--5">执行过程 举例 nums = [10,1,2,4,7,2] limit = 5</h3>
 
+<p><img src="/assets/images/leetcode/0505/Jietu20200506-011907@2x.jpg" alt="pic" /></p>
+
+<h4 id="python">python</h4>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">longestSubarray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span><span class="p">:</span>
@@ -508,6 +511,32 @@ abs(curr\_max - curr\_min) <= limit & 判断数组中元素是否符合条件，
                 <span class="n">curr_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sub_nums</span><span class="p">)</span> <span class="c1"># 当子数组最大值
 </span>                <span class="n">curr_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sub_nums</span><span class="p">)</span> <span class="c1"># 当前子数组最小值
 </span>        <span class="k">return</span>  <span class="nb">len</span><span class="p">(</span><span class="n">sub_nums</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">longestSubarray</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">nums</span> <span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">curr_max</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span> <span class="c1">// 当子数组下最大值 这里初始化为第一个数</span>
+        <span class="kt">int</span> <span class="n">curr_min</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span> <span class="c1">// 当子数组下最大值 这里初始化为第一个数</span>
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">sub_nums</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="nl">num:</span><span class="n">nums</span><span class="o">){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">num</span> <span class="o">-</span> <span class="n">curr_max</span><span class="o">)</span> <span class="o">&lt;=</span>  <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">num</span> <span class="o">-</span> <span class="n">curr_min</span><span class="o">)</span> <span class="o">&lt;=</span>  <span class="n">limit</span> <span class="o">&amp;&amp;</span> <span class="nc">Math</span><span class="o">.</span><span class="na">abs</span><span class="o">(</span><span class="n">curr_max</span> <span class="o">-</span> <span class="n">curr_min</span><span class="o">)</span> <span class="o">&lt;=</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">curr_max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">num</span><span class="o">,</span><span class="n">curr_max</span><span class="o">);</span>
+                <span class="n">curr_min</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">num</span><span class="o">,</span><span class="n">curr_min</span><span class="o">);</span>
+                <span class="n">sub_nums</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+            <span class="o">}</span><span class="k">else</span><span class="o">{</span>
+                <span class="n">sub_nums</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">num</span><span class="o">);</span>
+                <span class="n">sub_nums</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
+                <span class="n">curr_max</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">sub_nums</span><span class="o">);</span> <span class="c1">// 当子数组最大值</span>
+                <span class="n">curr_min</span> <span class="o">=</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">sub_nums</span><span class="o">);</span> <span class="c1">// 当前子数组最小值</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">sub_nums</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <h3 id="错误代码">错误代码</h3>
