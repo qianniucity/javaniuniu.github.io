@@ -422,6 +422,167 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0505-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,中序遍历"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0505/001"><h2 itemprop="headline" class="item__header">1438. 绝对差不超过限制的最长连续子数组</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">滑动窗口</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">滑动窗口</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-1438-绝对差不超过限制的最长连续子数组">题目 <a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/">1438. 绝对差不超过限制的最长连续子数组</a></h3>
+
+<p>给你一个整数数组 <code class="highlighter-rouge">nums</code> ，和一个表示限制的整数 <code class="highlighter-rouge">limit</code>，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 <code class="highlighter-rouge">limit</code> 。</p>
+
+<p>如果不存在满足条件的子数组，则返回 0 。</p>
+
+<h3 id="示例-1">示例 1：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [8,2,4,7], limit = 4
+输出：2
+解释：所有子数组如下：
+[8] 最大绝对差 |8-8| = 0 &lt;= 4.
+[8,2] 最大绝对差 |8-2| = 6 &gt; 4.
+[8,2,4] 最大绝对差 |8-2| = 6 &gt; 4.
+[8,2,4,7] 最大绝对差 |8-2| = 6 &gt; 4.
+[2] 最大绝对差 |2-2| = 0 &lt;= 4.
+[2,4] 最大绝对差 |2-4| = 2 &lt;= 4.
+[2,4,7] 最大绝对差 |2-7| = 5 &gt; 4.
+[4] 最大绝对差 |4-4| = 0 &lt;= 4.
+[4,7] 最大绝对差 |4-7| = 3 &lt;= 4.
+[7] 最大绝对差 |7-7| = 0 &lt;= 4.
+因此，满足题意的最长子数组的长度为 2 。
+</code></pre></div></div>
+<h3 id="示例-2">示例 2：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [10,1,2,4,7,2], limit = 5
+输出：4
+解释：满足题意的最长子数组是 [2,4,7,2]，其最大绝对差 |2-7| = 5 &lt;= 5 。
+</code></pre></div></div>
+<h3 id="示例-3">示例 3：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [4,2,2,2,4,4,2,2], limit = 0
+输出：3
+</code></pre></div></div>
+
+<h3 id="提示">提示：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= nums.length &lt;= 10^5
+1 &lt;= nums[i] &lt;= 10^9
+0 &lt;= limit &lt;= 10^9
+</code></pre></div></div>
+
+<h3 id="方法一-滑动窗口">方法一 滑动窗口</h3>
+<h4 id="解题思路">解题思路</h4>
+<ol>
+  <li>维护一直最大值和最小值</li>
+  <li>
+    <p>维护一个最长数组
+<script type="math/tex">% <![CDATA[
+sub\_nums增加的条件=\begin{cases}
+abs(num - curr\_max) <=  limit & 判断当前元素是否复合条件，当前元素和数组中最大元素比较\\
+abs(num - curr\_min) <=  limit & 判断当前元素是否复合条件，当前元素和数组中最小元素比较 \\
+abs(curr\_max - curr\_min) <= limit & 判断数组中元素是否符合条件，数组中最大元素和最小元素比较
+\end{cases} %]]></script></p>
+  </li>
+  <li>当不复合数组增加条件，则以当前长度向后移动</li>
+  <li>在向后移动的同时，数组中元素也在在发生变化，所以需要更新数组中的最大最小值</li>
+  <li>时间复杂度复杂度 $0(n)$ 空间复杂度 $0(n)$</li>
+</ol>
+
+<h4 id="代码">代码</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">longestSubarray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">curr_max</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 当子数组下最大值 这里初始化为第一个数
+</span>        <span class="n">curr_min</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 当子数组下最大值 这里初始化为第一个数
+</span>        <span class="n">sub_nums</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 以数组作为窗口滑动
+</span>        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span> <span class="o">-</span> <span class="n">curr_max</span><span class="p">)</span> <span class="o">&lt;=</span>  <span class="n">limit</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span> <span class="o">-</span> <span class="n">curr_min</span><span class="p">)</span> <span class="o">&lt;=</span>  <span class="n">limit</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">curr_max</span> <span class="o">-</span> <span class="n">curr_min</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">limit</span><span class="p">:</span>
+                <span class="n">curr_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">curr_max</span><span class="p">)</span>
+                <span class="n">curr_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">curr_min</span><span class="p">)</span>
+                <span class="n">sub_nums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>    
+                <span class="n">sub_nums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+                <span class="n">sub_nums</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">curr_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sub_nums</span><span class="p">)</span> <span class="c1"># 当子数组最大值
+</span>                <span class="n">curr_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">sub_nums</span><span class="p">)</span> <span class="c1"># 当前子数组最小值
+</span>        <span class="k">return</span>  <span class="nb">len</span><span class="p">(</span><span class="n">sub_nums</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="错误代码">错误代码</h3>
+<p>本想设计一个 时间复杂度为 n 的 结果错了 尴尬</p>
+<ul>
+  <li>错误答案 错在 [10,1,2,4,7,2] 5
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+  <span class="k">def</span> <span class="nf">longestSubarray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">limit</span><span class="p">):</span>
+      <span class="s">"""
+      :type nums: List[int]
+      :type limit: int
+      :rtype: int
+      """</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span><span class="p">:</span>
+          <span class="k">return</span> <span class="mi">0</span>
+      <span class="n">curr_max</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 当子数组下最大值 这里初始化为第一个数
+</span>      <span class="n">curr_min</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 当子数组下最大值 这里初始化为第一个数
+</span>      <span class="n">len_max</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 最长子数组长度
+</span>      <span class="n">len_curr</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 当前子数组长度
+</span>      <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+          <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span> <span class="o">-</span> <span class="n">curr_max</span><span class="p">)</span> <span class="o">&lt;</span>  <span class="n">limit</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">num</span> <span class="o">-</span> <span class="n">curr_min</span><span class="p">)</span> <span class="o">&lt;</span>  <span class="n">limit</span><span class="p">:</span>
+              <span class="n">curr_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">curr_max</span><span class="p">)</span>
+              <span class="n">curr_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">curr_min</span><span class="p">)</span>
+              <span class="n">len_curr</span> <span class="o">+=</span> <span class="mi">1</span>
+          <span class="k">else</span><span class="p">:</span>
+              <span class="n">len_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">len_max</span><span class="p">,</span><span class="n">len_curr</span><span class="p">)</span>
+              <span class="n">curr_max</span> <span class="o">=</span> <span class="n">num</span> <span class="c1"># 下一个子数组当前最大值
+</span>              <span class="n">curr_min</span> <span class="o">=</span> <span class="n">num</span> <span class="c1"># 下一个子数组当前最小值
+</span>              <span class="n">len_curr</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># 因为该下标已经计算过一次 所以 设置当前子数组长度为 1
+</span>      <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">len_max</span><span class="p">,</span><span class="n">len_curr</span><span class="p">)</span> <span class="c1"># 当数组中所有数都满足条件 则len_max,len_curr 进行比较
+</span></code></pre></div>    </div>
+  </li>
+</ul>
+</div><p><a href="/leetcode/2020/0505/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0505-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,滑动窗口"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/algo/2020/0505/003"><h2 itemprop="headline" class="item__header">滑动窗口</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="文案">文案</h1>
+<p>TODO</p>
+
+<h2 id="常用场景的一些总结">常用场景的一些总结</h2>
+<ul>
+  <li>数组顺序不能改变</li>
+  <li>需要求的答案也通常是连续在一起</li>
+  <li>通常会给一个限定条件</li>
+</ul>
+
+<h2 id="类似题目">类似题目</h2>
+<ul>
+  <li><a href="/leetcode/2020/0502/002/08">3. 无重复字符的最长子串</a></li>
+  <li><a href="/leetcode/2020/0426/025">5393. 可获得的最大点数</a></li>
+  <li><a href="/leetcode/2020/0505/001">1438. 绝对差不超过限制的最长连续子数组</a></li>
+</ul>
+
+<h2 id="滑动窗口-通用代码">滑动窗口 通用代码</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nums</span><span class="p">,</span><span class="n">limit</span><span class="p">):</span>
+
+</code></pre></div></div>
+</div><p><a href="/algo/2020/0505/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0505-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,滑动窗口"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/algo/2020/0505/008"><h2 itemprop="headline" class="item__header">二叉树的先序、中序、后序遍历</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="大概的概念">大概的概念</h3>
 <blockquote>
@@ -1253,174 +1414,8 @@ list.remove('abc')
                 href="/archive.html?tag=python">python</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="python3-built-in-functions">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
     <meta itemprop="keywords" content="python"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0503/003/01"><h2 itemprop="headline" class="item__header">5385. 改变一个整数能得到的最大差值</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">循环</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">循环</code></li>
-  <li><strong>类似题型</strong>:</li>
-  <li><strong>反思</strong>:当对比了自己一开始写的题解代码后，发现一个问题，写代码存在，用机器的方式编写，和以人脑的方式编写</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-5385-改变一个整数能得到的最大差值">题目 <a href="https://leetcode-cn.com/problems/max-difference-you-can-get-from-changing-an-integer/">5385. 改变一个整数能得到的最大差值</a></h3>
-<p>给你一个整数 <code class="highlighter-rouge">num</code> 。你可以对它进行如下步骤恰好 两次 ：</p>
-
-<ul>
-  <li>选择一个数字 <code class="highlighter-rouge">x (0 &lt;= x &lt;= 9)</code>.</li>
-  <li>选择另一个数字 <code class="highlighter-rouge">y (0 &lt;= y &lt;= 9)</code> 。数字 y 可以等于 x 。</li>
-  <li>将 <code class="highlighter-rouge">num</code> 中所有出现 <code class="highlighter-rouge">x</code> 的数位都用 y 替换。</li>
-  <li>得到的新的整数 不能 有前导 <code class="highlighter-rouge">0</code> ，得到的新整数也 不能 是 0 。</li>
-  <li>令两次对 num 的操作得到的结果分别为 a 和 b 。</li>
-</ul>
-
-<p>请你返回 <code class="highlighter-rouge">a</code> 和 <code class="highlighter-rouge">b</code> 的 <strong>最大差值</strong> 。</p>
-
-<p> </p>
-<h3 id="示例">示例</h3>
-<h4 id="示例-1">示例 1：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：num = 555
-输出：888
-解释：第一次选择 x = 5 且 y = 9 ，并把得到的新数字保存在 a 中。
-第二次选择 x = 5 且 y = 1 ，并把得到的新数字保存在 b 中。
-现在，我们有 a = 999 和 b = 111 ，最大差值为 888
-</code></pre></div></div>
-<h4 id="示例-2">示例 2：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：num = 9
-输出：8
-解释：第一次选择 x = 9 且 y = 9 ，并把得到的新数字保存在 a 中。
-第二次选择 x = 9 且 y = 1 ，并把得到的新数字保存在 b 中。
-现在，我们有 a = 9 和 b = 1 ，最大差值为 8
-</code></pre></div></div>
-<h4 id="示例-3">示例 3：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：num = 123456
-输出：820000
-</code></pre></div></div>
-<h4 id="示例-4">示例 4：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：num = 10000
-输出：80000
-</code></pre></div></div>
-<h4 id="示例-5">示例 5：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：num = 9288
-输出：8700
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<ul>
-  <li>使用方法 <code class="highlighter-rouge">str.replace()</code> 替换相同的元素</li>
-  <li>每个元素都从 0 到 9 都替换一遍 ，并记录最大值和最小值，最后返回最大差值
-    <ul>
-      <li>排除 前导 != 0
-        <h3 id="代码">代码</h3>
-        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">maxDiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
-  <span class="n">num_max</span> <span class="p">,</span><span class="n">num_min</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-  <span class="n">st</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-      <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-          <span class="n">a</span><span class="p">,</span><span class="n">b</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-          <span class="n">x</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
-          <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">'0'</span><span class="p">):</span>
-              <span class="k">continue</span>
-          <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-          <span class="n">num_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num_max</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-          <span class="n">num_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">num_min</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">num_max</span> <span class="o">-</span> <span class="n">num_min</span>
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
-</div><p><a href="/leetcode/2020/0503/003/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%BE%AA%E7%8E%AF">循环</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0503-003-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,循环"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0503/003/02"><h2 itemprop="headline" class="item__header">53. 最大子序和</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">贪心</code> <code class="success highlighter-rouge">动态规划</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">贪心</code> <code class="info highlighter-rouge">动态规划</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-53-最大子序和">题目 <a href="https://leetcode-cn.com/problems/maximum-subarray/">53. 最大子序和</a></h3>
-<p>给定一个整数数组 <code class="highlighter-rouge">nums</code> ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。</p>
-
-<h3 id="示例">示例:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [-2,1,-3,4,-1,2,1,-5,4],
-输出: 6
-解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
-</code></pre></div></div>
-<h3 id="进阶">进阶:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。
-</code></pre></div></div>
-
-<h3 id="方法一-贪心">方法一 贪心</h3>
-<ul>
-  <li>这道题用动态规划的思路并不难解决，比较难的是后文提出的用分治法求解，但由于其不是最优解法，所以先不列出来</li>
-  <li>动态规划的是首先对数组进行遍历，当前最大连续子序列和为 <code class="highlighter-rouge">sum</code>，结果为 <code class="highlighter-rouge">ans</code></li>
-  <li>如果 <code class="highlighter-rouge">sum &gt; 0</code>，则说明 sum 对结果有增益效果，则 <code class="highlighter-rouge">sum</code> 保留并加上当前遍历数字</li>
-  <li>如果 <code class="highlighter-rouge">sum &lt;= 0</code>，则说明 sum 对结果无增益效果，需要舍弃，则 <code class="highlighter-rouge">sum</code> 直接更新为当前遍历数字</li>
-  <li>每次比较 <code class="highlighter-rouge">sum</code> 和 <code class="highlighter-rouge">ans</code> 的大小，将最大值置为 <code class="highlighter-rouge">ans</code> ，遍历结束返回结果</li>
-  <li>时间复杂度：$O(n)$</li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">numsSum</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">numsSum</span> <span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
-                <span class="n">numsSum</span> <span class="o">+=</span> <span class="n">num</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">numsSum</span> <span class="o">=</span> <span class="n">num</span>
-            <span class="n">ans</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">numsSum</span><span class="p">,</span><span class="n">ans</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ans</span>
-</code></pre></div></div>
-
-<h3 id="动态规划">动态规划</h3>
-<ul>
-  <li>最重要的是搞清楚 <code class="highlighter-rouge">dp</code> 数组所存储元素的意义,这里要明确 dp[i] 存储的不是从 0 到 i 这个范围内所得到的最大的连续子数组的和，而是 <strong>以 nums[i] 为结尾的子数组所能达到的最大的和</strong></li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">maxSubArray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1"># 下面为nums长度至少为2的情况
-</span>        <span class="n">res</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># 先设定一个初始值（假设第一个数是可获得的最小值）
-</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
-            <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># 更新后的nums[i]存储 以原始num[i]为结尾的子数组和的最大值
-</span>            <span class="n">res</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>  <span class="c1"># 更新最大值
-</span>        <span class="k">return</span> <span class="n">res</span>
-
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0503/003/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%B4%AA%E5%BF%83">贪心</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0503-003-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,贪心,动态规划"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>190 post articles, 24 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>192 post articles, 24 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
