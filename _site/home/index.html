@@ -479,6 +479,277 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0505-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,二叉树的先序、中序、后序遍历"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/algo/2020/0505/009"><h2 itemprop="headline" class="item__header">二叉树(前序，中序，后序，层序)遍历递归与循环的python实现</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>二叉树的遍历是在面试使比较常见的项目了。对于二叉树的前中后层序遍历，每种遍历都可以递归和循环两种实现方法，且每种遍历的递归实现都比循环实现要简洁。下面做一个小结。</p>
+
+<p class="success">一、中序遍历</p>
+
+<p>前中后序三种遍历方法对于左右结点的遍历顺序都是一样的（先左后右），唯一不同的就是根节点的出现位置。对于中序遍历来说，根结点的遍历位置在中间。</p>
+
+<p>所以中序遍历的顺序：<strong>左中右</strong></p>
+
+<p class="info">1.1 递归实现</p>
+
+<p>每次递归，只需要判断结点是不是None，否则按照左中右的顺序打印出结点value值。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">inorderTraversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="s">"""
+        :type root: TreeNode
+        :rtype: List[int]
+        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">inorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">root</span><span class="o">.</span><span class="n">val</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">inorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+</code></pre></div></div>
+<p class="info">1.2 循环实现</p>
+
+<p>循环比递归要复杂得多，因为你得在一个函数中遍历到所有结点。但是有句话很重要：</p>
+
+<p><strong>对于树的遍历，循环操作基本上要用到栈(stack)这个结构</strong></p>
+
+<p>对于中序遍历的循环实现，每次将当前结点(curr)的左子结点push到栈中，直到当前结点(curr)为None。这时，pop出栈顶的第一个元素，设其为当前结点，并输出该结点的value值，且开始遍历该结点的右子树。</p>
+
+<p>例如，对于上图的一个二叉树，其循环遍历过程如下表：</p>
+
+<p><img src="/assets/images/algo/0505/thisfile.png" alt="pic2" /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">No.</th>
+      <th style="text-align: left">输出列表sol</th>
+      <th style="text-align: left">栈stack</th>
+      <th style="text-align: left">当前结点curr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">[1]</td>
+      <td style="text-align: left">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">[1,2]</td>
+      <td style="text-align: left">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">[1,2,4]</td>
+      <td style="text-align: left">None</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">5</td>
+      <td style="text-align: left">[4]</td>
+      <td style="text-align: left">[1,2]</td>
+      <td style="text-align: left">4 -&gt; None(4的右结点)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">6</td>
+      <td style="text-align: left">[4,2]</td>
+      <td style="text-align: left">[1]</td>
+      <td style="text-align: left">2 -&gt; 5</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">7</td>
+      <td style="text-align: left">[4,2]</td>
+      <td style="text-align: left">[1,5]</td>
+      <td style="text-align: left">None(5的左结点)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">8</td>
+      <td style="text-align: left">[4,2,5]</td>
+      <td style="text-align: left">[1]</td>
+      <td style="text-align: left">5 -&gt; None(5的右结点)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">9</td>
+      <td style="text-align: left">[4,2,5,1]</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">[4,2,5,1]</td>
+      <td style="text-align: left">[3]</td>
+      <td style="text-align: left">None</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">11</td>
+      <td style="text-align: left">[4,2,5,1,3]</td>
+      <td style="text-align: left">[]</td>
+      <td style="text-align: left">None</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>可见，规律为：当前结点curr不为None时，每一次循环将当前结点curr入栈；当前结点curr为None时，则出栈一个结点，且打印出栈结点的value值。整个循环在stack和curr皆为None的时候结束。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">inorderTraversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="k">while</span> <span class="n">stack</span> <span class="ow">or</span> <span class="n">curr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">curr</span><span class="p">:</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="p">)</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">left</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">sol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">right</span>
+        <span class="k">return</span> <span class="n">sol</span>
+</code></pre></div></div>
+<p class="success">二、前序遍历和后序遍历</p>
+
+<p>按照上面的说法，前序遍历指根结点在最前面输出，所以前序遍历的顺序是：<strong>中左右</strong></p>
+
+<p>后序遍历指根结点在最后面输出，所以后序遍历的顺序是：<strong>左右中</strong></p>
+
+<p class="info">2.1 递归实现</p>
+
+<p>递归实现与中序遍历几乎完全一样，改变一下打印的顺序即可：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">preorderTraversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>  <span class="c1">##前序遍历
+</span>        <span class="s">"""
+        :type root: TreeNode
+        :rtype: List[int]
+        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span>  <span class="p">[</span><span class="n">root</span><span class="o">.</span><span class="n">val</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">inorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">inorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">postorderTraversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>  <span class="c1">##后序遍历
+</span>        <span class="s">"""
+        :type root: TreeNode
+        :rtype: List[int]
+        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">return</span>  <span class="bp">self</span><span class="o">.</span><span class="n">inorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">inorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="n">root</span><span class="o">.</span><span class="n">val</span><span class="p">]</span>
+</code></pre></div></div>
+<p>改动的地方只有return时函数的打印顺序。</p>
+
+<p class="info">2.2 循环实现</p>
+
+<p>为什么把前序遍历和后序遍历放在一起呢？Leetcode上前序遍历是medium难度，后序遍历可是hard难度呢！</p>
+
+<p><strong>实际上，后序遍历不就是前序遍历的“反过程”嘛！</strong></p>
+
+<p>先看前序遍历。我们仍然使用栈stack，由于前序遍历的顺序是中左右，所以我们每次先打印当前结点curr，并将右子结点push到栈中，然后将左子结点设为当前结点。入栈和出栈条件（当前结点curr不为None时，每一次循环将当前结点curr入栈；当前结点curr为None时，则出栈一个结点）以及循环结束条件（整个循环在stack和curr皆为None的时候结束）与中序遍历一模一样。</p>
+
+<p>再看后序遍历。由于后序遍历的顺序是左右中，我们把它反过来，则遍历顺序变成中左右，是不是跟前序遍历只有左右结点的差异了呢？然而左右的差异仅仅就是.left和.right的差异，在代码上只有机械的差别。</p>
+
+<p>我们来看代码：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">preorderTraversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>  <span class="c1">## 前序遍历
+</span>        <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="k">while</span> <span class="n">stack</span> <span class="ow">or</span> <span class="n">curr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">curr</span><span class="p">:</span>
+                <span class="n">sol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">left</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">sol</span>
+
+    <span class="k">def</span> <span class="nf">postorderTraversal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span> <span class="c1">## 后序遍历
+</span>        <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="k">while</span> <span class="n">stack</span> <span class="ow">or</span> <span class="n">curr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">curr</span><span class="p">:</span>
+                <span class="n">sol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="n">right</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">sol</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+<p>代码的主体部分基本就是.right和.left交换了顺序，且后序遍历在最后输出的时候进行了反向（因为要从中右左变为左右中）</p>
+
+<p class="success">三、层序遍历</p>
+
+<p>层序遍历也可以叫做宽度优先遍历：先访问树的第一层结点，再访问树的第二层结点…然后一直访问到最下面一层结点。在同一层结点中，以从左到右的顺序依次访问。</p>
+
+<p class="info">3.1 递归实现</p>
+
+<p>递归函数需要有一个参数level，该参数表示当前结点的层数。遍历的结果返回到一个二维列表sol=[[]]中，sol中的每一个子列表保存了对应index层的从左到右的所有结点value值。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">levelOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="s">"""
+        :type root: TreeNode
+        :rtype: List[List[int]]
+        """</span>
+        <span class="k">def</span> <span class="nf">helper</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">node</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sol</span><span class="p">[</span><span class="n">level</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span> <span class="o">==</span> <span class="n">level</span><span class="p">:</span>  <span class="c1"># 遍历到新层时，只有最左边的结点使得等式成立
+</span>                    <span class="n">sol</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                <span class="n">helper</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">helper</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="p">[[]]</span>
+        <span class="n">helper</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sol</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</code></pre></div></div>
+<p>PS：</p>
+
+<p>Q：如果仍然按层遍历，但是每层从右往左遍历怎么办呢？</p>
+
+<p>A：将上面的代码left和right互换即可</p>
+
+<p>Q：如果仍然按层遍历，但是我要第一层从左往右，第二层从右往左，第三从左往右…这种zigzag遍历方式如何实现？</p>
+
+<p>A：将 <code class="highlighter-rouge">sol[level-1].append(node.val)</code> 进行一个层数奇偶的判断，一个用 <code class="highlighter-rouge">append()</code>，一个用 <code class="highlighter-rouge">insert(0,)</code></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    if level%2==1:
+        sol[level-1].append(node.val)
+    else:
+        sol[level-1].insert(0, node.val)
+</code></pre></div></div>
+<p class="info">3.2 循环实现</p>
+
+<p>这里的循环实现不能用栈了，得用队列queue。因为每一层都需要从左往右打印，而每打印一个结点都会在队列中依次添加其左右两个子结点，每一层的顺序都是一样的，故必须采用先进先出的数据结构。</p>
+
+<p>以下代码的打印结果为一个一维列表，没有采用二维列表的形式。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">levelOrder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">sol</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">root</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="p">[</span><span class="n">curr</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+            <span class="n">curr</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">sol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">curr</span><span class="o">.</span><span class="n">left</span><span class="p">:</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">curr</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sol</span>
+</code></pre></div></div>
+<p>其实，如果需要打印成zigzag形式（相邻层打印顺序相反），则可以采用栈stack数据结构，正好符合先进后出的形式。不过在代码上还要进行其他改动。</p>
+</div><p><a href="/algo/2020/0505/009">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%85%88%E5%BA%8F%E3%80%81%E4%B8%AD%E5%BA%8F%E3%80%81%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86">二叉树的先序、中序、后序遍历</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0505-009">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,二叉树的先序、中序、后序遍历"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0504/012"><h2 itemprop="headline" class="item__header">20. 有效的括号</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
@@ -960,6 +1231,23 @@ int main()
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>remove() 函数用于移除列表中某个值的第一个匹配项。
 list.remove('abc')
 </code></pre></div></div>
+
+<h3 id="通过-self属性-self函数-来调用外部的属性或函数">通过 self.属性 self.函数 来调用外部的属性或函数</h3>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"-inf"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="c1"># 访问左子树
+</span>        <span class="k">if</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="c1"># 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。
+</span>        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span>
+        <span class="c1"># 访问右子树
+</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+</code></pre></div></div>
 </div><p><a href="/python3/built/in/functions">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=python">python</a>
@@ -1131,92 +1419,8 @@ list.remove('abc')
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 03, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0503-003-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,贪心,动态规划"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0503/003/03"><h2 itemprop="headline" class="item__header">152. 乘积最大子数组</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">贪心</code> <code class="success highlighter-rouge">动态规划</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">贪心</code> <code class="info highlighter-rouge">动态规划</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-152-乘积最大子数组">题目 <a href="https://leetcode-cn.com/problems/maximum-product-subarray/">152. 乘积最大子数组</a></h3>
-<p>给你一个整数数组 <code class="highlighter-rouge">nums</code> ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字）。</p>
-
-<h3 id="示例-1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [2,3,-2,4]
-输出: 6
-解释: 子数组 [2,3] 有最大乘积 6。
-</code></pre></div></div>
-<h3 id="示例-2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [-2,0,-1]
-输出: 0
-解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<ul>
-  <li>当出现负数的时候 ，需要维护一个最小值，</li>
-</ul>
-
-<h3 id="方法一-贪心">方法一 贪心</h3>
-<pre><code class="language-python3">class Solution:
-    def maxProduct(self, nums: List[int]) -&gt; int:
-        imax = 1
-        imin = 1
-        ansMax = nums[0]
-        for i in range(len(nums)):
-            if nums[i] &lt; 0: # 当出现负数
-                temp = imax
-                imax = imin
-                imin = temp
-            imax = max(imax * nums[i],nums[i])
-            imin = min(imin * nums[i],nums[i]) # 维护一个最小值
-            ansMax = max(ansMax,imax)
-        return ansMax
-
-
-</code></pre>
-
-<h3 id="方法二-动态规划">方法二 动态规划</h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">maxProduct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
-        <span class="n">le</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">nums</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-        <span class="k">if</span> <span class="n">le</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-        <span class="n">res</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">dp_max</span> <span class="p">,</span><span class="n">dp_min</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">le</span> <span class="p">,[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">le</span>
-        <span class="n">dp_max</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">dp_min</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">le</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">dp_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dp_max</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">dp_min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dp_min</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">dp_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dp_min</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">dp_min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dp_max</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dp_max</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">res</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0503/003/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%B4%AA%E5%BF%83">贪心</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0503-003-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,贪心,动态规划"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>189 post articles, 24 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>190 post articles, 24 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>

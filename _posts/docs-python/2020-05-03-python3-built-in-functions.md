@@ -30,3 +30,21 @@ pop() 函数用于移除列表中的一个元素（默认最后一个元素）�
 remove() 函数用于移除列表中某个值的第一个匹配项。
 list.remove('abc')
 ```
+
+### 通过 self.属性 self.函数 来调用外部的属性或函数
+```python
+class Solution:
+    cur = float("-inf")
+    def isValidBST(self, root: TreeNode) -> bool:
+        if root is None:
+            return True
+        # 访问左子树
+        if  not self.isValidBST(root.left):
+            return False
+        # 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。
+        if (root.val <= self.cur):
+            return False
+        self.cur = root.val
+        # 访问右子树
+        return self.isValidBST(root.right)
+```
