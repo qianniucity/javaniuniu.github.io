@@ -322,6 +322,163 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0505/012"><h2 itemprop="headline" class="item__header">98. 验证二叉搜索树</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">中序遍历</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">中序遍历</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-98-验证二叉搜索树">题目 <a href="https://leetcode-cn.com/problems/validate-binary-search-tree/">98. 验证二叉搜索树</a></h3>
+<p>给定一个二叉树，判断其是否是一个有效的二叉搜索树。</p>
+
+<p>假设一个二叉搜索树具有如下特征：</p>
+<ul>
+  <li>节点的左子树只包含 <strong>小于</strong> 当前节点的数。</li>
+  <li>节点的右子树只包含 <strong>大于</strong> 当前节点的数。</li>
+  <li>所有左子树和右子树自身必须也是二叉搜索树。</li>
+</ul>
+
+<h3 id="示例1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
+    2
+   / \
+  1   3
+输出: true
+</code></pre></div></div>
+<h3 id="示例2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
+    5
+   / \
+  1   4
+     / \
+    3   6
+输出: false
+解释: 输入为: [5,1,4,null,null,3,6]。
+     根节点的值为 5 ，但是其右子节点值为 4 。
+</code></pre></div></div>
+
+<h3 id="方法一">方法一</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li>中序遍历时，判断当前节点是否大于中序遍历的前一个节点，如果大于，说明满足 BST，继续遍历；否则直接返回 false。
+    <h4 id="java">java</h4>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+  <span class="kt">long</span> <span class="n">pre</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="c1">// 访问左子树</span>
+      <span class="k">if</span> <span class="o">(!</span><span class="n">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">))</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="c1">// 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;=</span> <span class="n">pre</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
+      <span class="c1">// 访问右子树</span>
+      <span class="k">return</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+# 中序遍历 ： 按照 左 中 右 的顺序 挨个遍历
+</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="n">cur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"-inf"</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="c1"># 访问左子树
+</span>        <span class="k">if</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="c1"># 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。
+</span>        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span>
+        <span class="c1"># 访问右子树
+</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0505/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86">中序遍历</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0505-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,中序遍历"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/algo/2020/0505/008"><h2 itemprop="headline" class="item__header">二叉树的先序、中序、后序遍历</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="大概的概念">大概的概念</h3>
+<blockquote>
+  <p>二叉树的遍历分为两种：深度优先遍历和广度优先遍历；深度优先遍历又分为三种，先序、中序和后序</p>
+</blockquote>
+
+<ul>
+  <li>所有例子都是基于以下树进行遍历的</li>
+  <li>后面有类似题型</li>
+</ul>
+
+<p><img src="/assets/images/algo/0505/879896-20160603105939321-1775188072.jpg" alt="pic" /></p>
+
+<h3 id="深度优先遍历辅助结构栈">深度优先遍历（辅助结构：栈）</h3>
+<h4 id="先序遍历">先序遍历</h4>
+<blockquote>
+  <p>根节点，左子树，右子树</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：124563
+</code></pre></div></div>
+<h4 id="中序遍历">中序遍历</h4>
+<blockquote>
+  <p>左子树，根节点，右子树</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：425613
+</code></pre></div></div>
+<h4 id="后序遍历">后序遍历</h4>
+<blockquote>
+  <p>左子树，右子树，根节点</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：465231
+</code></pre></div></div>
+<p>关于先序、中序、后序遍历，我只说一点：就是这里的先、中、后指的是根节点，根节点，根节点。。。。</p>
+
+<h3 id="广度优先遍历辅助结构队列">广度优先遍历（辅助结构：队列）</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>很简单，结果为：123456
+</code></pre></div></div>
+
+<p>补充一下：广度优先遍历又叫层次遍历，感觉这个名字更加形象点，另外，每次遍历完一个节点会将它的子节点做入队操作。</p>
+
+<h3 id="类似题目">类似题目</h3>
+<ul>
+  <li><a href="/leetcode/2020/0505/012">98. 验证二叉搜索树</a></li>
+</ul>
+</div><p><a href="/algo/2020/0505/008">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%85%88%E5%BA%8F%E3%80%81%E4%B8%AD%E5%BA%8F%E3%80%81%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86">二叉树的先序、中序、后序遍历</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0505-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,二叉树的先序、中序、后序遍历"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0504/012"><h2 itemprop="headline" class="item__header">20. 有效的括号</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
@@ -467,18 +624,20 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <meta itemprop="keywords" content="leetcode,暴力,哈希表"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/cjj/2020/0504/011"><h2 itemprop="headline" class="item__header">C++ vector 容器浅析</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一什么是vector">一、什么是vector？</h3>
-<p>向量（Vector）是一个封装了动态大小数组的顺序容器（Sequence Container）。跟任意其它类型容器一样，它能够存放各种类型的对象。可以简单的认为，向量是一个能够存放任意类型的动态数组。</p>
-<h3 id="二容器特性">二、容器特性</h3>
-<h4 id="1顺序序列">1.顺序序列</h4>
-<p>顺序容器中的元素按照严格的线性顺序排序。可以通过元素在序列中的位置访问对应的元素。</p>
-<h4 id="2动态数组">2.动态数组</h4>
-<p>支持对序列中的任意元素进行快速直接访问，甚至可以通过指针算述进行该操作。操供了在序列末尾相对快速地添加/删除元素的操作。</p>
-<h4 id="3能够感知内存分配器的allocator-aware">3.能够感知内存分配器的（Allocator-aware）</h4>
-<p>容器使用一个内存分配器对象来动态地处理它的存储需求。</p>
-<h3 id="三基本函数实现">三、基本函数实现</h3>
-<h4 id="1构造函数">1.构造函数</h4>
-<ul>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li>转载自 <a href="https://www.runoob.com/w3cnote/cpp-vector-container-analysis.html">菜鸟技术-C++ vector 容器浅析</a>
+    <h3 id="一什么是vector">一、什么是vector？</h3>
+    <p>向量（Vector）是一个封装了动态大小数组的顺序容器（Sequence Container）。跟任意其它类型容器一样，它能够存放各种类型的对象。可以简单的认为，向量是一个能够存放任意类型的动态数组。</p>
+    <h3 id="二容器特性">二、容器特性</h3>
+    <h4 id="1顺序序列">1.顺序序列</h4>
+    <p>顺序容器中的元素按照严格的线性顺序排序。可以通过元素在序列中的位置访问对应的元素。</p>
+    <h4 id="2动态数组">2.动态数组</h4>
+    <p>支持对序列中的任意元素进行快速直接访问，甚至可以通过指针算述进行该操作。操供了在序列末尾相对快速地添加/删除元素的操作。</p>
+    <h4 id="3能够感知内存分配器的allocator-aware">3.能够感知内存分配器的（Allocator-aware）</h4>
+    <p>容器使用一个内存分配器对象来动态地处理它的存储需求。</p>
+    <h3 id="三基本函数实现">三、基本函数实现</h3>
+    <h4 id="1构造函数">1.构造函数</h4>
+  </li>
   <li>vector():创建一个空vector</li>
   <li>vector(int nSize):创建一个vector,元素个数为nSize</li>
   <li>vector(int nSize,const t&amp; t):创建一个vector，元素个数为nSize,且值均为t</li>
@@ -1056,244 +1215,8 @@ list.remove('abc')
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 03, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0503-003-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,贪心,动态规划"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0502/002/08"><h2 itemprop="headline" class="item__header">3. 无重复字符的最长子串</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">滑动窗口</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">滑动窗口</code></li>
-  <li><strong>类似题型</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0426/025">5393. 可获得的最大点数</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="题目-3-无重复字符的最长子串">题目 <a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></h3>
-<p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。</p>
-
-<p>示例 1:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "abcabcbb"
-输出: 3
-解释 : 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
-</code></pre></div></div>
-<p>示例 2:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "bbbbb"
-输出: 1
-解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
-</code></pre></div></div>
-<p>示例 3:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "pwwkew"
-输出: 3
-解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
-     请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
-</code></pre></div></div>
-
-<h3 id="解题思路-滑动窗口">解题思路 滑动窗口</h3>
-<h4 id="什么是滑动窗口">什么是滑动窗口？</h4>
-<ul>
-  <li>其实就是一个队列(或一个集合)，比如例题中的 <code class="highlighter-rouge">abcabcbb</code>，进入这个队列（窗口）为 abc 满足题目要求，当再进入 <code class="highlighter-rouge">a</code>，队列变成了 <code class="highlighter-rouge">abca</code>，这时候不满足要求。所以，我们要移动这个队列！</li>
-</ul>
-
-<h4 id="如何移动">如何移动？</h4>
-<ul>
-  <li>我们只要把队列的左边的元素移出就行了，直到满足题目要求！(不在出现重复字符串)</li>
-  <li>
-    <p>一直维持这样的队列，找出队列出现最长的长度时候，求出解！</p>
-  </li>
-  <li>时间复杂度：$O(n)$</li>
-</ul>
-
-<h3 id="代码">代码</h3>
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">lengthOfLongestSubstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span><span class="p">:</span> <span class="k">return</span> <span class="mi">0</span>
-        <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">curLen</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 当前长度
-</span>        <span class="n">maxLen</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 最长字符串
-</span>        <span class="n">lookup</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span> <span class="c1"># 用来存储滑动的字符串
-</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>
-            <span class="n">curLen</span> <span class="o">+=</span><span class="mi">1</span>
-
-            <span class="c1"># 这里是while循环，当重复字符串一直在集合当中，会一直删除左边的字符串，直到删除重复字符串   
-</span>            <span class="k">while</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">:</span>
-                <span class="n">lookup</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
-                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="n">curLen</span> <span class="o">-=</span> <span class="mi">1</span>
-
-            <span class="c1">#比较当前长度和最长长度
-</span>            <span class="k">if</span> <span class="n">curLen</span> <span class="o">&gt;</span> <span class="n">maxLen</span><span class="p">:</span><span class="n">maxLen</span><span class="o">=</span><span class="n">curLen</span>
-            <span class="n">lookup</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">maxLen</span>
-</code></pre></div></div>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-       <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">&gt;</span> <span class="n">lookup</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;&gt;();</span>
-        <span class="kt">int</span> <span class="n">cul_len</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">max_len</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">cul_len</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
-            <span class="k">while</span> <span class="o">(</span><span class="n">lookup</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span> <span class="o">{</span>
-                <span class="n">lookup</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">left</span><span class="o">));</span>
-                <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
-                <span class="n">cul_len</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">;</span>
-            <span class="o">}</span>
-
-            <span class="k">if</span><span class="o">(</span><span class="n">cul_len</span><span class="o">&gt;</span><span class="n">max_len</span><span class="o">)</span>
-                <span class="n">max_len</span> <span class="o">=</span> <span class="n">cul_len</span><span class="o">;</span>
-            <span class="n">lookup</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">max_len</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="方法二-滑动窗口二">方法二 滑动窗口二</h3>
-<ul>
-  <li>暴力解法时间复杂度较高，会达到 $O(n^2)$，故而采取滑动窗口的方法降低时间复杂度</li>
-  <li>定义一个 map 数据结构存储 (k, v)，其中 key 值为字符，value 值为字符位置 +1，加 1 表示从字符位置后一个才开始不重复</li>
-  <li>我们定义不重复子串的开始位置为 start，结束位置为 end</li>
-  <li>随着 end 不断遍历向后，会遇到与 [start, end] 区间内字符相同的情况，此时将字符作为 key 值，获取其 value 值，并更新 start，此时 [start, end] 区间内不存在重复字符</li>
-  <li>无论是否更新 start，都会更新其 map 数据结构和结果 ans。</li>
-  <li>时间复杂度：$O(n)$</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">(),</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">end</span> <span class="o">&lt;</span> <span class="n">n</span><span class="o">;</span> <span class="n">end</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="kt">char</span> <span class="n">alpha</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">end</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">alpha</span><span class="o">))</span> <span class="o">{</span>
-                <span class="n">start</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">alpha</span><span class="o">),</span> <span class="n">start</span><span class="o">);</span>
-            <span class="o">}</span>
-            <span class="n">ans</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">ans</span><span class="o">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
-            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">end</span><span class="o">),</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0502/002/08">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 02, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0502-002-08">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,滑动窗口"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0502/002/09"><h2 itemprop="headline" class="item__header">229. 求众数 II</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">摩尔投票法</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">摩尔投票法</code></li>
-  <li><strong>类似题型</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0325/010">169. 多数元素</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="题目-229-求众数-ii">题目 <a href="https://leetcode-cn.com/problems/majority-element-ii/">229. 求众数 II</a></h3>
-<p>给定一个大小为 n 的数组，找出其中所有出现超过 <code class="highlighter-rouge">n/3</code> 次的元素。</p>
-
-<p>说明: 要求算法的时间复杂度为 $O(n)$，空间复杂度为 $O(1)$。</p>
-
-<h3 id="示例1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [3,2,3]
-输出: [3]
-</code></pre></div></div>
-<h3 id="示例-2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,1,1,3,3,2,2,2]
-输出: [1,2]
-</code></pre></div></div>
-
-<h3 id="摩尔投票法的基本思想">摩尔投票法的基本思想</h3>
-<p>在每一轮投票过程中，从数组中找出一对不同的元素，将其从数组中删除。这样不断的删除直到无法再进行投票，如果数组为空，则没有任何元素出现的次数超过该数组长度的一半。如果只存在一种元素，那么这个元素则可能为目标元素。</p>
-
-<p>在算法执行过程中，我们使用常量空间实时记录一个候选元素c以及其出现次数 $f(c)$，c即为当前阶段出现次数超过半数的元素。根据这样的定义，我们也可以将摩尔投票法看作是一种动态规划算法。</p>
-
-<p>程序开始之前，元素c为空，$f(c)=0$。遍历数组A：</p>
-
-<ul>
-  <li>如果f(c)为0，表示截至到当前子数组，并没有候选元素。也就是说之前的遍历过程中并没有找到超过 <code class="highlighter-rouge">n/3</code> 的元素。那么，如果超过<code class="highlighter-rouge">n/3</code> 的元素c存在，那么c在剩下的子数组中，出现次数也一定超过<code class="highlighter-rouge">n/3</code>。因此我们可以将原始问题转化为它的子问题。此时c赋值为当前元素, 同时f(c)=1。</li>
-  <li>如果当前元素 <code class="highlighter-rouge">A[i] == c</code>, 那么 $f(c) += 1$。(没有找到不同元素，只需要把相同元素累计起来)</li>
-  <li>如果当前元素 <code class="highlighter-rouge">A[i] == c</code>, 那么 $f(c) += 1$。(没有找到不同元素，只需要把相同元素累计起来)</li>
-  <li>如果当前元素 <code class="highlighter-rouge">A[i] != c</code>，那么 $f(c) -= 1$ (相当于删除1个c)，不对A[i]做任何处理(相当于删除A[i])</li>
-</ul>
-
-<h3 id="解题思路">解题思路</h3>
-<ol>
-  <li>根据题型，需要返回出现次数超过 n/3 次的元素，可知最多有两个这样的元素</li>
-  <li>我们假设有两个这种元素，根据 <strong>摩尔投票法</strong> 设这两个元素为候选人</li>
-</ol>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">majorityElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 返回数组
-</span>        <span class="n">majorityO</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># 候选人1
-</span>        <span class="n">majorityT</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># 候选人2
-</span>        <span class="n">countO</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 候选人1 票数
-</span>        <span class="n">countT</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 候选人2 票数
-</span>        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">countO</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num</span> <span class="o">!=</span> <span class="n">majorityT</span><span class="p">:</span>
-                <span class="n">majorityO</span> <span class="o">=</span> <span class="n">num</span>
-                <span class="n">countO</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">continue</span>
-            <span class="k">elif</span> <span class="n">countT</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num</span> <span class="o">!=</span> <span class="n">majorityO</span><span class="p">:</span>
-                <span class="n">majorityT</span> <span class="o">=</span> <span class="n">num</span>
-                <span class="n">countT</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">continue</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">majorityO</span> <span class="o">==</span> <span class="n">num</span><span class="p">:</span>
-                    <span class="n">countO</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">elif</span> <span class="n">majorityT</span> <span class="o">==</span> <span class="n">num</span><span class="p">:</span>
-                    <span class="n">countT</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">countO</span> <span class="o">-=</span> <span class="mi">1</span>
-                    <span class="n">countT</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="n">counterO</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">counterT</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="k">if</span> <span class="n">countO</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="n">majorityO</span><span class="p">:</span>
-                    <span class="n">counterO</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">counterO</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">//</span><span class="mi">3</span><span class="p">:</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">majorityO</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">countT</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">num</span> <span class="o">==</span> <span class="n">majorityT</span><span class="p">:</span>
-                    <span class="n">counterT</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">counterT</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">//</span><span class="mi">3</span><span class="p">:</span>
-            <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">majorityT</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">res</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0502/002/09">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%91%A9%E5%B0%94%E6%8A%95%E7%A5%A8%E6%B3%95">摩尔投票法</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 02, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0502-002-09">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-02T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,摩尔投票法"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>187 post articles, 24 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>189 post articles, 24 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
