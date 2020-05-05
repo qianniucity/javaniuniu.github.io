@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>55. 跳跃游戏 - JAVA 牛牛</title>
 
-<meta name="description" content="难度：中等  本题涉及算法：暴力 双向指针  思路：暴力 双向指针  类似题型：题目 55. 跳跃游戏给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。示例 1:输入: [2,3,1,1,4]输出: true解释: 我们可以先跳 1...">
+<meta name="description" content="难度：中等  本题涉及算法：贪心 暴力 递归 记忆化  思路：贪心 暴力 递归 记忆化  类似题型：题目 55. 跳跃游戏给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。示例 1:输入: [2,3,1,1,4]输出: true解释...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0417/020"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -335,15 +335,27 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>55. 跳跃游戏</h1></header></div><meta itemprop="headline" content="55. 跳跃游戏"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E8%B4%AA%E5%BF%83">贪心</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E8%AE%B0%E5%BF%86%E5%8C%96">记忆化</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 17, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0417-020">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-17T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+    <meta itemprop="keywords" content="leetcode,贪心,暴力,递归,记忆化"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">暴力</code> <code class="success highlighter-rouge">双向指针</code></li>
-  <li><strong>思路</strong>：<code class="info highlighter-rouge">暴力</code> <code class="info highlighter-rouge">双向指针</code></li>
+  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">贪心</code> <code class="success highlighter-rouge">暴力</code> <code class="success highlighter-rouge">递归</code> <code class="success highlighter-rouge">记忆化</code></li>
+  <li><strong>思路</strong>：<code class="info highlighter-rouge">贪心</code> <code class="info highlighter-rouge">暴力</code> <code class="info highlighter-rouge">递归</code> <code class="info highlighter-rouge">记忆化</code></li>
   <li><strong>类似题型</strong>：</li>
 </ul>
 
@@ -371,22 +383,23 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <h4 id="解题思路">解题思路</h4>
 <ul>
   <li>维护一个最远可达到的位置</li>
-  <li>时间复杂度 $O(n)$ 时间复杂度 $O(1)$
-    <pre><code class="language-python3">class Solution:
-  def canJump(self, nums: List[int]) -&gt; bool:
-      nums_len = len(nums) -1
-      distance_max = 0 # 记录从0开始能到到达的最远距离
-      for i in range(len(nums)):
-          if i &lt;= distance_max: # 说明 下标 i 是能涉足到
-              distance_max = max(distance_max,i + nums[i]) # i 这个下标能到达的最远距离 和 distance_max 比较
-              if distance_max &gt;= nums_len:
-                  return True
-      return False
-</code></pre>
-  </li>
+  <li>时间复杂度 $O(n)$ 时间复杂度 $O(1)$</li>
 </ul>
 
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">canJump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">nums_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">distance_max</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># 记录从0开始能到到达的最远距离
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">distance_max</span><span class="p">:</span> <span class="c1"># 说明 下标 i 是能涉足到
+</span>                <span class="n">distance_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">distance_max</span><span class="p">,</span><span class="n">i</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c1"># i 这个下标能到达的最远距离 和 distance_max 比较
+</span>                <span class="k">if</span> <span class="n">distance_max</span> <span class="o">&gt;=</span> <span class="n">nums_len</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
 <h4 id="优化贪心算法">优化贪心算法</h4>
+
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">canJump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
         <span class="s">"""
@@ -422,6 +435,126 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </code></pre></div>    </div>
   </li>
 </ul>
+
+<h3 id="方法三-反向考虑当不得不跳到0的时候该数组才能跳不出去">方法三 反向考虑，当不得不跳到0的时候，该数组才能跳不出去</h3>
+<h4 id="解题思路-2">解题思路</h4>
+<ul>
+  <li>可以总结出，当你不管怎么跳，都要经过0时，也就是0是你的必经之路时，是跳不出去数组的。所以只要找到一条可以跳出0 的路径，那么就可以跳跃到最后一位。</li>
+  <li>那么如何判断是否能跳出0呢？设当前0的索引为index，用i遍历index-1至0，找到一个数大于index-i即可跳出0</li>
+  <li>时间复杂度 $O(n^2)$ 空间复杂度 $O(1)$</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canJump</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">){</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">++){</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]==</span><span class="mi">0</span><span class="o">){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">passZero</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">i</span><span class="o">))</span>
+                <span class="k">continue</span><span class="o">;</span>
+            <span class="k">else</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="c1">//判断是否能跳出当前0</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">passZero</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span><span class="kt">int</span> <span class="n">index</span><span class="o">){</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">index</span><span class="o">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">--){</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]&gt;(</span><span class="n">index</span><span class="o">-</span><span class="n">i</span><span class="o">))</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="方法四-递归">方法四 递归</h3>
+<h4 id="题解思路">题解思路</h4>
+<ul>
+  <li>我们先通过一张来图看下递归的运作原理</li>
+</ul>
+
+<p><img src="/assets/images/leetcode/0505/9a4cf33f7896c29f8e80776492e63b9034a820e3eb0db3e6ad19ffbe857c9b27-1.jpg" alt="1" /></p>
+
+<p>按照题目的意思 <code class="highlighter-rouge">nums[0]</code> 的值为2，所以它可以跳一步到下标1的位置，也可以跳两步到下标2的位置。
+<code class="highlighter-rouge">nums[1]</code> 的值为3，所以它有三个选择，跳一步到下标2，或者跳两步到下标3，还可以跳三步到下标4。到了下标4也就到了数组的最后一个位置了，所以后面可以不用检测了，为了演示的完整性我把剩余的跳跃步骤也画出来了。
+从上图中我们也可以看出，每次跳跃的步数跟数组中具体值有关，<code class="highlighter-rouge">nums[1]</code> 为3所以就有三种跳跃选择，<code class="highlighter-rouge">nums[i]</code> 为k就有k种跳跃选择。
+那么大概想到这个递归实现应该是由：循环+递归组合完成的。
+注意，每次跳跃的时候至少要大于等于1，否则就等于是原地打转了。</p>
+
+<p>再来看下递归的执行过程:</p>
+
+<p><img src="/assets/images/leetcode/0505/214bd66f445e1087d524cf1c9289c1604ad4d66a085bd18f3de46c0787966457-2.jpg" alt="2" /></p>
+
+<p>上图中f是函数名，括号里面的数字就对应了数组的下标。
+数组下标1中的值是3，所以可以执行三次跳跃，对应到上图中f(1)就有三个子树。
+从这里我们也可以看出，这个调用树是一棵N叉树，子节点的数量由1到N不等。
+注:递归的代码执行会超时。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canJump</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="n">nums</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//递归的终止条件</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">index</span><span class="o">&gt;=</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//根据nums[index]表示要循环多少次，index是当前我们能到达的位置，</span>
+        <span class="c1">//在这个基础上有 index+1，index+2.... index+i种跳跃选择</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">nums</span><span class="o">[</span><span class="n">index</span><span class="o">];++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">dfs</span><span class="o">(</span><span class="n">i</span><span class="o">+</span><span class="n">index</span><span class="o">,</span><span class="n">nums</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="方法五-递归记忆化">方法五 递归+记忆化</h3>
+<ul>
+  <li>递归的性能差因为执行了很多重复计算</li>
+</ul>
+
+<p><img src="/assets/images/leetcode/0505/45f9d1cc0c235de3b8970ecff3ab15a7fd9d108cc357348d902e09a13330672e-3.jpg" alt="3" /></p>
+
+<p>如上图中，<code class="highlighter-rouge">f(3)</code> 就被反复计算了好几次，既然性能不够就加缓存吧，把结果缓存起来，这样时间上可以大幅度提升。</p>
+
+<p><img src="/assets/images/leetcode/0505/d91a69502d2e1dea3c62b6fda4789470fdece6f7b57099753f55c0e4735c51e1-4.jpg" alt="4" /></p>
+
+<p>但很遗憾，即使这样优化了，还是会执行超时。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">canJump</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Boolean</span><span class="o">&gt;();</span>
+        <span class="k">return</span> <span class="nf">dfs</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span><span class="n">nums</span><span class="o">,</span><span class="n">cache</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">dfs</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">cache</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">index</span><span class="o">&gt;=</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">cache</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">index</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">index</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">nums</span><span class="o">[</span><span class="n">index</span><span class="o">];++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">dfs</span><span class="o">(</span><span class="n">i</span><span class="o">+</span><span class="n">index</span><span class="o">,</span><span class="n">nums</span><span class="o">,</span><span class="n">cache</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">((</span><span class="n">i</span><span class="o">+</span><span class="n">index</span><span class="o">),</span><span class="nc">Boolean</span><span class="o">.</span><span class="na">TRUE</span><span class="o">);</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="n">cache</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">index</span><span class="o">,</span><span class="nc">Boolean</span><span class="o">.</span><span class="na">FALSE</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
@@ -432,7 +565,9 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </div>
 <script async src="https://static.addtoany.com/menu/page.js"></script>
 <!-- AddToAny END -->
-</section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-04-17T00:00:00+08:00"><!-- start custom article footer snippet -->
+</section><div class="d-print-none"><footer class="article__footer"><span>Last updated
+      <time itemprop="dateModified" datetime="2020-05-05T00:00:00+08:00">May 05, 2020</time>
+    </span><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
