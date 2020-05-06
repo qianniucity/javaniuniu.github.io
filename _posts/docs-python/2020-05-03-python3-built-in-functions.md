@@ -31,6 +31,14 @@ remove() 函数用于移除列表中某个值的第一个匹配项。
 list.remove('abc')
 ```
 
+### enumerate()
+```
+enumerate() 函数用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列，同时列出数据和数据下标，一般用在 for 循环当中。
+for element in seq:
+...     print i, seq[i]
+...     i +=1
+```
+
 ### 通过 self.属性 self.函数 来调用外部的属性或函数
 ```python
 class Solution:
