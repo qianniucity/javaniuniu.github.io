@@ -322,6 +322,151 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0507/012"><h2 itemprop="headline" class="item__header">206. 反转链表</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">迭代</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">迭代</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-206-反转链表">题目 <a href="https://leetcode-cn.com/problems/reverse-linked-list/">206. 反转链表</a></h3>
+<p>反转一个单链表。</p>
+
+<h3 id="示例">示例:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
+输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
+</code></pre></div></div>
+<h4 id="进阶">进阶:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
+</code></pre></div></div>
+
+<h3 id="方法一-迭代">方法一 迭代</h3>
+<h4 id="解题思路">解题思路</h4>
+<p>通过迭代 将   <code class="highlighter-rouge">1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;∮</code> 转换成  <code class="highlighter-rouge">∮&lt;-1&lt;-2&lt;-3&lt;-4&lt;-5</code> <br />
+如图执行过程:</p>
+
+<p><img src="/assets/images/leetcode/0507/Jietu20200507-173331@2x.jpg" alt="pic" /></p>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
+
+        <span class="c1"># 申请两个链表 一个空链表，一个完整的链表
+</span>        <span class="n">pre</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span>
+        <span class="k">while</span> <span class="n">curr</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="nb">next</span>
+            <span class="n">curr</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">pre</span> <span class="c1"># 当前链表指向 新链表
+</span>            <span class="n">pre</span> <span class="o">=</span> <span class="n">curr</span> <span class="c1"># 赋值给新链表
+</span>            <span class="n">curr</span> <span class="o">=</span> <span class="n">temp</span>
+        <span class="k">return</span> <span class="n">pre</span>
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 申请两个链表 一个空链表，一个完整的链表</span>
+        <span class="nc">ListNode</span> <span class="n">pre</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="nc">ListNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">curr</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+            <span class="nc">ListNode</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="n">curr</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">pre</span><span class="o">;</span> <span class="c1">// 当前链表指向 新链表</span>
+            <span class="n">pre</span> <span class="o">=</span> <span class="n">curr</span><span class="o">;</span> <span class="c1">// 赋值给新链表</span>
+            <span class="n">curr</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">pre</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="递归">递归</h3>
+<h4 id="解题思路-1">解题思路</h4>
+<ul>
+  <li>终止条件是当前节点或者下一个节点==null</li>
+  <li>在函数内部，改变节点的指向，也就是 head 的下一个节点指向 head 递归函数那句</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>head.next.next = head
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ListNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">reverseList</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>  <span class="c1">// 当head=4 head.next-&gt;5</span>
+
+<span class="k">if</span><span class="o">(</span><span class="n">head</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// head.next -&gt;null 即 5.next = null</span>
+  <span class="k">return</span> <span class="n">head</span><span class="o">;</span> <span class="c1">// head = 5</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>所以 cul =5</li>
+  <li>head.next.next = head;  中head = 4</li>
+  <li>即 4.next.next = 4</li>
+  <li>即 5.next = 4</li>
+</ul>
+
+<h4 id="java-1">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+		<span class="c1">//递归终止条件是当前为空，或者下一个节点为空</span>
+		<span class="k">if</span><span class="o">(</span><span class="n">head</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="n">head</span><span class="o">;</span>
+		<span class="o">}</span>
+		<span class="c1">//这里的cur就是最后一个节点</span>
+		<span class="nc">ListNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">reverseList</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
+		<span class="c1">//如果链表是 1-&gt;2-&gt;3-&gt;4-&gt;5，那么此时的cur就是5</span>
+		<span class="c1">//而head是4，head的下一个是5，下下一个是空</span>
+		<span class="c1">//所以head.next.next 就是5-&gt;4</span>
+		<span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+		<span class="c1">//防止链表循环，需要将head.next设置为空</span>
+		<span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+		<span class="c1">//每层递归函数都返回cur，也就是最后一个节点</span>
+		<span class="k">return</span> <span class="n">cur</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python-1">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
+		<span class="s">"""
+		:type head: ListNode
+		:rtype: ListNode
+		"""</span>
+		<span class="c1"># 递归终止条件是当前为空，或者下一个节点为空
+</span>		<span class="k">if</span><span class="p">(</span><span class="n">head</span><span class="o">==</span><span class="bp">None</span> <span class="ow">or</span> <span class="n">head</span><span class="o">.</span><span class="nb">next</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">head</span>
+		<span class="c1"># 这里的cur就是最后一个节点
+</span>		<span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverseList</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="nb">next</span><span class="p">)</span>
+		<span class="c1"># 如果链表是 1-&gt;2-&gt;3-&gt;4-&gt;5，那么此时的cur就是5
+</span>		<span class="c1"># 而head是4，head的下一个是5，下下一个是空
+</span>		<span class="c1"># 所以head.next.next 就是5-&gt;4
+</span>		<span class="n">head</span><span class="o">.</span><span class="nb">next</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">head</span>
+		<span class="c1"># 防止链表循环，需要将head.next设置为空
+</span>		<span class="n">head</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
+		<span class="c1"># 每层递归函数都返回cur，也就是最后一个节点
+</span>		<span class="k">return</span> <span class="n">cur</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0507/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 07, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0507-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-07T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,暴力,哈希表"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0505/012"><h2 itemprop="headline" class="item__header">98. 验证二叉搜索树</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1397,63 +1542,8 @@ int main()
                 href="/archive.html?tag=C%2B%2B">C++</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="cjj-2020-0504-011">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-04T00:00:00+08:00">
     <meta itemprop="keywords" content="C++"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/python3/built/in/functions"><h2 itemprop="headline" class="item__header">Python3 内置函数</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="参考链接">参考链接</h3>
-<p><a href="https://www.runoob.com/python3/python3-built-in-functions.html">菜鸟Python3 内置函数</a></p>
-
-<h3 id="zip">zip()</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zip() 函数用于将可迭代的对象作为参数，将对象中对应的元素打包成一个个元组，然后返回由这些元组组成的列表。
-如果各个迭代器的元素个数不一致，则返回列表长度与最短的对象相同，利用 * 号操作符，可以将元组解压为列表。
-</code></pre></div></div>
-
-<h3 id="divmod">divmod()</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Python divmod() 函数接收两个数字类型（非复数）参数，返回一个包含商和余数的元组(a // b, a % b)。
-</code></pre></div></div>
-
-<h3 id="list--pop">List  pop()</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pop() 函数用于移除列表中的一个元素（默认最后一个元素），并且返回该元素的值。
-可以通过 list.pop(index) index 表示下标，意思是删除指定位置的值 并返回
-</code></pre></div></div>
-
-<h3 id="list--remove">List  remove()</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>remove() 函数用于移除列表中某个值的第一个匹配项。
-list.remove('abc')
-</code></pre></div></div>
-
-<h3 id="enumerate">enumerate()</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>enumerate() 函数用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列，同时列出数据和数据下标，一般用在 for 循环当中。
-for i, element in enumerate(seq):
-...     print i, element
-</code></pre></div></div>
-
-<h3 id="tuple名为元组">Tuple名为元组</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Tuple名为元组，可以看做是一种“不变”的List，即tuple一旦创建完毕，就不能修改了
-</code></pre></div></div>
-
-<h3 id="通过-self属性-self函数-来调用外部的属性或函数">通过 self.属性 self.函数 来调用外部的属性或函数</h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="n">cur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"-inf"</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="c1"># 访问左子树
-</span>        <span class="k">if</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="c1"># 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。
-</span>        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span>
-        <span class="c1"># 访问右子树
-</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
-</code></pre></div></div>
-</div><p><a href="/python3/built/in/functions">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=python">python</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="python3-built-in-functions">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="python"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>192 post articles, 24 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>193 post articles, 25 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1466,7 +1556,7 @@ for i, element in enumerate(seq):
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page24"><span>24</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page25"><span>25</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
