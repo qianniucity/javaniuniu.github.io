@@ -383,6 +383,20 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <span class="o">}</span>
 </code></pre></div></div>
 
+<h4 id="迭代升级版">迭代升级版</h4>
+<h4 id="python-1">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
+        <span class="s">"""
+        :type head: ListNode
+        :rtype: ListNode
+        """</span>
+        <span class="n">cur</span> <span class="p">,</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">head</span><span class="p">,</span> <span class="bp">None</span>
+        <span class="k">while</span> <span class="n">cur</span><span class="p">:</span>
+            <span class="n">cur</span><span class="o">.</span><span class="nb">next</span> <span class="p">,</span><span class="n">prev</span><span class="p">,</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">prev</span><span class="p">,</span> <span class="n">cur</span> <span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="nb">next</span>
+        <span class="k">return</span> <span class="n">prev</span>
+</code></pre></div></div>
+
 <h3 id="递归">递归</h3>
 <h4 id="解题思路-1">解题思路</h4>
 <ul>
@@ -428,7 +442,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h4 id="python-1">python</h4>
+<h4 id="python-2">python</h4>
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
 		<span class="s">"""
@@ -448,6 +462,37 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </span>		<span class="n">head</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
 		<span class="c1"># 每层递归函数都返回cur，也就是最后一个节点
 </span>		<span class="k">return</span> <span class="n">cur</span>
+</code></pre></div></div>
+
+<h3 id="方法三-栈">方法三 栈</h3>
+<ul>
+  <li>通过遍历把链表元素添加到栈内存</li>
+  <li>在把栈里面数据挨个添加到新的链表中</li>
+</ul>
+
+<h4 id="java-2">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">head</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">// 遍历链表到栈内存</span>
+        <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
+        <span class="nc">ListNode</span> <span class="n">ans</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">head</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">ListNode</span> <span class="n">reverseListHead</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">());</span> <span class="c1">// 初始化链表首个元素</span>
+        <span class="nc">ListNode</span> <span class="n">tempNode</span> <span class="o">=</span> <span class="n">reverseListHead</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">tempNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">());</span>
+            <span class="n">tempNode</span> <span class="o">=</span> <span class="n">tempNode</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">reverseListHead</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <ul>

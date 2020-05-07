@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>445. 两数相加 II - JAVA 牛牛</title>
 
-<meta name="description" content="题目 445. 两数相加 II给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。你可以假设除了数字 0 之外，这两个数字都不会以零开头。示例输入：(7 -&gt; 2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&g...">
+<meta name="description" content="难度：中等  本题涉及算法：栈  思路：栈  类似题型：题目 445. 两数相加 II给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。你可以假设除了数字 0 之外，这两个数字都不会以零开头。示例输入：(7 -&gt; 2 -&gt;...">
 <link rel="canonical" href="http://localhost:4000/leetcode/2020/0414/016"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -335,12 +335,22 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <article itemscope itemtype="http://schema.org/Article"><div class="article__header"><header><h1>445. 两数相加 II</h1></header></div><meta itemprop="headline" content="445. 两数相加 II"><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%A0%88">栈</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Apr 14, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0414-016">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-04-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+    <meta itemprop="keywords" content="leetcode,栈"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><h3 id="题目-445-两数相加-ii">题目 <a href="https://leetcode-cn.com/problems/add-two-numbers-ii/">445. 两数相加 II</a></h3>
+<div class="article__content" itemprop="articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：<code class="success highlighter-rouge">栈</code></li>
+  <li><strong>思路</strong>：<code class="info highlighter-rouge">栈</code></li>
+  <li><strong>类似题型</strong>：</li>
+</ul>
+
+<h3 id="题目-445-两数相加-ii">题目 <a href="https://leetcode-cn.com/problems/add-two-numbers-ii/">445. 两数相加 II</a></h3>
 <p>给你两个 非空 链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储一位数字。将这两数相加会返回一个新的链表。</p>
 
 <p>你可以假设除了数字 0 之外，这两个数字都不会以零开头。</p>
@@ -358,15 +368,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </ol>
 
 <h3 id="代码">代码</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">addTwoNumbers</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">l1</span><span class="o">,</span> <span class="nc">ListNode</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
         <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
         <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
@@ -379,6 +382,9 @@ MFrGw6cAAAAASUVORK5CYII=" />
             <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
         <span class="o">}</span>
 
+        <span class="c1">// 很妙的两个地方 carry 的设置 和 carry &gt;0 的判断</span>
+        <span class="c1">// 记录和大于10时 +1</span>
+        <span class="c1">// carry &gt;0 当大于10 则向前进 1</span>
         <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
         <span class="nc">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         <span class="k">while</span> <span class="o">(!</span><span class="n">stack1</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="o">!</span><span class="n">stack2</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
@@ -394,6 +400,31 @@ MFrGw6cAAAAASUVORK5CYII=" />
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">addTwoNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">l2</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ListNode</span><span class="p">:</span>
+        <span class="n">stack1</span><span class="p">,</span> <span class="n">stack2</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="n">l1</span><span class="p">:</span>
+            <span class="n">stack1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="nb">next</span>
+
+        <span class="k">while</span> <span class="n">l2</span><span class="p">:</span>
+            <span class="n">stack2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">l2</span><span class="o">.</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="nb">next</span>
+
+        <span class="n">ans</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">stack1</span> <span class="ow">or</span> <span class="n">stack2</span> <span class="ow">or</span> <span class="n">carry</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sumNum</span> <span class="o">=</span> <span class="n">carry</span>
+            <span class="n">sumNum</span> <span class="o">+=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">stack1</span> <span class="k">else</span> <span class="n">stack1</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">sumNum</span> <span class="o">+=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">stack2</span> <span class="k">else</span> <span class="n">stack2</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">curlNode</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="n">sumNum</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">curlNode</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">ans</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">curlNode</span>
+            <span class="n">carry</span> <span class="o">=</span> <span class="n">sumNum</span> <span class="o">//</span> <span class="mi">10</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
@@ -404,7 +435,9 @@ MFrGw6cAAAAASUVORK5CYII=" />
 </div>
 <script async src="https://static.addtoany.com/menu/page.js"></script>
 <!-- AddToAny END -->
-</section><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-04-14T00:00:00+08:00"><!-- start custom article footer snippet -->
+</section><div class="d-print-none"><footer class="article__footer"><span>Last updated
+      <time itemprop="dateModified" datetime="2020-05-08T00:00:00+08:00">May 08, 2020</time>
+    </span><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 <div class="article__subscribe"><div class="subscribe"><i class="fas fa-rss"></i> <a type="application/rss+xml" href="/feed.xml">Subscribe</a></div>
