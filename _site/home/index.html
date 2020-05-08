@@ -322,6 +322,139 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0508/012"><h2 itemprop="headline" class="item__header">9. 回文数</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">算数</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">算数</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-9-回文数">题目 <a href="https://leetcode-cn.com/problems/palindrome-number/">9. 回文数</a></h3>
+<p>判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。</p>
+
+<h3 id="示例-1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 121
+输出: true
+</code></pre></div></div>
+<h3 id="示例2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: -121
+输出: false
+解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
+</code></pre></div></div>
+<h3 id="示例-3">示例 3:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 10
+输出: false
+解释: 从右向左读, 为 01 。因此它不是一个回文数。
+</code></pre></div></div>
+<h3 id="进阶">进阶:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>你能不将整数转为字符串来解决这个问题吗？
+</code></pre></div></div>
+
+<h3 id="方法一-算数">方法一 算数</h3>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">num</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="o">;</span>
+            <span class="n">num</span> <span class="o">/=</span> <span class="mi">10</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">cur</span> <span class="o">==</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">isPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">num</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="n">num</span><span class="o">%</span><span class="mi">10</span>
+            <span class="n">num</span> <span class="o">//=</span><span class="mi">10</span>
+        <span class="k">return</span> <span class="n">cur</span> <span class="o">==</span> <span class="n">x</span>
+</code></pre></div></div>
+
+<h3 id="方法二-转字符串">方法二 转字符串</h3>
+<h4 id="java-1">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">){</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nc">String</span> <span class="n">strNum</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">strNum</span><span class="o">.</span><span class="na">length</span><span class="o">()/</span><span class="mi">2</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">strNum</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">strNum</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">strNum</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="o">);</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">a</span> <span class="o">!=</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python-1">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">isPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">nums</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<h3 id="方法三">方法三</h3>
+<ul>
+  <li><strong>取出后半段数字进行翻转。</strong></li>
+</ul>
+
+<p>这里需要注意的一个点就是由于回文数的位数可奇可偶，所以当它的长度是偶数时，它对折过来应该是相等的；当它的长度是奇数时，那么它对折过来后，有一个的长度需要去掉一位数（除以 10 并取整）。</p>
+
+<p>具体做法如下：</p>
+
+<ul>
+  <li>每次进行取余操作 （ %10），取出最低的数字：<code class="highlighter-rouge">y = x % 10</code></li>
+  <li>将最低的数字加到取出数的末尾：<code class="highlighter-rouge">revertNum = revertNum * 10 + y</code></li>
+  <li>每取一个最低位数字，x 都要自除以 10</li>
+  <li>判断 x 是不是小于 <code class="highlighter-rouge">revertNum</code> ，当它小于的时候，说明数字已经对半或者过半了</li>
+  <li>最后，判断奇偶数情况：如果是偶数的话，revertNum 和 x 相等；如果是奇数的话，最中间的数字就在revertNum 的最低位上，将它除以 10 以后应该和 x 相等。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//思考：这里大家可以思考一下，为什么末尾为 0 就可以直接返回 false</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="o">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">))</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">revertedNumber</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">revertedNumber</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">revertedNumber</span> <span class="o">=</span> <span class="n">revertedNumber</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">10</span><span class="o">;</span>
+            <span class="n">x</span> <span class="o">/=</span> <span class="mi">10</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="n">revertedNumber</span> <span class="o">||</span> <span class="n">x</span> <span class="o">==</span> <span class="n">revertedNumber</span> <span class="o">/</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0508/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%95%B0">算数</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,算数"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0507/012"><h2 itemprop="headline" class="item__header">206. 反转链表</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
@@ -1272,323 +1405,8 @@ abs(curr\_max - curr\_min) <= limit & 判断数组中元素是否符合条件，
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 04, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0504-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-04T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,暴力,哈希表"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/cjj/2020/0504/011"><h2 itemprop="headline" class="item__header">C++ vector 容器浅析</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li>转载自 <a href="https://www.runoob.com/w3cnote/cpp-vector-container-analysis.html">菜鸟技术-C++ vector 容器浅析</a>
-    <h3 id="一什么是vector">一、什么是vector？</h3>
-    <p>向量（Vector）是一个封装了动态大小数组的顺序容器（Sequence Container）。跟任意其它类型容器一样，它能够存放各种类型的对象。可以简单的认为，向量是一个能够存放任意类型的动态数组。</p>
-    <h3 id="二容器特性">二、容器特性</h3>
-    <h4 id="1顺序序列">1.顺序序列</h4>
-    <p>顺序容器中的元素按照严格的线性顺序排序。可以通过元素在序列中的位置访问对应的元素。</p>
-    <h4 id="2动态数组">2.动态数组</h4>
-    <p>支持对序列中的任意元素进行快速直接访问，甚至可以通过指针算述进行该操作。操供了在序列末尾相对快速地添加/删除元素的操作。</p>
-    <h4 id="3能够感知内存分配器的allocator-aware">3.能够感知内存分配器的（Allocator-aware）</h4>
-    <p>容器使用一个内存分配器对象来动态地处理它的存储需求。</p>
-    <h3 id="三基本函数实现">三、基本函数实现</h3>
-    <h4 id="1构造函数">1.构造函数</h4>
-  </li>
-  <li>vector():创建一个空vector</li>
-  <li>vector(int nSize):创建一个vector,元素个数为nSize</li>
-  <li>vector(int nSize,const t&amp; t):创建一个vector，元素个数为nSize,且值均为t</li>
-  <li>vector(const vector&amp;):复制构造函数</li>
-  <li>vector(begin,end):复制[begin,end)区间内另一个数组的元素到vector中
-    <h4 id="2增加函数">2.增加函数</h4>
-  </li>
-  <li>void push_back(const T&amp; x):向量尾部增加一个元素X</li>
-  <li>iterator insert(iterator it,const T&amp; x):向量中迭代器指向元素前增加一个元素x</li>
-  <li>iterator insert(iterator it,int n,const T&amp; x):向量中迭代器指向元素前增加n个相同的元素x</li>
-  <li>iterator insert(iterator it,const_iterator first,const_iterator last):向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据
-    <h4 id="3删除函数">3.删除函数</h4>
-  </li>
-  <li>iterator erase(iterator it):删除向量中迭代器指向元素</li>
-  <li>iterator erase(iterator first,iterator last):删除向量中[first,last)中元素</li>
-  <li>void pop_back():删除向量中最后一个元素</li>
-  <li>void clear():清空向量中所有元素
-    <h4 id="4遍历函数">4.遍历函数</h4>
-  </li>
-  <li>reference at(int pos):返回pos位置元素的引用</li>
-  <li>reference front():返回首元素的引用</li>
-  <li>reference back():返回尾元素的引用</li>
-  <li>iterator begin():返回向量头指针，指向第一个元素</li>
-  <li>iterator end():返回向量尾指针，指向向量最后一个元素的下一个位置</li>
-  <li>reverse_iterator rbegin():反向迭代器，指向最后一个元素</li>
-  <li>reverse_iterator rend():反向迭代器，指向第一个元素之前的位置
-    <h4 id="5判断函数">5.判断函数</h4>
-  </li>
-  <li>bool empty() const:判断向量是否为空，若为空，则向量中无元素
-    <h4 id="6大小函数">6.大小函数</h4>
-  </li>
-  <li>int size() const:返回向量中元素的个数</li>
-  <li>int capacity() const:返回当前向量所能容纳的最大元素值</li>
-  <li>int max_size() const:返回最大可允许的vector元素数量值
-    <h4 id="7其他函数">7.其他函数</h4>
-  </li>
-  <li>void swap(vector&amp;):交换两个同类型向量的数据</li>
-  <li>void assign(int n,const T&amp; x):设置向量中第n个元素的值为x</li>
-  <li>void assign(const_iterator first,const_iterator last):向量中[first,last)中元素设置成当前向量元素
-    <h4 id="8看着清楚">8.看着清楚</h4>
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.push_back 在数组的最后添加一个数据
-2.pop_back 去掉数组的最后一个数据
-3.at 得到编号位置的数据
-4.begin 得到数组头的指针
-5.end 得到数组的最后一个单元+1的指针
-6．front 得到数组头的引用
-7.back 得到数组的最后一个单元的引用
-8.max_size 得到vector最大可以是多大
-9.capacity 当前vector分配的大小
-10.size 当前使用数据的大小
-11.resize 改变当前使用数据的大小，如果它比当前使用的大，者填充默认值
-12.reserve 改变当前vecotr所分配空间的大小
-13.erase 删除指针指向的数据项
-14.clear 清空当前的vector
-15.rbegin 将vector反转后的开始指针返回(其实就是原来的end-1)
-16.rend 将vector反转构的结束指针返回(其实就是原来的begin-1)
-17.empty 判断vector是否为空
-18.swap 与另一个vector交换数据
-</code></pre></div>    </div>
-    <h3 id="四基本用法">四、基本用法</h3>
-    <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt; vector&gt;
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-</code></pre></div>    </div>
-    <h3 id="五简单介绍">五、简单介绍</h3>
-  </li>
-  <li>Vector<类型>标识符</类型></li>
-  <li>Vector<类型>标识符(最大容量)</类型></li>
-  <li>Vector<类型>标识符(最大容量,初始所有值)</类型></li>
-  <li>Int i[5]={1,2,3,4,5}
-    <ul>
-      <li>Vector<类型>vi(I,i+2);//得到i索引值为3以后的值</类型></li>
-    </ul>
-  </li>
-  <li>Vector&lt; vector&lt; int&gt; &gt;v; 二维向量//这里最外的&lt;&gt;要有空格。否则在比较旧的编译器下无法通过
-    <h3 id="实例">实例</h3>
-    <h4 id="1pop_backpush_backelem实例在容器最后移除和插入数据">1.pop_back()&amp;push_back(elem)实例在容器最后移除和插入数据</h4>
-  </li>
-</ul>
-
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string.h&gt;
-#include &lt;vector&gt;
-#include &lt;iostream&gt;
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">obj</span><span class="p">;</span><span class="c1">//创建一个向量存储容器 int</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">// push_back(elem)在数组最后添加数据</span>
-    <span class="p">{</span>
-        <span class="n">obj</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">","</span><span class="p">;</span>    
-    <span class="p">}</span>
-
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">5</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//去掉数组最后一个数据</span>
-    <span class="p">{</span>
-        <span class="n">obj</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">obj</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//size()容器中实际数据个数</span>
-    <span class="p">{</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">","</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-输出结果为：
-
-</code></pre></div></div>
-<p>0,1,2,3,4,5,6,7,8,9,</p>
-
-<p>0,1,2,3,4,</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#### 2.clear()清除容器中所有数据
-```c++
-#include &lt;string.h&gt;
-#include &lt;vector&gt;
-#include &lt;iostream&gt;
-using namespace std;
-
-int main()
-{
-    vector&lt;int&gt;obj;
-    for(int i=0;i&lt;10;i++)//push_back(elem)在数组最后添加数据
-    {
-        obj.push_back(i);
-        cout&lt;&lt;obj[i]&lt;&lt;",";
-    }
-
-    obj.clear();//清除容器中所以数据
-    for(int i=0;i&lt;obj.size();i++)
-    {
-        cout&lt;&lt;obj[i]&lt;&lt;endl;
-    }
-
-    return 0;
-}
-</code></pre></div></div>
-<p>输出结果为：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0,1,2,3,4,5,6,7,8,9,
-</code></pre></div></div>
-<p>###$ 3.排序</p>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string.h&gt;
-#include &lt;vector&gt;
-#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">obj</span><span class="p">;</span>
-
-    <span class="n">obj</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-    <span class="n">obj</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
-    <span class="n">obj</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-
-    <span class="n">sort</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">obj</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="c1">//从小到大</span>
-
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"从小到大:"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">obj</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">","</span><span class="p">;</span>  
-    <span class="p">}</span>
-
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"从大到小:"</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-    <span class="n">reverse</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="n">obj</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="c1">//从大到小</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">obj</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">","</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>输出结果为：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>从小到大:
-
-0,1,3,
-
-从大到小:
-3,1,0,
-</code></pre></div></div>
-<p>1.注意 sort 需要头文件 __#include <algorithm>__
-2.如果想 sort 来降序，可重写 sort</algorithm></p>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">bool</span> <span class="nf">compare</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">return</span> <span class="n">a</span><span class="o">&lt;</span> <span class="n">b</span><span class="p">;</span> <span class="c1">//升序排列，如果改为return a&gt;b，则为降序</span>
-<span class="p">}</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">23</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">76</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">43</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="mi">65</span><span class="p">},</span><span class="n">i</span><span class="p">;</span>
-<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">20</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="o">+</span><span class="mi">20</span><span class="p">,</span><span class="n">compare</span><span class="p">);</span>
-</code></pre></div></div>
-<h4 id="4访问直接数组访问迭代器访问">4.访问（直接数组访问&amp;迭代器访问）</h4>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string.h&gt;
-#include &lt;vector&gt;
-#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="c1">//顺序访问</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="n">obj</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">obj</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>   
-    <span class="p">}</span>
-
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"直接利用数组："</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//方法一</span>
-    <span class="p">{</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">" "</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
-    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"利用迭代器："</span> <span class="p">;</span>
-    <span class="c1">//方法二，使用迭代器将容器中数据输出</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">iterator</span> <span class="n">it</span><span class="p">;</span><span class="c1">//声明一个迭代器，来访问vector容器，作用：遍历或者指向vector容器的元素</span>
-    <span class="k">for</span><span class="p">(</span><span class="n">it</span><span class="o">=</span><span class="n">obj</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="n">it</span><span class="o">!=</span><span class="n">obj</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class="n">it</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="err">\</span><span class="o">*</span><span class="n">it</span><span class="o">&lt;&lt;</span><span class="s">" "</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>输出结果为：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>直接利用数组：0 1 2 3 4 5 6 7 8 9
-利用迭代器：0 1 2 3 4 5 6 7 8 9
-</code></pre></div></div>
-<h4 id="5二维数组两种定义方法结果一样">5.二维数组两种定义方法（结果一样）</h4>
-<p>方法一</p>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string.h&gt;
-#include &lt;vector&gt;
-#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">6</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">obj</span><span class="p">(</span><span class="n">N</span><span class="p">);</span> <span class="c1">//定义二维动态数组大小5行</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//动态二维数组为5行6列，值全为0</span>
-    <span class="p">{</span>
-        <span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">resize</span><span class="p">(</span><span class="n">M</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//输出二维动态数组</span>
-    <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">" "</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>方法二</p>
-<div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;string.h&gt;
-#include &lt;vector&gt;
-#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-</span><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">6</span><span class="p">;</span>
-    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&gt;</span> <span class="n">obj</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">M</span><span class="p">));</span> <span class="c1">//定义二维动态数组5行6列</span>
-
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="c1">//输出二维动态数组</span>
-    <span class="p">{</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">();</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">" "</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>输出结果为：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 0
-0 0 0 0 0 0
-</code></pre></div></div>
-</div><p><a href="/cjj/2020/0504/011">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=C%2B%2B">C++</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="cjj-2020-0504-011">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-04T00:00:00+08:00">
-    <meta itemprop="keywords" content="C++"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>193 post articles, 25 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>194 post articles, 25 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
