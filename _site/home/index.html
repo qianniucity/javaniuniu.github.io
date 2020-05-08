@@ -455,6 +455,153 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,算数"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0508/010"><h2 itemprop="headline" class="item__header">572. 另一个树的子树</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">递归</code></li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0508/011">100. 相同的树</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="题目-572-另一个树的子树">题目 <a href="https://leetcode-cn.com/problems/subtree-of-another-tree/">572. 另一个树的子树</a></h3>
+<p>给定两个非空二叉树 s 和 t，检验 s 中是否包含和 t 具有相同结构和节点值的子树。s 的一个子树包括 s 的一个节点和这个节点的所有子孙。s 也可以看做它自身的一棵子树。</p>
+
+<h3 id="示例-1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定的树 s:
+
+     3
+    / \
+   4   5
+  / \
+ 1   2
+给定的树 t：
+
+   4
+  / \
+ 1   2
+返回 true，因为 t 与 s 的一个子树拥有相同的结构和节点值。
+</code></pre></div></div>
+<h3 id="示例-2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定的树 s：
+
+     3
+    / \
+   4   5
+  / \
+ 1   2
+    /
+   0
+给定的树 t：
+
+   4
+  / \
+ 1   2
+返回 false。
+</code></pre></div></div>
+
+<h3 id="解题思路">解题思路</h3>
+<p>要判断一个树 t 是不是树 s 的子树，那么可以判断 t 是否和树 s 的任意子树相等。那么就转化成 <a href="/leetcode/2020/0508/011">100. 相同的树</a>。
+即，这个题的做法就是在 s 的每个子节点上，判断该子节点是否和 t 相等。</p>
+
+<p>判断两个树是否相等的三个条件是与的关系，即：</p>
+
+<ol>
+  <li>当前两个树的根节点值相等；</li>
+  <li>并且，s 的左子树和 t 的左子树相等；</li>
+  <li>并且，s 的右子树和 t 的右子树相等。</li>
+</ol>
+
+<p>而判断 t 是否为 s 的子树的三个条件是或的关系，即：</p>
+
+<ol>
+  <li>当前两棵树相等；</li>
+  <li>或者，t 是 s 的左子树；</li>
+  <li>或者，t 是 s 的右子树。</li>
+</ol>
+
+<h3 id="代码">代码</h3>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isSubtree</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">s</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 递归的结束条件</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">return</span> <span class="nf">subTree</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="n">t</span><span class="o">)</span> <span class="o">||</span> <span class="n">isSubtree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">left</span><span class="o">,</span><span class="n">t</span><span class="o">)</span> <span class="o">||</span> <span class="n">isSubtree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">right</span><span class="o">,</span><span class="n">t</span><span class="o">);</span>
+
+
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">subTree</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">s</span><span class="o">,</span><span class="nc">TreeNode</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 递归的结束条件</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">val</span><span class="o">==</span><span class="n">t</span><span class="o">.</span><span class="na">val</span> <span class="o">&amp;&amp;</span> <span class="n">subTree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">t</span><span class="o">.</span><span class="na">left</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">subTree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">right</span><span class="o">,</span><span class="n">t</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">isSubtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="s">"""
+        :type s: TreeNode
+        :type t: TreeNode
+        :rtype: bool
+        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSameTree</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSubtree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSubtree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">isSameTree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">val</span> <span class="o">==</span> <span class="n">t</span><span class="o">.</span><span class="n">val</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSameTree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">left</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSameTree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0508/010">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-010">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二叉树"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0508/011"><h2 itemprop="headline" class="item__header">100. 相同的树</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
@@ -1270,65 +1417,8 @@ abs(curr\_max - curr\_min) <= limit & 判断数组中元素是否符合条件，
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0505-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,滑动窗口"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/algo/2020/0505/008"><h2 itemprop="headline" class="item__header">二叉树的先序、中序、后序遍历</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="大概的概念">大概的概念</h3>
-<blockquote>
-  <p>二叉树的遍历分为两种：深度优先遍历和广度优先遍历；深度优先遍历又分为三种，先序、中序和后序</p>
-</blockquote>
-
-<ul>
-  <li>所有例子都是基于以下树进行遍历的</li>
-  <li>后面有类似题型</li>
-</ul>
-
-<p><img src="/assets/images/algo/0505/879896-20160603105939321-1775188072.jpg" alt="pic" /></p>
-
-<h3 id="深度优先遍历辅助结构栈">深度优先遍历（辅助结构：栈）</h3>
-<h4 id="先序遍历">先序遍历</h4>
-<blockquote>
-  <p>根节点，左子树，右子树</p>
-</blockquote>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：124563
-</code></pre></div></div>
-<h4 id="中序遍历">中序遍历</h4>
-<blockquote>
-  <p>左子树，根节点，右子树</p>
-</blockquote>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：425613
-</code></pre></div></div>
-<h4 id="后序遍历">后序遍历</h4>
-<blockquote>
-  <p>左子树，右子树，根节点</p>
-</blockquote>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：465231
-</code></pre></div></div>
-<p>关于先序、中序、后序遍历，我只说一点：就是这里的先、中、后指的是根节点，根节点，根节点。。。。</p>
-
-<h3 id="广度优先遍历辅助结构队列">广度优先遍历（辅助结构：队列）</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>很简单，结果为：123456
-</code></pre></div></div>
-
-<p>补充一下：广度优先遍历又叫层次遍历，感觉这个名字更加形象点，另外，每次遍历完一个节点会将它的子节点做入队操作。</p>
-
-<h3 id="类似题目">类似题目</h3>
-<ul>
-  <li><a href="/leetcode/2020/0505/012">98. 验证二叉搜索树</a></li>
-</ul>
-</div><p><a href="/algo/2020/0505/008">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%85%88%E5%BA%8F%E3%80%81%E4%B8%AD%E5%BA%8F%E3%80%81%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86">二叉树的先序、中序、后序遍历</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0505-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,二叉树的先序、中序、后序遍历"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>196 post articles, 25 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>197 post articles, 25 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
