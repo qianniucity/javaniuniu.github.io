@@ -459,6 +459,131 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0509-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,动态规划"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0508/008"><h2 itemprop="headline" class="item__header">面试题68 - I. 二叉搜索树的最近公共祖先</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">迭代</code> <code class="success highlighter-rouge">二叉树</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">迭代</code> <code class="info highlighter-rouge">二叉树</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-面试题68---i-二叉搜索树的最近公共祖先">题目 <a href="https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-zui-jin-gong-gong-zu-xian-lcof/">面试题68 - I. 二叉搜索树的最近公共祖先</a></h3>
+
+<p>给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。</p>
+
+<p>公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（ <strong>一个节点也可以是它自己的祖先</strong>）。”</p>
+
+<p>例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]</p>
+
+<p><img src="/assets/images/leetcode/0508/binarysearchtree_improved.png" alt="pic1" /></p>
+
+<h3 id="示例-1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+输出: 6
+解释: 节点 2 和节点 8 的最近公共祖先是 6。
+</code></pre></div></div>
+<h3 id="示例-2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+输出: 2
+解释: 节点 2 和节点 4 的最近公共祖先是 2, 因为根据定义最近公共祖先节点可以为节点本身。
+</code></pre></div></div>
+
+<h3 id="说明">说明:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>所有节点的值都是唯一的。
+p、q 为不同节点且均存在于给定的二叉搜索树中。
+</code></pre></div></div>
+
+<h3 id="方法一-迭代">方法一 迭代</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li><strong>祖先的定义</strong>： 若节点 <code class="highlighter-rouge">p</code> 在节点 <code class="highlighter-rouge">root</code> 的左（右）子树中，或 <code class="highlighter-rouge">p = root</code> ，则称 <code class="highlighter-rouge">root</code> 是 <code class="highlighter-rouge">p</code> 的祖先。</li>
+</ul>
+
+<p><img src="/assets/images/leetcode/0508/28242ac7394dfa60a3598a4cf145af9b8311d8f325838e5875d65f6d4ed692fa-Picture1.png" alt="pic2" /></p>
+
+<p>最近公共祖先的定义： 设节点 <code class="highlighter-rouge">root</code> 为节点 <code class="highlighter-rouge">p, q</code> 的某公共祖先，若其左子节点 <code class="highlighter-rouge">root.left</code> 和右子节点 <code class="highlighter-rouge">root.right</code> 都不是 p,q 的公共祖先，则称 <code class="highlighter-rouge">root</code> 是 “最近的公共祖先” 。</p>
+
+<p>根据以上定义，若 <code class="highlighter-rouge">root</code> 是 <code class="highlighter-rouge">p, q</code> 的 最近公共祖先 ，则只可能为以下情况之一：</p>
+
+<ol>
+  <li><code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 在 root 的子树中，且分列 <code class="highlighter-rouge">root</code> 的 异侧（即分别在左、右子树中）；</li>
+  <li><code class="highlighter-rouge">p = root</code> ，且 <code class="highlighter-rouge">q</code> 在 <code class="highlighter-rouge">root</code> 的左或右子树中；</li>
+  <li><code class="highlighter-rouge">q = root</code> ，且 <code class="highlighter-rouge">p</code> 在 <code class="highlighter-rouge">root</code> 的左或右子树中；</li>
+</ol>
+
+<p><img src="/assets/images/leetcode/0508/2e9f800c678fa65940262f8f355d6ecf56c693594ca0db1f8e3b266181a21b41-Picture2.png" alt="pic3" /></p>
+
+<p>本题给定了两个重要条件：① 树为 <strong>二叉搜索树</strong> ，② 树的所有节点的值都是 <strong>唯一</strong> 的。根据以上条件，可方便地判断 <code class="highlighter-rouge">p,q</code> 与 <code class="highlighter-rouge">root</code> 的子树关系，即：</p>
+
+<ul>
+  <li>若 <code class="highlighter-rouge">root.val &lt; p.val</code> ，则 <code class="highlighter-rouge">p</code> 在 <code class="highlighter-rouge">root</code> 右子树 中；</li>
+  <li>若 <code class="highlighter-rouge">root.val &gt; p.val</code> ，则 <code class="highlighter-rouge">p</code> 在 <code class="highlighter-rouge">root</code> 左子树 中；</li>
+  <li>若 <code class="highlighter-rouge">root.val = p.val</code> ，则 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">root</code> 指向 同一节点 。</li>
+</ul>
+
+<h3 id="方法一迭代">方法一：迭代</h3>
+<ol>
+  <li>循环搜索： 当节点 <code class="highlighter-rouge">root</code> 为空时跳出；
+    <ol>
+      <li>当 <code class="highlighter-rouge">p, q</code> 都在 <code class="highlighter-rouge">root</code> 的 右子树 中，则遍历至 <code class="highlighter-rouge">root.right</code> ；</li>
+      <li>否则，当 <code class="highlighter-rouge">p, q</code> 都在 <code class="highlighter-rouge">root</code> 的 左子树 中，则遍历至 <code class="highlighter-rouge">root.left</code> ；</li>
+      <li>否则，说明找到了 最近公共祖先 ，跳出。</li>
+    </ol>
+  </li>
+  <li>返回值： 最近公共祖先 <code class="highlighter-rouge">root</code> 。</li>
+</ol>
+
+<h3 id="代码">代码</h3>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">lowestCommonAncestor</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">p</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">q</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">while</span><span class="o">(</span><span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">.</span><span class="na">val</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">q</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="c1">// p,q 都在 root 的右子树中</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">;</span> <span class="c1">// 遍历至右子节点</span>
+            <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">val</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="c1">// p,q 都在 root 的左子树中</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span> <span class="c1">// 遍历至左子节点</span>
+            <span class="k">else</span> <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="s">'TreeNode'</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="s">'TreeNode'</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="s">'TreeNode'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s">'TreeNode'</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">val</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">,</span><span class="n">p</span> <span class="c1"># 保证 p.val &lt; q.val
+</span>        <span class="k">while</span> <span class="n">root</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">.</span><span class="n">val</span><span class="p">:</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span> <span class="c1"># 右子数
+</span>            <span class="k">elif</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">val</span><span class="p">:</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span> <span class="c1"># 左子数
+</span>            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">root</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0508/008">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E8%BF%AD%E4%BB%A3">迭代</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,二叉树,迭代"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0508/012"><h2 itemprop="headline" class="item__header">9. 回文数</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
@@ -1419,108 +1544,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 07, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0507-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-07T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,暴力,哈希表"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0505/012"><h2 itemprop="headline" class="item__header">98. 验证二叉搜索树</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">中序遍历</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">中序遍历</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-98-验证二叉搜索树">题目 <a href="https://leetcode-cn.com/problems/validate-binary-search-tree/">98. 验证二叉搜索树</a></h3>
-<p>给定一个二叉树，判断其是否是一个有效的二叉搜索树。</p>
-
-<p>假设一个二叉搜索树具有如下特征：</p>
-<ul>
-  <li>节点的左子树只包含 <strong>小于</strong> 当前节点的数。</li>
-  <li>节点的右子树只包含 <strong>大于</strong> 当前节点的数。</li>
-  <li>所有左子树和右子树自身必须也是二叉搜索树。</li>
-</ul>
-
-<h3 id="示例1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
-    2
-   / \
-  1   3
-输出: true
-</code></pre></div></div>
-<h3 id="示例2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
-    5
-   / \
-  1   4
-     / \
-    3   6
-输出: false
-解释: 输入为: [5,1,4,null,null,3,6]。
-     根节点的值为 5 ，但是其右子节点值为 4 。
-</code></pre></div></div>
-
-<h3 id="方法一">方法一</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li>中序遍历时，判断当前节点是否大于中序遍历的前一个节点，如果大于，说明满足 BST，继续遍历；否则直接返回 false。
-    <h4 id="java">java</h4>
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-  <span class="kt">long</span> <span class="n">pre</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
-  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="c1">// 访问左子树</span>
-      <span class="k">if</span> <span class="o">(!</span><span class="n">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">))</span> <span class="o">{</span>
-          <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="c1">// 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;=</span> <span class="n">pre</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="n">pre</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
-      <span class="c1">// 访问右子树</span>
-      <span class="k">return</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-# 中序遍历 ： 按照 左 中 右 的顺序 挨个遍历
-</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="n">cur</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">"-inf"</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">isValidBST</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="c1"># 访问左子树
-</span>        <span class="k">if</span>  <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="c1"># 访问当前节点：如果当前节点小于等于中序遍历的前一个节点，说明不满足BST，返回 false；否则继续遍历。
-</span>        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cur</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cur</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span>
-        <span class="c1"># 访问右子树
-</span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isValidBST</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0505/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86">中序遍历</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 05, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0505-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-05T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,中序遍历"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>199 post articles, 25 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>200 post articles, 25 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
