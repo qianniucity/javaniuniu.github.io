@@ -322,6 +322,88 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0509/006"><h2 itemprop="headline" class="item__header">23. 合并K个排序链表</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="error highlighter-rouge">困难</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">优先队列</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">优先队列</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="23-合并k个排序链表"><a href="https://leetcode-cn.com/problems/merge-k-sorted-lists/">23. 合并K个排序链表</a></h3>
+<p>合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。</p>
+
+<h3 id="示例">示例:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
+[
+  1-&gt;4-&gt;5,
+  1-&gt;3-&gt;4,
+  2-&gt;6
+]
+输出: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
+</code></pre></div></div>
+
+<h3 id="方法一-优先队列">方法一 优先队列</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li>通过题目和示例，可清楚的了解到，其实就是 <strong>合并元素</strong>，并 <strong>排序</strong>
+    <ol>
+      <li>第一步通队列保存链表元素</li>
+      <li>对队列排序</li>
+    </ol>
+  </li>
+  <li>通过优先队列，可完成上述两个步骤
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">i2</span><span class="o">,</span> <span class="n">i1</span><span class="o">));</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="代码">代码</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">mergeKLists</span><span class="o">(</span><span class="nc">ListNode</span><span class="o">[]</span> <span class="n">lists</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">i2</span><span class="o">,</span> <span class="n">i1</span><span class="o">));</span>
+
+        <span class="c1">// 合并链表元素到队列</span>
+        <span class="k">for</span><span class="o">(</span><span class="nc">ListNode</span> <span class="nl">node:</span><span class="n">lists</span><span class="o">){</span>
+            <span class="k">while</span> <span class="o">(</span><span class="n">node</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="c1">// 把队列中元素添加到了新的链表</span>
+        <span class="nc">ListNode</span> <span class="n">ans</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
+            <span class="nc">ListNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span> <span class="c1">// 每次拿出最大元素，并删除</span>
+            <span class="n">curr</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">ans</span><span class="o">;</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">curr</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0509/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97">优先队列</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 09, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0509-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,优先队列"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0509/007"><h2 itemprop="headline" class="item__header">213. 打家劫舍 II</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
@@ -1216,258 +1298,8 @@ p、q 为不同节点且均存在于给定的二叉搜索树中。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-011">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,算数"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/algo/2020/0508/003"><h2 itemprop="headline" class="item__header">二叉树算法框架</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="设计的总路线">设计的总路线：</h3>
-<blockquote>
-  <p>明确一个节点要做的事情，然后剩下的事抛给框架。</p>
-</blockquote>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">traverse</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// root 需要做什么？在这做。</span>
-    <span class="c1">// 其他的不用 root 操心，抛给框架</span>
-    <span class="n">traverse</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
-    <span class="n">traverse</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>举两个简单的例子体会一下这个思路，热热身。</p>
-
-<h3 id="1-如何把二叉树所有的节点中的值加一">1. 如何把二叉树所有的节点中的值加一？</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">plusOne</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
-    <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">+=</span> <span class="mi">1</span><span class="o">;</span>
-
-    <span class="n">plusOne</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
-    <span class="n">plusOne</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<h3 id="2-如何判断两棵二叉树是否完全相同">2. 如何判断两棵二叉树是否完全相同？</h3>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="nf">isSameTree</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root1</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">root2</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// 都为空的话，显然相同</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="c1">// 一个为空，一个非空，显然不同</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root1</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">root2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="c1">// 两个都非空，但 val 不一样也不行</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root1</span><span class="o">.</span><span class="na">val</span> <span class="o">!=</span> <span class="n">root2</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-
-    <span class="c1">// root1 和 root2 该比的都比完了</span>
-    <span class="k">return</span> <span class="nf">isSameTree</span><span class="o">(</span><span class="n">root1</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">root2</span><span class="o">.</span><span class="na">left</span><span class="o">)</span>
-        <span class="o">&amp;&amp;</span> <span class="n">isSameTree</span><span class="o">(</span><span class="n">root1</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">root2</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>借助框架，上面这两个例子不难理解吧？如果可以理解，那么所有二叉树算法你都能解决。</p>
-
-<p>二叉搜索树（ <code class="highlighter-rouge">Binary Search Tree</code>，简称 <code class="highlighter-rouge">BST</code>）是一种很常用的的二叉树。它的定义是：一个二叉树中，任意节点的值要大于等于左子树所有节点的值，且要小于等于右边子树的所有节点的值。</p>
-
-<p>如下就是一个符合定义的 <code class="highlighter-rouge">BST</code>：</p>
-
-<p><img src="/assets/images/algo/0508/132457a2aee39f7111be13aceb9ddc69ba3396aa0a9465bd7215cc196bf89744-file_1562812267854.png" alt="pic1" /></p>
-
-<p>下面实现 <code class="highlighter-rouge">BST</code> 的基础操作：判断 <code class="highlighter-rouge">BST</code> 的合法性、增、删、查。其中“删”和“判断合法性”略微复杂。</p>
-
-<h3 id="零判断-bst-的合法性">零、判断 BST 的合法性</h3>
-
-<p>这里是有坑的哦，我们按照刚才的思路，每个节点自己要做的事不就是比较自己和左右孩子吗？看起来应该这样写代码：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;=</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;=</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-
-    <span class="k">return</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">)</span>
-        <span class="o">&amp;&amp;</span> <span class="n">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>但是这个算法出现了错误，<code class="highlighter-rouge">BST</code> 的每个节点应该要小于右边子树的所有节点，下面这个二叉树显然不是 BST，但是我们的算法会把它判定为 BST。</p>
-
-<p><img src="/assets/images/algo/0508/73cf5787707fe1ab9b7ba96840cd79160ee50f1981508704d116213a986a88dc-file_1562811873883.png" alt="pic2" /></p>
-
-<p>出现错误，不要慌张，框架没有错，一定是某个细节问题没注意到。我们重新看一下 BST 的定义，root 需要做的不只是和左右子节点比较，而是要整个左子树和右子树所有节点比较。怎么办，鞭长莫及啊！</p>
-
-<p>这种情况，我们可以使用辅助函数，增加函数参数列表，在参数中携带额外信息，请看正确的代码：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="kt">boolean</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">min</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">max</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">min</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;=</span> <span class="n">min</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">max</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;=</span> <span class="n">max</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="k">return</span> <span class="nf">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">min</span><span class="o">,</span> <span class="n">root</span><span class="o">)</span>
-        <span class="o">&amp;&amp;</span> <span class="n">isValidBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">root</span><span class="o">,</span> <span class="n">max</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<h3 id="一在-bst-中查找一个数是否存在">一、在 BST 中查找一个数是否存在</h3>
-
-<p>根据我们的指导思想，可以这样写代码：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="nf">isInBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span> <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-
-    <span class="k">return</span> <span class="nf">isInBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">target</span><span class="o">)</span>
-        <span class="o">||</span> <span class="n">isInBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>这样写完全正确，充分证明了你的框架性思维已经养成。现在你可以考虑一点细节问题了：如何充分利用信息，把 BST 这个“左小右大”的特性用上？</p>
-
-<p>很简单，其实不需要递归地搜索两边，类似二分查找思想，根据 <code class="highlighter-rouge">target</code> 和 <code class="highlighter-rouge">root.val</code> 的大小比较，就能排除一边。我们把上面的思路稍稍改动：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">boolean</span> <span class="nf">isInBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span>
-        <span class="k">return</span> <span class="nf">isInBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">)</span>
-        <span class="k">return</span> <span class="nf">isInBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-    <span class="c1">// root 该做的事做完了，顺带把框架也完成了，妙</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>于是，我们对原始框架进行改造，抽象出一套针对 BST 的遍历框架：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">BST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
-        <span class="c1">// 找到目标，做点什么</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span>
-        <span class="no">BST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">)</span>
-        <span class="no">BST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<h3 id="二在-bst-中插入一个数">二、在 BST 中插入一个数</h3>
-
-<p>对数据结构的操作无非遍历 + 访问，遍历就是“找”，访问就是“改”。具体到这个问题，插入一个数，就是先找到插入位置，然后进行插入操作。</p>
-
-<p>上一个问题，我们总结了 <code class="highlighter-rouge">BST</code> 中的遍历框架，就是“找”的问题。直接套框架，加上“改”的操作即可。一旦涉及“改”，函数就要返回 <code class="highlighter-rouge">TreeNode</code> 类型，并且对递归调用的返回值进行接收。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">TreeNode</span> <span class="nf">insertIntoBST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// 找到空位置插入新节点</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="k">new</span> <span class="nc">TreeNode</span><span class="o">(</span><span class="n">val</span><span class="o">);</span>
-    <span class="c1">// if (root.val == val)</span>
-    <span class="c1">//     BST 中一般不会插入已存在元素</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">val</span><span class="o">)</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">insertIntoBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">val</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">val</span><span class="o">)</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">insertIntoBST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">val</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<h3 id="三在-bst-中删除一个数">三、在 BST 中删除一个数</h3>
-
-<p>这个问题稍微复杂，不过你有框架指导，难不住你。跟插入操作类似，先“找”再“改”，先把框架写出来再说：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">TreeNode</span> <span class="nf">deleteNode</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 找到啦，进行删除</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>找到目标节点了，比方说是节点 A，如何删除这个节点，这是难点。因为删除节点的同时不能破坏 BST 的性质。有三种情况，用图片来说明。</p>
-
-<p>情况 1：A 恰好是末端节点，两个子节点都为空，那么它可以当场去世了。</p>
-
-<p><img src="/assets/images/algo/0508/1025d7a4c1f7bcbd3aad7cbacd83ca762bbbe54de9a51eacaf0b73ca8a6e07f0-file_1562812267863.png" alt="pic3" /></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-</code></pre></div></div>
-
-<p>情况 2：A 只有一个非空子节点，那么它要让这个孩子接替自己的位置。</p>
-
-<p><img src="/assets/images/algo/0508/31095bbfab6f064279db2b5fc12f9a9a5b1bf57e6a417f253a9e98f006710abe-file_1562812267882.png" alt="pic5" /></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 排除了情况 1 之后</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
-</code></pre></div></div>
-<p>情况 3：A 有两个子节点，麻烦了，为了不破坏 BST 的性质，A 必须找到左子树中最大的那个节点，或者右子树中最小的那个节点来接替自己。我们以第二种方式讲解。关注我的众公号 labuladong 看更多精彩算法文章~</p>
-
-<p><img src="/assets/images/algo/0508/10815a1636daac6f8bd3cfd7429f8c8336bb6b37c556f9cf6c4d74ba90ac0829-file_1562812267872.png" alt="pic4" /></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// 找到右子树的最小节点</span>
-    <span class="nc">TreeNode</span> <span class="n">minNode</span> <span class="o">=</span> <span class="n">getMin</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-    <span class="c1">// 把 root 改成 minNode</span>
-    <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">minNode</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
-    <span class="c1">// 转而去删除 minNode</span>
-    <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">minNode</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>三种情况分析完毕，填入框架，简化一下代码：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">TreeNode</span> <span class="nf">deleteNode</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 这两个 if 把情况 1 和 2 都正确处理了</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
-        <span class="c1">// 处理情况 3</span>
-        <span class="nc">TreeNode</span> <span class="n">minNode</span> <span class="o">=</span> <span class="n">getMin</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">=</span> <span class="n">minNode</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">minNode</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">left</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
-    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">root</span><span class="o">.</span><span class="na">right</span> <span class="o">=</span> <span class="n">deleteNode</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">key</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
-<span class="o">}</span>
-
-<span class="nc">TreeNode</span> <span class="nf">getMin</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">node</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// BST 最左边的就是最小的</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">;</span>
-    <span class="k">return</span> <span class="n">node</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>删除操作就完成了。注意一下，这个删除操作并不完美，因为我们一般不会通过 root.val = minNode.val 修改节点内部的值来交换节点，而是通过一系列略微复杂的链表操作交换 root 和 minNode 两个节点。因为具体应用中，val 域可能会很大，修改起来很耗时，而链表操作无非改一改指针，而不会去碰内部数据。</p>
-
-<p>但这里忽略这个细节，旨在突出 BST 基本操作的共性，以及借助框架逐层细化问题的思维方式。</p>
-
-<h3 id="四最后总结">四、最后总结</h3>
-
-<p>通过这篇文章，你学会了如下几个技巧：</p>
-
-<ol>
-  <li>
-    <p>二叉树算法设计的总路线：把当前节点要做的事做好，其他的交给递归框架，不用当前节点操心。</p>
-  </li>
-  <li>
-    <p>如果当前节点会对下面的子节点有整体影响，可以通过辅助函数增长参数列表，借助参数传递信息。</p>
-  </li>
-  <li>
-    <p>在二叉树框架之上，扩展出一套 BST 遍历框架：</p>
-  </li>
-</ol>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">BST</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">==</span> <span class="n">target</span><span class="o">)</span>
-        <span class="c1">// 找到目标，做点什么</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span>
-        <span class="no">BST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">target</span><span class="o">)</span>
-        <span class="no">BST</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">target</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/algo/2020/0508/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91%E7%AE%97%E6%B3%95%E6%A1%86%E6%9E%B6">二叉树算法框架</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0508-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,二叉树算法框架"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>201 post articles, 26 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>202 post articles, 26 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
