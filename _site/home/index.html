@@ -322,6 +322,118 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0509/007"><h2 itemprop="headline" class="item__header">213. 打家劫舍 II</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">动态规划</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">动态规划</code></li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0402/013">198. 打家劫舍</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="题目-213-打家劫舍-ii">题目 <a href="https://leetcode-cn.com/problems/house-robber-ii/">213. 打家劫舍 II</a></h3>
+<p>你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 <strong>围成一圈</strong>，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，<strong>如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。</strong></p>
+
+<p>给定一个代表每个房屋存放金额的非负整数数组，计算你 <strong>在不触动警报装置的情况下，能够偷窃到的最高金额。</strong></p>
+
+<h3 id="示例1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [2,3,2]
+输出: 3
+解释: 你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+</code></pre></div></div>
+<h3 id="示例-2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,2,3,1]
+输出: 4
+解释: 你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+</code></pre></div></div>
+
+<h3 id="方法一">方法一</h3>
+<h3 id="解题思路">解题思路</h3>
+<ul>
+  <li>这次审题终于正确，🙆‍♂️</li>
+  <li>我们可以把题目分成两个部分
+    <ol>
+      <li>在 [0:n-1] 中找到最大值</li>
+      <li>在 [1:n]  中找到最大值</li>
+    </ol>
+  </li>
+</ul>
+
+<h4 id="动态规划基本思路">动态规划基本思路</h4>
+<ul>
+  <li>如图</li>
+</ul>
+
+<p><img src="/assets/images/leetcode/0509/Jietu20200509-140711@2x.jpg" alt="pic" /></p>
+
+<h3 id="代码">代码</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">rob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">def</span> <span class="nf">robmax</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+            <span class="n">nums_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span><span class="p">:</span> <span class="k">return</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">nums_len</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">opt</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nums_len</span>
+            <span class="n">opt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">opt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">nums_len</span><span class="p">):</span>
+                <span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">opt</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">opt</span><span class="p">[</span><span class="n">nums_len</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span><span class="p">:</span> <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">nums1</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="c1">#[1,n] 找到到最大值
+</span>        <span class="n">nums2</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># [0,n-1] 找到到最大值
+</span>        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">robmax</span><span class="p">(</span><span class="n">nums1</span><span class="p">),</span><span class="n">robmax</span><span class="p">(</span><span class="n">nums2</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">rob</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="k">return</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">nums1</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOfRange</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">nums2</span> <span class="o">=</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">copyOfRange</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">subrob</span><span class="o">(</span><span class="n">nums1</span><span class="o">),</span> <span class="n">subrob</span><span class="o">(</span><span class="n">nums2</span><span class="o">));</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="nf">subrob</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">){</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="k">return</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">len</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
+        <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">dp</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">],</span> <span class="n">dp</span><span class="o">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0509/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 09, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0509-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,动态规划"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/alog/2020/0509/004"><h2 itemprop="headline" class="item__header">图解动态规划的解题四步骤</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>类似题目</strong>:
@@ -1354,198 +1466,8 @@ p、q 为不同节点且均存在于给定的二叉搜索树中。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0508-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,二叉树算法框架"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0507/012"><h2 itemprop="headline" class="item__header">206. 反转链表</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">迭代</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">迭代</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-206-反转链表">题目 <a href="https://leetcode-cn.com/problems/reverse-linked-list/">206. 反转链表</a></h3>
-<p>反转一个单链表。</p>
-
-<h3 id="示例">示例:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;NULL
-输出: 5-&gt;4-&gt;3-&gt;2-&gt;1-&gt;NULL
-</code></pre></div></div>
-<h4 id="进阶">进阶:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
-</code></pre></div></div>
-
-<h3 id="方法一-迭代">方法一 迭代</h3>
-<h4 id="解题思路">解题思路</h4>
-<p>通过迭代 将   <code class="highlighter-rouge">1-&gt;2-&gt;3-&gt;4-&gt;5-&gt;∮</code> 转换成  <code class="highlighter-rouge">∮&lt;-1&lt;-2&lt;-3&lt;-4&lt;-5</code> <br />
-如图执行过程:</p>
-
-<p><img src="/assets/images/leetcode/0507/Jietu20200507-173331@2x.jpg" alt="pic" /></p>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
-
-        <span class="c1"># 申请两个链表 一个空链表，一个完整的链表
-</span>        <span class="n">pre</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span>
-        <span class="k">while</span> <span class="n">curr</span><span class="p">:</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="nb">next</span>
-            <span class="n">curr</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">pre</span> <span class="c1"># 当前链表指向 新链表
-</span>            <span class="n">pre</span> <span class="o">=</span> <span class="n">curr</span> <span class="c1"># 赋值给新链表
-</span>            <span class="n">curr</span> <span class="o">=</span> <span class="n">temp</span>
-        <span class="k">return</span> <span class="n">pre</span>
-</code></pre></div></div>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 申请两个链表 一个空链表，一个完整的链表</span>
-        <span class="nc">ListNode</span> <span class="n">pre</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="nc">ListNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">curr</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
-            <span class="nc">ListNode</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-            <span class="n">curr</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">pre</span><span class="o">;</span> <span class="c1">// 当前链表指向 新链表</span>
-            <span class="n">pre</span> <span class="o">=</span> <span class="n">curr</span><span class="o">;</span> <span class="c1">// 赋值给新链表</span>
-            <span class="n">curr</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">pre</span><span class="o">;</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="迭代升级版">迭代升级版</h4>
-<h4 id="python-1">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
-        <span class="s">"""
-        :type head: ListNode
-        :rtype: ListNode
-        """</span>
-        <span class="n">cur</span> <span class="p">,</span> <span class="n">prev</span> <span class="o">=</span> <span class="n">head</span><span class="p">,</span> <span class="bp">None</span>
-        <span class="k">while</span> <span class="n">cur</span><span class="p">:</span>
-            <span class="n">cur</span><span class="o">.</span><span class="nb">next</span> <span class="p">,</span><span class="n">prev</span><span class="p">,</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">prev</span><span class="p">,</span> <span class="n">cur</span> <span class="p">,</span> <span class="n">cur</span><span class="o">.</span><span class="nb">next</span>
-        <span class="k">return</span> <span class="n">prev</span>
-</code></pre></div></div>
-
-<h3 id="递归">递归</h3>
-<h4 id="解题思路-1">解题思路</h4>
-<ul>
-  <li>终止条件是当前节点或者下一个节点==null</li>
-  <li>在函数内部，改变节点的指向，也就是 head 的下一个节点指向 head 递归函数那句</li>
-</ul>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>head.next.next = head
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">ListNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">reverseList</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>  <span class="c1">// 当head=4 head.next-&gt;5</span>
-
-<span class="k">if</span><span class="o">(</span><span class="n">head</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">// head.next -&gt;null 即 5.next = null</span>
-  <span class="k">return</span> <span class="n">head</span><span class="o">;</span> <span class="c1">// head = 5</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>所以 cul =5</li>
-  <li>head.next.next = head;  中head = 4</li>
-  <li>即 4.next.next = 4</li>
-  <li>即 5.next = 4</li>
-</ul>
-
-<h4 id="java-1">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-	<span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
-		<span class="c1">//递归终止条件是当前为空，或者下一个节点为空</span>
-		<span class="k">if</span><span class="o">(</span><span class="n">head</span><span class="o">==</span><span class="kc">null</span> <span class="o">||</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">return</span> <span class="n">head</span><span class="o">;</span>
-		<span class="o">}</span>
-		<span class="c1">//这里的cur就是最后一个节点</span>
-		<span class="nc">ListNode</span> <span class="n">cur</span> <span class="o">=</span> <span class="n">reverseList</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">);</span>
-		<span class="c1">//如果链表是 1-&gt;2-&gt;3-&gt;4-&gt;5，那么此时的cur就是5</span>
-		<span class="c1">//而head是4，head的下一个是5，下下一个是空</span>
-		<span class="c1">//所以head.next.next 就是5-&gt;4</span>
-		<span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
-		<span class="c1">//防止链表循环，需要将head.next设置为空</span>
-		<span class="n">head</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-		<span class="c1">//每层递归函数都返回cur，也就是最后一个节点</span>
-		<span class="k">return</span> <span class="n">cur</span><span class="o">;</span>
-	<span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python-2">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-	<span class="k">def</span> <span class="nf">reverseList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">head</span><span class="p">):</span>
-		<span class="s">"""
-		:type head: ListNode
-		:rtype: ListNode
-		"""</span>
-		<span class="c1"># 递归终止条件是当前为空，或者下一个节点为空
-</span>		<span class="k">if</span><span class="p">(</span><span class="n">head</span><span class="o">==</span><span class="bp">None</span> <span class="ow">or</span> <span class="n">head</span><span class="o">.</span><span class="nb">next</span><span class="o">==</span><span class="bp">None</span><span class="p">):</span>
-			<span class="k">return</span> <span class="n">head</span>
-		<span class="c1"># 这里的cur就是最后一个节点
-</span>		<span class="n">cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverseList</span><span class="p">(</span><span class="n">head</span><span class="o">.</span><span class="nb">next</span><span class="p">)</span>
-		<span class="c1"># 如果链表是 1-&gt;2-&gt;3-&gt;4-&gt;5，那么此时的cur就是5
-</span>		<span class="c1"># 而head是4，head的下一个是5，下下一个是空
-</span>		<span class="c1"># 所以head.next.next 就是5-&gt;4
-</span>		<span class="n">head</span><span class="o">.</span><span class="nb">next</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">head</span>
-		<span class="c1"># 防止链表循环，需要将head.next设置为空
-</span>		<span class="n">head</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="bp">None</span>
-		<span class="c1"># 每层递归函数都返回cur，也就是最后一个节点
-</span>		<span class="k">return</span> <span class="n">cur</span>
-</code></pre></div></div>
-
-<h3 id="方法三-栈">方法三 栈</h3>
-<ul>
-  <li>通过遍历把链表元素添加到栈内存</li>
-  <li>在把栈里面数据挨个添加到新的链表中</li>
-</ul>
-
-<h4 id="java-2">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">reverseList</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">head</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">head</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="c1">// 遍历链表到栈内存</span>
-        <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
-        <span class="nc">ListNode</span> <span class="n">ans</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">head</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">stack</span><span class="o">.</span><span class="na">push</span><span class="o">(</span><span class="n">head</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
-            <span class="n">head</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="nc">ListNode</span> <span class="n">reverseListHead</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">());</span> <span class="c1">// 初始化链表首个元素</span>
-        <span class="nc">ListNode</span> <span class="n">tempNode</span> <span class="o">=</span> <span class="n">reverseListHead</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(!</span><span class="n">stack</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
-            <span class="n">tempNode</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">());</span>
-            <span class="n">tempNode</span> <span class="o">=</span> <span class="n">tempNode</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">reverseListHead</span><span class="o">;</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
-  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0507/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0507-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,暴力,哈希表"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>200 post articles, 25 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>201 post articles, 26 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1558,7 +1480,7 @@ p、q 为不同节点且均存在于给定的二叉搜索树中。
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page25"><span>25</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page26"><span>26</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
