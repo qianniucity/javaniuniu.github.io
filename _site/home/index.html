@@ -322,6 +322,164 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0511/007"><h2 itemprop="headline" class="item__header">50. Pow(x, n)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code> <code class="success highlighter-rouge">折半计算</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">递归</code> <code class="info highlighter-rouge">折半计算</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="50-powx-n"><a href="https://leetcode-cn.com/problems/powx-n/">50. Pow(x, n)</a></h3>
+<p>实现 <code class="highlighter-rouge">pow(x, n)</code> ，即计算 x 的 n 次幂函数。</p>
+
+<h3 id="示例-1">示例 1:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 2.00000, 10
+输出: 1024.00000
+</code></pre></div></div>
+<h3 id="示例2">示例 2:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 2.10000, 3
+输出: 9.26100
+</code></pre></div></div>
+<h3 id="示例3">示例 3:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 2.00000, -2
+输出: 0.25000
+解释: 2-2 = 1/22 = 1/4 = 0.25
+</code></pre></div></div>
+<h3 id="说明">说明:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-100.0 &lt; x &lt; 100.0
+n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
+</code></pre></div></div>
+
+<h3 id="方法一-暴力">方法一 暴力</h3>
+<h4 id="解题思路-时间会超时">解题思路 时间会超时</h4>
+<ul>
+  <li>先对 n 的正负做判断</li>
+  <li>当 n 为正数 $x^n$</li>
+  <li>当 n 为负数 $(1/x)^n$
+    <h4 id="java">java</h4>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
+          <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+          <span class="n">a</span> <span class="o">*=</span><span class="n">x</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="方法二-改良暴力">方法二 改良暴力</h3>
+<ul>
+  <li>通过折半计算，每次把 n 减半，降低空间复杂度
+    <h4 id="java-1">java</h4>
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
+          <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span> <span class="o">/=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
+              <span class="n">a</span> <span class="o">*=</span> <span class="n">x</span><span class="o">;</span>
+          <span class="n">x</span> <span class="o">*=</span><span class="n">x</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">myPow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="s">"""
+        :type x: float
+        :type n: int
+        :rtype: float
+        """</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
+        <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span>
+                <span class="n">n</span> <span class="o">/=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">*=</span><span class="n">x</span>
+                <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+
+<h3 id="方法三-递归">方法三 递归</h3>
+<h4 id="解题思路">解题思路</h4>
+<p>主要是注意n的正负，这个题比较简单了，直接递归调用就行。</p>
+
+<p>如果 n 是负数，那么相当于求 <code class="highlighter-rouge">(1/x)^(-n)</code>。
+如果 n 是正数 且 奇数，那么结果需要单独乘以 x
+如果 n 是正数 且 偶数，求 <code class="highlighter-rouge">(x^2)^(n/2)</code>，一直递归下去即可。
+时间复杂度是 $O(1)$，空间复杂度是 $O(1)$。
+我认为这个代码是 $O(1)$，因为n只有32位，循环次数是有上限的常数</p>
+
+<h3 id="代码">代码</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">%</span><span class="mi">2</span><span class="o">!=</span><span class="mi">0</span><span class="o">)</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">myPow</span><span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="nf">myPow</span><span class="o">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">,</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python-1">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">myPow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="s">"""
+        :type x: float
+        :type n: int
+        :rtype: float
+        """</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">myPow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myPow</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0511/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%8A%98%E5%8D%8A%E8%AE%A1%E7%AE%97">折半计算</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,递归,折半计算"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0510/007"><h2 itemprop="headline" class="item__header">199. 二叉树的右视图</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
@@ -389,10 +547,30 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <h3 id="方法二-bfs">方法二 BFS</h3>
 <ul>
-  <li>利用 BFS 进行层次遍历，记录下每层的最后一个元素。</li>
+  <li>
+    <p>利用 BFS 进行层次遍历，记录下每层的最后一个元素。</p>
+  </li>
+  <li>
+    <p>二叉树插入队列的如图</p>
+  </li>
 </ul>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+<p><img src="/assets/images/leetcode/0510/c109162ad484f35720fda786bd67a724c5f63edd69b6077b0213f009cce75951-image.png" alt="pic1" /></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */</span>
+<span class="c1">// 考察的是对二叉数执行顺序</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">rightSideView</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
         <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
         <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">TreeNode</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
         <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
@@ -413,6 +591,8 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
         <span class="o">}</span>
         <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 </div><p><a href="/leetcode/2020/0510/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
@@ -1188,159 +1368,8 @@ p、q 为不同节点且均存在于给定的二叉搜索树中。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-010">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,二叉树,递归"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0508/009"><h2 itemprop="headline" class="item__header">508. 出现次数最多的子树元素和</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code> <code class="success highlighter-rouge">哈希表</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">递归</code> <code class="info highlighter-rouge">哈希表</code></li>
-  <li><strong>类似题型</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0508/011">100. 相同的树</a></li>
-      <li><a href="/leetcode/2020/0508/010">572. 另一个树的子树</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="题目-508-出现次数最多的子树元素和">题目 <a href="https://leetcode-cn.com/problems/most-frequent-subtree-sum/">508. 出现次数最多的子树元素和</a></h3>
-<p>给你一个二叉树的根结点，请你找出出现次数最多的子树元素和。一个结点的「子树元素和」定义为以该结点为根的二叉树上所有结点的元素之和（包括结点本身）。</p>
-
-<p>你需要返回出现次数最多的子树元素和。如果有多个元素出现的次数相同，返回所有出现次数最多的子树元素和（不限顺序）。</p>
-
-<h3 id="示例-1">示例 1：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
-
-  5
- /  \
-2   -3
-返回 [2, -3, 4]，所有的值均只出现一次，以任意顺序返回所有值。
-</code></pre></div></div>
-<h3 id="示例2">示例 2：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：
-
-  5
- /  \
-2   -5
-返回 [2]，只有 2 出现两次，-5 只出现 1 次。
-</code></pre></div></div>
-
-<blockquote>
-  <p>提示： 假设任意子树元素和均可以用 32 位有符号整数表示。</p>
-</blockquote>
-
-<h3 id="方法一-递归哈希表">方法一 递归+哈希表</h3>
-
-<h3 id="解题思路">解题思路</h3>
-<ul>
-  <li>考察的其实还是对二叉树的理解 可参考 <a href="https://leetcode-cn.com/problems/same-tree/solution/xie-shu-suan-fa-de-tao-lu-kuang-jia-by-wei-lai-bu-/">写树算法的套路框架</a></li>
-</ul>
-
-<h3 id="代码">代码</h3>
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="c1">// 配合map 记录最多出现次数的子树</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">findFrequentTreeSum</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
-        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
-        <span class="n">helper</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="n">map</span><span class="o">);</span>
-        <span class="c1">// 然后求出map中value最大值对应的Key</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="nc">Integer</span> <span class="n">i</span> <span class="o">:</span> <span class="n">map</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">)</span> <span class="o">==</span> <span class="n">max</span><span class="o">)</span>
-                <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="c1">// 转数组</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">resArr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">res</span><span class="o">.</span><span class="na">size</span><span class="o">()];</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">res</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">resArr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">resArr</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">helper</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="n">helper</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">map</span><span class="o">);</span>
-        <span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">helper</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span> <span class="n">map</span><span class="o">);</span>
-        <span class="c1">// 当前节点为根的元素和</span>
-        <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">+</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">;</span>
-        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">val</span><span class="o">,</span> <span class="n">map</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">val</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
-        <span class="n">max</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">max</span><span class="o">,</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">val</span><span class="o">));</span>
-        <span class="k">return</span> <span class="n">val</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-</span>
-<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">findFrequentTreeSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
-
-        <span class="c1"># 生成默认的字典 相当于 java中的 Map.getOrDefault(key,0)
-</span>        <span class="n">tree_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-
-        <span class="c1"># 递归 遍历出所有 子的元素和 并用 字典记录
-</span>        <span class="k">def</span> <span class="nf">helper</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span><span class="k">return</span> <span class="mi">0</span>
-            <span class="n">left</span> <span class="o">=</span> <span class="n">helper</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">)</span>
-            <span class="n">right</span> <span class="o">=</span> <span class="n">helper</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">right</span> <span class="o">+</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span>
-            <span class="n">tree_dict</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">temp</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span><span class="k">return</span> <span class="p">[]</span>
-        <span class="n">helper</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
-
-        <span class="c1"># 记录出现最多次的 子树的元素和
-</span>        <span class="n">tree_max</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="c1"># python 通过 dict.values() 遍历出字典中的 value
-</span>        <span class="c1"># 类似于 java中的 for(Map.Entry&lt;String, String&gt; entry : map.entrySet())
-</span>        <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">tree_dict</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">tree_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">cnt</span><span class="p">,</span><span class="n">tree_max</span><span class="p">)</span>
-        <span class="n">res_list</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># python 通过 dict.items() 遍历出字典中的key 和 value
-</span>        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">tree_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">tree_max</span><span class="p">:</span>
-                <span class="n">res_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">res_list</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0508/009">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-009">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,递归,哈希表,二叉树"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>203 post articles, 26 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>204 post articles, 26 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
