@@ -480,6 +480,132 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,递归,折半计算"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0511/006"><h2 itemprop="headline" class="item__header">1248. 统计「优美子数组」</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">滑动窗口</code> <code class="success highlighter-rouge">按位与运算</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">滑动窗口</code> <code class="info highlighter-rouge">按位与运算</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-1248-统计优美子数组">题目 <a href="https://leetcode-cn.com/problems/count-number-of-nice-subarrays/">1248. 统计「优美子数组」</a></h3>
+<p>给你一个整数数组 <code class="highlighter-rouge">nums</code> 和一个整数 k。</p>
+
+<p>如果某个 <code class="highlighter-rouge">连续</code> 子数组中恰好有 k 个奇数数字，我们就认为这个子数组是 <code class="highlighter-rouge">「优美子数组」</code>。</p>
+
+<p>请返回这个数组中「优美子数组」的数目。</p>
+
+<h3 id="示例-1">示例 1：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [1,1,2,1,1], k = 3
+输出：2
+解释：包含 3 个奇数的子数组是 [1,1,2,1] 和 [1,2,1,1] 。
+</code></pre></div></div>
+<h3 id="示例-2">示例 2：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [2,4,6], k = 1
+输出：0
+解释：数列中不包含任何奇数，所以不存在优美子数组。
+</code></pre></div></div>
+<h3 id="示例-3">示例 3：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+输出：16
+</code></pre></div></div>
+<p> </p>
+
+<h3 id="提示">提示：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= nums.length &lt;= 50000
+1 &lt;= nums[i] &lt;= 10^5
+1 &lt;= k &lt;= nums.length
+</code></pre></div></div>
+
+<h3 id="方法一-滑动窗口">方法一 滑动窗口</h3>
+<ol>
+  <li>
+    <p>不断右移 <code class="highlighter-rouge">right</code> 指针来扩大滑动窗口，使其包含 <code class="highlighter-rouge">k</code> 个奇数；</p>
+  </li>
+  <li>
+    <p>若当前滑动窗口包含了 <code class="highlighter-rouge">k</code> 个奇数，则如下「计算当前窗口的优美子数组个数」：</p>
+    <ul>
+      <li>统计第 1 个奇数左边的偶数个数 <code class="highlighter-rouge">leftEvenCnt</code>。 这 <code class="highlighter-rouge">leftEvenCnt</code> 个偶数都可以作为「优美子数组」的起点，因此起点的选择有 <code class="highlighter-rouge">leftEvenCnt + 1</code> 种（因为可以一个偶数都不取，因此别忘了 +1 喔）。</li>
+      <li>统计第 k 个奇数右边的偶数个数 <code class="highlighter-rouge">rightEvenCnt</code> 。 这 <code class="highlighter-rouge">rightEvenCnt</code> 个偶数都可以作为「优美子数组」的终点，因此终点的选择有 <code class="highlighter-rouge">rightEvenCnt + 1</code> 种（因为可以一个偶数都不取，因此别忘了 +1 喔）。</li>
+      <li>因此「优美子数组」左右起点的选择组合数为 <code class="highlighter-rouge">(leftEvenCnt + 1) * (rightEvenCnt + 1)</code>。</li>
+    </ul>
+  </li>
+</ol>
+
+<ul>
+  <li>判断奇偶数
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+<span class="c1">// 基数</span>
+<span class="o">}</span>
+<span class="k">if</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+<span class="c1">// 偶数</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numberOfSubarrays</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">oddCnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 右指针先走，每遇到一个奇数则 oddCnt++。</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">++]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">oddCnt</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="c1">//  若当前滑动窗口 [left, right) 中有 k 个奇数了，进入此分支统计当前滑动窗口中的优美子数组个数。</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">oddCnt</span> <span class="o">==</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 先将滑动窗口的右边界向右拓展，直到遇到下一个奇数（或出界）</span>
+                <span class="c1">// rightEvenCnt 即为第 k 个奇数右边的偶数的个数</span>
+                <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">right</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">right</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">rightEvenCnt</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">tmp</span><span class="o">;</span>
+                <span class="c1">// leftEvenCnt 即为第 1 个奇数左边的偶数的个数</span>
+                <span class="kt">int</span> <span class="n">leftEvenCnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">leftEvenCnt</span><span class="o">++;</span>
+                    <span class="n">left</span><span class="o">++;</span>
+                <span class="o">}</span>
+                <span class="c1">// 第 1 个奇数左边的 leftEvenCnt 个偶数都可以作为优美子数组的起点</span>
+                <span class="c1">// (因为第1个奇数左边可以1个偶数都不取，所以起点的选择有 leftEvenCnt + 1 种）</span>
+                <span class="c1">// 第 k 个奇数右边的 rightEvenCnt 个偶数都可以作为优美子数组的终点</span>
+                <span class="c1">// (因为第k个奇数右边可以1个偶数都不取，所以终点的选择有 rightEvenCnt + 1 种）</span>
+                <span class="c1">// 所以该滑动窗口中，优美子数组左右起点的选择组合数为 (leftEvenCnt + 1) * (rightEvenCnt + 1)</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="o">(</span><span class="n">leftEvenCnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">*</span> <span class="o">(</span><span class="n">rightEvenCnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+
+                <span class="c1">// 此时 left 指向的是第 1 个奇数，因为该区间已经统计完了，因此 left 右移一位，oddCnt--</span>
+                <span class="n">left</span><span class="o">++;</span>
+                <span class="n">oddCnt</span><span class="o">--;</span> <span class="c1">// 这一步很关键 决定了执行下一个区间</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0511/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%8C%89%E4%BD%8D%E4%B8%8E%E8%BF%90%E7%AE%97">按位与运算</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,滑动窗口,按位与运算"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/post/2020/05/11/1.-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C.html"><h2 itemprop="headline" class="item__header">1. 两数之和</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">
+</div><p><a href="/post/2020/05/11/1.-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C.html">Read more</a></p></div><div class="article__info clearfix"><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0510/007"><h2 itemprop="headline" class="item__header">199. 二叉树的右视图</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
@@ -1084,292 +1210,8 @@ p、q 为不同节点且均存在于给定的二叉搜索树中。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,二叉树,迭代"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0508/012"><h2 itemprop="headline" class="item__header">9. 回文数</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">算数</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">算数</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-9-回文数">题目 <a href="https://leetcode-cn.com/problems/palindrome-number/">9. 回文数</a></h3>
-<p>判断一个整数是否是回文数。回文数是指正序（从左向右）和倒序（从右向左）读都是一样的整数。</p>
-
-<h3 id="示例-1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 121
-输出: true
-</code></pre></div></div>
-<h3 id="示例2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: -121
-输出: false
-解释: 从左向右读, 为 -121 。 从右向左读, 为 121- 。因此它不是一个回文数。
-</code></pre></div></div>
-<h3 id="示例-3">示例 3:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 10
-输出: false
-解释: 从右向左读, 为 01 。因此它不是一个回文数。
-</code></pre></div></div>
-<h3 id="进阶">进阶:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>你能不将整数转为字符串来解决这个问题吗？
-</code></pre></div></div>
-
-<h3 id="方法一-算数">方法一 算数</h3>
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
-        <span class="k">while</span><span class="o">(</span><span class="n">num</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="o">;</span>
-            <span class="n">num</span> <span class="o">/=</span> <span class="mi">10</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">cur</span> <span class="o">==</span> <span class="n">x</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">isPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="n">num</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="n">cur</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">num</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
-            <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="o">*</span><span class="mi">10</span> <span class="o">+</span> <span class="n">num</span><span class="o">%</span><span class="mi">10</span>
-            <span class="n">num</span> <span class="o">//=</span><span class="mi">10</span>
-        <span class="k">return</span> <span class="n">cur</span> <span class="o">==</span> <span class="n">x</span>
-</code></pre></div></div>
-
-<h3 id="方法二-转字符串">方法二 转字符串</h3>
-<h4 id="java-1">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">x</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">){</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="nc">String</span> <span class="n">strNum</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">strNum</span><span class="o">.</span><span class="na">length</span><span class="o">()/</span><span class="mi">2</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">strNum</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
-            <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">strNum</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">strNum</span><span class="o">.</span><span class="na">length</span><span class="o">()-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="o">);</span>
-            <span class="k">if</span><span class="o">(</span><span class="n">a</span> <span class="o">!=</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python-1">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">isPalindrome</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="n">nums</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">i</span><span class="p">]:</span>
-                <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">return</span> <span class="bp">True</span>
-</code></pre></div></div>
-
-<h3 id="方法三">方法三</h3>
-<ul>
-  <li><strong>取出后半段数字进行翻转。</strong></li>
-</ul>
-
-<p>这里需要注意的一个点就是由于回文数的位数可奇可偶，所以当它的长度是偶数时，它对折过来应该是相等的；当它的长度是奇数时，那么它对折过来后，有一个的长度需要去掉一位数（除以 10 并取整）。</p>
-
-<p>具体做法如下：</p>
-
-<ul>
-  <li>每次进行取余操作 （ %10），取出最低的数字：<code class="highlighter-rouge">y = x % 10</code></li>
-  <li>将最低的数字加到取出数的末尾：<code class="highlighter-rouge">revertNum = revertNum * 10 + y</code></li>
-  <li>每取一个最低位数字，x 都要自除以 10</li>
-  <li>判断 x 是不是小于 <code class="highlighter-rouge">revertNum</code> ，当它小于的时候，说明数字已经对半或者过半了</li>
-  <li>最后，判断奇偶数情况：如果是偶数的话，revertNum 和 x 相等；如果是奇数的话，最中间的数字就在revertNum 的最低位上，将它除以 10 以后应该和 x 相等。</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isPalindrome</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">//思考：这里大家可以思考一下，为什么末尾为 0 就可以直接返回 false</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="o">(</span><span class="n">x</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">))</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">revertedNumber</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">revertedNumber</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">revertedNumber</span> <span class="o">=</span> <span class="n">revertedNumber</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">10</span><span class="o">;</span>
-            <span class="n">x</span> <span class="o">/=</span> <span class="mi">10</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">x</span> <span class="o">==</span> <span class="n">revertedNumber</span> <span class="o">||</span> <span class="n">x</span> <span class="o">==</span> <span class="n">revertedNumber</span> <span class="o">/</span> <span class="mi">10</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0508/012">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%95%B0">算数</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-012">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,算数"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0508/010"><h2 itemprop="headline" class="item__header">572. 另一个树的子树</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">递归</code></li>
-  <li><strong>类似题型</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0508/011">100. 相同的树</a></li>
-      <li><a href="/leetcode/2020/0508/009">508. 出现次数最多的子树元素和</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="题目-572-另一个树的子树">题目 <a href="https://leetcode-cn.com/problems/subtree-of-another-tree/">572. 另一个树的子树</a></h3>
-<p>给定两个非空二叉树 s 和 t，检验 s 中是否包含和 t 具有相同结构和节点值的子树。s 的一个子树包括 s 的一个节点和这个节点的所有子孙。s 也可以看做它自身的一棵子树。</p>
-
-<h3 id="示例-1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定的树 s:
-
-     3
-    / \
-   4   5
-  / \
- 1   2
-给定的树 t：
-
-   4
-  / \
- 1   2
-返回 true，因为 t 与 s 的一个子树拥有相同的结构和节点值。
-</code></pre></div></div>
-<h3 id="示例-2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定的树 s：
-
-     3
-    / \
-   4   5
-  / \
- 1   2
-    /
-   0
-给定的树 t：
-
-   4
-  / \
- 1   2
-返回 false。
-</code></pre></div></div>
-
-<h3 id="解题思路">解题思路</h3>
-<p>要判断一个树 t 是不是树 s 的子树，那么可以判断 t 是否和树 s 的任意子树相等。那么就转化成 <a href="/leetcode/2020/0508/011">100. 相同的树</a>。
-即，这个题的做法就是在 s 的每个子节点上，判断该子节点是否和 t 相等。</p>
-
-<p>判断两个树是否相等的三个条件是与的关系，即：</p>
-
-<ol>
-  <li>当前两个树的根节点值相等；</li>
-  <li>并且，s 的左子树和 t 的左子树相等；</li>
-  <li>并且，s 的右子树和 t 的右子树相等。</li>
-</ol>
-
-<p>而判断 t 是否为 s 的子树的三个条件是或的关系，即：</p>
-
-<ol>
-  <li>当前两棵树相等；</li>
-  <li>或者，t 是 s 的左子树；</li>
-  <li>或者，t 是 s 的右子树。</li>
-</ol>
-
-<h3 id="代码">代码</h3>
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isSubtree</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">s</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 递归的结束条件</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="k">return</span> <span class="nf">subTree</span><span class="o">(</span><span class="n">s</span><span class="o">,</span><span class="n">t</span><span class="o">)</span> <span class="o">||</span> <span class="n">isSubtree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">left</span><span class="o">,</span><span class="n">t</span><span class="o">)</span> <span class="o">||</span> <span class="n">isSubtree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">right</span><span class="o">,</span><span class="n">t</span><span class="o">);</span>
-
-
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">subTree</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">s</span><span class="o">,</span><span class="nc">TreeNode</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 递归的结束条件</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">s</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">t</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">val</span><span class="o">==</span><span class="n">t</span><span class="o">.</span><span class="na">val</span> <span class="o">&amp;&amp;</span> <span class="n">subTree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">left</span><span class="o">,</span> <span class="n">t</span><span class="o">.</span><span class="na">left</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="n">subTree</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">right</span><span class="o">,</span><span class="n">t</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
-# class TreeNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-</span>
-<span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">isSubtree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-        <span class="s">"""
-        :type s: TreeNode
-        :type t: TreeNode
-        :rtype: bool
-        """</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSameTree</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSubtree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSubtree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">isSameTree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">s</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">t</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">False</span>
-        <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">val</span> <span class="o">==</span> <span class="n">t</span><span class="o">.</span><span class="n">val</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSameTree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">left</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">isSameTree</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">right</span><span class="p">)</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0508/010">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-010">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,二叉树,递归"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>204 post articles, 26 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>206 post articles, 26 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
