@@ -324,7 +324,7 @@ MFrGw6cAAAAASUVORK5CYII=" />
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0511/007"><h2 itemprop="headline" class="item__header">50. Pow(x, n)</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code> <code class="success highlighter-rouge">折半计算</code></li>
   <li><strong>思路</strong>：  <code class="info highlighter-rouge">递归</code> <code class="info highlighter-rouge">折半计算</code></li>
   <li><strong>类似题型</strong>:</li>
@@ -482,7 +482,7 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0511/006"><h2 itemprop="headline" class="item__header">1248. 统计「优美子数组」</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">滑动窗口</code> <code class="success highlighter-rouge">按位与运算</code></li>
   <li><strong>思路</strong>：  <code class="info highlighter-rouge">滑动窗口</code> <code class="info highlighter-rouge">按位与运算</code></li>
   <li><strong>类似题型</strong>:</li>
@@ -601,14 +601,112 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,滑动窗口,按位与运算"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/post/2020/05/11/1.-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C.html"><h2 itemprop="headline" class="item__header">1. 两数之和</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">
-</div><p><a href="/post/2020/05/11/1.-%E4%B8%A4%E6%95%B0%E4%B9%8B%E5%92%8C.html">Read more</a></p></div><div class="article__info clearfix"><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00"></div>
+          <header><a href="/leetcode/2020/0511/005"><h2 itemprop="headline" class="item__header">1. 两数之和</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">前缀和</code> <code class="success highlighter-rouge">暴力</code>  <code class="success highlighter-rouge">哈希表</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">暴力</code>  <code class="info highlighter-rouge">哈希表</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-1-两数之和">题目 <a href="https://leetcode-cn.com/problems/two-sum/">1. 两数之和</a></h3>
+<p>给定一个整数数组 <code class="highlighter-rouge">nums</code> 和一个目标值 <code class="highlighter-rouge">target</code>，请你在该数组中找出和为目标值的那 <code class="highlighter-rouge">两个</code> 整数，并返回他们的数组下标。</p>
+
+<p>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。</p>
+
+<h3 id="示例">示例:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定 nums = [2, 7, 11, 15], target = 9
+
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]
+</code></pre></div></div>
+
+<h3 id="方法一-暴力">方法一 暴力</h3>
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">twoSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]+</span><span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">])==</span><span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                    <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+                    <span class="k">break</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="方法二-前缀和-哈希表">方法二 前缀和 哈希表</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li>这道题本身如果通过暴力遍历的话也是很容易解决的，时间复杂度在 $O(n^2)$</li>
+  <li>由于哈希查找的时间复杂度为 $O(1)$，所以可以利用哈希容器 <code class="highlighter-rouge">map</code> 降低时间复杂度</li>
+  <li>遍历数组 <code class="highlighter-rouge">nums</code>，<code class="highlighter-rouge">i</code> 为当前下标，每个值都判断map中是否存在 <code class="highlighter-rouge">target-nums[i]</code> 的 <code class="highlighter-rouge">key</code> 值</li>
+  <li>如果存在则找到了两个值，如果不存在则将当前的 <code class="highlighter-rouge">(nums[i],i)</code> 存入 <code class="highlighter-rouge">map</code> 中，继续遍历直到找到为止</li>
+  <li>如果最终都没有结果则抛出异常</li>
+  <li>时间复杂度：$O(n)$</li>
+</ul>
+
+<h4 id="java-1">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">twoSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="mi">2</span><span class="o">];</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+                <span class="n">res</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+                <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span><span class="n">i</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">twoSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="s">"""
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nums_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="o">-</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums_dict</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nums_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">target</span> <span class="o">-</span> <span class="n">num</span><span class="p">))</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">res</span>
+            <span class="n">nums_dict</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0511/005">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%89%8D%E7%BC%80%E5%92%8C">前缀和</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,前缀和,暴力,哈希表"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0510/007"><h2 itemprop="headline" class="item__header">199. 二叉树的右视图</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">DFS</code> <code class="success highlighter-rouge">BFS</code></li>
   <li><strong>思路</strong>： <code class="info highlighter-rouge">DFS</code> <code class="info highlighter-rouge">BFS</code></li>
   <li><strong>类似题型</strong>:</li>
@@ -821,7 +919,7 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0509/007"><h2 itemprop="headline" class="item__header">213. 打家劫舍 II</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">动态规划</code></li>
   <li><strong>思路</strong>： <code class="info highlighter-rouge">动态规划</code></li>
   <li><strong>类似题型</strong>:
