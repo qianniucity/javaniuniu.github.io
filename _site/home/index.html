@@ -322,6 +322,226 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0512/005"><h2 itemprop="headline" class="item__header">155. 最小栈</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">前缀和</code> <code class="success highlighter-rouge">暴力</code>  <code class="success highlighter-rouge">哈希表</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">暴力</code>  <code class="info highlighter-rouge">哈希表</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+<h3 id="题目-155-最小栈">题目 <a href="https://leetcode-cn.com/problems/min-stack/">155. 最小栈</a></h3>
+<p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</p>
+
+<ul>
+  <li>push(x) —— 将元素 x 推入栈中。</li>
+  <li>pop() —— 删除栈顶的元素。</li>
+  <li>top() —— 获取栈顶元素。</li>
+  <li>getMin() —— 检索栈中的最小元素。
+ </li>
+</ul>
+
+<h3 id="示例">示例:</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+输出：
+[null,null,null,null,-3,null,0,-2]
+
+解释：
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin();   --&gt; 返回 -3.
+minStack.pop();
+minStack.top();      --&gt; 返回 0.
+minStack.getMin();   --&gt; 返回 -2.
+</code></pre></div></div>
+
+<h3 id="提示">提示：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pop、top 和 getMin 操作总是在 非空栈 上调用。
+</code></pre></div></div>
+
+<h3 id="方法一-数组">方法一 数组</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li>我们先用最快捷的方式做题，在慢慢优化代码</li>
+  <li>使用数组，做数据的增删差操作</li>
+  <li>
+    <p>而对于获取最小值 使用 <code class="highlighter-rouge">Collections.min(list)</code> 获取
+```java
+class MinStack {</p>
+
+    <p>// 数据
+  List<Integer> list = null;
+  /** initialize your data structure here. */
+  public MinStack() {
+      list = new ArrayList&lt;&gt;();
+  }</Integer></p>
+
+    <p>public void push(int x) {
+      list.add(x);</p>
+
+    <p>}</p>
+
+    <p>public void pop() {
+      list.remove(list.size()-1);</p>
+
+    <p>}</p>
+
+    <p>public int top() {
+      return list.get(list.size()-1);</p>
+
+    <p>}</p>
+
+    <p>public int getMin() {
+      return Collections.min(list);
+  }
+}</p>
+  </li>
+</ul>
+
+<p>/**</p>
+<ul>
+  <li>Your MinStack object will be instantiated and called as such:</li>
+  <li>MinStack obj = new MinStack();</li>
+  <li>obj.push(x);</li>
+  <li>obj.pop();</li>
+  <li>int param_3 = obj.top();</li>
+  <li>int param_4 = obj.getMin();
+ */
+```</li>
+</ul>
+
+<h3 id="方法二-辅助栈">方法二 辅助栈</h3>
+<h4 id="解题思路-1">解题思路</h4>
+<ul>
+  <li>显然 直接使用 <code class="highlighter-rouge">Collections.min(list)</code> 拿到最最小数 会触发隐藏剧情(Collections.min 是怎么实现的)</li>
+  <li>是的，这里可以用栈，而且用两个，一个是数据栈，一个是辅助栈</li>
+  <li>数据栈好理解 而辅助栈则是用在 获取最小值中， 通过把最小值放在辅助栈栈顶，来获取最小数据</li>
+  <li>
+    <p>上代码
+```java
+class MinStack {</p>
+
+    <p>// 数据栈
+  private Stack<Integer> data;
+  // 辅助栈 用于获取最小值
+  private Stack<Integer> helper;
+  /** initialize your data structure here. */
+  public MinStack() {
+      data = new Stack&lt;&gt;();
+      helper = new Stack&lt;&gt;();
+  }</Integer></Integer></p>
+
+    <p>public void push(int x) {
+      data.add(x);
+      if (helper.isEmpty() || helper.peek()&gt;=x)
+          helper.add(x);
+      else
+          helper.add(helper.peek());</p>
+
+    <p>}</p>
+
+    <p>public void pop() {
+      if(!data.isEmpty()) {
+          data.pop();
+          helper.pop();
+      }</p>
+
+    <p>}</p>
+
+    <p>public int top() {
+      if(!data.isEmpty())
+          return data.peek();
+      throw new RuntimeException(“栈中元素为空，此操作非法”);</p>
+
+    <p>}</p>
+
+    <p>public int getMin() {
+      if(!data.isEmpty()) {
+          return helper.peek();
+      }
+      throw new RuntimeException(“栈中元素为空，此操作非法”);</p>
+
+    <p>}
+}</p>
+  </li>
+</ul>
+
+<p>/**</p>
+<ul>
+  <li>Your MinStack object will be instantiated and called as such:</li>
+  <li>MinStack obj = new MinStack();</li>
+  <li>obj.push(x);</li>
+  <li>obj.pop();</li>
+  <li>int param_3 = obj.top();</li>
+  <li>int param_4 = obj.getMin();
+ */
+```</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MinStack</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        initialize your data structure here.
+        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 数据栈
+</span>        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 辅助栈
+</span>
+
+    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">getMin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+
+
+<span class="c1"># Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(x)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
+</span></code></pre></div></div>
+</div><p><a href="/leetcode/2020/0512/005">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%89%8D%E7%BC%80%E5%92%8C">前缀和</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0512-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,前缀和,暴力,哈希表"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0511/007"><h2 itemprop="headline" class="item__header">50. Pow(x, n)</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1165,151 +1385,8 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 09, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0509-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,动态规划"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0508/008"><h2 itemprop="headline" class="item__header">面试题68 - I. 二叉搜索树的最近公共祖先</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">迭代</code> <code class="success highlighter-rouge">二叉树</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">迭代</code> <code class="info highlighter-rouge">二叉树</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-面试题68---i-二叉搜索树的最近公共祖先">题目 <a href="https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-zui-jin-gong-gong-zu-xian-lcof/">面试题68 - I. 二叉搜索树的最近公共祖先</a></h3>
-
-<p>给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。</p>
-
-<p>公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（ <strong>一个节点也可以是它自己的祖先</strong>）。”</p>
-
-<p>例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]</p>
-
-<p><img src="/assets/images/leetcode/0508/binarysearchtree_improved.png" alt="pic1" /></p>
-
-<h3 id="示例-1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
-输出: 6
-解释: 节点 2 和节点 8 的最近公共祖先是 6。
-</code></pre></div></div>
-<h3 id="示例-2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
-输出: 2
-解释: 节点 2 和节点 4 的最近公共祖先是 2, 因为根据定义最近公共祖先节点可以为节点本身。
-</code></pre></div></div>
-
-<h3 id="说明">说明:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>所有节点的值都是唯一的。
-p、q 为不同节点且均存在于给定的二叉搜索树中。
-</code></pre></div></div>
-
-<h3 id="方法一-迭代">方法一 迭代</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li><strong>祖先的定义</strong>： 若节点 <code class="highlighter-rouge">p</code> 在节点 <code class="highlighter-rouge">root</code> 的左（右）子树中，或 <code class="highlighter-rouge">p = root</code> ，则称 <code class="highlighter-rouge">root</code> 是 <code class="highlighter-rouge">p</code> 的祖先。</li>
-</ul>
-
-<p><img src="/assets/images/leetcode/0508/28242ac7394dfa60a3598a4cf145af9b8311d8f325838e5875d65f6d4ed692fa-Picture1.png" alt="pic2" /></p>
-
-<p>最近公共祖先的定义： 设节点 <code class="highlighter-rouge">root</code> 为节点 <code class="highlighter-rouge">p, q</code> 的某公共祖先，若其左子节点 <code class="highlighter-rouge">root.left</code> 和右子节点 <code class="highlighter-rouge">root.right</code> 都不是 p,q 的公共祖先，则称 <code class="highlighter-rouge">root</code> 是 “最近的公共祖先” 。</p>
-
-<p>根据以上定义，若 <code class="highlighter-rouge">root</code> 是 <code class="highlighter-rouge">p, q</code> 的 最近公共祖先 ，则只可能为以下情况之一：</p>
-
-<ol>
-  <li><code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">q</code> 在 root 的子树中，且分列 <code class="highlighter-rouge">root</code> 的 异侧（即分别在左、右子树中）；</li>
-  <li><code class="highlighter-rouge">p = root</code> ，且 <code class="highlighter-rouge">q</code> 在 <code class="highlighter-rouge">root</code> 的左或右子树中；</li>
-  <li><code class="highlighter-rouge">q = root</code> ，且 <code class="highlighter-rouge">p</code> 在 <code class="highlighter-rouge">root</code> 的左或右子树中；</li>
-</ol>
-
-<p><img src="/assets/images/leetcode/0508/2e9f800c678fa65940262f8f355d6ecf56c693594ca0db1f8e3b266181a21b41-Picture2.png" alt="pic3" /></p>
-
-<p>本题给定了两个重要条件：① 树为 <strong>二叉搜索树</strong> ，② 树的所有节点的值都是 <strong>唯一</strong> 的。根据以上条件，可方便地判断 <code class="highlighter-rouge">p,q</code> 与 <code class="highlighter-rouge">root</code> 的子树关系，即：</p>
-
-<ul>
-  <li>若 <code class="highlighter-rouge">root.val &lt; p.val</code> ，则 <code class="highlighter-rouge">p</code> 在 <code class="highlighter-rouge">root</code> 右子树 中；</li>
-  <li>若 <code class="highlighter-rouge">root.val &gt; p.val</code> ，则 <code class="highlighter-rouge">p</code> 在 <code class="highlighter-rouge">root</code> 左子树 中；</li>
-  <li>若 <code class="highlighter-rouge">root.val = p.val</code> ，则 <code class="highlighter-rouge">p</code> 和 <code class="highlighter-rouge">root</code> 指向 同一节点 。</li>
-</ul>
-
-<h3 id="方法一迭代">方法一：迭代</h3>
-<ol>
-  <li>循环搜索： 当节点 <code class="highlighter-rouge">root</code> 为空时跳出；
-    <ol>
-      <li>当 <code class="highlighter-rouge">p, q</code> 都在 <code class="highlighter-rouge">root</code> 的 右子树 中，则遍历至 <code class="highlighter-rouge">root.right</code> ；</li>
-      <li>否则，当 <code class="highlighter-rouge">p, q</code> 都在 <code class="highlighter-rouge">root</code> 的 左子树 中，则遍历至 <code class="highlighter-rouge">root.left</code> ；</li>
-      <li>否则，说明找到了 最近公共祖先 ，跳出。</li>
-    </ol>
-  </li>
-  <li>返回值： 最近公共祖先 <code class="highlighter-rouge">root</code> 。</li>
-</ol>
-
-<h3 id="代码">代码</h3>
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">TreeNode</span> <span class="nf">lowestCommonAncestor</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">p</span><span class="o">,</span> <span class="nc">TreeNode</span> <span class="n">q</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">while</span><span class="o">(</span><span class="n">root</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">.</span><span class="na">val</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&lt;</span> <span class="n">q</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="c1">// p,q 都在 root 的右子树中</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">;</span> <span class="c1">// 遍历至右子节点</span>
-            <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">val</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">.</span><span class="na">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="na">val</span><span class="o">)</span> <span class="c1">// p,q 都在 root 的左子树中</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">;</span> <span class="c1">// 遍历至左子节点</span>
-            <span class="k">else</span> <span class="k">break</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">root</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-</span>
-<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="s">'TreeNode'</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="s">'TreeNode'</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="s">'TreeNode'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s">'TreeNode'</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">val</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span><span class="p">,</span><span class="n">p</span> <span class="c1"># 保证 p.val &lt; q.val
-</span>        <span class="k">while</span> <span class="n">root</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">.</span><span class="n">val</span><span class="p">:</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">right</span> <span class="c1"># 右子数
-</span>            <span class="k">elif</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">val</span><span class="p">:</span>
-                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">left</span> <span class="c1"># 左子数
-</span>            <span class="k">else</span><span class="p">:</span>
-                <span class="k">break</span>
-        <span class="k">return</span> <span class="n">root</span>
-</code></pre></div></div>
-
-<h3 id="方法二-递归">方法二 递归</h3>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 递归
-</span><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">lowestCommonAncestor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
-        <span class="s">"""
-        :type root: TreeNode
-        :type p: TreeNode
-        :type q: TreeNode
-        :rtype: TreeNode
-        """</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">root</span><span class="p">:</span> <span class="k">return</span>
-        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">.</span><span class="n">val</span> <span class="ow">and</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">q</span><span class="o">.</span><span class="n">val</span><span class="p">:</span>
-            <span class="n">root</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">q</span><span class="o">.</span><span class="n">val</span> <span class="ow">and</span> <span class="n">root</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">p</span><span class="o">.</span><span class="n">val</span><span class="p">:</span>
-            <span class="n">root</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">lowestCommonAncestor</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">q</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">root</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0508/008">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E8%BF%AD%E4%BB%A3">迭代</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0508-008">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,二叉树,迭代"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>206 post articles, 26 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>207 post articles, 26 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
