@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-12T11:27:47+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己能在技术这条路上能坚持多久
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-12T11:31:49+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己能在技术这条路上能坚持多久
 </subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">155. 最小栈</title><link href="http://localhost:4000/leetcode/2020/0512/005" rel="alternate" type="text/html" title="155. 最小栈" /><published>2020-05-12T00:00:00+08:00</published><updated>2020-05-12T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0512/155.%20%E6%9C%80%E5%B0%8F%E6%A0%88</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0512/005">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;前缀和&lt;/code&gt; &lt;code class=&quot;success highlighter-rouge&quot;&gt;暴力&lt;/code&gt;  &lt;code class=&quot;success highlighter-rouge&quot;&gt;哈希表&lt;/code&gt;&lt;/li&gt;
@@ -46,51 +46,48 @@ minStack.getMin();   --&amp;gt; 返回 -2.
 &lt;ul&gt;
   &lt;li&gt;我们先用最快捷的方式做题，在慢慢优化代码&lt;/li&gt;
   &lt;li&gt;使用数组，做数据的增删差操作&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;而对于获取最小值 使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;Collections.min(list)&lt;/code&gt; 获取
-```java
-class MinStack {&lt;/p&gt;
-
-    &lt;p&gt;// 数据
-  List&lt;Integer&gt; list = null;
-  /** initialize your data structure here. */
-  public MinStack() {
-      list = new ArrayList&amp;lt;&amp;gt;();
-  }&lt;/Integer&gt;&lt;/p&gt;
-
-    &lt;p&gt;public void push(int x) {
-      list.add(x);&lt;/p&gt;
-
-    &lt;p&gt;}&lt;/p&gt;
-
-    &lt;p&gt;public void pop() {
-      list.remove(list.size()-1);&lt;/p&gt;
-
-    &lt;p&gt;}&lt;/p&gt;
-
-    &lt;p&gt;public int top() {
-      return list.get(list.size()-1);&lt;/p&gt;
-
-    &lt;p&gt;}&lt;/p&gt;
-
-    &lt;p&gt;public int getMin() {
-      return Collections.min(list);
-  }
-}&lt;/p&gt;
-  &lt;/li&gt;
+  &lt;li&gt;而对于获取最小值 使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;Collections.min(list)&lt;/code&gt; 获取&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;/**&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Your MinStack object will be instantiated and called as such:&lt;/li&gt;
-  &lt;li&gt;MinStack obj = new MinStack();&lt;/li&gt;
-  &lt;li&gt;obj.push(x);&lt;/li&gt;
-  &lt;li&gt;obj.pop();&lt;/li&gt;
-  &lt;li&gt;int param_3 = obj.top();&lt;/li&gt;
-  &lt;li&gt;int param_4 = obj.getMin();
- */
-```&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h4 id=&quot;java&quot;&gt;java&lt;/h4&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MinStack&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;// 数据&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;/** initialize your data structure here. */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MinStack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;top&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getMin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h3 id=&quot;方法二-辅助栈&quot;&gt;方法二 辅助栈&lt;/h3&gt;
 &lt;h4 id=&quot;解题思路-1&quot;&gt;解题思路&lt;/h4&gt;
@@ -98,68 +95,66 @@ class MinStack {&lt;/p&gt;
   &lt;li&gt;显然 直接使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;Collections.min(list)&lt;/code&gt; 拿到最最小数 会触发隐藏剧情(Collections.min 是怎么实现的)&lt;/li&gt;
   &lt;li&gt;是的，这里可以用栈，而且用两个，一个是数据栈，一个是辅助栈&lt;/li&gt;
   &lt;li&gt;数据栈好理解 而辅助栈则是用在 获取最小值中， 通过把最小值放在辅助栈栈顶，来获取最小数据&lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;上代码
-```java
-class MinStack {&lt;/p&gt;
-
-    &lt;p&gt;// 数据栈
-  private Stack&lt;Integer&gt; data;
-  // 辅助栈 用于获取最小值
-  private Stack&lt;Integer&gt; helper;
-  /** initialize your data structure here. */
-  public MinStack() {
-      data = new Stack&amp;lt;&amp;gt;();
-      helper = new Stack&amp;lt;&amp;gt;();
-  }&lt;/Integer&gt;&lt;/Integer&gt;&lt;/p&gt;
-
-    &lt;p&gt;public void push(int x) {
-      data.add(x);
-      if (helper.isEmpty() || helper.peek()&amp;gt;=x)
-          helper.add(x);
-      else
-          helper.add(helper.peek());&lt;/p&gt;
-
-    &lt;p&gt;}&lt;/p&gt;
-
-    &lt;p&gt;public void pop() {
-      if(!data.isEmpty()) {
-          data.pop();
-          helper.pop();
-      }&lt;/p&gt;
-
-    &lt;p&gt;}&lt;/p&gt;
-
-    &lt;p&gt;public int top() {
-      if(!data.isEmpty())
-          return data.peek();
-      throw new RuntimeException(“栈中元素为空，此操作非法”);&lt;/p&gt;
-
-    &lt;p&gt;}&lt;/p&gt;
-
-    &lt;p&gt;public int getMin() {
-      if(!data.isEmpty()) {
-          return helper.peek();
-      }
-      throw new RuntimeException(“栈中元素为空，此操作非法”);&lt;/p&gt;
-
-    &lt;p&gt;}
-}&lt;/p&gt;
-  &lt;/li&gt;
+  &lt;li&gt;上代码&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;/**&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Your MinStack object will be instantiated and called as such:&lt;/li&gt;
-  &lt;li&gt;MinStack obj = new MinStack();&lt;/li&gt;
-  &lt;li&gt;obj.push(x);&lt;/li&gt;
-  &lt;li&gt;obj.pop();&lt;/li&gt;
-  &lt;li&gt;int param_3 = obj.top();&lt;/li&gt;
-  &lt;li&gt;int param_4 = obj.getMin();
- */
-```&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h4 id=&quot;java-1&quot;&gt;java&lt;/h4&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MinStack&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
 
+    &lt;span class=&quot;c1&quot;&gt;// 数据栈&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// 辅助栈 用于获取最小值&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;cm&quot;&gt;/** initialize your data structure here. */&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;MinStack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stack&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;peek&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&amp;gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;peek&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;pop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;top&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;peek&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;栈中元素为空，此操作非法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getMin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isEmpty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;peek&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RuntimeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;栈中元素为空，此操作非法&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;python&quot;&gt;python&lt;/h4&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MinStack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -201,7 +196,7 @@ class MinStack {&lt;/p&gt;
 # obj.pop()
 # param_3 = obj.top()
 # param_4 = obj.getMin()
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="前缀和" /><category term="暴力" /><category term="哈希表" /><summary type="html">难度：简单 本题涉及算法： 前缀和 暴力 哈希表 思路： 前缀和 暴力 哈希表 类似题型: 题目 155. 最小栈 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。 push(x) —— 将元素 x 推入栈中。 pop() —— 删除栈顶的元素。 top() —— 获取栈顶元素。 getMin() —— 检索栈中的最小元素。   示例: 输入： [&quot;MinStack&quot;,&quot;push&quot;,&quot;push&quot;,&quot;push&quot;,&quot;getMin&quot;,&quot;pop&quot;,&quot;top&quot;,&quot;getMin&quot;] [[],[-2],[0],[-3],[],[],[],[]] 输出： [null,null,null,null,-3,null,0,-2] 解释： MinStack minStack = new MinStack(); minStack.push(-2); minStack.push(0); minStack.push(-3); minStack.getMin(); --&amp;gt; 返回 -3. minStack.pop(); minStack.top(); --&amp;gt; 返回 0. minStack.getMin(); --&amp;gt; 返回 -2. 提示： pop、top 和 getMin 操作总是在 非空栈 上调用。 方法一 数组 解题思路 我们先用最快捷的方式做题，在慢慢优化代码 使用数组，做数据的增删差操作 而对于获取最小值 使用 Collections.min(list) 获取 ```java class MinStack { // 数据 List list = null; /** initialize your data structure here. */ public MinStack() { list = new ArrayList&amp;lt;&amp;gt;(); } public void push(int x) { list.add(x); } public void pop() { list.remove(list.size()-1); } public int top() { return list.get(list.size()-1); } public int getMin() { return Collections.min(list); } } /** Your MinStack object will be instantiated and called as such: MinStack obj = new MinStack(); obj.push(x); obj.pop(); int param_3 = obj.top(); int param_4 = obj.getMin(); */ ``` 方法二 辅助栈 解题思路 显然 直接使用 Collections.min(list) 拿到最最小数 会触发隐藏剧情(Collections.min 是怎么实现的) 是的，这里可以用栈，而且用两个，一个是数据栈，一个是辅助栈 数据栈好理解 而辅助栈则是用在 获取最小值中， 通过把最小值放在辅助栈栈顶，来获取最小数据 上代码 ```java class MinStack { // 数据栈 private Stack data; // 辅助栈 用于获取最小值 private Stack helper; /** initialize your data structure here. */ public MinStack() { data = new Stack&amp;lt;&amp;gt;(); helper = new Stack&amp;lt;&amp;gt;(); } public void push(int x) { data.add(x); if (helper.isEmpty() || helper.peek()&amp;gt;=x) helper.add(x); else helper.add(helper.peek()); } public void pop() { if(!data.isEmpty()) { data.pop(); helper.pop(); } } public int top() { if(!data.isEmpty()) return data.peek(); throw new RuntimeException(“栈中元素为空，此操作非法”); } public int getMin() { if(!data.isEmpty()) { return helper.peek(); } throw new RuntimeException(“栈中元素为空，此操作非法”); } } /** Your MinStack object will be instantiated and called as such: MinStack obj = new MinStack(); obj.push(x); obj.pop(); int param_3 = obj.top(); int param_4 = obj.getMin(); */ ``` class MinStack: def __init__(self): &quot;&quot;&quot; initialize your data structure here. &quot;&quot;&quot; self.stack = [] # 数据栈 self.helper = [] # 辅助栈 def push(self, x: int) -&amp;gt; None: self.stack.append(x) if not self.helper or self.helper[-1] &amp;gt;= x: self.helper.append(x) else: self.helper.append(self.helper[-1]) def pop(self) -&amp;gt; None: if self.stack: self.helper.pop() return self.stack.pop() def top(self) -&amp;gt; int: if self.stack: return self.stack[-1] def getMin(self) -&amp;gt; int: if self.helper: return self.helper[-1] # Your MinStack object will be instantiated and called as such: # obj = MinStack() # obj.push(x) # obj.pop() # param_3 = obj.top() # param_4 = obj.getMin()</summary></entry><entry><title type="html">快速幂</title><link href="http://localhost:4000/alog/2020/0512/004" rel="alternate" type="text/html" title="快速幂" /><published>2020-05-12T00:00:00+08:00</published><updated>2020-05-12T00:00:00+08:00</updated><id>http://localhost:4000/alog/2020/0512/%E5%BF%AB%E9%80%9F%E5%B9%82</id><content type="html" xml:base="http://localhost:4000/alog/2020/0512/004">&lt;ul&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="前缀和" /><category term="暴力" /><category term="哈希表" /><summary type="html">难度：简单 本题涉及算法： 前缀和 暴力 哈希表 思路： 前缀和 暴力 哈希表 类似题型: 题目 155. 最小栈 设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。 push(x) —— 将元素 x 推入栈中。 pop() —— 删除栈顶的元素。 top() —— 获取栈顶元素。 getMin() —— 检索栈中的最小元素。   示例: 输入： [&quot;MinStack&quot;,&quot;push&quot;,&quot;push&quot;,&quot;push&quot;,&quot;getMin&quot;,&quot;pop&quot;,&quot;top&quot;,&quot;getMin&quot;] [[],[-2],[0],[-3],[],[],[],[]] 输出： [null,null,null,null,-3,null,0,-2] 解释： MinStack minStack = new MinStack(); minStack.push(-2); minStack.push(0); minStack.push(-3); minStack.getMin(); --&amp;gt; 返回 -3. minStack.pop(); minStack.top(); --&amp;gt; 返回 0. minStack.getMin(); --&amp;gt; 返回 -2. 提示： pop、top 和 getMin 操作总是在 非空栈 上调用。 方法一 数组 解题思路 我们先用最快捷的方式做题，在慢慢优化代码 使用数组，做数据的增删差操作 而对于获取最小值 使用 Collections.min(list) 获取 java class MinStack { // 数据 List&amp;lt;Integer&amp;gt; list = null; /** initialize your data structure here. */ public MinStack() { list = new ArrayList&amp;lt;&amp;gt;(); } public void push(int x) { list.add(x); } public void pop() { list.remove(list.size()-1); } public int top() { return list.get(list.size()-1); } public int getMin() { return Collections.min(list); } } /** * Your MinStack object will be instantiated and called as such: * MinStack obj = new MinStack(); * obj.push(x); * obj.pop(); * int param_3 = obj.top(); * int param_4 = obj.getMin(); */ 方法二 辅助栈 解题思路 显然 直接使用 Collections.min(list) 拿到最最小数 会触发隐藏剧情(Collections.min 是怎么实现的) 是的，这里可以用栈，而且用两个，一个是数据栈，一个是辅助栈 数据栈好理解 而辅助栈则是用在 获取最小值中， 通过把最小值放在辅助栈栈顶，来获取最小数据 上代码 java class MinStack { // 数据栈 private Stack&amp;lt;Integer&amp;gt; data; // 辅助栈 用于获取最小值 private Stack&amp;lt;Integer&amp;gt; helper; /** initialize your data structure here. */ public MinStack() { data = new Stack&amp;lt;&amp;gt;(); helper = new Stack&amp;lt;&amp;gt;(); } public void push(int x) { data.add(x); if (helper.isEmpty() || helper.peek()&amp;gt;=x) helper.add(x); else helper.add(helper.peek()); } public void pop() { if(!data.isEmpty()) { data.pop(); helper.pop(); } } public int top() { if(!data.isEmpty()) return data.peek(); throw new RuntimeException(&quot;栈中元素为空，此操作非法&quot;); } public int getMin() { if(!data.isEmpty()) { return helper.peek(); } throw new RuntimeException(&quot;栈中元素为空，此操作非法&quot;); } } /** * Your MinStack object will be instantiated and called as such: * MinStack obj = new MinStack(); * obj.push(x); * obj.pop(); * int param_3 = obj.top(); * int param_4 = obj.getMin(); */ python class MinStack: def __init__(self): &quot;&quot;&quot; initialize your data structure here. &quot;&quot;&quot; self.stack = [] # 数据栈 self.helper = [] # 辅助栈 def push(self, x: int) -&amp;gt; None: self.stack.append(x) if not self.helper or self.helper[-1] &amp;gt;= x: self.helper.append(x) else: self.helper.append(self.helper[-1]) def pop(self) -&amp;gt; None: if self.stack: self.helper.pop() return self.stack.pop() def top(self) -&amp;gt; int: if self.stack: return self.stack[-1] def getMin(self) -&amp;gt; int: if self.helper: return self.helper[-1] # Your MinStack object will be instantiated and called as such: # obj = MinStack() # obj.push(x) # obj.pop() # param_3 = obj.top() # param_4 = obj.getMin()</summary></entry><entry><title type="html">快速幂</title><link href="http://localhost:4000/alog/2020/0512/004" rel="alternate" type="text/html" title="快速幂" /><published>2020-05-12T00:00:00+08:00</published><updated>2020-05-12T00:00:00+08:00</updated><id>http://localhost:4000/alog/2020/0512/%E5%BF%AB%E9%80%9F%E5%B9%82</id><content type="html" xml:base="http://localhost:4000/alog/2020/0512/004">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;类似题目&lt;/strong&gt;:
     &lt;ul&gt;
       &lt;li&gt;&lt;a href=&quot;/leetcode/2020/0511/007&quot;&gt;50. Pow(x, n)&lt;/a&gt;&lt;/li&gt;
