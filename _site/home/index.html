@@ -542,6 +542,75 @@ class MinStack {</p>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0512-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-12T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,前缀和,暴力,哈希表"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/alog/2020/0512/004"><h2 itemprop="headline" class="item__header">快速幂</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>类似题目</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0511/007">50. Pow(x, n)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="快速幂">快速幂</h3>
+<p>计算 $x^ n$ 通常需要 $n$ 次乘法, 时间复杂度为 $O(n)$ , 当 $n$ 非常大的时候, 运算效率很低.</p>
+
+<p>快速幂是通过把 $n$ 转化为二进制来实现的. 例如: 计算 $x^{14}$, 14 可以用二进制表示为:</p>
+
+<p>$14 = (1110)_ 2 = 1 * 2^3 + 1 * 2^2 + 1 * 2^1 + 0 * 2^0 $</p>
+
+<p>那么对应的乘法可以表示为:</p>
+
+<p>$x^{14} = x^{2 ^3} * x^{2^2} * x^{2 ^1} $</p>
+
+<p>转换后乘法运算次数减少, 每次计算 $x^{2^n}$, 再决定是否将这个数字加入到最终结果里面去. 代码如下:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fpowx</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">*</span> <span class="n">x</span>
+        <span class="c1"># compute x^2 x^4 x^8
+</span>        <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span>
+        <span class="n">n</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+
+<h3 id="乘法防止溢出">乘法防止溢出</h3>
+<p><strong>注: 对于 python 没有任何帮助, python整数直接相乘取模会快10倍</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>f_multi: 0.030360s
+s_multi: 0.003781s
+</code></pre></div></div>
+<p>防止溢出的乘法和快速幂类似, 出现的原因是, 想两个数直接相乘发生溢出时, 改为相加运算, 并且可以直接取模. 这样保证了数据的正确性.</p>
+
+<p>例如 $x\times 14$ 可以转化为:</p>
+
+<p>$x\times 14 = 8\times x + 4\times x + 2\times x$</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">fmulti</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">9</span> <span class="o">+</span> <span class="mi">7</span><span class="p">):</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">m</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="n">m</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+        <span class="n">res</span> <span class="o">%=</span> <span class="n">mod</span>
+        <span class="n">n</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+</div><p><a href="/alog/2020/0512/004">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%BF%AB%E9%80%9F%E5%B9%82">快速幂</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%B9%98%E6%B3%95%E9%98%B2%E6%AD%A2%E6%BA%A2%E5%87%BA">乘法防止溢出</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0512-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,快速幂,乘法防止溢出"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0511/007"><h2 itemprop="headline" class="item__header">50. Pow(x, n)</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -686,6 +755,55 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
         <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">myPow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myPow</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="快速幂">快速幂</h3>
+<p>计算 $x^ n$ 通常需要 $n$ 次乘法, 时间复杂度为 $O(n)$ , 当 $n$ 非常大的时候, 运算效率很低.</p>
+
+<p>快速幂是通过把 $n$ 转化为二进制来实现的. 例如: 计算 $x^{14}$, 14 可以用二进制表示为:</p>
+
+<p>$14 = (1110)_ 2 = 1 * 2^3 + 1 * 2^2 + 1 * 2^1 + 0 * 2^0 $</p>
+
+<p>那么对应的乘法可以表示为:</p>
+
+<p>$x^{14} = x^{2 ^3} * x^{2^2} * x^{2 ^1} $</p>
+
+<p>转换后乘法运算次数减少, 每次计算 $x^{2^n}$, 再决定是否将这个数字加入到最终结果里面去. 代码如下:</p>
+
+<h4 id="python-2">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">myPow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span>
+        <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">res</span> <span class="o">*=</span> <span class="n">x</span>
+            <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">res</span>
+
+</code></pre></div></div>
+
+<h4 id="java-2">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">res</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
+        <span class="kt">long</span> <span class="n">b</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span> <span class="c1">// 防止 int 溢出， 使用 long</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">b</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">b</span> <span class="o">&gt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">((</span><span class="n">b</span><span class="o">&amp;</span><span class="mi">1</span><span class="o">)</span> <span class="o">==</span><span class="mi">1</span><span class="o">)</span>
+                <span class="n">res</span> <span class="o">*=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span><span class="o">;</span>
+            <span class="n">b</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 </div><p><a href="/leetcode/2020/0511/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
@@ -1248,145 +1366,8 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 09, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0509-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,动态规划"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/alog/2020/0509/004"><h2 itemprop="headline" class="item__header">图解动态规划的解题四步骤</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>类似题目</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0402/013">198. 打家劫舍</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="图解动态规划的解题四步骤">图解动态规划的解题四步骤</h3>
-
-<p>如果你对于动态规划还不是很了解，或者没怎么做过动态规划的题目的话，那么 House Robber （小偷问题）这道题是一个非常好的入门题目。本文会以 House Robber 题目为例子，讲解动态规划题目的四个基本步骤。</p>
-
-<p>动态规划的的四个解题步骤是：</p>
-
-<ul>
-  <li>定义子问题</li>
-  <li>写出子问题的递推关系</li>
-  <li>确定 DP 数组的计算顺序</li>
-  <li>空间优化（可选）</li>
-</ul>
-
-<p>下面我们一步一步地进行讲解。</p>
-
-<h3 id="步骤一定义子问题">步骤一：定义子问题</h3>
-<p>稍微接触过一点动态规划的朋友都知道动态规划有一个“子问题”的定义。什么是子问题？子问题是和原问题相似，但规模较小的问题。例如这道小偷问题，原问题是“从全部房子中能偷到的最大金额”，将问题的规模缩小，子问题就是“从 k 个房子中能偷到的最大金额”，用 f(k) 表示。</p>
-
-<p><img src="/assets/images/leetcode/0402/91c71fba111b52580bd0f99bd77f386ae26055b6ffb015c3df9dc26204e8465a.jpg" alt="pic1" /></p>
-
-<p>可以看到，子问题是参数化的，我们定义的子问题中有参数 kk。假设一共有 nn 个房子的话，就一共有 nn 个子问题。动态规划实际上就是通过求这一堆子问题的解，来求出原问题的解。这要求子问题需要具备两个性质：</p>
-
-<ul>
-  <li>原问题要能由子问题表示。例如这道小偷问题中，k=nk=n 时实际上就是原问题。否则，解了半天子问题还是解不出原问题，那子问题岂不是白解了。</li>
-  <li>一个子问题的解要能通过其他子问题的解求出。例如这道小偷问题中，f(k)f(k) 可以由 f(k-1)f(k−1) 和 f(k-2)f(k−2) 求出，具体原理后面会解释。这个性质就是教科书中所说的“最优子结构”。如果定义不出这样的子问题，那么这道题实际上没法用动态规划解。</li>
-</ul>
-
-<p>小偷问题由于比较简单，定义子问题实际上是很直观的。一些比较难的动态规划题目可能需要一些定义子问题的技巧。</p>
-
-<h3 id="步骤二写出子问题的递推关系">步骤二：写出子问题的递推关系</h3>
-<p>这一步是求解动态规划问题最关键的一步。然而，这一步也是最无法在代码中体现出来的一步。在做题的时候，最好把这一步的思路用注释的形式写下来。做动态规划题目不要求快，而要确保无误。否则，写代码五分钟，找 bug 半小时，岂不美哉？</p>
-
-<p>我们来分析一下这道小偷问题的递推关系：</p>
-
-<p>假设一共有 nn 个房子，每个房子的金额分别是 H0, H1, …,Hn-1,子问题 f(k)f(k) 表示从前 k 个房子（即 H0, H1,…Hk-1,中能偷到的最大金额。那么，偷 k 个房子有两种偷法：</p>
-
-<p><img src="/assets/images/leetcode/0402/ccceac397062b8ac6d369506f5481be5e473d4f9b35751da7861a681bbecc3e8.jpg" alt="pic2" /></p>
-
-<p>k 个房子中最后一个房子是 Hk-1。如果不偷这个房子，那么问题就变成在前 k-1个房子中偷到最大的金额，也就是子问题 f(k-1)。如果偷这个房子，那么前一个房子 Hk-2显然不能偷，其他房子不受影响。那么问题就变成在前 k-2 个房子中偷到的最大的金额。两种情况中，选择金额较大的一种结果。</p>
-
-<p>f(k) = max{f(k-1), Hk-1 + f(k-2)}</p>
-
-<p>在写递推关系的时候，要注意写上 k=0k=0 和 k=1k=1 的基本情况：</p>
-
-<ul>
-  <li>当 k=0 时，没有房子，所以 f(0) =0。</li>
-  <li>当 k=1 时，只有一个房子，偷这个房子即可，所以 f(1) = H0</li>
-</ul>
-
-<p>这样才能构成完整的递推关系，后面写代码也不容易在边界条件上出错。</p>
-
-<h3 id="步骤三确定-dp-数组的计算顺序">步骤三：确定 DP 数组的计算顺序</h3>
-<p>在确定了子问题的递推关系之后，下一步就是依次计算出这些子问题了。在很多教程中都会写，动态规划有两种计算顺序，一种是自顶向下的、使用备忘录的递归方法，一种是自底向上的、使用 dp 数组的循环方法。不过在 <strong>普通的动态规划题目中，99% 的情况我们都不需要用到备忘录方法</strong>，所以我们最好坚持用自底向上的 dp 数组。</p>
-
-<p>DP 数组也可以叫”子问题数组”，因为 DP 数组中的每一个元素都对应一个子问题。如下图所示，dp[k] 对应子问题 f(k)，即偷前 kk 间房子的最大金额。</p>
-
-<p><img src="/assets/images/leetcode/0402/a0d29f1322a7938733fd62f3b2de8b04f678591e40cdf4062810e8d9608e4b5e.jpg" alt="pic3" /></p>
-
-<p>那么，只要搞清楚了子问题的计算顺序，就可以确定 DP 数组的计算顺序。对于小偷问题，我们分析子问题的依赖关系，发现每个 f(k) 依赖 f(k-1) 和 f(k−2)。也就是说，dp[k] 依赖 dp[k-1] 和 dp[k-2]，如下图所示。</p>
-
-<p><img src="/assets/images/leetcode/0402/daa19672855195ae1496f6a3f112dbe9fe0e16e9541238002acaac44f22be613.jpg" alt="pic4" /></p>
-
-<p>那么，既然 DP 数组中的依赖关系都是向右指的，DP 数组的计算顺序就是从左向右。这样我们可以保证，计算一个子问题的时候，它所依赖的那些子问题已经计算出来了。</p>
-
-<p>确定了 DP 数组的计算顺序之后，我们就可以写出题解代码了：</p>
-
-<p>Java:</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">rob</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="c1">// 子问题：</span>
-    <span class="c1">// f(k) = 偷 [0..k) 房间中的最大金额</span>
-
-    <span class="c1">// f(0) = 0</span>
-    <span class="c1">// f(1) = nums[0]</span>
-    <span class="c1">// f(k) = max{ rob(k-1), nums[k-1] + rob(k-2) }</span>
-
-    <span class="kt">int</span> <span class="no">N</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
-    <span class="kt">int</span><span class="o">[]</span> <span class="n">dp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="no">N</span><span class="o">+</span><span class="mi">1</span><span class="o">];</span>
-    <span class="n">dp</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="n">dp</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="mi">0</span><span class="o">];</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="no">N</span><span class="o">;</span> <span class="n">k</span><span class="o">++)</span> <span class="o">{</span>
-        <span class="n">dp</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">dp</span><span class="o">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="o">],</span> <span class="n">nums</span><span class="o">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="o">+</span> <span class="n">dp</span><span class="o">[</span><span class="n">k</span><span class="o">-</span><span class="mi">2</span><span class="o">]);</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">dp</span><span class="o">[</span><span class="no">N</span><span class="o">];</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h3 id="步骤四空间优化">步骤四：空间优化</h3>
-<p>空间优化是动态规划问题的进阶内容了。对于初学者来说，可以不掌握这部分内容。</p>
-
-<p>空间优化的基本原理是，很多时候我们并不需要始终持有全部的 DP 数组。对于小偷问题，我们发现，最后一步计算 f(n) 的时候，实际上只用到了 f(n-1) 和 f(n-2) 的结果。n-3 之前的子问题，实际上早就已经用不到了。那么，我们可以只用两个变量保存两个子问题的结果，就可以依次计算出所有的子问题。下面的动图比较了空间优化前和优化后的对比关系：</p>
-
-<p><img src="/assets/images/leetcode/0402/3dcbb1028ed9cdac95fdc8c8348ccc6f2e4c50b3fd8222e5690257d6b495090a.gif" alt="pic5" /></p>
-
-<p>这样一来，空间复杂度也从 O(n)O(n) 降到了 O(1)O(1)。优化后的代码如下所示：</p>
-
-<p>Java:</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">rob</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="n">prev</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="kt">int</span> <span class="n">curr</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-
-    <span class="c1">// 每次循环，计算“偷到当前房子为止的最大金额”</span>
-    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">:</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 循环开始时，curr 表示 dp[k-1]，prev 表示 dp[k-2]</span>
-        <span class="c1">// dp[k] = max{ dp[k-1], dp[k-2] + i }</span>
-        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">curr</span><span class="o">,</span> <span class="n">prev</span> <span class="o">+</span> <span class="n">i</span><span class="o">);</span>
-        <span class="n">prev</span> <span class="o">=</span> <span class="n">curr</span><span class="o">;</span>
-        <span class="n">curr</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
-        <span class="c1">// 循环结束时，curr 表示 dp[k]，prev 表示 dp[k-1]</span>
-    <span class="o">}</span>
-
-    <span class="k">return</span> <span class="n">curr</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/alog/2020/0509/004">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92">动态规划</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 09, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0509-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,动态规划"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>207 post articles, 26 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>208 post articles, 26 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
