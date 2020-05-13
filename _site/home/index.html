@@ -322,6 +322,120 @@ MFrGw6cAAAAASUVORK5CYII=" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0513/005"><h2 itemprop="headline" class="item__header">2. 两数相加</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">链表</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">链表</code></li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0414/016">445. 两数相加 II</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="题目-2-两数相加">题目 <a href="https://leetcode-cn.com/problems/add-two-numbers/">2. 两数相加</a></h3>
+<p>给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 <code class="highlighter-rouge">逆序</code> 的方式存储的，并且它们的每个节点只能存储 <code class="highlighter-rouge">一位</code> 数字。</p>
+
+<p>如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。</p>
+
+<p>您可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
+
+<h3 id="示例">示例：</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+输出：7 -&gt; 0 -&gt; 8
+原因：342 + 465 = 807
+</code></pre></div></div>
+
+<h3 id="方法一-按位相加">方法一 按位相加</h3>
+<ul>
+  <li>主要是对 <code class="highlighter-rouge">sum</code> 大于10 需要花点时间处理，其他直接通过 <strong>按位相加</strong> 即可</li>
+</ul>
+
+<h3 id="复杂度分析">复杂度分析</h3>
+<ul>
+  <li>时间复杂度：$O(\max(m, n))$，假设 $m$ 和 $n$ 分别表示 $l1$ 和 $l2$ 的长度，上面的算法最多重复 $\max(m, n)$ 次。</li>
+  <li>空间复杂度：$O(\max(m, n))$， 新列表的长度最多为 $\max(m,n) + 1$。</li>
+</ul>
+
+<h3 id="上代码">上代码</h3>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */</span>
+<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">addTwoNumbers</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">l1</span><span class="o">,</span> <span class="nc">ListNode</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="nc">ListNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
+
+        <span class="c1">// 很妙的两个地方 carry 的设置 和 carry &gt;0 的判断 的判断 🌟🌟🌟🌟🌟</span>
+        <span class="c1">// 记录和大于10时 +1</span>
+        <span class="c1">// carry &gt;0 当大于10 则向前进 1</span>
+        <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">carry</span><span class="o">;</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="o">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="n">l1</span><span class="o">.</span><span class="na">val</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="o">(</span><span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="n">l2</span><span class="o">.</span><span class="na">val</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="n">carry</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="mi">10</span><span class="o">;</span>
+            <span class="n">curr</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">sum</span> <span class="o">%</span> <span class="mi">10</span><span class="o">);</span>
+            <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+</span>
+<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">addTwoNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">l2</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ListNode</span><span class="p">:</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span>
+        <span class="c1"># 很妙的两个地方 carry 的设置 和 carry &gt;0 的判断 🌟🌟🌟🌟🌟
+</span>        <span class="c1"># 记录和大于10时 +1
+</span>        <span class="c1"># carry &gt;0 当大于10 则向前进 1
+</span>        <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">l1</span>  <span class="ow">or</span> <span class="n">l2</span><span class="p">:</span>
+            <span class="nb">sum</span> <span class="o">=</span> <span class="n">carry</span>
+            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">l1</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l1</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">l2</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l2</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="n">carry</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">//</span> <span class="mi">10</span>
+
+            <span class="n">curr</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="nb">sum</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="nb">next</span>
+
+            <span class="k">if</span> <span class="n">l1</span> <span class="p">:</span> <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="nb">next</span>
+            <span class="k">if</span> <span class="n">l2</span> <span class="p">:</span> <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="nb">next</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="nb">next</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0513/005">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%93%BE%E8%A1%A8">链表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 13, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0513-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-13T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,链表"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0513/006"><h2 itemprop="headline" class="item__header">102. 二叉树的层序遍历</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1156,7 +1270,15 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
   <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">前缀和</code> <code class="success highlighter-rouge">暴力</code>  <code class="success highlighter-rouge">哈希表</code></li>
   <li><strong>思路</strong>：  <code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">暴力</code>  <code class="info highlighter-rouge">哈希表</code></li>
-  <li><strong>类似题型</strong>:</li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li>看到数组或者可以转换成数组的题目，会先想一遍暴力，然后在 会考虑 <code class="highlighter-rouge">哈希表</code> 是不是可以帮助降低时间复杂度</li>
+      <li>就像看到 <code class="highlighter-rouge">二叉树</code> 或很自然的想到 DFS 和 BFS (概率很高)</li>
+      <li><a href="/leetcode/2020/0325/010">169. 多数元素</a></li>
+      <li><a href="/leetcode/2020/0428/028/04">面试题56 - I. 数组中数字出现的次数</a></li>
+      <li><a href="/leetcode/2020/0428/028/03">136. 只出现一次的数字</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -1382,91 +1504,8 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 10, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0510-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-10T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,二叉树,DFS,BFS"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0509/006"><h2 itemprop="headline" class="item__header">23. 合并K个排序链表</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="error highlighter-rouge">困难</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">优先队列</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">优先队列</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="23-合并k个排序链表"><a href="https://leetcode-cn.com/problems/merge-k-sorted-lists/">23. 合并K个排序链表</a></h3>
-<p>合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。</p>
-
-<h3 id="示例">示例:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:
-[
-  1-&gt;4-&gt;5,
-  1-&gt;3-&gt;4,
-  2-&gt;6
-]
-输出: 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
-</code></pre></div></div>
-
-<h3 id="方法一-优先队列">方法一 优先队列</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li>通过题目和示例，可清楚的了解到，其实就是 <strong>合并元素</strong>，并 <strong>排序</strong>
-    <ol>
-      <li>第一步通队列保存链表元素</li>
-      <li>对队列排序</li>
-    </ol>
-  </li>
-  <li>通过优先队列，可完成上述两个步骤
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">i2</span><span class="o">,</span> <span class="n">i1</span><span class="o">));</span>
-</code></pre></div>    </div>
-    <p>时间复杂度：$O(n*log(k))$，n 是所有链表中元素的总和，k 是链表个数</p>
-  </li>
-</ul>
-
-<h4 id="代码">代码</h4>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">mergeKLists</span><span class="o">(</span><span class="nc">ListNode</span><span class="o">[]</span> <span class="n">lists</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PriorityQueue</span><span class="o">&lt;&gt;((</span><span class="n">i1</span><span class="o">,</span> <span class="n">i2</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">i2</span><span class="o">,</span> <span class="n">i1</span><span class="o">));</span>
-
-        <span class="c1">// 合并链表元素到队列</span>
-        <span class="k">for</span><span class="o">(</span><span class="nc">ListNode</span> <span class="nl">node:</span><span class="n">lists</span><span class="o">){</span>
-            <span class="k">while</span> <span class="o">(</span><span class="n">node</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
-                <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">);</span>
-                <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="c1">// 把队列中元素添加到了新的链表</span>
-        <span class="nc">ListNode</span> <span class="n">ans</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
-            <span class="nc">ListNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">());</span> <span class="c1">// 每次拿出最大元素，并删除</span>
-            <span class="n">curr</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">ans</span><span class="o">;</span>
-            <span class="n">ans</span> <span class="o">=</span> <span class="n">curr</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
-
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0509/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97">优先队列</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 09, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0509-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-09T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,优先队列"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>209 post articles, 27 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>210 post articles, 27 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
