@@ -653,6 +653,25 @@ MFrGw6cAAAAASUVORK5CYII=" />
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0513-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-13T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,DFS,BFS"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/alog/2020/0513/003"><h2 itemprop="headline" class="item__header">广度优先搜索(BFS)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>#文案
+TODO</p>
+
+<ul>
+  <li>图片</li>
+</ul>
+
+<p><img src="/assets/images/algo/0513/BFS.gif" alt="bfs" /></p>
+</div><p><a href="/alog/2020/0513/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%B9%BF%E5%BA%A6%E4%BC%98%E5%85%88%E6%90%9C%E7%B4%A2%28BFS%29">广度优先搜索(BFS)</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 13, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0513-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-13T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,广度优先搜索(BFS)"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0512/005"><h2 itemprop="headline" class="item__header">155. 最小栈</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
@@ -1375,137 +1394,8 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,前缀和,暴力,哈希表"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0510/007"><h2 itemprop="headline" class="item__header">199. 二叉树的右视图</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">DFS</code> <code class="success highlighter-rouge">BFS</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">DFS</code> <code class="info highlighter-rouge">BFS</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-199-二叉树的右视图">题目 <a href="https://leetcode-cn.com/problems/binary-tree-right-side-view/">199. 二叉树的右视图</a></h3>
-<p>给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。</p>
-
-<h3 id="示例">示例:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,2,3,null,5,null,4]
-输出: [1, 3, 4]
-解释:
-
-   1            &lt;---
- /   \
-2     3         &lt;---
- \     \
-  5     4       &lt;---
-</code></pre></div></div>
-
-<h3 id="方法一-dfs">方法一 DFS</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li>我们按照 「根结点 -&gt; 右子树 -&gt; 左子树」 的顺序访问，就可以保证每层都是最先访问最右边的节点的</li>
-</ul>
-
-<h3 id="代码">代码</h3>
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */</span>
-<span class="c1">// 考察的是对二叉数执行顺序</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">rightSideView</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// 从根节点开始访问，根节点深度是0</span>
-        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">,</span><span class="mi">0</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-
-    <span class="o">}</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">dfs</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">,</span><span class="kt">int</span> <span class="n">deepth</span><span class="o">){</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
-        <span class="c1">// 先访问 当前节点，再递归地访问 右子树 和 左子树</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">deepth</span><span class="o">==</span><span class="n">res</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">val</span><span class="o">);</span><span class="c1">// 如果当前节点所在深度还没有出现在res里，说明在该深度下当前节点是第一个被访问的节点，因此将当前节点加入res中。</span>
-        <span class="n">deepth</span><span class="o">++;</span>
-        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">right</span><span class="o">,</span><span class="n">deepth</span><span class="o">);</span>
-        <span class="n">dfs</span><span class="o">(</span><span class="n">root</span><span class="o">.</span><span class="na">left</span><span class="o">,</span><span class="n">deepth</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-</code></pre></div></div>
-
-<h3 id="方法二-bfs">方法二 BFS</h3>
-<ul>
-  <li>
-    <p>利用 BFS 进行层次遍历，记录下每层的最后一个元素。</p>
-  </li>
-  <li>
-    <p>二叉树插入队列的如图</p>
-  </li>
-</ul>
-
-<p><img src="/assets/images/leetcode/0510/c109162ad484f35720fda786bd67a724c5f63edd69b6077b0213f009cce75951-image.png" alt="pic1" /></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode(int x) { val = x; }
- * }
- */</span>
-<span class="c1">// 考察的是对二叉数执行顺序</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="nf">rightSideView</span><span class="o">(</span><span class="nc">TreeNode</span> <span class="n">root</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">root</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-        <span class="nc">Queue</span><span class="o">&lt;</span><span class="nc">TreeNode</span><span class="o">&gt;</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedList</span><span class="o">&lt;&gt;();</span>
-        <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
-        <span class="k">while</span><span class="o">(!</span><span class="n">queue</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
-            <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
-            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="o">;</span><span class="n">i</span><span class="o">++){</span>
-                <span class="nc">TreeNode</span> <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
-                    <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">left</span><span class="o">);</span>
-                <span class="o">}</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">!=</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">queue</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">right</span><span class="o">);</span>
-                <span class="o">}</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">==</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">res</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">val</span><span class="o">);</span> <span class="c1">//将当前层的最后一个节点放入结果列表</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0510/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%8C%E5%8F%89%E6%A0%91">二叉树</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=DFS">DFS</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=BFS">BFS</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 10, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0510-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-10T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,二叉树,DFS,BFS"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>210 post articles, 27 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>211 post articles, 27 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
