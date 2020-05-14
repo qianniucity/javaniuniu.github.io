@@ -40,7 +40,7 @@ show_title: false
     background-color: #123;
   }
   .hero-bg-image-example {
-    background-image: url("/docs/assets/images/cover3.jpg");
+    background-image: url("/docs/assets/images/cover4_2.jpg");
   }
   .hero-bg-image-example--linear-gradient {
     background-image: linear-gradient(135deg, rgba(255, 69, 0, .5), rgba(255, 197, 0, .2)), url("/docs/assets/images/cover3.jpg");
@@ -70,7 +70,15 @@ Java Development
 
 一直在服务于金融行业，曾就职于易宝支付和恒生电子
 
-没在上班
+现在开始积极找工作-求推荐😊😊😊😊😊
+
+---
+### 感谢
+- [芝加哥美术馆-提供高清图片](https://www.artic.edu/)
+- [CSDN-提供很多文章素材](https://csdn.net)
+
+
+---
 
 #### Contact
 Email: king101125s@gmail.com
