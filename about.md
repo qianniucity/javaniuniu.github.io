@@ -50,7 +50,7 @@ show_title: false
 <div class="hero hero-example hero--dark hero-bg-image-example my-3">
   <div class="hero__content">
     <h3>about</h3>
-    <p>主要是想看下自己能在技术这条路上能坚持多久</p>
+    <p>主要是想看下自己还能在多做些什么</p>
   </div>
 </div>
 
@@ -62,13 +62,13 @@ CN: 闵鹏（MinPeng） ｜ EN: Keith ｜ 花名:蚂蚁
 
 
 ## I Am
-Java Development
+Backend Development
 
 2009 - 2012年 毕业专科学校
 
 2019 - 2022年 南昌大学
 
-一直在服务于金融行业，曾就职于易宝支付和恒生电子
+一直在服务于金融行业，曾就职于易宝支付, 恒生电子
 
 现在开始积极找工作-求推荐😊😊😊😊😊
 
