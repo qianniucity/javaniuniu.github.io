@@ -375,6 +375,129 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0515/017"><h2 itemprop="headline" class="item__header">8. 字符串转换整数 (atoi)</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：</li>
+  <li><strong>思路</strong>：</li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-8-字符串转换整数-atoi">题目 <a href="https://leetcode-cn.com/problems/string-to-integer-atoi/">8. 字符串转换整数 (atoi)</a></h3>
+
+<p>请你来实现一个 atoi 函数，使其能将字符串转换成整数。</p>
+
+<p>首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。接下来的转化规则如下：</p>
+
+<ul>
+  <li>如果第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字字符组合起来，形成一个有符号整数。</li>
+  <li>假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成一个整数。</li>
+  <li>该字符串在有效的整数部分之后也可能会存在多余的字符，那么这些字符可以被忽略，它们对函数不应该造成影响。 <br />
+注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换，即无法进行有效转换。</li>
+</ul>
+
+<p>在任何情况下，若函数不能进行有效的转换时，请返回 0 。</p>
+
+<h4 id="提示">提示：</h4>
+
+<ul>
+  <li>本题中的空白字符只包括空格字符 ‘ ‘ 。</li>
+  <li>假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−231,  231 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。
+ </li>
+</ul>
+
+<h4 id="示例1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "42"
+输出: 42
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "   -42"
+输出: -42
+解释: 第一个非空白字符为 '-', 它是一个负号。
+     我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。
+</code></pre></div></div>
+<h4 id="示例3">示例 3:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "4193 with words"
+输出: 4193
+解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。
+</code></pre></div></div>
+<h4 id="示例4">示例 4:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "words and 987"
+输出: 0
+解释: 第一个非空字符是 'w', 但它不是数字或正、负号。
+     因此无法执行有效的转换。
+</code></pre></div></div>
+<h4 id="示例5">示例 5:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "-91283472332"
+输出: -2147483648
+解释: 数字 "-91283472332" 超过 32 位有符号整数范围。
+     因此返回 INT_MIN (−231) 。
+</code></pre></div></div>
+
+<h3 id="方法一">方法一</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li>题目已经给出很详细规则，根据规则可以自己填代码</li>
+  <li>这题的关键在 <strong>判断字符是否为数字</strong> ，可以使用下面的代码
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Character.isDigit(char ch)
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">myAtoi</span><span class="o">(</span><span class="nc">String</span> <span class="n">str</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">chars</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">chars</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="sc">' '</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 去掉前导空格</span>
+            <span class="n">idx</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">idx</span> <span class="o">==</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//去掉前导空格以后到了末尾了</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">boolean</span> <span class="n">negative</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">chars</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'-'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">//遇到负号</span>
+            <span class="n">negative</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="n">idx</span><span class="o">++;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">chars</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">==</span> <span class="sc">'+'</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// 遇到正号</span>
+            <span class="n">idx</span><span class="o">++;</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(!</span><span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">chars</span><span class="o">[</span><span class="n">idx</span><span class="o">]))</span> <span class="o">{</span>
+            <span class="c1">// 其他符号</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">idx</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="nc">Character</span><span class="o">.</span><span class="na">isDigit</span><span class="o">(</span><span class="n">chars</span><span class="o">[</span><span class="n">idx</span><span class="o">]))</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">digit</span> <span class="o">=</span> <span class="n">chars</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span> <span class="o">-</span> <span class="sc">'0'</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">ans</span> <span class="o">&gt;</span> <span class="o">(</span><span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span> <span class="o">-</span> <span class="n">digit</span><span class="o">)</span> <span class="o">/</span> <span class="mi">10</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// 本来应该是 ans * 10 + digit &gt; Integer.MAX_VALUE</span>
+                <span class="c1">// 但是 *10 和 + digit 都有可能越界，所有都移动到右边去就可以了。</span>
+                <span class="k">return</span> <span class="n">negative</span><span class="o">?</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span> <span class="o">:</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">digit</span><span class="o">;</span>
+            <span class="n">idx</span><span class="o">++;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">negative</span><span class="o">?</span> <span class="o">-</span><span class="n">ans</span> <span class="o">:</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0515/017">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 15, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0515-017">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-15T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0515/006"><h2 itemprop="headline" class="item__header">560. 和为K的子数组</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1284,215 +1407,8 @@ s_multi: 0.003781s
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 12, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0512-004">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-12T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,快速幂,乘法防止溢出"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0511/007"><h2 itemprop="headline" class="item__header">50. Pow(x, n)</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code> <code class="success highlighter-rouge">折半计算</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">递归</code> <code class="info highlighter-rouge">折半计算</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="50-powx-n"><a href="https://leetcode-cn.com/problems/powx-n/">50. Pow(x, n)</a></h3>
-<p>实现 <code class="highlighter-rouge">pow(x, n)</code> ，即计算 x 的 n 次幂函数。</p>
-
-<h3 id="示例-1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 2.00000, 10
-输出: 1024.00000
-</code></pre></div></div>
-<h3 id="示例2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 2.10000, 3
-输出: 9.26100
-</code></pre></div></div>
-<h3 id="示例3">示例 3:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 2.00000, -2
-输出: 0.25000
-解释: 2-2 = 1/22 = 1/4 = 0.25
-</code></pre></div></div>
-<h3 id="说明">说明:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-100.0 &lt; x &lt; 100.0
-n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
-</code></pre></div></div>
-
-<h3 id="方法一-暴力">方法一 暴力</h3>
-<h4 id="解题思路-时间会超时">解题思路 时间会超时</h4>
-<ul>
-  <li>先对 n 的正负做判断</li>
-  <li>当 n 为正数 $x^n$</li>
-  <li>当 n 为负数 $(1/x)^n$
-    <h4 id="java">java</h4>
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
-      <span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
-      <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
-          <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-          <span class="n">a</span> <span class="o">*=</span><span class="n">x</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h3 id="方法二-改良暴力">方法二 改良暴力</h3>
-<ul>
-  <li>通过折半计算，每次把 n 减半，降低空间复杂度
-    <h4 id="java-1">java</h4>
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
-      <span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
-      <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
-          <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span> <span class="o">/=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
-          <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
-              <span class="n">a</span> <span class="o">*=</span> <span class="n">x</span><span class="o">;</span>
-          <span class="n">x</span> <span class="o">*=</span><span class="n">x</span><span class="o">;</span>
-      <span class="o">}</span>
-      <span class="k">return</span> <span class="n">a</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">myPow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="s">"""
-        :type x: float
-        :type n: int
-        :rtype: float
-        """</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
-        <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span>
-                <span class="n">n</span> <span class="o">/=</span> <span class="mi">2</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">*=</span><span class="n">x</span>
-                <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">res</span>
-</code></pre></div></div>
-
-<h3 id="方法三-递归">方法三 递归</h3>
-<h4 id="解题思路">解题思路</h4>
-<p>主要是注意n的正负，这个题比较简单了，直接递归调用就行。</p>
-
-<p>如果 n 是负数，那么相当于求 <code class="highlighter-rouge">(1/x)^(-n)</code>。
-如果 n 是正数 且 奇数，那么结果需要单独乘以 x
-如果 n 是正数 且 偶数，求 <code class="highlighter-rouge">(x^2)^(n/2)</code>，一直递归下去即可。
-时间复杂度是 $O(1)$，空间复杂度是 $O(1)$。
-我认为这个代码是 $O(1)$，因为n只有32位，循环次数是有上限的常数</p>
-
-<h3 id="代码">代码</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">==</span><span class="mi">0</span><span class="o">)</span>
-            <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">n</span><span class="o">%</span><span class="mi">2</span><span class="o">!=</span><span class="mi">0</span><span class="o">)</span>
-            <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">myPow</span><span class="o">(</span><span class="n">x</span><span class="o">,</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">);</span>
-        <span class="k">return</span> <span class="nf">myPow</span><span class="o">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">,</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python-1">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">myPow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="s">"""
-        :type x: float
-        :type n: int
-        :rtype: float
-        """</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">myPow</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">myPow</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h3 id="快速幂">快速幂</h3>
-<p>计算 $x^ n$ 通常需要 $n$ 次乘法, 时间复杂度为 $O(n)$ , 当 $n$ 非常大的时候, 运算效率很低.</p>
-
-<p>快速幂是通过把 $n$ 转化为二进制来实现的. 例如: 计算 $x^{14}$, 14 可以用二进制表示为:</p>
-
-<p>$14 = (1110)_ 2 = 1 * 2^3 + 1 * 2^2 + 1 * 2^1 + 0 * 2^0 $</p>
-
-<p>那么对应的乘法可以表示为:</p>
-
-<p>$x^{14} = x^{2 ^3} * x^{2^2} * x^{2 ^1} $</p>
-
-<p>转换后乘法运算次数减少, 每次计算 $x^{2^n}$, 再决定是否将这个数字加入到最终结果里面去. 代码如下:</p>
-
-<h4 id="python-2">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">myPow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="o">-</span><span class="n">n</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span>
-        <span class="k">while</span> <span class="n">n</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">n</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">res</span> <span class="o">*=</span> <span class="n">x</span>
-            <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">res</span>
-
-</code></pre></div></div>
-
-<h4 id="java-2">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">myPow</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">double</span> <span class="n">res</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">;</span>
-        <span class="kt">long</span> <span class="n">b</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span> <span class="c1">// 防止 int 溢出， 使用 long</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">b</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="o">;</span>
-            <span class="n">b</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">b</span> <span class="o">&gt;</span><span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">((</span><span class="n">b</span><span class="o">&amp;</span><span class="mi">1</span><span class="o">)</span> <span class="o">==</span><span class="mi">1</span><span class="o">)</span>
-                <span class="n">res</span> <span class="o">*=</span> <span class="n">x</span><span class="o">;</span>
-            <span class="n">x</span> <span class="o">*=</span> <span class="n">x</span><span class="o">;</span>
-            <span class="n">b</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0511/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%8A%98%E5%8D%8A%E8%AE%A1%E7%AE%97">折半计算</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,递归,折半计算"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>213 post articles, 27 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>214 post articles, 27 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
