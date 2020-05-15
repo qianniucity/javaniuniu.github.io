@@ -375,6 +375,159 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0515/006"><h2 itemprop="headline" class="item__header">560. 和为K的子数组</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">前缀和</code> <code class="success highlighter-rouge">哈希表</code></li>
+  <li><strong>思路</strong>：  <code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">哈希表</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-560-和为k的子数组">题目 <a href="https://leetcode-cn.com/problems/subarray-sum-equals-k/">560. 和为K的子数组</a></h3>
+<p>给定一个整数数组和一个整数 <code class="highlighter-rouge">k</code>，你需要找到该数组中和为 <code class="highlighter-rouge">k</code> 的连续的子数组的个数。</p>
+
+<h3 id="示例-1-">示例 1 :</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:nums = [1,1,1], k = 2
+输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
+</code></pre></div></div>
+<h4 id="说明-">说明 :</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>数组的长度为 [1, 20,000]。
+数组中元素的范围是 [-1000, 1000] ，且整数 k 的范围是 [-1e7, 1e7]。
+</code></pre></div></div>
+
+<h3 id="方法一-前缀和">方法一 前缀和</h3>
+<h4 id="解题思路">解题思路</h4>
+<ul>
+  <li><strong>题目理解</strong>：
+    <ul>
+      <li>在数组 <code class="highlighter-rouge">nums</code> 中找到连续子数组和为 <code class="highlighter-rouge">k</code>，并返回子数组个数</li>
+      <li>我们假设 从左到右 前缀和为 <code class="highlighter-rouge">preSum[0]preSum[0]...preSum[i+1]</code></li>
+      <li>我们再根据下面的 <strong>前缀和推倒过程</strong> ，可以得到任意连续子数组和</li>
+      <li>只要 $preSum[right+1] - preSum[left] = k$ 即可得到结果</li>
+    </ul>
+  </li>
+  <li><strong>前缀和推倒过程</strong>：
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>preSum[0] = 0
+preSum[1] = num[0] = preSum[0] + nums[0]
+preSum[2] = num[0] + num[1] = preSum[1] + nums[1]
+preSum[3] = num[0] + num[1] + nums[2] = preSum[2] + nums[2]
+.
+.
+preSum[i+1] = num[0] + num[1] ... + nums[i] = preSum[i] + nums[i]
+</code></pre></div>    </div>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度 $O(N^2)$ ：假设数组长度为 <code class="highlighter-rouge">n</code> ，遍历两次 ；</li>
+      <li>空间复杂度 $O(N+1)$ ：假设数组长度为 <code class="highlighter-rouge">n</code>，其中 <code class="highlighter-rouge">preSum[0]</code> 为前缀初始值。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">subarraySum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="c1">// 计算前缀和数组</span>
+        <span class="kt">int</span><span class="o">[]</span> <span class="n">preSum</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
+        <span class="n">preSum</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">preSum</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">preSum</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="o">}</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">left</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">right</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="c1">// 区间和 [left..right]，注意下标偏移</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">preSum</span><span class="o">[</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">preSum</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">==</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">count</span><span class="o">++;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">subarraySum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">nums_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+        <span class="n">pre_sum</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">nums_len</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">num</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+            <span class="n">pre_sum</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span>
+        <span class="k">for</span> <span class="n">left</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
+                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span>
+</code></pre></div></div>
+
+<h3 id="方法二-前缀和--哈希表">方法二 前缀和 + 哈希表</h3>
+<ul>
+  <li>还是前缀和的思想，我们把前缀和放在 <code class="highlighter-rouge">map</code> 中， <code class="highlighter-rouge">map.put(preSum,前缀和出现次数)</code> (数组中可能会有负数，所以可能会重复出现)</li>
+</ul>
+
+<h4 id="java-1">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">subarraySum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="c1">// key:前i个元素的和，value：对应key 出现的个数</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">preSumMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="c1">// 数组下标为 0，则前面数组为空，所以和为 0，且出现一次  </span>
+        <span class="n">preSumMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">preSum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">preSum</span> <span class="o">+=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">preSumMap</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">preSum</span><span class="o">-</span><span class="n">k</span><span class="o">)){</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="n">preSumMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">preSum</span><span class="o">-</span><span class="n">k</span><span class="o">);</span>
+            <span class="o">}</span>
+            <span class="n">preSumMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">preSum</span><span class="o">,</span> <span class="n">preSumMap</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="mi">0</span><span class="o">)+</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python-1">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">subarraySum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">pre_sum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">pre_sum_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">pre_sum_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="n">pre_sum</span> <span class="o">+=</span> <span class="n">num</span>
+            <span class="k">if</span> <span class="n">pre_sum</span> <span class="o">-</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pre_sum_dict</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="n">pre_sum_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pre_sum</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
+            <span class="n">pre_sum_dict</span><span class="p">[</span><span class="n">pre_sum</span><span class="p">]</span> <span class="o">+=</span>  <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">count</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度 $O(N)$ ：假设数组长度为 <code class="highlighter-rouge">n</code> ，我们遍历数组长度为 <code class="highlighter-rouge">n</code></li>
+      <li>空间复杂度 $O(N)$ ：假设数组长度为 <code class="highlighter-rouge">n</code>，哈希表在最坏的情况下，保存 <code class="highlighter-rouge">n</code> 个不同元素</li>
+    </ul>
+  </li>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0515/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%89%8D%E7%BC%80%E5%92%8C">前缀和</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 15, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0515-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-15T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,前缀和,哈希表"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0514/006"><h2 itemprop="headline" class="item__header">6. Z 字形变换</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1338,129 +1491,8 @@ n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,递归,折半计算"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0511/006"><h2 itemprop="headline" class="item__header">1248. 统计「优美子数组」</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">滑动窗口</code> <code class="success highlighter-rouge">按位与运算</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">滑动窗口</code> <code class="info highlighter-rouge">按位与运算</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-1248-统计优美子数组">题目 <a href="https://leetcode-cn.com/problems/count-number-of-nice-subarrays/">1248. 统计「优美子数组」</a></h3>
-<p>给你一个整数数组 <code class="highlighter-rouge">nums</code> 和一个整数 k。</p>
-
-<p>如果某个 <code class="highlighter-rouge">连续</code> 子数组中恰好有 k 个奇数数字，我们就认为这个子数组是 <code class="highlighter-rouge">「优美子数组」</code>。</p>
-
-<p>请返回这个数组中「优美子数组」的数目。</p>
-
-<h3 id="示例-1">示例 1：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [1,1,2,1,1], k = 3
-输出：2
-解释：包含 3 个奇数的子数组是 [1,1,2,1] 和 [1,2,1,1] 。
-</code></pre></div></div>
-<h3 id="示例-2">示例 2：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [2,4,6], k = 1
-输出：0
-解释：数列中不包含任何奇数，所以不存在优美子数组。
-</code></pre></div></div>
-<h3 id="示例-3">示例 3：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：nums = [2,2,2,1,2,2,1,2,2,2], k = 2
-输出：16
-</code></pre></div></div>
-<p> </p>
-
-<h3 id="提示">提示：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= nums.length &lt;= 50000
-1 &lt;= nums[i] &lt;= 10^5
-1 &lt;= k &lt;= nums.length
-</code></pre></div></div>
-
-<h3 id="方法一-滑动窗口">方法一 滑动窗口</h3>
-<ol>
-  <li>
-    <p>不断右移 <code class="highlighter-rouge">right</code> 指针来扩大滑动窗口，使其包含 <code class="highlighter-rouge">k</code> 个奇数；</p>
-  </li>
-  <li>
-    <p>若当前滑动窗口包含了 <code class="highlighter-rouge">k</code> 个奇数，则如下「计算当前窗口的优美子数组个数」：</p>
-    <ul>
-      <li>统计第 1 个奇数左边的偶数个数 <code class="highlighter-rouge">leftEvenCnt</code>。 这 <code class="highlighter-rouge">leftEvenCnt</code> 个偶数都可以作为「优美子数组」的起点，因此起点的选择有 <code class="highlighter-rouge">leftEvenCnt + 1</code> 种（因为可以一个偶数都不取，因此别忘了 +1 喔）。</li>
-      <li>统计第 k 个奇数右边的偶数个数 <code class="highlighter-rouge">rightEvenCnt</code> 。 这 <code class="highlighter-rouge">rightEvenCnt</code> 个偶数都可以作为「优美子数组」的终点，因此终点的选择有 <code class="highlighter-rouge">rightEvenCnt + 1</code> 种（因为可以一个偶数都不取，因此别忘了 +1 喔）。</li>
-      <li>因此「优美子数组」左右起点的选择组合数为 <code class="highlighter-rouge">(leftEvenCnt + 1) * (rightEvenCnt + 1)</code>。</li>
-    </ul>
-  </li>
-</ol>
-
-<ul>
-  <li>判断奇偶数
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-<span class="c1">// 基数</span>
-<span class="o">}</span>
-<span class="k">if</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-<span class="c1">// 偶数</span>
-<span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">numberOfSubarrays</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">oddCnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// 右指针先走，每遇到一个奇数则 oddCnt++。</span>
-            <span class="k">if</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">++]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">oddCnt</span><span class="o">++;</span>
-            <span class="o">}</span>
-
-            <span class="c1">//  若当前滑动窗口 [left, right) 中有 k 个奇数了，进入此分支统计当前滑动窗口中的优美子数组个数。</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">oddCnt</span> <span class="o">==</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">// 先将滑动窗口的右边界向右拓展，直到遇到下一个奇数（或出界）</span>
-                <span class="c1">// rightEvenCnt 即为第 k 个奇数右边的偶数的个数</span>
-                <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">right</span><span class="o">;</span>
-                <span class="k">while</span> <span class="o">(</span><span class="n">right</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">right</span><span class="o">++;</span>
-                <span class="o">}</span>
-                <span class="kt">int</span> <span class="n">rightEvenCnt</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">tmp</span><span class="o">;</span>
-                <span class="c1">// leftEvenCnt 即为第 1 个奇数左边的偶数的个数</span>
-                <span class="kt">int</span> <span class="n">leftEvenCnt</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-                <span class="k">while</span> <span class="o">((</span><span class="n">nums</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">leftEvenCnt</span><span class="o">++;</span>
-                    <span class="n">left</span><span class="o">++;</span>
-                <span class="o">}</span>
-                <span class="c1">// 第 1 个奇数左边的 leftEvenCnt 个偶数都可以作为优美子数组的起点</span>
-                <span class="c1">// (因为第1个奇数左边可以1个偶数都不取，所以起点的选择有 leftEvenCnt + 1 种）</span>
-                <span class="c1">// 第 k 个奇数右边的 rightEvenCnt 个偶数都可以作为优美子数组的终点</span>
-                <span class="c1">// (因为第k个奇数右边可以1个偶数都不取，所以终点的选择有 rightEvenCnt + 1 种）</span>
-                <span class="c1">// 所以该滑动窗口中，优美子数组左右起点的选择组合数为 (leftEvenCnt + 1) * (rightEvenCnt + 1)</span>
-                <span class="n">res</span> <span class="o">+=</span> <span class="o">(</span><span class="n">leftEvenCnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">*</span> <span class="o">(</span><span class="n">rightEvenCnt</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
-
-                <span class="c1">// 此时 left 指向的是第 1 个奇数，因为该区间已经统计完了，因此 left 右移一位，oddCnt--</span>
-                <span class="n">left</span><span class="o">++;</span>
-                <span class="n">oddCnt</span><span class="o">--;</span> <span class="c1">// 这一步很关键 决定了执行下一个区间</span>
-            <span class="o">}</span>
-
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0511/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%8C%89%E4%BD%8D%E4%B8%8E%E8%BF%90%E7%AE%97">按位与运算</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 11, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0511-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-11T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,滑动窗口,按位与运算"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>212 post articles, 27 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>213 post articles, 27 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
