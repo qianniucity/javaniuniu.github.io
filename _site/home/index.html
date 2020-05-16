@@ -375,12 +375,142 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0516/007"><h2 itemprop="headline" class="item__header">13. 罗马数字转整数</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">哈希表</code></li>
+  <li><strong>思路</strong>： <code class="info highlighter-rouge">哈希表</code></li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0516/006">12. 整数转罗马数字</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h3 id="题目-13-罗马数字转整数">题目 <a href="https://leetcode-cn.com/problems/roman-to-integer/">13. 罗马数字转整数</a></h3>
+<p>罗马数字包含以下七种字符: <code class="highlighter-rouge">I， V， X， L，C，D</code> 和 <code class="highlighter-rouge">M</code>。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>字符          数值
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+</code></pre></div></div>
+<p>例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。</p>
+
+<p>通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：</p>
+
+<ul>
+  <li>I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。</li>
+  <li>X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。 </li>
+  <li>C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。
+给定一个罗马数字，将其转换成整数。输入确保在 1 到 3999 的范围内。</li>
+</ul>
+
+<h4 id="示例1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "III"
+输出: 3
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "IV"
+输出: 4
+</code></pre></div></div>
+<h4 id="示例3">示例 3:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "IX"
+输出: 9
+</code></pre></div></div>
+<h4 id="示例4">示例 4:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "LVIII"
+输出: 58
+解释: L = 50, V= 5, III = 3.
+</code></pre></div></div>
+<h4 id="示例5">示例 5:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: "MCMXCIV"
+输出: 1994
+解释: M = 1000, CM = 900, XC = 90, IV = 4.
+</code></pre></div></div>
+<h3 id="方法一-哈希表">方法一 哈希表</h3>
+<ul>
+  <li><strong>解题思路</strong>:
+    <ol>
+      <li>把罗马数字用 <strong>哈希表</strong> 对应保存起来</li>
+      <li>在判断上注意 <code class="highlighter-rouge">4, 40, 400, 4000</code> 这样的数字</li>
+    </ol>
+  </li>
+</ul>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">romanToInt</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">char</span><span class="o">[]</span> <span class="n">arr</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">();</span>
+        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Character</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'I'</span><span class="o">,</span><span class="mi">1</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'V'</span><span class="o">,</span><span class="mi">5</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'X'</span><span class="o">,</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'L'</span><span class="o">,</span><span class="mi">50</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'C'</span><span class="o">,</span><span class="mi">100</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'D'</span><span class="o">,</span><span class="mi">500</span><span class="o">);</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="sc">'M'</span><span class="o">,</span><span class="mi">1000</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">c</span><span class="o">)</span> <span class="o">&gt;</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">]))</span> <span class="o">{</span>
+                <span class="n">res</span> <span class="o">-=</span> <span class="mi">2</span><span class="o">*</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">]);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">res</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">romanToInt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+        <span class="s">"""
+        :type s: str
+        :rtype: int
+        """</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="p">{</span><span class="s">'I'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="s">'V'</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="s">'X'</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="s">'L'</span><span class="p">:</span><span class="mi">50</span><span class="p">,</span> <span class="s">'C'</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span> <span class="s">'D'</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span> <span class="s">'M'</span><span class="p">:</span><span class="mi">1000</span><span class="p">}</span>        
+        <span class="n">ans</span><span class="o">=</span><span class="mi">0</span>        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)):</span>            
+            <span class="k">if</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">&lt;</span><span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]:</span>                
+                <span class="n">ans</span><span class="o">-=</span><span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ans</span><span class="o">+=</span><span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0516/007">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 16, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0516-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-16T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,哈希表"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0516/006"><h2 itemprop="headline" class="item__header">12. 整数转罗马数字</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
   <li><strong>本题涉及算法</strong>：</li>
   <li><strong>思路</strong>： <code class="info highlighter-rouge">这道题告诉又一次告诉我，题解先做出来，不管方法多么的简单</code></li>
-  <li><strong>类似题型</strong>:</li>
+  <li><strong>类似题型</strong>:
+    <ul>
+      <li><a href="/leetcode/2020/0516/007">13. 罗马数字转整数</a></li>
+    </ul>
+  </li>
 </ul>
 
 <hr />
@@ -1222,223 +1352,8 @@ TODO</p>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 13, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0513-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-13T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,广度优先搜索(BFS)"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0512/005"><h2 itemprop="headline" class="item__header">155. 最小栈</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">前缀和</code> <code class="success highlighter-rouge">暴力</code>  <code class="success highlighter-rouge">哈希表</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">暴力</code>  <code class="info highlighter-rouge">哈希表</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-<h3 id="题目-155-最小栈">题目 <a href="https://leetcode-cn.com/problems/min-stack/">155. 最小栈</a></h3>
-<p>设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。</p>
-
-<ul>
-  <li>push(x) —— 将元素 x 推入栈中。</li>
-  <li>pop() —— 删除栈顶的元素。</li>
-  <li>top() —— 获取栈顶元素。</li>
-  <li>getMin() —— 检索栈中的最小元素。
- </li>
-</ul>
-
-<h3 id="示例">示例:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：
-["MinStack","push","push","push","getMin","pop","top","getMin"]
-[[],[-2],[0],[-3],[],[],[],[]]
-
-输出：
-[null,null,null,null,-3,null,0,-2]
-
-解释：
-MinStack minStack = new MinStack();
-minStack.push(-2);
-minStack.push(0);
-minStack.push(-3);
-minStack.getMin();   --&gt; 返回 -3.
-minStack.pop();
-minStack.top();      --&gt; 返回 0.
-minStack.getMin();   --&gt; 返回 -2.
-</code></pre></div></div>
-
-<h3 id="提示">提示：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pop、top 和 getMin 操作总是在 非空栈 上调用。
-</code></pre></div></div>
-
-<h3 id="方法一-数组">方法一 数组</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li>我们先用最快捷的方式做题，在慢慢优化代码</li>
-  <li>使用数组，做数据的增删差操作</li>
-  <li>而对于获取最小值 使用 <code class="highlighter-rouge">Collections.min(list)</code> 获取</li>
-</ul>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MinStack</span> <span class="o">{</span>
-
-    <span class="c1">// 数据</span>
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="cm">/** initialize your data structure here. */</span>
-    <span class="kd">public</span> <span class="nf">MinStack</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">push</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pop</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">list</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">()-</span><span class="mi">1</span><span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">top</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">list</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">list</span><span class="o">.</span><span class="na">size</span><span class="o">()-</span><span class="mi">1</span><span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getMin</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nc">Collections</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="cm">/**
- * Your MinStack object will be instantiated and called as such:
- * MinStack obj = new MinStack();
- * obj.push(x);
- * obj.pop();
- * int param_3 = obj.top();
- * int param_4 = obj.getMin();
- */</span>
-</code></pre></div></div>
-
-<h3 id="方法二-辅助栈">方法二 辅助栈</h3>
-<h4 id="解题思路-1">解题思路</h4>
-<ul>
-  <li>显然 直接使用 <code class="highlighter-rouge">Collections.min(list)</code> 拿到最最小数 会触发隐藏剧情(Collections.min 是怎么实现的)</li>
-  <li>是的，这里可以用栈，而且用两个，一个是数据栈，一个是辅助栈</li>
-  <li>数据栈好理解 而辅助栈则是用在 获取最小值中， 通过把最小值放在辅助栈栈顶，来获取最小数据</li>
-  <li>上代码</li>
-</ul>
-
-<h4 id="java-1">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MinStack</span> <span class="o">{</span>
-
-    <span class="c1">// 数据栈</span>
-    <span class="kd">private</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">data</span><span class="o">;</span>
-    <span class="c1">// 辅助栈 用于获取最小值</span>
-    <span class="kd">private</span> <span class="nc">Stack</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">helper</span><span class="o">;</span>
-    <span class="cm">/** initialize your data structure here. */</span>
-    <span class="kd">public</span> <span class="nf">MinStack</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
-        <span class="n">helper</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Stack</span><span class="o">&lt;&gt;();</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">push</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">data</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">helper</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()</span> <span class="o">||</span> <span class="n">helper</span><span class="o">.</span><span class="na">peek</span><span class="o">()&gt;=</span><span class="n">x</span><span class="o">)</span>
-            <span class="n">helper</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-        <span class="k">else</span>
-            <span class="n">helper</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">helper</span><span class="o">.</span><span class="na">peek</span><span class="o">());</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">pop</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(!</span><span class="n">data</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
-            <span class="n">data</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
-            <span class="n">helper</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
-        <span class="o">}</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">top</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(!</span><span class="n">data</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span>
-            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"栈中元素为空，此操作非法"</span><span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getMin</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(!</span><span class="n">data</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">helper</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">"栈中元素为空，此操作非法"</span><span class="o">);</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="cm">/**
- * Your MinStack object will be instantiated and called as such:
- * MinStack obj = new MinStack();
- * obj.push(x);
- * obj.pop();
- * int param_3 = obj.top();
- * int param_4 = obj.getMin();
- */</span>
-</code></pre></div></div>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">MinStack</span><span class="p">:</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">"""
-        initialize your data structure here.
-        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 数据栈
-</span>        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># 辅助栈
-</span>
-
-    <span class="k">def</span> <span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">x</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-
-
-    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
-
-
-    <span class="k">def</span> <span class="nf">top</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-
-    <span class="k">def</span> <span class="nf">getMin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-
-
-
-<span class="c1"># Your MinStack object will be instantiated and called as such:
-# obj = MinStack()
-# obj.push(x)
-# obj.pop()
-# param_3 = obj.top()
-# param_4 = obj.getMin()
-</span></code></pre></div></div>
-</div><p><a href="/leetcode/2020/0512/005">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%89%8D%E7%BC%80%E5%92%8C">前缀和</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%9A%B4%E5%8A%9B">暴力</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 12, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0512-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-12T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,前缀和,暴力,哈希表"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>215 post articles, 27 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>216 post articles, 27 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
