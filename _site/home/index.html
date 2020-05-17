@@ -375,6 +375,97 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0517/001"><h2 itemprop="headline" class="item__header">5414. 收藏清单</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：  <code class="success highlighter-rouge">交集</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">交集</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-5414-收藏清单">题目 <a href="https://leetcode-cn.com/problems/people-whose-list-of-favorite-companies-is-not-a-subset-of-another-list/">5414. 收藏清单</a></h3>
+
+<p>给你一个数组 <code class="highlighter-rouge">favoriteCompanies</code> ，其中 <code class="highlighter-rouge">favoriteCompanies[i]</code> 是第 i 名用户收藏的公司清单 <strong>（下标从 0 开始）</strong>。</p>
+
+<p>请找出不是其他任何人收藏的公司清单的子集的收藏清单，并返回该清单下标。下标需要按升序排列。</p>
+
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：favoriteCompanies = [["leetcode","google","facebook"],["google","microsoft"],["google","facebook"],["google"],["amazon"]]
+输出：[0,1,4]
+解释：
+favoriteCompanies[2]=["google","facebook"] 是 favoriteCompanies[0]=["leetcode","google","facebook"] 的子集。
+favoriteCompanies[3]=["google"] 是 favoriteCompanies[0]=["leetcode","google","facebook"] 和 favoriteCompanies[1]=["google","microsoft"] 的子集。
+其余的收藏清单均不是其他任何人收藏的公司清单的子集，因此，答案为 [0,1,4] 。
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：favoriteCompanies = [["leetcode","google","facebook"],["leetcode","amazon"],["facebook","google"]]
+输出：[0,1]
+解释：favoriteCompanies[2]=["facebook","google"] 是 favoriteCompanies[0]=["leetcode","google","facebook"] 的子集，因此，答案为 [0,1] 。
+</code></pre></div></div>
+<h4 id="示例-3">示例 3：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：favoriteCompanies = [["leetcode"],["google"],["facebook"],["amazon"]]
+输出：[0,1,2,3]
+</code></pre></div></div>
+
+<h4 id="提示">提示：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= favoriteCompanies.length &lt;= 100
+1 &lt;= favoriteCompanies[i].length &lt;= 500
+1 &lt;= favoriteCompanies[i][j].length &lt;= 20
+favoriteCompanies[i] 中的所有字符串 各不相同 。
+用户收藏的公司清单也 各不相同 ，也就是说，即便我们按字母顺序排序每个清单， favoriteCompanies[i] != favoriteCompanies[j] 仍然成立。
+所有字符串仅包含小写英文字母。
+</code></pre></div></div>
+
+<h3 id="方法一-判断交集">方法一 判断交集</h3>
+<ul>
+  <li><strong>题目理解</strong>：
+    <ul>
+      <li>题目可以理解为，两个清单是否为包含关系</li>
+      <li>因此我们的解题思路是：通过计算两个清单的 <strong>交集</strong> ，判断两个清单的交集是否为包含关系</li>
+    </ul>
+  </li>
+  <li><strong>算法流程</strong>：
+    <ol>
+      <li>列表转化为集合，可计算两个列表的交集  对于实现交集可以参考 <a href="https://blog.csdn.net/qiubingcsdn/article/details/82947880">Python实现”两个数组的交集”的两种方法</a></li>
+      <li>判断两集合的交集是否为某一集合 <code class="highlighter-rouge">x&amp;y == x</code> ，来确定清单</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">peopleIndexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">favoriteCompanies</span><span class="p">):</span>
+        <span class="n">fav_set</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">sub</span><span class="p">)))</span> <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">favoriteCompanies</span><span class="p">]</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fav_set</span><span class="p">):</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fav_set</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="n">j</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">x</span><span class="o">&amp;</span><span class="n">y</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span> <span class="c1"># 通过判断交集，来防止数据重复录入
+</span>                    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">ans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0517/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%A4%E9%9B%86">交集</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 17, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0517-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-17T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,交集"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0517/008"><h2 itemprop="headline" class="item__header">5398. 统计二叉树中好节点的数目</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1186,122 +1277,8 @@ T     S     G
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 14, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0514-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-14T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,🌟🌟🌟🌟🌟,题解模版"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0513/005"><h2 itemprop="headline" class="item__header">2. 两数相加</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">链表</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">链表</code></li>
-  <li><strong>类似题型</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0414/016">445. 两数相加 II</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="题目-2-两数相加">题目 <a href="https://leetcode-cn.com/problems/add-two-numbers/">2. 两数相加</a></h3>
-<p>给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 <code class="highlighter-rouge">逆序</code> 的方式存储的，并且它们的每个节点只能存储 <code class="highlighter-rouge">一位</code> 数字。</p>
-
-<p>如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。</p>
-
-<p>您可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
-
-<h3 id="示例">示例：</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
-输出：7 -&gt; 0 -&gt; 8
-原因：342 + 465 = 807
-</code></pre></div></div>
-
-<h3 id="方法一-按位相加">方法一 按位相加</h3>
-<ul>
-  <li>主要是对 <code class="highlighter-rouge">sum</code> 大于10 需要花点时间处理，其他直接通过 <strong>按位相加</strong> 即可</li>
-</ul>
-
-<h3 id="复杂度分析">复杂度分析</h3>
-<ul>
-  <li>时间复杂度：$O(\max(m, n))$，假设 $m$ 和 $n$ 分别表示 $l1$ 和 $l2$ 的长度，上面的算法最多重复 $\max(m, n)$ 次。</li>
-  <li>空间复杂度：$O(\max(m, n))$， 新列表的长度最多为 $\max(m,n) + 1$。</li>
-</ul>
-
-<h3 id="上代码">上代码</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * Definition for singly-linked list.
- * public class ListNode {
- *     int val;
- *     ListNode next;
- *     ListNode(int x) { val = x; }
- * }
- */</span>
-<span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">ListNode</span> <span class="nf">addTwoNumbers</span><span class="o">(</span><span class="nc">ListNode</span> <span class="n">l1</span><span class="o">,</span> <span class="nc">ListNode</span> <span class="n">l2</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">ListNode</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-        <span class="nc">ListNode</span> <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span><span class="o">;</span>
-
-        <span class="c1">// 很妙的两个地方 carry 的设置 和 carry &gt;0 的判断 的判断 🌟🌟🌟🌟🌟</span>
-        <span class="c1">// 记录和大于10时 +1</span>
-        <span class="c1">// carry &gt;0 当大于10 则向前进 1</span>
-        <span class="kt">int</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">while</span> <span class="o">(</span><span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-            <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">carry</span><span class="o">;</span>
-            <span class="n">sum</span> <span class="o">+=</span> <span class="o">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="n">l1</span><span class="o">.</span><span class="na">val</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
-            <span class="n">sum</span> <span class="o">+=</span> <span class="o">(</span><span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="n">l2</span><span class="o">.</span><span class="na">val</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
-            <span class="n">carry</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">/</span> <span class="mi">10</span><span class="o">;</span>
-            <span class="n">curr</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ListNode</span><span class="o">(</span><span class="n">sum</span> <span class="o">%</span> <span class="mi">10</span><span class="o">);</span>
-            <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">l1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">l2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
-    <span class="o">}</span>
-
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-</span>
-<span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">addTwoNumbers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l1</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">,</span> <span class="n">l2</span><span class="p">:</span> <span class="n">ListNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ListNode</span><span class="p">:</span>
-        <span class="n">head</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-        <span class="n">curr</span> <span class="o">=</span> <span class="n">head</span>
-        <span class="c1"># 很妙的两个地方 carry 的设置 和 carry &gt;0 的判断 🌟🌟🌟🌟🌟
-</span>        <span class="c1"># 记录和大于10时 +1
-</span>        <span class="c1"># carry &gt;0 当大于10 则向前进 1
-</span>        <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="n">carry</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">l1</span>  <span class="ow">or</span> <span class="n">l2</span><span class="p">:</span>
-            <span class="nb">sum</span> <span class="o">=</span> <span class="n">carry</span>
-            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">l1</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l1</span> <span class="k">else</span> <span class="mi">0</span>
-            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">l2</span><span class="o">.</span><span class="n">val</span> <span class="k">if</span> <span class="n">l2</span> <span class="k">else</span> <span class="mi">0</span>
-            <span class="n">carry</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">//</span> <span class="mi">10</span>
-
-            <span class="n">curr</span><span class="o">.</span><span class="nb">next</span> <span class="o">=</span> <span class="n">ListNode</span><span class="p">(</span><span class="nb">sum</span> <span class="o">%</span> <span class="mi">10</span><span class="p">)</span>
-            <span class="n">curr</span> <span class="o">=</span> <span class="n">curr</span><span class="o">.</span><span class="nb">next</span>
-
-            <span class="k">if</span> <span class="n">l1</span> <span class="p">:</span> <span class="n">l1</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="nb">next</span>
-            <span class="k">if</span> <span class="n">l2</span> <span class="p">:</span> <span class="n">l2</span> <span class="o">=</span> <span class="n">l2</span><span class="o">.</span><span class="nb">next</span>
-        <span class="k">return</span> <span class="n">head</span><span class="o">.</span><span class="nb">next</span>
-</code></pre></div></div>
-
-<ul>
-  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
-  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0513/005">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%93%BE%E8%A1%A8">链表</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 13, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0513-005">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-13T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,链表"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>218 post articles, 28 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>219 post articles, 28 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
