@@ -466,6 +466,163 @@ favoriteCompanies[i] 中的所有字符串 各不相同 。
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0517-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-17T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,交集"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0517/003"><h2 itemprop="headline" class="item__header">5413. 重新排列句子中的单词</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：  <code class="success highlighter-rouge">lambda</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">lambda</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-5413-重新排列句子中的单词">题目 <a href="https://leetcode-cn.com/problems/rearrange-words-in-a-sentence/">5413. 重新排列句子中的单词</a></h3>
+
+<p>「句子」是一个用空格分隔单词的字符串。给你一个满足下述格式的句子 <code class="highlighter-rouge">text</code> :</p>
+
+<ul>
+  <li>句子的首字母大写</li>
+  <li><code class="highlighter-rouge">text</code> 中的每个单词都用单个空格分隔。
+请你重新排列 <code class="highlighter-rouge">text</code> 中的单词，使所有单词按其长度的升序排列。如果两个单词的长度相同，则保留其在原句子中的相对顺序。</li>
+</ul>
+
+<p>请同样按上述格式返回新的句子。</p>
+
+<p> </p>
+
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：text = "Leetcode is cool"
+输出："Is cool leetcode"
+解释：句子中共有 3 个单词，长度为 8 的 "Leetcode" ，长度为 2 的 "is" 以及长度为 4 的 "cool" 。
+输出需要按单词的长度升序排列，新句子中的第一个单词首字母需要大写。
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：text = "Keep calm and code on"
+输出："On and keep calm code"
+解释：输出的排序情况如下：
+"On" 2 个字母。
+"and" 3 个字母。
+"keep" 4 个字母，因为存在长度相同的其他单词，所以它们之间需要保留在原句子中的相对顺序。
+"calm" 4 个字母。
+"code" 4 个字母。
+</code></pre></div></div>
+<h4 id="示例-3">示例 3：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：text = "To be or not to be"
+输出："To be or to be not"
+</code></pre></div></div>
+
+<h4 id="提示">提示：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>text 以大写字母开头，然后包含若干小写字母以及单词间的单个空格。
+1 &lt;= text.length &lt;= 10^5
+</code></pre></div></div>
+
+<h3 id="方法一-按照元素长度排序">方法一 按照元素长度排序</h3>
+<ul>
+  <li>使用 lambda 轻松搞定排序</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">arrangeWords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="c1"># 首字母转小写
+</span>        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">" "</span><span class="p">)</span> <span class="c1"># 通过 空格 分割成数组
+</span>        <span class="n">text</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1"># 使用 lambda 按照元素长度排序
+</span>        <span class="k">return</span> <span class="s">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="c1"># 最后首字母大写
+</span></code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0517/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=lambda">lambda</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 17, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0517-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-17T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,lambda"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0517/002"><h2 itemprop="headline" class="item__header">5412. 在既定时间做作业的学生人数</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>：  <code class="success highlighter-rouge">zip</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">zip</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-5412-在既定时间做作业的学生人数">题目 <a href="https://leetcode-cn.com/problems/number-of-students-doing-homework-at-a-given-time/">5412. 在既定时间做作业的学生人数</a></h3>
+
+<p>给你两个整数数组 <code class="highlighter-rouge">startTime（开始时间）</code>和 <code class="highlighter-rouge">endTime（结束时间）</code>，并指定一个整数 <code class="highlighter-rouge">queryTime</code> 作为查询时间。</p>
+
+<p>已知，第 <code class="highlighter-rouge">i</code> 名学生在 <code class="highlighter-rouge">startTime[i]</code> 时开始写作业并于 <code class="highlighter-rouge">endTime[i]</code> 时完成作业。</p>
+
+<p>请返回在查询时间 <code class="highlighter-rouge">queryTime</code> 时正在做作业的学生人数。形式上，返回能够使 <code class="highlighter-rouge">queryTime</code> 处于区间 <code class="highlighter-rouge">[startTime[i]</code>, <code class="highlighter-rouge">endTime[i]]</code>（含）的学生人数。</p>
+
+<p> </p>
+
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：startTime = [1,2,3], endTime = [3,2,7], queryTime = 4
+输出：1
+解释：一共有 3 名学生。
+第一名学生在时间 1 开始写作业，并于时间 3 完成作业，在时间 4 没有处于做作业的状态。
+第二名学生在时间 2 开始写作业，并于时间 2 完成作业，在时间 4 没有处于做作业的状态。
+第二名学生在时间 3 开始写作业，预计于时间 7 完成作业，这是是唯一一名在时间 4 时正在做作业的学生。
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：startTime = [4], endTime = [4], queryTime = 4
+输出：1
+解释：在查询时间只有一名学生在做作业。
+</code></pre></div></div>
+<h4 id="示例-3">示例 3：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：startTime = [4], endTime = [4], queryTime = 5
+输出：0
+</code></pre></div></div>
+<h4 id="示例-4">示例 4：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：startTime = [1,1,1,1], endTime = [1,3,2,4], queryTime = 7
+输出：0
+</code></pre></div></div>
+<h4 id="示例-5">示例 5：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5
+输出：5
+</code></pre></div></div>
+
+<h4 id="提示">提示：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>startTime.length == endTime.length
+1 &lt;= startTime.length &lt;= 100
+1 &lt;= startTime[i] &lt;= endTime[i] &lt;= 1000
+1 &lt;= queryTime &lt;= 1000
+</code></pre></div></div>
+
+<h4 id="方法一-合并数组">方法一 合并数组</h4>
+<ul>
+  <li>使用 zip 合并数组，代码更简洁</li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">busyStudent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startTime</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">endTime</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">queryTime</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">zipped</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span><span class="n">endTime</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="ow">in</span> <span class="n">zipped</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">queryTime</span><span class="o">&gt;=</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">queryTime</span> <span class="o">&lt;=</span><span class="n">y</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">count</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
+  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
+</ul>
+</div><p><a href="/leetcode/2020/0517/002">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 17, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0517-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-17T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0517/008"><h2 itemprop="headline" class="item__header">5398. 统计二叉树中好节点的数目</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -1001,284 +1158,8 @@ M             1000
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 15, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0515-017">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-15T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0515/006"><h2 itemprop="headline" class="item__header">560. 和为K的子数组</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">前缀和</code> <code class="success highlighter-rouge">哈希表</code></li>
-  <li><strong>思路</strong>：  <code class="info highlighter-rouge">前缀和</code> <code class="info highlighter-rouge">哈希表</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-560-和为k的子数组">题目 <a href="https://leetcode-cn.com/problems/subarray-sum-equals-k/">560. 和为K的子数组</a></h3>
-<p>给定一个整数数组和一个整数 <code class="highlighter-rouge">k</code>，你需要找到该数组中和为 <code class="highlighter-rouge">k</code> 的连续的子数组的个数。</p>
-
-<h3 id="示例-1-">示例 1 :</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入:nums = [1,1,1], k = 2
-输出: 2 , [1,1] 与 [1,1] 为两种不同的情况。
-</code></pre></div></div>
-<h4 id="说明-">说明 :</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>数组的长度为 [1, 20,000]。
-数组中元素的范围是 [-1000, 1000] ，且整数 k 的范围是 [-1e7, 1e7]。
-</code></pre></div></div>
-
-<h3 id="方法一-前缀和">方法一 前缀和</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li><strong>题目理解</strong>：
-    <ul>
-      <li>在数组 <code class="highlighter-rouge">nums</code> 中找到连续子数组和为 <code class="highlighter-rouge">k</code>，并返回子数组个数</li>
-      <li>我们假设 从左到右 前缀和为 <code class="highlighter-rouge">preSum[0]preSum[0]...preSum[i+1]</code></li>
-      <li>我们再根据下面的 <strong>前缀和推倒过程</strong> ，可以得到任意连续子数组和</li>
-      <li>只要 $preSum[right+1] - preSum[left] = k$ 即可得到结果</li>
-    </ul>
-  </li>
-  <li><strong>前缀和推倒过程</strong>：
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>preSum[0] = 0
-preSum[1] = num[0] = preSum[0] + nums[0]
-preSum[2] = num[0] + num[1] = preSum[1] + nums[1]
-preSum[3] = num[0] + num[1] + nums[2] = preSum[2] + nums[2]
-.
-.
-preSum[i+1] = num[0] + num[1] ... + nums[i] = preSum[i] + nums[i]
-</code></pre></div>    </div>
-  </li>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(N^2)$ ：假设数组长度为 <code class="highlighter-rouge">n</code> ，遍历两次 ；</li>
-      <li>空间复杂度 $O(N+1)$ ：假设数组长度为 <code class="highlighter-rouge">n</code>，其中 <code class="highlighter-rouge">preSum[0]</code> 为前缀初始值。</li>
-    </ul>
-  </li>
-</ul>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">subarraySum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
-        <span class="c1">// 计算前缀和数组</span>
-        <span class="kt">int</span><span class="o">[]</span> <span class="n">preSum</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="o">];</span>
-        <span class="n">preSum</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">preSum</span><span class="o">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">preSum</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-        <span class="o">}</span>
-        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">left</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">right</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="n">len</span><span class="o">;</span> <span class="n">right</span><span class="o">++)</span> <span class="o">{</span>
-                <span class="c1">// 区间和 [left..right]，注意下标偏移</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">preSum</span><span class="o">[</span><span class="n">right</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">-</span> <span class="n">preSum</span><span class="o">[</span><span class="n">left</span><span class="o">]</span> <span class="o">==</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">count</span><span class="o">++;</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">subarraySum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="n">nums_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
-        <span class="n">pre_sum</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">nums_len</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">num</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
-            <span class="n">pre_sum</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">num</span>
-        <span class="k">for</span> <span class="n">left</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">right</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre_sum</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">k</span><span class="p">:</span>
-                    <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">count</span>
-</code></pre></div></div>
-
-<h3 id="方法二-前缀和--哈希表">方法二 前缀和 + 哈希表</h3>
-<ul>
-  <li>还是前缀和的思想，我们把前缀和放在 <code class="highlighter-rouge">map</code> 中， <code class="highlighter-rouge">map.put(preSum,前缀和出现次数)</code> (数组中可能会有负数，所以可能会重复出现)</li>
-</ul>
-
-<h4 id="java-1">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">subarraySum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="c1">// key:前i个元素的和，value：对应key 出现的个数</span>
-        <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">,</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">preSumMap</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
-        <span class="c1">// 数组下标为 0，则前面数组为空，所以和为 0，且出现一次  </span>
-        <span class="n">preSumMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
-        <span class="kt">int</span> <span class="n">preSum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="n">preSum</span> <span class="o">+=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">preSumMap</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">preSum</span><span class="o">-</span><span class="n">k</span><span class="o">)){</span>
-                <span class="n">count</span> <span class="o">+=</span> <span class="n">preSumMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">preSum</span><span class="o">-</span><span class="n">k</span><span class="o">);</span>
-            <span class="o">}</span>
-            <span class="n">preSumMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">preSum</span><span class="o">,</span> <span class="n">preSumMap</span><span class="o">.</span><span class="na">getOrDefault</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span> <span class="mi">0</span><span class="o">)+</span><span class="mi">1</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<h4 id="python-1">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">subarraySum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="n">pre_sum</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">pre_sum_dict</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">pre_sum_dict</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
-            <span class="n">pre_sum</span> <span class="o">+=</span> <span class="n">num</span>
-            <span class="k">if</span> <span class="n">pre_sum</span> <span class="o">-</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">pre_sum_dict</span><span class="p">:</span>
-                <span class="n">count</span> <span class="o">+=</span> <span class="n">pre_sum_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pre_sum</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span>
-            <span class="n">pre_sum_dict</span><span class="p">[</span><span class="n">pre_sum</span><span class="p">]</span> <span class="o">+=</span>  <span class="mi">1</span>
-        <span class="k">return</span> <span class="n">count</span>
-</code></pre></div></div>
-
-<ul>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(N)$ ：假设数组长度为 <code class="highlighter-rouge">n</code> ，我们遍历数组长度为 <code class="highlighter-rouge">n</code></li>
-      <li>空间复杂度 $O(N)$ ：假设数组长度为 <code class="highlighter-rouge">n</code>，哈希表在最坏的情况下，保存 <code class="highlighter-rouge">n</code> 个不同元素</li>
-    </ul>
-  </li>
-  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
-  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0515/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%89%8D%E7%BC%80%E5%92%8C">前缀和</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%93%88%E5%B8%8C%E8%A1%A8">哈希表</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 15, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0515-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-15T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,前缀和,哈希表"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0514/006"><h2 itemprop="headline" class="item__header">6. Z 字形变换</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>：</li>
-  <li><strong>思路</strong>：</li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="6-z-字形变换"><a href="https://leetcode-cn.com/problems/zigzag-conversion/">6. Z 字形变换</a></h3>
-<p>将一个给定字符串根据给定的行数，以从上往下、从左到右进行 Z 字形排列。</p>
-
-<p>比如输入字符串为 <code class="highlighter-rouge">LEETCODEISHIRING</code> 行数为 3 时，排列如下：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>L   C   I   R
-E T O E S I I G
-E   D   H   N
-</code></pre></div></div>
-<p>之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如：”LCIRETOESIIGEDHN”。</p>
-
-<p>请你实现这个将字符串进行指定行数变换的函数：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>string convert(string s, int numRows);
-</code></pre></div></div>
-<h3 id="示例1">示例 1:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: s = "LEETCODEISHIRING", numRows = 3
-输出: "LCIRETOESIIGEDHN
-</code></pre></div></div>
-<h3 id="示例2">示例 2:</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: s = "LEETCODEISHIRING", numRows = 4
-输出: "LDREOEIIECIHNTSG"
-解释:
-
-L     D     R
-E   O E   I I
-E C   I H   N
-T     S     G
-</code></pre></div></div>
-
-<h3 id="方法一">方法一</h3>
-<h4 id="解题思路">解题思路</h4>
-<ul>
-  <li><strong>题目理解</strong>：
-    <ul>
-      <li>字符串 <code class="highlighter-rouge">s</code> 按照 <code class="highlighter-rouge">Z</code> 形状排列字符串，最后按照行打印</li>
-      <li>我们假设 <code class="highlighter-rouge">numRows</code> 对应的行是  $r_1,r_2…r_n$ , 排序顺序异常是按照 从上到下 $r_1,r_2 …r_n$  再从下到上 $r_i …r_2,r_1$ ,反复进行</li>
-      <li>因此我们的解题思路是：模拟这个行的变化，在遍历 <code class="highlighter-rouge">s</code> 的同时，把每个字符串添加到对应的行 <code class="highlighter-rouge">res[i]</code></li>
-    </ul>
-  </li>
-  <li><strong>算法流程</strong>：按照顺序遍历 <code class="highlighter-rouge">s</code>;
-    <ol>
-      <li><code class="highlighter-rouge">res[i] += c</code>： 把每个字符 <code class="highlighter-rouge">c</code> 填入对应行 $r_i$；</li>
-      <li><code class="highlighter-rouge">i += flag</code>： 更新当前字符 <code class="highlighter-rouge">c</code> 对应的行索引；</li>
-      <li><code class="highlighter-rouge">flag = - flag</code>： 在达到 $Z$ 字形转折点时，执行反向。</li>
-    </ol>
-  </li>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(N)$ ：遍历一遍字符串 <code class="highlighter-rouge">s</code>；</li>
-      <li>空间复杂度 $O(N)$ ：各行字符串共占用 $O(N)$ 额外空间。</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="代码">代码</h3>
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">numRows</span><span class="p">):</span>
-        <span class="s">"""
-        :type s: str
-        :type numRows: int
-        :rtype: str
-        """</span>
-        <span class="k">if</span> <span class="n">numRows</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">s</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="s">''</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numRows</span><span class="p">)]</span>
-        <span class="n">i</span><span class="p">,</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
-            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">c</span>
-            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">0</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="n">numRows</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="n">flag</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="n">flag</span>
-        <span class="k">return</span> <span class="s">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-</code></pre></div></div>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">convert</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">numRows</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">numRows</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">)</span>
-            <span class="k">return</span> <span class="n">s</span><span class="o">;</span>
-        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">StringBuilder</span><span class="o">&gt;</span> <span class="n">rows</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numRows</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
-        <span class="n">rows</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">());</span>
-        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-        <span class="k">for</span><span class="o">(</span><span class="kt">char</span> <span class="nl">c:</span><span class="n">s</span><span class="o">.</span><span class="na">toCharArray</span><span class="o">()){</span>
-            <span class="n">rows</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">c</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span> <span class="o">||</span> <span class="n">i</span><span class="o">==</span><span class="n">numRows</span><span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-                <span class="n">flag</span> <span class="o">=</span> <span class="o">-</span><span class="n">flag</span><span class="o">;</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="n">flag</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="nc">StringBuilder</span>  <span class="n">res</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
-        <span class="k">for</span><span class="o">(</span><span class="nc">StringBuilder</span> <span class="n">str</span> <span class="o">:</span><span class="n">rows</span><span class="o">)</span>
-            <span class="n">res</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">res</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
-  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0514/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F">🌟🌟🌟🌟🌟</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%A2%98%E8%A7%A3%E6%A8%A1%E7%89%88">题解模版</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 14, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0514-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-14T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,🌟🌟🌟🌟🌟,题解模版"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>219 post articles, 28 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>221 post articles, 28 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
