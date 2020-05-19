@@ -375,6 +375,121 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0519/001"><h2 itemprop="headline" class="item__header">15. 三数之和</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">数组遍历</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">数组遍历</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+<h3 id="题目-15-三数之和">题目 <a href="https://leetcode-cn.com/problems/3sum/">15. 三数之和</a></h3>
+<p>给你一个包含 <code class="highlighter-rouge">n</code> 个整数的数组 <code class="highlighter-rouge">nums</code>，判断 <code class="highlighter-rouge">nums</code> 中是否存在三个元素 <code class="highlighter-rouge">a，b，c</code> ，使得 <code class="highlighter-rouge">a + b + c = 0</code> ？请你找出所有满足条件且不重复的三元组。</p>
+
+<p><strong>注意</strong>：答案中不可以包含重复的三元组。</p>
+
+<h4 id="示例">示例：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+</code></pre></div></div>
+
+<h3 id="方法一-数组遍历">方法一 数组遍历</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li>首先对数组进行排序，排序后固定一个数 $nums[i]$，再使用左右指针指向 $nums[i]$ 后面的两端，数字分别为 $nums[L]$ 和 $nums[R]$，计算三个数的和 $sum$ 判断是否满足为 $0$，满足则添加进结果集</li>
+      <li>如果 $nums[i]$ 大于 $0$，则三数之和必然无法等于 $0$，结束循环</li>
+      <li>如果 $nums[i]= nums[i−1]$，则说明该数字重复，会导致结果重复，所以应该跳过</li>
+      <li>当 $sum0 时，$nums[L] = nums[L+1]$ 则会导致结果重复，应该跳过，$L++$</li>
+      <li>当 $sum0$ 时，$nums[R] =nums[R−1]$ 则会导致结果重复，应该跳过，$R–$</li>
+    </ul>
+  </li>
+  <li><strong>时间复杂度</strong>：
+    <ul>
+      <li>时间复杂度：$O(n^2)$ $n$ 为数组长度</li>
+      <li>空间复杂度：$O(1)$</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="nf">threeSum</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">List</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">nums</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">len</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="o">)</span> <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+        <span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">nums</span><span class="o">);</span> <span class="c1">// 排序</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="k">break</span><span class="o">;</span> <span class="c1">// 如果当前数字大于0，则三数之和一定大于0，所以结束循环</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">])</span> <span class="k">continue</span><span class="o">;</span> <span class="c1">// 去重</span>
+            <span class="kt">int</span> <span class="no">L</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">;</span>
+            <span class="kt">int</span> <span class="no">R</span> <span class="o">=</span> <span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="o">;</span>
+            <span class="k">while</span><span class="o">(</span><span class="no">L</span> <span class="o">&lt;</span> <span class="no">R</span><span class="o">){</span>
+                <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="no">L</span><span class="o">]</span> <span class="o">+</span> <span class="n">nums</span><span class="o">[</span><span class="no">R</span><span class="o">];</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">sum</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
+                    <span class="n">ans</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="nc">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">],</span><span class="n">nums</span><span class="o">[</span><span class="no">L</span><span class="o">],</span><span class="n">nums</span><span class="o">[</span><span class="no">R</span><span class="o">]));</span>
+                    <span class="k">while</span> <span class="o">(</span><span class="no">L</span><span class="o">&lt;</span><span class="no">R</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="no">L</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="no">L</span><span class="o">+</span><span class="mi">1</span><span class="o">])</span> <span class="no">L</span><span class="o">++;</span> <span class="c1">// 去重</span>
+                    <span class="k">while</span> <span class="o">(</span><span class="no">L</span><span class="o">&lt;</span><span class="no">R</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="o">[</span><span class="no">R</span><span class="o">]</span> <span class="o">==</span> <span class="n">nums</span><span class="o">[</span><span class="no">R</span><span class="o">-</span><span class="mi">1</span><span class="o">])</span> <span class="no">R</span><span class="o">--;</span> <span class="c1">// 去重</span>
+                    <span class="no">L</span><span class="o">++;</span>
+                    <span class="no">R</span><span class="o">--;</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="no">L</span><span class="o">++;</span>
+                <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="no">R</span><span class="o">--;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>        
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">threeSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="s">"""
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """</span>
+        <span class="n">nums_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span> <span class="ow">or</span> <span class="n">nums_len</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span> <span class="k">return</span> <span class="n">ans</span>
+        <span class="n">nums</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nums_len</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">ans</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="k">continue</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">nums_len</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">ans</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">,</span><span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="p">,</span><span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]])</span>
+                    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">left</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">==</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">right</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">left</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0519/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%95%B0%E7%BB%84%E9%81%8D%E5%8E%86">数组遍历</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 19, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0519-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-19T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,数组遍历"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0518/001"><h2 itemprop="headline" class="item__header">14. 最长公共前缀</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">简单</code></li>
@@ -1003,111 +1118,8 @@ M             1000
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 16, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0516-007">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-16T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,哈希表"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0516/006"><h2 itemprop="headline" class="item__header">12. 整数转罗马数字</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>：</li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">这道题告诉又一次告诉我，题解先做出来，不管方法多么的简单</code></li>
-  <li><strong>类似题型</strong>:
-    <ul>
-      <li><a href="/leetcode/2020/0516/007">13. 罗马数字转整数</a></li>
-    </ul>
-  </li>
-</ul>
-
-<hr />
-
-<h3 id="题目-12-整数转罗马数字">题目 <a href="https://leetcode-cn.com/problems/integer-to-roman/">12. 整数转罗马数字</a></h3>
-<p>罗马数字包含以下七种字符： <code class="highlighter-rouge">I， V， X， L，C，D </code>和 <code class="highlighter-rouge"> M</code>。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>字符          数值
-I             1
-V             5
-X             10
-L             50
-C             100
-D             500
-M             1000
-</code></pre></div></div>
-<p>例如， 罗马数字 2 写做 <code class="highlighter-rouge">II</code> ，即为两个并列的 1。12 写做 <code class="highlighter-rouge">XII</code> ，即为 <code class="highlighter-rouge">X + II</code> 。 27 写做  <code class="highlighter-rouge">XXVII</code>, 即为 <code class="highlighter-rouge">XX + V + II</code> 。</p>
-
-<p>通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 <code class="highlighter-rouge">IIII</code>，而是 <code class="highlighter-rouge">IV</code>。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况：</p>
-
-<ul>
-  <li><code class="highlighter-rouge">I</code> 可以放在 <code class="highlighter-rouge">V</code> (5) 和 <code class="highlighter-rouge">X</code> (10) 的左边，来表示 4 和 9。</li>
-  <li><code class="highlighter-rouge">X</code> 可以放在 <code class="highlighter-rouge">L</code> (50) 和 <code class="highlighter-rouge">C</code> (100) 的左边，来表示 40 和 90。 </li>
-  <li><code class="highlighter-rouge">C</code> 可以放在 <code class="highlighter-rouge">D</code> (500) 和 <code class="highlighter-rouge">M</code> (1000) 的左边，来表示 400 和 900。
-给定一个整数，将其转为罗马数字。输入确保在 1 到 3999 的范围内。</li>
-</ul>
-
-<h4 id="示例1">示例 1:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 3
-输出: "III"
-</code></pre></div></div>
-<h4 id="示例2">示例 2:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 4
-输出: "IV"
-</code></pre></div></div>
-<h4 id="示例3">示例 3:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 9
-输出: "IX"
-</code></pre></div></div>
-<h4 id="示例4">示例 4:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 58
-输出: "LVIII"
-解释: L = 50, V = 5, III = 3.
-</code></pre></div></div>
-<h4 id="示例5">示例 5:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: 1994
-输出: "MCMXCIV"
-解释: M = 1000, CM = 900, XC = 90, IV = 4.
-</code></pre></div></div>
-
-<h3 id="方法一">方法一</h3>
-<ul>
-  <li><strong>解题思路</strong>：
-    <ul>
-      <li>把所有的罗马数组列出来 在拼接
-        <h4 id="python">python</h4>
-        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-<span class="k">def</span> <span class="nf">intToRoman</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-    <span class="n">thousands</span> <span class="o">=</span> <span class="p">[</span><span class="s">""</span><span class="p">,</span> <span class="s">"M"</span><span class="p">,</span> <span class="s">"MM"</span><span class="p">,</span> <span class="s">"MMM"</span><span class="p">]</span>
-    <span class="n">hundreds</span> <span class="o">=</span> <span class="p">[</span><span class="s">""</span><span class="p">,</span> <span class="s">"C"</span><span class="p">,</span> <span class="s">"CC"</span><span class="p">,</span> <span class="s">"CCC"</span><span class="p">,</span> <span class="s">"CD"</span><span class="p">,</span> <span class="s">"D"</span><span class="p">,</span> <span class="s">"DC"</span><span class="p">,</span> <span class="s">"DCC"</span><span class="p">,</span> <span class="s">"DCCC"</span><span class="p">,</span> <span class="s">"CM"</span><span class="p">]</span>
-    <span class="n">tens</span> <span class="o">=</span> <span class="p">[</span><span class="s">""</span><span class="p">,</span> <span class="s">"X"</span><span class="p">,</span> <span class="s">"XX"</span><span class="p">,</span> <span class="s">"XXX"</span><span class="p">,</span> <span class="s">"XL"</span><span class="p">,</span> <span class="s">"L"</span><span class="p">,</span> <span class="s">"LX"</span><span class="p">,</span> <span class="s">"LXX"</span><span class="p">,</span> <span class="s">"LXXX"</span><span class="p">,</span> <span class="s">"XC"</span><span class="p">]</span>
-    <span class="n">ones</span> <span class="o">=</span> <span class="p">[</span><span class="s">""</span><span class="p">,</span> <span class="s">"I"</span><span class="p">,</span> <span class="s">"II"</span><span class="p">,</span> <span class="s">"III"</span><span class="p">,</span> <span class="s">"IV"</span><span class="p">,</span> <span class="s">"V"</span><span class="p">,</span> <span class="s">"VI"</span><span class="p">,</span> <span class="s">"VII"</span><span class="p">,</span> <span class="s">"VIII"</span><span class="p">,</span> <span class="s">"IX"</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">thousands</span><span class="p">[</span><span class="n">num</span> <span class="o">//</span> <span class="mi">1000</span><span class="p">]</span> <span class="o">+</span> <span class="n">hundreds</span><span class="p">[</span><span class="n">num</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">//</span> <span class="mi">100</span><span class="p">]</span> <span class="o">+</span> <span class="n">tens</span><span class="p">[</span><span class="n">num</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">//</span> <span class="mi">10</span><span class="p">]</span> <span class="o">+</span> <span class="n">ones</span><span class="p">[</span><span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="p">]</span>
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">String</span> <span class="nf">intToRoman</span><span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">String</span><span class="o">[]</span> <span class="n">thousands</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[]{</span><span class="s">""</span><span class="o">,</span> <span class="s">"M"</span><span class="o">,</span> <span class="s">"MM"</span><span class="o">,</span> <span class="s">"MMM"</span><span class="o">};</span>
-        <span class="nc">String</span><span class="o">[]</span> <span class="n">hundreds</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[]{</span><span class="s">""</span><span class="o">,</span> <span class="s">"C"</span><span class="o">,</span> <span class="s">"CC"</span><span class="o">,</span> <span class="s">"CCC"</span><span class="o">,</span> <span class="s">"CD"</span><span class="o">,</span> <span class="s">"D"</span><span class="o">,</span> <span class="s">"DC"</span><span class="o">,</span> <span class="s">"DCC"</span><span class="o">,</span> <span class="s">"DCCC"</span><span class="o">,</span> <span class="s">"CM"</span><span class="o">};</span>
-        <span class="nc">String</span><span class="o">[]</span> <span class="n">tens</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[]{</span><span class="s">""</span><span class="o">,</span> <span class="s">"X"</span><span class="o">,</span> <span class="s">"XX"</span><span class="o">,</span> <span class="s">"XXX"</span><span class="o">,</span> <span class="s">"XL"</span><span class="o">,</span> <span class="s">"L"</span><span class="o">,</span> <span class="s">"LX"</span><span class="o">,</span> <span class="s">"LXX"</span><span class="o">,</span> <span class="s">"LXXX"</span><span class="o">,</span> <span class="s">"XC"</span><span class="o">};</span>
-        <span class="nc">String</span><span class="o">[]</span> <span class="n">ones</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">String</span><span class="o">[]{</span><span class="s">""</span><span class="o">,</span> <span class="s">"I"</span><span class="o">,</span> <span class="s">"II"</span><span class="o">,</span> <span class="s">"III"</span><span class="o">,</span> <span class="s">"IV"</span><span class="o">,</span> <span class="s">"V"</span><span class="o">,</span> <span class="s">"VI"</span><span class="o">,</span> <span class="s">"VII"</span><span class="o">,</span> <span class="s">"VIII"</span><span class="o">,</span> <span class="s">"IX"</span><span class="o">};</span>
-        <span class="k">return</span> <span class="n">thousands</span><span class="o">[</span><span class="n">num</span> <span class="o">/</span> <span class="mi">1000</span><span class="o">]</span> <span class="o">+</span> <span class="n">hundreds</span><span class="o">[</span><span class="n">num</span> <span class="o">%</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mi">100</span><span class="o">]</span> <span class="o">+</span> <span class="n">tens</span><span class="o">[</span><span class="n">num</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">/</span> <span class="mi">10</span><span class="o">]</span> <span class="o">+</span> <span class="n">ones</span><span class="o">[</span><span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="o">];</span>
-
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
-  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0516/006">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F">🌟🌟🌟🌟🌟</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 16, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0516-006">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-16T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,🌟🌟🌟🌟🌟"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>222 post articles, 28 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>223 post articles, 28 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
