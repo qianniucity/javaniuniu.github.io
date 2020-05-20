@@ -1,5 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-19T19:11:58+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">15. 三数之和</title><link href="http://localhost:4000/leetcode/2020/0519/001" rel="alternate" type="text/html" title="15. 三数之和" /><published>2020-05-19T00:00:00+08:00</published><updated>2020-05-19T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0519/15.%20%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0519/001">&lt;ul&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-20T11:18:40+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">16. 最接近的三数之和</title><link href="http://localhost:4000/leetcode/2020/0520/001" rel="alternate" type="text/html" title="16. 最接近的三数之和" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0520/16.%20%E6%9C%80%E6%8E%A5%E8%BF%91%E7%9A%84%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0520/001">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;数组遍历&lt;/code&gt; &lt;code class=&quot;success highlighter-rouge&quot;&gt;双指针&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;数组遍历&lt;/code&gt; &lt;code class=&quot;info highlighter-rouge&quot;&gt;双指针&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;/leetcode/2020/0519/001&quot;&gt;15. 三数之和&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;题目-16-最接近的三数之和&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/3sum-closest/&quot;&gt;16. 最接近的三数之和&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;给定一个包括 n 个整数的数组 &lt;code class=&quot;highlighter-rouge&quot;&gt;nums&lt;/code&gt; 和 一个目标值 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt;。找出 &lt;code class=&quot;highlighter-rouge&quot;&gt;nums&lt;/code&gt; 中的三个整数，使得它们的和与 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 最接近。返回这三个数的和。假定每组输入只存在唯一答案。&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
+
+与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;方法一-双指针&quot;&gt;方法一 双指针&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;左右指针向中间移动，中间同时从左向右移动 &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt;，并三数相加&lt;/li&gt;
+      &lt;li&gt;通过每次 &lt;code class=&quot;highlighter-rouge&quot;&gt;三数之和 - 目标值&lt;/code&gt; ，&lt;strong&gt;比较绝对值&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;:
+    &lt;ul&gt;
+      &lt;li&gt;时间复杂度 $O(N^2)$ ，$N$ 为数组的长度&lt;/li&gt;
+      &lt;li&gt;空间复杂度 $O(1)$&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;python&quot;&gt;python&lt;/h4&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;threeSumClosest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;nums_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums_len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;java&quot;&gt;java&lt;/h4&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;threeSumClosest&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Arrays&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums_len&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;abs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;right&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;--;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans_sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="数组遍历" /><category term="双指针" /><summary type="html">难度：中等 本题涉及算法： 数组遍历 双指针 思路： 数组遍历 双指针 类似题型: 15. 三数之和 题目 16. 最接近的三数之和 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。 例如，给定数组 nums = [-1，2，1，-4], 和 target = 1. 与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2). 方法一 双指针 解题思路： 左右指针向中间移动，中间同时从左向右移动 i，并三数相加 通过每次 三数之和 - 目标值 ，比较绝对值 复杂度分析: 时间复杂度 $O(N^2)$ ，$N$ 为数组的长度 空间复杂度 $O(1)$ python class Solution: def threeSumClosest(self, nums: List[int], target: int) -&amp;gt; int: nums_len = len(nums) nums.sort() ans_sum = nums[0] + nums[1] + nums[2]; for i in range(nums_len): left, right = i + 1 , nums_len - 1 while left &amp;lt; right: curr_sum = nums[i] + nums[left] + nums[right] if abs(curr_sum - target) &amp;lt; abs(ans_sum - target): ans_sum = curr_sum if curr_sum &amp;gt; target: right -= 1 elif curr_sum &amp;lt; target: left += 1 else: return target return ans_sum java class Solution { public int threeSumClosest(int[] nums, int target) { int nums_len = nums.length; Arrays.sort(nums); int ans_sum = nums[0] + nums[1] + nums[2]; for(int i = 0 ;i&amp;lt;nums_len;i++) { int left = i + 1, right = nums_len - 1; while (left &amp;lt; right) { int curr_sum = nums[i] + nums[left] + nums[right]; if (Math.abs(curr_sum - target) &amp;lt; Math.abs(ans_sum - target) ) ans_sum = curr_sum; if (curr_sum &amp;gt; target) right --; else if (curr_sum &amp;lt; target) left ++; else return target; } } return ans_sum; } } 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">15. 三数之和</title><link href="http://localhost:4000/leetcode/2020/0519/001" rel="alternate" type="text/html" title="15. 三数之和" /><published>2020-05-19T00:00:00+08:00</published><updated>2020-05-19T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0519/15.%20%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0519/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;数组遍历&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;数组遍历&lt;/code&gt;&lt;/li&gt;
@@ -7,6 +86,7 @@
 &lt;/ul&gt;
 
 &lt;hr /&gt;
+
 &lt;h3 id=&quot;题目-15-三数之和&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/3sum/&quot;&gt;15. 三数之和&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;给你一个包含 &lt;code class=&quot;highlighter-rouge&quot;&gt;n&lt;/code&gt; 个整数的数组 &lt;code class=&quot;highlighter-rouge&quot;&gt;nums&lt;/code&gt;，判断 &lt;code class=&quot;highlighter-rouge&quot;&gt;nums&lt;/code&gt; 中是否存在三个元素 &lt;code class=&quot;highlighter-rouge&quot;&gt;a，b，c&lt;/code&gt; ，使得 &lt;code class=&quot;highlighter-rouge&quot;&gt;a + b + c = 0&lt;/code&gt; ？请你找出所有满足条件且不重复的三元组。&lt;/p&gt;
 
@@ -161,215 +241,7 @@
   &lt;li&gt;这个例子是 &lt;strong&gt;菜鸟编程&lt;/strong&gt; 里关于 &lt;strong&gt;zip函数&lt;/strong&gt; 介绍 &lt;a href=&quot;https://www.runoob.com/python/python-func-zip.html&quot;&gt;Python zip() 函数&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;如果你也发现了，请为自己点赞，顺便为作者点赞👍支持&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;如果发现在别处也有类似的例题，请在下面👇评论区告诉作者&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="zip" /><summary type="html">难度：简单 本题涉及算法： 思路： zip 类似题型: 题目 14. 最长公共前缀 编写一个函数来查找字符串数组中的最长公共前缀。 如果不存在公共前缀，返回空字符串 ”“。 示例 1: 输入: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;] 输出: &quot;fl&quot; 示例 2: 输入: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;] 输出: &quot;&quot; 解释: 输入不存在公共前缀。 说明: 所有输入只包含小写字母 a-z 。 方法一 zip合并 解题思路： 使用 zip 根据字符串下标合并成数组， 判断合并后数组里元素是否都相同 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 class Solution(object): def longestCommonPrefix(self, strs): ans = '' for i in zip(*strs): if len(set(i)) == 1: ans += i[0] else: break return ans 这个例子是 菜鸟编程 里关于 zip函数 介绍 Python zip() 函数 如果你也发现了，请为自己点赞，顺便为作者点赞👍支持 如果发现在别处也有类似的例题，请在下面👇评论区告诉作者</summary></entry><entry><title type="html">5412. 在既定时间做作业的学生人数</title><link href="http://localhost:4000/leetcode/2020/0517/002" rel="alternate" type="text/html" title="5412. 在既定时间做作业的学生人数" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5412.%20%E5%9C%A8%E6%97%A2%E5%AE%9A%E6%97%B6%E9%97%B4%E5%81%9A%E4%BD%9C%E4%B8%9A%E7%9A%84%E5%AD%A6%E7%94%9F%E4%BA%BA%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/002">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;题目-5412-在既定时间做作业的学生人数&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/number-of-students-doing-homework-at-a-given-time/&quot;&gt;5412. 在既定时间做作业的学生人数&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;给你两个整数数组 &lt;code class=&quot;highlighter-rouge&quot;&gt;startTime（开始时间）&lt;/code&gt;和 &lt;code class=&quot;highlighter-rouge&quot;&gt;endTime（结束时间）&lt;/code&gt;，并指定一个整数 &lt;code class=&quot;highlighter-rouge&quot;&gt;queryTime&lt;/code&gt; 作为查询时间。&lt;/p&gt;
-
-&lt;p&gt;已知，第 &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; 名学生在 &lt;code class=&quot;highlighter-rouge&quot;&gt;startTime[i]&lt;/code&gt; 时开始写作业并于 &lt;code class=&quot;highlighter-rouge&quot;&gt;endTime[i]&lt;/code&gt; 时完成作业。&lt;/p&gt;
-
-&lt;p&gt;请返回在查询时间 &lt;code class=&quot;highlighter-rouge&quot;&gt;queryTime&lt;/code&gt; 时正在做作业的学生人数。形式上，返回能够使 &lt;code class=&quot;highlighter-rouge&quot;&gt;queryTime&lt;/code&gt; 处于区间 &lt;code class=&quot;highlighter-rouge&quot;&gt;[startTime[i]&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;endTime[i]]&lt;/code&gt;（含）的学生人数。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [1,2,3], endTime = [3,2,7], queryTime = 4
-输出：1
-解释：一共有 3 名学生。
-第一名学生在时间 1 开始写作业，并于时间 3 完成作业，在时间 4 没有处于做作业的状态。
-第二名学生在时间 2 开始写作业，并于时间 2 完成作业，在时间 4 没有处于做作业的状态。
-第二名学生在时间 3 开始写作业，预计于时间 7 完成作业，这是是唯一一名在时间 4 时正在做作业的学生。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [4], endTime = [4], queryTime = 4
-输出：1
-解释：在查询时间只有一名学生在做作业。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [4], endTime = [4], queryTime = 5
-输出：0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-4&quot;&gt;示例 4：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [1,1,1,1], endTime = [1,3,2,4], queryTime = 7
-输出：0
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-5&quot;&gt;示例 5：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5
-输出：5
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;startTime.length == endTime.length
-1 &amp;lt;= startTime.length &amp;lt;= 100
-1 &amp;lt;= startTime[i] &amp;lt;= endTime[i] &amp;lt;= 1000
-1 &amp;lt;= queryTime &amp;lt;= 1000
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;方法一-合并数组&quot;&gt;方法一 合并数组&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;使用 zip 合并数组，代码更简洁&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;busyStudent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;zipped&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zipped&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：简单 本题涉及算法： zip 思路： zip 类似题型: 题目 5412. 在既定时间做作业的学生人数 给你两个整数数组 startTime（开始时间）和 endTime（结束时间），并指定一个整数 queryTime 作为查询时间。 已知，第 i 名学生在 startTime[i] 时开始写作业并于 endTime[i] 时完成作业。 请返回在查询时间 queryTime 时正在做作业的学生人数。形式上，返回能够使 queryTime 处于区间 [startTime[i], endTime[i]]（含）的学生人数。   示例 1： 输入：startTime = [1,2,3], endTime = [3,2,7], queryTime = 4 输出：1 解释：一共有 3 名学生。 第一名学生在时间 1 开始写作业，并于时间 3 完成作业，在时间 4 没有处于做作业的状态。 第二名学生在时间 2 开始写作业，并于时间 2 完成作业，在时间 4 没有处于做作业的状态。 第二名学生在时间 3 开始写作业，预计于时间 7 完成作业，这是是唯一一名在时间 4 时正在做作业的学生。 示例 2： 输入：startTime = [4], endTime = [4], queryTime = 4 输出：1 解释：在查询时间只有一名学生在做作业。 示例 3： 输入：startTime = [4], endTime = [4], queryTime = 5 输出：0 示例 4： 输入：startTime = [1,1,1,1], endTime = [1,3,2,4], queryTime = 7 输出：0 示例 5： 输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5 输出：5 提示： startTime.length == endTime.length 1 &amp;lt;= startTime.length &amp;lt;= 100 1 &amp;lt;= startTime[i] &amp;lt;= endTime[i] &amp;lt;= 1000 1 &amp;lt;= queryTime &amp;lt;= 1000 方法一 合并数组 使用 zip 合并数组，代码更简洁 class Solution: def busyStudent(self, startTime: List[int], endTime: List[int], queryTime: int) -&amp;gt; int: zipped = zip(startTime,endTime) count = 0 for x,y in zipped: if queryTime&amp;gt;= x and queryTime &amp;lt;=y: count += 1 return count 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5413. 重新排列句子中的单词</title><link href="http://localhost:4000/leetcode/2020/0517/003" rel="alternate" type="text/html" title="5413. 重新排列句子中的单词" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5413.%20%E9%87%8D%E6%96%B0%E6%8E%92%E5%88%97%E5%8F%A5%E5%AD%90%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/003">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;lambda&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;lambda&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;题目-5413-重新排列句子中的单词&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/rearrange-words-in-a-sentence/&quot;&gt;5413. 重新排列句子中的单词&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;「句子」是一个用空格分隔单词的字符串。给你一个满足下述格式的句子 &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; :&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;句子的首字母大写&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; 中的每个单词都用单个空格分隔。
-请你重新排列 &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; 中的单词，使所有单词按其长度的升序排列。如果两个单词的长度相同，则保留其在原句子中的相对顺序。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;请同样按上述格式返回新的句子。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：text = &quot;Leetcode is cool&quot;
-输出：&quot;Is cool leetcode&quot;
-解释：句子中共有 3 个单词，长度为 8 的 &quot;Leetcode&quot; ，长度为 2 的 &quot;is&quot; 以及长度为 4 的 &quot;cool&quot; 。
-输出需要按单词的长度升序排列，新句子中的第一个单词首字母需要大写。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：text = &quot;Keep calm and code on&quot;
-输出：&quot;On and keep calm code&quot;
-解释：输出的排序情况如下：
-&quot;On&quot; 2 个字母。
-&quot;and&quot; 3 个字母。
-&quot;keep&quot; 4 个字母，因为存在长度相同的其他单词，所以它们之间需要保留在原句子中的相对顺序。
-&quot;calm&quot; 4 个字母。
-&quot;code&quot; 4 个字母。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：text = &quot;To be or not to be&quot;
-输出：&quot;To be or to be not&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;text 以大写字母开头，然后包含若干小写字母以及单词间的单个空格。
-1 &amp;lt;= text.length &amp;lt;= 10^5
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一-按照元素长度排序&quot;&gt;方法一 按照元素长度排序&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;使用 lambda 轻松搞定排序&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;arrangeWords&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 首字母转小写
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 通过 空格 分割成数组
-&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 使用 lambda 按照元素长度排序
-&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;capitalize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 最后首字母大写
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="lambda" /><summary type="html">难度：中等 本题涉及算法： lambda 思路： lambda 类似题型: 题目 5413. 重新排列句子中的单词 「句子」是一个用空格分隔单词的字符串。给你一个满足下述格式的句子 text : 句子的首字母大写 text 中的每个单词都用单个空格分隔。 请你重新排列 text 中的单词，使所有单词按其长度的升序排列。如果两个单词的长度相同，则保留其在原句子中的相对顺序。 请同样按上述格式返回新的句子。   示例 1： 输入：text = &quot;Leetcode is cool&quot; 输出：&quot;Is cool leetcode&quot; 解释：句子中共有 3 个单词，长度为 8 的 &quot;Leetcode&quot; ，长度为 2 的 &quot;is&quot; 以及长度为 4 的 &quot;cool&quot; 。 输出需要按单词的长度升序排列，新句子中的第一个单词首字母需要大写。 示例 2： 输入：text = &quot;Keep calm and code on&quot; 输出：&quot;On and keep calm code&quot; 解释：输出的排序情况如下： &quot;On&quot; 2 个字母。 &quot;and&quot; 3 个字母。 &quot;keep&quot; 4 个字母，因为存在长度相同的其他单词，所以它们之间需要保留在原句子中的相对顺序。 &quot;calm&quot; 4 个字母。 &quot;code&quot; 4 个字母。 示例 3： 输入：text = &quot;To be or not to be&quot; 输出：&quot;To be or to be not&quot; 提示： text 以大写字母开头，然后包含若干小写字母以及单词间的单个空格。 1 &amp;lt;= text.length &amp;lt;= 10^5 方法一 按照元素长度排序 使用 lambda 轻松搞定排序 class Solution: def arrangeWords(self, text: str) -&amp;gt; str: text = text.lower() # 首字母转小写 text = text.split(&quot; &quot;) # 通过 空格 分割成数组 text.sort(key=lambda x: len(x)) # 使用 lambda 按照元素长度排序 return ' '.join(text).capitalize() # 最后首字母大写 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5398. 统计二叉树中好节点的数目</title><link href="http://localhost:4000/leetcode/2020/0517/008" rel="alternate" type="text/html" title="5398. 统计二叉树中好节点的数目" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5398.%20%E7%BB%9F%E8%AE%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%A5%BD%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%B0%E7%9B%AE</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/008">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;深度优先搜索&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;深度优先搜索&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;题目-5398-统计二叉树中好节点的数目&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/contest/biweekly-contest-26/problems/count-good-nodes-in-binary-tree/&quot;&gt;5398. 统计二叉树中好节点的数目&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;给你一棵根为 &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt; 的二叉树，请你返回二叉树中好节点的数目。&lt;/p&gt;
-
-&lt;p&gt;「好节点」X 定义为：从根到该节点 X 所经过的节点中，没有任何节点的值大于 X 的值。&lt;/p&gt;
-
-&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0517/test_sample_1.png&quot; alt=&quot;pic1&quot; /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：root = [3,1,4,3,null,1,5]
-输出：4
-解释：图中蓝色节点为好节点。
-根节点 (3) 永远是个好节点。
-节点 4 -&amp;gt; (3,4) 是路径中的最大值。
-节点 5 -&amp;gt; (3,4,5) 是路径中的最大值。
-节点 3 -&amp;gt; (3,1,3) 是路径中的最大值。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0517/test_sample_2.png&quot; alt=&quot;pic2&quot; /&gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：root = [3,3,null,4,2]
-输出：3
-解释：节点 2 -&amp;gt; (3, 3, 2) 不是好节点，因为 &quot;3&quot; 比它大。
-示例 3：
-
-输入：root = [1]
-输出：1
-解释：根节点是好节点。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;二叉树中节点数目范围是 [1, 10^5] 。
-每个节点权值的范围是 [-10^4, 10^4] 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一-深度优先搜索&quot;&gt;方法一 深度优先搜索&lt;/h3&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;goodNodes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TreeNode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 终止条件
-&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="深度优先搜索" /><summary type="html">难度：中等 本题涉及算法： 深度优先搜索 思路： 深度优先搜索 类似题型: 题目 5398. 统计二叉树中好节点的数目 给你一棵根为 root 的二叉树，请你返回二叉树中好节点的数目。 「好节点」X 定义为：从根到该节点 X 所经过的节点中，没有任何节点的值大于 X 的值。 示例 1： 输入：root = [3,1,4,3,null,1,5] 输出：4 解释：图中蓝色节点为好节点。 根节点 (3) 永远是个好节点。 节点 4 -&amp;gt; (3,4) 是路径中的最大值。 节点 5 -&amp;gt; (3,4,5) 是路径中的最大值。 节点 3 -&amp;gt; (3,1,3) 是路径中的最大值。 示例 2： 输入：root = [3,3,null,4,2] 输出：3 解释：节点 2 -&amp;gt; (3, 3, 2) 不是好节点，因为 &quot;3&quot; 比它大。 示例 3： 输入：root = [1] 输出：1 解释：根节点是好节点。 提示： 二叉树中节点数目范围是 [1, 10^5] 。 每个节点权值的范围是 [-10^4, 10^4] 。 方法一 深度优先搜索 # Definition for a binary tree node. # class TreeNode: # def __init__(self, val=0, left=None, right=None): # self.val = val # self.left = left # self.right = right class Solution: def goodNodes(self, root: TreeNode) -&amp;gt; int: def dfs(root, curr_val): if not root:return 0 # 终止条件 count = 0 if root.val &amp;gt;= curr_val: count += 1 curr_val = root.val count += dfs(root.left,curr_val) count += dfs(root.right,curr_val) return count return dfs(root,- 10 ** 5) 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5397. 最简分数</title><link href="http://localhost:4000/leetcode/2020/0517/006" rel="alternate" type="text/html" title="5397. 最简分数" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5397.%20%E6%9C%80%E7%AE%80%E5%88%86%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/006">&lt;ul&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="zip" /><summary type="html">难度：简单 本题涉及算法： 思路： zip 类似题型: 题目 14. 最长公共前缀 编写一个函数来查找字符串数组中的最长公共前缀。 如果不存在公共前缀，返回空字符串 ”“。 示例 1: 输入: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;] 输出: &quot;fl&quot; 示例 2: 输入: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;] 输出: &quot;&quot; 解释: 输入不存在公共前缀。 说明: 所有输入只包含小写字母 a-z 。 方法一 zip合并 解题思路： 使用 zip 根据字符串下标合并成数组， 判断合并后数组里元素是否都相同 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 class Solution(object): def longestCommonPrefix(self, strs): ans = '' for i in zip(*strs): if len(set(i)) == 1: ans += i[0] else: break return ans 这个例子是 菜鸟编程 里关于 zip函数 介绍 Python zip() 函数 如果你也发现了，请为自己点赞，顺便为作者点赞👍支持 如果发现在别处也有类似的例题，请在下面👇评论区告诉作者</summary></entry><entry><title type="html">5397. 最简分数</title><link href="http://localhost:4000/leetcode/2020/0517/006" rel="alternate" type="text/html" title="5397. 最简分数" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5397.%20%E6%9C%80%E7%AE%80%E5%88%86%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/006">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;最大公约数&lt;/code&gt;  &lt;code class=&quot;success highlighter-rouge&quot;&gt;欧几里得法&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;： &lt;code class=&quot;info highlighter-rouge&quot;&gt;最大公约数&lt;/code&gt;  &lt;code class=&quot;info highlighter-rouge&quot;&gt;欧几里得法&lt;/code&gt;&lt;/li&gt;
@@ -454,7 +326,215 @@
                 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gcd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
                     &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="最大公约数" /><category term="欧几里得法" /><summary type="html">难度：中等 本题涉及算法： 最大公约数 欧几里得法 思路： 最大公约数 欧几里得法 类似题型: 365. 水壶问题 题目 5397. 最简分数 给你一个整数 n ，请你返回所有 0 到 1 之间（不包括 0 和 1）满足分母小于等于 n 的 最简 分数 。分数可以以 任意 顺序返回。 示例 1： 输入：n = 2 输出：[&quot;1/2&quot;] 解释：&quot;1/2&quot; 是唯一一个分母小于等于 2 的最简分数。 示例 2： 输入：n = 3 输出：[&quot;1/2&quot;,&quot;1/3&quot;,&quot;2/3&quot;] 示例 3： 输入：n = 4 输出：[&quot;1/2&quot;,&quot;1/3&quot;,&quot;1/4&quot;,&quot;2/3&quot;,&quot;3/4&quot;] 解释：&quot;2/4&quot; 不是最简分数，因为它可以化简为 &quot;1/2&quot; 。 示例 4： 输入：n = 1 输出：[] 提示： 1 &amp;lt;= n &amp;lt;= 100 欧几里得法(辗转相除法) 通过举例说明1 举例： 105和85的最大公约数 第一轮计回算 105÷85=1…20 第二轮计算 85÷20=4…5 第三轮计算 20÷5=4 第三轮没有余数， 因此 105和85的最大公约数就是第三轮计算的被除数 5 欧几里得法(辗转相除法) 通过举例说明2 举例： 21和17的最大公约数 第一轮计回算 21÷17=1…4 第二轮计算 17÷4=4…1 第三轮计算 4÷1=4 第三轮没有余数， 因此 105和85的最大公约数就是第三轮计算的被除数 1 方法一 最大公约数 解题思路： 先求得最大公约数 通过最大公约数 是否为 1 来判断 是否为最简分数 复杂度分析： 时间复杂度 $O(N^2)$ 空间复杂度 不会算 ，谁帮忙算下 ？ class Solution: def simplifiedFractions(self, n: int) -&amp;gt; List[str]: def gcd(a,b): while b: a, b = b, a % b return a res = [] for i in range(2,n+1): for j in range(1,i): if gcd(i,j) == 1: res.append(str(j) +'/'+str(i)) return res</summary></entry><entry><title type="html">5414. 收藏清单</title><link href="http://localhost:4000/leetcode/2020/0517/001" rel="alternate" type="text/html" title="5414. 收藏清单" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5414.%20%E6%94%B6%E8%97%8F%E6%B8%85%E5%8D%95</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/001">&lt;ul&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="最大公约数" /><category term="欧几里得法" /><summary type="html">难度：中等 本题涉及算法： 最大公约数 欧几里得法 思路： 最大公约数 欧几里得法 类似题型: 365. 水壶问题 题目 5397. 最简分数 给你一个整数 n ，请你返回所有 0 到 1 之间（不包括 0 和 1）满足分母小于等于 n 的 最简 分数 。分数可以以 任意 顺序返回。 示例 1： 输入：n = 2 输出：[&quot;1/2&quot;] 解释：&quot;1/2&quot; 是唯一一个分母小于等于 2 的最简分数。 示例 2： 输入：n = 3 输出：[&quot;1/2&quot;,&quot;1/3&quot;,&quot;2/3&quot;] 示例 3： 输入：n = 4 输出：[&quot;1/2&quot;,&quot;1/3&quot;,&quot;1/4&quot;,&quot;2/3&quot;,&quot;3/4&quot;] 解释：&quot;2/4&quot; 不是最简分数，因为它可以化简为 &quot;1/2&quot; 。 示例 4： 输入：n = 1 输出：[] 提示： 1 &amp;lt;= n &amp;lt;= 100 欧几里得法(辗转相除法) 通过举例说明1 举例： 105和85的最大公约数 第一轮计回算 105÷85=1…20 第二轮计算 85÷20=4…5 第三轮计算 20÷5=4 第三轮没有余数， 因此 105和85的最大公约数就是第三轮计算的被除数 5 欧几里得法(辗转相除法) 通过举例说明2 举例： 21和17的最大公约数 第一轮计回算 21÷17=1…4 第二轮计算 17÷4=4…1 第三轮计算 4÷1=4 第三轮没有余数， 因此 105和85的最大公约数就是第三轮计算的被除数 1 方法一 最大公约数 解题思路： 先求得最大公约数 通过最大公约数 是否为 1 来判断 是否为最简分数 复杂度分析： 时间复杂度 $O(N^2)$ 空间复杂度 不会算 ，谁帮忙算下 ？ class Solution: def simplifiedFractions(self, n: int) -&amp;gt; List[str]: def gcd(a,b): while b: a, b = b, a % b return a res = [] for i in range(2,n+1): for j in range(1,i): if gcd(i,j) == 1: res.append(str(j) +'/'+str(i)) return res</summary></entry><entry><title type="html">5413. 重新排列句子中的单词</title><link href="http://localhost:4000/leetcode/2020/0517/003" rel="alternate" type="text/html" title="5413. 重新排列句子中的单词" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5413.%20%E9%87%8D%E6%96%B0%E6%8E%92%E5%88%97%E5%8F%A5%E5%AD%90%E4%B8%AD%E7%9A%84%E5%8D%95%E8%AF%8D</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/003">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;lambda&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;lambda&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;题目-5413-重新排列句子中的单词&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/rearrange-words-in-a-sentence/&quot;&gt;5413. 重新排列句子中的单词&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;「句子」是一个用空格分隔单词的字符串。给你一个满足下述格式的句子 &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; :&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;句子的首字母大写&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; 中的每个单词都用单个空格分隔。
+请你重新排列 &lt;code class=&quot;highlighter-rouge&quot;&gt;text&lt;/code&gt; 中的单词，使所有单词按其长度的升序排列。如果两个单词的长度相同，则保留其在原句子中的相对顺序。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;请同样按上述格式返回新的句子。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：text = &quot;Leetcode is cool&quot;
+输出：&quot;Is cool leetcode&quot;
+解释：句子中共有 3 个单词，长度为 8 的 &quot;Leetcode&quot; ，长度为 2 的 &quot;is&quot; 以及长度为 4 的 &quot;cool&quot; 。
+输出需要按单词的长度升序排列，新句子中的第一个单词首字母需要大写。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：text = &quot;Keep calm and code on&quot;
+输出：&quot;On and keep calm code&quot;
+解释：输出的排序情况如下：
+&quot;On&quot; 2 个字母。
+&quot;and&quot; 3 个字母。
+&quot;keep&quot; 4 个字母，因为存在长度相同的其他单词，所以它们之间需要保留在原句子中的相对顺序。
+&quot;calm&quot; 4 个字母。
+&quot;code&quot; 4 个字母。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：text = &quot;To be or not to be&quot;
+输出：&quot;To be or to be not&quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;text 以大写字母开头，然后包含若干小写字母以及单词间的单个空格。
+1 &amp;lt;= text.length &amp;lt;= 10^5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-按照元素长度排序&quot;&gt;方法一 按照元素长度排序&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;使用 lambda 轻松搞定排序&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;arrangeWords&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lower&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 首字母转小写
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 通过 空格 分割成数组
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;lambda&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 使用 lambda 按照元素长度排序
+&lt;/span&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;capitalize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 最后首字母大写
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="lambda" /><summary type="html">难度：中等 本题涉及算法： lambda 思路： lambda 类似题型: 题目 5413. 重新排列句子中的单词 「句子」是一个用空格分隔单词的字符串。给你一个满足下述格式的句子 text : 句子的首字母大写 text 中的每个单词都用单个空格分隔。 请你重新排列 text 中的单词，使所有单词按其长度的升序排列。如果两个单词的长度相同，则保留其在原句子中的相对顺序。 请同样按上述格式返回新的句子。   示例 1： 输入：text = &quot;Leetcode is cool&quot; 输出：&quot;Is cool leetcode&quot; 解释：句子中共有 3 个单词，长度为 8 的 &quot;Leetcode&quot; ，长度为 2 的 &quot;is&quot; 以及长度为 4 的 &quot;cool&quot; 。 输出需要按单词的长度升序排列，新句子中的第一个单词首字母需要大写。 示例 2： 输入：text = &quot;Keep calm and code on&quot; 输出：&quot;On and keep calm code&quot; 解释：输出的排序情况如下： &quot;On&quot; 2 个字母。 &quot;and&quot; 3 个字母。 &quot;keep&quot; 4 个字母，因为存在长度相同的其他单词，所以它们之间需要保留在原句子中的相对顺序。 &quot;calm&quot; 4 个字母。 &quot;code&quot; 4 个字母。 示例 3： 输入：text = &quot;To be or not to be&quot; 输出：&quot;To be or to be not&quot; 提示： text 以大写字母开头，然后包含若干小写字母以及单词间的单个空格。 1 &amp;lt;= text.length &amp;lt;= 10^5 方法一 按照元素长度排序 使用 lambda 轻松搞定排序 class Solution: def arrangeWords(self, text: str) -&amp;gt; str: text = text.lower() # 首字母转小写 text = text.split(&quot; &quot;) # 通过 空格 分割成数组 text.sort(key=lambda x: len(x)) # 使用 lambda 按照元素长度排序 return ' '.join(text).capitalize() # 最后首字母大写 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5412. 在既定时间做作业的学生人数</title><link href="http://localhost:4000/leetcode/2020/0517/002" rel="alternate" type="text/html" title="5412. 在既定时间做作业的学生人数" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5412.%20%E5%9C%A8%E6%97%A2%E5%AE%9A%E6%97%B6%E9%97%B4%E5%81%9A%E4%BD%9C%E4%B8%9A%E7%9A%84%E5%AD%A6%E7%94%9F%E4%BA%BA%E6%95%B0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/002">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;题目-5412-在既定时间做作业的学生人数&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/number-of-students-doing-homework-at-a-given-time/&quot;&gt;5412. 在既定时间做作业的学生人数&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;给你两个整数数组 &lt;code class=&quot;highlighter-rouge&quot;&gt;startTime（开始时间）&lt;/code&gt;和 &lt;code class=&quot;highlighter-rouge&quot;&gt;endTime（结束时间）&lt;/code&gt;，并指定一个整数 &lt;code class=&quot;highlighter-rouge&quot;&gt;queryTime&lt;/code&gt; 作为查询时间。&lt;/p&gt;
+
+&lt;p&gt;已知，第 &lt;code class=&quot;highlighter-rouge&quot;&gt;i&lt;/code&gt; 名学生在 &lt;code class=&quot;highlighter-rouge&quot;&gt;startTime[i]&lt;/code&gt; 时开始写作业并于 &lt;code class=&quot;highlighter-rouge&quot;&gt;endTime[i]&lt;/code&gt; 时完成作业。&lt;/p&gt;
+
+&lt;p&gt;请返回在查询时间 &lt;code class=&quot;highlighter-rouge&quot;&gt;queryTime&lt;/code&gt; 时正在做作业的学生人数。形式上，返回能够使 &lt;code class=&quot;highlighter-rouge&quot;&gt;queryTime&lt;/code&gt; 处于区间 &lt;code class=&quot;highlighter-rouge&quot;&gt;[startTime[i]&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;endTime[i]]&lt;/code&gt;（含）的学生人数。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [1,2,3], endTime = [3,2,7], queryTime = 4
+输出：1
+解释：一共有 3 名学生。
+第一名学生在时间 1 开始写作业，并于时间 3 完成作业，在时间 4 没有处于做作业的状态。
+第二名学生在时间 2 开始写作业，并于时间 2 完成作业，在时间 4 没有处于做作业的状态。
+第二名学生在时间 3 开始写作业，预计于时间 7 完成作业，这是是唯一一名在时间 4 时正在做作业的学生。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [4], endTime = [4], queryTime = 4
+输出：1
+解释：在查询时间只有一名学生在做作业。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [4], endTime = [4], queryTime = 5
+输出：0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-4&quot;&gt;示例 4：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [1,1,1,1], endTime = [1,3,2,4], queryTime = 7
+输出：0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-5&quot;&gt;示例 5：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5
+输出：5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;startTime.length == endTime.length
+1 &amp;lt;= startTime.length &amp;lt;= 100
+1 &amp;lt;= startTime[i] &amp;lt;= endTime[i] &amp;lt;= 1000
+1 &amp;lt;= queryTime &amp;lt;= 1000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;方法一-合并数组&quot;&gt;方法一 合并数组&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;使用 zip 合并数组，代码更简洁&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;busyStudent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;endTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;zipped&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;startTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;endTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;zipped&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryTime&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：简单 本题涉及算法： zip 思路： zip 类似题型: 题目 5412. 在既定时间做作业的学生人数 给你两个整数数组 startTime（开始时间）和 endTime（结束时间），并指定一个整数 queryTime 作为查询时间。 已知，第 i 名学生在 startTime[i] 时开始写作业并于 endTime[i] 时完成作业。 请返回在查询时间 queryTime 时正在做作业的学生人数。形式上，返回能够使 queryTime 处于区间 [startTime[i], endTime[i]]（含）的学生人数。   示例 1： 输入：startTime = [1,2,3], endTime = [3,2,7], queryTime = 4 输出：1 解释：一共有 3 名学生。 第一名学生在时间 1 开始写作业，并于时间 3 完成作业，在时间 4 没有处于做作业的状态。 第二名学生在时间 2 开始写作业，并于时间 2 完成作业，在时间 4 没有处于做作业的状态。 第二名学生在时间 3 开始写作业，预计于时间 7 完成作业，这是是唯一一名在时间 4 时正在做作业的学生。 示例 2： 输入：startTime = [4], endTime = [4], queryTime = 4 输出：1 解释：在查询时间只有一名学生在做作业。 示例 3： 输入：startTime = [4], endTime = [4], queryTime = 5 输出：0 示例 4： 输入：startTime = [1,1,1,1], endTime = [1,3,2,4], queryTime = 7 输出：0 示例 5： 输入：startTime = [9,8,7,6,5,4,3,2,1], endTime = [10,10,10,10,10,10,10,10,10], queryTime = 5 输出：5 提示： startTime.length == endTime.length 1 &amp;lt;= startTime.length &amp;lt;= 100 1 &amp;lt;= startTime[i] &amp;lt;= endTime[i] &amp;lt;= 1000 1 &amp;lt;= queryTime &amp;lt;= 1000 方法一 合并数组 使用 zip 合并数组，代码更简洁 class Solution: def busyStudent(self, startTime: List[int], endTime: List[int], queryTime: int) -&amp;gt; int: zipped = zip(startTime,endTime) count = 0 for x,y in zipped: if queryTime&amp;gt;= x and queryTime &amp;lt;=y: count += 1 return count 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5398. 统计二叉树中好节点的数目</title><link href="http://localhost:4000/leetcode/2020/0517/008" rel="alternate" type="text/html" title="5398. 统计二叉树中好节点的数目" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5398.%20%E7%BB%9F%E8%AE%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%A5%BD%E8%8A%82%E7%82%B9%E7%9A%84%E6%95%B0%E7%9B%AE</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/008">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;深度优先搜索&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;深度优先搜索&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;题目-5398-统计二叉树中好节点的数目&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/contest/biweekly-contest-26/problems/count-good-nodes-in-binary-tree/&quot;&gt;5398. 统计二叉树中好节点的数目&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;给你一棵根为 &lt;code class=&quot;highlighter-rouge&quot;&gt;root&lt;/code&gt; 的二叉树，请你返回二叉树中好节点的数目。&lt;/p&gt;
+
+&lt;p&gt;「好节点」X 定义为：从根到该节点 X 所经过的节点中，没有任何节点的值大于 X 的值。&lt;/p&gt;
+
+&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0517/test_sample_1.png&quot; alt=&quot;pic1&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：root = [3,1,4,3,null,1,5]
+输出：4
+解释：图中蓝色节点为好节点。
+根节点 (3) 永远是个好节点。
+节点 4 -&amp;gt; (3,4) 是路径中的最大值。
+节点 5 -&amp;gt; (3,4,5) 是路径中的最大值。
+节点 3 -&amp;gt; (3,1,3) 是路径中的最大值。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0517/test_sample_2.png&quot; alt=&quot;pic2&quot; /&gt;&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：root = [3,3,null,4,2]
+输出：3
+解释：节点 2 -&amp;gt; (3, 3, 2) 不是好节点，因为 &quot;3&quot; 比它大。
+示例 3：
+
+输入：root = [1]
+输出：1
+解释：根节点是好节点。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;二叉树中节点数目范围是 [1, 10^5] 。
+每个节点权值的范围是 [-10^4, 10^4] 。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-深度优先搜索&quot;&gt;方法一 深度优先搜索&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;goodNodes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TreeNode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 终止条件
+&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;val&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;left&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;right&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr_val&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dfs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="深度优先搜索" /><summary type="html">难度：中等 本题涉及算法： 深度优先搜索 思路： 深度优先搜索 类似题型: 题目 5398. 统计二叉树中好节点的数目 给你一棵根为 root 的二叉树，请你返回二叉树中好节点的数目。 「好节点」X 定义为：从根到该节点 X 所经过的节点中，没有任何节点的值大于 X 的值。 示例 1： 输入：root = [3,1,4,3,null,1,5] 输出：4 解释：图中蓝色节点为好节点。 根节点 (3) 永远是个好节点。 节点 4 -&amp;gt; (3,4) 是路径中的最大值。 节点 5 -&amp;gt; (3,4,5) 是路径中的最大值。 节点 3 -&amp;gt; (3,1,3) 是路径中的最大值。 示例 2： 输入：root = [3,3,null,4,2] 输出：3 解释：节点 2 -&amp;gt; (3, 3, 2) 不是好节点，因为 &quot;3&quot; 比它大。 示例 3： 输入：root = [1] 输出：1 解释：根节点是好节点。 提示： 二叉树中节点数目范围是 [1, 10^5] 。 每个节点权值的范围是 [-10^4, 10^4] 。 方法一 深度优先搜索 # Definition for a binary tree node. # class TreeNode: # def __init__(self, val=0, left=None, right=None): # self.val = val # self.left = left # self.right = right class Solution: def goodNodes(self, root: TreeNode) -&amp;gt; int: def dfs(root, curr_val): if not root:return 0 # 终止条件 count = 0 if root.val &amp;gt;= curr_val: count += 1 curr_val = root.val count += dfs(root.left,curr_val) count += dfs(root.right,curr_val) return count return dfs(root,- 10 ** 5) 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5414. 收藏清单</title><link href="http://localhost:4000/leetcode/2020/0517/001" rel="alternate" type="text/html" title="5414. 收藏清单" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5414.%20%E6%94%B6%E8%97%8F%E6%B8%85%E5%8D%95</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;交集&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;交集&lt;/code&gt;&lt;/li&gt;
@@ -738,118 +818,4 @@ M             1000
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="🌟🌟🌟🌟🌟" /><summary type="html">难度：中等 本题涉及算法： 思路： 这道题告诉又一次告诉我，题解先做出来，不管方法多么的简单 类似题型: 13. 罗马数字转整数 题目 12. 整数转罗马数字 罗马数字包含以下七种字符： I， V， X， L，C，D 和  M。 字符 数值 I 1 V 5 X 10 L 50 C 100 D 500 M 1000 例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。 通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况： I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。 X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。  C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。 给定一个整数，将其转为罗马数字。输入确保在 1 到 3999 的范围内。 示例 1: 输入: 3 输出: &quot;III&quot; 示例 2: 输入: 4 输出: &quot;IV&quot; 示例 3: 输入: 9 输出: &quot;IX&quot; 示例 4: 输入: 58 输出: &quot;LVIII&quot; 解释: L = 50, V = 5, III = 3. 示例 5: 输入: 1994 输出: &quot;MCMXCIV&quot; 解释: M = 1000, CM = 900, XC = 90, IV = 4. 方法一 解题思路： 把所有的罗马数组列出来 在拼接 python class Solution: def intToRoman(self, num: int) -&amp;gt; str: thousands = [&quot;&quot;, &quot;M&quot;, &quot;MM&quot;, &quot;MMM&quot;] hundreds = [&quot;&quot;, &quot;C&quot;, &quot;CC&quot;, &quot;CCC&quot;, &quot;CD&quot;, &quot;D&quot;, &quot;DC&quot;, &quot;DCC&quot;, &quot;DCCC&quot;, &quot;CM&quot;] tens = [&quot;&quot;, &quot;X&quot;, &quot;XX&quot;, &quot;XXX&quot;, &quot;XL&quot;, &quot;L&quot;, &quot;LX&quot;, &quot;LXX&quot;, &quot;LXXX&quot;, &quot;XC&quot;] ones = [&quot;&quot;, &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot;, &quot;VI&quot;, &quot;VII&quot;, &quot;VIII&quot;, &quot;IX&quot;] return thousands[num // 1000] + hundreds[num % 1000 // 100] + tens[num % 100 // 10] + ones[num % 10] java public String intToRoman(int num) { String[] thousands = new String[]{&quot;&quot;, &quot;M&quot;, &quot;MM&quot;, &quot;MMM&quot;}; String[] hundreds = new String[]{&quot;&quot;, &quot;C&quot;, &quot;CC&quot;, &quot;CCC&quot;, &quot;CD&quot;, &quot;D&quot;, &quot;DC&quot;, &quot;DCC&quot;, &quot;DCCC&quot;, &quot;CM&quot;}; String[] tens = new String[]{&quot;&quot;, &quot;X&quot;, &quot;XX&quot;, &quot;XXX&quot;, &quot;XL&quot;, &quot;L&quot;, &quot;LX&quot;, &quot;LXX&quot;, &quot;LXXX&quot;, &quot;XC&quot;}; String[] ones = new String[]{&quot;&quot;, &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot;, &quot;VI&quot;, &quot;VII&quot;, &quot;VIII&quot;, &quot;IX&quot;}; return thousands[num / 1000] + hundreds[num % 1000 / 100] + tens[num % 100 / 10] + ones[num % 10]; } 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">8. 字符串转换整数 (atoi)</title><link href="http://localhost:4000/leetcode/2020/0515/017" rel="alternate" type="text/html" title="8. 字符串转换整数 (atoi)" /><published>2020-05-15T00:00:00+08:00</published><updated>2020-05-15T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0515/8.%20%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E6%95%B4%E6%95%B0%20(atoi)</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0515/017">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;题目-8-字符串转换整数-atoi&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/string-to-integer-atoi/&quot;&gt;8. 字符串转换整数 (atoi)&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;请你来实现一个 atoi 函数，使其能将字符串转换成整数。&lt;/p&gt;
-
-&lt;p&gt;首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。接下来的转化规则如下：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;如果第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字字符组合起来，形成一个有符号整数。&lt;/li&gt;
-  &lt;li&gt;假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成一个整数。&lt;/li&gt;
-  &lt;li&gt;该字符串在有效的整数部分之后也可能会存在多余的字符，那么这些字符可以被忽略，它们对函数不应该造成影响。 &lt;br /&gt;
-注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换，即无法进行有效转换。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;在任何情况下，若函数不能进行有效的转换时，请返回 0 。&lt;/p&gt;
-
-&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;本题中的空白字符只包括空格字符 ‘ ‘ 。&lt;/li&gt;
-  &lt;li&gt;假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−231,  231 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。
- &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;示例1&quot;&gt;示例 1:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: &quot;42&quot;
-输出: 42
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例2&quot;&gt;示例 2:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: &quot;   -42&quot;
-输出: -42
-解释: 第一个非空白字符为 '-', 它是一个负号。
-     我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例3&quot;&gt;示例 3:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: &quot;4193 with words&quot;
-输出: 4193
-解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例4&quot;&gt;示例 4:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: &quot;words and 987&quot;
-输出: 0
-解释: 第一个非空字符是 'w', 但它不是数字或正、负号。
-     因此无法执行有效的转换。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例5&quot;&gt;示例 5:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: &quot;-91283472332&quot;
-输出: -2147483648
-解释: 数字 &quot;-91283472332&quot; 超过 32 位有符号整数范围。
-     因此返回 INT_MIN (−231) 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一&quot;&gt;方法一&lt;/h3&gt;
-&lt;h4 id=&quot;解题思路&quot;&gt;解题思路&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;题目已经给出很详细规则，根据规则可以自己填代码&lt;/li&gt;
-  &lt;li&gt;这题的关键在 &lt;strong&gt;判断字符是否为数字&lt;/strong&gt; ，可以使用下面的代码
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Character.isDigit(char ch)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;myAtoi&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toCharArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;' '&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 去掉前导空格&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;//去掉前导空格以后到了末尾了&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;boolean&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;negative&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'-'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;//遇到负号&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;negative&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'+'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 遇到正号&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(!&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Character&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isDigit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// 其他符号&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Character&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;isDigit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chars&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;sc&quot;&gt;'0'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 本来应该是 ans * 10 + digit &amp;gt; Integer.MAX_VALUE&lt;/span&gt;
-                &lt;span class=&quot;c1&quot;&gt;// 但是 *10 和 + digit 都有可能越界，所有都移动到右边去就可以了。&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;negative&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MIN_VALUE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Integer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;MAX_VALUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;digit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;idx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;negative&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：中等 本题涉及算法： 思路： 类似题型: 题目 8. 字符串转换整数 (atoi) 请你来实现一个 atoi 函数，使其能将字符串转换成整数。 首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。接下来的转化规则如下： 如果第一个非空字符为正或者负号时，则将该符号与之后面尽可能多的连续数字字符组合起来，形成一个有符号整数。 假如第一个非空字符是数字，则直接将其与之后连续的数字字符组合起来，形成一个整数。 该字符串在有效的整数部分之后也可能会存在多余的字符，那么这些字符可以被忽略，它们对函数不应该造成影响。 注意：假如该字符串中的第一个非空格字符不是一个有效整数字符、字符串为空或字符串仅包含空白字符时，则你的函数不需要进行转换，即无法进行有效转换。 在任何情况下，若函数不能进行有效的转换时，请返回 0 。 提示： 本题中的空白字符只包括空格字符 ‘ ‘ 。 假设我们的环境只能存储 32 位大小的有符号整数，那么其数值范围为 [−231,  231 − 1]。如果数值超过这个范围，请返回  INT_MAX (231 − 1) 或 INT_MIN (−231) 。   示例 1: 输入: &quot;42&quot; 输出: 42 示例 2: 输入: &quot; -42&quot; 输出: -42 解释: 第一个非空白字符为 '-', 它是一个负号。   我们尽可能将负号与后面所有连续出现的数字组合起来，最后得到 -42 。 示例 3: 输入: &quot;4193 with words&quot; 输出: 4193 解释: 转换截止于数字 '3' ，因为它的下一个字符不为数字。 示例 4: 输入: &quot;words and 987&quot; 输出: 0 解释: 第一个非空字符是 'w', 但它不是数字或正、负号。 因此无法执行有效的转换。 示例 5: 输入: &quot;-91283472332&quot; 输出: -2147483648 解释: 数字 &quot;-91283472332&quot; 超过 32 位有符号整数范围。   因此返回 INT_MIN (−231) 。 方法一 解题思路 题目已经给出很详细规则，根据规则可以自己填代码 这题的关键在 判断字符是否为数字 ，可以使用下面的代码 Character.isDigit(char ch) public class Solution { public int myAtoi(String str) { char[] chars = str.toCharArray(); int n = chars.length; int idx = 0; while (idx &amp;lt; n &amp;amp;&amp;amp; chars[idx] == ' ') { // 去掉前导空格 idx++; } if (idx == n) { //去掉前导空格以后到了末尾了 return 0; } boolean negative = false; if (chars[idx] == '-') { //遇到负号 negative = true; idx++; } else if (chars[idx] == '+') { // 遇到正号 idx++; } else if (!Character.isDigit(chars[idx])) { // 其他符号 return 0; } int ans = 0; while (idx &amp;lt; n &amp;amp;&amp;amp; Character.isDigit(chars[idx])) { int digit = chars[idx] - '0'; if (ans &amp;gt; (Integer.MAX_VALUE - digit) / 10) { // 本来应该是 ans * 10 + digit &amp;gt; Integer.MAX_VALUE // 但是 *10 和 + digit 都有可能越界，所有都移动到右边去就可以了。 return negative? Integer.MIN_VALUE : Integer.MAX_VALUE; } ans = ans * 10 + digit; idx++; } return negative? -ans : ans; } } 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="🌟🌟🌟🌟🌟" /><summary type="html">难度：中等 本题涉及算法： 思路： 这道题告诉又一次告诉我，题解先做出来，不管方法多么的简单 类似题型: 13. 罗马数字转整数 题目 12. 整数转罗马数字 罗马数字包含以下七种字符： I， V， X， L，C，D 和  M。 字符 数值 I 1 V 5 X 10 L 50 C 100 D 500 M 1000 例如， 罗马数字 2 写做 II ，即为两个并列的 1。12 写做 XII ，即为 X + II 。 27 写做  XXVII, 即为 XX + V + II 。 通常情况下，罗马数字中小的数字在大的数字的右边。但也存在特例，例如 4 不写做 IIII，而是 IV。数字 1 在数字 5 的左边，所表示的数等于大数 5 减小数 1 得到的数值 4 。同样地，数字 9 表示为 IX。这个特殊的规则只适用于以下六种情况： I 可以放在 V (5) 和 X (10) 的左边，来表示 4 和 9。 X 可以放在 L (50) 和 C (100) 的左边，来表示 40 和 90。  C 可以放在 D (500) 和 M (1000) 的左边，来表示 400 和 900。 给定一个整数，将其转为罗马数字。输入确保在 1 到 3999 的范围内。 示例 1: 输入: 3 输出: &quot;III&quot; 示例 2: 输入: 4 输出: &quot;IV&quot; 示例 3: 输入: 9 输出: &quot;IX&quot; 示例 4: 输入: 58 输出: &quot;LVIII&quot; 解释: L = 50, V = 5, III = 3. 示例 5: 输入: 1994 输出: &quot;MCMXCIV&quot; 解释: M = 1000, CM = 900, XC = 90, IV = 4. 方法一 解题思路： 把所有的罗马数组列出来 在拼接 python class Solution: def intToRoman(self, num: int) -&amp;gt; str: thousands = [&quot;&quot;, &quot;M&quot;, &quot;MM&quot;, &quot;MMM&quot;] hundreds = [&quot;&quot;, &quot;C&quot;, &quot;CC&quot;, &quot;CCC&quot;, &quot;CD&quot;, &quot;D&quot;, &quot;DC&quot;, &quot;DCC&quot;, &quot;DCCC&quot;, &quot;CM&quot;] tens = [&quot;&quot;, &quot;X&quot;, &quot;XX&quot;, &quot;XXX&quot;, &quot;XL&quot;, &quot;L&quot;, &quot;LX&quot;, &quot;LXX&quot;, &quot;LXXX&quot;, &quot;XC&quot;] ones = [&quot;&quot;, &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot;, &quot;VI&quot;, &quot;VII&quot;, &quot;VIII&quot;, &quot;IX&quot;] return thousands[num // 1000] + hundreds[num % 1000 // 100] + tens[num % 100 // 10] + ones[num % 10] java public String intToRoman(int num) { String[] thousands = new String[]{&quot;&quot;, &quot;M&quot;, &quot;MM&quot;, &quot;MMM&quot;}; String[] hundreds = new String[]{&quot;&quot;, &quot;C&quot;, &quot;CC&quot;, &quot;CCC&quot;, &quot;CD&quot;, &quot;D&quot;, &quot;DC&quot;, &quot;DCC&quot;, &quot;DCCC&quot;, &quot;CM&quot;}; String[] tens = new String[]{&quot;&quot;, &quot;X&quot;, &quot;XX&quot;, &quot;XXX&quot;, &quot;XL&quot;, &quot;L&quot;, &quot;LX&quot;, &quot;LXX&quot;, &quot;LXXX&quot;, &quot;XC&quot;}; String[] ones = new String[]{&quot;&quot;, &quot;I&quot;, &quot;II&quot;, &quot;III&quot;, &quot;IV&quot;, &quot;V&quot;, &quot;VI&quot;, &quot;VII&quot;, &quot;VIII&quot;, &quot;IX&quot;}; return thousands[num / 1000] + hundreds[num % 1000 / 100] + tens[num % 100 / 10] + ones[num % 10]; } 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry></feed>
