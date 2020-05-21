@@ -375,6 +375,160 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0521/001"><h2 itemprop="headline" class="item__header">17. 电话号码的字母组合</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">回溯算法</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">回溯算法</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+<h3 id="题目-17-电话号码的字母组合">题目 <a href="https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/">17. 电话号码的字母组合</a></h3>
+<p>给定一个仅包含数字 <code class="highlighter-rouge">2-9</code> 的字符串，返回所有它能表示的字母组合。</p>
+
+<p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p>
+
+<p><img src="/assets/images/leetcode/0521/17_telephone_keypad.png" alt="pic" /></p>
+
+<h4 id="示例">示例:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入："23"
+输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+说明:
+尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。
+</code></pre></div></div>
+
+<h3 id="方法一-回溯法">方法一 回溯法</h3>
+<ul>
+  <li><strong>回溯法使用</strong>：
+    <ul>
+      <li>对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题</li>
+      <li>如图</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/images/leetcode/0521/17phone.gif" alt="17. 电话号码的字母组合.gif" /></p>
+
+<ul>
+  <li><strong>解题思路</strong>：
+    <ol>
+      <li><code class="highlighter-rouge">digits</code> 是数字字符串</li>
+      <li><code class="highlighter-rouge">s(digits)</code> 是 <code class="highlighter-rouge">digits</code> 所能代表的字母字符串</li>
+      <li>把 <code class="highlighter-rouge">s(digits)</code> 分解 可表示为
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  s(digits[0...n-1])
+ = letter(digits[0] + digits[1...n-1])
+ = letter(digits[0] + letter(digits[1] + digits[2...n-1])
+ = .....
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">letterCombinations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digits</span><span class="p">):</span>
+        <span class="s">"""
+        :type digits: str
+        :rtype: List[str]
+        """</span>
+        <span class="n">phone</span><span class="o">=</span> <span class="p">{</span>
+            <span class="s">'2'</span><span class="p">:[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">],</span>
+            <span class="s">'3'</span><span class="p">:[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">,</span><span class="s">'f'</span><span class="p">],</span>
+            <span class="s">'4'</span><span class="p">:[</span><span class="s">'g'</span><span class="p">,</span><span class="s">'h'</span><span class="p">,</span><span class="s">'i'</span><span class="p">],</span>
+            <span class="s">'5'</span><span class="p">:[</span><span class="s">'j'</span><span class="p">,</span><span class="s">'k'</span><span class="p">,</span><span class="s">'l'</span><span class="p">],</span>
+            <span class="s">'6'</span><span class="p">:[</span><span class="s">'m'</span><span class="p">,</span><span class="s">'n'</span><span class="p">,</span><span class="s">'o'</span><span class="p">],</span>
+            <span class="s">'7'</span><span class="p">:[</span><span class="s">'p'</span><span class="p">,</span><span class="s">'q'</span><span class="p">,</span><span class="s">'r'</span><span class="p">,</span><span class="s">'s'</span><span class="p">],</span>
+            <span class="s">'8'</span><span class="p">:[</span><span class="s">'t'</span><span class="p">,</span><span class="s">'u'</span><span class="p">,</span><span class="s">'v'</span><span class="p">],</span>
+            <span class="s">'9'</span><span class="p">:[</span><span class="s">'w'</span><span class="p">,</span><span class="s">'x'</span><span class="p">,</span><span class="s">'y'</span><span class="p">,</span><span class="s">'z'</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">def</span> <span class="nf">backtrack</span><span class="p">(</span><span class="n">combination</span><span class="p">,</span><span class="n">next_digits</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">next_digits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">phone</span><span class="p">[</span><span class="n">next_digits</span><span class="p">[</span><span class="mi">0</span><span class="p">]]:</span>
+                    <span class="n">backtrack</span><span class="p">(</span><span class="n">combination</span><span class="o">+</span><span class="n">letter</span><span class="p">,</span><span class="n">next_digits</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+
+        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">digits</span><span class="p">:</span>
+            <span class="n">backtrack</span><span class="p">(</span><span class="s">''</span><span class="p">,</span><span class="n">digits</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span>
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">phone</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;()</span> <span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">{</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"3"</span><span class="o">,</span> <span class="s">"def"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"4"</span><span class="o">,</span> <span class="s">"ghi"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"5"</span><span class="o">,</span> <span class="s">"jkl"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"6"</span><span class="o">,</span> <span class="s">"mno"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"pqrs"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"8"</span><span class="o">,</span> <span class="s">"tuv"</span><span class="o">);</span>
+        <span class="n">put</span><span class="o">(</span><span class="s">"9"</span><span class="o">,</span> <span class="s">"wxyz"</span><span class="o">);</span>
+      <span class="err">\</span><span class="o">}</span><span class="err">\</span><span class="o">};</span>
+
+    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">output</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">backtrack</span><span class="o">(</span><span class="nc">String</span> <span class="n">combination</span><span class="o">,</span> <span class="nc">String</span> <span class="n">next_digits</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">next_digits</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
+            <span class="n">output</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">combination</span><span class="o">);</span>
+        <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">digit</span> <span class="o">=</span> <span class="n">next_digits</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">letters</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">digit</span><span class="o">);</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">letters</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">letter</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">digit</span><span class="o">).</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+                <span class="n">backtrack</span><span class="o">(</span><span class="n">combination</span> <span class="o">+</span> <span class="n">letter</span><span class="o">,</span> <span class="n">next_digits</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">letterCombinations</span><span class="o">(</span><span class="nc">String</span> <span class="n">digits</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">digits</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
+          <span class="n">backtrack</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="n">digits</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">output</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0521/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95">回溯算法</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 21, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0521-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-21T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,回溯算法"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/alog/2020/0521/003"><h2 itemprop="headline" class="item__header">回溯算法</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>回溯法使用</strong>：
+    <ul>
+      <li>对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题</li>
+      <li>如图</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/images/leetcode/0521/17phone.gif" alt="17. 电话号码的字母组合.gif" /></p>
+
+<h4 id="类似题型">类似题型</h4>
+<ul>
+  <li><a href="/leetcode/2020/0521/001">17. 电话号码的字母组合</a></li>
+</ul>
+</div><p><a href="/alog/2020/0521/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95">回溯算法</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 21, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0521-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-21T00:00:00+08:00">
+    <meta itemprop="keywords" content="算法,回溯算法"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/pm/risk"><h2 itemprop="headline" class="item__header">风险管理</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="风险管理概述">风险管理概述</h4>
 <ul>
@@ -829,170 +983,8 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 19, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0519-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-19T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,数组遍历"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0518/001"><h2 itemprop="headline" class="item__header">14. 最长公共前缀</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>：</li>
-  <li><strong>思路</strong>：   <code class="info highlighter-rouge">zip</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-14-最长公共前缀">题目 <a href="https://leetcode-cn.com/problems/longest-common-prefix/">14. 最长公共前缀</a></h3>
-
-<p>编写一个函数来查找字符串数组中的最长公共前缀。</p>
-
-<p>如果不存在公共前缀，返回空字符串 ”“。</p>
-
-<h4 id="示例1">示例 1:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: ["flower","flow","flight"]
-输出: "fl"
-</code></pre></div></div>
-<h4 id="示例2">示例 2:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: ["dog","racecar","car"]
-输出: ""
-解释: 输入不存在公共前缀。
-</code></pre></div></div>
-<h4 id="说明">说明:</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>所有输入只包含小写字母 a-z 。
-</code></pre></div></div>
-
-<h3 id="方法一-zip合并">方法一 zip合并</h3>
-<ul>
-  <li><strong>解题思路</strong>：
-    <ul>
-      <li>使用 <strong>zip</strong> 根据字符串下标合并成数组，</li>
-      <li>判断合并后数组里元素是否都相同</li>
-    </ul>
-  </li>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度</li>
-      <li>空间复杂度 $O(1)$ ，使用的变量为自然数个</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">longestCommonPrefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strs</span><span class="p">):</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="s">''</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">strs</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">ans</span> <span class="o">+=</span> <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">break</span>
-        <span class="k">return</span> <span class="n">ans</span>
-</code></pre></div></div>
-
-<ul>
-  <li>这个例子是 <strong>菜鸟编程</strong> 里关于 <strong>zip函数</strong> 介绍 <a href="https://www.runoob.com/python/python-func-zip.html">Python zip() 函数</a></li>
-  <li><strong>如果你也发现了，请为自己点赞，顺便为作者点赞👍支持</strong></li>
-  <li><strong>如果发现在别处也有类似的例题，请在下面👇评论区告诉作者</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0518/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=zip">zip</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 18, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0518-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-18T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,zip"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0517/001"><h2 itemprop="headline" class="item__header">5414. 收藏清单</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>：  <code class="success highlighter-rouge">交集</code></li>
-  <li><strong>思路</strong>：   <code class="info highlighter-rouge">交集</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-5414-收藏清单">题目 <a href="https://leetcode-cn.com/problems/people-whose-list-of-favorite-companies-is-not-a-subset-of-another-list/">5414. 收藏清单</a></h3>
-
-<p>给你一个数组 <code class="highlighter-rouge">favoriteCompanies</code> ，其中 <code class="highlighter-rouge">favoriteCompanies[i]</code> 是第 i 名用户收藏的公司清单 <strong>（下标从 0 开始）</strong>。</p>
-
-<p>请找出不是其他任何人收藏的公司清单的子集的收藏清单，并返回该清单下标。下标需要按升序排列。</p>
-
-<h4 id="示例-1">示例 1：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：favoriteCompanies = [["leetcode","google","facebook"],["google","microsoft"],["google","facebook"],["google"],["amazon"]]
-输出：[0,1,4]
-解释：
-favoriteCompanies[2]=["google","facebook"] 是 favoriteCompanies[0]=["leetcode","google","facebook"] 的子集。
-favoriteCompanies[3]=["google"] 是 favoriteCompanies[0]=["leetcode","google","facebook"] 和 favoriteCompanies[1]=["google","microsoft"] 的子集。
-其余的收藏清单均不是其他任何人收藏的公司清单的子集，因此，答案为 [0,1,4] 。
-</code></pre></div></div>
-<h4 id="示例-2">示例 2：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：favoriteCompanies = [["leetcode","google","facebook"],["leetcode","amazon"],["facebook","google"]]
-输出：[0,1]
-解释：favoriteCompanies[2]=["facebook","google"] 是 favoriteCompanies[0]=["leetcode","google","facebook"] 的子集，因此，答案为 [0,1] 。
-</code></pre></div></div>
-<h4 id="示例-3">示例 3：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：favoriteCompanies = [["leetcode"],["google"],["facebook"],["amazon"]]
-输出：[0,1,2,3]
-</code></pre></div></div>
-
-<h4 id="提示">提示：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= favoriteCompanies.length &lt;= 100
-1 &lt;= favoriteCompanies[i].length &lt;= 500
-1 &lt;= favoriteCompanies[i][j].length &lt;= 20
-favoriteCompanies[i] 中的所有字符串 各不相同 。
-用户收藏的公司清单也 各不相同 ，也就是说，即便我们按字母顺序排序每个清单， favoriteCompanies[i] != favoriteCompanies[j] 仍然成立。
-所有字符串仅包含小写英文字母。
-</code></pre></div></div>
-
-<h3 id="方法一-判断交集">方法一 判断交集</h3>
-<ul>
-  <li><strong>题目理解</strong>：
-    <ul>
-      <li>题目可以理解为，两个清单是否为包含关系</li>
-      <li>因此我们的解题思路是：通过计算两个清单的 <strong>交集</strong> ，判断两个清单的交集是否为包含关系</li>
-    </ul>
-  </li>
-  <li><strong>算法流程</strong>：
-    <ol>
-      <li>列表转化为集合，可计算两个列表的交集  对于实现交集可以参考 <a href="https://blog.csdn.net/qiubingcsdn/article/details/82947880">Python实现”两个数组的交集”的两种方法</a></li>
-      <li>判断两集合的交集是否为某一集合 <code class="highlighter-rouge">x&amp;y == x</code> ，来确定清单</li>
-    </ol>
-  </li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">peopleIndexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">favoriteCompanies</span><span class="p">):</span>
-        <span class="n">fav_set</span> <span class="o">=</span> <span class="p">[</span><span class="nb">set</span><span class="p">(</span><span class="n">sub</span><span class="p">)))</span> <span class="k">for</span> <span class="n">sub</span> <span class="ow">in</span> <span class="n">favoriteCompanies</span><span class="p">]</span>
-        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fav_set</span><span class="p">):</span>
-            <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fav_set</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span><span class="n">j</span><span class="p">:</span>
-                    <span class="k">continue</span>
-                <span class="k">if</span> <span class="n">x</span><span class="o">&amp;</span><span class="n">y</span> <span class="o">==</span> <span class="n">x</span><span class="p">:</span> <span class="c1"># 通过判断交集，来防止数据重复录入
-</span>                    <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
-                    <span class="k">break</span>
-            <span class="k">if</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">ans</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">ans</span>
-</code></pre></div></div>
-
-<ul>
-  <li><strong>如果你觉得本文对你有帮助，请点赞👍支持</strong></li>
-  <li><strong>如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0517/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E4%BA%A4%E9%9B%86">交集</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 17, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0517-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-17T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,交集"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>228 post articles, 29 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>230 post articles, 29 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
