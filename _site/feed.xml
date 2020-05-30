@@ -1,19 +1,166 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-22T01:06:34+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">回溯算法</title><link href="http://localhost:4000/alog/2020/0521/003" rel="alternate" type="text/html" title="回溯算法" /><published>2020-05-21T00:00:00+08:00</published><updated>2020-05-21T00:00:00+08:00</updated><id>http://localhost:4000/alog/2020/0521/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95</id><content type="html" xml:base="http://localhost:4000/alog/2020/0521/003">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;回溯法使用&lt;/strong&gt;：
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-05-31T00:06:54+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">5408. 通过翻转子数组使两个数组相等</title><link href="http://localhost:4000/leetcode/2020/0530/001" rel="alternate" type="text/html" title="5408. 通过翻转子数组使两个数组相等" /><published>2020-05-30T00:00:00+08:00</published><updated>2020-05-30T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0530/5408.%20%E9%80%9A%E8%BF%87%E7%BF%BB%E8%BD%AC%E5%AD%90%E6%95%B0%E7%BB%84%E4%BD%BF%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9B%B8%E7%AD%89</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0530/001">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:
     &lt;ul&gt;
-      &lt;li&gt;对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题&lt;/li&gt;
-      &lt;li&gt;如图&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/longest-common-prefix/&quot;&gt;14. 最长公共前缀&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0521/17phone.gif&quot; alt=&quot;17. 电话号码的字母组合.gif&quot; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h3 id=&quot;题目-5408-通过翻转子数组使两个数组相等&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/contest/biweekly-contest-27/problems/make-two-arrays-equal-by-reversing-sub-arrays/&quot;&gt;5408. 通过翻转子数组使两个数组相等&lt;/a&gt;&lt;/h3&gt;
 
-&lt;h4 id=&quot;类似题型&quot;&gt;类似题型&lt;/h4&gt;
+&lt;p&gt;给你两个长度相同的整数数组 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 和 &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;每一步中，你可以选择 &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; 的任意 &lt;strong&gt;非空子数组&lt;/strong&gt; 并将它翻转。你可以执行此过程任意次。&lt;/p&gt;
+
+&lt;p&gt;如果你能让 &lt;code class=&quot;highlighter-rouge&quot;&gt;arr&lt;/code&gt; 变得与 &lt;code class=&quot;highlighter-rouge&quot;&gt;target&lt;/code&gt; 相同，返回 True；否则，返回 False 。&lt;/p&gt;
+
+&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [1,2,3,4], arr = [2,4,1,3]
+输出：true
+解释：你可以按照如下步骤使 arr 变成 target：
+1- 翻转子数组 [2,4,1] ，arr 变成 [1,4,2,3]
+2- 翻转子数组 [4,2] ，arr 变成 [1,2,4,3]
+3- 翻转子数组 [4,3] ，arr 变成 [1,2,3,4]
+上述方法并不是唯一的，还存在多种将 arr 变成 target 的方法。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [7], arr = [7]
+输出：true
+解释：arr 不需要做任何翻转已经与 target 相等。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [1,12], arr = [12,1]
+输出：true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-4&quot;&gt;示例 4：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [3,7,9], arr = [3,7,11]
+输出：false
+解释：arr 没有数字 9 ，所以无论如何也无法变成 target 。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-5&quot;&gt;示例 5：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [1,1,1,1,1], arr = [1,1,1,1,1]
+输出：true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;target.length == arr.length
+1 &amp;lt;= target.length &amp;lt;= 1000
+1 &amp;lt;= target[i] &amp;lt;= 1000
+1 &amp;lt;= arr[i] &amp;lt;= 1000
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-zip合并&quot;&gt;方法一 zip合并&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;/leetcode/2020/0521/001&quot;&gt;17. 电话号码的字母组合&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="回溯算法" /><summary type="html">回溯法使用： 对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题 如图 类似题型 17. 电话号码的字母组合</summary></entry><entry><title type="html">17. 电话号码的字母组合</title><link href="http://localhost:4000/leetcode/2020/0521/001" rel="alternate" type="text/html" title="17. 电话号码的字母组合" /><published>2020-05-21T00:00:00+08:00</published><updated>2020-05-21T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0521/17.%20%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E5%AD%97%E6%AF%8D%E7%BB%84%E5%90%88</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0521/001">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;使用 &lt;strong&gt;zip&lt;/strong&gt; 根据字符串下标合并成数组，&lt;/li&gt;
+      &lt;li&gt;判断合并后数组里元素是否都相同&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度&lt;/li&gt;
+      &lt;li&gt;空间复杂度 $O(1)$ ，使用的变量为自然数个
+        &lt;h4 id=&quot;python&quot;&gt;python&lt;/h4&gt;
+        &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;canBeEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+          &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;__类似题型 __&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持小牛&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="zip" /><summary type="html">难度：简单 本题涉及算法： 思路： zip 类似题型: 14. 最长公共前缀 题目 5408. 通过翻转子数组使两个数组相等 给你两个长度相同的整数数组 target 和 arr 。 每一步中，你可以选择 arr 的任意 非空子数组 并将它翻转。你可以执行此过程任意次。 如果你能让 arr 变得与 target 相同，返回 True；否则，返回 False 。 示例 1： 输入：target = [1,2,3,4], arr = [2,4,1,3] 输出：true 解释：你可以按照如下步骤使 arr 变成 target： 1- 翻转子数组 [2,4,1] ，arr 变成 [1,4,2,3] 2- 翻转子数组 [4,2] ，arr 变成 [1,2,4,3] 3- 翻转子数组 [4,3] ，arr 变成 [1,2,3,4] 上述方法并不是唯一的，还存在多种将 arr 变成 target 的方法。 示例 2： 输入：target = [7], arr = [7] 输出：true 解释：arr 不需要做任何翻转已经与 target 相等。 示例 3： 输入：target = [1,12], arr = [12,1] 输出：true 示例 4： 输入：target = [3,7,9], arr = [3,7,11] 输出：false 解释：arr 没有数字 9 ，所以无论如何也无法变成 target 。 示例 5： 输入：target = [1,1,1,1,1], arr = [1,1,1,1,1] 输出：true 提示： target.length == arr.length 1 &amp;lt;= target.length &amp;lt;= 1000 1 &amp;lt;= target[i] &amp;lt;= 1000 1 &amp;lt;= arr[i] &amp;lt;= 1000 方法一 zip合并 解题思路： 使用 zip 根据字符串下标合并成数组， 判断合并后数组里元素是否都相同 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 python class Solution: def canBeEqual(self, target: List[int], arr: List[int]) -&amp;gt; bool: target.sort() arr.sort() for i in zip(target,arr): if len(set(i)) == 1: continue else: return False return True __类似题型 __ 如果你觉得本文对你有帮助，请点赞👍支持小牛 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5409. 检查一个字符串是否包含所有长度为 K 的二进制子串</title><link href="http://localhost:4000/leetcode/2020/0530/002" rel="alternate" type="text/html" title="5409. 检查一个字符串是否包含所有长度为 K 的二进制子串" /><published>2020-05-30T00:00:00+08:00</published><updated>2020-05-30T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0530/5409.%20%E6%A3%80%E6%9F%A5%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%98%AF%E5%90%A6%E5%8C%85%E5%90%AB%E6%89%80%E6%9C%89%E9%95%BF%E5%BA%A6%E4%B8%BA%20K%20%E7%9A%84%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AD%90%E4%B8%B2</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0530/002">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;滑动窗口&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;滑动窗口&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;题目5409-检查一个字符串是否包含所有长度为-k-的二进制子串&quot;&gt;题目&lt;a href=&quot;https://leetcode-cn.com/contest/biweekly-contest-27/problems/check-if-a-string-contains-all-binary-codes-of-size-k/&quot;&gt;5409. 检查一个字符串是否包含所有长度为 K 的二进制子串&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;给你一个二进制字符串 &lt;code class=&quot;highlighter-rouge&quot;&gt;s&lt;/code&gt; 和一个整数 &lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt; 。&lt;/p&gt;
+
+&lt;p&gt;如果所有长度为 &lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt; 的二进制字符串都是 &lt;code class=&quot;highlighter-rouge&quot;&gt;s&lt;/code&gt; 的子串，请返回 True ，否则请返回 False 。&lt;/p&gt;
+
+&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：s = &quot;00110110&quot;, k = 2
+输出：true
+解释：长度为 2 的二进制串包括 &quot;00&quot;，&quot;01&quot;，&quot;10&quot; 和 &quot;11&quot;。它们分别是 s 中下标为 0，1，3，2 开始的长度为 2 的子串。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：s = &quot;00110&quot;, k = 2
+输出：true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：s = &quot;0110&quot;, k = 1
+输出：true
+解释：长度为 1 的二进制串包括 &quot;0&quot; 和 &quot;1&quot;，显然它们都是 s 的子串。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-4&quot;&gt;示例 4：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：s = &quot;0110&quot;, k = 2
+输出：false
+解释：长度为 2 的二进制串 &quot;00&quot; 没有出现在 s 中。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-5&quot;&gt;示例 5：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：s = &quot;0000000001011100&quot;, k = 4
+输出：false
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 &amp;lt;= s.length &amp;lt;= 5 * 10^5
+s 中只含 0 和 1 。
+1 &amp;lt;= k &amp;lt;= 20
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-滑动窗口&quot;&gt;方法一 滑动窗口&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;计算长度为 &lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt; 的所有字符串出现次数，计算公式 $2^ k$&lt;/li&gt;
+      &lt;li&gt;计算在字符串 &lt;code class=&quot;highlighter-rouge&quot;&gt;s&lt;/code&gt; 中，出现长度为 &lt;code class=&quot;highlighter-rouge&quot;&gt;k&lt;/code&gt; 的所有不重复子串个数&lt;/li&gt;
+      &lt;li&gt;当 &lt;code class=&quot;highlighter-rouge&quot;&gt;k=1&lt;/code&gt; ，&lt;code class=&quot;highlighter-rouge&quot;&gt;s&lt;/code&gt; 中子串续 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;gt;=1&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;时间复杂度 $O(N)$ ，$N$ 表示字符串长度&lt;/li&gt;
+      &lt;li&gt;空间复杂度 $O(1)$ ，使用的变量为自然数个
+        &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hasAllCodes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;s_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s_len&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+      &lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;curr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持小牛&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：中等 本题涉及算法： 滑动窗口 思路： 滑动窗口 类似题型: 题目5409. 检查一个字符串是否包含所有长度为 K 的二进制子串 给你一个二进制字符串 s 和一个整数 k 。 如果所有长度为 k 的二进制字符串都是 s 的子串，请返回 True ，否则请返回 False 。 示例 1： 输入：s = &quot;00110110&quot;, k = 2 输出：true 解释：长度为 2 的二进制串包括 &quot;00&quot;，&quot;01&quot;，&quot;10&quot; 和 &quot;11&quot;。它们分别是 s 中下标为 0，1，3，2 开始的长度为 2 的子串。 示例 2： 输入：s = &quot;00110&quot;, k = 2 输出：true 示例 3： 输入：s = &quot;0110&quot;, k = 1 输出：true 解释：长度为 1 的二进制串包括 &quot;0&quot; 和 &quot;1&quot;，显然它们都是 s 的子串。 示例 4： 输入：s = &quot;0110&quot;, k = 2 输出：false 解释：长度为 2 的二进制串 &quot;00&quot; 没有出现在 s 中。 示例 5： 输入：s = &quot;0000000001011100&quot;, k = 4 输出：false 提示： 1 &amp;lt;= s.length &amp;lt;= 5 * 10^5 s 中只含 0 和 1 。 1 &amp;lt;= k &amp;lt;= 20 方法一 滑动窗口 解题思路： 计算长度为 k 的所有字符串出现次数，计算公式 $2^ k$ 计算在字符串 s 中，出现长度为 k 的所有不重复子串个数 当 k=1 ，s 中子串续 &amp;gt;=1 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 class Solution: def hasAllCodes(self, s: str, k: int) -&amp;gt; bool: s_len = len(s) if s_len &amp;lt; 2 ** k: return False curr = set() for i in range(s_len+1-k): curr.add(s[i:k+i]) if len(curr) &amp;gt;= 2 ** k: return True else: return False 如果你觉得本文对你有帮助，请点赞👍支持小牛 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">17. 电话号码的字母组合</title><link href="http://localhost:4000/leetcode/2020/0521/001" rel="alternate" type="text/html" title="17. 电话号码的字母组合" /><published>2020-05-21T00:00:00+08:00</published><updated>2020-05-21T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0521/17.%20%E7%94%B5%E8%AF%9D%E5%8F%B7%E7%A0%81%E7%9A%84%E5%AD%97%E6%AF%8D%E7%BB%84%E5%90%88</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0521/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;回溯算法&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;回溯算法&lt;/code&gt;&lt;/li&gt;
@@ -129,58 +276,91 @@
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="回溯算法" /><summary type="html">难度：中等 本题涉及算法： 回溯算法 思路： 回溯算法 类似题型: 题目 17. 电话号码的字母组合 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。 示例: 输入：&quot;23&quot; 输出：[&quot;ad&quot;, &quot;ae&quot;, &quot;af&quot;, &quot;bd&quot;, &quot;be&quot;, &quot;bf&quot;, &quot;cd&quot;, &quot;ce&quot;, &quot;cf&quot;]. 说明: 尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。 方法一 回溯法 回溯法使用： 对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题 如图 解题思路： digits 是数字字符串 s(digits) 是 digits 所能代表的字母字符串 把 s(digits) 分解 可表示为 s(digits[0...n-1]) = letter(digits[0] + digits[1...n-1]) = letter(digits[0] + letter(digits[1] + digits[2...n-1]) = ..... python class Solution(object): def letterCombinations(self, digits): &quot;&quot;&quot; :type digits: str :rtype: List[str] &quot;&quot;&quot; phone= { '2':['a','b','c'], '3':['d','e','f'], '4':['g','h','i'], '5':['j','k','l'], '6':['m','n','o'], '7':['p','q','r','s'], '8':['t','u','v'], '9':['w','x','y','z'] } def backtrack(combination,next_digits): if len(next_digits) == 0: return output.append(combination) else: for letter in phone[next_digits[0]]: backtrack(combination+letter,next_digits[1:]) output = [] if digits: backtrack('',digits) return output java class Solution { Map&amp;lt;String, String&amp;gt; phone = new HashMap&amp;lt;String, String&amp;gt;() \{\{ put(&quot;2&quot;, &quot;abc&quot;); put(&quot;3&quot;, &quot;def&quot;); put(&quot;4&quot;, &quot;ghi&quot;); put(&quot;5&quot;, &quot;jkl&quot;); put(&quot;6&quot;, &quot;mno&quot;); put(&quot;7&quot;, &quot;pqrs&quot;); put(&quot;8&quot;, &quot;tuv&quot;); put(&quot;9&quot;, &quot;wxyz&quot;); \}\}; List&amp;lt;String&amp;gt; output = new ArrayList&amp;lt;String&amp;gt;(); private void backtrack(String combination, String next_digits) { if (next_digits.length() == 0){ output.add(combination); }else { String digit = next_digits.substring(0, 1); String letters = phone.get(digit); for (int i = 0; i &amp;lt; letters.length(); i++) { String letter = phone.get(digit).substring(i, i + 1); backtrack(combination + letter, next_digits.substring(1)); } } } public List&amp;lt;String&amp;gt; letterCombinations(String digits) { if (digits.length() != 0) backtrack(&quot;&quot;, digits); return output; } }</summary></entry><entry><title type="html">项目管理日常</title><link href="http://localhost:4000/pm/everyday" rel="alternate" type="text/html" title="项目管理日常" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E6%97%A5%E5%B8%B8</id><content type="html" xml:base="http://localhost:4000/pm/everyday">&lt;h3 id=&quot;项目经理每日工作&quot;&gt;项目经理每日工作&lt;/h3&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="回溯算法" /><summary type="html">难度：中等 本题涉及算法： 回溯算法 思路： 回溯算法 类似题型: 题目 17. 电话号码的字母组合 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。 示例: 输入：&quot;23&quot; 输出：[&quot;ad&quot;, &quot;ae&quot;, &quot;af&quot;, &quot;bd&quot;, &quot;be&quot;, &quot;bf&quot;, &quot;cd&quot;, &quot;ce&quot;, &quot;cf&quot;]. 说明: 尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。 方法一 回溯法 回溯法使用： 对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题 如图 解题思路： digits 是数字字符串 s(digits) 是 digits 所能代表的字母字符串 把 s(digits) 分解 可表示为 s(digits[0...n-1]) = letter(digits[0] + digits[1...n-1]) = letter(digits[0] + letter(digits[1] + digits[2...n-1]) = ..... python class Solution(object): def letterCombinations(self, digits): &quot;&quot;&quot; :type digits: str :rtype: List[str] &quot;&quot;&quot; phone= { '2':['a','b','c'], '3':['d','e','f'], '4':['g','h','i'], '5':['j','k','l'], '6':['m','n','o'], '7':['p','q','r','s'], '8':['t','u','v'], '9':['w','x','y','z'] } def backtrack(combination,next_digits): if len(next_digits) == 0: return output.append(combination) else: for letter in phone[next_digits[0]]: backtrack(combination+letter,next_digits[1:]) output = [] if digits: backtrack('',digits) return output java class Solution { Map&amp;lt;String, String&amp;gt; phone = new HashMap&amp;lt;String, String&amp;gt;() \{\{ put(&quot;2&quot;, &quot;abc&quot;); put(&quot;3&quot;, &quot;def&quot;); put(&quot;4&quot;, &quot;ghi&quot;); put(&quot;5&quot;, &quot;jkl&quot;); put(&quot;6&quot;, &quot;mno&quot;); put(&quot;7&quot;, &quot;pqrs&quot;); put(&quot;8&quot;, &quot;tuv&quot;); put(&quot;9&quot;, &quot;wxyz&quot;); \}\}; List&amp;lt;String&amp;gt; output = new ArrayList&amp;lt;String&amp;gt;(); private void backtrack(String combination, String next_digits) { if (next_digits.length() == 0){ output.add(combination); }else { String digit = next_digits.substring(0, 1); String letters = phone.get(digit); for (int i = 0; i &amp;lt; letters.length(); i++) { String letter = phone.get(digit).substring(i, i + 1); backtrack(combination + letter, next_digits.substring(1)); } } } public List&amp;lt;String&amp;gt; letterCombinations(String digits) { if (digits.length() != 0) backtrack(&quot;&quot;, digits); return output; } }</summary></entry><entry><title type="html">回溯算法</title><link href="http://localhost:4000/alog/2020/0521/003" rel="alternate" type="text/html" title="回溯算法" /><published>2020-05-21T00:00:00+08:00</published><updated>2020-05-21T00:00:00+08:00</updated><id>http://localhost:4000/alog/2020/0521/%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95</id><content type="html" xml:base="http://localhost:4000/alog/2020/0521/003">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;回溯法使用&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题&lt;/li&gt;
+      &lt;li&gt;如图&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;项目目标，计划，计划，再计划&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/leetcode/0521/17phone.gif&quot; alt=&quot;17. 电话号码的字母组合.gif&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;类似题型&quot;&gt;类似题型&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/leetcode/2020/0521/001&quot;&gt;17. 电话号码的字母组合&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="算法" /><category term="回溯算法" /><summary type="html">回溯法使用： 对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题 如图 类似题型 17. 电话号码的字母组合</summary></entry><entry><title type="html">风险管理</title><link href="http://localhost:4000/pm/risk" rel="alternate" type="text/html" title="风险管理" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86</id><content type="html" xml:base="http://localhost:4000/pm/risk">&lt;h4 id=&quot;风险管理概述&quot;&gt;风险管理概述&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;客观性：风险是客观存在的&lt;/li&gt;
+  &lt;li&gt;目的：降低负面风险，提升正面风险&lt;/li&gt;
+  &lt;li&gt;三要素：事件，概率，影响&lt;/li&gt;
+  &lt;li&gt;非事件类风险：
+    &lt;ul&gt;
+      &lt;li&gt;变异风险：已规划事件，活动存在不确定性，导致变异性风险&lt;/li&gt;
+      &lt;li&gt;模糊性风险：对未来可能发生，存在不确定性。如知识不足造成，项目系统太复杂模糊不清，&lt;strong&gt;通过专家意见，最佳事件为标杆填补差距，也可以采用增量开发，原型搭建或模拟等方法来处理&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;总结自己一天的计划完成情况&lt;/p&gt;
+  &lt;li&gt;项目韧性：
+    &lt;ul&gt;
+      &lt;li&gt;除了对已知风险列出风险预算，还要对突发性风险预算预留合理的应急预算和时间&lt;/li&gt;
+      &lt;li&gt;灵活的项目变更&lt;/li&gt;
+      &lt;li&gt;授权信赖的团队在商定时间内完成工作&lt;/li&gt;
+      &lt;li&gt;经常留意预警信号，以尽早识别突发性风险&lt;/li&gt;
+      &lt;li&gt;明确征求相关方的意见，以明确为应对突发性风险而可以调整项目范围或策略的领域&lt;/li&gt;
+    &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;考虑明天应该做的主要工作，二八原则，授权&lt;/p&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;威胁应对策略&quot;&gt;威胁应对策略&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报&lt;/li&gt;
+  &lt;li&gt;规避：通常是改变目标或计划，使其概率下降为零，如，&lt;strong&gt;延长进度，改变策略，缩小范围&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;转移：转交给第三方，这个时候涉及到钱&lt;/li&gt;
+  &lt;li&gt;减轻：减轻风险发生的影响，&lt;strong&gt;通常我们会，多招聘几个人，或者实习生&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;接受：
+    &lt;ul&gt;
+      &lt;li&gt;主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上&lt;/li&gt;
+      &lt;li&gt;被动接受：只是定期对威胁进行审查，确保并未发生重大改变&lt;/li&gt;
+    &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;了解每个项目小组的工作进展情况，并进行相应指导&lt;/strong&gt;&lt;/p&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;机会应对策略&quot;&gt;机会应对策略&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报&lt;/li&gt;
+  &lt;li&gt;开拓：将特定机会出现的概率提高到100%，&lt;strong&gt;比如：分配最有能力的资源非项目缩短时间，采用最小技术，或技术升级缩短时间&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;分享：将相应的机会责任转移给第三方，使其想有机会带来的部分收益，让那些最有能力为项目抓住机会的人担任新的风险责任人，&lt;strong&gt;包括建立合伙关系，合作团队，特殊公司或合资企业来分享机会&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;提高：提高机会出现的概率，如果无法提高概率，可针对其潜在收益规模的因素来提高发生机会的概率，&lt;strong&gt;包括为早日完成活动而增加的资源&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;接受：
+    &lt;ul&gt;
+      &lt;li&gt;主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上&lt;/li&gt;
+      &lt;li&gt;被动接受：只是定期对威胁进行审查，确保并未发生重大改变&lt;/li&gt;
+    &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;提前考虑到实施过程中的缺陷与不足之处，并想出改善的方法与步骤&lt;/strong&gt;&lt;/p&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;风险管理大概流程&quot;&gt;风险管理大概流程&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;当接手的项目紧急，在不了解项目的情况下
+    &lt;ol&gt;
+      &lt;li&gt;可先从项目的背景出发，先了解项目的情况&lt;/li&gt;
+      &lt;li&gt;通过头脑风暴等各种方式收集可能存在的风险&lt;/li&gt;
+      &lt;li&gt;数据分析，包括 &lt;strong&gt;文件分析，假设条件和制约因素分析，根本原因分析&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;对以识别的风险，根据风险三要素，记录风险&lt;/li&gt;
+      &lt;li&gt;确定风险优先级，及风险造成影响&lt;/li&gt;
+      &lt;li&gt;规划风险应对，风险责任到人，根据上面的 &lt;strong&gt;威胁应对策略,机会应对策略&lt;/strong&gt;&lt;/li&gt;
+      &lt;li&gt;实施风险应对，并在整个过程中 监督风险，并定期审查风险&lt;/li&gt;
+    &lt;/ol&gt;
   &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;记住每一位项目团队的负责人及团队组长的名字. 干活负责程度&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;每天必须看的 &lt;strong&gt;各种数据报表和清单&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;考虑自己一天工作当中失误的地方&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;自己一天工作完成的质量与效率是否还能提高&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;应该批复的各项资料和文件&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;项目日志跟踪记录重点跟进事项，提前安排&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;项目报告例行准备，高层级和日常报告 - 可以要求团队成员每周、每两周或每月提交一次状态报告&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;管理和控制干系人参与，&lt;strong&gt;争取干系人积极贡献&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;领域知识和业务知识学习时间，重要 &lt;strong&gt;风险有提前预警&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;谁也不喜欢意外的事情，积极主动. 持续不断的交流&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;沟通能力，会议主持，文案写作，谈话能力，在复杂决策前敢于拍板&lt;/strong&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="敏捷管理" /><category term="项目管理日常" /><summary type="html">项目经理每日工作 项目目标，计划，计划，再计划 总结自己一天的计划完成情况 考虑明天应该做的主要工作，二八原则，授权 了解每个项目小组的工作进展情况，并进行相应指导 提前考虑到实施过程中的缺陷与不足之处，并想出改善的方法与步骤 记住每一位项目团队的负责人及团队组长的名字. 干活负责程度 每天必须看的 各种数据报表和清单 考虑自己一天工作当中失误的地方 自己一天工作完成的质量与效率是否还能提高 应该批复的各项资料和文件 项目日志跟踪记录重点跟进事项，提前安排 项目报告例行准备，高层级和日常报告 - 可以要求团队成员每周、每两周或每月提交一次状态报告 管理和控制干系人参与，争取干系人积极贡献 领域知识和业务知识学习时间，重要 风险有提前预警 谁也不喜欢意外的事情，积极主动. 持续不断的交流 沟通能力，会议主持，文案写作，谈话能力，在复杂决策前敢于拍板</summary></entry><entry><title type="html">每日晨会</title><link href="http://localhost:4000/pm/daymeeting" rel="alternate" type="text/html" title="每日晨会" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E6%AF%8F%E6%97%A5%E6%99%A8%E4%BC%9A</id><content type="html" xml:base="http://localhost:4000/pm/daymeeting">&lt;h3 id=&quot;每日晨会&quot;&gt;每日晨会&lt;/h3&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;现象&quot;&gt;现象&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;当你了解这些之后，你可以拒绝领导，拒绝客户，拒绝下属，方便你的管理&lt;/li&gt;
+  &lt;li&gt;很多公司在 风险记录和风险审查上做的不足，相应的会确实很多经验总结教训&lt;/li&gt;
+  &lt;li&gt;对于突发情况，没有足够的资源利用，比如人力资源，资金，或实物资源&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="项目管理" /><category term="风险管理" /><summary type="html">风险管理概述 客观性：风险是客观存在的 目的：降低负面风险，提升正面风险 三要素：事件，概率，影响 非事件类风险： 变异风险：已规划事件，活动存在不确定性，导致变异性风险 模糊性风险：对未来可能发生，存在不确定性。如知识不足造成，项目系统太复杂模糊不清，通过专家意见，最佳事件为标杆填补差距，也可以采用增量开发，原型搭建或模拟等方法来处理 项目韧性： 除了对已知风险列出风险预算，还要对突发性风险预算预留合理的应急预算和时间 灵活的项目变更 授权信赖的团队在商定时间内完成工作 经常留意预警信号，以尽早识别突发性风险 明确征求相关方的意见，以明确为应对突发性风险而可以调整项目范围或策略的领域 威胁应对策略 上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报 规避：通常是改变目标或计划，使其概率下降为零，如，延长进度，改变策略，缩小范围 转移：转交给第三方，这个时候涉及到钱 减轻：减轻风险发生的影响，通常我们会，多招聘几个人，或者实习生 接受： 主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上 被动接受：只是定期对威胁进行审查，确保并未发生重大改变 机会应对策略 上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报 开拓：将特定机会出现的概率提高到100%，比如：分配最有能力的资源非项目缩短时间，采用最小技术，或技术升级缩短时间 分享：将相应的机会责任转移给第三方，使其想有机会带来的部分收益，让那些最有能力为项目抓住机会的人担任新的风险责任人，包括建立合伙关系，合作团队，特殊公司或合资企业来分享机会 提高：提高机会出现的概率，如果无法提高概率，可针对其潜在收益规模的因素来提高发生机会的概率，包括为早日完成活动而增加的资源 接受： 主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上 被动接受：只是定期对威胁进行审查，确保并未发生重大改变 风险管理大概流程 当接手的项目紧急，在不了解项目的情况下 可先从项目的背景出发，先了解项目的情况 通过头脑风暴等各种方式收集可能存在的风险 数据分析，包括 文件分析，假设条件和制约因素分析，根本原因分析 对以识别的风险，根据风险三要素，记录风险 确定风险优先级，及风险造成影响 规划风险应对，风险责任到人，根据上面的 威胁应对策略,机会应对策略 实施风险应对，并在整个过程中 监督风险，并定期审查风险 现象 当你了解这些之后，你可以拒绝领导，拒绝客户，拒绝下属，方便你的管理 很多公司在 风险记录和风险审查上做的不足，相应的会确实很多经验总结教训 对于突发情况，没有足够的资源利用，比如人力资源，资金，或实物资源</summary></entry><entry><title type="html">每日晨会</title><link href="http://localhost:4000/pm/daymeeting" rel="alternate" type="text/html" title="每日晨会" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E6%AF%8F%E6%97%A5%E6%99%A8%E4%BC%9A</id><content type="html" xml:base="http://localhost:4000/pm/daymeeting">&lt;h3 id=&quot;每日晨会&quot;&gt;每日晨会&lt;/h3&gt;
 &lt;ol&gt;
   &lt;li&gt;
     &lt;ul&gt;
@@ -335,77 +515,58 @@
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="数组遍历" /><category term="双指针" /><summary type="html">难度：中等 本题涉及算法： 数组遍历 双指针 思路： 数组遍历 双指针 类似题型: 15. 三数之和 题目 16. 最接近的三数之和 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。 例如，给定数组 nums = [-1，2，1，-4], 和 target = 1. 与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2). 方法一 双指针 解题思路： 左右指针向中间移动，中间同时从左向右移动 i，并三数相加 通过每次 三数之和 - 目标值 ，比较绝对值 复杂度分析: 时间复杂度 $O(N^2)$ ，$N$ 为数组的长度 空间复杂度 $O(1)$ python class Solution: def threeSumClosest(self, nums: List[int], target: int) -&amp;gt; int: nums_len = len(nums) nums.sort() ans_sum = nums[0] + nums[1] + nums[2]; for i in range(nums_len): left, right = i + 1 , nums_len - 1 while left &amp;lt; right: curr_sum = nums[i] + nums[left] + nums[right] if abs(curr_sum - target) &amp;lt; abs(ans_sum - target): ans_sum = curr_sum if curr_sum &amp;gt; target: right -= 1 elif curr_sum &amp;lt; target: left += 1 else: return target return ans_sum java class Solution { public int threeSumClosest(int[] nums, int target) { int nums_len = nums.length; Arrays.sort(nums); int ans_sum = nums[0] + nums[1] + nums[2]; for(int i = 0 ;i&amp;lt;nums_len;i++) { int left = i + 1, right = nums_len - 1; while (left &amp;lt; right) { int curr_sum = nums[i] + nums[left] + nums[right]; if (Math.abs(curr_sum - target) &amp;lt; Math.abs(ans_sum - target) ) ans_sum = curr_sum; if (curr_sum &amp;gt; target) right --; else if (curr_sum &amp;lt; target) left ++; else return target; } } return ans_sum; } } 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">风险管理</title><link href="http://localhost:4000/pm/risk" rel="alternate" type="text/html" title="风险管理" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86</id><content type="html" xml:base="http://localhost:4000/pm/risk">&lt;h4 id=&quot;风险管理概述&quot;&gt;风险管理概述&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;客观性：风险是客观存在的&lt;/li&gt;
-  &lt;li&gt;目的：降低负面风险，提升正面风险&lt;/li&gt;
-  &lt;li&gt;三要素：事件，概率，影响&lt;/li&gt;
-  &lt;li&gt;非事件类风险：
-    &lt;ul&gt;
-      &lt;li&gt;变异风险：已规划事件，活动存在不确定性，导致变异性风险&lt;/li&gt;
-      &lt;li&gt;模糊性风险：对未来可能发生，存在不确定性。如知识不足造成，项目系统太复杂模糊不清，&lt;strong&gt;通过专家意见，最佳事件为标杆填补差距，也可以采用增量开发，原型搭建或模拟等方法来处理&lt;/strong&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;项目韧性：
-    &lt;ul&gt;
-      &lt;li&gt;除了对已知风险列出风险预算，还要对突发性风险预算预留合理的应急预算和时间&lt;/li&gt;
-      &lt;li&gt;灵活的项目变更&lt;/li&gt;
-      &lt;li&gt;授权信赖的团队在商定时间内完成工作&lt;/li&gt;
-      &lt;li&gt;经常留意预警信号，以尽早识别突发性风险&lt;/li&gt;
-      &lt;li&gt;明确征求相关方的意见，以明确为应对突发性风险而可以调整项目范围或策略的领域&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="数组遍历" /><category term="双指针" /><summary type="html">难度：中等 本题涉及算法： 数组遍历 双指针 思路： 数组遍历 双指针 类似题型: 15. 三数之和 题目 16. 最接近的三数之和 给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。 例如，给定数组 nums = [-1，2，1，-4], 和 target = 1. 与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2). 方法一 双指针 解题思路： 左右指针向中间移动，中间同时从左向右移动 i，并三数相加 通过每次 三数之和 - 目标值 ，比较绝对值 复杂度分析: 时间复杂度 $O(N^2)$ ，$N$ 为数组的长度 空间复杂度 $O(1)$ python class Solution: def threeSumClosest(self, nums: List[int], target: int) -&amp;gt; int: nums_len = len(nums) nums.sort() ans_sum = nums[0] + nums[1] + nums[2]; for i in range(nums_len): left, right = i + 1 , nums_len - 1 while left &amp;lt; right: curr_sum = nums[i] + nums[left] + nums[right] if abs(curr_sum - target) &amp;lt; abs(ans_sum - target): ans_sum = curr_sum if curr_sum &amp;gt; target: right -= 1 elif curr_sum &amp;lt; target: left += 1 else: return target return ans_sum java class Solution { public int threeSumClosest(int[] nums, int target) { int nums_len = nums.length; Arrays.sort(nums); int ans_sum = nums[0] + nums[1] + nums[2]; for(int i = 0 ;i&amp;lt;nums_len;i++) { int left = i + 1, right = nums_len - 1; while (left &amp;lt; right) { int curr_sum = nums[i] + nums[left] + nums[right]; if (Math.abs(curr_sum - target) &amp;lt; Math.abs(ans_sum - target) ) ans_sum = curr_sum; if (curr_sum &amp;gt; target) right --; else if (curr_sum &amp;lt; target) left ++; else return target; } } return ans_sum; } } 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">项目管理日常</title><link href="http://localhost:4000/pm/everyday" rel="alternate" type="text/html" title="项目管理日常" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E6%97%A5%E5%B8%B8</id><content type="html" xml:base="http://localhost:4000/pm/everyday">&lt;h3 id=&quot;项目经理每日工作&quot;&gt;项目经理每日工作&lt;/h3&gt;
 
-&lt;h4 id=&quot;威胁应对策略&quot;&gt;威胁应对策略&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报&lt;/li&gt;
-  &lt;li&gt;规避：通常是改变目标或计划，使其概率下降为零，如，&lt;strong&gt;延长进度，改变策略，缩小范围&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;转移：转交给第三方，这个时候涉及到钱&lt;/li&gt;
-  &lt;li&gt;减轻：减轻风险发生的影响，&lt;strong&gt;通常我们会，多招聘几个人，或者实习生&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;接受：
-    &lt;ul&gt;
-      &lt;li&gt;主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上&lt;/li&gt;
-      &lt;li&gt;被动接受：只是定期对威胁进行审查，确保并未发生重大改变&lt;/li&gt;
-    &lt;/ul&gt;
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;项目目标，计划，计划，再计划&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;机会应对策略&quot;&gt;机会应对策略&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报&lt;/li&gt;
-  &lt;li&gt;开拓：将特定机会出现的概率提高到100%，&lt;strong&gt;比如：分配最有能力的资源非项目缩短时间，采用最小技术，或技术升级缩短时间&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;分享：将相应的机会责任转移给第三方，使其想有机会带来的部分收益，让那些最有能力为项目抓住机会的人担任新的风险责任人，&lt;strong&gt;包括建立合伙关系，合作团队，特殊公司或合资企业来分享机会&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;提高：提高机会出现的概率，如果无法提高概率，可针对其潜在收益规模的因素来提高发生机会的概率，&lt;strong&gt;包括为早日完成活动而增加的资源&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;接受：
-    &lt;ul&gt;
-      &lt;li&gt;主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上&lt;/li&gt;
-      &lt;li&gt;被动接受：只是定期对威胁进行审查，确保并未发生重大改变&lt;/li&gt;
-    &lt;/ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;总结自己一天的计划完成情况&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;风险管理大概流程&quot;&gt;风险管理大概流程&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;当接手的项目紧急，在不了解项目的情况下
-    &lt;ol&gt;
-      &lt;li&gt;可先从项目的背景出发，先了解项目的情况&lt;/li&gt;
-      &lt;li&gt;通过头脑风暴等各种方式收集可能存在的风险&lt;/li&gt;
-      &lt;li&gt;数据分析，包括 &lt;strong&gt;文件分析，假设条件和制约因素分析，根本原因分析&lt;/strong&gt;&lt;/li&gt;
-      &lt;li&gt;对以识别的风险，根据风险三要素，记录风险&lt;/li&gt;
-      &lt;li&gt;确定风险优先级，及风险造成影响&lt;/li&gt;
-      &lt;li&gt;规划风险应对，风险责任到人，根据上面的 &lt;strong&gt;威胁应对策略,机会应对策略&lt;/strong&gt;&lt;/li&gt;
-      &lt;li&gt;实施风险应对，并在整个过程中 监督风险，并定期审查风险&lt;/li&gt;
-    &lt;/ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;考虑明天应该做的主要工作，二八原则，授权&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;现象&quot;&gt;现象&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;当你了解这些之后，你可以拒绝领导，拒绝客户，拒绝下属，方便你的管理&lt;/li&gt;
-  &lt;li&gt;很多公司在 风险记录和风险审查上做的不足，相应的会确实很多经验总结教训&lt;/li&gt;
-  &lt;li&gt;对于突发情况，没有足够的资源利用，比如人力资源，资金，或实物资源&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="项目管理" /><category term="风险管理" /><summary type="html">风险管理概述 客观性：风险是客观存在的 目的：降低负面风险，提升正面风险 三要素：事件，概率，影响 非事件类风险： 变异风险：已规划事件，活动存在不确定性，导致变异性风险 模糊性风险：对未来可能发生，存在不确定性。如知识不足造成，项目系统太复杂模糊不清，通过专家意见，最佳事件为标杆填补差距，也可以采用增量开发，原型搭建或模拟等方法来处理 项目韧性： 除了对已知风险列出风险预算，还要对突发性风险预算预留合理的应急预算和时间 灵活的项目变更 授权信赖的团队在商定时间内完成工作 经常留意预警信号，以尽早识别突发性风险 明确征求相关方的意见，以明确为应对突发性风险而可以调整项目范围或策略的领域 威胁应对策略 上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报 规避：通常是改变目标或计划，使其概率下降为零，如，延长进度，改变策略，缩小范围 转移：转交给第三方，这个时候涉及到钱 减轻：减轻风险发生的影响，通常我们会，多招聘几个人，或者实习生 接受： 主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上 被动接受：只是定期对威胁进行审查，确保并未发生重大改变 机会应对策略 上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报 开拓：将特定机会出现的概率提高到100%，比如：分配最有能力的资源非项目缩短时间，采用最小技术，或技术升级缩短时间 分享：将相应的机会责任转移给第三方，使其想有机会带来的部分收益，让那些最有能力为项目抓住机会的人担任新的风险责任人，包括建立合伙关系，合作团队，特殊公司或合资企业来分享机会 提高：提高机会出现的概率，如果无法提高概率，可针对其潜在收益规模的因素来提高发生机会的概率，包括为早日完成活动而增加的资源 接受： 主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上 被动接受：只是定期对威胁进行审查，确保并未发生重大改变 风险管理大概流程 当接手的项目紧急，在不了解项目的情况下 可先从项目的背景出发，先了解项目的情况 通过头脑风暴等各种方式收集可能存在的风险 数据分析，包括 文件分析，假设条件和制约因素分析，根本原因分析 对以识别的风险，根据风险三要素，记录风险 确定风险优先级，及风险造成影响 规划风险应对，风险责任到人，根据上面的 威胁应对策略,机会应对策略 实施风险应对，并在整个过程中 监督风险，并定期审查风险 现象 当你了解这些之后，你可以拒绝领导，拒绝客户，拒绝下属，方便你的管理 很多公司在 风险记录和风险审查上做的不足，相应的会确实很多经验总结教训 对于突发情况，没有足够的资源利用，比如人力资源，资金，或实物资源</summary></entry><entry><title type="html">15. 三数之和</title><link href="http://localhost:4000/leetcode/2020/0519/001" rel="alternate" type="text/html" title="15. 三数之和" /><published>2020-05-19T00:00:00+08:00</published><updated>2020-05-19T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0519/15.%20%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0519/001">&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;了解每个项目小组的工作进展情况，并进行相应指导&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;提前考虑到实施过程中的缺陷与不足之处，并想出改善的方法与步骤&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;记住每一位项目团队的负责人及团队组长的名字. 干活负责程度&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;每天必须看的 &lt;strong&gt;各种数据报表和清单&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;考虑自己一天工作当中失误的地方&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;自己一天工作完成的质量与效率是否还能提高&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;应该批复的各项资料和文件&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;项目日志跟踪记录重点跟进事项，提前安排&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;项目报告例行准备，高层级和日常报告 - 可以要求团队成员每周、每两周或每月提交一次状态报告&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;管理和控制干系人参与，&lt;strong&gt;争取干系人积极贡献&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;领域知识和业务知识学习时间，重要 &lt;strong&gt;风险有提前预警&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;谁也不喜欢意外的事情，积极主动. 持续不断的交流&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;沟通能力，会议主持，文案写作，谈话能力，在复杂决策前敢于拍板&lt;/strong&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="敏捷管理" /><category term="项目管理日常" /><summary type="html">项目经理每日工作 项目目标，计划，计划，再计划 总结自己一天的计划完成情况 考虑明天应该做的主要工作，二八原则，授权 了解每个项目小组的工作进展情况，并进行相应指导 提前考虑到实施过程中的缺陷与不足之处，并想出改善的方法与步骤 记住每一位项目团队的负责人及团队组长的名字. 干活负责程度 每天必须看的 各种数据报表和清单 考虑自己一天工作当中失误的地方 自己一天工作完成的质量与效率是否还能提高 应该批复的各项资料和文件 项目日志跟踪记录重点跟进事项，提前安排 项目报告例行准备，高层级和日常报告 - 可以要求团队成员每周、每两周或每月提交一次状态报告 管理和控制干系人参与，争取干系人积极贡献 领域知识和业务知识学习时间，重要 风险有提前预警 谁也不喜欢意外的事情，积极主动. 持续不断的交流 沟通能力，会议主持，文案写作，谈话能力，在复杂决策前敢于拍板</summary></entry><entry><title type="html">15. 三数之和</title><link href="http://localhost:4000/leetcode/2020/0519/001" rel="alternate" type="text/html" title="15. 三数之和" /><published>2020-05-19T00:00:00+08:00</published><updated>2020-05-19T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0519/15.%20%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0519/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;： &lt;code class=&quot;success highlighter-rouge&quot;&gt;数组遍历&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;数组遍历&lt;/code&gt;&lt;/li&gt;
@@ -509,142 +670,4 @@
                 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
                     &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;left&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="数组遍历" /><summary type="html">难度：中等 本题涉及算法： 数组遍历 思路： 数组遍历 类似题型: 题目 15. 三数之和 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。 注意：答案中不可以包含重复的三元组。 示例： 给定数组 nums = [-1, 0, 1, 2, -1, -4]， 满足要求的三元组集合为： [ [-1, 0, 1], [-1, -1, 2] ] 方法一 数组遍历 解题思路： 首先对数组进行排序，排序后固定一个数 $nums[i]$，再使用左右指针指向 $nums[i]$ 后面的两端，数字分别为 $nums[L]$ 和 $nums[R]$，计算三个数的和 $sum$ 判断是否满足为 $0$，满足则添加进结果集 如果 $nums[i]$ 大于 $0$，则三数之和必然无法等于 $0$，结束循环 如果 $nums[i]= nums[i−1]$，则说明该数字重复，会导致结果重复，所以应该跳过 当 $sum0 时，$nums[L] = nums[L+1]$ 则会导致结果重复，应该跳过，$L++$ 当 $sum0$ 时，$nums[R] =nums[R−1]$ 则会导致结果重复，应该跳过，$R–$ 时间复杂度： 时间复杂度：$O(n^2)$ $n$ 为数组长度 空间复杂度：$O(1)$ java class Solution { public static List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; threeSum(int[] nums) { List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; ans = new ArrayList(); int len = nums.length; if(nums == null || len &amp;lt; 3) return ans; Arrays.sort(nums); // 排序 for (int i = 0; i &amp;lt; len ; i++) { if(nums[i] &amp;gt; 0) break; // 如果当前数字大于0，则三数之和一定大于0，所以结束循环 if(i &amp;gt; 0 &amp;amp;&amp;amp; nums[i] == nums[i-1]) continue; // 去重 int L = i+1; int R = len-1; while(L &amp;lt; R){ int sum = nums[i] + nums[L] + nums[R]; if(sum == 0){ ans.add(Arrays.asList(nums[i],nums[L],nums[R])); while (L&amp;lt;R &amp;amp;&amp;amp; nums[L] == nums[L+1]) L++; // 去重 while (L&amp;lt;R &amp;amp;&amp;amp; nums[R] == nums[R-1]) R--; // 去重 L++; R--; } else if (sum &amp;lt; 0) L++; else if (sum &amp;gt; 0) R--; } } return ans; } } python class Solution(object): def threeSum(self, nums): &quot;&quot;&quot; :type nums: List[int] :rtype: List[List[int]] &quot;&quot;&quot; nums_len = len(nums) ans = [] if not nums or nums_len &amp;lt; 3: return ans nums.sort() for i in range(nums_len): if nums[i] &amp;gt; 0: return ans if i &amp;gt; 0 and nums[i] == nums[i-1]: continue left = i + 1 right = nums_len - 1 while left &amp;lt; right: if nums[left] + nums[right] + nums[i] == 0: ans.append([nums[i] ,nums[left] ,nums[right]]) while left &amp;lt; right and nums[left] == nums[left + 1]: left = left + 1 while left &amp;lt; right and nums[right] == nums[right - 1]: right = right - 1 left = left + 1 right = right - 1 elif nums[left] + nums[right] + nums[i] &amp;gt; 0: right = right - 1 else: left = left + 1 return ans</summary></entry><entry><title type="html">14. 最长公共前缀</title><link href="http://localhost:4000/leetcode/2020/0518/001" rel="alternate" type="text/html" title="14. 最长公共前缀" /><published>2020-05-18T00:00:00+08:00</published><updated>2020-05-18T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0518/14.%20%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0518/001">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;题目-14-最长公共前缀&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/longest-common-prefix/&quot;&gt;14. 最长公共前缀&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;编写一个函数来查找字符串数组中的最长公共前缀。&lt;/p&gt;
-
-&lt;p&gt;如果不存在公共前缀，返回空字符串 ”“。&lt;/p&gt;
-
-&lt;h4 id=&quot;示例1&quot;&gt;示例 1:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]
-输出: &quot;fl&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例2&quot;&gt;示例 2:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;]
-输出: &quot;&quot;
-解释: 输入不存在公共前缀。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;说明&quot;&gt;说明:&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;所有输入只包含小写字母 a-z 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一-zip合并&quot;&gt;方法一 zip合并&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;使用 &lt;strong&gt;zip&lt;/strong&gt; 根据字符串下标合并成数组，&lt;/li&gt;
-      &lt;li&gt;判断合并后数组里元素是否都相同&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度&lt;/li&gt;
-      &lt;li&gt;空间复杂度 $O(1)$ ，使用的变量为自然数个&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;longestCommonPrefix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;strs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;''&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;这个例子是 &lt;strong&gt;菜鸟编程&lt;/strong&gt; 里关于 &lt;strong&gt;zip函数&lt;/strong&gt; 介绍 &lt;a href=&quot;https://www.runoob.com/python/python-func-zip.html&quot;&gt;Python zip() 函数&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果你也发现了，请为自己点赞，顺便为作者点赞👍支持&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果发现在别处也有类似的例题，请在下面👇评论区告诉作者&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="zip" /><summary type="html">难度：简单 本题涉及算法： 思路： zip 类似题型: 题目 14. 最长公共前缀 编写一个函数来查找字符串数组中的最长公共前缀。 如果不存在公共前缀，返回空字符串 ”“。 示例 1: 输入: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;] 输出: &quot;fl&quot; 示例 2: 输入: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;] 输出: &quot;&quot; 解释: 输入不存在公共前缀。 说明: 所有输入只包含小写字母 a-z 。 方法一 zip合并 解题思路： 使用 zip 根据字符串下标合并成数组， 判断合并后数组里元素是否都相同 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 class Solution(object): def longestCommonPrefix(self, strs): ans = '' for i in zip(*strs): if len(set(i)) == 1: ans += i[0] else: break return ans 这个例子是 菜鸟编程 里关于 zip函数 介绍 Python zip() 函数 如果你也发现了，请为自己点赞，顺便为作者点赞👍支持 如果发现在别处也有类似的例题，请在下面👇评论区告诉作者</summary></entry><entry><title type="html">5414. 收藏清单</title><link href="http://localhost:4000/leetcode/2020/0517/001" rel="alternate" type="text/html" title="5414. 收藏清单" /><published>2020-05-17T00:00:00+08:00</published><updated>2020-05-17T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0517/5414.%20%E6%94%B6%E8%97%8F%E6%B8%85%E5%8D%95</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0517/001">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：  &lt;code class=&quot;success highlighter-rouge&quot;&gt;交集&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;info highlighter-rouge&quot;&gt;交集&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;题目-5414-收藏清单&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/people-whose-list-of-favorite-companies-is-not-a-subset-of-another-list/&quot;&gt;5414. 收藏清单&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;给你一个数组 &lt;code class=&quot;highlighter-rouge&quot;&gt;favoriteCompanies&lt;/code&gt; ，其中 &lt;code class=&quot;highlighter-rouge&quot;&gt;favoriteCompanies[i]&lt;/code&gt; 是第 i 名用户收藏的公司清单 &lt;strong&gt;（下标从 0 开始）&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;请找出不是其他任何人收藏的公司清单的子集的收藏清单，并返回该清单下标。下标需要按升序排列。&lt;/p&gt;
-
-&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：favoriteCompanies = [[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;],[&quot;google&quot;,&quot;microsoft&quot;],[&quot;google&quot;,&quot;facebook&quot;],[&quot;google&quot;],[&quot;amazon&quot;]]
-输出：[0,1,4]
-解释：
-favoriteCompanies[2]=[&quot;google&quot;,&quot;facebook&quot;] 是 favoriteCompanies[0]=[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;] 的子集。
-favoriteCompanies[3]=[&quot;google&quot;] 是 favoriteCompanies[0]=[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;] 和 favoriteCompanies[1]=[&quot;google&quot;,&quot;microsoft&quot;] 的子集。
-其余的收藏清单均不是其他任何人收藏的公司清单的子集，因此，答案为 [0,1,4] 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：favoriteCompanies = [[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;],[&quot;leetcode&quot;,&quot;amazon&quot;],[&quot;facebook&quot;,&quot;google&quot;]]
-输出：[0,1]
-解释：favoriteCompanies[2]=[&quot;facebook&quot;,&quot;google&quot;] 是 favoriteCompanies[0]=[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;] 的子集，因此，答案为 [0,1] 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：favoriteCompanies = [[&quot;leetcode&quot;],[&quot;google&quot;],[&quot;facebook&quot;],[&quot;amazon&quot;]]
-输出：[0,1,2,3]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1 &amp;lt;= favoriteCompanies.length &amp;lt;= 100
-1 &amp;lt;= favoriteCompanies[i].length &amp;lt;= 500
-1 &amp;lt;= favoriteCompanies[i][j].length &amp;lt;= 20
-favoriteCompanies[i] 中的所有字符串 各不相同 。
-用户收藏的公司清单也 各不相同 ，也就是说，即便我们按字母顺序排序每个清单， favoriteCompanies[i] != favoriteCompanies[j] 仍然成立。
-所有字符串仅包含小写英文字母。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一-判断交集&quot;&gt;方法一 判断交集&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;题目理解&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;题目可以理解为，两个清单是否为包含关系&lt;/li&gt;
-      &lt;li&gt;因此我们的解题思路是：通过计算两个清单的 &lt;strong&gt;交集&lt;/strong&gt; ，判断两个清单的交集是否为包含关系&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;算法流程&lt;/strong&gt;：
-    &lt;ol&gt;
-      &lt;li&gt;列表转化为集合，可计算两个列表的交集  对于实现交集可以参考 &lt;a href=&quot;https://blog.csdn.net/qiubingcsdn/article/details/82947880&quot;&gt;Python实现”两个数组的交集”的两种方法&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;判断两集合的交集是否为某一集合 &lt;code class=&quot;highlighter-rouge&quot;&gt;x&amp;amp;y == x&lt;/code&gt; ，来确定清单&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;peopleIndexes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;favoriteCompanies&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fav_set&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sub&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;favoriteCompanies&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fav_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;enumerate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fav_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 通过判断交集，来防止数据重复录入
-&lt;/span&gt;                    &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-                    &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flag&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-                &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="交集" /><summary type="html">难度：中等 本题涉及算法： 交集 思路： 交集 类似题型: 题目 5414. 收藏清单 给你一个数组 favoriteCompanies ，其中 favoriteCompanies[i] 是第 i 名用户收藏的公司清单 （下标从 0 开始）。 请找出不是其他任何人收藏的公司清单的子集的收藏清单，并返回该清单下标。下标需要按升序排列。 示例 1： 输入：favoriteCompanies = [[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;],[&quot;google&quot;,&quot;microsoft&quot;],[&quot;google&quot;,&quot;facebook&quot;],[&quot;google&quot;],[&quot;amazon&quot;]] 输出：[0,1,4] 解释： favoriteCompanies[2]=[&quot;google&quot;,&quot;facebook&quot;] 是 favoriteCompanies[0]=[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;] 的子集。 favoriteCompanies[3]=[&quot;google&quot;] 是 favoriteCompanies[0]=[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;] 和 favoriteCompanies[1]=[&quot;google&quot;,&quot;microsoft&quot;] 的子集。 其余的收藏清单均不是其他任何人收藏的公司清单的子集，因此，答案为 [0,1,4] 。 示例 2： 输入：favoriteCompanies = [[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;],[&quot;leetcode&quot;,&quot;amazon&quot;],[&quot;facebook&quot;,&quot;google&quot;]] 输出：[0,1] 解释：favoriteCompanies[2]=[&quot;facebook&quot;,&quot;google&quot;] 是 favoriteCompanies[0]=[&quot;leetcode&quot;,&quot;google&quot;,&quot;facebook&quot;] 的子集，因此，答案为 [0,1] 。 示例 3： 输入：favoriteCompanies = [[&quot;leetcode&quot;],[&quot;google&quot;],[&quot;facebook&quot;],[&quot;amazon&quot;]] 输出：[0,1,2,3] 提示： 1 &amp;lt;= favoriteCompanies.length &amp;lt;= 100 1 &amp;lt;= favoriteCompanies[i].length &amp;lt;= 500 1 &amp;lt;= favoriteCompanies[i][j].length &amp;lt;= 20 favoriteCompanies[i] 中的所有字符串 各不相同 。 用户收藏的公司清单也 各不相同 ，也就是说，即便我们按字母顺序排序每个清单， favoriteCompanies[i] != favoriteCompanies[j] 仍然成立。 所有字符串仅包含小写英文字母。 方法一 判断交集 题目理解： 题目可以理解为，两个清单是否为包含关系 因此我们的解题思路是：通过计算两个清单的 交集 ，判断两个清单的交集是否为包含关系 算法流程： 列表转化为集合，可计算两个列表的交集 对于实现交集可以参考 Python实现”两个数组的交集”的两种方法 判断两集合的交集是否为某一集合 x&amp;amp;y == x ，来确定清单 class Solution(object): def peopleIndexes(self, favoriteCompanies): fav_set = [set(sub))) for sub in favoriteCompanies] ans = [] for i,x in enumerate(fav_set): flag = 0 for j, y in enumerate(fav_set): if i ==j: continue if x&amp;amp;y == x: # 通过判断交集，来防止数据重复录入 flag = 1 break if flag == 0: ans.append(i) return ans 如果你觉得本文对你有帮助，请点赞👍支持 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="数组遍历" /><summary type="html">难度：中等 本题涉及算法： 数组遍历 思路： 数组遍历 类似题型: 题目 15. 三数之和 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。 注意：答案中不可以包含重复的三元组。 示例： 给定数组 nums = [-1, 0, 1, 2, -1, -4]， 满足要求的三元组集合为： [ [-1, 0, 1], [-1, -1, 2] ] 方法一 数组遍历 解题思路： 首先对数组进行排序，排序后固定一个数 $nums[i]$，再使用左右指针指向 $nums[i]$ 后面的两端，数字分别为 $nums[L]$ 和 $nums[R]$，计算三个数的和 $sum$ 判断是否满足为 $0$，满足则添加进结果集 如果 $nums[i]$ 大于 $0$，则三数之和必然无法等于 $0$，结束循环 如果 $nums[i]= nums[i−1]$，则说明该数字重复，会导致结果重复，所以应该跳过 当 $sum0 时，$nums[L] = nums[L+1]$ 则会导致结果重复，应该跳过，$L++$ 当 $sum0$ 时，$nums[R] =nums[R−1]$ 则会导致结果重复，应该跳过，$R–$ 时间复杂度： 时间复杂度：$O(n^2)$ $n$ 为数组长度 空间复杂度：$O(1)$ java class Solution { public static List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; threeSum(int[] nums) { List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; ans = new ArrayList(); int len = nums.length; if(nums == null || len &amp;lt; 3) return ans; Arrays.sort(nums); // 排序 for (int i = 0; i &amp;lt; len ; i++) { if(nums[i] &amp;gt; 0) break; // 如果当前数字大于0，则三数之和一定大于0，所以结束循环 if(i &amp;gt; 0 &amp;amp;&amp;amp; nums[i] == nums[i-1]) continue; // 去重 int L = i+1; int R = len-1; while(L &amp;lt; R){ int sum = nums[i] + nums[L] + nums[R]; if(sum == 0){ ans.add(Arrays.asList(nums[i],nums[L],nums[R])); while (L&amp;lt;R &amp;amp;&amp;amp; nums[L] == nums[L+1]) L++; // 去重 while (L&amp;lt;R &amp;amp;&amp;amp; nums[R] == nums[R-1]) R--; // 去重 L++; R--; } else if (sum &amp;lt; 0) L++; else if (sum &amp;gt; 0) R--; } } return ans; } } python class Solution(object): def threeSum(self, nums): &quot;&quot;&quot; :type nums: List[int] :rtype: List[List[int]] &quot;&quot;&quot; nums_len = len(nums) ans = [] if not nums or nums_len &amp;lt; 3: return ans nums.sort() for i in range(nums_len): if nums[i] &amp;gt; 0: return ans if i &amp;gt; 0 and nums[i] == nums[i-1]: continue left = i + 1 right = nums_len - 1 while left &amp;lt; right: if nums[left] + nums[right] + nums[i] == 0: ans.append([nums[i] ,nums[left] ,nums[right]]) while left &amp;lt; right and nums[left] == nums[left + 1]: left = left + 1 while left &amp;lt; right and nums[right] == nums[right - 1]: right = right - 1 left = left + 1 right = right - 1 elif nums[left] + nums[right] + nums[i] &amp;gt; 0: right = right - 1 else: left = left + 1 return ans</summary></entry></feed>
