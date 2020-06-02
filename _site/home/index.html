@@ -443,8 +443,108 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 02, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0530-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-02T00:00:00+08:00">
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0602-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-02T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,递归"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0602/002"><h2 itemprop="headline" class="item__header">26. 删除排序数组中的重复项</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>：</li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">遍历</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-26-删除排序数组中的重复项">题目 <a href="https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/">26. 删除排序数组中的重复项</a></h3>
+
+<p>给定一个排序数组，你需要在 原地 删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。</p>
+
+<p>不要使用额外的数组空间，你必须在 <code class="highlighter-rouge">原地</code> <strong>修改输入数组</strong> 并在使用 $O(1)$ 额外空间的条件下完成。</p>
+
+<h4 id="示例1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定数组 nums = [1,1,2],
+
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。
+
+你不需要考虑数组中超出新长度后面的元素。
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定 nums = [0,0,1,1,1,2,2,3,3,4],
+
+函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
+
+你不需要考虑数组中超出新长度后面的元素。
+</code></pre></div></div>
+
+<h4 id="说明">说明:</h4>
+
+<p>为什么返回数值是整数，但输出的答案是数组呢?</p>
+
+<p>请注意，输入数组是以「引用」方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。</p>
+
+<p>你可以想象内部操作如下:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
+int len = removeDuplicates(nums);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中该长度范围内的所有元素。
+for (int i = 0; i &lt; len; i++) {
+    print(nums[i]);
+}
+</code></pre></div></div>
+
+<h3 id="方法一-遍历">方法一 遍历</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li>别想复杂了，直接遍历并记录个数</li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度：$O(n)$。最差情况下 数组中所有的元素都不相同，则遍历 N 次</li>
+      <li>空间复杂度：$O(1)$。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">removeDuplicates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span>
+
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">removeDuplicates</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span><span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">!=</span> <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+                <span class="n">i</span> <span class="o">++</span> <span class="o">;</span>
+                <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0602/002">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%81%8D%E5%8E%86">遍历</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 02, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0602-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-02T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,遍历"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0530/002"><h2 itemprop="headline" class="item__header">5409. 检查一个字符串是否包含所有长度为 K 的二进制子串</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
@@ -926,30 +1026,8 @@ s 中只含 0 和 1 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-everyday">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
     <meta itemprop="keywords" content="敏捷管理,项目管理日常"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/pm/daymeeting"><h2 itemprop="headline" class="item__header">每日晨会</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="每日晨会">每日晨会</h3>
-<ol>
-  <li>
-    <ul>
-      <li>时间：9:20–9:30 时长：10分钟 人员：全体</li>
-      <li>内容可以是：闲聊，游戏，工作，改进，10分钟演讲，案例分析，知识分享，经验学习</li>
-    </ul>
-  </li>
-  <li>在每日晨会上，增加一个板块， 有什么难点或者纠结的地方，需要帮助吗？</li>
-  <li>希望晨会有价值</li>
-</ol>
-</div><p><a href="/pm/daymeeting">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%95%8F%E6%8D%B7%E7%AE%A1%E7%90%86">敏捷管理</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%AF%8F%E6%97%A5%E6%99%A8%E4%BC%9A">每日晨会</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-daymeeting">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="敏捷管理,每日晨会"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>233 post articles, 30 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>234 post articles, 30 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
