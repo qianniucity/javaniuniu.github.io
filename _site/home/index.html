@@ -375,6 +375,77 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0602/001"><h2 itemprop="headline" class="item__header">面试题64. 求1+2+…+n</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">递归</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">递归</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-面试题64-求12n">题目 <a href="https://leetcode-cn.com/problems/qiu-12n-lcof/">面试题64. 求1+2+…+n</a></h3>
+<p>求 1+2+…+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。</p>
+
+<h4 id="示例-1">示例 1：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: n = 3
+输出: 6
+</code></pre></div></div>
+<h4 id="示例-2">示例 2：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: n = 9
+输出: 45
+</code></pre></div></div>
+
+<h4 id="限制">限制：</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 &lt;= n &lt;= 10000
+</code></pre></div></div>
+
+<h3 id="方法一-递归">方法一 递归</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li>题目其实指明了要用 <code class="highlighter-rouge">递归</code></li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度：$O(n)$。递归函数递归 $n$ 次，每次递归中计算时间复杂度为 $O(1)$，因此总时间复杂度为 $O(n)$。</li>
+      <li>空间复杂度：$O(n)$。递归函数的空间复杂度取决于递归调用栈的深度，这里递归函数调用栈深度为 $O(n)$，因此空间复杂度为 $O(n)$。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">sumNums</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="s">"""
+        :type n: int
+        :rtype: int
+        """</span>
+        <span class="c1"># and这个逻辑运算的本质是——如果A&amp;&amp;B，A为false，B是不计算的；只有当A为true，才会继续计算B
+</span>        <span class="k">return</span> <span class="n">n</span><span class="o">!=</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sumNums</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">sumNums</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="o">)</span> <span class="k">return</span> <span class="n">n</span><span class="o">;</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="n">sumNums</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">n</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0602/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%80%92%E5%BD%92">递归</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 02, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0530-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-02T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,递归"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0530/002"><h2 itemprop="headline" class="item__header">5409. 检查一个字符串是否包含所有长度为 K 的二进制子串</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -877,86 +948,8 @@ s 中只含 0 和 1 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-daymeeting">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
     <meta itemprop="keywords" content="敏捷管理,每日晨会"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/pm/aspm"><h2 itemprop="headline" class="item__header">作为管理者的项目经理</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="团队管理资源管理和指标实现">团队管理、资源管理和指标实现。</h3>
-
-<ol>
-  <li><strong>团队的管理</strong>：找最出色的人；设定高标准，培养他、激励他；建团队。</li>
-</ol>
-
-<ul>
-  <li>
-    <p>决定录取一个人最重要标准是从团队建设上来考察的：</p>
-
-    <ul>
-      <li>
-        <p>1) 这个人会不会给公司带来长期价值</p>
-      </li>
-      <li>
-        <p>2) 这个人会不会提高团队的“集体心智”</p>
-      </li>
-      <li>
-        <p>3) 我是否愿意和这个人一起工作</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<ol>
-  <li><strong>资源管理</strong>：根据优先级分配资源；掌握进度，检查结果；解决纷争，保持平衡；适应环境及优先级的变化</li>
-</ol>
-
-<ul>
-  <li>
-    <p>作为其手下的员工你该怎么做?</p>
-
-    <ul>
-      <li>
-        <p>1) 想让你希望的事情能得到响应，需要采用办法让你要做的事情的优先级提高，让领导成为你的支持资源</p>
-      </li>
-      <li>
-        <p>2) 需要定期反馈事情的进度，特别是遇到问题的时候，及时向上司报告风险</p>
-      </li>
-      <li>
-        <p>3）有理也要饶人，领导不希望出现冲突。</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<ol>
-  <li><strong>指标实现</strong>：管理者做事情的最终目的就是拿到KPI，取得好的业绩。</li>
-</ol>
-
-<ul>
-  <li>
-    <p>作为其手下的员工你该怎么做?</p>
-
-    <ul>
-      <li>
-        <p>1) 正确理解上级意图，以老板的心态工作。</p>
-      </li>
-      <li>
-        <p>2) 及时反馈业务上的核心点，帮助上司决策。给老板你的判断，而非等待老板的判断。管理者需要的是建议，不是让管理者一直思考。而是提供你的建议，方案，优缺点，然后交由管理者决策。</p>
-      </li>
-      <li>
-        <p>3）记住帮助上司成功是自己成功的最好方法。最快形成合理的方案——包含计划、任务分解、资源配备、措施保障等等。策划能力和统筹能力。</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-</div><p><a href="/pm/aspm">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%95%8F%E6%8D%B7%E7%AE%A1%E7%90%86">敏捷管理</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E6%97%A5%E5%B8%B8">项目管理日常</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-aspm">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="敏捷管理,项目管理日常"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>232 post articles, 29 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>233 post articles, 30 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -969,7 +962,7 @@ s 中只含 0 和 1 。
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page29"><span>29</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page30"><span>30</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
