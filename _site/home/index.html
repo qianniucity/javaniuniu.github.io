@@ -375,6 +375,182 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0603/001"><h2 itemprop="headline" class="item__header">27. 移除元素</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>：</li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">拷贝覆盖</code> <code class="info highlighter-rouge">倒序遍历</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+
+<h3 id="题目-27-移除元素">题目 <a href="https://leetcode-cn.com/problems/remove-element/">27. 移除元素</a></h3>
+
+<p>给你一个数组 <code class="highlighter-rouge">nums</code> 和一个值 <code class="highlighter-rouge">val</code>，你需要 原地 移除所有数值等于 <code class="highlighter-rouge">val</code> 的元素，并返回移除后数组的新长度。</p>
+
+<p>不要使用额外的数组空间，你必须仅使用 <code class="highlighter-rouge">O(1)</code> 额外空间并 <strong>原地</strong> <code class="highlighter-rouge">修改输入数组</code>。</p>
+
+<p>元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。</p>
+
+<p> </p>
+
+<h4 id="示例-1">示例 1:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定 nums = [3,2,2,3], val = 3,
+
+函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。
+
+你不需要考虑数组中超出新长度后面的元素。
+</code></pre></div></div>
+<h4 id="示例2">示例 2:</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>给定 nums = [0,1,2,2,3,0,4,2], val = 2,
+
+函数应该返回新的长度 5, 并且 nums 中的前五个元素为 0, 1, 3, 0, 4。
+
+注意这五个元素可为任意顺序。
+
+你不需要考虑数组中超出新长度后面的元素。
+</code></pre></div></div>
+
+<h4 id="说明">说明:</h4>
+
+<p>为什么返回数值是整数，但输出的答案是数组呢?</p>
+
+<p>请注意，输入数组是以「引用」方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。</p>
+
+<p>你可以想象内部操作如下:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// nums 是以“引用”方式传递的。也就是说，不对实参作任何拷贝
+int len = removeElement(nums, val);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中 该长度范围内 的所有元素。
+for (int i = 0; i &lt; len; i++) {
+    print(nums[i]);
+}
+</code></pre></div></div>
+
+<h3 id="方法一-倒序遍历">方法一 倒序遍历</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li>倒序遍历，可以解决删除数组时，不需要对数组下标做多余的判断</li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度：$O(n)$，假设数组的长度是 $n$，最差情况是当数组中元素都不相同，则遍历 $n$</li>
+      <li>空间复杂度：$O(1)$。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">removeElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">val</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">val</span><span class="p">):</span>
+                <span class="n">nums</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h3 id="方法二-拷贝覆盖">方法二 拷贝覆盖</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li>主要思路是遍历数组nums，每次取出的数字变量为num，同时设置一个下标ans</li>
+      <li>在遍历过程中如果出现数字与需要移除的值不相同时，则进行拷贝覆盖nums[ans] = num，ans自增1</li>
+      <li>如果相同的时候，则跳过该数字不进行拷贝覆盖，最后ans即为新的数组长度</li>
+      <li><strong>这种思路在移除元素较多时更适合使用，最极端的情况是全部元素都需要移除，遍历一遍结束即可</strong></li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度：$O(n)$，假设数组的长度是 $n$，最差情况是当数组中元素都不相同，则遍历 $n$</li>
+      <li>空间复杂度：$O(1)$。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="python-1">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">removeElement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">val</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">num</span> <span class="o">!=</span> <span class="n">val</span><span class="p">:</span>
+                <span class="n">nums</span><span class="p">[</span><span class="n">ans</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span>
+                <span class="n">ans</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
+
+<h4 id="java">java</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">removeElement</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="nl">num:</span><span class="n">nums</span><span class="o">){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">num</span> <span class="o">!=</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nums</span><span class="o">[</span><span class="n">ans</span><span class="o">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+                <span class="n">ans</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="方法三-交换移除">方法三 交换移除</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li>主要思路是遍历数组nums，遍历指针为i，总长度为ans</li>
+      <li>在遍历过程中如果出现数字与需要移除的值不相同时，则i自增1，继续下一次遍历</li>
+      <li>如果相同的时候，则将nums[i]与nums[ans-1]交换，即当前数字和数组最后一个数字进行交换，交换后就少了一个元素，故而ans自减1</li>
+      <li><strong>这种思路在移除元素较少时更适合使用，最极端的情况是没有元素需要移除，遍历一遍结束即可</strong></li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度：$O(n)$，假设数组的长度是 $n$，最差情况是当数组中元素都不相同，则遍历 $n$</li>
+      <li>空间复杂度：$O(1)$。</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">removeElement</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="o">;)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">==</span> <span class="n">val</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">nums</span><span class="o">[</span><span class="n">ans</span> <span class="o">-</span> <span class="mi">1</span><span class="o">];</span>
+                <span class="n">ans</span><span class="o">--;</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+                <span class="n">i</span><span class="o">++;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0603/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%8B%B7%E8%B4%9D%E8%A6%86%E7%9B%96">拷贝覆盖</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%80%92%E5%BA%8F%E9%81%8D%E5%8E%86">倒序遍历</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E4%BA%A4%E6%8D%A2%E7%A7%BB%E9%99%A4">交换移除</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F%F0%9F%8C%9F">🌟🌟🌟🌟🌟</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 03, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0603-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-03T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,拷贝覆盖,倒序遍历,交换移除,🌟🌟🌟🌟🌟"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0602/001"><h2 itemprop="headline" class="item__header">面试题64. 求1+2+…+n</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="warning highlighter-rouge">中等</code></li>
@@ -449,8 +625,8 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
           <header><a href="/leetcode/2020/0602/002"><h2 itemprop="headline" class="item__header">26. 删除排序数组中的重复项</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>：</li>
-  <li><strong>思路</strong>：   <code class="info highlighter-rouge">遍历</code></li>
+  <li><strong>本题涉及算法</strong>：<code class="info highlighter-rouge">双指针法</code></li>
+  <li><strong>思路</strong>：   <code class="info highlighter-rouge">双指针法</code></li>
   <li><strong>类似题型</strong>:</li>
 </ul>
 
@@ -494,16 +670,21 @@ for (int i = 0; i &lt; len; i++) {
 }
 </code></pre></div></div>
 
-<h3 id="方法一-遍历">方法一 遍历</h3>
+<h3 id="方法一-双指针法">方法一 双指针法</h3>
 <ul>
   <li><strong>解题思路</strong>：
     <ul>
-      <li>别想复杂了，直接遍历并记录个数</li>
+      <li>
+        <p>数组完成排序后，我们可以放置两个指针 $i$ 和 $j$，其中 $i$ 是慢指针，而 $j$ 是快指针。只要 $nums[i] = nums[j]$，我们就增加 $j$ 以跳过重复项。</p>
+      </li>
+      <li>
+        <p>当我们遇到 $nums[j] \neq nums[i]$ 时，跳过重复项的运行已经结束，因此我们必须把它$（nums[j]）$的值复制到 $nums[i + 1]$。然后递增 $i$，接着我们将再次重复相同的过程，直到 $j$ 到达数组的末尾为止。</p>
+      </li>
     </ul>
   </li>
   <li><strong>复杂度分析</strong>：
     <ul>
-      <li>时间复杂度：$O(n)$。最差情况下 数组中所有的元素都不相同，则遍历 N 次</li>
+      <li>时间复杂度：$O(n)$，假设数组的长度是 $n$，那么 $i$ 和 $j$ 分别最多遍历 $n$ 步。</li>
       <li>空间复杂度：$O(1)$。</li>
     </ul>
   </li>
@@ -541,10 +722,10 @@ for (int i = 0; i &lt; len; i++) {
                 href="/archive.html?tag=leetcode">leetcode</a>
             </li><li>
               <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%81%8D%E5%8E%86">遍历</a>
+                href="/archive.html?tag=%E5%8F%8C%E6%8C%87%E9%92%88%E6%B3%95">双指针法</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 02, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0602-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-02T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,遍历"></div>
+    <meta itemprop="keywords" content="leetcode,双指针法"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0530/002"><h2 itemprop="headline" class="item__header">5409. 检查一个字符串是否包含所有长度为 K 的二进制子串</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
@@ -963,71 +1144,8 @@ s 中只含 0 和 1 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-risk">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
     <meta itemprop="keywords" content="项目管理,风险管理"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/pm/everyday"><h2 itemprop="headline" class="item__header">项目管理日常</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="项目经理每日工作">项目经理每日工作</h3>
-
-<ol>
-  <li>
-    <p>项目目标，计划，计划，再计划</p>
-  </li>
-  <li>
-    <p>总结自己一天的计划完成情况</p>
-  </li>
-  <li>
-    <p>考虑明天应该做的主要工作，二八原则，授权</p>
-  </li>
-  <li>
-    <p><strong>了解每个项目小组的工作进展情况，并进行相应指导</strong></p>
-  </li>
-  <li>
-    <p><strong>提前考虑到实施过程中的缺陷与不足之处，并想出改善的方法与步骤</strong></p>
-  </li>
-  <li>
-    <p>记住每一位项目团队的负责人及团队组长的名字. 干活负责程度</p>
-  </li>
-  <li>
-    <p>每天必须看的 <strong>各种数据报表和清单</strong></p>
-  </li>
-  <li>
-    <p>考虑自己一天工作当中失误的地方</p>
-  </li>
-  <li>
-    <p>自己一天工作完成的质量与效率是否还能提高</p>
-  </li>
-  <li>
-    <p>应该批复的各项资料和文件</p>
-  </li>
-  <li>
-    <p><strong>项目日志跟踪记录重点跟进事项，提前安排</strong></p>
-  </li>
-  <li>
-    <p>项目报告例行准备，高层级和日常报告 - 可以要求团队成员每周、每两周或每月提交一次状态报告</p>
-  </li>
-  <li>
-    <p>管理和控制干系人参与，<strong>争取干系人积极贡献</strong></p>
-  </li>
-  <li>
-    <p>领域知识和业务知识学习时间，重要 <strong>风险有提前预警</strong></p>
-  </li>
-  <li>
-    <p>谁也不喜欢意外的事情，积极主动. 持续不断的交流</p>
-  </li>
-  <li>
-    <p><strong>沟通能力，会议主持，文案写作，谈话能力，在复杂决策前敢于拍板</strong></p>
-  </li>
-</ol>
-</div><p><a href="/pm/everyday">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E6%95%8F%E6%8D%B7%E7%AE%A1%E7%90%86">敏捷管理</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E6%97%A5%E5%B8%B8">项目管理日常</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-everyday">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="敏捷管理,项目管理日常"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>234 post articles, 30 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>235 post articles, 30 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
