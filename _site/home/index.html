@@ -374,6 +374,82 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0603/002"><h2 itemprop="headline" class="item__header">28. 实现 strStr()</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="language-plaintext success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>：</li>
+  <li><strong>思路</strong>：   <code class="language-plaintext info highlighter-rouge">滑动窗口</code></li>
+  <li><strong>类似题型</strong>：
+    <ul>
+      <li><a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/">3. 无重复字符的最长子串</a></li>
+      <li><a href="https://leetcode-cn.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/">1461. 检查一个字符串是否包含所有长度为 K 的二进制子串</a></li>
+      <li><a href="https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/">1438. 绝对差不超过限制的最长连续子数组</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+<h3 id="题目-28-实现-strstr">题目 <a href="https://leetcode-cn.com/problems/implement-strstr/">28. 实现 strStr()</a></h3>
+<p>实现 <code class="language-plaintext highlighter-rouge">strStr()</code> 函数。</p>
+
+<p>给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。</p>
+
+<h4 id="示例-1">示例 1:</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: haystack = "hello", needle = "ll"
+输出: 2
+</code></pre></div></div>
+<h4 id="示例-2">示例 2:</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: haystack = "aaaaa", needle = "bba"
+输出: -1
+</code></pre></div></div>
+<h4 id="说明">说明:</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
+
+对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与C语言的 strstr() 以及 Java的 indexOf() 定义相符。
+</code></pre></div></div>
+
+<h3 id="方法一-滑动窗口">方法一 滑动窗口</h3>
+<ul>
+  <li><strong>解题思路</strong>：
+    <ul>
+      <li><strong>这种字符串或数组中，进行比较或者找子集，很容易使用 使用活动窗口很容易解决 （KMP我不懂阿）</strong></li>
+    </ul>
+  </li>
+  <li><strong>复杂度分析</strong>：
+    <ul>
+      <li>时间复杂度：$O(H-N+1)$， $H$ 是 <code class="language-plaintext highlighter-rouge">haystack</code> 的长度， $N$ 是 <code class="language-plaintext highlighter-rouge">needle</code> 的长度</li>
+      <li>空间复杂度：$O(1)$。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="python">python</h4>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">strStr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">):</span>
+        <span class="c1"># 滑动窗口
+</span>        <span class="n">ans</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">haystack_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">haystack</span><span class="p">)</span>
+        <span class="n">needle_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">needle_len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">needle_len</span> <span class="o">&gt;</span> <span class="n">haystack_len</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ans</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">haystack_len</span> <span class="o">-</span> <span class="n">needle_len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">haystack</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">needle_len</span><span class="p">]</span> <span class="o">==</span> <span class="n">needle</span><span class="p">:</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0603/002">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3">滑动窗口</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 03, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0603-002">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-03T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode,滑动窗口"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0603/001"><h2 itemprop="headline" class="item__header">27. 移除元素</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="language-plaintext success highlighter-rouge">简单</code></li>
@@ -1061,90 +1137,8 @@ s 中只含 0 和 1 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 21, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0521-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-21T00:00:00+08:00">
     <meta itemprop="keywords" content="算法,回溯算法"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/pm/risk"><h2 itemprop="headline" class="item__header">风险管理</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="风险管理概述">风险管理概述</h4>
-<ul>
-  <li>客观性：风险是客观存在的</li>
-  <li>目的：降低负面风险，提升正面风险</li>
-  <li>三要素：事件，概率，影响</li>
-  <li>非事件类风险：
-    <ul>
-      <li>变异风险：已规划事件，活动存在不确定性，导致变异性风险</li>
-      <li>模糊性风险：对未来可能发生，存在不确定性。如知识不足造成，项目系统太复杂模糊不清，<strong>通过专家意见，最佳事件为标杆填补差距，也可以采用增量开发，原型搭建或模拟等方法来处理</strong></li>
-    </ul>
-  </li>
-  <li>项目韧性：
-    <ul>
-      <li>除了对已知风险列出风险预算，还要对突发性风险预算预留合理的应急预算和时间</li>
-      <li>灵活的项目变更</li>
-      <li>授权信赖的团队在商定时间内完成工作</li>
-      <li>经常留意预警信号，以尽早识别突发性风险</li>
-      <li>明确征求相关方的意见，以明确为应对突发性风险而可以调整项目范围或策略的领域</li>
-    </ul>
-  </li>
-</ul>
-
-<h4 id="威胁应对策略">威胁应对策略</h4>
-<ul>
-  <li>上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报</li>
-  <li>规避：通常是改变目标或计划，使其概率下降为零，如，<strong>延长进度，改变策略，缩小范围</strong></li>
-  <li>转移：转交给第三方，这个时候涉及到钱</li>
-  <li>减轻：减轻风险发生的影响，<strong>通常我们会，多招聘几个人，或者实习生</strong></li>
-  <li>接受：
-    <ul>
-      <li>主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上</li>
-      <li>被动接受：只是定期对威胁进行审查，确保并未发生重大改变</li>
-    </ul>
-  </li>
-</ul>
-
-<h4 id="机会应对策略">机会应对策略</h4>
-<ul>
-  <li>上报：当项目经理觉得某威胁不在项目范围内，或超出权限，应采用上报</li>
-  <li>开拓：将特定机会出现的概率提高到100%，<strong>比如：分配最有能力的资源非项目缩短时间，采用最小技术，或技术升级缩短时间</strong></li>
-  <li>分享：将相应的机会责任转移给第三方，使其想有机会带来的部分收益，让那些最有能力为项目抓住机会的人担任新的风险责任人，<strong>包括建立合伙关系，合作团队，特殊公司或合资企业来分享机会</strong></li>
-  <li>提高：提高机会出现的概率，如果无法提高概率，可针对其潜在收益规模的因素来提高发生机会的概率，<strong>包括为早日完成活动而增加的资源</strong></li>
-  <li>接受：
-    <ul>
-      <li>主动接受：这个策略是建立在应急储备，预留时间，资金和资源的基础上</li>
-      <li>被动接受：只是定期对威胁进行审查，确保并未发生重大改变</li>
-    </ul>
-  </li>
-</ul>
-
-<h4 id="风险管理大概流程">风险管理大概流程</h4>
-<ul>
-  <li>当接手的项目紧急，在不了解项目的情况下
-    <ol>
-      <li>可先从项目的背景出发，先了解项目的情况</li>
-      <li>通过头脑风暴等各种方式收集可能存在的风险</li>
-      <li>数据分析，包括 <strong>文件分析，假设条件和制约因素分析，根本原因分析</strong></li>
-      <li>对以识别的风险，根据风险三要素，记录风险</li>
-      <li>确定风险优先级，及风险造成影响</li>
-      <li>规划风险应对，风险责任到人，根据上面的 <strong>威胁应对策略,机会应对策略</strong></li>
-      <li>实施风险应对，并在整个过程中 监督风险，并定期审查风险</li>
-    </ol>
-  </li>
-</ul>
-
-<h4 id="现象">现象</h4>
-<ul>
-  <li>当你了解这些之后，你可以拒绝领导，拒绝客户，拒绝下属，方便你的管理</li>
-  <li>很多公司在 风险记录和风险审查上做的不足，相应的会确实很多经验总结教训</li>
-  <li>对于突发情况，没有足够的资源利用，比如人力资源，资金，或实物资源</li>
-</ul>
-</div><p><a href="/pm/risk">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86">项目管理</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%A3%8E%E9%99%A9%E7%AE%A1%E7%90%86">风险管理</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="pm-risk">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="项目管理,风险管理"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>235 post articles, 30 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>236 post articles, 30 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>

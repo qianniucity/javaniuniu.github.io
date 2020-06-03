@@ -1,5 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-03T13:18:33+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">27. 移除元素</title><link href="http://localhost:4000/leetcode/2020/0603/001" rel="alternate" type="text/html" title="27. 移除元素" /><published>2020-06-03T00:00:00+08:00</published><updated>2020-06-03T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0603/27.%20%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0603/001">&lt;ul&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-03T23:02:54+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">28. 实现 strStr()</title><link href="http://localhost:4000/leetcode/2020/0603/002" rel="alternate" type="text/html" title="28. 实现 strStr()" /><published>2020-06-03T00:00:00+08:00</published><updated>2020-06-03T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0603/28.%20%E5%AE%9E%E7%8E%B0%20strStr()</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0603/002">&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;滑动窗口&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/&quot;&gt;3. 无重复字符的最长子串&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/&quot;&gt;1461. 检查一个字符串是否包含所有长度为 K 的二进制子串&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/&quot;&gt;1438. 绝对差不超过限制的最长连续子数组&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+&lt;h3 id=&quot;题目-28-实现-strstr&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/implement-strstr/&quot;&gt;28. 实现 strStr()&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;实现 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;strStr()&lt;/code&gt; 函数。&lt;/p&gt;
+
+&lt;p&gt;给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。&lt;/p&gt;
+
+&lt;h4 id=&quot;示例-1&quot;&gt;示例 1:&lt;/h4&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: haystack = &quot;hello&quot;, needle = &quot;ll&quot;
+输出: 2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;示例-2&quot;&gt;示例 2:&lt;/h4&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot;
+输出: -1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;说明&quot;&gt;说明:&lt;/h4&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。
+
+对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与C语言的 strstr() 以及 Java的 indexOf() 定义相符。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;方法一-滑动窗口&quot;&gt;方法一 滑动窗口&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;这种字符串或数组中，进行比较或者找子集，很容易使用 使用活动窗口很容易解决 （KMP我不懂阿）&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;时间复杂度：$O(H-N+1)$， $H$ 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;haystack&lt;/code&gt; 的长度， $N$ 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;needle&lt;/code&gt; 的长度&lt;/li&gt;
+      &lt;li&gt;空间复杂度：$O(1)$。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;python&quot;&gt;python&lt;/h4&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;strStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haystack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;needle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# 滑动窗口
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;haystack_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;haystack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;needle_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;needle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;needle_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;needle_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haystack_len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;haystack_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;needle_len&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;haystack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;needle_len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;needle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;break&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ans&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="滑动窗口" /><summary type="html">难度：简单 本题涉及算法： 思路： 滑动窗口 类似题型： 3. 无重复字符的最长子串 1461. 检查一个字符串是否包含所有长度为 K 的二进制子串 1438. 绝对差不超过限制的最长连续子数组 题目 28. 实现 strStr() 实现 strStr() 函数。 给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回  -1。 示例 1: 输入: haystack = &quot;hello&quot;, needle = &quot;ll&quot; 输出: 2 示例 2: 输入: haystack = &quot;aaaaa&quot;, needle = &quot;bba&quot; 输出: -1 说明: 当 needle 是空字符串时，我们应当返回什么值呢？这是一个在面试中很好的问题。 对于本题而言，当 needle 是空字符串时我们应当返回 0 。这与C语言的 strstr() 以及 Java的 indexOf() 定义相符。 方法一 滑动窗口 解题思路： 这种字符串或数组中，进行比较或者找子集，很容易使用 使用活动窗口很容易解决 （KMP我不懂阿） 复杂度分析： 时间复杂度：$O(H-N+1)$， $H$ 是 haystack 的长度， $N$ 是 needle 的长度 空间复杂度：$O(1)$。 python class Solution(object): def strStr(self, haystack, needle): # 滑动窗口 ans = -1 haystack_len = len(haystack) needle_len = len(needle) if needle_len == 0: return 0 if needle_len &amp;gt; haystack_len: return ans for i in range(haystack_len - needle_len + 1): if haystack[i:i+needle_len] == needle: ans = i break return ans</summary></entry><entry><title type="html">27. 移除元素</title><link href="http://localhost:4000/leetcode/2020/0603/001" rel="alternate" type="text/html" title="27. 移除元素" /><published>2020-06-03T00:00:00+08:00</published><updated>2020-06-03T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0603/27.%20%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0603/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;拷贝覆盖&lt;/code&gt; &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;倒序遍历&lt;/code&gt; &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;交换移除&lt;/code&gt;&lt;/li&gt;
@@ -677,70 +741,4 @@ s 中只含 0 和 1 。
   &lt;/li&gt;
   &lt;li&gt;在每日晨会上，增加一个板块， 有什么难点或者纠结的地方，需要帮助吗？&lt;/li&gt;
   &lt;li&gt;希望晨会有价值&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="敏捷管理" /><category term="每日晨会" /><summary type="html">每日晨会 时间：9:20–9:30 时长：10分钟 人员：全体 内容可以是：闲聊，游戏，工作，改进，10分钟演讲，案例分析，知识分享，经验学习 在每日晨会上，增加一个板块， 有什么难点或者纠结的地方，需要帮助吗？ 希望晨会有价值</summary></entry><entry><title type="html">作为管理者的项目经理</title><link href="http://localhost:4000/pm/aspm" rel="alternate" type="text/html" title="作为管理者的项目经理" /><published>2020-05-20T00:00:00+08:00</published><updated>2020-05-20T00:00:00+08:00</updated><id>http://localhost:4000/pm/%E4%BD%9C%E4%B8%BA%E7%AE%A1%E7%90%86%E8%80%85%E7%9A%84%E9%A1%B9%E7%9B%AE%E7%BB%8F%E7%90%86</id><content type="html" xml:base="http://localhost:4000/pm/aspm">&lt;h3 id=&quot;团队管理资源管理和指标实现&quot;&gt;团队管理、资源管理和指标实现。&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;团队的管理&lt;/strong&gt;：找最出色的人；设定高标准，培养他、激励他；建团队。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;决定录取一个人最重要标准是从团队建设上来考察的：&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;1) 这个人会不会给公司带来长期价值&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;2) 这个人会不会提高团队的“集体心智”&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;3) 我是否愿意和这个人一起工作&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;资源管理&lt;/strong&gt;：根据优先级分配资源；掌握进度，检查结果；解决纷争，保持平衡；适应环境及优先级的变化&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;作为其手下的员工你该怎么做?&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;1) 想让你希望的事情能得到响应，需要采用办法让你要做的事情的优先级提高，让领导成为你的支持资源&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;2) 需要定期反馈事情的进度，特别是遇到问题的时候，及时向上司报告风险&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;3）有理也要饶人，领导不希望出现冲突。&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;指标实现&lt;/strong&gt;：管理者做事情的最终目的就是拿到KPI，取得好的业绩。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;作为其手下的员工你该怎么做?&lt;/p&gt;
-
-    &lt;ul&gt;
-      &lt;li&gt;
-        &lt;p&gt;1) 正确理解上级意图，以老板的心态工作。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;2) 及时反馈业务上的核心点，帮助上司决策。给老板你的判断，而非等待老板的判断。管理者需要的是建议，不是让管理者一直思考。而是提供你的建议，方案，优缺点，然后交由管理者决策。&lt;/p&gt;
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;p&gt;3）记住帮助上司成功是自己成功的最好方法。最快形成合理的方案——包含计划、任务分解、资源配备、措施保障等等。策划能力和统筹能力。&lt;/p&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="敏捷管理" /><category term="项目管理日常" /><summary type="html">团队管理、资源管理和指标实现。 团队的管理：找最出色的人；设定高标准，培养他、激励他；建团队。 决定录取一个人最重要标准是从团队建设上来考察的： 1) 这个人会不会给公司带来长期价值 2) 这个人会不会提高团队的“集体心智” 3) 我是否愿意和这个人一起工作 资源管理：根据优先级分配资源；掌握进度，检查结果；解决纷争，保持平衡；适应环境及优先级的变化 作为其手下的员工你该怎么做? 1) 想让你希望的事情能得到响应，需要采用办法让你要做的事情的优先级提高，让领导成为你的支持资源 2) 需要定期反馈事情的进度，特别是遇到问题的时候，及时向上司报告风险 3）有理也要饶人，领导不希望出现冲突。 指标实现：管理者做事情的最终目的就是拿到KPI，取得好的业绩。 作为其手下的员工你该怎么做? 1) 正确理解上级意图，以老板的心态工作。 2) 及时反馈业务上的核心点，帮助上司决策。给老板你的判断，而非等待老板的判断。管理者需要的是建议，不是让管理者一直思考。而是提供你的建议，方案，优缺点，然后交由管理者决策。 3）记住帮助上司成功是自己成功的最好方法。最快形成合理的方案——包含计划、任务分解、资源配备、措施保障等等。策划能力和统筹能力。</summary></entry></feed>
+&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="敏捷管理" /><category term="每日晨会" /><summary type="html">每日晨会 时间：9:20–9:30 时长：10分钟 人员：全体 内容可以是：闲聊，游戏，工作，改进，10分钟演讲，案例分析，知识分享，经验学习 在每日晨会上，增加一个板块， 有什么难点或者纠结的地方，需要帮助吗？ 希望晨会有价值</summary></entry></feed>
