@@ -393,15 +393,15 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <meta itemprop="keywords" content="jpa"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>有 <code class="highlighter-rouge">nativeQuery = true</code> 时，是可以执行原生sql语句，所谓原生sql，也就是说这段sql拷贝到数据库中，然后把参数值给一下就能运行了，比如：</p>
+<div class="article__content" itemprop="articleBody"><p>有 <code class="language-plaintext highlighter-rouge">nativeQuery = true</code> 时，是可以执行原生sql语句，所谓原生sql，也就是说这段sql拷贝到数据库中，然后把参数值给一下就能运行了，比如：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Query</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">"select * from product_rel where audit_id=?1 and process_object=0 "</span><span class="o">,</span><span class="n">nativeQuery</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
 <span class="nc">List</span><span class="o">&lt;</span><span class="nc">ProductRel</span><span class="o">&gt;</span> <span class="nf">findAllByProductAuditId</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">id</span><span class="o">);</span>
 </code></pre></div></div>
-<p>这个时候，把 <code class="highlighter-rouge">select * from product_rel where audit_id=?1 and process_object=0</code> 拷贝到数据库中，并给audit_id赋一个值，那么这段sql就可以运行。其中数据库表在数据库中的表名就是product_rel，字段audit_id在数据库中也是真实存在的字段名。</p>
+<p>这个时候，把 <code class="language-plaintext highlighter-rouge">select * from product_rel where audit_id=?1 and process_object=0</code> 拷贝到数据库中，并给audit_id赋一个值，那么这段sql就可以运行。其中数据库表在数据库中的表名就是product_rel，字段audit_id在数据库中也是真实存在的字段名。</p>
 
 <p> </p>
 
-<p>没有 <code class="highlighter-rouge">nativeQuery = true</code> 时，就不是原生sql，而其中的 <code class="highlighter-rouge">select * from xxx中xxx</code> 也不是数据库对应的真正的表名，而是对应的实体名，并且sql中的字段名也不是数据库中真正的字段名，而是 <code class="highlighter-rouge">实体的字段名</code>。例如：</p>
+<p>没有 <code class="language-plaintext highlighter-rouge">nativeQuery = true</code> 时，就不是原生sql，而其中的 <code class="language-plaintext highlighter-rouge">select * from xxx中xxx</code> 也不是数据库对应的真正的表名，而是对应的实体名，并且sql中的字段名也不是数据库中真正的字段名，而是 <code class="language-plaintext highlighter-rouge">实体的字段名</code>。例如：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Query</span><span class="o">(</span><span class="s">"select ratio from MdmRatio ratio  where enabledNum=1 "</span><span class="o">)</span>
 <span class="nc">List</span><span class="o">&lt;</span><span class="nc">MdmUtilThreeProjection</span><span class="o">&gt;</span> <span class="nf">findByMdmUtilThreeProjection</span><span class="o">();</span>
 </code></pre></div></div>
@@ -410,7 +410,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <span class="nd">@Table</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"mdm_ratio"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">MdmRatio</span> <span class="kd">implements</span> <span class="nc">Serializale</span><span class="o">{...}</span>
 </code></pre></div></div>
-<p>此中， <code class="highlighter-rouge">select ratio from MdmRatio ratio</code> 中的MdmRatio为实体名，不是真正的数据库表名，真正的数据库表名是mdm_ratio(如上图@Table里面写的那样，MdmRatio实体对应的数据库表名是mdm_ratio。但不一定都是这样的，可能你的MdmRatio实体对应的数据库表是mdm_ratio_abc，但whatever，随便是什么，只要它真实存在就Ok)，而查询条件中的enabledNum在数据库中真正的名字是enabled_num。</p>
+<p>此中， <code class="language-plaintext highlighter-rouge">select ratio from MdmRatio ratio</code> 中的MdmRatio为实体名，不是真正的数据库表名，真正的数据库表名是mdm_ratio(如上图@Table里面写的那样，MdmRatio实体对应的数据库表名是mdm_ratio。但不一定都是这样的，可能你的MdmRatio实体对应的数据库表是mdm_ratio_abc，但whatever，随便是什么，只要它真实存在就Ok)，而查询条件中的enabledNum在数据库中真正的名字是enabled_num。</p>
 
 <p>这两个的作用是一样的，只是写法不同而已。涉及到HQL的知识。</p>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->

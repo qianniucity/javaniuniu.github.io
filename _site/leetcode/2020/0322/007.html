@@ -400,9 +400,9 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><ul>
-  <li><strong>难度</strong>：<code class="success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="success highlighter-rouge">暴力</code> <code class="success highlighter-rouge">二分查找</code></li>
-  <li><strong>思路</strong>： <code class="info highlighter-rouge">暴力</code> <code class="info highlighter-rouge">二分查找</code></li>
+  <li><strong>难度</strong>：<code class="language-plaintext success highlighter-rouge">简单</code></li>
+  <li><strong>本题涉及算法</strong>： <code class="language-plaintext success highlighter-rouge">暴力</code> <code class="language-plaintext success highlighter-rouge">二分查找</code></li>
+  <li><strong>思路</strong>： <code class="language-plaintext info highlighter-rouge">暴力</code> <code class="language-plaintext info highlighter-rouge">二分查找</code></li>
   <li><strong>类似题型</strong>:</li>
 </ul>
 
@@ -411,11 +411,11 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <h3 id="题目-两个数组间的距离值">题目 <a href="https://leetcode-cn.com/problems/find-the-distance-value-between-two-arrays/">两个数组间的距离值</a></h3>
 <p>给你两个整数数组 arr1 ， arr2 和一个整数 d ，请你返回两个数组之间的 距离值 。</p>
 
-<p>「距离值」 定义为符合此描述的元素数目：对于元素 <code class="highlighter-rouge">arr1[i]</code> ，不存在任何元素 <code class="highlighter-rouge">arr2[j]</code> 满足 <code class="highlighter-rouge">\|arr1[i]-arr2[j]\| &lt;= d</code> 。</p>
+<p>「距离值」 定义为符合此描述的元素数目：对于元素 <code class="language-plaintext highlighter-rouge">arr1[i]</code> ，不存在任何元素 <code class="language-plaintext highlighter-rouge">arr2[j]</code> 满足 <code class="language-plaintext highlighter-rouge">\|arr1[i]-arr2[j]\| &lt;= d</code> 。</p>
 
 <h3 id="示例">示例</h3>
 <h4 id="示例-1">示例 1：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：arr1 = [4,5,8], arr2 = [10,9,1,8], d = 2   
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：arr1 = [4,5,8], arr2 = [10,9,1,8], d = 2   
 输出：2    
 解释：   
 对于 arr1[0]=4 我们有：   
@@ -435,11 +435,11 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 |8-8|=0 &lt;= d=2   
 </code></pre></div></div>
 <h4 id="示例-2">示例 2：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：arr1 = [1,4,2,3], arr2 = [-4,-3,6,10,20,30], d = 3   
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：arr1 = [1,4,2,3], arr2 = [-4,-3,6,10,20,30], d = 3   
 输出：2  
 </code></pre></div></div>
 <h4 id="示例-3">示例 3：</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：arr1 = [2,1,100,3], arr2 = [-5,-2,10,-3,7], d = 6    
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入：arr1 = [2,1,100,3], arr2 = [-5,-2,10,-3,7], d = 6    
 输出：1  
 </code></pre></div></div>
 
@@ -475,15 +475,15 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <h3 id="方法二-二分查找">方法二 二分查找</h3>
 <p>在上一种方法中，要知道是否每一个 $y_j$ 是不是满足 $|x_i - y_j| &gt; d$ ，我们枚举了所有 $y_j$ 。实际上我们只要找到大于等于 $x_i$ 的第一个 $y_j$ 和小于 $x$ 的第一个 $y_j$，看看它们满不满足这个性质就可以了。</p>
 
-<p>我们可以对 <code class="highlighter-rouge">arr2</code> 进行排序，然后对于 arr1 中的每个元素 $x_i$ 在 <code class="highlighter-rouge">arr2</code> 中二分寻找上述的两个 $y_j$ 如果这两个元素满足性质，则所有元素都满足性质，将答案增加 11。</p>
+<p>我们可以对 <code class="language-plaintext highlighter-rouge">arr2</code> 进行排序，然后对于 arr1 中的每个元素 $x_i$ 在 <code class="language-plaintext highlighter-rouge">arr2</code> 中二分寻找上述的两个 $y_j$ 如果这两个元素满足性质，则所有元素都满足性质，将答案增加 11。</p>
 
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 <span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">findTheDistanceValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr1</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">arr2</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="n">arr2</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="n">arr2</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
         <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">arr1</span><span class="p">:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="n">bisect</span><span class="o">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">arr2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">bisect</span><span class="p">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">arr2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr2</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">arr2</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">arr2</span><span class="p">[</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">:</span>
                     <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>

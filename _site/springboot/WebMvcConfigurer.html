@@ -419,7 +419,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <span class="err">｝</span>
 </code></pre></div></div>
 <h5 id="配置resourcehandlers">配置ResourceHandlers</h5>
-<p>此方法用来专门注册一个<code class="highlighter-rouge">Handler</code>，来处理静态资源的，例如：图片，js，css等。举例：</p>
+<p>此方法用来专门注册一个<code class="language-plaintext highlighter-rouge">Handler</code>，来处理静态资源的，例如：图片，js，css等。举例：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nd">@Override</span>
  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addResourceHandlers</span><span class="o">(</span><span class="nc">ResourceHandlerRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
      <span class="c1">//可以通过http://127.0.0.1:8080/web/home.html访问resources/web/home.html页面</span>
@@ -429,7 +429,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <p>当你请求http://127.0.0.1:8080/web/home.html时，会把resources/web/home.html返回。注意：这里的静态资源是放置在WEB-INF目录下的</p>
 
 <h5 id="配置viewcontroller">配置ViewController</h5>
-<p>此方法可以很方便的实现一个请求到视图的映射，而无需书写<code class="highlighter-rouge">controller</code>，例如：</p>
+<p>此方法可以很方便的实现一个请求到视图的映射，而无需书写<code class="language-plaintext highlighter-rouge">controller</code>，例如：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addViewControllers</span><span class="o">(</span><span class="nc">ViewControllerRegistry</span> <span class="n">registry</span><span class="o">){</span>
 	<span class="n">registry</span><span class="o">.</span><span class="na">addViewController</span><span class="o">(</span><span class="s">"/login"</span><span class="o">).</span><span class="na">setViewName</span><span class="o">(</span><span class="s">"web/login.html"</span><span class="o">);</span>
@@ -438,7 +438,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <p>|这是访问http://127.0.0.1:8080/login时，会直接返回login.html页面。</p>
 
 <h5 id="配置messageconverter">配置MessageConverter</h5>
-<p>这个配置一般针对于<code class="highlighter-rouge">Api</code>接口服务程序，配置在请求返回时内容采用什么转换器进行转换，我们最常用到的就是<code class="highlighter-rouge">fastJson</code>的转换，配置如下所示</p>
+<p>这个配置一般针对于<code class="language-plaintext highlighter-rouge">Api</code>接口服务程序，配置在请求返回时内容采用什么转换器进行转换，我们最常用到的就是<code class="language-plaintext highlighter-rouge">fastJson</code>的转换，配置如下所示</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 消息内容转换配置
      * 配置fastJson返回json转换
@@ -486,7 +486,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
         <span class="n">converters</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">fastConverter</span><span class="o">);</span>
     <span class="o">}</span>
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FastJson SerializerFeatures
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FastJson SerializerFeatures
 WriteNullListAsEmpty ：List字段如果为null,输出为[],而非null    
 WriteNullStringAsEmpty ： 字符类型字段如果为null,输出为"",而非null   
 DisableCircularReferenceDetect ：消除对同一对象循环引用的问题，默认为false（如果不配置有可能会进入死循环）   
@@ -494,7 +494,7 @@ WriteNullBooleanAsFalse：Boolean字段如果为null,输出为false,而非null
 WriteMapNullValue：是否输出值为null的字段,默认为false。   
 WriteNullNumberAsZero: 数值字段如果为null，则输出为0    
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>重写writeInternal方法，可以重新构造返回对象，达到统一的返回值   
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>重写writeInternal方法，可以重新构造返回对象，达到统一的返回值   
 setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式       
 </code></pre></div></div>
 
@@ -595,7 +595,7 @@ setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式
 
 <h5 id="配置cors跨域">配置CORS跨域</h5>
 
-<p><code class="highlighter-rouge">Spring</code>既然为了集成了<code class="highlighter-rouge">CROS</code>，那就证明了一点，以后前后端分离是一个开发趋势</p>
+<p><code class="language-plaintext highlighter-rouge">Spring</code>既然为了集成了<code class="language-plaintext highlighter-rouge">CROS</code>，那就证明了一点，以后前后端分离是一个开发趋势</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
    <span class="cm">/**
      * 跨域CORS配置
@@ -641,7 +641,7 @@ setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式
 <p>验证访问：http://127.0.0.1:8080/web/cors.html,没设置addCorsMappings()报跨域异常。</p>
 
 <h5 id="配置拦截器">配置拦截器</h5>
-<p>在之前<code class="highlighter-rouge">Xml</code>配置形式天下的时候，我们都是在<code class="highlighter-rouge">spring-mvc.xml</code>配置文件内添加<code class="highlighter-rouge">&lt;mvc:interceptor&gt;</code>标签配置拦截器。</p>
+<p>在之前<code class="language-plaintext highlighter-rouge">Xml</code>配置形式天下的时候，我们都是在<code class="language-plaintext highlighter-rouge">spring-mvc.xml</code>配置文件内添加<code class="language-plaintext highlighter-rouge">&lt;mvc:interceptor&gt;</code>标签配置拦截器。</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**
      * 拦截器配置
      * @param registry
@@ -652,7 +652,7 @@ setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式
     <span class="o">}</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">InterceptorRegistry</code>内的<code class="highlighter-rouge">addInterceptor</code>需要一个实现<code class="highlighter-rouge">HandlerInterceptor</code>接口的拦截器实例，<code class="highlighter-rouge">addPathPatterns</code>方法用于设置拦截器的过滤路径规则·。<code class="highlighter-rouge">excludePathPatterns</code> 表示不拦截。</p>
+<p><code class="language-plaintext highlighter-rouge">InterceptorRegistry</code>内的<code class="language-plaintext highlighter-rouge">addInterceptor</code>需要一个实现<code class="language-plaintext highlighter-rouge">HandlerInterceptor</code>接口的拦截器实例，<code class="language-plaintext highlighter-rouge">addPathPatterns</code>方法用于设置拦截器的过滤路径规则·。<code class="language-plaintext highlighter-rouge">excludePathPatterns</code> 表示不拦截。</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Slf4j</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomHandlerInterceptor</span> <span class="kd">implements</span> <span class="nc">HandlerInterceptor</span> <span class="o">{</span>
     <span class="nd">@Override</span>
@@ -681,7 +681,7 @@ setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式
 </code></pre></div></div>
 
 <p>每次请求时打印</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2018-12-24 22:21:34.434  INFO 2156 --- [io-8080-exec-10]  : preHandle:请求前调用
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2018-12-24 22:21:34.434  INFO 2156 --- [io-8080-exec-10]  : preHandle:请求前调用
 2018-12-24 22:21:34.436  INFO 2156 --- [io-8080-exec-10]  : postHandle:请求后调用
 2018-12-24 22:21:34.436  INFO 2156 --- [io-8080-exec-10]  : afterCompletion:请求调用完成后回调方法，即在视图渲染完成后回调
 </code></pre></div></div>
@@ -717,7 +717,7 @@ setDateFormat(“YYYY-MM-dd”);设置日期类型的返回格式
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/SpringBoot/Ansync">SpringBoot Ansync 异步线程池-三种方式</a></div><div class="next"><span>NEXT</span><a href="/Spring/Aspect/JoinPoint">JoinPoint的用法</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/SpringBoot/Ansync">SpringBoot Ansync 异步线程池-三种方式</a></div></div></div>
 
 </div>
 

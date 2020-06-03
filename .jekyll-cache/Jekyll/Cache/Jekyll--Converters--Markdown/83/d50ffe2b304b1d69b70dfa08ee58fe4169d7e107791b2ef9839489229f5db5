@@ -1,32 +1,32 @@
-I"�<h2 id="镜像中-安装插件">镜像中 安装插件</h2>
+I"b<h2 id="镜像中-安装插件">镜像中 安装插件</h2>
 <p>这个命令会在docker容器中执行”apt-get install -y ping”，也就是安装一个ping命令，运行完之后容器就自动退出了</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run ddfddf/tutorial apt-get install -y ping
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run ddfddf/tutorial apt-get install -y ping
 docker commit 0299878039f0 ddfddf/ping  #0299878039f0 通过 docker ps -a 查找
 </code></pre></div></div>
 <h2 id="复制文件到本地">复制文件到本地</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker cp [OPTIONS] [CONTAINER_ID]:[SRC_PATH] [DEST_PATH]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker cp [OPTIONS] [CONTAINER_ID]:[SRC_PATH] [DEST_PATH]
 docker cp mynginx:/etc/nginx /etc/nginx
 </code></pre></div></div>
 <h2 id="复制文件到镜像">复制文件到镜像</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker cp /etc/nginx mynginx:/etc/nginx
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker cp /etc/nginx mynginx:/etc/nginx
 </code></pre></div></div>
 
 <h2 id="从-container-创建-image">从 container 创建 image</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 命令
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 命令
   docker commit [container] [imageName]
 - 实例
 docker commit nginx king101125s/nginxStudy:v1
 </code></pre></div></div>
 
 <h2 id="push-images到hubdockercom">push images到hub.docker.com</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 命令
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 命令
   docker push usename/repository:TAG
 - 实例
   docker push king101125s/nginxStudy:v1
 </code></pre></div></div>
 
 <h2 id="参看容器ip">参看容器ip</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker inspect container
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker inspect container
 </code></pre></div></div>
 
 <h2 id="设置mysql密码-运行mysqlname-容器名称---e-mysql_root_password设置初始密码---p-33073306--端口映射主机端口3307">设置mysql密码 (运行mysql(–name 容器名称  -e MYSQL_ROOT_PASSWORD设置初始密码  -p 3307:3306  端口映射，主机端口3307))</h2>
@@ -40,7 +40,7 @@ docker run <span class="nt">-d</span> <span class="nt">--name</span> redis_rc-al
 </code></pre></div></div>
 
 <h2 id="设置rabbitmq密码">设置rabbitMQ密码</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name rabbitmq3.7.7 -p 5672:5672 -p 15672:15672 -v `pwd`/data:/var/lib/rabbitmq --hostname myRabbit -e RABBITMQ_DEFAULT_VHOST=my_vhost  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin df80af9ca0c9
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name rabbitmq3.7.7 -p 5672:5672 -p 15672:15672 -v `pwd`/data:/var/lib/rabbitmq --hostname myRabbit -e RABBITMQ_DEFAULT_VHOST=my_vhost  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin df80af9ca0c9
 </code></pre></div></div>
 
 <h2 id="设置mongo-密码">设置mongo 密码</h2>
@@ -52,7 +52,7 @@ docker run <span class="nt">-d</span> <span class="nt">--name</span> redis_rc-al
 docker run -d –name activemq_5.15.9_alpine_1 -p 61617:61616 -p 8162:8161 rmohr/activemq:5.15.9-alpine</p>
 <h1 id="adminadmin-admin-管理员权限">admin:admin admin 管理员权限</h1>
 <h1 id="useruser-user-用户权限">user:user user 用户权限</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 ## 创建&amp;运行zookeeper容器
 ```shell script
 docker run --privileged=true -d --name zookeeper --publish 2181:2181  -d zookeeper:3.5.6

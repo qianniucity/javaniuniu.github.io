@@ -1,4 +1,4 @@
-I"L<p>本附录是笔者对 Docker 官方文档中 <a href="https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/">Intro Guide to Dockerfile Best Practices</a> 的理解与翻译。</p>
+I"�I<p>本附录是笔者对 Docker 官方文档中 <a href="https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/">Intro Guide to Dockerfile Best Practices</a> 的理解与翻译。</p>
 
 <h2 id="一般性的指南和建议">一般性的指南和建议</h2>
 <h3 id="容器应该是短暂的">容器应该是短暂的</h3>
@@ -25,7 +25,7 @@
 <p>将多行参数按字母顺序排序（比如要安装多个包时）。这可以帮助你避免重复包含同一个包，更新包列表时也更容易。也便于 PRs 阅读和审查。建议在反斜杠符号 \ 之前添加一个空格，以增加可读性。</p>
 
 <p>下面是来自 buildpack-deps 镜像的例子：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
   bzr \
   cvs \
   git \
@@ -56,7 +56,7 @@
 <p>你可以给镜像添加标签来帮助组织镜像、记录许可信息、辅助自动化构建等。每个标签一行，由 LABEL 开头加上一个或多个标签对。下面的示例展示了各种不同的可能格式。# 开头的行是注释内容。</p>
 
 <p>注意：如果你的字符串中包含空格，必须将字符串放入引号中或者对空格使用转义。如果字符串内容本身就包含引号，必须对引号使用转义。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set one or more individual labels
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set one or more individual labels
 LABEL com.example.version="0.0.1-beta"
 
 LABEL vendor="ACME Incorporated"
@@ -66,7 +66,7 @@ LABEL com.example.release-date="2015-02-12"
 LABEL com.example.version.is-production=""
 </code></pre></div></div>
 <p>一个镜像可以包含多个标签，但建议将多个标签放入到一个 LABEL 指令中。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set multiple labels at once, using line-continuation characters to break long lines
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Set multiple labels at once, using line-continuation characters to break long lines
 LABEL vendor=ACME\ Incorporated \
       com.example.is-beta= \
       com.example.is-production="" \
@@ -84,20 +84,20 @@ LABEL vendor=ACME\ Incorporated \
 <p>不要使用 RUN apt-get upgrade 或 dist-upgrade，因为许多基础镜像中的「必须」包不会在一个非特权容器中升级。如果基础镜像中的某个包过时了，你应该联系它的维护者。如果你确定某个特定的包，比如 foo，需要升级，使用 apt-get install -y foo 就行，该指令会自动升级 foo 包。</p>
 
 <p>永远将 RUN apt-get update 和 apt-get install 组合成一条 RUN 声明，例如：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
         package-bar \
         package-baz \
         package-foo
 </code></pre></div></div>
 <p>将 apt-get update 放在一条单独的 RUN 声明中会导致缓存问题以及后续的 apt-get install 失败。比如，假设你有一个 Dockerfile 文件：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu:18.04
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu:18.04
 
 RUN apt-get update
 
 RUN apt-get install -y curl
 </code></pre></div></div>
 <p>构建镜像后，所有的层都在 Docker 的缓存中。假设你后来又修改了其中的 apt-get install 添加了一个包：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu:18.04
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM ubuntu:18.04
 
 RUN apt-get update
 
@@ -106,7 +106,7 @@ RUN apt-get install -y curl nginx
 <p>Docker 发现修改后的 RUN apt-get update 指令和之前的完全一样。所以，apt-get update 不会执行，而是使用之前的缓存镜像。因为 apt-get update 没有运行，后面的 apt-get install 可能安装的是过时的 curl 和 nginx 版本。</p>
 
 <p>使用 RUN apt-get update &amp;&amp; apt-get install -y 可以确保你的 Dockerfiles 每次安装的都是包的最新的版本，而且这个过程不需要进一步的编码或额外干预。这项技术叫作 cache busting。你也可以显示指定一个包的版本号来达到 cache-busting，这就是所谓的固定版本，例如：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
     package-bar \
     package-baz \
     package-foo=1.3.*
@@ -114,7 +114,7 @@ RUN apt-get install -y curl nginx
 <p>固定版本会迫使构建过程检索特定的版本，而不管缓存中有什么。这项技术也可以减少因所需包中未预料到的变化而导致的失败。</p>
 
 <p>下面是一个 RUN 指令的示例模板，展示了所有关于 apt-get 的建议。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN apt-get update &amp;&amp; apt-get install -y \
     aufs-tools \
     automake \
     build-essential \
@@ -153,7 +153,7 @@ RUN apt-get install -y curl nginx
 <p>ENV 指令也可用于为你想要容器化的服务提供必要的环境变量，比如 Postgres 需要的 PGDATA。</p>
 
 <p>最后，ENV 也能用于设置常见的版本号，比如下面的示例：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENV PG_MAJOR 9.3
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENV PG_MAJOR 9.3
 
 ENV PG_VERSION 9.3.4
 
@@ -167,7 +167,7 @@ ENV PATH /usr/local/postgres-$PG_MAJOR/bin:$PATH
 <p>虽然 ADD 和 COPY 功能类似，但一般优先使用 COPY。因为它比 ADD 更透明。COPY 只支持简单将本地文件拷贝到容器中，而 ADD 有一些并不明显的功能（比如本地 tar 提取和远程 URL 支持）。因此，ADD 的最佳用例是将本地 tar 文件自动提取到镜像中，例如 ADD rootfs.tar.xz。</p>
 
 <p>如果你的 Dockerfile 有多个步骤需要使用上下文中不同的文件。单独 COPY 每个文件，而不是一次性的 COPY 所有文件，这将保证每个步骤的构建缓存只在特定的文件变化时失效。例如：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>COPY requirements.txt /tmp/
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>COPY requirements.txt /tmp/
 
 RUN pip install --requirement /tmp/requirements.txt
 
@@ -176,14 +176,14 @@ COPY . /tmp/
 <p>如果将 COPY . /tmp/ 放置在 RUN 指令之前，只要 . 目录中任何一个文件变化，都会导致后续指令的缓存失效。</p>
 
 <p>为了让镜像尽量小，最好不要使用 ADD 指令从远程 URL 获取包，而是使用 curl 和 wget。这样你可以在文件提取完之后删掉不再需要的文件来避免在镜像中额外添加一层。比如尽量避免下面的用法：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ADD http://example.com/big.tar.xz /usr/src/things/
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ADD http://example.com/big.tar.xz /usr/src/things/
 
 RUN tar -xJf /usr/src/things/big.tar.xz -C /usr/src/things
 
 RUN make -C /usr/src/things all
 </code></pre></div></div>
 <p>而是应该使用下面这种方法：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN mkdir -p /usr/src/things \
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN mkdir -p /usr/src/things \
     &amp;&amp; curl -SL http://example.com/big.tar.xz \
     | tar -xJC /usr/src/things \
     &amp;&amp; make -C /usr/src/things all
@@ -196,55 +196,55 @@ RUN make -C /usr/src/things all
 <p>ENTRYPOINT 的最佳用处是设置镜像的主命令，允许将镜像当成命令本身来运行（用 CMD 提供默认选项）。</p>
 
 <p>例如，下面的示例镜像提供了命令行工具 s3cmd:</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENTRYPOINT ["s3cmd"]
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ENTRYPOINT ["s3cmd"]
 
 CMD ["--help"]
 </code></pre></div></div>
 <p>现在直接运行该镜像创建的容器会显示命令帮助：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run s3cmd
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run s3cmd
 </code></pre></div></div>
 <p>或者提供正确的参数来执行某个命令：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run s3cmd ls s3://mybucket
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run s3cmd ls s3://mybucket
 </code></pre></div></div>
 <p>这样镜像名可以当成命令行的参考。</p>
 
 <p>ENTRYPOINT 指令也可以结合一个辅助脚本使用，和前面命令行风格类似，即使启动工具需要不止一个步骤。</p>
 
 <p>例如，Postgres 官方镜像使用下面的脚本作为 ENTRYPOINT：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="nb">set</span> <span class="nt">-e</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash
+set -e
 
-<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">=</span> <span class="s1">'postgres'</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
-    </span><span class="nb">chown</span> <span class="nt">-R</span> postgres <span class="s2">"</span><span class="nv">$PGDATA</span><span class="s2">"</span>
+if [ "$1" = 'postgres' ]; then
+    chown -R postgres "$PGDATA"
 
-    <span class="k">if</span> <span class="o">[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">ls</span> <span class="nt">-A</span> <span class="s2">"</span><span class="nv">$PGDATA</span><span class="s2">"</span><span class="si">)</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
-        </span>gosu postgres initdb
-    <span class="k">fi
+    if [ -z "$(ls -A "$PGDATA")" ]; then
+        gosu postgres initdb
+    fi
 
-    </span><span class="nb">exec </span>gosu postgres <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
-<span class="k">fi
+    exec gosu postgres "$@"
+fi
 
-</span><span class="nb">exec</span> <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+exec "$@"
 </code></pre></div></div>
 <blockquote>
   <p>注意：该脚本使用了 Bash 的内置命令 exec，所以最后运行的进程就是容器的 PID 为 1 的进程。这样，进程就可以接收到任何发送给容器的 Unix 信号了。</p>
 </blockquote>
 
 <p>该辅助脚本被拷贝到容器，并在容器启动时通过 ENTRYPOINT 执行：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>COPY ./docker-entrypoint.sh /
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>COPY ./docker-entrypoint.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 </code></pre></div></div>
 <p>该脚本可以让用户用几种不同的方式和 Postgres 交互。</p>
 
 <p>你可以很简单地启动 Postgres：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run postgres
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run postgres
 </code></pre></div></div>
 <p>也可以执行 Postgres 并传递参数：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run postgres postgres --help
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run postgres postgres --help
 </code></pre></div></div>
 <p>最后，你还可以启动另外一个完全不同的工具，比如 Bash：</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run --rm -it postgres bash
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker run --rm -it postgres bash
 </code></pre></div></div>
 <h3 id="volume">VOLUME</h3>
 <p>VOLUME 指令用于暴露任何数据库存储文件，配置文件，或容器创建的文件和目录。强烈建议使用 VOLUME 来管理镜像中的可变部分和用户可以改变的部分。</p>

@@ -414,9 +414,9 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 </code></pre></div></div>
 <h4 id="角色如何表示与shiro有何不同">“角色”如何表示？与Shiro有何不同？</h4>
 
-<p>在Security中，<code class="highlighter-rouge">角色和权限共用GrantedAuthority接口</code>，唯一的不同角色就是多了个前缀”ROLE_“，而且<code class="highlighter-rouge">它没有Shiro的那种从属关系</code>，即一个角色包含哪些权限等等。在Security看来角色和权限时一样的，它认证的时候，把所有权限（角色、权限）都取出来，而不是分开验证。</p>
+<p>在Security中，<code class="language-plaintext highlighter-rouge">角色和权限共用GrantedAuthority接口</code>，唯一的不同角色就是多了个前缀”ROLE_“，而且<code class="language-plaintext highlighter-rouge">它没有Shiro的那种从属关系</code>，即一个角色包含哪些权限等等。在Security看来角色和权限时一样的，它认证的时候，把所有权限（角色、权限）都取出来，而不是分开验证。</p>
 
-<p>所以，在Security提供的UserDetailsService默认实现JdbcDaoImpl中，<code class="highlighter-rouge">角色和权限都存储在auhtorities表中</code>。而不是像Shiro那样，角色有个roles表，权限有个permissions表。以及相关的管理表等等。</p>
+<p>所以，在Security提供的UserDetailsService默认实现JdbcDaoImpl中，<code class="language-plaintext highlighter-rouge">角色和权限都存储在auhtorities表中</code>。而不是像Shiro那样，角色有个roles表，权限有个permissions表。以及相关的管理表等等。</p>
 
 <p><strong>GrantedAuthority接口的默认实现SimpleGrantedAuthority</strong></p>
 
@@ -466,11 +466,11 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <p><img src="/assets/images/SpringSecurity/1313132-20190119133239244-1352677896.png" alt="图片pic2" />
 <img src="/assets/images/SpringSecurity/1313132-20190119133256601-1567591650.png" alt="图片pic3" /></p>
 
-<p>但是前面说到了，<code class="highlighter-rouge">Security才不管你是角色，还是权限。它只比对字符串。</code></p>
+<p>但是前面说到了，<code class="language-plaintext highlighter-rouge">Security才不管你是角色，还是权限。它只比对字符串。</code></p>
 
 <p>比如它有个表达式hasRole(“ADMIN”)。那它实际上查询的是用户权限集合中是否存在字符串”ROLE_ADMIN”。如果你从角色表中取出用户所拥有的角色时不加上”ROLE_“前缀，那验证的时候就匹配不上了。</p>
 
-<p><code class="highlighter-rouge">所以角色信息存储的时候可以没有"ROLE_"前缀，但是包装成GrantedAuthority对象的时候必须要有。</code></p>
+<p><code class="language-plaintext highlighter-rouge">所以角色信息存储的时候可以没有"ROLE_"前缀，但是包装成GrantedAuthority对象的时候必须要有。</code></p>
 
 <h4 id="权限检查访问控制方式">权限检查/访问控制方式</h4>
 
@@ -488,7 +488,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 </code></pre></div></div>
 <p><strong>细粒度的访问控制</strong></p>
 
-<p><code class="highlighter-rouge">注：需要使用注解@EnableGlobalMethodSecurity(prePostEnabled=true) 开启</code></p>
+<p><code class="language-plaintext highlighter-rouge">注：需要使用注解@EnableGlobalMethodSecurity(prePostEnabled=true) 开启</code></p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@PreAuthoritze</span><span class="o">(</span><span class="s">"hasAuthority('readArtical')"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Artical</span><span class="o">&gt;</span> <span class="nf">getAll</span><span class="o">()</span> <span class="o">{</span>
     <span class="c1">//...</span>

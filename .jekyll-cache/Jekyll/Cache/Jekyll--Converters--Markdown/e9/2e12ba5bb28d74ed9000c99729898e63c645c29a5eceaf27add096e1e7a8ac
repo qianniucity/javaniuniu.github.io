@@ -1,4 +1,4 @@
-I"kc<ul>
+I"�d<ul>
   <li>@Data ： 注在类上，提供类的get、set、equals、hashCode、canEqual、toString方法</li>
   <li>@AllArgsConstructor ： 注在类上，提供类的全参构造</li>
   <li>@NoArgsConstructor ： 注在类上，提供类的无参构造</li>
@@ -17,7 +17,7 @@
 
 <p>1.1 @NoArgsConstructor 实战使用</p>
 
-<p><code class="highlighter-rouge">@NoArgsConstructor</code>在类上使用，它可以提供一个无参构造器，比如：</p>
+<p><code class="language-plaintext highlighter-rouge">@NoArgsConstructor</code>在类上使用，它可以提供一个无参构造器，比如：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
@@ -32,7 +32,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>当然，有时候我们会使用到单例模式，这个时候我们需要将构造器私有化，那么就可以使用这样一个属性<code class="highlighter-rouge">access</code>设置构造器的权限：</p>
+<p>当然，有时候我们会使用到单例模式，这个时候我们需要将构造器私有化，那么就可以使用这样一个属性<code class="language-plaintext highlighter-rouge">access</code>设置构造器的权限：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">access</span> <span class="o">=</span> <span class="nc">AccessLevel</span><span class="o">.</span><span class="na">PRIVATE</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="nc">String</span> <span class="n">username</span><span class="o">;</span>
@@ -48,7 +48,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>当类中有final字段没有被初始化时，编译器会报错，但是也可用<code class="highlighter-rouge">@NoArgsConstructor(force = true)</code>，那么Lombok就会为没有初始化的<code class="highlighter-rouge">final</code>字段设置默认值<code class="highlighter-rouge"> 0 / false / null</code>, 这样编译器就不会报错，如下所示：</p>
+<p>当类中有final字段没有被初始化时，编译器会报错，但是也可用<code class="language-plaintext highlighter-rouge">@NoArgsConstructor(force = true)</code>，那么Lombok就会为没有初始化的<code class="language-plaintext highlighter-rouge">final</code>字段设置默认值<code class="language-plaintext highlighter-rouge"> 0 / false / null</code>, 这样编译器就不会报错，如下所示：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">force</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
@@ -65,7 +65,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>对于具有约束的字段（例如使用了<code class="highlighter-rouge">@NonNull</code>注解的字段），不会生成字段检查，如下所示：</p>
+<p>对于具有约束的字段（例如使用了<code class="language-plaintext highlighter-rouge">@NonNull</code>注解的字段），不会生成字段检查，如下所示：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">force</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span><span class="o">;</span>
@@ -87,7 +87,7 @@
 
 <p>1.2 @NoArgsConstructor 配置详解</p>
 
-<p>首先来看看 <code class="highlighter-rouge">@NoArgsConstructor</code> 注解源码部分的实现：</p>
+<p>首先来看看 <code class="language-plaintext highlighter-rouge">@NoArgsConstructor</code> 注解源码部分的实现：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
 <span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">SOURCE</span><span class="o">)</span>
 <span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">NoArgsConstructor</span> <span class="o">{</span>
@@ -109,7 +109,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>看到有这样一个注解属性：<code class="highlighter-rouge">staticName</code>，是代表什么意思呢？  <br />
+<p>看到有这样一个注解属性：<code class="language-plaintext highlighter-rouge">staticName</code>，是代表什么意思呢？  <br />
 也就是说是否生成静态的构造方法，如果生成静态的构造方法，那么原来的实例构造方法将会被私有（private），然后创建一个你指定名称的静态构造方法，并且是public的，如下所示：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@NoArgsConstructor</span><span class="o">(</span><span class="n">staticName</span> <span class="o">=</span> <span class="s">"UserHa"</span><span class="o">)</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
@@ -135,7 +135,7 @@
 
 <p>2.1 @RequiredArgsConstructor 实战使用</p>
 
-<p><code class="highlighter-rouge">@RequiredArgsConstructor</code>也是在类上使用，但是这个注解可以生成带参或者不带参的构造方法。</p>
+<p><code class="language-plaintext highlighter-rouge">@RequiredArgsConstructor</code>也是在类上使用，但是这个注解可以生成带参或者不带参的构造方法。</p>
 
 <p>若带参数，只能是类中所有带有 @NonNull注解的和以final修饰的未经初始化的字段，如下所示：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequiredArgsConstructor</span>
@@ -164,7 +164,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>如果针对User类使用<code class="highlighter-rouge">@RequiredArgsConstructor</code>注解实现空参构造方法，那么我们就要这样定义实体类：</p>
+<p>如果针对User类使用<code class="language-plaintext highlighter-rouge">@RequiredArgsConstructor</code>注解实现空参构造方法，那么我们就要这样定义实体类：</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RequiredArgsConstructor</span>
 <span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">gender</span> <span class="o">=</span> <span class="s">"男"</span><span class="o">;</span>
@@ -173,7 +173,7 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>当然如果我们要是想生成空参构造，仅适用上一个注解<code class="highlighter-rouge">@NoArgsConstructor</code>就可以了。</p>
+<p>当然如果我们要是想生成空参构造，仅适用上一个注解<code class="language-plaintext highlighter-rouge">@NoArgsConstructor</code>就可以了。</p>
 
 <p>2.2 @RequiredArgsConstructor 配置详解</p>
 
@@ -241,10 +241,10 @@
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>同样这几个属性配置方式，也可以参见<code class="highlighter-rouge">@NoArgsConstructor</code></p>
+<p>同样这几个属性配置方式，也可以参见<code class="language-plaintext highlighter-rouge">@NoArgsConstructor</code></p>
 <ol>
   <li>Constructor 全局配置
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 如果设置为true，则lombok将向生成的构造函数添加 @java.beans.ConstructorProperties。
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 如果设置为true，则lombok将向生成的构造函数添加 @java.beans.ConstructorProperties。
 lombok.anyConstructor.addConstructorProperties = [true | false] (default: false)
 # 是否禁用这几种构造器注解
 lombok.[allArgsConstructor|requiredArgsConstructor|noArgsConstructor].flagUsage = [warning | error] (default: not set)
@@ -255,10 +255,10 @@ lombok.copyableAnnotations = [A list of fully qualified types] (default: empty l
   </li>
 </ol>
 
-<p>测试 <code class="highlighter-rouge">addConstructorProperties</code></p>
+<p>测试 <code class="language-plaintext highlighter-rouge">addConstructorProperties</code></p>
 
 <p>全局配置文件内容</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.stopBubbling = true
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.stopBubbling = true
 # 首先清除原有配置
 clear lombok.anyConstructor.addConstructorProperties
 # 设置新的配置

@@ -1,9 +1,9 @@
-I""<h1 id="docker-compose-volumes">Docker Compose Volumes</h1>
+I"�<h1 id="docker-compose-volumes">Docker Compose Volumes</h1>
 
 <p><strong>volumes的作用有点类似于VMware里面的共享目录，用于将物理主机里的目录映射到docker虚拟机里。</strong></p>
 
 <h2 id="通常用法">通常用法</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2'
 
 networks:
   thinking:
@@ -32,7 +32,7 @@ services:
       - thinking
 </code></pre></div></div>
 <p>其中</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    volumes:
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    volumes:
     - $PWD/:/test_pwd
 </code></pre></div></div>
 
@@ -40,13 +40,13 @@ services:
 
 <p>执行</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker-compose -f test_voloumes.yaml up -d
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker-compose -f test_voloumes.yaml up -d
 Creating network "desktop_thinking" with the default driver
 Creating test_1.thinking.com ... done
 
 Creating test_2.thinking.com ... done
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker exec -it test_1.thinking.com /bin/bash
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker exec -it test_1.thinking.com /bin/bash
 root@6322d7abd4b6:/# ls
 bin   dev  home  lib64  mnt  proc  run   srv  test_pwd  usr
 
@@ -60,7 +60,7 @@ docker-compose-test.yml  docker-compose.yml  test  test_voloumes.yaml
 
 <p>特殊用法
 在研究fabric项目的时候还发现有另外一种用法</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '2'
 
 volumes:
   test_1.thinking.com:
@@ -94,20 +94,20 @@ services:
       - thinking
 </code></pre></div></div>
 <p>试一下</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker-compose -f test_voloumes.yaml up -d
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker-compose -f test_voloumes.yaml up -d
 Creating volume "desktop_test_1.thinking.com" with default driver
 Creating volume "desktop_test_2.thinking.com" with default driver
 Recreating test_1.thinking.com ... 
 
 Recreating test_1.thinking.com ... done
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker volume ls
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker volume ls
 DRIVER              VOLUME NAME
 local               desktop_test_1.thinking.com
 
 local               desktop_test_2.thinking.com
 </code></pre></div></div>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker volume inspect desktop_test_1.thinking.com
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker volume inspect desktop_test_1.thinking.com
 [
     {
         "CreatedAt": "2018-06-06T02:37:41-07:00",
@@ -123,7 +123,7 @@ local               desktop_test_2.thinking.com
 </code></pre></div></div>
 
 <p>这看起来意思是volume test_1.thinking.com对应的物理机是/var/lib/docker/volumes/desktop_test_1.thinking.com/_ data，映射到docker虚拟机里面是/test，检验一下</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker exec -it test_1.thinking.com /bin/bash
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ docker exec -it test_1.thinking.com /bin/bash
 root@104a3ebe6639:/# ls
 bin   dev  home  lib64  mnt  proc  run   srv  test      tmp  var
 boot  etc  lib   media  opt  root  sbin  sys  test_pwd  usr
@@ -131,7 +131,7 @@ boot  etc  lib   media  opt  root  sbin  sys  test_pwd  usr
 root@104a3ebe6639:/# mkdir -p /test/fuck
 </code></pre></div></div>
 <p>到物理机里面去看</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ls /var/lib/docker/volumes/desktop_test_1.thinking.com/_data
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ls /var/lib/docker/volumes/desktop_test_1.thinking.com/_data
 
 ls: cannot access '/var/lib/docker/volumes/desktop_test_1.thinking.com/_data': Permission denied
 

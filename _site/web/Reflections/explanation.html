@@ -957,7 +957,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 </code></pre></div>    </div>
   </li>
   <li>Log输出结果如下：
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>08-27 15:11:37.999 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectNewInstance book = Book{name='Android进阶之光', author='刘望舒'}
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>08-27 15:11:37.999 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectNewInstance book = Book{name='Android进阶之光', author='刘望舒'}
 08-27 15:11:38.000 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectPrivateConstructor book = Book{name='Android开发艺术探索', author='任玉刚'}
 08-27 15:11:38.000 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectPrivateField tag = BookTag
 08-27 15:11:38.000 11987-11987/com.android.peter.reflectdemo D/peter.log.ReflectClass: reflectPrivateMethod string = I am declaredMethod 1 !
@@ -972,7 +972,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <p>在阅读Class类文档时发现一个特点，以通过反射获得Method对象为例，一般会提供四种方法，getMethod(parameterTypes)、getMethods()、getDeclaredMethod(parameterTypes)和getDeclaredMethods()。getMethod(parameterTypes)用来获取某个公有的方法的对象，getMethods()获得该类所有公有的方法，getDeclaredMethod(parameterTypes)获得该类某个方法，getDeclaredMethods()获得该类所有方法。带有Declared修饰的方法可以反射到私有的方法，没有Declared修饰的只能用来反射公有的方法。其他的Annotation、Field、Constructor也是如此。</p>
 
 <p>在ReflectClass类中还提供了两种反射PowerManager.shutdown()的方法，在调用的时候会输出如下log，提示没有相关权限。之前在项目中尝试反射其他方法的时候还遇到过有权限和没权限返回的值不一样的情况。如果源码中明确进行了权限验证，而你的应用又无法获得这个权限的话，建议就不要浪费时间反射了。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> W/System.err: java.lang.reflect.InvocationTargetException
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> W/System.err: java.lang.reflect.InvocationTargetException
  W/System.err:     at java.lang.reflect.Method.invoke(Native Method)
  W/System.err:     at .ReflectClass.shutDown(ReflectClass.java:104)
  W/System.err:     at .MainActivity$1.onClick(MainActivity.java:25)

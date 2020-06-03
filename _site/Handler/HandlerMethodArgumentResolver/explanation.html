@@ -395,14 +395,14 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><p>前面已经讲了很多关于 <strong>过滤器</strong> 相关内容，接下来会陆续讲到对拦截的数据，我们还能做些啥？</p>
 <ol>
-  <li>SpringMVC解析器用于解析<code class="highlighter-rouge">request</code>请求参数并将绑定数据到Controller的入参上。</li>
-  <li>自定义一个参数解析器需要实现<code class="highlighter-rouge">HandlerMethodArgumentResolver接口</code>，<code class="highlighter-rouge">重写supportsParameter和resolveArgument方法</code>，配置文件中加入resolver配置。</li>
+  <li>SpringMVC解析器用于解析<code class="language-plaintext highlighter-rouge">request</code>请求参数并将绑定数据到Controller的入参上。</li>
+  <li>自定义一个参数解析器需要实现<code class="language-plaintext highlighter-rouge">HandlerMethodArgumentResolver接口</code>，<code class="language-plaintext highlighter-rouge">重写supportsParameter和resolveArgument方法</code>，配置文件中加入resolver配置。</li>
   <li>如果需要多个解析器同时生效需要在一个解析器中对其他解析器做兼容</li>
 </ol>
 
 <h3 id="为什么要自定义一个解析器呢">为什么要自定义一个解析器呢？</h3>
 <p>源于需要对前端请求参数进行手动URLDecode，也即除了Web容器自动decode一次，代码内还需要再decode一次。 <br />
-针对这种需求，首先想到的是<code class="highlighter-rouge">filter</code>或者<code class="highlighter-rouge">interceptor</code>实现，但是由于HttpServletRequest对象本身是不提供setParameter()方法的，因此想要修改request中的参数值为decode后的值是不易达到的。  <br />
+针对这种需求，首先想到的是<code class="language-plaintext highlighter-rouge">filter</code>或者<code class="language-plaintext highlighter-rouge">interceptor</code>实现，但是由于HttpServletRequest对象本身是不提供setParameter()方法的，因此想要修改request中的参数值为decode后的值是不易达到的。  <br />
 SpringMVC的HandlerMethodArgumentResolver，解析器；其功能就是解析request请求参数并绑定数据到Controller的入参上。因此自定义解析器加入URLDecode逻辑即可完全满足需求。</p>
 
 <p>下面，就一步一步的完成一个解析器由简到繁的实现过程。</p>
@@ -468,7 +468,7 @@ SpringMVC的HandlerMethodArgumentResolver，解析器；其功能就是解析req
 <p>好了，现在解析器会把所有应用了@MyParam注解的参数都赋值为null。</p>
 
 <h4 id="实现一个解析原始类型的参数解析器">实现一个解析原始类型的参数解析器</h4>
-<p>对于如何解析原始类型参数，SpringMVC已经有了一个内置的实现——<code class="highlighter-rouge">RequestParamMethodArgumentResolver</code>，因此完全可以参考这个实现来自定义我们自己的解析器。</p>
+<p>对于如何解析原始类型参数，SpringMVC已经有了一个内置的实现——<code class="language-plaintext highlighter-rouge">RequestParamMethodArgumentResolver</code>，因此完全可以参考这个实现来自定义我们自己的解析器。</p>
 
 <p>如上所述，解析器逻辑的主要部分都在resolveArgument方法内，这里就说说自定义该方法的实现。</p>
 
@@ -502,7 +502,7 @@ SpringMVC的HandlerMethodArgumentResolver，解析器；其功能就是解析req
 <span class="o">}</span>
 </code></pre></div></div>
 <h4 id="添加解析对象类型参数的功能">添加解析对象类型参数的功能</h4>
-<p>对于如何解析对象类型参数，SpringMVC内也有了一个内置的实现——<code class="highlighter-rouge">ModelAttributeMethodProcessor</code>，我们也是参考这个实现来自定义我们自己的解析器。</p>
+<p>对于如何解析对象类型参数，SpringMVC内也有了一个内置的实现——<code class="language-plaintext highlighter-rouge">ModelAttributeMethodProcessor</code>，我们也是参考这个实现来自定义我们自己的解析器。</p>
 
 <p>同样，resolveArgument方法示例如下</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Override</span>
