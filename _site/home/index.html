@@ -374,6 +374,84 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/leetcode/2020/0604/001"><h2 itemprop="headline" class="item__header">238. 除自身以外数组的乘积</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><strong>难度</strong>：<code class="language-plaintext success highlighter-rouge">中等</code></li>
+  <li><strong>本题涉及算法</strong>：</li>
+  <li><strong>思路</strong>：   <code class="language-plaintext info highlighter-rouge">乘积 = 左边乘积 * 右边乘积</code></li>
+  <li><strong>类似题型</strong>:</li>
+</ul>
+
+<hr />
+<h3 id="题目-238-除自身以外数组的乘积">题目 <a href="https://leetcode-cn.com/problems/product-of-array-except-self/">238. 除自身以外数组的乘积</a></h3>
+<p>给你一个长度为 <code class="language-plaintext highlighter-rouge">n</code> 的整数数组 <code class="language-plaintext highlighter-rouge">nums</code>，其中 <code class="language-plaintext highlighter-rouge">n &gt; 1</code>，返回输出数组 <code class="language-plaintext highlighter-rouge">output</code> ，其中 <code class="language-plaintext highlighter-rouge">output[i]</code> 等于 <code class="language-plaintext highlighter-rouge">nums</code> 中除 <code class="language-plaintext highlighter-rouge">nums[i]</code> 之外其余各元素的乘积。
+ </p>
+
+<h4 id="示例">示例:</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,2,3,4]
+输出: [24,12,8,6]
+``` 
+
+__提示__：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。
+
+__说明__: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。
+
+__进阶__：
+你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
+
+#### 方法一 乘积 = 左边乘积 * 右边乘积
+- __解题思路__：
+    - 第一印象，想用除法，$（所有数乘积/nums[i]）$ ，同时需要对 `0` 做判断；
+    - 第二印象，想试试滑动窗口，但是复杂度会变成 $n^2$；
+    - 沿着滑动窗口的思路，改良下得出 `乘积 = 当前数左边的乘积 * 当前数右边的乘积`
+
+- __复杂度分析__：
+    - 时间复杂度：$O(n)$， $n$ 代表数组的长度
+    - 空间复杂度：$O(1)$， 排除返回数组空间为 $n$
+
+```java
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int[] res = new int[nums.length]; // 初始化长度为 nums.length 的数组
+        int r = 1; // 右边的乘积
+        for(int i=nums.length-1;i&gt;=0;i--) {
+            r *= nums[i];
+            res[i] = r;
+        }
+        int l = 1; //左边的乘积
+        for(int i = 0;i&lt;nums.length-1;i++) {
+            res[i] = l * res[i+1];
+            l *= nums[i];
+        }
+        res[nums.length-1] = l;
+        return res;
+
+    }
+}
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">productExceptSelf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="c1"># 初始化长度为 le(nums) 的数组
+</span>        <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># 右边的乘积
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">r</span> <span class="o">*=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>
+
+        <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># 左边的乘积
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">l</span>
+            <span class="n">l</span> <span class="o">*=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">res</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">l</span>
+        <span class="k">return</span> <span class="n">res</span>
+</code></pre></div></div>
+</div><p><a href="/leetcode/2020/0604/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=leetcode">leetcode</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0604-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="leetcode"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0603/002"><h2 itemprop="headline" class="item__header">28. 实现 strStr()</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="language-plaintext success highlighter-rouge">简单</code></li>
@@ -1111,34 +1189,8 @@ s 中只含 0 和 1 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 21, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0521-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-21T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,回溯算法"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/alog/2020/0521/003"><h2 itemprop="headline" class="item__header">回溯算法</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>回溯法使用</strong>：
-    <ul>
-      <li>对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题</li>
-      <li>如图</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="/assets/images/leetcode/0521/17phone.gif" alt="17. 电话号码的字母组合.gif" /></p>
-
-<h4 id="类似题型">类似题型</h4>
-<ul>
-  <li><a href="/leetcode/2020/0521/001">17. 电话号码的字母组合</a></li>
-</ul>
-</div><p><a href="/alog/2020/0521/003">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E7%AE%97%E6%B3%95">算法</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95">回溯算法</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 21, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="algo-2020-0521-003">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-21T00:00:00+08:00">
-    <meta itemprop="keywords" content="算法,回溯算法"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>236 post articles, 30 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>237 post articles, 30 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
