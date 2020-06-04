@@ -1,59 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-04T13:06:45+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-04T13:21:53+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
 </subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">238. 除自身以外数组的乘积</title><link href="http://localhost:4000/leetcode/2020/0604/001" rel="alternate" type="text/html" title="238. 除自身以外数组的乘积" /><published>2020-06-04T00:00:00+08:00</published><updated>2020-06-04T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0604/238.%20%E9%99%A4%E8%87%AA%E8%BA%AB%E4%BB%A5%E5%A4%96%E6%95%B0%E7%BB%84%E7%9A%84%E4%B9%98%E7%A7%AF</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0604/001">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext success highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;乘积 = 左边乘积 * 右边乘积&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;hr /&gt;
+
 &lt;h3 id=&quot;题目-238-除自身以外数组的乘积&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/product-of-array-except-self/&quot;&gt;238. 除自身以外数组的乘积&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;给你一个长度为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n&lt;/code&gt; 的整数数组 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nums&lt;/code&gt;，其中 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;n &amp;gt; 1&lt;/code&gt;，返回输出数组 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;output&lt;/code&gt; ，其中 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;output[i]&lt;/code&gt; 等于 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nums&lt;/code&gt; 中除 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nums[i]&lt;/code&gt; 之外其余各元素的乘积。
  &lt;/p&gt;
 
 &lt;h4 id=&quot;示例&quot;&gt;示例:&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: [1,2,3,4]
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入: [1,2,3,4]     
 输出: [24,12,8,6]
-``` 
 
-__提示__：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。
+提示：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。
 
-__说明__: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。
+说明: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。
 
-__进阶__：
+进阶：
 你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
-
-#### 方法一 乘积 = 左边乘积 * 右边乘积
-- __解题思路__：
-    - 第一印象，想用除法，$（所有数乘积/nums[i]）$ ，同时需要对 `0` 做判断；
-    - 第二印象，想试试滑动窗口，但是复杂度会变成 $n^2$；
-    - 沿着滑动窗口的思路，改良下得出 `乘积 = 当前数左边的乘积 * 当前数右边的乘积`
-
-- __复杂度分析__：
-    - 时间复杂度：$O(n)$， $n$ 代表数组的长度
-    - 空间复杂度：$O(1)$， 排除返回数组空间为 $n$
-
-```java
-class Solution {
-    public int[] productExceptSelf(int[] nums) {
-        int[] res = new int[nums.length]; // 初始化长度为 nums.length 的数组
-        int r = 1; // 右边的乘积
-        for(int i=nums.length-1;i&amp;gt;=0;i--) {
-            r *= nums[i];
-            res[i] = r;
-        }
-        int l = 1; //左边的乘积
-        for(int i = 0;i&amp;lt;nums.length-1;i++) {
-            res[i] = l * res[i+1];
-            l *= nums[i];
-        }
-        res[nums.length-1] = l;
-        return res;
-
-    }
-}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
+&lt;h3 id=&quot;方法一-乘积--左边乘积--右边乘积&quot;&gt;方法一 乘积 = 左边乘积 * 右边乘积&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;第一印象，想用除法，$（所有数乘积/nums[i]）$ ，同时需要对 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;0&lt;/code&gt; 做判断；&lt;/li&gt;
+      &lt;li&gt;第二印象，想试试滑动窗口，但是复杂度会变成 $n^2$；&lt;/li&gt;
+      &lt;li&gt;沿着滑动窗口的思路，改良下得出 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;乘积 = 当前数左边的乘积 * 当前数右边的乘积&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;：
+    &lt;ul&gt;
+      &lt;li&gt;时间复杂度：$O(n)$， $n$ 代表数组的长度&lt;/li&gt;
+      &lt;li&gt;空间复杂度：$O(1)$， 排除返回数组空间为 $n$&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&quot;java&quot;&gt;java&lt;/h4&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;productExceptSelf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 初始化长度为 nums.length 的数组&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// 右边的乘积&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;r&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//左边的乘积&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;python&quot;&gt;python&lt;/h4&gt;
 &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;productExceptSelf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# 初始化长度为 le(nums) 的数组
@@ -68,7 +77,7 @@ class Solution {
             &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nums&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：中等 本题涉及算法： 思路： 乘积 = 左边乘积 * 右边乘积 类似题型: 题目 238. 除自身以外数组的乘积 给你一个长度为 n 的整数数组 nums，其中 n &amp;gt; 1，返回输出数组 output ，其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。   示例: 输入: [1,2,3,4] 输出: [24,12,8,6] ```  __提示__：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。 __说明__: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。 __进阶__： 你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。） #### 方法一 乘积 = 左边乘积 * 右边乘积 - __解题思路__： - 第一印象，想用除法，$（所有数乘积/nums[i]）$ ，同时需要对 `0` 做判断； - 第二印象，想试试滑动窗口，但是复杂度会变成 $n^2$； - 沿着滑动窗口的思路，改良下得出 `乘积 = 当前数左边的乘积 * 当前数右边的乘积` - __复杂度分析__： - 时间复杂度：$O(n)$， $n$ 代表数组的长度 - 空间复杂度：$O(1)$， 排除返回数组空间为 $n$ ```java class Solution { public int[] productExceptSelf(int[] nums) { int[] res = new int[nums.length]; // 初始化长度为 nums.length 的数组 int r = 1; // 右边的乘积 for(int i=nums.length-1;i&amp;gt;=0;i--) { r *= nums[i]; res[i] = r; } int l = 1; //左边的乘积 for(int i = 0;i&amp;lt;nums.length-1;i++) { res[i] = l * res[i+1]; l *= nums[i]; } res[nums.length-1] = l; return res; } } class Solution(object): def productExceptSelf(self, nums): res = [1] * len(nums) # 初始化长度为 le(nums) 的数组 r = 1 # 右边的乘积 for i in range(len(nums)-1,-1,-1): r *= nums[i] res[i] = r l = 1 # 左边的乘积 for i in range(len(nums)-1): res[i] = res[i+1] * l l *= nums[i] res[-1] = l return res</summary></entry><entry><title type="html">27. 移除元素</title><link href="http://localhost:4000/leetcode/2020/0603/001" rel="alternate" type="text/html" title="27. 移除元素" /><published>2020-06-03T00:00:00+08:00</published><updated>2020-06-03T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0603/27.%20%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0603/001">&lt;ul&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：中等 本题涉及算法： 思路： 乘积 = 左边乘积 * 右边乘积 类似题型: 题目 238. 除自身以外数组的乘积 给你一个长度为 n 的整数数组 nums，其中 n &amp;gt; 1，返回输出数组 output ，其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。   示例: 输入: [1,2,3,4] 输出: [24,12,8,6] 提示：题目数据保证数组之中任意元素的全部前缀元素和后缀（甚至是整个数组）的乘积都在 32 位整数范围内。 说明: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。 进阶： 你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。） 方法一 乘积 = 左边乘积 * 右边乘积 解题思路： 第一印象，想用除法，$（所有数乘积/nums[i]）$ ，同时需要对 0 做判断； 第二印象，想试试滑动窗口，但是复杂度会变成 $n^2$； 沿着滑动窗口的思路，改良下得出 乘积 = 当前数左边的乘积 * 当前数右边的乘积 复杂度分析： 时间复杂度：$O(n)$， $n$ 代表数组的长度 空间复杂度：$O(1)$， 排除返回数组空间为 $n$ java class Solution { public int[] productExceptSelf(int[] nums) { int[] res = new int[nums.length]; // 初始化长度为 nums.length 的数组 int r = 1; // 右边的乘积 for(int i=nums.length-1;i&amp;gt;=0;i--) { r *= nums[i]; res[i] = r; } int l = 1; //左边的乘积 for(int i = 0;i&amp;lt;nums.length-1;i++) { res[i] = l * res[i+1]; l *= nums[i]; } res[nums.length-1] = l; return res; } } python class Solution(object): def productExceptSelf(self, nums): res = [1] * len(nums) # 初始化长度为 le(nums) 的数组 r = 1 # 右边的乘积 for i in range(len(nums)-1,-1,-1): r *= nums[i] res[i] = r l = 1 # 左边的乘积 for i in range(len(nums)-1): res[i] = res[i+1] * l l *= nums[i] res[-1] = l return res</summary></entry><entry><title type="html">27. 移除元素</title><link href="http://localhost:4000/leetcode/2020/0603/001" rel="alternate" type="text/html" title="27. 移除元素" /><published>2020-06-03T00:00:00+08:00</published><updated>2020-06-03T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0603/27.%20%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0603/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;拷贝覆盖&lt;/code&gt; &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;倒序遍历&lt;/code&gt; &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;交换移除&lt;/code&gt;&lt;/li&gt;
