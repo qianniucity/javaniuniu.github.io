@@ -374,6 +374,36 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/web/shiro/AuthorizingRealm"><h2 itemprop="headline" class="item__header">shiro 中 AuthorizingRealm 的执行时机</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="1dogetauthenticationinfo执行时机如下">1.doGetAuthenticationInfo执行时机如下</h4>
+
+<p>当调用Subject currentUser = SecurityUtils.getSubject();</p>
+
+<p>currentUser.login(token);</p>
+
+<h4 id="2dogetauthorizationinfo执行时机有三个如下">2.doGetAuthorizationInfo执行时机有三个，如下：</h4>
+
+<ol>
+  <li>
+    <p>subject.hasRole(“admin”) 或 subject.isPermitted(“admin”)：自己去调用这个是否有什么角色或者是否有什么权限的时候；</p>
+  </li>
+  <li>
+    <p>@RequiresRoles(“admin”) ：在方法上加注解的时候；</p>
+  </li>
+  <li>
+    <p>[@shiro.hasPermission name = “admin”][/@shiro.hasPermission]：在页面上加shiro标签的时候，即进这个页面的时候扫描到有这个标签的时候。</p>
+  </li>
+</ol>
+</div><p><a href="/web/shiro/AuthorizingRealm">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=shiro">shiro</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=AuthorizingRealm">AuthorizingRealm</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="web-shiro-AuthorizingRealm">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="shiro,AuthorizingRealm"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/leetcode/2020/0604/001"><h2 itemprop="headline" class="item__header">238. 除自身以外数组的乘积</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
   <li><strong>难度</strong>：<code class="language-plaintext warning highlighter-rouge">中等</code></li>
@@ -1070,136 +1100,8 @@ s 中只含 0 和 1 。
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 30, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0530-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-30T00:00:00+08:00">
     <meta itemprop="keywords" content="leetcode,zip"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0521/001"><h2 itemprop="headline" class="item__header">17. 电话号码的字母组合</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="language-plaintext warning highlighter-rouge">中等</code></li>
-  <li><strong>本题涉及算法</strong>： <code class="language-plaintext success highlighter-rouge">回溯算法</code></li>
-  <li><strong>思路</strong>：   <code class="language-plaintext info highlighter-rouge">回溯算法</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-<h3 id="题目-17-电话号码的字母组合">题目 <a href="https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/">17. 电话号码的字母组合</a></h3>
-<p>给定一个仅包含数字 <code class="language-plaintext highlighter-rouge">2-9</code> 的字符串，返回所有它能表示的字母组合。</p>
-
-<p>给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。</p>
-
-<p><img src="/assets/images/leetcode/0521/17_telephone_keypad.png" alt="pic" /></p>
-
-<h4 id="示例">示例:</h4>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入："23"
-输出：["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
-说明:
-尽管上面的答案是按字典序排列的，但是你可以任意选择答案输出的顺序。
-</code></pre></div></div>
-
-<h3 id="方法一-回溯法">方法一 回溯法</h3>
-<ul>
-  <li><strong>回溯法使用</strong>：
-    <ul>
-      <li>对于回溯法，通常在二叉树中被使用，更广义上来说，可以处理类树状结构或树形问题</li>
-      <li>如图</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="/assets/images/leetcode/0521/17phone.gif" alt="17. 电话号码的字母组合.gif" /></p>
-
-<ul>
-  <li><strong>解题思路</strong>：
-    <ol>
-      <li><code class="language-plaintext highlighter-rouge">digits</code> 是数字字符串</li>
-      <li><code class="language-plaintext highlighter-rouge">s(digits)</code> 是 <code class="language-plaintext highlighter-rouge">digits</code> 所能代表的字母字符串</li>
-      <li>把 <code class="language-plaintext highlighter-rouge">s(digits)</code> 分解 可表示为
-        <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  s(digits[0...n-1])
- = letter(digits[0] + digits[1...n-1])
- = letter(digits[0] + letter(digits[1] + digits[2...n-1])
- = .....
-</code></pre></div>        </div>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<h4 id="python">python</h4>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">letterCombinations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">digits</span><span class="p">):</span>
-        <span class="s">"""
-        :type digits: str
-        :rtype: List[str]
-        """</span>
-        <span class="n">phone</span><span class="o">=</span> <span class="p">{</span>
-            <span class="s">'2'</span><span class="p">:[</span><span class="s">'a'</span><span class="p">,</span><span class="s">'b'</span><span class="p">,</span><span class="s">'c'</span><span class="p">],</span>
-            <span class="s">'3'</span><span class="p">:[</span><span class="s">'d'</span><span class="p">,</span><span class="s">'e'</span><span class="p">,</span><span class="s">'f'</span><span class="p">],</span>
-            <span class="s">'4'</span><span class="p">:[</span><span class="s">'g'</span><span class="p">,</span><span class="s">'h'</span><span class="p">,</span><span class="s">'i'</span><span class="p">],</span>
-            <span class="s">'5'</span><span class="p">:[</span><span class="s">'j'</span><span class="p">,</span><span class="s">'k'</span><span class="p">,</span><span class="s">'l'</span><span class="p">],</span>
-            <span class="s">'6'</span><span class="p">:[</span><span class="s">'m'</span><span class="p">,</span><span class="s">'n'</span><span class="p">,</span><span class="s">'o'</span><span class="p">],</span>
-            <span class="s">'7'</span><span class="p">:[</span><span class="s">'p'</span><span class="p">,</span><span class="s">'q'</span><span class="p">,</span><span class="s">'r'</span><span class="p">,</span><span class="s">'s'</span><span class="p">],</span>
-            <span class="s">'8'</span><span class="p">:[</span><span class="s">'t'</span><span class="p">,</span><span class="s">'u'</span><span class="p">,</span><span class="s">'v'</span><span class="p">],</span>
-            <span class="s">'9'</span><span class="p">:[</span><span class="s">'w'</span><span class="p">,</span><span class="s">'x'</span><span class="p">,</span><span class="s">'y'</span><span class="p">,</span><span class="s">'z'</span><span class="p">]</span>
-        <span class="p">}</span>
-        <span class="k">def</span> <span class="nf">backtrack</span><span class="p">(</span><span class="n">combination</span><span class="p">,</span><span class="n">next_digits</span><span class="p">):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">next_digits</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">output</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">phone</span><span class="p">[</span><span class="n">next_digits</span><span class="p">[</span><span class="mi">0</span><span class="p">]]:</span>
-                    <span class="n">backtrack</span><span class="p">(</span><span class="n">combination</span><span class="o">+</span><span class="n">letter</span><span class="p">,</span><span class="n">next_digits</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-
-
-        <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">digits</span><span class="p">:</span>
-            <span class="n">backtrack</span><span class="p">(</span><span class="s">''</span><span class="p">,</span><span class="n">digits</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">output</span>
-</code></pre></div></div>
-
-<h4 id="java">java</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-    <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">phone</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;()</span> <span class="err">\</span><span class="o">{</span><span class="err">\</span><span class="o">{</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"3"</span><span class="o">,</span> <span class="s">"def"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"4"</span><span class="o">,</span> <span class="s">"ghi"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"5"</span><span class="o">,</span> <span class="s">"jkl"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"6"</span><span class="o">,</span> <span class="s">"mno"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"7"</span><span class="o">,</span> <span class="s">"pqrs"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"8"</span><span class="o">,</span> <span class="s">"tuv"</span><span class="o">);</span>
-        <span class="n">put</span><span class="o">(</span><span class="s">"9"</span><span class="o">,</span> <span class="s">"wxyz"</span><span class="o">);</span>
-      <span class="err">\</span><span class="o">}</span><span class="err">\</span><span class="o">};</span>
-
-    <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">output</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
-
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">backtrack</span><span class="o">(</span><span class="nc">String</span> <span class="n">combination</span><span class="o">,</span> <span class="nc">String</span> <span class="n">next_digits</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">next_digits</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
-            <span class="n">output</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">combination</span><span class="o">);</span>
-        <span class="o">}</span><span class="k">else</span> <span class="o">{</span>
-            <span class="nc">String</span> <span class="n">digit</span> <span class="o">=</span> <span class="n">next_digits</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
-            <span class="nc">String</span> <span class="n">letters</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">digit</span><span class="o">);</span>
-            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">letters</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-                <span class="nc">String</span> <span class="n">letter</span> <span class="o">=</span> <span class="n">phone</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">digit</span><span class="o">).</span><span class="na">substring</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
-                <span class="n">backtrack</span><span class="o">(</span><span class="n">combination</span> <span class="o">+</span> <span class="n">letter</span><span class="o">,</span> <span class="n">next_digits</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
-            <span class="o">}</span>
-
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="nf">letterCombinations</span><span class="o">(</span><span class="nc">String</span> <span class="n">digits</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">digits</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
-          <span class="n">backtrack</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="n">digits</span><span class="o">);</span>
-        <span class="k">return</span> <span class="n">output</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/leetcode/2020/0521/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%9B%9E%E6%BA%AF%E7%AE%97%E6%B3%95">回溯算法</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>May 21, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0521-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-05-21T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode,回溯算法"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>237 post articles, 30 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>238 post articles, 30 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
