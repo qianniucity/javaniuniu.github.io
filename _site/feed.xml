@@ -1,18 +1,286 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-08T23:05:04+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">Shiro框架中有三个核心概念：Subject ，SecurityManager和Realms</title><link href="http://localhost:4000/web/shiro/three-core" rel="alternate" type="text/html" title="Shiro框架中有三个核心概念：Subject ，SecurityManager和Realms" /><published>2020-06-08T00:00:00+08:00</published><updated>2020-06-08T00:00:00+08:00</updated><id>http://localhost:4000/web/shiro/Shiro%E6%A1%86%E6%9E%B6%E4%B8%AD%E6%9C%89%E4%B8%89%E4%B8%AA%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5:Subject%20,SecurityManager%E5%92%8CRealms</id><content type="html" xml:base="http://localhost:4000/web/shiro/three-core">&lt;h4 id=&quot;211-subject&quot;&gt;2.1.1    Subject&lt;/h4&gt;
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 一词是一个安全术语，其基本意思是“当前的操作用户”。称之为“用户”并不准确，因为“用户”一词通常跟人相关。在安全领域，术语“Subject”可以是人，也可以是第三方进程、后台帐户（Daemon Account）、定时作业（Corn Job）或其他类似事物。它仅仅意味着“当前跟软件交互的东西”。但考虑到大多数目的和用途，你可以把它认为是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt; 的“用户”概念。
-在程序中你都能轻易的获得 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; ，允许在任何需要的地方进行安全操作。每个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 对象都必须与一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 进行绑定，你访问Subject对象其实都是在与 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 里的特定 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 进行交互。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-12T13:25:44+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">深入理解Spring两大特性：IoC和AOP</title><link href="http://localhost:4000/springboot/aop-ioc" rel="alternate" type="text/html" title="深入理解Spring两大特性：IoC和AOP" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>http://localhost:4000/springboot/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Spring%E4%B8%A4%E5%A4%A7%E7%89%B9%E6%80%A7:IoC%E5%92%8CAOP</id><content type="html" xml:base="http://localhost:4000/springboot/aop-ioc">&lt;p&gt;众所周知，Spring拥有两大特性：IoC和AOP。IoC，&lt;strong&gt;英文全称Inversion of Control，意为控制反转。AOP，英文全称Aspect-Oriented Programming，意为面向切面编程。&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h4 id=&quot;2212-securitymanager&quot;&gt;22.1.2    SecurityManager&lt;/h4&gt;
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 的“幕后”推手是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; Subject&lt;/code&gt; 代表了当前用户的安全操作，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 则管理所有用户的安全操作。它是Shiro框架的核心，充当“保护伞”，引用了多个内部嵌套安全组件，它们形成了对象图。但是，一旦 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 及其内部对象图配置好，它就会退居幕后，应用开发人员几乎把他们的所有时间都花在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject API&lt;/code&gt;调用上。
-那么，如何设置&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt;呢？嗯，这要看应用的环境。例如，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Web&lt;/code&gt;应用通常会在Web.xml中指定一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro Servlet Filter&lt;/code&gt;，这会创建&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt;实例，如果你运行的是一个独立应用，你需要用其他配置方式，但有很多配置选项。
-一个应用几乎总是只有一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 实例。它实际是应用的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Singleton&lt;/code&gt;（尽管不必是一个静态&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Singleton&lt;/code&gt;）。跟&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;里的几乎所有组件一样，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 的缺省实现是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POJO&lt;/code&gt;，而且可用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POJO&lt;/code&gt;兼容的任何配置机制进行配置 - 普通的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Java&lt;/code&gt;代码、&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Spring XML、YAML、.properties&lt;/code&gt;和.ini文件等。基本来讲，能够实例化类和调用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JavaBean&lt;/code&gt;兼容方法的任何配置形式都可使用。&lt;/p&gt;
+&lt;p&gt;Spring核心容器的主要组件是Bean工厂（BeanFactory），Bean工厂使用控制反转（IoC）模式来降低程序代码之间的耦合度，并提供了面向切面编程（AOP）的实现。&lt;/p&gt;
 
-&lt;h4 id=&quot;2213-realms&quot;&gt;22.1.3    Realms&lt;/h4&gt;
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;的第三个也是最后一个概念是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;充当了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;与应用安全数据间的“桥梁”或者“连接器”。也就是说，当与像用户帐户这类安全相关数据进行交互，执行认证（登录）和授权（访问控制）时，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;会从应用配置的Realm中查找很多内容。
-从这个意义上讲，Realm实质上是一个安全相关的DAO：它封装了数据源的连接细节，并在需要时将相关数据提供给&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;。当配置&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;时，你必须至少指定一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;，用于认证和（或）授权。配置多个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;是可以的，但是至少需要一个。
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;内置了可以连接大量安全数据源（又名目录）的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;，如LDAP、关系数据库（JDBC）、类似INI的文本配置资源以及属性文件 等。如果缺省的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;不能满足需求，你还可以插入代表自定义数据源的自己的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;实现。
-象其他内部组件一样，由&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt;来管理如何使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realms&lt;/code&gt;来获取安全的身份数据。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="shiro" /><summary type="html">2.1.1    Subject Subject 一词是一个安全术语，其基本意思是“当前的操作用户”。称之为“用户”并不准确，因为“用户”一词通常跟人相关。在安全领域，术语“Subject”可以是人，也可以是第三方进程、后台帐户（Daemon Account）、定时作业（Corn Job）或其他类似事物。它仅仅意味着“当前跟软件交互的东西”。但考虑到大多数目的和用途，你可以把它认为是 Shiro 的“用户”概念。 在程序中你都能轻易的获得 Subject ，允许在任何需要的地方进行安全操作。每个 Subject 对象都必须与一个 SecurityManager 进行绑定，你访问Subject对象其实都是在与 SecurityManager 里的特定 Subject 进行交互。 22.1.2    SecurityManager Subject 的“幕后”推手是 SecurityManager 。 Subject 代表了当前用户的安全操作，SecurityManager 则管理所有用户的安全操作。它是Shiro框架的核心，充当“保护伞”，引用了多个内部嵌套安全组件，它们形成了对象图。但是，一旦 SecurityManager 及其内部对象图配置好，它就会退居幕后，应用开发人员几乎把他们的所有时间都花在Subject API调用上。 那么，如何设置SecurityManager呢？嗯，这要看应用的环境。例如，Web应用通常会在Web.xml中指定一个Shiro Servlet Filter，这会创建SecurityManager实例，如果你运行的是一个独立应用，你需要用其他配置方式，但有很多配置选项。 一个应用几乎总是只有一个 SecurityManager 实例。它实际是应用的Singleton（尽管不必是一个静态Singleton）。跟Shiro里的几乎所有组件一样，SecurityManager 的缺省实现是POJO，而且可用POJO兼容的任何配置机制进行配置 - 普通的Java代码、Spring XML、YAML、.properties和.ini文件等。基本来讲，能够实例化类和调用JavaBean兼容方法的任何配置形式都可使用。 22.1.3    Realms Shiro的第三个也是最后一个概念是Realm。Realm充当了Shiro与应用安全数据间的“桥梁”或者“连接器”。也就是说，当与像用户帐户这类安全相关数据进行交互，执行认证（登录）和授权（访问控制）时，Shiro会从应用配置的Realm中查找很多内容。 从这个意义上讲，Realm实质上是一个安全相关的DAO：它封装了数据源的连接细节，并在需要时将相关数据提供给Shiro。当配置Shiro时，你必须至少指定一个Realm，用于认证和（或）授权。配置多个Realm是可以的，但是至少需要一个。 Shiro内置了可以连接大量安全数据源（又名目录）的Realm，如LDAP、关系数据库（JDBC）、类似INI的文本配置资源以及属性文件 等。如果缺省的Realm不能满足需求，你还可以插入代表自定义数据源的自己的Realm实现。 象其他内部组件一样，由SecurityManager来管理如何使用Realms来获取安全的身份数据。</summary></entry><entry><title type="html">什么是双亲委派机制</title><link href="http://localhost:4000/jvm/sqwpjz" rel="alternate" type="text/html" title="什么是双亲委派机制" /><published>2020-06-08T00:00:00+08:00</published><updated>2020-06-08T00:00:00+08:00</updated><id>http://localhost:4000/jvm/java%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E5%8F%8A%E4%BD%9C%E7%94%A8</id><content type="html" xml:base="http://localhost:4000/jvm/sqwpjz">&lt;p&gt;当某个类加载器需要加载某个.class文件时，它首先把这个任务委托给他的上级类加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。&lt;/p&gt;
+&lt;p&gt;简单来说，&lt;strong&gt;Spring是一个轻量级的控制反转（IoC）和面向切面编程（AOP）的容器框架。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;下面，我们简要说明下这两大特性。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;h3 id=&quot;1-spring常用注解&quot;&gt;1. Spring常用注解&lt;/h3&gt;
+
+&lt;p&gt;在具体介绍IoC和AOP之前，我们先简要说明下Spring常用注解&lt;/p&gt;
+
+&lt;p&gt;1、@Controller：用于标注控制器层组件&lt;/p&gt;
+
+&lt;p&gt;2、@Service：用于标注业务层组件&lt;/p&gt;
+
+&lt;p&gt;3、@Component : 用于标注这是一个受 Spring 管理的组件，组件引用名称是类名，第一个字母小写。可以使用@Component(“beanID”) 指定组件的名称&lt;/p&gt;
+
+&lt;p&gt;4、@Repository：用于标注数据访问组件，即DAO组件&lt;/p&gt;
+
+&lt;p&gt;5、@Bean：方法级别的注解，主要用在@Configuration和@Component注解的类里，@Bean注解的方法会产生一个Bean对象，该对象由Spring管理并放到IoC容器中。引用名称是方法名，也可以用@Bean(name = “beanID”)指定组件名&lt;/p&gt;
+
+&lt;p&gt;6、@Scope(“prototype”)：将组件的范围设置为原型的（即多例）。保证每一个请求有一个单独的action来处理，避免action的线程问题。&lt;/p&gt;
+
+&lt;p&gt;由于Spring默认是单例的，只会创建一个action对象，每次访问都是同一个对象，容易产生并发问题，数据不安全。&lt;/p&gt;
+
+&lt;p&gt;7、@Autowired：默认按类型进行自动装配。在容器查找匹配的Bean，当有且仅有一个匹配的Bean时，Spring将其注入@Autowired标注的变量中。&lt;/p&gt;
+
+&lt;p&gt;8、@Resource：默认按名称进行自动装配，当找不到与名称匹配的Bean时会按类型装配。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;p&gt;简单点说，就是，&lt;strong&gt;能够明确该类是一个控制器类组件的，就用@Controller；能够明确是一个服务类组件的，就用@Service；能够明确该类是一个数据访问组件的，就用@Repository；不知道他是啥或者不好区分他是啥，但是就是想让他动态装配的就用@Component。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;@Controller、@Service、@Component、@Repository都是类级别的注解，__如果一个方法也想动态装配，就用@Bean。&lt;/p&gt;
+
+&lt;p&gt;当我们想按类型进行自动装配时，就用@Autowired；当我们想按名称（beanID）进行自动装配时，就用@Resource；当我们需要根据比如配置信息等来动态装配不同的组件时，可以用getBean(“beanID”)。__&lt;/p&gt;
+
+&lt;p&gt;到这里，如果对这些注解，或是自动装配不太理解，可以继续往下，看完 控制反转(IoC) 内容后再回来理解这里的内容。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+
+&lt;h3 id=&quot;2-控制反转ioc&quot;&gt;2. 控制反转(IoC)&lt;/h3&gt;
+
+&lt;p&gt;控制反转，简单点说，就是创建对象的控制权，被反转到了Spring框架上。&lt;/p&gt;
+
+&lt;p&gt;通常，我们实例化一个对象时，都是使用类的构造方法来new一个对象，这个过程是由我们自己来控制的，而控制反转就把new对象的工交给了Spring容器。&lt;/p&gt;
+
+&lt;p&gt;《expert ONE-ON-ONE J2EE Development without EJB》第6章中指出&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;P128
+
+IoC Implementation Strategies
+
+IoC is a broad concept that can be implemented in different ways. There are two main types:
+
+Dependency Lookup: The container provides callbacks to components, and a lookup context.This is the EJB and Apache Avalon approach. It leaves the onus on each component to use container APIs to look up resources and collaborators. The Inversion of Control is limited to the container invoking callback methods that application code can use to obtain resources.
+
+Dependency Injection: Components do no look up; they provide plain Java methods enabling the container to resolve dependencies. The container is wholly responsible for wiring up components, passing resolved objects in to JavaBean properties or constructors. Use of JavaBean properties is called Setter Injection; use of constructor arguments is called Constructor Injection.
+
+
+P130
+
+The second IoC strategy-Dependency Injection-is usually preferable.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;主要意思为：&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;IoC的主要实现方式有两种：依赖查找、依赖注入。
+
+依赖注入是一种更可取的方式。
+
+那么依赖查找和依赖注入有什么区别呢？
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;依赖查找，主要是容器为组件提供一个回调接口和上下文环境。这样一来，组件就必须自己使用容器提供的API来查找资源和协作对象，控制反转仅体现在那些回调方法上，容器调用这些回调方法，从而应用代码获取到资源。&lt;/p&gt;
+
+&lt;p&gt;依赖注入，组件不做定位查询，只提供标准的Java方法让容器去决定依赖关系。容器全权负责组件的装配，把符合依赖关系的对象通过Java Bean属性或构造方法传递给需要的对象。&lt;/p&gt;
+
+&lt;h4 id=&quot;21-ioc容器&quot;&gt;2.1 IoC容器&lt;/h4&gt;
+
+&lt;p&gt;IoC容器：具有依赖注入功能的容器，可以创建对象的容器。IoC容器负责实例化、定位、配置应用程序中的对象并建立这些对象之间的依赖。&lt;/p&gt;
+
+&lt;h4 id=&quot;22-依赖注入&quot;&gt;2.2 依赖注入&lt;/h4&gt;
+
+&lt;p&gt;DI，英文全称，Dependency Injection，意为依赖注入。&lt;/p&gt;
+
+&lt;p&gt;依赖注入：由IoC容器动态地将某个对象所需要的外部资源（包括对象、资源、常量数据）注入到组件(Controller, Service等）之中。简单点说，就是IoC容器会把当前对象所需要的外部资源动态的注入给我们。&lt;/p&gt;
+
+&lt;p&gt;Spring依赖注入的方式主要有四个，基于注解注入方式、set注入方式、构造器注入方式、静态工厂注入方式。推荐使用基于注解注入方式，配置较少，比较方便。&lt;/p&gt;
+
+&lt;p&gt;基于注解注入方式&lt;/p&gt;
+
+&lt;p&gt;服务层代码&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdminService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;控制层代码&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;prototype&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdminController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdminService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adminService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;@Autowired与@Resource都可以用来装配Bean，都可以写在字段、setter方法上。他们的区别是：&lt;/p&gt;
+
+&lt;p&gt;@Autowired默认按类型进行自动装配（该注解属于Spring），默认情况下要求依赖对象必须存在，如果要允许为null，需设置required属性为false，例：@Autowired(required=false)。如果要使用名称进行装配，可以与@Qualifier注解一起使用。&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;adminService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private AdminService adminService; @Resource默认按照名称进行装配（该注解属于J2EE），名称可以通过name属性来指定。如果没有指定name属性，当注解写在字段上时，默认取字段名进行装配；如果注解写在setter方法上，默认取属性名进行装配。当找不到与名称相匹配的Bean时，会按照类型进行装配。但是，name属性一旦指定，就只会按照名称进行装配。 ```java @Resource(name = &quot;adminService&quot;) private AdminService adminService;  ```
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;除此之外，对于一些复杂的装载Bean的时机，比如我们需要根据配置装载不同的Bean，以完成不同的操作，可以使用getBean(“beanID”)的方式来加载Bean。&lt;/p&gt;
+
+&lt;p&gt;通过BeanID加载Bean方法如下：&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationContextAware&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;applicationContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;applicationContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;containsBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;not found bean id: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;我们在需要装载Bean的地方调用该方法即可&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BaseController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loadService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;IService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;IService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;加载Bean错误&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h3 id=&quot;3-面向切面编程aop&quot;&gt;3. 面向切面编程(AOP)&lt;/h3&gt;
+
+&lt;p&gt;面向切面编程（AOP）就是纵向的编程。比如业务A和业务B现在需要一个相同的操作，传统方法我们可能需要在A、B中都加入相关操作代码，而应用AOP就可以只写一遍代码，A、B共用这段代码。并且，当A、B需要增加新的操作时，可以在不改动原代码的情况下，灵活添加新的业务逻辑实现。&lt;/p&gt;
+
+&lt;p&gt;在实际开发中，比如商品查询、促销查询等业务，都需要记录日志、异常处理等操作，AOP把所有共用代码都剥离出来，单独放置到某个类中进行集中管理，在具体运行时，由容器进行动态织入这些公共代码。&lt;/p&gt;
+
+&lt;p&gt;AOP主要一般应用于签名验签、参数校验、日志记录、事务控制、权限控制、性能统计、异常处理等。&lt;/p&gt;
+
+&lt;h4 id=&quot;31aop涉及名词&quot;&gt;3.1 AOP涉及名词&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;切面（Aspect）&lt;/strong&gt;：共有功能的实现。如日志切面、权限切面、验签切面等。在实际开发中通常是一个存放共有功能实现的标准Java类。当Java类使用了@Aspect注解修饰时，就能被AOP容器识别为切面。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;通知（Advice）&lt;/strong&gt;：切面的具体实现。就是要给目标对象织入的事情。以目标方法为参照点，根据放置的地方不同，可分为前置通知（Before）、后置通知（AfterReturning）、异常通知（AfterThrowing）、最终通知（After）与环绕通知（Around）5种。在实际开发中通常是切面类中的一个方法，具体属于哪类通知，通过方法上的注解区分。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;连接点（JoinPoint）&lt;/strong&gt;：程序在运行过程中能够插入切面的地点。例如，方法调用、异常抛出等。Spring只支持方法级的连接点。一个类的所有方法前、后、抛出异常时等都是连接点。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;切入点（Pointcut）&lt;/strong&gt;：用于定义通知应该切入到哪些连接点上。不同的通知通常需要切入到不同的连接点上，这种精准的匹配是由切入点的正则表达式来定义的。&lt;/p&gt;
+
+&lt;p&gt;比如，在上面所说的连接点的基础上，来定义切入点。我们有一个类，类里有10个方法，那就产生了几十个连接点。但是我们并不想在所有方法上都织入通知，我们只想让其中的几个方法，在调用之前检验下入参是否合法，那么就用切点来定义这几个方法，让切点来筛选连接点，选中我们想要的方法。切入点就是来定义哪些类里面的哪些方法会得到通知。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;目标对象（Target）&lt;/strong&gt;：那些即将切入切面的对象，也就是那些被通知的对象。这些对象专注业务本身的逻辑，所有的共有功能等待AOP容器的切入。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;代理对象（Proxy）&lt;/strong&gt;：将通知应用到目标对象之后被动态创建的对象。可以简单地理解为，代理对象的功能等于目标对象本身业务逻辑加上共有功能。代理对象对于使用者而言是透明的，是程序运行过程中的产物。目标对象被织入共有功能后产生的对象。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;织入（Weaving）&lt;/strong&gt;：将切面应用到目标对象从而创建一个新的代理对象的过程。这个过程可以发生在编译时、类加载时、运行时。Spring是在运行时完成织入，运行时织入通过Java语言的反射机制与动态代理机制来动态实现。&lt;/p&gt;
+
+&lt;h4 id=&quot;32-pointcut用法&quot;&gt;3.2 Pointcut用法&lt;/h4&gt;
+
+&lt;p&gt;Pointcut格式为：&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;execution(modifier-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern?)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;修饰符匹配 modifier-pattern?&lt;/strong&gt; 例：public private&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;返回值匹配 ret-type-pattern&lt;/strong&gt;  可以用 * 表示任意返回值&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;类路径匹配 declaring-type-pattern?&lt;/strong&gt;  全路径的类名&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;方法名匹配 name-pattern&lt;/strong&gt;  可以指定方法名或者用 * 表示所有方法；set* 表示所有以set开头的方法&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;参数匹配 (param-pattern)&lt;/strong&gt;  可以指定具体的参数类型，多个参数用“,”分隔；可以用 * 表示匹配任意类型的参数；可以用 (..) 表示零个或多个任意参数&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;异常类型匹配throws-pattern?&lt;/strong&gt;  例：throws Exception&lt;/p&gt;
+
+&lt;p&gt;其中后面跟着 ? 表示可选项&lt;/p&gt;
+
+&lt;p&gt;例：&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(public * cn.wbnull. springbootdemo.controller.*.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sign&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt; &lt;/p&gt;
+
+&lt;h4 id=&quot;33-一个例子&quot;&gt;3.3 一个例子&lt;/h4&gt;
+
+&lt;p&gt;以 Spring Boot入门：使用AOP实现拦截器 中的AOP为例&lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SignAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;SignAop类使用了@Aspect注解，则该类可以被AOP容器识别为切面。&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SignAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;signAop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;@Pointcut声明一个切入点，范围为controller包下所有的类的所有方法&lt;/p&gt;
+
+&lt;p&gt;注：作为切入点签名的方法必须返回void类型&lt;/p&gt;
+
+&lt;p&gt; &lt;/p&gt;
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
+&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SignAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;signAop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;signAop()&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doBefore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinPoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
+       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@AfterReturning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;signAop()&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returning&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;params&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JSONObject&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doAfterReturning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinPoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JSONObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;doBefore()方法使用@Before(“signAop()”)注解，表示前置通知（在某连接点之前执行的通知），但这个通知不能阻止连接点之前的执行流程，除非它抛出一个异常。&lt;/p&gt;
+
+&lt;p&gt;doAfterReturning()方法使用@AfterReturning(value = “signAop()”, returning = “params”)注解，表示后置通知（在某连接点正常完成后执行的通知），通常在一个匹配的方法返回的时候执行。&lt;/p&gt;
+
+&lt;p&gt;实际运行时，在进入controller包下所有方法前，都会进入doBefore()方法，在controller包下方法执行完成后，都会进入doAfterReturning()方法。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="spirngboot" /><summary type="html">众所周知，Spring拥有两大特性：IoC和AOP。IoC，英文全称Inversion of Control，意为控制反转。AOP，英文全称Aspect-Oriented Programming，意为面向切面编程。 Spring核心容器的主要组件是Bean工厂（BeanFactory），Bean工厂使用控制反转（IoC）模式来降低程序代码之间的耦合度，并提供了面向切面编程（AOP）的实现。 简单来说，Spring是一个轻量级的控制反转（IoC）和面向切面编程（AOP）的容器框架。 下面，我们简要说明下这两大特性。   1. Spring常用注解 在具体介绍IoC和AOP之前，我们先简要说明下Spring常用注解 1、@Controller：用于标注控制器层组件 2、@Service：用于标注业务层组件 3、@Component : 用于标注这是一个受 Spring 管理的组件，组件引用名称是类名，第一个字母小写。可以使用@Component(“beanID”) 指定组件的名称 4、@Repository：用于标注数据访问组件，即DAO组件 5、@Bean：方法级别的注解，主要用在@Configuration和@Component注解的类里，@Bean注解的方法会产生一个Bean对象，该对象由Spring管理并放到IoC容器中。引用名称是方法名，也可以用@Bean(name = “beanID”)指定组件名 6、@Scope(“prototype”)：将组件的范围设置为原型的（即多例）。保证每一个请求有一个单独的action来处理，避免action的线程问题。 由于Spring默认是单例的，只会创建一个action对象，每次访问都是同一个对象，容易产生并发问题，数据不安全。 7、@Autowired：默认按类型进行自动装配。在容器查找匹配的Bean，当有且仅有一个匹配的Bean时，Spring将其注入@Autowired标注的变量中。 8、@Resource：默认按名称进行自动装配，当找不到与名称匹配的Bean时会按类型装配。   简单点说，就是，能够明确该类是一个控制器类组件的，就用@Controller；能够明确是一个服务类组件的，就用@Service；能够明确该类是一个数据访问组件的，就用@Repository；不知道他是啥或者不好区分他是啥，但是就是想让他动态装配的就用@Component。 @Controller、@Service、@Component、@Repository都是类级别的注解，__如果一个方法也想动态装配，就用@Bean。 当我们想按类型进行自动装配时，就用@Autowired；当我们想按名称（beanID）进行自动装配时，就用@Resource；当我们需要根据比如配置信息等来动态装配不同的组件时，可以用getBean(“beanID”)。__ 到这里，如果对这些注解，或是自动装配不太理解，可以继续往下，看完 控制反转(IoC) 内容后再回来理解这里的内容。   2. 控制反转(IoC) 控制反转，简单点说，就是创建对象的控制权，被反转到了Spring框架上。 通常，我们实例化一个对象时，都是使用类的构造方法来new一个对象，这个过程是由我们自己来控制的，而控制反转就把new对象的工交给了Spring容器。 《expert ONE-ON-ONE J2EE Development without EJB》第6章中指出 P128 IoC Implementation Strategies IoC is a broad concept that can be implemented in different ways. There are two main types: Dependency Lookup: The container provides callbacks to components, and a lookup context.This is the EJB and Apache Avalon approach. It leaves the onus on each component to use container APIs to look up resources and collaborators. The Inversion of Control is limited to the container invoking callback methods that application code can use to obtain resources. Dependency Injection: Components do no look up; they provide plain Java methods enabling the container to resolve dependencies. The container is wholly responsible for wiring up components, passing resolved objects in to JavaBean properties or constructors. Use of JavaBean properties is called Setter Injection; use of constructor arguments is called Constructor Injection. P130 The second IoC strategy-Dependency Injection-is usually preferable. 主要意思为： IoC的主要实现方式有两种：依赖查找、依赖注入。 依赖注入是一种更可取的方式。 那么依赖查找和依赖注入有什么区别呢？ 依赖查找，主要是容器为组件提供一个回调接口和上下文环境。这样一来，组件就必须自己使用容器提供的API来查找资源和协作对象，控制反转仅体现在那些回调方法上，容器调用这些回调方法，从而应用代码获取到资源。 依赖注入，组件不做定位查询，只提供标准的Java方法让容器去决定依赖关系。容器全权负责组件的装配，把符合依赖关系的对象通过Java Bean属性或构造方法传递给需要的对象。 2.1 IoC容器 IoC容器：具有依赖注入功能的容器，可以创建对象的容器。IoC容器负责实例化、定位、配置应用程序中的对象并建立这些对象之间的依赖。 2.2 依赖注入 DI，英文全称，Dependency Injection，意为依赖注入。 依赖注入：由IoC容器动态地将某个对象所需要的外部资源（包括对象、资源、常量数据）注入到组件(Controller, Service等）之中。简单点说，就是IoC容器会把当前对象所需要的外部资源动态的注入给我们。 Spring依赖注入的方式主要有四个，基于注解注入方式、set注入方式、构造器注入方式、静态工厂注入方式。推荐使用基于注解注入方式，配置较少，比较方便。 基于注解注入方式 服务层代码 @Service public class AdminService { //code } 控制层代码 @Controller @Scope(&quot;prototype&quot;) public class AdminController { @Autowired private AdminService adminService; //code } @Autowired与@Resource都可以用来装配Bean，都可以写在字段、setter方法上。他们的区别是： @Autowired默认按类型进行自动装配（该注解属于Spring），默认情况下要求依赖对象必须存在，如果要允许为null，需设置required属性为false，例：@Autowired(required=false)。如果要使用名称进行装配，可以与@Qualifier注解一起使用。 @Autowired @Qualifier(&quot;adminService&quot;) private AdminService adminService; @Resource默认按照名称进行装配（该注解属于J2EE），名称可以通过name属性来指定。如果没有指定name属性，当注解写在字段上时，默认取字段名进行装配；如果注解写在setter方法上，默认取属性名进行装配。当找不到与名称相匹配的Bean时，会按照类型进行装配。但是，name属性一旦指定，就只会按照名称进行装配。 ```java @Resource(name = &quot;adminService&quot;) private AdminService adminService;  ``` 除此之外，对于一些复杂的装载Bean的时机，比如我们需要根据配置装载不同的Bean，以完成不同的操作，可以使用getBean(“beanID”)的方式来加载Bean。 通过BeanID加载Bean方法如下： @Component public class BeanUtils implements ApplicationContextAware { private static ApplicationContext applicationContext; @Override public void setApplicationContext(ApplicationContext applicationContext) { if (BeanUtils.applicationContext == null) { BeanUtils.applicationContext = applicationContext; } } public static ApplicationContext getApplicationContext() { return applicationContext; } public static Object getBean(String id) throws Exception { try { return applicationContext.containsBean(id) ? applicationContext.getBean(id) : null; } catch (BeansException e) { e.printStackTrace(); throw new Exception(&quot;not found bean id: &quot; + id); } } } 我们在需要装载Bean的地方调用该方法即可 public class BaseController { protected IService loadService(String id) throws Exception { IService iService = (IService) BeanUtils.getBean(id); if (iService != null) { return iService; } else { throw new Exception(&quot;加载Bean错误&quot;); } } } 3. 面向切面编程(AOP) 面向切面编程（AOP）就是纵向的编程。比如业务A和业务B现在需要一个相同的操作，传统方法我们可能需要在A、B中都加入相关操作代码，而应用AOP就可以只写一遍代码，A、B共用这段代码。并且，当A、B需要增加新的操作时，可以在不改动原代码的情况下，灵活添加新的业务逻辑实现。 在实际开发中，比如商品查询、促销查询等业务，都需要记录日志、异常处理等操作，AOP把所有共用代码都剥离出来，单独放置到某个类中进行集中管理，在具体运行时，由容器进行动态织入这些公共代码。 AOP主要一般应用于签名验签、参数校验、日志记录、事务控制、权限控制、性能统计、异常处理等。 3.1 AOP涉及名词 切面（Aspect）：共有功能的实现。如日志切面、权限切面、验签切面等。在实际开发中通常是一个存放共有功能实现的标准Java类。当Java类使用了@Aspect注解修饰时，就能被AOP容器识别为切面。 通知（Advice）：切面的具体实现。就是要给目标对象织入的事情。以目标方法为参照点，根据放置的地方不同，可分为前置通知（Before）、后置通知（AfterReturning）、异常通知（AfterThrowing）、最终通知（After）与环绕通知（Around）5种。在实际开发中通常是切面类中的一个方法，具体属于哪类通知，通过方法上的注解区分。 连接点（JoinPoint）：程序在运行过程中能够插入切面的地点。例如，方法调用、异常抛出等。Spring只支持方法级的连接点。一个类的所有方法前、后、抛出异常时等都是连接点。 切入点（Pointcut）：用于定义通知应该切入到哪些连接点上。不同的通知通常需要切入到不同的连接点上，这种精准的匹配是由切入点的正则表达式来定义的。 比如，在上面所说的连接点的基础上，来定义切入点。我们有一个类，类里有10个方法，那就产生了几十个连接点。但是我们并不想在所有方法上都织入通知，我们只想让其中的几个方法，在调用之前检验下入参是否合法，那么就用切点来定义这几个方法，让切点来筛选连接点，选中我们想要的方法。切入点就是来定义哪些类里面的哪些方法会得到通知。 目标对象（Target）：那些即将切入切面的对象，也就是那些被通知的对象。这些对象专注业务本身的逻辑，所有的共有功能等待AOP容器的切入。 代理对象（Proxy）：将通知应用到目标对象之后被动态创建的对象。可以简单地理解为，代理对象的功能等于目标对象本身业务逻辑加上共有功能。代理对象对于使用者而言是透明的，是程序运行过程中的产物。目标对象被织入共有功能后产生的对象。 织入（Weaving）：将切面应用到目标对象从而创建一个新的代理对象的过程。这个过程可以发生在编译时、类加载时、运行时。Spring是在运行时完成织入，运行时织入通过Java语言的反射机制与动态代理机制来动态实现。 3.2 Pointcut用法 Pointcut格式为： execution(modifier-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern?) 修饰符匹配 modifier-pattern? 例：public private 返回值匹配 ret-type-pattern 可以用 * 表示任意返回值 类路径匹配 declaring-type-pattern? 全路径的类名 方法名匹配 name-pattern 可以指定方法名或者用 * 表示所有方法；set* 表示所有以set开头的方法 参数匹配 (param-pattern) 可以指定具体的参数类型，多个参数用“,”分隔；可以用 * 表示匹配任意类型的参数；可以用 (..) 表示零个或多个任意参数 异常类型匹配throws-pattern? 例：throws Exception 其中后面跟着 ? 表示可选项 例： @Pointcut(&quot;execution(public * cn.wbnull. springbootdemo.controller.*.*(..))&quot;) private void sign() { }   3.3 一个例子 以 Spring Boot入门：使用AOP实现拦截器 中的AOP为例 @Aspect @Component public class SignAop { } SignAop类使用了@Aspect注解，则该类可以被AOP容器识别为切面。   @Aspect @Component public class SignAop { @Pointcut(&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;) private void signAop() { } } @Pointcut声明一个切入点，范围为controller包下所有的类的所有方法 注：作为切入点签名的方法必须返回void类型   @Aspect @Component public class SignAop { @Pointcut(&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;) private void signAop() { } @Before(&quot;signAop()&quot;) public void doBefore(JoinPoint joinPoint) throws Exception { //code } @AfterReturning(value = &quot;signAop()&quot;, returning = &quot;params&quot;) public JSONObject doAfterReturning(JoinPoint joinPoint, JSONObject params) { //code } } doBefore()方法使用@Before(“signAop()”)注解，表示前置通知（在某连接点之前执行的通知），但这个通知不能阻止连接点之前的执行流程，除非它抛出一个异常。 doAfterReturning()方法使用@AfterReturning(value = “signAop()”, returning = “params”)注解，表示后置通知（在某连接点正常完成后执行的通知），通常在一个匹配的方法返回的时候执行。 实际运行时，在进入controller包下所有方法前，都会进入doBefore()方法，在controller包下方法执行完成后，都会进入doAfterReturning()方法。</summary></entry><entry><title type="html">shiro 中 AuthorizingRealm 的执行时机</title><link href="http://localhost:4000/web/shiro/AuthorizingRealm" rel="alternate" type="text/html" title="shiro 中 AuthorizingRealm 的执行时机" /><published>2020-06-08T00:00:00+08:00</published><updated>2020-06-08T00:00:00+08:00</updated><id>http://localhost:4000/web/shiro/AuthorizingRealm%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA</id><content type="html" xml:base="http://localhost:4000/web/shiro/AuthorizingRealm">&lt;h4 id=&quot;1dogetauthenticationinfo执行时机如下&quot;&gt;1.doGetAuthenticationInfo执行时机如下&lt;/h4&gt;
+
+&lt;p&gt;当调用Subject currentUser = SecurityUtils.getSubject();&lt;/p&gt;
+
+&lt;p&gt;currentUser.login(token);&lt;/p&gt;
+
+&lt;h4 id=&quot;2dogetauthorizationinfo执行时机有三个如下&quot;&gt;2.doGetAuthorizationInfo执行时机有三个，如下：&lt;/h4&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;subject.hasRole(“admin”) 或 subject.isPermitted(“admin”)：自己去调用这个是否有什么角色或者是否有什么权限的时候；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;@RequiresRoles(“admin”) ：在方法上加注解的时候；&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;[@shiro.hasPermission name = “admin”][/@shiro.hasPermission]：在页面上加shiro标签的时候，即进这个页面的时候扫描到有这个标签的时候。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="shiro" /><category term="AuthorizingRealm" /><summary type="html">1.doGetAuthenticationInfo执行时机如下 当调用Subject currentUser = SecurityUtils.getSubject(); currentUser.login(token); 2.doGetAuthorizationInfo执行时机有三个，如下： subject.hasRole(“admin”) 或 subject.isPermitted(“admin”)：自己去调用这个是否有什么角色或者是否有什么权限的时候； @RequiresRoles(“admin”) ：在方法上加注解的时候； [@shiro.hasPermission name = “admin”][/@shiro.hasPermission]：在页面上加shiro标签的时候，即进这个页面的时候扫描到有这个标签的时候。</summary></entry><entry><title type="html">什么是双亲委派机制</title><link href="http://localhost:4000/jvm/sqwpjz" rel="alternate" type="text/html" title="什么是双亲委派机制" /><published>2020-06-08T00:00:00+08:00</published><updated>2020-06-08T00:00:00+08:00</updated><id>http://localhost:4000/jvm/java%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E5%8F%8A%E4%BD%9C%E7%94%A8</id><content type="html" xml:base="http://localhost:4000/jvm/sqwpjz">&lt;p&gt;当某个类加载器需要加载某个.class文件时，它首先把这个任务委托给他的上级类加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。&lt;/p&gt;
 
 &lt;h3 id=&quot;类加载器的类别&quot;&gt;类加载器的类别&lt;/h3&gt;
 
@@ -76,25 +344,20 @@ java.ext.dir 指定位置中的类，开发者可以直接使用标准扩展类�
 &lt;h3 id=&quot;双亲委派机制的作用&quot;&gt;双亲委派机制的作用&lt;/h3&gt;
 
 &lt;p&gt;1、防止重复加载同一个.class。通过委托去向上面问一问，加载过了，就不用再加载一遍。保证数据安全。
-2、保证核心.class不能被篡改。通过委托方式，不会去篡改核心.clas，即使篡改也不会去加载，即使加载也不会是同一个.class对象了。不同的加载器加载同一个.class也不是同一个Class对象。这样保证了Class执行安全。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="jvm" /><category term="双亲委派机制" /><summary type="html">当某个类加载器需要加载某个.class文件时，它首先把这个任务委托给他的上级类加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。 类加载器的类别 BootstrapClassLoader（启动类加载器） c++编写，加载java核心库 java.*,构造ExtClassLoader和AppClassLoader。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作 ExtClassLoader （标准扩展类加载器） java编写，加载扩展库，如classpath中的jre ，javax.*或者 java.ext.dir 指定位置中的类，开发者可以直接使用标准扩展类加载器。 AppClassLoader（系统类加载器） java编写，加载程序所在的目录，如user.dir所在的位置的class CustomClassLoader（用户自定义类加载器） java编写,用户自定义的类加载器,可加载指定路径的class文件 源码分析 protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { synchronized (getClassLoadingLock(name)) { // 首先检查这个classsh是否已经加载过了 Class&amp;lt;?&amp;gt; c = findLoadedClass(name); if (c == null) { long t0 = System.nanoTime(); try { // c==null表示没有加载，如果有父类的加载器则让父类加载器加载 if (parent != null) { c = parent.loadClass(name, false); } else { //如果父类的加载器为空 则说明递归到bootStrapClassloader了 //bootStrapClassloader比较特殊无法通过get获取 c = findBootstrapClassOrNull(name); } } catch (ClassNotFoundException e) {} if (c == null) { //如果bootstrapClassLoader 仍然没有加载过，则递归回来，尝试自己去加载class long t1 = System.nanoTime(); c = findClass(name); sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0); sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1); sun.misc.PerfCounter.getFindClasses().increment(); } } if (resolve) { resolveClass(c); } return c; } } 委派机制的流程图 双亲委派机制的作用 1、防止重复加载同一个.class。通过委托去向上面问一问，加载过了，就不用再加载一遍。保证数据安全。 2、保证核心.class不能被篡改。通过委托方式，不会去篡改核心.clas，即使篡改也不会去加载，即使加载也不会是同一个.class对象了。不同的加载器加载同一个.class也不是同一个Class对象。这样保证了Class执行安全。</summary></entry><entry><title type="html">shiro 中 AuthorizingRealm 的执行时机</title><link href="http://localhost:4000/web/shiro/AuthorizingRealm" rel="alternate" type="text/html" title="shiro 中 AuthorizingRealm 的执行时机" /><published>2020-06-08T00:00:00+08:00</published><updated>2020-06-08T00:00:00+08:00</updated><id>http://localhost:4000/web/shiro/AuthorizingRealm%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA</id><content type="html" xml:base="http://localhost:4000/web/shiro/AuthorizingRealm">&lt;h4 id=&quot;1dogetauthenticationinfo执行时机如下&quot;&gt;1.doGetAuthenticationInfo执行时机如下&lt;/h4&gt;
+2、保证核心.class不能被篡改。通过委托方式，不会去篡改核心.clas，即使篡改也不会去加载，即使加载也不会是同一个.class对象了。不同的加载器加载同一个.class也不是同一个Class对象。这样保证了Class执行安全。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="jvm" /><category term="双亲委派机制" /><summary type="html">当某个类加载器需要加载某个.class文件时，它首先把这个任务委托给他的上级类加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。 类加载器的类别 BootstrapClassLoader（启动类加载器） c++编写，加载java核心库 java.*,构造ExtClassLoader和AppClassLoader。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作 ExtClassLoader （标准扩展类加载器） java编写，加载扩展库，如classpath中的jre ，javax.*或者 java.ext.dir 指定位置中的类，开发者可以直接使用标准扩展类加载器。 AppClassLoader（系统类加载器） java编写，加载程序所在的目录，如user.dir所在的位置的class CustomClassLoader（用户自定义类加载器） java编写,用户自定义的类加载器,可加载指定路径的class文件 源码分析 protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { synchronized (getClassLoadingLock(name)) { // 首先检查这个classsh是否已经加载过了 Class&amp;lt;?&amp;gt; c = findLoadedClass(name); if (c == null) { long t0 = System.nanoTime(); try { // c==null表示没有加载，如果有父类的加载器则让父类加载器加载 if (parent != null) { c = parent.loadClass(name, false); } else { //如果父类的加载器为空 则说明递归到bootStrapClassloader了 //bootStrapClassloader比较特殊无法通过get获取 c = findBootstrapClassOrNull(name); } } catch (ClassNotFoundException e) {} if (c == null) { //如果bootstrapClassLoader 仍然没有加载过，则递归回来，尝试自己去加载class long t1 = System.nanoTime(); c = findClass(name); sun.misc.PerfCounter.getParentDelegationTime().addTime(t1 - t0); sun.misc.PerfCounter.getFindClassTime().addElapsedTimeFrom(t1); sun.misc.PerfCounter.getFindClasses().increment(); } } if (resolve) { resolveClass(c); } return c; } } 委派机制的流程图 双亲委派机制的作用 1、防止重复加载同一个.class。通过委托去向上面问一问，加载过了，就不用再加载一遍。保证数据安全。 2、保证核心.class不能被篡改。通过委托方式，不会去篡改核心.clas，即使篡改也不会去加载，即使加载也不会是同一个.class对象了。不同的加载器加载同一个.class也不是同一个Class对象。这样保证了Class执行安全。</summary></entry><entry><title type="html">Shiro框架中有三个核心概念：Subject ，SecurityManager和Realms</title><link href="http://localhost:4000/web/shiro/three-core" rel="alternate" type="text/html" title="Shiro框架中有三个核心概念：Subject ，SecurityManager和Realms" /><published>2020-06-08T00:00:00+08:00</published><updated>2020-06-08T00:00:00+08:00</updated><id>http://localhost:4000/web/shiro/Shiro%E6%A1%86%E6%9E%B6%E4%B8%AD%E6%9C%89%E4%B8%89%E4%B8%AA%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5:Subject%20,SecurityManager%E5%92%8CRealms</id><content type="html" xml:base="http://localhost:4000/web/shiro/three-core">&lt;h4 id=&quot;211-subject&quot;&gt;2.1.1    Subject&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 一词是一个安全术语，其基本意思是“当前的操作用户”。称之为“用户”并不准确，因为“用户”一词通常跟人相关。在安全领域，术语“Subject”可以是人，也可以是第三方进程、后台帐户（Daemon Account）、定时作业（Corn Job）或其他类似事物。它仅仅意味着“当前跟软件交互的东西”。但考虑到大多数目的和用途，你可以把它认为是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt; 的“用户”概念。
+在程序中你都能轻易的获得 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; ，允许在任何需要的地方进行安全操作。每个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 对象都必须与一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 进行绑定，你访问Subject对象其实都是在与 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 里的特定 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 进行交互。&lt;/p&gt;
 
-&lt;p&gt;当调用Subject currentUser = SecurityUtils.getSubject();&lt;/p&gt;
+&lt;h4 id=&quot;2212-securitymanager&quot;&gt;22.1.2    SecurityManager&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject&lt;/code&gt; 的“幕后”推手是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt; Subject&lt;/code&gt; 代表了当前用户的安全操作，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 则管理所有用户的安全操作。它是Shiro框架的核心，充当“保护伞”，引用了多个内部嵌套安全组件，它们形成了对象图。但是，一旦 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 及其内部对象图配置好，它就会退居幕后，应用开发人员几乎把他们的所有时间都花在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Subject API&lt;/code&gt;调用上。
+那么，如何设置&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt;呢？嗯，这要看应用的环境。例如，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Web&lt;/code&gt;应用通常会在Web.xml中指定一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro Servlet Filter&lt;/code&gt;，这会创建&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt;实例，如果你运行的是一个独立应用，你需要用其他配置方式，但有很多配置选项。
+一个应用几乎总是只有一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 实例。它实际是应用的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Singleton&lt;/code&gt;（尽管不必是一个静态&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Singleton&lt;/code&gt;）。跟&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;里的几乎所有组件一样，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt; 的缺省实现是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POJO&lt;/code&gt;，而且可用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POJO&lt;/code&gt;兼容的任何配置机制进行配置 - 普通的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Java&lt;/code&gt;代码、&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Spring XML、YAML、.properties&lt;/code&gt;和.ini文件等。基本来讲，能够实例化类和调用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JavaBean&lt;/code&gt;兼容方法的任何配置形式都可使用。&lt;/p&gt;
 
-&lt;p&gt;currentUser.login(token);&lt;/p&gt;
-
-&lt;h4 id=&quot;2dogetauthorizationinfo执行时机有三个如下&quot;&gt;2.doGetAuthorizationInfo执行时机有三个，如下：&lt;/h4&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;subject.hasRole(“admin”) 或 subject.isPermitted(“admin”)：自己去调用这个是否有什么角色或者是否有什么权限的时候；&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;@RequiresRoles(“admin”) ：在方法上加注解的时候；&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;[@shiro.hasPermission name = “admin”][/@shiro.hasPermission]：在页面上加shiro标签的时候，即进这个页面的时候扫描到有这个标签的时候。&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="shiro" /><category term="AuthorizingRealm" /><summary type="html">1.doGetAuthenticationInfo执行时机如下 当调用Subject currentUser = SecurityUtils.getSubject(); currentUser.login(token); 2.doGetAuthorizationInfo执行时机有三个，如下： subject.hasRole(“admin”) 或 subject.isPermitted(“admin”)：自己去调用这个是否有什么角色或者是否有什么权限的时候； @RequiresRoles(“admin”) ：在方法上加注解的时候； [@shiro.hasPermission name = “admin”][/@shiro.hasPermission]：在页面上加shiro标签的时候，即进这个页面的时候扫描到有这个标签的时候。</summary></entry><entry><title type="html">238. 除自身以外数组的乘积</title><link href="http://localhost:4000/leetcode/2020/0604/001" rel="alternate" type="text/html" title="238. 除自身以外数组的乘积" /><published>2020-06-04T00:00:00+08:00</published><updated>2020-06-04T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0604/238.%20%E9%99%A4%E8%87%AA%E8%BA%AB%E4%BB%A5%E5%A4%96%E6%95%B0%E7%BB%84%E7%9A%84%E4%B9%98%E7%A7%AF</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0604/001">&lt;ul&gt;
+&lt;h4 id=&quot;2213-realms&quot;&gt;22.1.3    Realms&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;的第三个也是最后一个概念是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;。&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;充当了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;与应用安全数据间的“桥梁”或者“连接器”。也就是说，当与像用户帐户这类安全相关数据进行交互，执行认证（登录）和授权（访问控制）时，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;会从应用配置的Realm中查找很多内容。
+从这个意义上讲，Realm实质上是一个安全相关的DAO：它封装了数据源的连接细节，并在需要时将相关数据提供给&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;。当配置&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;时，你必须至少指定一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;，用于认证和（或）授权。配置多个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;是可以的，但是至少需要一个。
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Shiro&lt;/code&gt;内置了可以连接大量安全数据源（又名目录）的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;，如LDAP、关系数据库（JDBC）、类似INI的文本配置资源以及属性文件 等。如果缺省的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;不能满足需求，你还可以插入代表自定义数据源的自己的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realm&lt;/code&gt;实现。
+象其他内部组件一样，由&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityManager&lt;/code&gt;来管理如何使用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Realms&lt;/code&gt;来获取安全的身份数据。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="shiro" /><summary type="html">2.1.1    Subject Subject 一词是一个安全术语，其基本意思是“当前的操作用户”。称之为“用户”并不准确，因为“用户”一词通常跟人相关。在安全领域，术语“Subject”可以是人，也可以是第三方进程、后台帐户（Daemon Account）、定时作业（Corn Job）或其他类似事物。它仅仅意味着“当前跟软件交互的东西”。但考虑到大多数目的和用途，你可以把它认为是 Shiro 的“用户”概念。 在程序中你都能轻易的获得 Subject ，允许在任何需要的地方进行安全操作。每个 Subject 对象都必须与一个 SecurityManager 进行绑定，你访问Subject对象其实都是在与 SecurityManager 里的特定 Subject 进行交互。 22.1.2    SecurityManager Subject 的“幕后”推手是 SecurityManager 。 Subject 代表了当前用户的安全操作，SecurityManager 则管理所有用户的安全操作。它是Shiro框架的核心，充当“保护伞”，引用了多个内部嵌套安全组件，它们形成了对象图。但是，一旦 SecurityManager 及其内部对象图配置好，它就会退居幕后，应用开发人员几乎把他们的所有时间都花在Subject API调用上。 那么，如何设置SecurityManager呢？嗯，这要看应用的环境。例如，Web应用通常会在Web.xml中指定一个Shiro Servlet Filter，这会创建SecurityManager实例，如果你运行的是一个独立应用，你需要用其他配置方式，但有很多配置选项。 一个应用几乎总是只有一个 SecurityManager 实例。它实际是应用的Singleton（尽管不必是一个静态Singleton）。跟Shiro里的几乎所有组件一样，SecurityManager 的缺省实现是POJO，而且可用POJO兼容的任何配置机制进行配置 - 普通的Java代码、Spring XML、YAML、.properties和.ini文件等。基本来讲，能够实例化类和调用JavaBean兼容方法的任何配置形式都可使用。 22.1.3    Realms Shiro的第三个也是最后一个概念是Realm。Realm充当了Shiro与应用安全数据间的“桥梁”或者“连接器”。也就是说，当与像用户帐户这类安全相关数据进行交互，执行认证（登录）和授权（访问控制）时，Shiro会从应用配置的Realm中查找很多内容。 从这个意义上讲，Realm实质上是一个安全相关的DAO：它封装了数据源的连接细节，并在需要时将相关数据提供给Shiro。当配置Shiro时，你必须至少指定一个Realm，用于认证和（或）授权。配置多个Realm是可以的，但是至少需要一个。 Shiro内置了可以连接大量安全数据源（又名目录）的Realm，如LDAP、关系数据库（JDBC）、类似INI的文本配置资源以及属性文件 等。如果缺省的Realm不能满足需求，你还可以插入代表自定义数据源的自己的Realm实现。 象其他内部组件一样，由SecurityManager来管理如何使用Realms来获取安全的身份数据。</summary></entry><entry><title type="html">238. 除自身以外数组的乘积</title><link href="http://localhost:4000/leetcode/2020/0604/001" rel="alternate" type="text/html" title="238. 除自身以外数组的乘积" /><published>2020-06-04T00:00:00+08:00</published><updated>2020-06-04T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0604/238.%20%E9%99%A4%E8%87%AA%E8%BA%AB%E4%BB%A5%E5%A4%96%E6%95%B0%E7%BB%84%E7%9A%84%E4%B9%98%E7%A7%AF</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0604/001">&lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext warning highlighter-rouge&quot;&gt;中等&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;乘积 = 左边乘积 * 右边乘积&lt;/code&gt;&lt;/li&gt;
@@ -619,89 +882,4 @@ s 中只含 0 和 1 。
   &lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持小牛&lt;/strong&gt;&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：中等 本题涉及算法： 滑动窗口 思路： 滑动窗口 类似题型: 题目5409. 检查一个字符串是否包含所有长度为 K 的二进制子串 给你一个二进制字符串 s 和一个整数 k 。 如果所有长度为 k 的二进制字符串都是 s 的子串，请返回 True ，否则请返回 False 。 示例 1： 输入：s = &quot;00110110&quot;, k = 2 输出：true 解释：长度为 2 的二进制串包括 &quot;00&quot;，&quot;01&quot;，&quot;10&quot; 和 &quot;11&quot;。它们分别是 s 中下标为 0，1，3，2 开始的长度为 2 的子串。 示例 2： 输入：s = &quot;00110&quot;, k = 2 输出：true 示例 3： 输入：s = &quot;0110&quot;, k = 1 输出：true 解释：长度为 1 的二进制串包括 &quot;0&quot; 和 &quot;1&quot;，显然它们都是 s 的子串。 示例 4： 输入：s = &quot;0110&quot;, k = 2 输出：false 解释：长度为 2 的二进制串 &quot;00&quot; 没有出现在 s 中。 示例 5： 输入：s = &quot;0000000001011100&quot;, k = 4 输出：false 提示： 1 &amp;lt;= s.length &amp;lt;= 5 * 10^5 s 中只含 0 和 1 。 1 &amp;lt;= k &amp;lt;= 20 方法一 滑动窗口 解题思路： 计算长度为 k 的所有字符串出现次数，计算公式 $2^ k$ 计算在字符串 s 中，出现长度为 k 的所有不重复子串个数 当 k=1 ，s 中子串续 &amp;gt;=1 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 class Solution: def hasAllCodes(self, s: str, k: int) -&amp;gt; bool: s_len = len(s) if s_len &amp;lt; 2 ** k: return False curr = set() for i in range(s_len+1-k): curr.add(s[i:k+i]) if len(curr) &amp;gt;= 2 ** k: return True else: return False 如果你觉得本文对你有帮助，请点赞👍支持小牛 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry><entry><title type="html">5408. 通过翻转子数组使两个数组相等</title><link href="http://localhost:4000/leetcode/2020/0530/001" rel="alternate" type="text/html" title="5408. 通过翻转子数组使两个数组相等" /><published>2020-05-30T00:00:00+08:00</published><updated>2020-05-30T00:00:00+08:00</updated><id>http://localhost:4000/leetcode/2020/0530/5408.%20%E9%80%9A%E8%BF%87%E7%BF%BB%E8%BD%AC%E5%AD%90%E6%95%B0%E7%BB%84%E4%BD%BF%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%BB%84%E7%9B%B8%E7%AD%89</id><content type="html" xml:base="http://localhost:4000/leetcode/2020/0530/001">&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;难度&lt;/strong&gt;：&lt;code class=&quot;language-plaintext success highlighter-rouge&quot;&gt;简单&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;本题涉及算法&lt;/strong&gt;：&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;思路&lt;/strong&gt;：   &lt;code class=&quot;language-plaintext info highlighter-rouge&quot;&gt;zip&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;类似题型&lt;/strong&gt;:
-    &lt;ul&gt;
-      &lt;li&gt;&lt;a href=&quot;https://leetcode-cn.com/problems/longest-common-prefix/&quot;&gt;14. 最长公共前缀&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;hr /&gt;
-&lt;h3 id=&quot;题目-5408-通过翻转子数组使两个数组相等&quot;&gt;题目 &lt;a href=&quot;https://leetcode-cn.com/problems/make-two-arrays-equal-by-reversing-sub-arrays/&quot;&gt;5408. 通过翻转子数组使两个数组相等&lt;/a&gt;&lt;/h3&gt;
-
-&lt;p&gt;给你两个长度相同的整数数组 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;target&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arr&lt;/code&gt; 。&lt;/p&gt;
-
-&lt;p&gt;每一步中，你可以选择 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arr&lt;/code&gt; 的任意 &lt;strong&gt;非空子数组&lt;/strong&gt; 并将它翻转。你可以执行此过程任意次。&lt;/p&gt;
-
-&lt;p&gt;如果你能让 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arr&lt;/code&gt; 变得与 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;target&lt;/code&gt; 相同，返回 True；否则，返回 False 。&lt;/p&gt;
-
-&lt;h4 id=&quot;示例-1&quot;&gt;示例 1：&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [1,2,3,4], arr = [2,4,1,3]
-输出：true
-解释：你可以按照如下步骤使 arr 变成 target：
-1- 翻转子数组 [2,4,1] ，arr 变成 [1,4,2,3]
-2- 翻转子数组 [4,2] ，arr 变成 [1,2,4,3]
-3- 翻转子数组 [4,3] ，arr 变成 [1,2,3,4]
-上述方法并不是唯一的，还存在多种将 arr 变成 target 的方法。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-2&quot;&gt;示例 2：&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [7], arr = [7]
-输出：true
-解释：arr 不需要做任何翻转已经与 target 相等。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-3&quot;&gt;示例 3：&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [1,12], arr = [12,1]
-输出：true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-4&quot;&gt;示例 4：&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [3,7,9], arr = [3,7,11]
-输出：false
-解释：arr 没有数字 9 ，所以无论如何也无法变成 target 。
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h4 id=&quot;示例-5&quot;&gt;示例 5：&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;输入：target = [1,1,1,1,1], arr = [1,1,1,1,1]
-输出：true
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;提示&quot;&gt;提示：&lt;/h4&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;target.length == arr.length
-1 &amp;lt;= target.length &amp;lt;= 1000
-1 &amp;lt;= target[i] &amp;lt;= 1000
-1 &amp;lt;= arr[i] &amp;lt;= 1000
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;方法一-zip合并&quot;&gt;方法一 zip合并&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;解题思路&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;使用 &lt;strong&gt;zip&lt;/strong&gt; 根据字符串下标合并成数组，&lt;/li&gt;
-      &lt;li&gt;判断合并后数组里元素是否都相同&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;复杂度分析&lt;/strong&gt;：
-    &lt;ul&gt;
-      &lt;li&gt;时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度&lt;/li&gt;
-      &lt;li&gt;空间复杂度 $O(1)$ ，使用的变量为自然数个
-        &lt;h4 id=&quot;python&quot;&gt;python&lt;/h4&gt;
-        &lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Solution&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;canBeEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;zip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
-      &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-          &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;        &lt;/div&gt;
-      &lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;__类似题型 __&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果你觉得本文对你有帮助，请点赞👍支持小牛&lt;/strong&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><category term="zip" /><summary type="html">难度：简单 本题涉及算法： 思路： zip 类似题型: 14. 最长公共前缀 题目 5408. 通过翻转子数组使两个数组相等 给你两个长度相同的整数数组 target 和 arr 。 每一步中，你可以选择 arr 的任意 非空子数组 并将它翻转。你可以执行此过程任意次。 如果你能让 arr 变得与 target 相同，返回 True；否则，返回 False 。 示例 1： 输入：target = [1,2,3,4], arr = [2,4,1,3] 输出：true 解释：你可以按照如下步骤使 arr 变成 target： 1- 翻转子数组 [2,4,1] ，arr 变成 [1,4,2,3] 2- 翻转子数组 [4,2] ，arr 变成 [1,2,4,3] 3- 翻转子数组 [4,3] ，arr 变成 [1,2,3,4] 上述方法并不是唯一的，还存在多种将 arr 变成 target 的方法。 示例 2： 输入：target = [7], arr = [7] 输出：true 解释：arr 不需要做任何翻转已经与 target 相等。 示例 3： 输入：target = [1,12], arr = [12,1] 输出：true 示例 4： 输入：target = [3,7,9], arr = [3,7,11] 输出：false 解释：arr 没有数字 9 ，所以无论如何也无法变成 target 。 示例 5： 输入：target = [1,1,1,1,1], arr = [1,1,1,1,1] 输出：true 提示： target.length == arr.length 1 &amp;lt;= target.length &amp;lt;= 1000 1 &amp;lt;= target[i] &amp;lt;= 1000 1 &amp;lt;= arr[i] &amp;lt;= 1000 方法一 zip合并 解题思路： 使用 zip 根据字符串下标合并成数组， 判断合并后数组里元素是否都相同 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示数组中最短字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 python class Solution: def canBeEqual(self, target: List[int], arr: List[int]) -&amp;gt; bool: target.sort() arr.sort() for i in zip(target,arr): if len(set(i)) == 1: continue else: return False return True __类似题型 __ 如果你觉得本文对你有帮助，请点赞👍支持小牛 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="leetcode" /><summary type="html">难度：中等 本题涉及算法： 滑动窗口 思路： 滑动窗口 类似题型: 题目5409. 检查一个字符串是否包含所有长度为 K 的二进制子串 给你一个二进制字符串 s 和一个整数 k 。 如果所有长度为 k 的二进制字符串都是 s 的子串，请返回 True ，否则请返回 False 。 示例 1： 输入：s = &quot;00110110&quot;, k = 2 输出：true 解释：长度为 2 的二进制串包括 &quot;00&quot;，&quot;01&quot;，&quot;10&quot; 和 &quot;11&quot;。它们分别是 s 中下标为 0，1，3，2 开始的长度为 2 的子串。 示例 2： 输入：s = &quot;00110&quot;, k = 2 输出：true 示例 3： 输入：s = &quot;0110&quot;, k = 1 输出：true 解释：长度为 1 的二进制串包括 &quot;0&quot; 和 &quot;1&quot;，显然它们都是 s 的子串。 示例 4： 输入：s = &quot;0110&quot;, k = 2 输出：false 解释：长度为 2 的二进制串 &quot;00&quot; 没有出现在 s 中。 示例 5： 输入：s = &quot;0000000001011100&quot;, k = 4 输出：false 提示： 1 &amp;lt;= s.length &amp;lt;= 5 * 10^5 s 中只含 0 和 1 。 1 &amp;lt;= k &amp;lt;= 20 方法一 滑动窗口 解题思路： 计算长度为 k 的所有字符串出现次数，计算公式 $2^ k$ 计算在字符串 s 中，出现长度为 k 的所有不重复子串个数 当 k=1 ，s 中子串续 &amp;gt;=1 复杂度分析： 时间复杂度 $O(N)$ ，$N$ 表示字符串长度 空间复杂度 $O(1)$ ，使用的变量为自然数个 class Solution: def hasAllCodes(self, s: str, k: int) -&amp;gt; bool: s_len = len(s) if s_len &amp;lt; 2 ** k: return False curr = set() for i in range(s_len+1-k): curr.add(s[i:k+i]) if len(curr) &amp;gt;= 2 ** k: return True else: return False 如果你觉得本文对你有帮助，请点赞👍支持小牛 如果有疑惑或者表达不到位的额地方 ，请在下面👇评论区指出</summary></entry></feed>
