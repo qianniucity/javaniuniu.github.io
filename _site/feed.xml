@@ -1,5 +1,488 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-18T20:11:02+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
-</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">Spring中Bean的作用域、生命周期</title><link href="http://localhost:4000/spring/bean" rel="alternate" type="text/html" title="Spring中Bean的作用域、生命周期" /><published>2020-06-18T00:00:00+08:00</published><updated>2020-06-18T00:00:00+08:00</updated><id>http://localhost:4000/spring/Spring%E4%B8%ADBean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E3%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F</id><content type="html" xml:base="http://localhost:4000/spring/bean">&lt;h3 id=&quot;bean的作用域&quot;&gt;Bean的作用域&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-06-20T12:49:49+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+</subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">Mysql 分区表-分区操作</title><link href="http://localhost:4000/mysql/partition" rel="alternate" type="text/html" title="Mysql 分区表-分区操作" /><published>2020-06-20T00:00:00+08:00</published><updated>2020-06-20T00:00:00+08:00</updated><id>http://localhost:4000/mysql/Mysql%20%E5%88%86%E5%8C%BA%E8%A1%A8-%E5%88%86%E5%8C%BA%E6%93%8D%E4%BD%9C</id><content type="html" xml:base="http://localhost:4000/mysql/partition">&lt;h3 id=&quot;视频参考链接&quot;&gt;视频参考链接&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.bilibili.com/video/BV1E7411q7Nx?p=1&quot;&gt;MySQL分区&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;一查看mysql是否支持分区&quot;&gt;一、查看MySQL是否支持分区&lt;/h3&gt;
+&lt;h4 id=&quot;1mysql56以及之前版本&quot;&gt;1、MySQL5.6以及之前版本&lt;/h4&gt;
+
+&lt;p&gt;show variables like ‘%partition%’;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/mysql/0620/1530782-20181221101618516-1766491003.png&quot; alt=&quot;1&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;2mysql57&quot;&gt;2、MySQL5.7&lt;/h4&gt;
+
+&lt;p&gt;show plugins;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/mysql/0620/1530782-20181221101735004-398510033.png&quot; alt=&quot;2&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;二分区表的分类与限制&quot;&gt;二、分区表的分类与限制&lt;/h3&gt;
+&lt;h4 id=&quot;1分区表分类&quot;&gt;1、分区表分类&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;RANGE分区&lt;/strong&gt;：基于属于一个给定连续区间的列值，把多行分配给分区。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;LIST分区&lt;/strong&gt;：类似于按RANGE分区，区别在于LIST分区是基于列值匹配一个离散值集合中的某个值来进行选择。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;HASH分区&lt;/strong&gt;：基于用户定义的表达式的返回值来进行选择的分区，该表达式使用将要插入到表中的这些行的列值进行计算。这个函数可以包含MySQL 中有效的、产生非负整数值的任何表达式。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;KEY分区&lt;/strong&gt;：类似于按HASH分区，区别在于KEY分区只支持计算一列或多列，且MySQL服务器提供其自身的哈希函数。必须有一列或多列包含整数值。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;复合分区&lt;/strong&gt;：在MySQL 5.6版本中，只支持RANGE和LIST的子分区，且子分区的类型只能为HASH和KEY。&lt;/p&gt;
+
+&lt;h4 id=&quot;2分区表限制&quot;&gt;2、分区表限制&lt;/h4&gt;
+
+&lt;p&gt;1）分区键必须包含在表的所有主键、唯一键中。&lt;/p&gt;
+
+&lt;p&gt;2）MYSQL只能在使用分区函数的列本身进行比较时才能过滤分区，而不能根据表达式的值去过滤分区，即使这个表达式就是分区函数也不行。&lt;/p&gt;
+
+&lt;p&gt;3）最大分区数： 不使用NDB存储引擎的给定表的最大可能分区数为8192（包括子分区）。如果当分区数很大，但是未达到8192时提示 Got error … from storage engine: Out of resources when opening file,可以通过增加open_files_limit系统变量的值来解决问题，当然同时打开文件的数量也可能由操作系统限制。&lt;/p&gt;
+
+&lt;p&gt;4）不支持查询缓存： 分区表不支持查询缓存，对于涉及分区表的查询，它自动禁用。 查询缓存无法启用此类查询。&lt;/p&gt;
+
+&lt;p&gt;5）分区的innodb表不支持外键。&lt;/p&gt;
+
+&lt;p&gt;6）服务器SQL_mode影响分区表的同步复制。 主机和从机上的不同SQL_mode可能会导致sql语句; 这可能导致分区之间的数据分配给定主从位置不同，甚至可能导致插入主机上成功的分区表在从库上失败。 为了获得最佳效果，您应该始终在主机和从机上使用相同的服务器SQL模式。&lt;/p&gt;
+
+&lt;p&gt;7）ALTER TABLE … ORDER BY： 对分区表运行的ALTER TABLE … ORDER BY列语句只会导致每个分区中的行排序。&lt;/p&gt;
+
+&lt;p&gt;8）全文索引。 分区表不支持全文索引，即使是使用InnoDB或MyISAM存储引擎的分区表。  &lt;br /&gt;
+9）分区表无法使用外键约束。  &lt;br /&gt;
+10）Spatial columns： 具有空间数据类型（如POINT或GEOMETRY）的列不能在分区表中使用。 &lt;br /&gt;
+11）临时表： 临时表不能分区。  &lt;br /&gt;
+12）subpartition问题： subpartition必须使用HASH或KEY分区。 只有RANGE和LIST分区可能被分区; HASH和KEY分区不能被子分区。 &lt;br /&gt;
+13）分区表不支持mysqlcheck，myisamchk和myisampack。&lt;/p&gt;
+
+&lt;h3 id=&quot;三创建分区表&quot;&gt;三、创建分区表&lt;/h3&gt;
+&lt;h4 id=&quot;1range分区&quot;&gt;1、range分区&lt;/h4&gt;
+
+&lt;p&gt;1）行数据基于一个给定的连续区间的列值放入分区。&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`test_11`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`id`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`t`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`id`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`t`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;utf8&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RANGE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;to_days&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p20170801&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;736907&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p20170901&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;736938&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+ &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pmax&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;maxvalue&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;123456789&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;2）然后插入4条数据：&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test_11&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;values&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;20170722&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;20170822&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;20170823&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;20170824&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;3）然后查看information下partitions对分区别信息的统计：&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION_NAME&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;分区&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TABLE_ROWS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;行数&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;information_schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;partitions&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table_schema&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;mysql_test&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table_name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;&quot;test_11&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;+-----------+--------+
+| 分区      | 行数   |
++-----------+--------+
+| p20170801 |      1 |
+| p20170901 |      3 |
++-----------+--------+
+2 rows in set (0.00 sec)12345678
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;可以看出分区p20170801插入1行数据，p20170901插入的3行数据。
+可以是用year、to_days、unix_timestamp等函数对相应的时间字段进行转换，然后分区。&lt;/p&gt;
+&lt;h3 id=&quot;2list分区&quot;&gt;2、list分区&lt;/h3&gt;
+
+&lt;p&gt;和range分区一样，只是list分区面向的是离散的值&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;c1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;c2&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LIST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;affected&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;123456789&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;与RANGE分区的情况不同，没有“catch-all”，如MAXVALUE; 分区表达式的所有预期值应在PARTITION … VALUES IN（…）子句中涵盖。 包含不匹配的分区列值的INSERT语句失败并显示错误，如此示例所示：&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ERROR&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1525&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HY000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;Table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;has&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;no&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partition&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;312&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;3hash分区&quot;&gt;3、hash分区&lt;/h4&gt;
+
+&lt;p&gt;根据用户自定义表达式的返回值来进行分区，返回值不能为负数&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;col2&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;CHAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;col3&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;DATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HASH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;YEAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;col3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITIONS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;123&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;如果你插入col3的数值为’2005-09-15’，那么根据以下计算来选择插入的分区：&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;MOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;YEAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'2005-09-01'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;MOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2005&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;mi&quot;&gt;1123&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;4key分区&quot;&gt;4、key分区&lt;/h4&gt;
+
+&lt;p&gt;根据MySQL数据库提供的散列函数进行分区&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;VARCHAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;UNIQUE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITIONS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1234567&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;KEY仅列出零个或多个列名称。 用作分区键的任何列必须包含表的主键的一部分或全部，如果该表具有一个。 如果没有列名称作为分区键，则使用表的主键（如果有）。如果没有主键，但是有一个唯一的键，那么唯一键用于分区键。但是，如果唯一键列未定义为NOT NULL，则上一条语句将失败。
+与其他分区类型不同，KEY使用的分区不限于整数或空值。 例如，以下CREATE TABLE语句是有效的：&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tm1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;CHAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITIONS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12345&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;注意：对于key分区表，不能执行ALTER TABLE DROP PRIMARY KEY，因为这样做会生成错误 ERROR 1466 (HY000): Field in list of fields for partition function not found in table.&lt;/p&gt;
+&lt;h4 id=&quot;5column分区&quot;&gt;5、Column分区&lt;/h4&gt;
+
+&lt;p&gt;COLUMN分区是5.5开始引入的分区功能，只有RANGE COLUMN和LIST COLUMN这两种分区；支持整形、日期、字符串；RANGE和LIST的分区方式非常的相似。
+COLUMNS和RANGE和LIST分区的区别
+1）针对日期字段的分区就不需要再使用函数进行转换了，例如针对date字段进行分区不需要再使用YEAR()表达式进行转换。  &lt;br /&gt;
+2）COLUMN分区支持多个字段作为分区键但是不支持表达式作为分区键。&lt;/p&gt;
+
+&lt;h5 id=&quot;column支持的数据类型&quot;&gt;column支持的数据类型：&lt;/h5&gt;
+
+&lt;p&gt;1）所有的整型，float和decimal不支持  &lt;br /&gt;
+2）日期类型：date和datetime，其他不支持  &lt;br /&gt;
+3）字符类型：CHAR, VARCHAR, BINARY和VARBINARY，blob和text不支持 &lt;br /&gt;
+单列的column range分区mysql&amp;gt; show create table list_c;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`list_c`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c1`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c2`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;latin1&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!50500 PARTITION BY RANGE  COLUMNS(c1)
+(PARTITION p0 VALUES LESS THAN (5) ENGINE = InnoDB,
+ PARTITION p1 VALUES LESS THAN (10) ENGINE = InnoDB) */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;多列的column range分区mysql&amp;gt; show create table list_c;&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`list_c`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c1`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c2`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c3`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;latin1&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!50500 PARTITION BY RANGE  COLUMNS(c1,c3)
+(PARTITION p0 VALUES LESS THAN (5,'aaa') ENGINE = InnoDB,
+ PARTITION p1 VALUES LESS THAN (10,'bbb') ENGINE = InnoDB) */&lt;/span&gt;
+&lt;span class=&quot;err&quot;&gt;单列的&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;column&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;分区&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;list_c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+ &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`list_c`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c1`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c2`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`c3`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;char&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;latin1&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!50500 PARTITION BY LIST  COLUMNS(c3)
+(PARTITION p0 VALUES IN ('aaa') ENGINE = InnoDB,
+ PARTITION p1 VALUES IN ('bbb') ENGINE = InnoDB) */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;6子分区组合分区&quot;&gt;6、子分区（组合分区）&lt;/h4&gt;
+
+&lt;p&gt;在分区的基础上再进一步分区，有时成为复合分区;
+MySQL数据库允许在range和list的分区上进行HASH和KEY的子分区。例如：&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ts&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;purchased&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;DATE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RANGE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;YEAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;purchased&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;SUBPARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HASH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TO_DAYS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;purchased&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;SUBPARTITIONS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1990&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MAXVALUE&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@mycat-3 ~]# ll /data/mysql_data_3306/mysql_test/ts*
+-rw-r----- 1 mysql mysql  8596 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts.frm
+-rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p0#SP#p0sp0.ibd
+-rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p0#SP#p0sp1.ibd
+-rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p1#SP#p1sp0.ibd
+-rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p1#SP#p1sp1.ibd
+-rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p2#SP#p2sp0.ibd
+-rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p2#SP#p2sp1.ibd
+1234567891011121314151617
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;ts表根据purchased进行range分区，然后又进行了一次hash分区，最后形成了3*2个分区，可以从物理文件证实此分区方式。可以通过subpartition语法来显示指定子分区名称。
+注意：每个子分区的数量必须相同；如果一个分区表的任何子分区已经使用subpartition，那么必须表明所有的子分区名称；每个subpartition子句必须包括子分区的一个名字；子分区的名字必须是一致的
+另外，对于MyISAM表可以使用index directory和data direactory来指定各个分区的数据和索引目录，但是对于innodb表来说，因为该存储引擎使用表空间自动的进行数据和索引的管理，因此会忽略指定index和data的语法。&lt;/p&gt;
+
+&lt;h3 id=&quot;四普通表转换为分区表&quot;&gt;四、普通表转换为分区表&lt;/h3&gt;
+&lt;p&gt;1、用alter table table_name partition by命令重建分区表&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jxfp_data_bak&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITIONS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;五分区表操作&quot;&gt;五、分区表操作&lt;/h3&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;year_col&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RANGE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;year_col&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1991&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1995&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1999&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;1add-partition-新增分区&quot;&gt;1、ADD PARTITION （新增分区）&lt;/h4&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2002&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;2drop-partition-删除分区&quot;&gt;2、DROP PARTITION （删除分区）&lt;/h4&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DROP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;3truncate-partition截取分区&quot;&gt;3、TRUNCATE PARTITION（截取分区）&lt;/h4&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TRUNCATE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;4coalesce-partition合并分区&quot;&gt;4、COALESCE PARTITION（合并分区）&lt;/h4&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;VARCHAR&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;started&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;DATE&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HASH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;YEAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;started&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITIONS&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COALESCE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;5reorganize-partition拆分重组分区&quot;&gt;5、REORGANIZE PARTITION（拆分/重组分区）&lt;/h4&gt;
+
+&lt;h5 id=&quot;1拆分分区&quot;&gt;1）拆分分区&lt;/h5&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ALGORITHM&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;INPLACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REORGANIZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;employees&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p5&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2010&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p6&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;MAXVALUE&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h5 id=&quot;2重组分区&quot;&gt;2）重组分区&lt;/h5&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;members&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REORGANIZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1970&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tbl_name&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;REORGANIZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partition_list&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;partition_definitions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;members&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REORGANIZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1980&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tt&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ADD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tt&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REORGANIZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;np&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;IN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;6analyze-check-partition分析与检查分区&quot;&gt;6、ANALYZE 、CHECK PARTITION（分析与检查分区）&lt;/h4&gt;
+
+&lt;p&gt;1）ANALYZE 读取和存储分区中值的分布情况&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;2）CHECK 检查分区是否存在错误&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;ANALYZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CHECK&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;7repair分区&quot;&gt;7、REPAIR分区&lt;/h4&gt;
+
+&lt;p&gt;修复被破坏的分区&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REPAIR&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;8optimize&quot;&gt;8、OPTIMIZE&lt;/h4&gt;
+
+&lt;p&gt;该命令主要是用于回收空闲空间和分区的碎片整理。对分区执行该命令,相当于依次对分区执行 CHECK PARTITION, ANALYZE PARTITION,REPAIR PARTITION命令。&lt;/p&gt;
+
+&lt;p&gt;譬如:&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OPTIMIZE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;9rebuild分区&quot;&gt;9、REBUILD分区&lt;/h4&gt;
+
+&lt;p&gt;重建分区,它相当于先删除分区中的数据,然后重新插入。这个主要是用于分区的碎片整理。&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REBUILD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h4 id=&quot;10exchange-partition分区交换&quot;&gt;10、EXCHANGE PARTITION（分区交换）&lt;/h4&gt;
+
+&lt;p&gt;分区交换的语法如下:&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pt&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;EXCHANGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;WITH&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nt&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;其中,pt是分区表,p是pt的分区(注:也可以是子分区),nt是目标表。&lt;/p&gt;
+
+&lt;p&gt;其实,分区交换的限制还是蛮多的:&lt;/p&gt;
+
+&lt;p&gt;1） nt不能为分区表&lt;/p&gt;
+
+&lt;p&gt;2）nt不能为临时表&lt;/p&gt;
+
+&lt;p&gt;3）nt和pt的结构必须一致&lt;/p&gt;
+
+&lt;p&gt;4）nt不存在任何外键约束,即既不能是主键,也不能是外键。&lt;/p&gt;
+
+&lt;p&gt;5）nt中的数据不能位于p分区的范围之外。&lt;/p&gt;
+
+&lt;p&gt;具体可参考MySQL的官方文档&lt;/p&gt;
+
+&lt;h4 id=&quot;11迁移分区discard-import-&quot;&gt;11、迁移分区（DISCARD 、IMPORT ）&lt;/h4&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DISCARD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TABLESPACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;ALTER&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t1&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IMPORT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TABLESPACE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;实验环境：（都是mysql5.7）
+源库：192.168.2.200      mysql5.7.16    zhangdb下的emp_2分区表的
+目标库：192.168.2.100    mysql5.7.18    test下  （将zhangdb的emp表，导入到目标库的test schema下）
+–：在源数据库中创建测试分区表emp_2，然后导入数据&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zhangdb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;BIGINT&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;VARCHAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;VARCHAR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;BY&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RANGE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;COLUMNS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  
+&lt;span class=&quot;n&quot;&gt;PARTITION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LESS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THAN&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;     
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;（接着创建存储过程，导入测试数据）&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;DELIMITER&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;PROCEDURE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;insert_batch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DECLARE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;INT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;WHILE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DO&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;THEN&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IF&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REPEAT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'X'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;REPEAT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Y'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;SET&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;num&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WHILE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;COMMIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;END&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;DELIMITER&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PARTITION_NAME&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;information_schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;partitions&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table_schema&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'zhangdb'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;------------+----------------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE_NAME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PARTITION_NAME&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;------------+----------------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp&lt;/span&gt;        &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;           &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt;      &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt;             &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;------------+----------------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partition&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;      &lt;span class=&quot;mi&quot;&gt;999&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partition&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partition&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从上面可以看出，emp_2分区表已经创建完成，并且有3个子分区，每个分区都有一点数据。
+–：在目标数据库中，创建emp_2表的结构，不要数据（要在源库，使用show create table emp_2\G 的方法 查看创建该表的sql）&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`emp_2`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`id`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`x`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`y`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`id`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;utf8mb4&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!50500 PARTITION BY RANGE  COLUMNS(id)
+(PARTITION p1 VALUES LESS THAN (1000) ENGINE = InnoDB,
+ PARTITION p2 VALUES LESS THAN (2000) ENGINE = InnoDB,
+ PARTITION p3 VALUES LESS THAN (3000) ENGINE = InnoDB) */&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost test]# ll
+-rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p0.ibd
+-rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p1.ibd
+-rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p2.ibd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;注意：
+※约束条件、字符集等等也必须一致，建议使用show create table t1; 来获取创建表的SQL，否则在新服务器上导入表空间的时候会提示1808错误。
+–：在目标数据库上，丢弃分区表的表空间&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;discard&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tablespace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;affected&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost test]# ll    ---这时候在看，刚才的3个分区的idb文件都没有了
+-rw-r----- 1 mysql mysql  8604 May 25 04:14 emp_2.frm
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;–：在源数据库上运行FLUSH TABLES … FOR EXPORT 锁定表并生成.cfg元数据文件，最后将cfg和ibd文件传输到目标数据库中&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;flush&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tables&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;export&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;affected&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;00&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[root@localhost zhangdb]# scp emp_2* root@192.168.2.100:/mysql/data/test/   --将文件cp到目标数据库
+mysql&amp;gt; unlock tables;   ---最后将表的锁是否
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;–：在目标数据库中对文件授权，然后导入表空间查看数据是否完整可用&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;localhost&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chown&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mysql&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;#*&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tablespace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Query&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;OK&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;rows&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;affected&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;96&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;MySQL&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;emp_2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;     &lt;span class=&quot;mi&quot;&gt;2999&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;c1&quot;&gt;----------+&lt;/span&gt;
+&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;row&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;63&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;从上面的查看得知，分区表都已经导入到目标数据库中了，
+另外，也可以将部分子分区导入到目标数据库中，（往往整个分区表会很大，可用只将需要用到的子分区导入到目标数据库中），
+将部分子分区导入到目标数据库的方法是：
+1）在创建目标表的时候，只需要创建要导入的分区即可，如： 只创建了p2 p3两个分区&lt;/p&gt;
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;`emp_2`&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`id`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bigint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;unsigned&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`x`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;`y`&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;varchar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;500&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NOT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;PRIMARY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;KEY&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;`id`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ENGINE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;InnoDB&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;AUTO_INCREMENT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3000&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CHARSET&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;utf8mb4&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!50500 PARTITION BY RANGE  COLUMNS(id)
+(
+ PARTITION p2 VALUES LESS THAN (2000) ENGINE = InnoDB,
+ PARTITION p3 VALUES LESS THAN (3000) ENGINE = InnoDB) */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;2）从源库cp到目标库的文件，当然也就是这俩的，就不需要其他分区的了，
+3）其他的操作方法都一样了。&lt;/p&gt;
+
+&lt;h3 id=&quot;六如何获取分区的相关信息&quot;&gt;六、如何获取分区的相关信息&lt;/h3&gt;
+&lt;ol&gt;
+  &lt;li&gt;通过 SHOW CREATE TABLE 语句来查看分区表的分区子句&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;譬如:mysql&amp;gt; show create table e/G&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;通过 SHOW TABLE STATUS 语句来查看表是否分区对应Create_options字段&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;譬如:
+mysql&amp;gt; show table status/G&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;* 1. row **&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;&lt;strong&gt;**&lt;/strong&gt;*****&lt;/p&gt;
+
+&lt;p&gt;Name: e Engine: InnoDB Version: 10 Row_format: Compact Rows: 6 Avg_row_length: 10922 Data_length: 65536Max_data_length: 0 Index_length: 0 Data_free: 0 Auto_increment: NULL Create_time: 2015-12-07 22:26:06 Update_time: NULL Check_time: NULL Collation: latin1_swedish_ci Checksum: NULL Create_options: partitioned Comment:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;查看 INFORMATION_SCHEMA.PARTITIONS表&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;通过 EXPLAIN PARTITIONS SELECT 语句查看对于具体的SELECT语句,会访问哪个分区。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;七mysql57对于partition表的改进&quot;&gt;七、MySQL5.7对于partition表的改进&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;HANDLER statements：MySQL 5.7.1分区表开始支持HANDLER语句；&lt;/li&gt;
+  &lt;li&gt;index condition pushdown：MySQL5.7.3分区表开始支持ICP；&lt;/li&gt;
+  &lt;li&gt;load data：MySQL5.7开始使用缓存来实现性能提升，每个分区使用130KB缓冲区来实现这一点；&lt;/li&gt;
+  &lt;li&gt;Per-partition索引缓存：MySQL5.7开始支持使用CACHE INDEX和LOAD INDEX INTO CACHE语句对分区的MyISAM表支持索引缓存；&lt;/li&gt;
+  &lt;li&gt;FOR EXPORT选项（FLUSH TABLES）:MySQL 5.7.4分区的InnoDB表开始支持FLUSH TABLES语句FOR EXPORT选项；&lt;/li&gt;
+  &lt;li&gt;从MySQL 5.7.2开始，子分区支持ANALYZE，CHECK，OPTIMIZE，REPAIR和TRUNCATE操作；&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="mysql" /><summary type="html">视频参考链接 MySQL分区 一、查看MySQL是否支持分区 1、MySQL5.6以及之前版本 show variables like ‘%partition%’; 2、MySQL5.7 show plugins; 二、分区表的分类与限制 1、分区表分类 RANGE分区：基于属于一个给定连续区间的列值，把多行分配给分区。 LIST分区：类似于按RANGE分区，区别在于LIST分区是基于列值匹配一个离散值集合中的某个值来进行选择。 HASH分区：基于用户定义的表达式的返回值来进行选择的分区，该表达式使用将要插入到表中的这些行的列值进行计算。这个函数可以包含MySQL 中有效的、产生非负整数值的任何表达式。 KEY分区：类似于按HASH分区，区别在于KEY分区只支持计算一列或多列，且MySQL服务器提供其自身的哈希函数。必须有一列或多列包含整数值。 复合分区：在MySQL 5.6版本中，只支持RANGE和LIST的子分区，且子分区的类型只能为HASH和KEY。 2、分区表限制 1）分区键必须包含在表的所有主键、唯一键中。 2）MYSQL只能在使用分区函数的列本身进行比较时才能过滤分区，而不能根据表达式的值去过滤分区，即使这个表达式就是分区函数也不行。 3）最大分区数： 不使用NDB存储引擎的给定表的最大可能分区数为8192（包括子分区）。如果当分区数很大，但是未达到8192时提示 Got error … from storage engine: Out of resources when opening file,可以通过增加open_files_limit系统变量的值来解决问题，当然同时打开文件的数量也可能由操作系统限制。 4）不支持查询缓存： 分区表不支持查询缓存，对于涉及分区表的查询，它自动禁用。 查询缓存无法启用此类查询。 5）分区的innodb表不支持外键。 6）服务器SQL_mode影响分区表的同步复制。 主机和从机上的不同SQL_mode可能会导致sql语句; 这可能导致分区之间的数据分配给定主从位置不同，甚至可能导致插入主机上成功的分区表在从库上失败。 为了获得最佳效果，您应该始终在主机和从机上使用相同的服务器SQL模式。 7）ALTER TABLE … ORDER BY： 对分区表运行的ALTER TABLE … ORDER BY列语句只会导致每个分区中的行排序。 8）全文索引。 分区表不支持全文索引，即使是使用InnoDB或MyISAM存储引擎的分区表。 9）分区表无法使用外键约束。 10）Spatial columns： 具有空间数据类型（如POINT或GEOMETRY）的列不能在分区表中使用。 11）临时表： 临时表不能分区。 12）subpartition问题： subpartition必须使用HASH或KEY分区。 只有RANGE和LIST分区可能被分区; HASH和KEY分区不能被子分区。 13）分区表不支持mysqlcheck，myisamchk和myisampack。 三、创建分区表 1、range分区 1）行数据基于一个给定的连续区间的列值放入分区。 CREATE TABLE `test_11` ( `id` int(11) NOT NULL, `t` date NOT NULL, PRIMARY KEY (`id`,`t`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8 PARTITION BY RANGE (to_days(t)) (PARTITION p20170801 VALUES LESS THAN (736907) ENGINE = InnoDB, PARTITION p20170901 VALUES LESS THAN (736938) ENGINE = InnoDB, PARTITION pmax VALUES LESS THAN maxvalue ENGINE = InnoDB);123456789 2）然后插入4条数据： insert into test_11 values (1,&quot;20170722&quot;),(2,&quot;20170822&quot;),(3,&quot;20170823&quot;),(4,&quot;20170824&quot;);1 3）然后查看information下partitions对分区别信息的统计： select PARTITION_NAME as &quot;分区&quot;,TABLE_ROWS as &quot;行数&quot; from information_schema.partitions where table_schema=&quot;mysql_test&quot; and table_name=&quot;test_11&quot;; +-----------+--------+ | 分区 | 行数 | +-----------+--------+ | p20170801 | 1 | | p20170901 | 3 | +-----------+--------+ 2 rows in set (0.00 sec)12345678 可以看出分区p20170801插入1行数据，p20170901插入的3行数据。 可以是用year、to_days、unix_timestamp等函数对相应的时间字段进行转换，然后分区。 2、list分区 和range分区一样，只是list分区面向的是离散的值 mysql&amp;gt; CREATE TABLE h2 ( -&amp;gt; c1 INT, -&amp;gt; c2 INT -&amp;gt; ) -&amp;gt; PARTITION BY LIST(c1) ( -&amp;gt; PARTITION p0 VALUES IN (1, 4, 7), -&amp;gt; PARTITION p1 VALUES IN (2, 5, 8) -&amp;gt; ); Query OK, 0 rows affected (0.11 sec)123456789 与RANGE分区的情况不同，没有“catch-all”，如MAXVALUE; 分区表达式的所有预期值应在PARTITION … VALUES IN（…）子句中涵盖。 包含不匹配的分区列值的INSERT语句失败并显示错误，如此示例所示： mysql&amp;gt; INSERT INTO h2 VALUES (3, 5); ERROR 1525 (HY000): Table has no partition for value 312 3、hash分区 根据用户自定义表达式的返回值来进行分区，返回值不能为负数 CREATE TABLE t1 (col1 INT, col2 CHAR(5), col3 DATE) PARTITION BY HASH( YEAR(col3) ) PARTITIONS 4;123 如果你插入col3的数值为’2005-09-15’，那么根据以下计算来选择插入的分区： MOD(YEAR('2005-09-01'),4) = MOD(2005,4) = 1123 4、key分区 根据MySQL数据库提供的散列函数进行分区 CREATE TABLE k1 ( id INT NOT NULL, name VARCHAR(20), UNIQUE KEY (id) ) PARTITION BY KEY() PARTITIONS 2;1234567 KEY仅列出零个或多个列名称。 用作分区键的任何列必须包含表的主键的一部分或全部，如果该表具有一个。 如果没有列名称作为分区键，则使用表的主键（如果有）。如果没有主键，但是有一个唯一的键，那么唯一键用于分区键。但是，如果唯一键列未定义为NOT NULL，则上一条语句将失败。 与其他分区类型不同，KEY使用的分区不限于整数或空值。 例如，以下CREATE TABLE语句是有效的： CREATE TABLE tm1 ( s1 CHAR(32) PRIMARY KEY ) PARTITION BY KEY(s1) PARTITIONS 10;12345 注意：对于key分区表，不能执行ALTER TABLE DROP PRIMARY KEY，因为这样做会生成错误 ERROR 1466 (HY000): Field in list of fields for partition function not found in table. 5、Column分区 COLUMN分区是5.5开始引入的分区功能，只有RANGE COLUMN和LIST COLUMN这两种分区；支持整形、日期、字符串；RANGE和LIST的分区方式非常的相似。 COLUMNS和RANGE和LIST分区的区别 1）针对日期字段的分区就不需要再使用函数进行转换了，例如针对date字段进行分区不需要再使用YEAR()表达式进行转换。 2）COLUMN分区支持多个字段作为分区键但是不支持表达式作为分区键。 column支持的数据类型： 1）所有的整型，float和decimal不支持 2）日期类型：date和datetime，其他不支持 3）字符类型：CHAR, VARCHAR, BINARY和VARBINARY，blob和text不支持 单列的column range分区mysql&amp;gt; show create table list_c; CREATE TABLE `list_c` ( `c1` int(11) DEFAULT NULL, `c2` int(11) DEFAULT NULL ) ENGINE=InnoDB DEFAULT CHARSET=latin1 /*!50500 PARTITION BY RANGE COLUMNS(c1) (PARTITION p0 VALUES LESS THAN (5) ENGINE = InnoDB, PARTITION p1 VALUES LESS THAN (10) ENGINE = InnoDB) */ 多列的column range分区mysql&amp;gt; show create table list_c; CREATE TABLE `list_c` ( `c1` int(11) DEFAULT NULL, `c2` int(11) DEFAULT NULL, `c3` char(20) DEFAULT NULL ) ENGINE=InnoDB DEFAULT CHARSET=latin1 /*!50500 PARTITION BY RANGE COLUMNS(c1,c3) (PARTITION p0 VALUES LESS THAN (5,'aaa') ENGINE = InnoDB, PARTITION p1 VALUES LESS THAN (10,'bbb') ENGINE = InnoDB) */ 单列的column list分区mysql&amp;gt; show create table list_c; CREATE TABLE `list_c` ( `c1` int(11) DEFAULT NULL, `c2` int(11) DEFAULT NULL, `c3` char(20) DEFAULT NULL ) ENGINE=InnoDB DEFAULT CHARSET=latin1 /*!50500 PARTITION BY LIST COLUMNS(c3) (PARTITION p0 VALUES IN ('aaa') ENGINE = InnoDB, PARTITION p1 VALUES IN ('bbb') ENGINE = InnoDB) */ 6、子分区（组合分区） 在分区的基础上再进一步分区，有时成为复合分区; MySQL数据库允许在range和list的分区上进行HASH和KEY的子分区。例如： CREATE TABLE ts (id INT, purchased DATE) PARTITION BY RANGE( YEAR(purchased) ) SUBPARTITION BY HASH( TO_DAYS(purchased) ) SUBPARTITIONS 2 ( PARTITION p0 VALUES LESS THAN (1990), PARTITION p1 VALUES LESS THAN (2000), PARTITION p2 VALUES LESS THAN MAXVALUE ); [root@mycat-3 ~]# ll /data/mysql_data_3306/mysql_test/ts* -rw-r----- 1 mysql mysql 8596 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts.frm -rw-r----- 1 mysql mysql 98304 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p0#SP#p0sp0.ibd -rw-r----- 1 mysql mysql 98304 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p0#SP#p0sp1.ibd -rw-r----- 1 mysql mysql 98304 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p1#SP#p1sp0.ibd -rw-r----- 1 mysql mysql 98304 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p1#SP#p1sp1.ibd -rw-r----- 1 mysql mysql 98304 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p2#SP#p2sp0.ibd -rw-r----- 1 mysql mysql 98304 Aug 8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p2#SP#p2sp1.ibd 1234567891011121314151617 ts表根据purchased进行range分区，然后又进行了一次hash分区，最后形成了3*2个分区，可以从物理文件证实此分区方式。可以通过subpartition语法来显示指定子分区名称。 注意：每个子分区的数量必须相同；如果一个分区表的任何子分区已经使用subpartition，那么必须表明所有的子分区名称；每个subpartition子句必须包括子分区的一个名字；子分区的名字必须是一致的 另外，对于MyISAM表可以使用index directory和data direactory来指定各个分区的数据和索引目录，但是对于innodb表来说，因为该存储引擎使用表空间自动的进行数据和索引的管理，因此会忽略指定index和data的语法。 四、普通表转换为分区表 1、用alter table table_name partition by命令重建分区表 alter table jxfp_data_bak PARTITION BY KEY(SH) PARTITIONS 8; 五、分区表操作 CREATE TABLE t1 ( id INT, year_col INT ) PARTITION BY RANGE (year_col) ( PARTITION p0 VALUES LESS THAN (1991), PARTITION p1 VALUES LESS THAN (1995), PARTITION p2 VALUES LESS THAN (1999) ); 1、ADD PARTITION （新增分区） ALTER TABLE t1 ADD PARTITION (PARTITION p3 VALUES LESS THAN (2002)); 2、DROP PARTITION （删除分区） ALTER TABLE t1 DROP PARTITION p0, p1; 3、TRUNCATE PARTITION（截取分区） ALTER TABLE t1 TRUNCATE PARTITION p0; ALTER TABLE t1 TRUNCATE PARTITION p1, p3; 4、COALESCE PARTITION（合并分区） CREATE TABLE t2 ( name VARCHAR (30), started DATE ) PARTITION BY HASH( YEAR(started) ) PARTITIONS 6; ALTER TABLE t2 COALESCE PARTITION 2; 5、REORGANIZE PARTITION（拆分/重组分区） 1）拆分分区 ALTER TABLE table ALGORITHM=INPLACE, REORGANIZE PARTITION; ALTER TABLE employees ADD PARTITION ( PARTITION p5 VALUES LESS THAN (2010), PARTITION p6 VALUES LESS THAN MAXVALUE ); 2）重组分区 ALTER TABLE members REORGANIZE PARTITION s0,s1 INTO ( PARTITION p0 VALUES LESS THAN (1970) ); ALTER TABLE tbl_name REORGANIZE PARTITION partition_list INTO (partition_definitions); ALTER TABLE members REORGANIZE PARTITION p0,p1,p2,p3 INTO ( PARTITION m0 VALUES LESS THAN (1980), PARTITION m1 VALUES LESS THAN (2000) ); ALTER TABLE tt ADD PARTITION (PARTITION np VALUES IN (4, 8)); ALTER TABLE tt REORGANIZE PARTITION p1,np INTO ( PARTITION p1 VALUES IN (6, 18), PARTITION np VALUES in (4, 8, 12) ); 6、ANALYZE 、CHECK PARTITION（分析与检查分区） 1）ANALYZE 读取和存储分区中值的分布情况 ALTER TABLE t1 ANALYZE PARTITION p1, ANALYZE PARTITION p2; ALTER TABLE t1 ANALYZE PARTITION p1, p2; 2）CHECK 检查分区是否存在错误 ALTER TABLE t1 ANALYZE PARTITION p1, CHECK PARTITION p2; 7、REPAIR分区 修复被破坏的分区 ALTER TABLE t1 REPAIR PARTITION p0,p1; 8、OPTIMIZE 该命令主要是用于回收空闲空间和分区的碎片整理。对分区执行该命令,相当于依次对分区执行 CHECK PARTITION, ANALYZE PARTITION,REPAIR PARTITION命令。 譬如: ALTER TABLE t1 OPTIMIZE PARTITION p0, p1; 9、REBUILD分区 重建分区,它相当于先删除分区中的数据,然后重新插入。这个主要是用于分区的碎片整理。 ALTER TABLE t1 REBUILD PARTITION p0, p1; 10、EXCHANGE PARTITION（分区交换） 分区交换的语法如下: ALTER TABLE pt EXCHANGE PARTITION p WITH TABLE nt 其中,pt是分区表,p是pt的分区(注:也可以是子分区),nt是目标表。 其实,分区交换的限制还是蛮多的: 1） nt不能为分区表 2）nt不能为临时表 3）nt和pt的结构必须一致 4）nt不存在任何外键约束,即既不能是主键,也不能是外键。 5）nt中的数据不能位于p分区的范围之外。 具体可参考MySQL的官方文档 11、迁移分区（DISCARD 、IMPORT ） ALTER TABLE t1 DISCARD PARTITION p2, p3 TABLESPACE; ALTER TABLE t1 IMPORT PARTITION p2, p3 TABLESPACE; 实验环境：（都是mysql5.7） 源库：192.168.2.200 mysql5.7.16 zhangdb下的emp_2分区表的 目标库：192.168.2.100 mysql5.7.18 test下 （将zhangdb的emp表，导入到目标库的test schema下） –：在源数据库中创建测试分区表emp_2，然后导入数据 MySQL [zhangdb]&amp;gt; CREATE TABLE emp_2( id BIGINT unsigned NOT NULL AUTO_INCREMENT, x VARCHAR(500) NOT NULL, y VARCHAR(500) NOT NULL, PRIMARY KEY(id) ) PARTITION BY RANGE COLUMNS(id) ( PARTITION p1 VALUES LESS THAN (1000), PARTITION p2 VALUES LESS THAN (2000), PARTITION p3 VALUES LESS THAN (3000) ); （接着创建存储过程，导入测试数据） DELIMITER // CREATE PROCEDURE insert_batch() begin DECLARE num INT; SET num=1; WHILE num &amp;lt; 3000 DO IF (num%10000=0) THEN COMMIT; END IF; INSERT INTO emp_2 VALUES(NULL, REPEAT('X', 500), REPEAT('Y', 500)); SET num=num+1; END WHILE; COMMIT; END // DELIMITER ; mysql&amp;gt; select TABLE_NAME,PARTITION_NAME from information_schema.partitions where table_schema='zhangdb'; +------------+----------------+ | TABLE_NAME | PARTITION_NAME | +------------+----------------+ | emp | NULL | | emp_2 | p1 | | emp_2 | p2 | | emp_2 | p3 | +------------+----------------+ 4 rows in set (0.00 sec) mysql&amp;gt; select count(*) from emp_2 partition (p1); +----------+ | count(*) | +----------+ | 999 | +----------+ 1 row in set (0.00 sec) mysql&amp;gt; select count(*) from emp_2 partition (p2); +----------+ | count(*) | +----------+ | 1000 | +----------+ 1 row in set (0.00 sec) mysql&amp;gt; select count(*) from emp_2 partition (p3); +----------+ | count(*) | +----------+ | 1000 | +----------+ 1 row in set (0.00 sec) 从上面可以看出，emp_2分区表已经创建完成，并且有3个子分区，每个分区都有一点数据。 –：在目标数据库中，创建emp_2表的结构，不要数据（要在源库，使用show create table emp_2\G 的方法 查看创建该表的sql） MySQL [test]&amp;gt; CREATE TABLE `emp_2` ( `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, `x` varchar(500) NOT NULL, `y` varchar(500) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=3000 DEFAULT CHARSET=utf8mb4 /*!50500 PARTITION BY RANGE COLUMNS(id) (PARTITION p1 VALUES LESS THAN (1000) ENGINE = InnoDB, PARTITION p2 VALUES LESS THAN (2000) ENGINE = InnoDB, PARTITION p3 VALUES LESS THAN (3000) ENGINE = InnoDB) */ ; [root@localhost test]# ll -rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p0.ibd -rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p1.ibd -rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p2.ibd 注意： ※约束条件、字符集等等也必须一致，建议使用show create table t1; 来获取创建表的SQL，否则在新服务器上导入表空间的时候会提示1808错误。 –：在目标数据库上，丢弃分区表的表空间 MySQL [test]&amp;gt; alter table emp_2 discard tablespace; Query OK, 0 rows affected (0.12 sec) [root@localhost test]# ll ---这时候在看，刚才的3个分区的idb文件都没有了 -rw-r----- 1 mysql mysql 8604 May 25 04:14 emp_2.frm –：在源数据库上运行FLUSH TABLES … FOR EXPORT 锁定表并生成.cfg元数据文件，最后将cfg和ibd文件传输到目标数据库中 mysql&amp;gt; flush tables emp_2 for export; Query OK, 0 rows affected (0.00 sec) [root@localhost zhangdb]# scp emp_2* root@192.168.2.100:/mysql/data/test/ --将文件cp到目标数据库 mysql&amp;gt; unlock tables; ---最后将表的锁是否 –：在目标数据库中对文件授权，然后导入表空间查看数据是否完整可用 [root@localhost test]# chown mysql.mysql emp_2#* MySQL [test]&amp;gt; alter table emp_2 import tablespace; Query OK, 0 rows affected (0.96 sec) MySQL [test]&amp;gt; select count(*) from emp_2; +----------+ | count(*) | +----------+ | 2999 | +----------+ 1 row in set (0.63 sec) 从上面的查看得知，分区表都已经导入到目标数据库中了， 另外，也可以将部分子分区导入到目标数据库中，（往往整个分区表会很大，可用只将需要用到的子分区导入到目标数据库中）， 将部分子分区导入到目标数据库的方法是： 1）在创建目标表的时候，只需要创建要导入的分区即可，如： 只创建了p2 p3两个分区 CREATE TABLE `emp_2` ( `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT, `x` varchar(500) NOT NULL, `y` varchar(500) NOT NULL, PRIMARY KEY (`id`) ) ENGINE=InnoDB AUTO_INCREMENT=3000 DEFAULT CHARSET=utf8mb4 /*!50500 PARTITION BY RANGE COLUMNS(id) ( PARTITION p2 VALUES LESS THAN (2000) ENGINE = InnoDB, PARTITION p3 VALUES LESS THAN (3000) ENGINE = InnoDB) */ 2）从源库cp到目标库的文件，当然也就是这俩的，就不需要其他分区的了， 3）其他的操作方法都一样了。 六、如何获取分区的相关信息 通过 SHOW CREATE TABLE 语句来查看分区表的分区子句 譬如:mysql&amp;gt; show create table e/G 通过 SHOW TABLE STATUS 语句来查看表是否分区对应Create_options字段 譬如: mysql&amp;gt; show table status/G ********* 1. row ************* Name: e Engine: InnoDB Version: 10 Row_format: Compact Rows: 6 Avg_row_length: 10922 Data_length: 65536Max_data_length: 0 Index_length: 0 Data_free: 0 Auto_increment: NULL Create_time: 2015-12-07 22:26:06 Update_time: NULL Check_time: NULL Collation: latin1_swedish_ci Checksum: NULL Create_options: partitioned Comment: 查看 INFORMATION_SCHEMA.PARTITIONS表 通过 EXPLAIN PARTITIONS SELECT 语句查看对于具体的SELECT语句,会访问哪个分区。 七、MySQL5.7对于partition表的改进 HANDLER statements：MySQL 5.7.1分区表开始支持HANDLER语句； index condition pushdown：MySQL5.7.3分区表开始支持ICP； load data：MySQL5.7开始使用缓存来实现性能提升，每个分区使用130KB缓冲区来实现这一点； Per-partition索引缓存：MySQL5.7开始支持使用CACHE INDEX和LOAD INDEX INTO CACHE语句对分区的MyISAM表支持索引缓存； FOR EXPORT选项（FLUSH TABLES）:MySQL 5.7.4分区的InnoDB表开始支持FLUSH TABLES语句FOR EXPORT选项； 从MySQL 5.7.2开始，子分区支持ANALYZE，CHECK，OPTIMIZE，REPAIR和TRUNCATE操作；</summary></entry><entry><title type="html">Spring中Bean的作用域、生命周期</title><link href="http://localhost:4000/spring/bean" rel="alternate" type="text/html" title="Spring中Bean的作用域、生命周期" /><published>2020-06-18T00:00:00+08:00</published><updated>2020-06-18T00:00:00+08:00</updated><id>http://localhost:4000/spring/Spring%E4%B8%ADBean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F%E3%80%81%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F</id><content type="html" xml:base="http://localhost:4000/spring/bean">&lt;h3 id=&quot;bean的作用域&quot;&gt;Bean的作用域&lt;/h3&gt;
 &lt;p&gt;　　Spring 3中为Bean定义了5中作用域，分别为singleton（单例）、prototype（原型）、request、session和global session，5种作用域说明如下：&lt;/p&gt;
 &lt;ol&gt;
   &lt;li&gt;&lt;strong&gt;singleton&lt;/strong&gt;：单例模式，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Singleton作用域是Spring中的缺省作用域，也可以显示的将Bean定义为singleton模式，配置为：
@@ -730,267 +1213,4 @@ publishing {
 //}
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h3 id=&quot;修改-gradle-可手动编译-也可以-选择-auto-自动编译-和maven一样&quot;&gt;修改 .gradle 可手动编译 也可以 选择 auto 自动编译 和maven一样&lt;/h3&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="spring源码编译" /><summary type="html">1.基本环境 jdk 1.8.241 (必须1.8及以上版本) gradle 6.5 2.spring下载 使用 git 下载 spring-framework 下载地址：spring-framework 2.使用ide 导入spring-framework 源码 4.需要修改个配置 （看到 // 即为需要注释的代码） 4.1 build.gradle // apply from: &quot;${rootDir}/gradle/ide.gradle&quot; ... publishing { publications { mavenJava(MavenPublication) { // artifact docsZip // artifact schemaZip // artifact distZip } } } 4.2. spring-aspects.gradle //eclipse.project { // natures += &quot;org.eclipse.ajdt.ui.ajnature&quot; // buildCommands = [new org.gradle.plugins.ide.eclipse.model.BuildCommand(&quot;org.eclipse.ajdt.core.ajbuilder&quot;)] //} 4.3. kotlin-coroutines.gradle //eclipse { // project { // buildCommand &quot;org.jetbrains.kotlin.ui.kotlinBuilder&quot; // buildCommand &quot;org.eclipse.jdt.core.javabuilder&quot; // natures &quot;org.jetbrains.kotlin.core.kotlinNature&quot; // natures &quot;org.eclipse.jdt.core.javanature&quot; // linkedResource name: &quot;kotlin_bin&quot;, type: &quot;2&quot;, locationUri: &quot;org.jetbrains.kotlin.core.filesystem:/&quot; + project.name + &quot;/kotlin_bin&quot; // } // classpath { // containers &quot;org.jetbrains.kotlin.core.KOTLIN_CONTAINER&quot; // } //} 修改 .gradle 可手动编译 也可以 选择 auto 自动编译 和maven一样</summary></entry><entry><title type="html">深入理解Spring两大特性：IoC和AOP</title><link href="http://localhost:4000/springboot/aop-ioc" rel="alternate" type="text/html" title="深入理解Spring两大特性：IoC和AOP" /><published>2020-06-12T00:00:00+08:00</published><updated>2020-06-12T00:00:00+08:00</updated><id>http://localhost:4000/springboot/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3Spring%E4%B8%A4%E5%A4%A7%E7%89%B9%E6%80%A7:IoC%E5%92%8CAOP</id><content type="html" xml:base="http://localhost:4000/springboot/aop-ioc">&lt;p&gt;众所周知，Spring拥有两大特性：IoC和AOP。IoC，&lt;strong&gt;英文全称Inversion of Control，意为控制反转。AOP，英文全称Aspect-Oriented Programming，意为面向切面编程。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Spring核心容器的主要组件是Bean工厂（BeanFactory），Bean工厂使用控制反转（IoC）模式来降低程序代码之间的耦合度，并提供了面向切面编程（AOP）的实现。&lt;/p&gt;
-
-&lt;p&gt;简单来说，&lt;strong&gt;Spring是一个轻量级的控制反转（IoC）和面向切面编程（AOP）的容器框架。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;下面，我们简要说明下这两大特性。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;h3 id=&quot;1-spring常用注解&quot;&gt;1. Spring常用注解&lt;/h3&gt;
-
-&lt;p&gt;在具体介绍IoC和AOP之前，我们先简要说明下Spring常用注解&lt;/p&gt;
-
-&lt;p&gt;1、@Controller：用于标注控制器层组件&lt;/p&gt;
-
-&lt;p&gt;2、@Service：用于标注业务层组件&lt;/p&gt;
-
-&lt;p&gt;3、@Component : 用于标注这是一个受 Spring 管理的组件，组件引用名称是类名，第一个字母小写。可以使用@Component(“beanID”) 指定组件的名称&lt;/p&gt;
-
-&lt;p&gt;4、@Repository：用于标注数据访问组件，即DAO组件&lt;/p&gt;
-
-&lt;p&gt;5、@Bean：方法级别的注解，主要用在@Configuration和@Component注解的类里，@Bean注解的方法会产生一个Bean对象，该对象由Spring管理并放到IoC容器中。引用名称是方法名，也可以用@Bean(name = “beanID”)指定组件名&lt;/p&gt;
-
-&lt;p&gt;6、@Scope(“prototype”)：将组件的范围设置为原型的（即多例）。保证每一个请求有一个单独的action来处理，避免action的线程问题。&lt;/p&gt;
-
-&lt;p&gt;由于Spring默认是单例的，只会创建一个action对象，每次访问都是同一个对象，容易产生并发问题，数据不安全。&lt;/p&gt;
-
-&lt;p&gt;7、@Autowired：默认按类型进行自动装配。在容器查找匹配的Bean，当有且仅有一个匹配的Bean时，Spring将其注入@Autowired标注的变量中。&lt;/p&gt;
-
-&lt;p&gt;8、@Resource：默认按名称进行自动装配，当找不到与名称匹配的Bean时会按类型装配。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;p&gt;简单点说，就是，&lt;strong&gt;能够明确该类是一个控制器类组件的，就用@Controller；能够明确是一个服务类组件的，就用@Service；能够明确该类是一个数据访问组件的，就用@Repository；不知道他是啥或者不好区分他是啥，但是就是想让他动态装配的就用@Component。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;@Controller、@Service、@Component、@Repository都是类级别的注解，__如果一个方法也想动态装配，就用@Bean。&lt;/p&gt;
-
-&lt;p&gt;当我们想按类型进行自动装配时，就用@Autowired；当我们想按名称（beanID）进行自动装配时，就用@Resource；当我们需要根据比如配置信息等来动态装配不同的组件时，可以用getBean(“beanID”)。__&lt;/p&gt;
-
-&lt;p&gt;到这里，如果对这些注解，或是自动装配不太理解，可以继续往下，看完 控制反转(IoC) 内容后再回来理解这里的内容。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-
-&lt;h3 id=&quot;2-控制反转ioc&quot;&gt;2. 控制反转(IoC)&lt;/h3&gt;
-
-&lt;p&gt;控制反转，简单点说，就是创建对象的控制权，被反转到了Spring框架上。&lt;/p&gt;
-
-&lt;p&gt;通常，我们实例化一个对象时，都是使用类的构造方法来new一个对象，这个过程是由我们自己来控制的，而控制反转就把new对象的工交给了Spring容器。&lt;/p&gt;
-
-&lt;p&gt;《expert ONE-ON-ONE J2EE Development without EJB》第6章中指出&lt;/p&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;P128
-
-IoC Implementation Strategies
-
-IoC is a broad concept that can be implemented in different ways. There are two main types:
-
-Dependency Lookup: The container provides callbacks to components, and a lookup context.This is the EJB and Apache Avalon approach. It leaves the onus on each component to use container APIs to look up resources and collaborators. The Inversion of Control is limited to the container invoking callback methods that application code can use to obtain resources.
-
-Dependency Injection: Components do no look up; they provide plain Java methods enabling the container to resolve dependencies. The container is wholly responsible for wiring up components, passing resolved objects in to JavaBean properties or constructors. Use of JavaBean properties is called Setter Injection; use of constructor arguments is called Constructor Injection.
-
-
-P130
-
-The second IoC strategy-Dependency Injection-is usually preferable.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;主要意思为：&lt;/p&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;IoC的主要实现方式有两种：依赖查找、依赖注入。
-
-依赖注入是一种更可取的方式。
-
-那么依赖查找和依赖注入有什么区别呢？
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;依赖查找，主要是容器为组件提供一个回调接口和上下文环境。这样一来，组件就必须自己使用容器提供的API来查找资源和协作对象，控制反转仅体现在那些回调方法上，容器调用这些回调方法，从而应用代码获取到资源。&lt;/p&gt;
-
-&lt;p&gt;依赖注入，组件不做定位查询，只提供标准的Java方法让容器去决定依赖关系。容器全权负责组件的装配，把符合依赖关系的对象通过Java Bean属性或构造方法传递给需要的对象。&lt;/p&gt;
-
-&lt;h4 id=&quot;21-ioc容器&quot;&gt;2.1 IoC容器&lt;/h4&gt;
-
-&lt;p&gt;IoC容器：具有依赖注入功能的容器，可以创建对象的容器。IoC容器负责实例化、定位、配置应用程序中的对象并建立这些对象之间的依赖。&lt;/p&gt;
-
-&lt;h4 id=&quot;22-依赖注入&quot;&gt;2.2 依赖注入&lt;/h4&gt;
-
-&lt;p&gt;DI，英文全称，Dependency Injection，意为依赖注入。&lt;/p&gt;
-
-&lt;p&gt;依赖注入：由IoC容器动态地将某个对象所需要的外部资源（包括对象、资源、常量数据）注入到组件(Controller, Service等）之中。简单点说，就是IoC容器会把当前对象所需要的外部资源动态的注入给我们。&lt;/p&gt;
-
-&lt;p&gt;Spring依赖注入的方式主要有四个，基于注解注入方式、set注入方式、构造器注入方式、静态工厂注入方式。推荐使用基于注解注入方式，配置较少，比较方便。&lt;/p&gt;
-
-&lt;p&gt;基于注解注入方式&lt;/p&gt;
-
-&lt;p&gt;服务层代码&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Service&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdminService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;控制层代码&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Controller&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Scope&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;prototype&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdminController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdminService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adminService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;@Autowired与@Resource都可以用来装配Bean，都可以写在字段、setter方法上。他们的区别是：&lt;/p&gt;
-
-&lt;p&gt;@Autowired默认按类型进行自动装配（该注解属于Spring），默认情况下要求依赖对象必须存在，如果要允许为null，需设置required属性为false，例：@Autowired(required=false)。如果要使用名称进行装配，可以与@Qualifier注解一起使用。&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Autowired&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Qualifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;adminService&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;private AdminService adminService; @Resource默认按照名称进行装配（该注解属于J2EE），名称可以通过name属性来指定。如果没有指定name属性，当注解写在字段上时，默认取字段名进行装配；如果注解写在setter方法上，默认取属性名进行装配。当找不到与名称相匹配的Bean时，会按照类型进行装配。但是，name属性一旦指定，就只会按照名称进行装配。 ```java @Resource(name = &quot;adminService&quot;) private AdminService adminService;  ```
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;除此之外，对于一些复杂的装载Bean的时机，比如我们需要根据配置装载不同的Bean，以完成不同的操作，可以使用getBean(“beanID”)的方式来加载Bean。&lt;/p&gt;
-
-&lt;p&gt;通过BeanID加载Bean方法如下：&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationContextAware&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;applicationContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;applicationContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ApplicationContext&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;containsBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;applicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;BeansException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;not found bean id: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;我们在需要装载Bean的地方调用该方法即可&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BaseController&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IService&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loadService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;IService&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;IService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BeanUtils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iService&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;iService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;k&quot;&gt;throw&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Exception&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;加载Bean错误&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h3 id=&quot;3-面向切面编程aop&quot;&gt;3. 面向切面编程(AOP)&lt;/h3&gt;
-
-&lt;p&gt;面向切面编程（AOP）就是纵向的编程。比如业务A和业务B现在需要一个相同的操作，传统方法我们可能需要在A、B中都加入相关操作代码，而应用AOP就可以只写一遍代码，A、B共用这段代码。并且，当A、B需要增加新的操作时，可以在不改动原代码的情况下，灵活添加新的业务逻辑实现。&lt;/p&gt;
-
-&lt;p&gt;在实际开发中，比如商品查询、促销查询等业务，都需要记录日志、异常处理等操作，AOP把所有共用代码都剥离出来，单独放置到某个类中进行集中管理，在具体运行时，由容器进行动态织入这些公共代码。&lt;/p&gt;
-
-&lt;p&gt;AOP主要一般应用于签名验签、参数校验、日志记录、事务控制、权限控制、性能统计、异常处理等。&lt;/p&gt;
-
-&lt;h4 id=&quot;31aop涉及名词&quot;&gt;3.1 AOP涉及名词&lt;/h4&gt;
-
-&lt;p&gt;&lt;strong&gt;切面（Aspect）&lt;/strong&gt;：共有功能的实现。如日志切面、权限切面、验签切面等。在实际开发中通常是一个存放共有功能实现的标准Java类。当Java类使用了@Aspect注解修饰时，就能被AOP容器识别为切面。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;通知（Advice）&lt;/strong&gt;：切面的具体实现。就是要给目标对象织入的事情。以目标方法为参照点，根据放置的地方不同，可分为前置通知（Before）、后置通知（AfterReturning）、异常通知（AfterThrowing）、最终通知（After）与环绕通知（Around）5种。在实际开发中通常是切面类中的一个方法，具体属于哪类通知，通过方法上的注解区分。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;连接点（JoinPoint）&lt;/strong&gt;：程序在运行过程中能够插入切面的地点。例如，方法调用、异常抛出等。Spring只支持方法级的连接点。一个类的所有方法前、后、抛出异常时等都是连接点。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;切入点（Pointcut）&lt;/strong&gt;：用于定义通知应该切入到哪些连接点上。不同的通知通常需要切入到不同的连接点上，这种精准的匹配是由切入点的正则表达式来定义的。&lt;/p&gt;
-
-&lt;p&gt;比如，在上面所说的连接点的基础上，来定义切入点。我们有一个类，类里有10个方法，那就产生了几十个连接点。但是我们并不想在所有方法上都织入通知，我们只想让其中的几个方法，在调用之前检验下入参是否合法，那么就用切点来定义这几个方法，让切点来筛选连接点，选中我们想要的方法。切入点就是来定义哪些类里面的哪些方法会得到通知。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;目标对象（Target）&lt;/strong&gt;：那些即将切入切面的对象，也就是那些被通知的对象。这些对象专注业务本身的逻辑，所有的共有功能等待AOP容器的切入。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;代理对象（Proxy）&lt;/strong&gt;：将通知应用到目标对象之后被动态创建的对象。可以简单地理解为，代理对象的功能等于目标对象本身业务逻辑加上共有功能。代理对象对于使用者而言是透明的，是程序运行过程中的产物。目标对象被织入共有功能后产生的对象。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;织入（Weaving）&lt;/strong&gt;：将切面应用到目标对象从而创建一个新的代理对象的过程。这个过程可以发生在编译时、类加载时、运行时。Spring是在运行时完成织入，运行时织入通过Java语言的反射机制与动态代理机制来动态实现。&lt;/p&gt;
-
-&lt;h4 id=&quot;32-pointcut用法&quot;&gt;3.2 Pointcut用法&lt;/h4&gt;
-
-&lt;p&gt;Pointcut格式为：&lt;/p&gt;
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;execution(modifier-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern?)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;strong&gt;修饰符匹配 modifier-pattern?&lt;/strong&gt; 例：public private&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;返回值匹配 ret-type-pattern&lt;/strong&gt;  可以用 * 表示任意返回值&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;类路径匹配 declaring-type-pattern?&lt;/strong&gt;  全路径的类名&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;方法名匹配 name-pattern&lt;/strong&gt;  可以指定方法名或者用 * 表示所有方法；set* 表示所有以set开头的方法&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;参数匹配 (param-pattern)&lt;/strong&gt;  可以指定具体的参数类型，多个参数用“,”分隔；可以用 * 表示匹配任意类型的参数；可以用 (..) 表示零个或多个任意参数&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;异常类型匹配throws-pattern?&lt;/strong&gt;  例：throws Exception&lt;/p&gt;
-
-&lt;p&gt;其中后面跟着 ? 表示可选项&lt;/p&gt;
-
-&lt;p&gt;例：&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(public * cn.wbnull. springbootdemo.controller.*.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sign&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt; &lt;/p&gt;
-
-&lt;h4 id=&quot;33-一个例子&quot;&gt;3.3 一个例子&lt;/h4&gt;
-
-&lt;p&gt;以 Spring Boot入门：使用AOP实现拦截器 中的AOP为例&lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SignAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;SignAop类使用了@Aspect注解，则该类可以被AOP容器识别为切面。&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SignAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;signAop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;@Pointcut声明一个切入点，范围为controller包下所有的类的所有方法&lt;/p&gt;
-
-&lt;p&gt;注：作为切入点签名的方法必须返回void类型&lt;/p&gt;
-
-&lt;p&gt; &lt;/p&gt;
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Aspect&lt;/span&gt;
-&lt;span class=&quot;nd&quot;&gt;@Component&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SignAop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Pointcut&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;signAop&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;signAop()&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doBefore&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinPoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
-       &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@AfterReturning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;value&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;signAop()&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returning&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;params&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JSONObject&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doAfterReturning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JoinPoint&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;joinPoint&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JSONObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;//code&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;doBefore()方法使用@Before(“signAop()”)注解，表示前置通知（在某连接点之前执行的通知），但这个通知不能阻止连接点之前的执行流程，除非它抛出一个异常。&lt;/p&gt;
-
-&lt;p&gt;doAfterReturning()方法使用@AfterReturning(value = “signAop()”, returning = “params”)注解，表示后置通知（在某连接点正常完成后执行的通知），通常在一个匹配的方法返回的时候执行。&lt;/p&gt;
-
-&lt;p&gt;实际运行时，在进入controller包下所有方法前，都会进入doBefore()方法，在controller包下方法执行完成后，都会进入doAfterReturning()方法。&lt;/p&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="spirngboot" /><summary type="html">众所周知，Spring拥有两大特性：IoC和AOP。IoC，英文全称Inversion of Control，意为控制反转。AOP，英文全称Aspect-Oriented Programming，意为面向切面编程。 Spring核心容器的主要组件是Bean工厂（BeanFactory），Bean工厂使用控制反转（IoC）模式来降低程序代码之间的耦合度，并提供了面向切面编程（AOP）的实现。 简单来说，Spring是一个轻量级的控制反转（IoC）和面向切面编程（AOP）的容器框架。 下面，我们简要说明下这两大特性。   1. Spring常用注解 在具体介绍IoC和AOP之前，我们先简要说明下Spring常用注解 1、@Controller：用于标注控制器层组件 2、@Service：用于标注业务层组件 3、@Component : 用于标注这是一个受 Spring 管理的组件，组件引用名称是类名，第一个字母小写。可以使用@Component(“beanID”) 指定组件的名称 4、@Repository：用于标注数据访问组件，即DAO组件 5、@Bean：方法级别的注解，主要用在@Configuration和@Component注解的类里，@Bean注解的方法会产生一个Bean对象，该对象由Spring管理并放到IoC容器中。引用名称是方法名，也可以用@Bean(name = “beanID”)指定组件名 6、@Scope(“prototype”)：将组件的范围设置为原型的（即多例）。保证每一个请求有一个单独的action来处理，避免action的线程问题。 由于Spring默认是单例的，只会创建一个action对象，每次访问都是同一个对象，容易产生并发问题，数据不安全。 7、@Autowired：默认按类型进行自动装配。在容器查找匹配的Bean，当有且仅有一个匹配的Bean时，Spring将其注入@Autowired标注的变量中。 8、@Resource：默认按名称进行自动装配，当找不到与名称匹配的Bean时会按类型装配。   简单点说，就是，能够明确该类是一个控制器类组件的，就用@Controller；能够明确是一个服务类组件的，就用@Service；能够明确该类是一个数据访问组件的，就用@Repository；不知道他是啥或者不好区分他是啥，但是就是想让他动态装配的就用@Component。 @Controller、@Service、@Component、@Repository都是类级别的注解，__如果一个方法也想动态装配，就用@Bean。 当我们想按类型进行自动装配时，就用@Autowired；当我们想按名称（beanID）进行自动装配时，就用@Resource；当我们需要根据比如配置信息等来动态装配不同的组件时，可以用getBean(“beanID”)。__ 到这里，如果对这些注解，或是自动装配不太理解，可以继续往下，看完 控制反转(IoC) 内容后再回来理解这里的内容。   2. 控制反转(IoC) 控制反转，简单点说，就是创建对象的控制权，被反转到了Spring框架上。 通常，我们实例化一个对象时，都是使用类的构造方法来new一个对象，这个过程是由我们自己来控制的，而控制反转就把new对象的工交给了Spring容器。 《expert ONE-ON-ONE J2EE Development without EJB》第6章中指出 P128 IoC Implementation Strategies IoC is a broad concept that can be implemented in different ways. There are two main types: Dependency Lookup: The container provides callbacks to components, and a lookup context.This is the EJB and Apache Avalon approach. It leaves the onus on each component to use container APIs to look up resources and collaborators. The Inversion of Control is limited to the container invoking callback methods that application code can use to obtain resources. Dependency Injection: Components do no look up; they provide plain Java methods enabling the container to resolve dependencies. The container is wholly responsible for wiring up components, passing resolved objects in to JavaBean properties or constructors. Use of JavaBean properties is called Setter Injection; use of constructor arguments is called Constructor Injection. P130 The second IoC strategy-Dependency Injection-is usually preferable. 主要意思为： IoC的主要实现方式有两种：依赖查找、依赖注入。 依赖注入是一种更可取的方式。 那么依赖查找和依赖注入有什么区别呢？ 依赖查找，主要是容器为组件提供一个回调接口和上下文环境。这样一来，组件就必须自己使用容器提供的API来查找资源和协作对象，控制反转仅体现在那些回调方法上，容器调用这些回调方法，从而应用代码获取到资源。 依赖注入，组件不做定位查询，只提供标准的Java方法让容器去决定依赖关系。容器全权负责组件的装配，把符合依赖关系的对象通过Java Bean属性或构造方法传递给需要的对象。 2.1 IoC容器 IoC容器：具有依赖注入功能的容器，可以创建对象的容器。IoC容器负责实例化、定位、配置应用程序中的对象并建立这些对象之间的依赖。 2.2 依赖注入 DI，英文全称，Dependency Injection，意为依赖注入。 依赖注入：由IoC容器动态地将某个对象所需要的外部资源（包括对象、资源、常量数据）注入到组件(Controller, Service等）之中。简单点说，就是IoC容器会把当前对象所需要的外部资源动态的注入给我们。 Spring依赖注入的方式主要有四个，基于注解注入方式、set注入方式、构造器注入方式、静态工厂注入方式。推荐使用基于注解注入方式，配置较少，比较方便。 基于注解注入方式 服务层代码 @Service public class AdminService { //code } 控制层代码 @Controller @Scope(&quot;prototype&quot;) public class AdminController { @Autowired private AdminService adminService; //code } @Autowired与@Resource都可以用来装配Bean，都可以写在字段、setter方法上。他们的区别是： @Autowired默认按类型进行自动装配（该注解属于Spring），默认情况下要求依赖对象必须存在，如果要允许为null，需设置required属性为false，例：@Autowired(required=false)。如果要使用名称进行装配，可以与@Qualifier注解一起使用。 @Autowired @Qualifier(&quot;adminService&quot;) private AdminService adminService; @Resource默认按照名称进行装配（该注解属于J2EE），名称可以通过name属性来指定。如果没有指定name属性，当注解写在字段上时，默认取字段名进行装配；如果注解写在setter方法上，默认取属性名进行装配。当找不到与名称相匹配的Bean时，会按照类型进行装配。但是，name属性一旦指定，就只会按照名称进行装配。 ```java @Resource(name = &quot;adminService&quot;) private AdminService adminService;  ``` 除此之外，对于一些复杂的装载Bean的时机，比如我们需要根据配置装载不同的Bean，以完成不同的操作，可以使用getBean(“beanID”)的方式来加载Bean。 通过BeanID加载Bean方法如下： @Component public class BeanUtils implements ApplicationContextAware { private static ApplicationContext applicationContext; @Override public void setApplicationContext(ApplicationContext applicationContext) { if (BeanUtils.applicationContext == null) { BeanUtils.applicationContext = applicationContext; } } public static ApplicationContext getApplicationContext() { return applicationContext; } public static Object getBean(String id) throws Exception { try { return applicationContext.containsBean(id) ? applicationContext.getBean(id) : null; } catch (BeansException e) { e.printStackTrace(); throw new Exception(&quot;not found bean id: &quot; + id); } } } 我们在需要装载Bean的地方调用该方法即可 public class BaseController { protected IService loadService(String id) throws Exception { IService iService = (IService) BeanUtils.getBean(id); if (iService != null) { return iService; } else { throw new Exception(&quot;加载Bean错误&quot;); } } } 3. 面向切面编程(AOP) 面向切面编程（AOP）就是纵向的编程。比如业务A和业务B现在需要一个相同的操作，传统方法我们可能需要在A、B中都加入相关操作代码，而应用AOP就可以只写一遍代码，A、B共用这段代码。并且，当A、B需要增加新的操作时，可以在不改动原代码的情况下，灵活添加新的业务逻辑实现。 在实际开发中，比如商品查询、促销查询等业务，都需要记录日志、异常处理等操作，AOP把所有共用代码都剥离出来，单独放置到某个类中进行集中管理，在具体运行时，由容器进行动态织入这些公共代码。 AOP主要一般应用于签名验签、参数校验、日志记录、事务控制、权限控制、性能统计、异常处理等。 3.1 AOP涉及名词 切面（Aspect）：共有功能的实现。如日志切面、权限切面、验签切面等。在实际开发中通常是一个存放共有功能实现的标准Java类。当Java类使用了@Aspect注解修饰时，就能被AOP容器识别为切面。 通知（Advice）：切面的具体实现。就是要给目标对象织入的事情。以目标方法为参照点，根据放置的地方不同，可分为前置通知（Before）、后置通知（AfterReturning）、异常通知（AfterThrowing）、最终通知（After）与环绕通知（Around）5种。在实际开发中通常是切面类中的一个方法，具体属于哪类通知，通过方法上的注解区分。 连接点（JoinPoint）：程序在运行过程中能够插入切面的地点。例如，方法调用、异常抛出等。Spring只支持方法级的连接点。一个类的所有方法前、后、抛出异常时等都是连接点。 切入点（Pointcut）：用于定义通知应该切入到哪些连接点上。不同的通知通常需要切入到不同的连接点上，这种精准的匹配是由切入点的正则表达式来定义的。 比如，在上面所说的连接点的基础上，来定义切入点。我们有一个类，类里有10个方法，那就产生了几十个连接点。但是我们并不想在所有方法上都织入通知，我们只想让其中的几个方法，在调用之前检验下入参是否合法，那么就用切点来定义这几个方法，让切点来筛选连接点，选中我们想要的方法。切入点就是来定义哪些类里面的哪些方法会得到通知。 目标对象（Target）：那些即将切入切面的对象，也就是那些被通知的对象。这些对象专注业务本身的逻辑，所有的共有功能等待AOP容器的切入。 代理对象（Proxy）：将通知应用到目标对象之后被动态创建的对象。可以简单地理解为，代理对象的功能等于目标对象本身业务逻辑加上共有功能。代理对象对于使用者而言是透明的，是程序运行过程中的产物。目标对象被织入共有功能后产生的对象。 织入（Weaving）：将切面应用到目标对象从而创建一个新的代理对象的过程。这个过程可以发生在编译时、类加载时、运行时。Spring是在运行时完成织入，运行时织入通过Java语言的反射机制与动态代理机制来动态实现。 3.2 Pointcut用法 Pointcut格式为： execution(modifier-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern?) 修饰符匹配 modifier-pattern? 例：public private 返回值匹配 ret-type-pattern 可以用 * 表示任意返回值 类路径匹配 declaring-type-pattern? 全路径的类名 方法名匹配 name-pattern 可以指定方法名或者用 * 表示所有方法；set* 表示所有以set开头的方法 参数匹配 (param-pattern) 可以指定具体的参数类型，多个参数用“,”分隔；可以用 * 表示匹配任意类型的参数；可以用 (..) 表示零个或多个任意参数 异常类型匹配throws-pattern? 例：throws Exception 其中后面跟着 ? 表示可选项 例： @Pointcut(&quot;execution(public * cn.wbnull. springbootdemo.controller.*.*(..))&quot;) private void sign() { }   3.3 一个例子 以 Spring Boot入门：使用AOP实现拦截器 中的AOP为例 @Aspect @Component public class SignAop { } SignAop类使用了@Aspect注解，则该类可以被AOP容器识别为切面。   @Aspect @Component public class SignAop { @Pointcut(&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;) private void signAop() { } } @Pointcut声明一个切入点，范围为controller包下所有的类的所有方法 注：作为切入点签名的方法必须返回void类型   @Aspect @Component public class SignAop { @Pointcut(&quot;execution(public * cn.wbnull.springbootdemo.controller.*.*(..))&quot;) private void signAop() { } @Before(&quot;signAop()&quot;) public void doBefore(JoinPoint joinPoint) throws Exception { //code } @AfterReturning(value = &quot;signAop()&quot;, returning = &quot;params&quot;) public JSONObject doAfterReturning(JoinPoint joinPoint, JSONObject params) { //code } } doBefore()方法使用@Before(“signAop()”)注解，表示前置通知（在某连接点之前执行的通知），但这个通知不能阻止连接点之前的执行流程，除非它抛出一个异常。 doAfterReturning()方法使用@AfterReturning(value = “signAop()”, returning = “params”)注解，表示后置通知（在某连接点正常完成后执行的通知），通常在一个匹配的方法返回的时候执行。 实际运行时，在进入controller包下所有方法前，都会进入doBefore()方法，在controller包下方法执行完成后，都会进入doAfterReturning()方法。</summary></entry></feed>
+&lt;h3 id=&quot;修改-gradle-可手动编译-也可以-选择-auto-自动编译-和maven一样&quot;&gt;修改 .gradle 可手动编译 也可以 选择 auto 自动编译 和maven一样&lt;/h3&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="spring源码编译" /><summary type="html">1.基本环境 jdk 1.8.241 (必须1.8及以上版本) gradle 6.5 2.spring下载 使用 git 下载 spring-framework 下载地址：spring-framework 2.使用ide 导入spring-framework 源码 4.需要修改个配置 （看到 // 即为需要注释的代码） 4.1 build.gradle // apply from: &quot;${rootDir}/gradle/ide.gradle&quot; ... publishing { publications { mavenJava(MavenPublication) { // artifact docsZip // artifact schemaZip // artifact distZip } } } 4.2. spring-aspects.gradle //eclipse.project { // natures += &quot;org.eclipse.ajdt.ui.ajnature&quot; // buildCommands = [new org.gradle.plugins.ide.eclipse.model.BuildCommand(&quot;org.eclipse.ajdt.core.ajbuilder&quot;)] //} 4.3. kotlin-coroutines.gradle //eclipse { // project { // buildCommand &quot;org.jetbrains.kotlin.ui.kotlinBuilder&quot; // buildCommand &quot;org.eclipse.jdt.core.javabuilder&quot; // natures &quot;org.jetbrains.kotlin.core.kotlinNature&quot; // natures &quot;org.eclipse.jdt.core.javanature&quot; // linkedResource name: &quot;kotlin_bin&quot;, type: &quot;2&quot;, locationUri: &quot;org.jetbrains.kotlin.core.filesystem:/&quot; + project.name + &quot;/kotlin_bin&quot; // } // classpath { // containers &quot;org.jetbrains.kotlin.core.KOTLIN_CONTAINER&quot; // } //} 修改 .gradle 可手动编译 也可以 选择 auto 自动编译 和maven一样</summary></entry></feed>
