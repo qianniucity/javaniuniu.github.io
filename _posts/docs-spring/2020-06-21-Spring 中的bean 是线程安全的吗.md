@@ -9,7 +9,7 @@ key: spring-2020-06-21-01
 ### 概要
 Spring容器中的Bean是否线程安全，容器本身并没有提供Bean的线程安全策略，因此可以说 __Spring容器中的Bean本身不具备线程安全的特性，但是具体还是要结合具体scope的Bean去研究__。
 
-##### Spring 的 bean 作用域（scope）类型
+#### Spring 的 bean 作用域（scope）类型
 1. singleton:单例，默认作用域。
 2. prototype:原型，每次创建一个新对象。
 3. request:请求，每次Http请求创建一个新对象，适用于WebApplicationContext环境下。
