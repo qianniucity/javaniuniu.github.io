@@ -374,6 +374,14 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/map"><h2 itemprop="headline" class="item__header">Map</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">
+</div><p><a href="/java/map">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=map">map</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-map-2020-06-30-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-30T00:00:00+08:00">
+    <meta itemprop="keywords" content="map"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java/nio/bio"><h2 itemprop="headline" class="item__header">怎样理解阻塞非阻塞与同步异步的区别</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>老张爱喝茶，废话不说，煮开水。 <br />
 出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。  <br />
@@ -1742,35 +1750,8 @@ mysql&gt; show table status/G</p>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 20, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-06-20-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-20T00:00:00+08:00">
     <meta itemprop="keywords" content="jvm"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/spring/bean"><h2 itemprop="headline" class="item__header">Spring中Bean的作用域、生命周期</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="bean的作用域">Bean的作用域</h3>
-<p>　　Spring 3中为Bean定义了5中作用域，分别为singleton（单例）、prototype（原型）、request、session和global session，5种作用域说明如下：</p>
-<ol>
-  <li><strong>singleton</strong>：单例模式，Spring IoC容器中只会存在一个共享的Bean实例，无论有多少个Bean引用它，始终指向同一对象。Singleton作用域是Spring中的缺省作用域，也可以显示的将Bean定义为singleton模式，配置为：
-<code class="language-plaintext highlighter-rouge">&lt;bean id="userDao" class="com.ioc.UserDaoImpl" scope="singleton"/&gt;</code></li>
-  <li><strong>prototype</strong>:原型模式，每次通过Spring容器获取prototype定义的bean时，容器都将创建一个新的Bean实例，每个Bean实例都有自己的属性和状态，而singleton全局只有一个对象。根据经验，对有状态的bean使用prototype作用域，而对无状态的bean使用singleton作用域。</li>
-  <li><strong>request</strong>：在一次Http请求中，容器会返回该Bean的同一实例。而对不同的Http请求则会产生新的Bean，而且该bean仅在当前Http Request内有效。
-<code class="language-plaintext highlighter-rouge">&lt;bean id="loginAction" class="com.cnblogs.Login" scope="request"/&gt;</code> ，针对每一次Http请求，Spring容器根据该bean的定义创建一个全新的实例，且该实例仅在当前Http请求内有效，而其它请求无法看到当前请求中状态的变化，当当前Http请求结束，该bean实例也将会被销毁。</li>
-  <li><strong>session</strong>：在一次Http Session中，容器会返回该Bean的同一实例。而对不同的Session请求则会创建新的实例，该bean实例仅在当前Session内有效。
-<code class="language-plaintext highlighter-rouge">&lt;bean id="userPreference" class="com.ioc.UserPreference" scope="session"/&gt;</code>，同Http请求相同，每一次session请求创建新的实例，而不同的实例之间不共享属性，且实例仅在自己的session请求内有效，请求结束，则实例将被销毁。</li>
-  <li><strong>global Session</strong>：在一个全局的Http Session中，容器会返回该Bean的同一个实例，仅在使用portlet context时有效。</li>
-</ol>
-
-<h3 id="bean的生命周期">Bean的生命周期</h3>
-<p>　　经过如上对Bean作用域的介绍，接下来将在Bean作用域的基础上讲解Bean的生命周期。  <br />
-　　Spring容器可以管理singleton作用域下Bean的生命周期，在此作用域下，Spring能够精确地知道Bean何时被创建，何时初始化完成，以及何时被销毁。而对于prototype作用域的Bean，Spring只负责创建，当容器创建了Bean的实例后，Bean的实例就交给了客户端的代码管理，Spring容器将不再跟踪其生命周期，并且不会管理那些被配置成prototype作用域的Bean的生命周期。Spring中Bean的生命周期的执行是一个很复杂的过程，读者可以利用Spring提供的方法来定制Bean的创建过程。Spring容器在保证一个bean实例能够使用之前会做很多工作：</p>
-
-<p><img src="/assets/images/spring/0618/2018110145039276.png" alt="1" />
-<img src="/assets/images/spring/0618/2018110145059598.png" alt="2" /></p>
-</div><p><a href="/spring/bean">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=spring">spring</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 18, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="spring-bean">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-18T00:00:00+08:00">
-    <meta itemprop="keywords" content="spring"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>257 post articles, 33 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>258 post articles, 33 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>

@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>Spring-Aop - JAVA 牛牛</title>
 
-<meta name="description" content="A Post with Header Image, See Page layout for more examples.">
+<meta name="description" content="AOP的作用作用：在不修改源代码的情况下，可以实现功能的增强传统的纵向体系代码复用：横向抽取机制（AOP思想）：AOP 思想： 基于代理思想，对原来目标对象，创建代理对象，在不修改原对象代码情况下，通过代理对象，调用增强功能的代码，从而对原有业务方法进行增强 ！AOP应用场景场景一： 记录日志场景二： 监控方法运...">
 <link rel="canonical" href="http://localhost:4000/Spring/Aop"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -265,7 +265,7 @@
 
     <div class="grid page__grid">
 
-      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">Spring</li><li class="toc-h2"><a href="/page/spring.html">关于Spring</a></li><li class="toc-h2"><a href="/spring/source">Spring源码编译</a></li><li class="toc-h2"><a href="/Spring/Aspect/explanation">Aspect配置说明</a></li><li class="toc-h2"><a href="/Spring/Aspect/JoinPoint">JoinPoint的用法</a></li><li class="toc-h2"><a href="/Spring/Aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/Spring/OncePerRequestFilter/example">OncePerRequestFilter示例</a></li><li class="toc-h2"><a href="/spring/bean">Spring中Bean的作用域、生命周期</a></li><li class="toc-h2"><a href="/spring/thread/security">Spring 中的bean 是线程安全的吗</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
+      <div class="page__sidebar d-print-none"><div class="sidebar-toc"><ul class="toc toc--navigator"><li class="toc-h1">Spring</li><li class="toc-h2 active"><a href="/Spring/Aop">Spring Aop</a></li><li class="toc-h2"><a href="/Spring/Aoc">Spring Aoc</a></li><li class="toc-h2"><a href="/Spring/Di">Spring Di</a></li><li class="toc-h2"><a href="/spring/source">Spring源码编译</a></li><li class="toc-h2"><a href="/Spring/Aspect/explanation">Aspect配置说明</a></li><li class="toc-h2"><a href="/Spring/Aspect/JoinPoint">JoinPoint的用法</a></li><li class="toc-h2"><a href="/Spring/Aspect">Aspect实现样例</a></li><li class="toc-h2"><a href="/Spring/OncePerRequestFilter/example">OncePerRequestFilter示例</a></li><li class="toc-h2"><a href="/spring/bean">Spring中Bean的作用域、生命周期</a></li><li class="toc-h2"><a href="/spring/thread/security">Spring 中的bean 是线程安全的吗</a></li></ul></div></div><div class="page__main js-page-main has-aside cell cell--auto">
 
       <div class="page__main-inner"><div class="page__header d-print-none"><header class="header"><div class="main">
       <div class="header__title">
@@ -393,9 +393,187 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <meta itemprop="keywords" content="SpringAop"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
-<div class="article__content" itemprop="articleBody"><p>A Post with Header Image, See <a href="https://tianqi.name/jekyll-TeXt-theme/samples.html#page-layout">Page layout</a> for more examples.</p>
+<div class="article__content" itemprop="articleBody"><h4 id="aop的作用">AOP的作用</h4>
+<p>作用：在不修改源代码的情况下，可以实现功能的增强</p>
 
-<!--more-->
+<hr />
+
+<p>传统的纵向体系代码复用：</p>
+
+<p><img src="/assets/images/spring/0630/20180630172708942.png" alt="1" /></p>
+
+<p>横向抽取机制（AOP思想）：</p>
+
+<p><img src="/assets/images/spring/0630/20180630172800537.png" alt="2" /></p>
+
+<p><strong>AOP 思想： 基于代理思想，对原来目标对象，创建代理对象，在不修改原对象代码情况下，通过代理对象，调用增强功能的代码，从而对原有业务方法进行增强 ！</strong></p>
+
+<h4 id="aop应用场景">AOP应用场景</h4>
+
+<p>场景一： <strong>记录日志</strong>
+场景二： <strong>监控方法运行时间</strong> （监控性能）<br />
+场景三： <strong>权限控制</strong>
+场景四： <strong>缓存优化</strong> （第一次调用查询数据库，将查询结果放入内存对象， 第二次调用， 直接从内存对象返回，不需要查询数据库 ）<br />
+场景五： <strong>事务管理</strong> （调用方法前开启事务， 调用方法后提交关闭事务 ）</p>
+
+<h4 id="aop的实现原理">AOP的实现原理</h4>
+<p>那Spring中AOP是怎么实现的呢？Spring中AOP的有两种实现方式：</p>
+<ol>
+  <li>JDK动态代理</li>
+  <li>Cglib动态代理</li>
+</ol>
+
+<h5 id="jdk动态代理">JDK动态代理</h5>
+<ol>
+  <li>引入依赖，有spring，单元测，日志管理
+    <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-context --&gt;</span>
+     <span class="nt">&lt;dependency&gt;</span>
+         <span class="nt">&lt;groupId&gt;</span>org.springframework<span class="nt">&lt;/groupId&gt;</span>
+         <span class="nt">&lt;artifactId&gt;</span>spring-context<span class="nt">&lt;/artifactId&gt;</span>
+         <span class="nt">&lt;version&gt;</span>5.2.7.RELEASE<span class="nt">&lt;/version&gt;</span>
+     <span class="nt">&lt;/dependency&gt;</span>
+
+     <span class="nt">&lt;dependency&gt;</span>
+         <span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
+         <span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
+         <span class="nt">&lt;version&gt;</span>4.12<span class="nt">&lt;/version&gt;</span>
+<span class="c">&lt;!--            &lt;scope&gt;test&lt;/scope&gt;--&gt;</span>
+     <span class="nt">&lt;/dependency&gt;</span>
+     <span class="c">&lt;!-- 日志 --&gt;</span>
+     <span class="nt">&lt;dependency&gt;</span>
+         <span class="nt">&lt;groupId&gt;</span>org.slf4j<span class="nt">&lt;/groupId&gt;</span>
+         <span class="nt">&lt;artifactId&gt;</span>slf4j-log4j12<span class="nt">&lt;/artifactId&gt;</span>
+         <span class="nt">&lt;version&gt;</span>1.7.30<span class="nt">&lt;/version&gt;</span>
+     <span class="nt">&lt;/dependency&gt;</span>
+
+
+     <span class="nt">&lt;dependency&gt;</span>
+         <span class="nt">&lt;groupId&gt;</span>cglib<span class="nt">&lt;/groupId&gt;</span>
+         <span class="nt">&lt;artifactId&gt;</span>cglib<span class="nt">&lt;/artifactId&gt;</span>
+         <span class="nt">&lt;version&gt;</span>3.3.0<span class="nt">&lt;/version&gt;</span>
+     <span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li>UserDao接口
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDao</span> <span class="o">{</span>
+ <span class="kd">public</span> <span class="kt">void</span> <span class="nf">saveUser</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>UserDao实现类
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserDaoImpl</span> <span class="kd">implements</span> <span class="nc">UserDao</span> <span class="o">{</span>
+
+ <span class="nd">@Override</span>
+ <span class="kd">public</span> <span class="kt">void</span> <span class="nf">saveUser</span><span class="o">()</span> <span class="o">{</span>
+     <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"持久层：用户保存"</span><span class="o">);</span>
+ <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>动态代理
+    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
+
+ <span class="kd">final</span> <span class="nc">UserDao</span> <span class="n">userDao</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UserDaoImpl</span><span class="o">();</span>
+ <span class="c1">// newProxyInstance的三个参数解释：</span>
+ <span class="c1">// 参数1：代理类的类加载器，同目标类的类加载器</span>
+ <span class="c1">// 参数2：代理类要实现的接口列表，同目标类实现的接口列表</span>
+ <span class="c1">// 参数3：回调，是一个InvocationHandler接口的实现对象，当调用代理对象的方法时，执行的是回调中的invoke方法</span>
+ <span class="c1">//proxy为代理对象</span>
+ <span class="nc">UserDao</span> <span class="n">proxy</span> <span class="o">=</span> <span class="o">(</span><span class="nc">UserDao</span><span class="o">)</span> <span class="nc">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">userDao</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">(),</span>
+         <span class="n">userDao</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getInterfaces</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">InvocationHandler</span><span class="o">()</span> <span class="o">{</span>
+
+             <span class="nd">@Override</span>
+             <span class="c1">// 参数proxy:被代理的对象</span>
+             <span class="c1">// 参数method:执行的方法，代理对象执行哪个方法，method就是哪个方法</span>
+             <span class="c1">// 参数args:执行方法的参数</span>
+             <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="nc">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+                 <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"记录日志"</span><span class="o">);</span>
+                 <span class="nc">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">userDao</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+                 <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+             <span class="o">}</span>
+         <span class="o">});</span>
+ <span class="c1">//代理对象执行方法</span>
+ <span class="n">proxy</span><span class="o">.</span><span class="na">saveUser</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div>    </div>
+  </li>
+  <li>结果
+在没有修改原有类的代码的情况下，对原有类的功能进行了增强
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>记录日志
+持久曾：用户保护
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h5 id="cglib动态代理">Cglib动态代理</h5>
+<p>在实际开发中，可能需要对 <strong>没有实现接口的类增强，用JDK动态代理的方式就没法实现</strong> 。采用Cglib动态代理可以对没有实现接口的类产生代理，实际上是生成了目标类的子类来增强。</p>
+<ul>
+  <li>首先，需要导入Cglib所需的jar包。提示：spring已经集成了cglib，我们已经导入了spring包，所以不需要再导入其它包了。
+    <ol>
+      <li>目标类（一个公开方法，另外一个用final修饰）：
+```java</li>
+    </ol>
+  </li>
+</ul>
+
+<p>public class Dog{</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>final public void run(String name) {
+    System.out.println("狗"+name+"----run");
+}
+
+public void eat() {
+    System.out.println("狗----eat");
+} } ``` 2. 方法拦截器： ```java import java.lang.reflect.Method;
+</code></pre></div></div>
+
+<p>import net.sf.cglib.proxy.MethodInterceptor;
+import net.sf.cglib.proxy.MethodProxy;</p>
+
+<p>public class MyMethodInterceptor implements MethodInterceptor{</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Override
+public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+  long start = System.currentTimeMillis();
+  System.out.println("方法："+method.getName()+"开始执行");
+  //注意这里的方法调用，不是用反射哦！！！
+  Object object = methodProxy.invokeSuper(obj, args);
+  long end = System.currentTimeMillis();
+  System.out.println("用时："+ (end-start) + " ms");
+}   } ```
+</code></pre></div></div>
+
+<ol>
+  <li>测试类
+```java</li>
+</ol>
+
+<p>import net.sf.cglib.core.DebuggingClassWriter;
+import net.sf.cglib.proxy.Enhancer;</p>
+
+<p>public class CgLibProxy {
+    public static void main(String[] args) {
+        //在指定目录下生成动态代理类，我们可以反编译看一下里面到底是一些什么东西
+        // System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, “D:\java\java_workapace”);</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //创建Enhancer对象，类似于JDK动态代理的Proxy类，下一步就是设置几个参数
+    Enhancer enhancer = new Enhancer();
+    //设置目标类的字节码文件
+    enhancer.setSuperclass(Dog.class);
+    //设置回调函数
+    enhancer.setCallback(new MyMethodInterceptor());
+
+    //这里的creat方法就是正式创建代理类
+    Dog proxyDog = (Dog)enhancer.create();
+    //调用代理类的eat方法
+    proxyDog.eat();       
+} } ``` 3. 结果 ``` 这里是对目标类进行增强 狗----eat ```
+</code></pre></div></div>
+
+<h4 id="参考网站">参考网站</h4>
+<p><a href="https://www.cnblogs.com/wyq1995/p/10945034.html">CGLib动态代理</a><br />
+<a href="https://blog.csdn.net/u010452388/article/details/80868392">Spring AOP的实现原理及应用场景（通过动态代理）</a></p>
 </div><section class="article__sharing d-print-none"><!-- AddToAny BEGIN -->
 <div class="a2a_kit a2a_kit_size_32 a2a_default_style">
 <a class="a2a_dd" href="https://www.addtoany.com/share"></a>
@@ -417,7 +595,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
       </a>
     </p>
   </div></div></footer>
-<div class="article__section-navigator clearfix"><div class="previous"><span>PREVIOUS</span><a href="/spring/thread/security">Spring 中的bean 是线程安全的吗</a></div></div></div>
+<div class="article__section-navigator clearfix"><div class="next"><span>NEXT</span><a href="/Spring/Aoc">Spring Aoc</a></div></div></div>
 
 </div>
 
