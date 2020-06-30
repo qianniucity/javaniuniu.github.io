@@ -65,12 +65,14 @@ __AOP 思想： 基于代理思想，对原来目标对象，创建代理对象�
         </dependency>
 ```
 2. UserDao接口
+
 ```java
 public interface UserDao {
     public void saveUser();
 }
 ```
 3. UserDao实现类
+
 ```java
 public class UserDaoImpl implements UserDao {
 
@@ -82,6 +84,7 @@ public class UserDaoImpl implements UserDao {
 ```
 
 4. 动态代理
+
 ```java
 @Test
 public void test1() {
@@ -110,6 +113,7 @@ public void test1() {
 }
 ```
 5. 结果
+
 在没有修改原有类的代码的情况下，对原有类的功能进行了增强
 ```
 记录日志
@@ -118,10 +122,10 @@ public void test1() {
 
 ##### Cglib动态代理
 在实际开发中，可能需要对 __没有实现接口的类增强，用JDK动态代理的方式就没法实现__ 。采用Cglib动态代理可以对没有实现接口的类产生代理，实际上是生成了目标类的子类来增强。
-- 首先，需要导入Cglib所需的jar包。提示：spring已经集成了cglib，我们已经导入了spring包，所以不需要再导入其它包了。
+- 首先，需要导入Cglib所需的jar包。提示：spring已经集成了cglib，我们已经导入了spring包，所以不需要再导入其它包了。  
 1. 目标类（一个公开方法，另外一个用final修饰）：
-```java
 
+```java
 public class Dog{
 
     final public void run(String name) {
@@ -133,7 +137,9 @@ public class Dog{
     }
 }
 ```
+
 2. 方法拦截器：
+
 ```java
 import java.lang.reflect.Method;
 
@@ -155,8 +161,8 @@ public class MyMethodInterceptor implements MethodInterceptor{
 ```
 
 3. 测试类
-```java
 
+```java
 import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
 
@@ -179,7 +185,9 @@ public class CgLibProxy {
     }
 }
 ```
+
 3. 结果
+
 ```
 这里是对目标类进行增强
 狗----eat

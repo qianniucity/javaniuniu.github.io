@@ -454,121 +454,143 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
      <span class="nt">&lt;/dependency&gt;</span>
 </code></pre></div>    </div>
   </li>
-  <li>UserDao接口
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDao</span> <span class="o">{</span>
- <span class="kd">public</span> <span class="kt">void</span> <span class="nf">saveUser</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>UserDao实现类
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserDaoImpl</span> <span class="kd">implements</span> <span class="nc">UserDao</span> <span class="o">{</span>
+  <li>UserDao接口</li>
+</ol>
 
- <span class="nd">@Override</span>
- <span class="kd">public</span> <span class="kt">void</span> <span class="nf">saveUser</span><span class="o">()</span> <span class="o">{</span>
-     <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"持久层：用户保存"</span><span class="o">);</span>
- <span class="o">}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDao</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">saveUser</span><span class="o">();</span>
 <span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>动态代理
-    <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+</code></pre></div></div>
+<ol>
+  <li>UserDao实现类</li>
+</ol>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserDaoImpl</span> <span class="kd">implements</span> <span class="nc">UserDao</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">saveUser</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"持久层：用户保存"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>动态代理</li>
+</ol>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test1</span><span class="o">()</span> <span class="o">{</span>
 
- <span class="kd">final</span> <span class="nc">UserDao</span> <span class="n">userDao</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UserDaoImpl</span><span class="o">();</span>
- <span class="c1">// newProxyInstance的三个参数解释：</span>
- <span class="c1">// 参数1：代理类的类加载器，同目标类的类加载器</span>
- <span class="c1">// 参数2：代理类要实现的接口列表，同目标类实现的接口列表</span>
- <span class="c1">// 参数3：回调，是一个InvocationHandler接口的实现对象，当调用代理对象的方法时，执行的是回调中的invoke方法</span>
- <span class="c1">//proxy为代理对象</span>
- <span class="nc">UserDao</span> <span class="n">proxy</span> <span class="o">=</span> <span class="o">(</span><span class="nc">UserDao</span><span class="o">)</span> <span class="nc">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">userDao</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">(),</span>
-         <span class="n">userDao</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getInterfaces</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">InvocationHandler</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">UserDao</span> <span class="n">userDao</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UserDaoImpl</span><span class="o">();</span>
+    <span class="c1">// newProxyInstance的三个参数解释：</span>
+    <span class="c1">// 参数1：代理类的类加载器，同目标类的类加载器</span>
+    <span class="c1">// 参数2：代理类要实现的接口列表，同目标类实现的接口列表</span>
+    <span class="c1">// 参数3：回调，是一个InvocationHandler接口的实现对象，当调用代理对象的方法时，执行的是回调中的invoke方法</span>
+    <span class="c1">//proxy为代理对象</span>
+    <span class="nc">UserDao</span> <span class="n">proxy</span> <span class="o">=</span> <span class="o">(</span><span class="nc">UserDao</span><span class="o">)</span> <span class="nc">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">userDao</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getClassLoader</span><span class="o">(),</span>
+            <span class="n">userDao</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getInterfaces</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">InvocationHandler</span><span class="o">()</span> <span class="o">{</span>
 
-             <span class="nd">@Override</span>
-             <span class="c1">// 参数proxy:被代理的对象</span>
-             <span class="c1">// 参数method:执行的方法，代理对象执行哪个方法，method就是哪个方法</span>
-             <span class="c1">// 参数args:执行方法的参数</span>
-             <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="nc">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
-                 <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"记录日志"</span><span class="o">);</span>
-                 <span class="nc">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">userDao</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-                 <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-             <span class="o">}</span>
-         <span class="o">});</span>
- <span class="c1">//代理对象执行方法</span>
- <span class="n">proxy</span><span class="o">.</span><span class="na">saveUser</span><span class="o">();</span>
+                <span class="nd">@Override</span>
+                <span class="c1">// 参数proxy:被代理的对象</span>
+                <span class="c1">// 参数method:执行的方法，代理对象执行哪个方法，method就是哪个方法</span>
+                <span class="c1">// 参数args:执行方法的参数</span>
+                <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="nc">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"记录日志"</span><span class="o">);</span>
+                    <span class="nc">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">userDao</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+                    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+    <span class="c1">//代理对象执行方法</span>
+    <span class="n">proxy</span><span class="o">.</span><span class="na">saveUser</span><span class="o">();</span>
 <span class="o">}</span>
-</code></pre></div>    </div>
-  </li>
-  <li>结果
-在没有修改原有类的代码的情况下，对原有类的功能进行了增强
-    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>记录日志
-持久曾：用户保护
-</code></pre></div>    </div>
-  </li>
+</code></pre></div></div>
+<ol>
+  <li>结果</li>
 </ol>
+
+<p>在没有修改原有类的代码的情况下，对原有类的功能进行了增强</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>记录日志
+持久曾：用户保护
+</code></pre></div></div>
 
 <h5 id="cglib动态代理">Cglib动态代理</h5>
 <p>在实际开发中，可能需要对 <strong>没有实现接口的类增强，用JDK动态代理的方式就没法实现</strong> 。采用Cglib动态代理可以对没有实现接口的类产生代理，实际上是生成了目标类的子类来增强。</p>
 <ul>
   <li>首先，需要导入Cglib所需的jar包。提示：spring已经集成了cglib，我们已经导入了spring包，所以不需要再导入其它包了。
     <ol>
-      <li>目标类（一个公开方法，另外一个用final修饰）：
-```java</li>
+      <li>目标类（一个公开方法，另外一个用final修饰）：</li>
     </ol>
   </li>
 </ul>
 
-<p>public class Dog{</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span><span class="o">{</span>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>final public void run(String name) {
-    System.out.println("狗"+name+"----run");
-}
+    <span class="kd">final</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"狗"</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">"----run"</span><span class="o">);</span>
+    <span class="o">}</span>
 
-public void eat() {
-    System.out.println("狗----eat");
-} } ``` 2. 方法拦截器： ```java import java.lang.reflect.Method;
-</code></pre></div></div>
-
-<p>import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;</p>
-
-<p>public class MyMethodInterceptor implements MethodInterceptor{</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Override
-public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-  long start = System.currentTimeMillis();
-  System.out.println("方法："+method.getName()+"开始执行");
-  //注意这里的方法调用，不是用反射哦！！！
-  Object object = methodProxy.invokeSuper(obj, args);
-  long end = System.currentTimeMillis();
-  System.out.println("用时："+ (end-start) + " ms");
-}   } ```
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eat</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"狗----eat"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
 <ol>
-  <li>测试类
-```java</li>
+  <li>方法拦截器：</li>
 </ol>
 
-<p>import net.sf.cglib.core.DebuggingClassWriter;
-import net.sf.cglib.proxy.Enhancer;</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
 
-<p>public class CgLibProxy {
-    public static void main(String[] args) {
-        //在指定目录下生成动态代理类，我们可以反编译看一下里面到底是一些什么东西
-        // System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, “D:\java\java_workapace”);</p>
+<span class="kn">import</span> <span class="nn">net.sf.cglib.proxy.MethodInterceptor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">net.sf.cglib.proxy.MethodProxy</span><span class="o">;</span>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    //创建Enhancer对象，类似于JDK动态代理的Proxy类，下一步就是设置几个参数
-    Enhancer enhancer = new Enhancer();
-    //设置目标类的字节码文件
-    enhancer.setSuperclass(Dog.class);
-    //设置回调函数
-    enhancer.setCallback(new MyMethodInterceptor());
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyMethodInterceptor</span> <span class="kd">implements</span> <span class="nc">MethodInterceptor</span><span class="o">{</span>
 
-    //这里的creat方法就是正式创建代理类
-    Dog proxyDog = (Dog)enhancer.create();
-    //调用代理类的eat方法
-    proxyDog.eat();       
-} } ``` 3. 结果 ``` 这里是对目标类进行增强 狗----eat ```
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">intercept</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">,</span> <span class="nc">MethodProxy</span> <span class="n">proxy</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+      <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"方法："</span><span class="o">+</span><span class="n">method</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">"开始执行"</span><span class="o">);</span>
+      <span class="c1">//注意这里的方法调用，不是用反射哦！！！</span>
+      <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="n">methodProxy</span><span class="o">.</span><span class="na">invokeSuper</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+      <span class="kt">long</span> <span class="n">end</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"用时："</span><span class="o">+</span> <span class="o">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="o">)</span> <span class="o">+</span> <span class="s">" ms"</span><span class="o">);</span>
+    <span class="o">}</span>  
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>测试类</li>
+</ol>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">net.sf.cglib.core.DebuggingClassWriter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">net.sf.cglib.proxy.Enhancer</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CgLibProxy</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//在指定目录下生成动态代理类，我们可以反编译看一下里面到底是一些什么东西</span>
+        <span class="c1">// System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "D:\\java\\java_workapace");</span>
+
+        <span class="c1">//创建Enhancer对象，类似于JDK动态代理的Proxy类，下一步就是设置几个参数</span>
+        <span class="nc">Enhancer</span> <span class="n">enhancer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Enhancer</span><span class="o">();</span>
+        <span class="c1">//设置目标类的字节码文件</span>
+        <span class="n">enhancer</span><span class="o">.</span><span class="na">setSuperclass</span><span class="o">(</span><span class="nc">Dog</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="c1">//设置回调函数</span>
+        <span class="n">enhancer</span><span class="o">.</span><span class="na">setCallback</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyMethodInterceptor</span><span class="o">());</span>
+
+        <span class="c1">//这里的creat方法就是正式创建代理类</span>
+        <span class="nc">Dog</span> <span class="n">proxyDog</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Dog</span><span class="o">)</span><span class="n">enhancer</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+        <span class="c1">//调用代理类的eat方法</span>
+        <span class="n">proxyDog</span><span class="o">.</span><span class="na">eat</span><span class="o">();</span>       
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ol>
+  <li>结果</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>这里是对目标类进行增强
+狗----eat
 </code></pre></div></div>
 
 <h4 id="参考网站">参考网站</h4>
