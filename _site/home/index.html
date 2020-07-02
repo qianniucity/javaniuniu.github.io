@@ -374,6 +374,154 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mysql/002"><h2 itemprop="headline" class="item__header">MYSQL调优----如何设置合理的数据库连接池的大小</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="一前言">一、前言</h2>
+
+<p>基本上来说，大部分项目都需要跟数据库做交互，那么，数据库连接池的大小设置成多大合适呢？</p>
+
+<p>一些开发老鸟可能还会告诉你：<strong>没关系，尽量设置的大些，比如设置成 200，这样数据库性能会高些，吞吐量也会大些！</strong></p>
+
+<p>你也许会点头称是，真的是这样吗？看完这篇文章，也许会颠覆你的认知哦！</p>
+
+<h2 id="二正菜开始">二、正菜开始</h2>
+
+<p>可以很直接的说，关于数据库连接池大小的设置，每个开发者都可能在一环节掉进坑里，事实上呢，大部分程序员可能都会依靠自己的直觉去设置它的大小，设置成 100 ？思量许久后，自顾自想，应该差不多吧？</p>
+
+<h2 id="三假设你的服务有1万并发的访问">三、假设你的服务有1万并发的访问</h2>
+
+<p>不妨意淫一下，你手里有个网站，并发压力虽然还没到 Facebook 那个级别，但是呢？也有个1万上下的并发量！也就是说差不多2万左右的 TPS。</p>
+
+<p>那么问题来了！<strong>这个网站的数据库连接池应该设置成多大合适呢？</strong></p>
+
+<p>其实这个问法本身就是有问题的，我们需要反过来问，正确问法应该是：</p>
+
+<p><strong>“这个网站的数据库连接池应该设置成多小合适呢？”</strong></p>
+
+<blockquote>
+  <p>PS: 这里有一个 Oracle 性能小组发布的简短视频，链接地址为 https://www.youtube.com/watch?v=xNDnVOCdvQ0，友情提示，需要科学上网才能访问哦！</p>
+</blockquote>
+
+<p>口述一下，视频中对 Oracle 数据库进行了压力测试，模拟 9600 个并发线程来操作数据库，每两次数据库操作之间 sleep 550ms，注意，视频中刚开始设置的线程池大小为 2048。</p>
+
+<p>让我们来看看数据库连接池的大小为 2048 性能测试结果的鬼样子：</p>
+
+<p><strong>每个请求要在连接池队列里等待 33ms，获得连接之后，执行SQL需要耗时77ms, CPU 消耗维持在 95% 左右；</strong></p>
+
+<p>接下来，我们将连接池的大小改小点，设置成 1024，其他测试参数不变，结果咋样？</p>
+
+<p><strong>“这里，获取连接等待时长基本不变，但是 SQL 的执行耗时降低了！”</strong></p>
+
+<p>哎呦，有长进哦！</p>
+
+<p>接下来，我们再设置小些，连接池的大小降低到 96，并发数等其他参数不变，看看结果如何：</p>
+
+<p><strong>每个请求在连接池队列中的平均等待时间为 1ms, SQL 执行耗时为 2ms</strong>.</p>
+
+<p>我去！什么鬼？</p>
+
+<p><strong>我们没调整任何东西，仅仅只是将数据库连接池的大小降低了，这样，就能把之前平均 100ms 响应时间缩短到了 3ms。吞吐量指数级上升啊！</strong></p>
+
+<p>你这也太溜了！</p>
+
+<h2 id="四为啥有这种效果">四、为啥有这种效果?</h2>
+
+<p>我们不妨想一下，为啥 Nginx 内部仅仅使用了 4 个线程，其性能就大大超越了 100 个进程的 Apache HTTPD 呢？追究其原因的话，回想一下计算机科学的基础知识，答案其实非常明显。</p>
+
+<p>要知道，即使是单核 CPU 的计算机也能“同时”运行着数百个线程。但我们其实都知道，这只不过是操作系统快速切换时间片，跟我们玩的一个小把戏罢了。</p>
+
+<p>一核 CPU同一时刻只能执行一个线程，然后操作系统切换上下文，CPU 核心快速调度，执行另一个线程的代码，不停反复，给我们造成了所有进程同时运行假象。</p>
+
+<p>其实，在一核 CPU 的机器上，顺序执行<strong>A</strong>和<strong>B</strong>永远比通过时间分片切换“同时”执行<strong>A</strong>和<strong>B</strong>要快，其中原因，学过操作系统这门课程的童鞋应该很清楚。一旦线程的数量超过了 CPU 核心的数量，再增加线程数系统就只会更慢，而不是更快，因为这里涉及到上下文切换耗费的额外的性能。</p>
+
+<p>说到这里，你应该恍然大悟了 ……</p>
+
+<h2 id="五其他应该考虑到的因素">五、其他应该考虑到的因素</h2>
+
+<p>上小节中说到了主要原因，但其实没有这么简单，我们还需要考虑到一些其他的因素。</p>
+
+<p>当我们在寻找数据库的性能瓶颈时，大致可归为三类：</p>
+
+<ul>
+  <li><strong>CPU</strong></li>
+  <li><strong>磁盘 IO</strong></li>
+  <li><strong>网络 IO</strong></li>
+</ul>
+
+<p>也许你会说，还有内存这一因素？内存的确是需要考虑的，但是比起<strong>磁盘IO</strong>和<strong>网络IO</strong>，稍显微不足道，这里就不加了。</p>
+
+<p>假设我们不考虑磁盘 IO 和网络 IO，就很好定论了，在一个 8 核的服务器上，数据库连接数/线程数设置为 8 能够提供最优的性能，如果再增加连接数，反而会因为上下文切换导致性能下降。</p>
+
+<p>大家都知道，数据库通常把数据存储在磁盘上，而磁盘呢，通常是由一些旋转着的金属碟片和一个装在步进马达上的读写头组成的。读/写头同一时刻只能出现在一个位置，当它需要再次执行读写操作时，它必须“寻址”到另外一个位置才能完成任务。所以呢？这里就有了<strong>寻址的耗时</strong>，此外还有<strong>旋转耗时</strong>，读写头需要等待磁盘碟片上的目标数据“旋转到位”才能进行读写操作。使用缓存当然是能够提升性能的，但上述原理仍然适用。</p>
+
+<p>在这段（”I/O等待”）时间内，线程是处于“阻塞”等待状态，也就是说没干啥正事！此时操作系统可以将这个空闲的CPU 核心用于服务其他线程。</p>
+
+<p>这里我们可以总结一下，当你的线程处理的是 I/O 密集型业务时，便可以让线程/连接数设置的比 CPU核心大一些，这样就能够在同样的时间内，完成更多的工作，提升吞吐量。</p>
+
+<p>那么问题又来了？</p>
+
+<p>大小设置成多少合适呢？</p>
+
+<p>这要取决于<strong>磁盘</strong>，如果你使用的是 SSD 固态硬盘，它不需要寻址，也不需要旋转碟片。打住打住！！！你千万可别理所当然的认为：“<strong>既然SSD速度更快，我们把线程数的大小设置的大些吧！！</strong>”</p>
+
+<p>结论正好相反！无需寻址和没有旋回耗时的确意味着<strong>更少的阻塞</strong>，所以更少的线程（更接近于CPU核心数）会发挥出更高的性能。只有当阻塞密集时，更多的线程数才能发挥出更好的性能。</p>
+
+<p>上面我们已经说过了磁盘 IO, 接下来我们谈谈网络 IO！</p>
+
+<p>网络 IO 其实也是非常相似的。通过以太网接口读写数据时也会造成阻塞，10G带宽会比1G带宽的阻塞耗时少一些，而 1G 带宽又会比 100M 带宽的阻塞少一些。通常情况下，我们把网络 IO 放在第三顺位来考虑，然而有些人会在性能计算中忽略网络 IO 带来的影响。</p>
+
+<p>上图是 PostgreSQL 的基准性能测试数据，从图中我们可以看到，TPS 在连接数达到 50 时开始变缓。回过头来想下，在上面 Oracle 的性能测试视频中，测试人员们将连接数从 2048 降到了 96，实际上 96 还是太高了，除非你的服务器 CPU 核心数有 16 或 32。</p>
+
+<h2 id="六连接数计算公式">六、连接数计算公式</h2>
+
+<p>下面公式由 PostgreSQL 提供，不过底层原理是不变的，它适用于市面上绝大部分数据库产品。还有，你应该模拟预期的访问量，并通过下面的公式先设置一个偏合理的值，然后在实际的测试中，通过微调，来寻找最合适的连接数大小。</p>
+
+<p><strong>连接数 = ((核心数 * 2) + 有效磁盘数)</strong></p>
+
+<blockquote>
+  <p>核心数不应包含超线程(hyper thread)，即使打开了超线程也是如此，如果热点数据全被缓存了，那么有效磁盘数实际是0，随着缓存命中率的下降，有效磁盘数也逐渐趋近于实际的磁盘数。另外需要注意，这一公式作用于SSD 的效果如何，尚未明了。</p>
+</blockquote>
+
+<p>好了，按照这个公式，如果说你的服务器 CPU 是 4核 i7 的，连接池大小应该为 <code class="language-plaintext highlighter-rouge">((4*2)+1)=9</code>。</p>
+
+<p>取个整, 我们就设置为 10 吧。你这个行不行啊？10 也太小了吧！</p>
+
+<p>你要是觉得不太行的话，可以跑个性能测试看看，我们可以保证，它能轻松支撑 3000 用户以 6000 TPS 的速率并发执行简单查询的场景。你还可以将连接池大小超过 10，那时，你会看到响应时长开始增加，TPS 开始下降。</p>
+
+<h2 id="七结论你需要的是一个小连接池和一个等待连接的线程队列">七、结论：你需要的是一个小连接池，和一个等待连接的线程队列</h2>
+
+<p>假设说你有 10000 个并发访问，而你设置了连接池大小为 10000，你怕是石乐志哦。</p>
+
+<p>改成 1000，太高？改成 100？还是太多了。</p>
+
+<p>你仅仅需要一个大小为 10 数据库连接池，然后让剩下的业务线程都在队列里等待就可以了。</p>
+
+<blockquote>
+  <p>连接池中的连接数量大小应该设置成：数据库能够有效同时进行的查询任务数（通常情况下来说不会高于 2*CPU核心数）。</p>
+</blockquote>
+
+<p>你应该经常会看到一些用户量不是很大的 web 应用中，为应付大约十来个的并发，却将数据库连接池设置成 100， 200 的情况。请不要过度配置您的数据库连接池的大小。</p>
+
+<h2 id="八额外需要注意的点">八、额外需要注意的点</h2>
+
+<p>实际上，连接池的大小的设置还是要结合实际的业务场景来说事。</p>
+
+<p>比如说，你的系统同时混合了<strong>长事务</strong>和<strong>短事务</strong>，这时，根据上面的公式来计算就很难办了。正确的做法应该是创建两个连接池，一个服务于长事务，一个服务于”实时”查询，也就是短事务。</p>
+
+<p>还有一种情况，比方说一个系统执行一个任务队列，业务上要求同一时间内只允许执行一定数量的任务，这时，我们就应该让并发任务数去适配连接池连接数，而不是连接数大小去适配并发任务数。</p>
+
+<h2 id="ref">Ref</h2>
+
+<p>https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing</p>
+</div><p><a href="/mysql/002">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E8%B0%83%E4%BC%98">调优</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=MYSQL%E8%B0%83%E4%BC%98">MYSQL调优</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 02, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mysql-2020-07-02-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-02T00:00:00+08:00">
+    <meta itemprop="keywords" content="调优,MYSQL调优"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/ArrayList/01"><h2 itemprop="headline" class="item__header">ArrayList循环遍历并删除元素的常见陷阱</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>在工作和学习中，经常碰到删除ArrayList里面的某个元素，看似一个很简单的问题，却很容易出bug。不妨把这个问题当做一道面试题目，我想一定能难道不少的人。今天就给大家说一下在ArrayList循环遍历并删除元素的问题。首先请看下面的例子：</p>
 
@@ -1645,144 +1793,8 @@ mysql&gt; show table status/G</p>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 20, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mysql-2020-06-20-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-20T00:00:00+08:00">
     <meta itemprop="keywords" content="mysql"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/leetcode/2020/0620/001"><h2 itemprop="headline" class="item__header">35. 搜索插入位置</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li><strong>难度</strong>：<code class="language-plaintext success highlighter-rouge">简单</code></li>
-  <li><strong>本题涉及算法</strong>：<code class="language-plaintext success highlighter-rouge">二分查找</code></li>
-  <li><strong>思路</strong>：   <code class="language-plaintext info highlighter-rouge">二分查找</code> <code class="language-plaintext info highlighter-rouge">暴力</code>   <code class="language-plaintext info highlighter-rouge">目标值插入数组</code></li>
-  <li><strong>类似题型</strong>:</li>
-</ul>
-
-<hr />
-
-<h3 id="题目-35-搜索插入位置">题目 <a href="https://leetcode-cn.com/problems/search-insert-position/">35. 搜索插入位置</a></h3>
-<p>给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。</p>
-
-<p>你可以假设数组中无重复元素。</p>
-
-<h4 id="示例-1">示例 1:</h4>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>输入: [1,3,5,6], 5
-输出: 2
-示例 2:
-
-输入: [1,3,5,6], 2
-输出: 1
-示例 3:
-
-输入: [1,3,5,6], 7
-输出: 4
-示例 4:
-
-输入: [1,3,5,6], 0
-输出: 0
-</code></pre></div></div>
-
-<h3 id="方法一-二分查找">方法一 二分查找</h3>
-<ul>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(logN)))$ ，这里 $N$   是数组的长度，每一次都将问题的规模缩减为原来的一半，因此时间复杂度是对数级别的</li>
-      <li>空间复杂度 $O(1)$
-        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-  <span class="k">def</span> <span class="nf">searchInsert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-  <span class="s">"""
-  :type nums: List[int]
-  :type target: int
-  :rtype: int
-  """</span>
-  <span class="n">left</span> <span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
-  <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
-      <span class="n">mid</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-      <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
-          <span class="n">left</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span>
-      <span class="k">else</span><span class="p">:</span>
-          <span class="n">right</span> <span class="o">=</span> <span class="n">mid</span>
-  <span class="k">return</span> <span class="n">left</span>
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="方法二-暴力遍历">方法二 暴力遍历</h3>
-<ul>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(logN)))$ ，这里 $N$   是数组的长度，最差情况下遍历 目标值&gt;数组最后一个值</li>
-      <li>空间复杂度 $O(1)$
-        <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-  <span class="k">def</span> <span class="nf">searchInsert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">nums</span><span class="p">:</span>
-      <span class="k">return</span> <span class="mi">0</span>
-  <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
-      <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
-      <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">:</span>
-          <span class="k">return</span> <span class="n">i</span>
-</code></pre></div>        </div>
-        <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Solution</span> <span class="o">{</span>
-  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">searchInsert</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">nums</span><span class="o">,</span> <span class="kt">int</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-  <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">nums</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
-  <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-  <span class="k">if</span> <span class="o">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">0</span><span class="o">){</span>
-      <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-  <span class="o">}</span>
-  <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">return</span> <span class="n">len</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">ans</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
-          <span class="k">break</span><span class="o">;</span>
-      <span class="o">}</span>
-  <span class="o">}</span>
-  <span class="k">return</span> <span class="n">ans</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div>        </div>
-        <h3 id="方法三-目标值插入数组后在查找对于位置提供了一个新思路">方法三 目标值插入数组后在查找对于位置（提供了一个新思路）</h3>
-      </li>
-    </ul>
-  </li>
-  <li><strong>解题思路</strong>：
-    <ul>
-      <li>目标值插入数组中</li>
-      <li>排序后在查询对于目标值的位置</li>
-    </ul>
-  </li>
-  <li><strong>复杂度分析</strong>：
-    <ul>
-      <li>时间复杂度 $O(logN)))$ ，这里 $N$   是数组的长度，最差情况下遍历 目标值&gt;数组最后一个值</li>
-      <li>空间复杂度 $O(1)$</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">searchInsert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="c1"># 不管这个数在不在里面，直接append
-</span>        <span class="n">nums</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-        <span class="c1"># 然后再排序
-</span>        <span class="n">nums</span><span class="p">.</span><span class="n">sort</span><span class="p">()</span>
-        <span class="c1"># 最后返回查找的index
-</span>        <span class="k">return</span> <span class="n">nums</span><span class="p">.</span><span class="n">index</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
-
-</code></pre></div></div>
-
-<ul>
-  <li><strong>如果你也发现了，请为自己点赞，顺便为小牛点赞👍支持</strong></li>
-  <li><strong>如果发现在别处也有类似的例题，请在下面👇评论区告诉小牛</strong></li>
-</ul>
-</div><p><a href="/leetcode/2020/0620/001">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=leetcode">leetcode</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="leetcode-2020-0620-001">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="leetcode"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>259 post articles, 33 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>260 post articles, 33 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
