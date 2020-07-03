@@ -374,6 +374,286 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/copy/01"><h2 itemprop="headline" class="item__header">Java深入理解深拷贝和浅拷贝区别</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一拷贝的引入">一、拷贝的引入</h3>
+
+<h4 id="1引用拷贝">（1）、引用拷贝</h4>
+
+<p>创建一个指向对象的引用变量的拷贝。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Teacher</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher</span><span class="o">(</span><span class="s">"Taylor"</span><span class="o">,</span><span class="mi">26</span><span class="o">);</span>
+<span class="nc">Teacher</span> <span class="n">otherteacher</span> <span class="o">=</span> <span class="n">teacher</span><span class="o">;</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">otherteacher</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>输出结果：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>blog.Teacher@355da254
+blog.Teacher@355da254
+</code></pre></div></div>
+
+<p>结果分析：由输出结果可以看出，它们的地址值是相同的，那么它们肯定是同一个对象。teacher和otherteacher的只是引用而已，他们都指向了一个相同的对象Teacher(“Taylor”,26)。 这就叫做引用拷贝。</p>
+
+<p><img src="/assets/images/mianshiti/0703/20190213224407919.png" alt="1" /></p>
+
+<h4 id="2对象拷贝">（2）、对象拷贝</h4>
+
+<p>创建对象本身的一个副本。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Teacher</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher</span><span class="o">(</span><span class="s">"Swift"</span><span class="o">,</span><span class="mi">26</span><span class="o">);</span>
+<span class="nc">Teacher</span> <span class="n">otherteacher</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Teacher</span><span class="o">)</span><span class="n">teacher</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
+<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">otherteacher</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>输出结果：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>blog.Teacher@355da254
+blog.Teacher@4dc63996
+</code></pre></div></div>
+
+<p>结果分析：由输出结果可以看出，它们的地址是不同的，也就是说创建了新的对象， 而不是把原对象的地址赋给了一个新的引用变量,这就叫做对象拷贝。</p>
+
+<p><img src="/assets/images/mianshiti/0703/20190213224646355.png" alt="2" /></p>
+
+<p><strong>==注：深拷贝和浅拷贝都是对象拷贝==</strong></p>
+
+<h3 id="二浅拷贝">二、浅拷贝</h3>
+
+<h4 id="1定义">（1）、定义</h4>
+
+<p>被复制对象的所有变量都含有与原来的对象相同的值，而所有的对其他对象的引用仍然指向原来的对象。即对象的浅拷贝会对“主”对象进行拷贝，但不会复制主对象里面的对象。”里面的对象“会在原来的对象和它的副本之间共享。</p>
+
+<p>简而言之，浅拷贝仅仅复制所考虑的对象，而不复制它所引用的对象</p>
+
+<h4 id="2浅拷贝实例">（2）、浅拷贝实例</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShallowCopy</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
+        <span class="nc">Teacher</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher</span><span class="o">();</span>
+        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"riemann"</span><span class="o">);</span>
+        <span class="n">teacher</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">27</span><span class="o">);</span>
+
+        <span class="nc">Student2</span> <span class="n">student1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Student2</span><span class="o">();</span>
+        <span class="n">student1</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"edgar"</span><span class="o">);</span>
+        <span class="n">student1</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">18</span><span class="o">);</span>
+        <span class="n">student1</span><span class="o">.</span><span class="na">setTeacher</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
+
+        <span class="nc">Student2</span> <span class="n">student2</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Student2</span><span class="o">)</span> <span class="n">student1</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拷贝后"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getAge</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getAge</span><span class="o">());</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"修改老师的信息后-------------"</span><span class="o">);</span>
+        <span class="c1">// 修改老师的信息</span>
+        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Games"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Teacher</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Student2</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Teacher</span> <span class="n">teacher</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Teacher</span> <span class="nf">getTeacher</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">teacher</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTeacher</span><span class="o">(</span><span class="nc">Teacher</span> <span class="n">teacher</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">teacher</span> <span class="o">=</span> <span class="n">teacher</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
+        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">object</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>输出结果：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>拷贝后
+edgar
+18
+riemann
+27
+修改老师的信息后-------------
+Games
+Games
+</code></pre></div></div>
+
+<p>结果分析： 两个引用student1和student2指向不同的两个对象，但是两个引用student1和student2中的两个teacher引用指向的是同一个对象，所以说明是浅拷贝。</p>
+
+<p><img src="/assets/images/mianshiti/0703/20190213231318786.png" alt="3" /></p>
+
+<h3 id="三深拷贝">三、深拷贝</h3>
+
+<h4 id="1定义-1">（1）、定义</h4>
+
+<p>深拷贝是一个整个独立的对象拷贝，深拷贝会拷贝所有的属性,并拷贝属性指向的动态分配的内存。当对象和它所引用的对象一起拷贝时即发生深拷贝。深拷贝相比于浅拷贝速度较慢并且花销较大。</p>
+
+<p>简而言之，深拷贝把要复制的对象所引用的对象都复制了一遍。</p>
+
+<h4 id="2深拷贝实例">（2）、深拷贝实例</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DeepCopy</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
+        <span class="nc">Teacher2</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher2</span><span class="o">();</span>
+        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"riemann"</span><span class="o">);</span>
+        <span class="n">teacher</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">27</span><span class="o">);</span>
+
+        <span class="nc">Student3</span> <span class="n">student1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Student3</span><span class="o">();</span>
+        <span class="n">student1</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"edgar"</span><span class="o">);</span>
+        <span class="n">student1</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">18</span><span class="o">);</span>
+        <span class="n">student1</span><span class="o">.</span><span class="na">setTeacher</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
+
+        <span class="nc">Student3</span> <span class="n">student2</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Student3</span><span class="o">)</span> <span class="n">student1</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拷贝后"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getAge</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getAge</span><span class="o">());</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"修改老师的信息后-------------"</span><span class="o">);</span>
+        <span class="c1">// 修改老师的信息</span>
+        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Games"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Teacher2</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Student3</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Teacher2</span> <span class="n">teacher</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Teacher2</span> <span class="nf">getTeacher</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">teacher</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTeacher</span><span class="o">(</span><span class="nc">Teacher2</span> <span class="n">teacher</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">teacher</span> <span class="o">=</span> <span class="n">teacher</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
+        <span class="c1">// 浅复制时：</span>
+        <span class="c1">// Object object = super.clone();</span>
+        <span class="c1">// return object;</span>
+
+        <span class="c1">// 改为深复制：</span>
+        <span class="nc">Student3</span> <span class="n">student</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Student3</span><span class="o">)</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+        <span class="c1">// 本来是浅复制，现在将Teacher对象复制一份并重新set进来</span>
+        <span class="n">student</span><span class="o">.</span><span class="na">setTeacher</span><span class="o">((</span><span class="nc">Teacher2</span><span class="o">)</span> <span class="n">student</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">clone</span><span class="o">());</span>
+        <span class="k">return</span> <span class="n">student</span><span class="o">;</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>输出结果：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>拷贝后
+edgar
+18
+riemann
+27
+修改老师的信息后-------------
+Games
+riemann
+</code></pre></div></div>
+
+<p>结果分析：
+两个引用student1和student2指向不同的两个对象，两个引用student1和student2中的两个teacher引用指向的是两个对象，但对teacher对象的修改只能影响student1对象,所以说是深拷贝。</p>
+
+<p><img src="/assets/images/mianshiti/0703/20190213232800511.png" alt="4" /></p>
+</div><p><a href="/mianshi/copy/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mysql/002"><h2 itemprop="headline" class="item__header">MYSQL调优----如何设置合理的数据库连接池的大小</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="一前言">一、前言</h2>
 
@@ -1301,500 +1581,8 @@ config里面自己定义的Bean:User</p>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 21, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="spring-2020-06-21-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-21T00:00:00+08:00">
     <meta itemprop="keywords" content="spring,🌟🌟🌟🌟🌟"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mysql/partition"><h2 itemprop="headline" class="item__header">Mysql 分区表-分区操作</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="视频参考链接">视频参考链接</h3>
-<p><a href="https://www.bilibili.com/video/BV1E7411q7Nx?p=1">MySQL分区</a></p>
-
-<h3 id="一查看mysql是否支持分区">一、查看MySQL是否支持分区</h3>
-<h4 id="1mysql56以及之前版本">1、MySQL5.6以及之前版本</h4>
-
-<p>show variables like ‘%partition%’;</p>
-
-<p><img src="/assets/images/mysql/0620/1530782-20181221101618516-1766491003.png" alt="1" /></p>
-
-<h4 id="2mysql57">2、MySQL5.7</h4>
-
-<p>show plugins;</p>
-
-<p><img src="/assets/images/mysql/0620/1530782-20181221101735004-398510033.png" alt="2" /></p>
-
-<h3 id="二分区表的分类与限制">二、分区表的分类与限制</h3>
-<h4 id="1分区表分类">1、分区表分类</h4>
-
-<p><strong>RANGE分区</strong>：基于属于一个给定连续区间的列值，把多行分配给分区。</p>
-
-<p><strong>LIST分区</strong>：类似于按RANGE分区，区别在于LIST分区是基于列值匹配一个离散值集合中的某个值来进行选择。</p>
-
-<p><strong>HASH分区</strong>：基于用户定义的表达式的返回值来进行选择的分区，该表达式使用将要插入到表中的这些行的列值进行计算。这个函数可以包含MySQL 中有效的、产生非负整数值的任何表达式。</p>
-
-<p><strong>KEY分区</strong>：类似于按HASH分区，区别在于KEY分区只支持计算一列或多列，且MySQL服务器提供其自身的哈希函数。必须有一列或多列包含整数值。</p>
-
-<p><strong>复合分区</strong>：在MySQL 5.6版本中，只支持RANGE和LIST的子分区，且子分区的类型只能为HASH和KEY。</p>
-
-<h4 id="2分区表限制">2、分区表限制</h4>
-
-<p>1）分区键必须包含在表的所有主键、唯一键中。</p>
-
-<p>2）MYSQL只能在使用分区函数的列本身进行比较时才能过滤分区，而不能根据表达式的值去过滤分区，即使这个表达式就是分区函数也不行。</p>
-
-<p>3）最大分区数： 不使用NDB存储引擎的给定表的最大可能分区数为8192（包括子分区）。如果当分区数很大，但是未达到8192时提示 Got error … from storage engine: Out of resources when opening file,可以通过增加open_files_limit系统变量的值来解决问题，当然同时打开文件的数量也可能由操作系统限制。</p>
-
-<p>4）不支持查询缓存： 分区表不支持查询缓存，对于涉及分区表的查询，它自动禁用。 查询缓存无法启用此类查询。</p>
-
-<p>5）分区的innodb表不支持外键。</p>
-
-<p>6）服务器SQL_mode影响分区表的同步复制。 主机和从机上的不同SQL_mode可能会导致sql语句; 这可能导致分区之间的数据分配给定主从位置不同，甚至可能导致插入主机上成功的分区表在从库上失败。 为了获得最佳效果，您应该始终在主机和从机上使用相同的服务器SQL模式。</p>
-
-<p>7）ALTER TABLE … ORDER BY： 对分区表运行的ALTER TABLE … ORDER BY列语句只会导致每个分区中的行排序。</p>
-
-<p>8）全文索引。 分区表不支持全文索引，即使是使用InnoDB或MyISAM存储引擎的分区表。  <br />
-9）分区表无法使用外键约束。  <br />
-10）Spatial columns： 具有空间数据类型（如POINT或GEOMETRY）的列不能在分区表中使用。 <br />
-11）临时表： 临时表不能分区。  <br />
-12）subpartition问题： subpartition必须使用HASH或KEY分区。 只有RANGE和LIST分区可能被分区; HASH和KEY分区不能被子分区。 <br />
-13）分区表不支持mysqlcheck，myisamchk和myisampack。</p>
-
-<h3 id="三创建分区表">三、创建分区表</h3>
-<h4 id="1range分区">1、range分区</h4>
-
-<p>1）行数据基于一个给定的连续区间的列值放入分区。</p>
-
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`test_11`</span> <span class="p">(</span>
-  <span class="nv">`id`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`t`</span> <span class="nb">date</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`id`</span><span class="p">,</span><span class="nv">`t`</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span>
- <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">RANGE</span> <span class="p">(</span><span class="n">to_days</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
-<span class="p">(</span><span class="n">PARTITION</span> <span class="n">p20170801</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">736907</span><span class="p">)</span> <span class="n">ENGINE</span> <span class="o">=</span> <span class="n">InnoDB</span><span class="p">,</span>
- <span class="n">PARTITION</span> <span class="n">p20170901</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">736938</span><span class="p">)</span> <span class="n">ENGINE</span> <span class="o">=</span> <span class="n">InnoDB</span><span class="p">,</span>
- <span class="n">PARTITION</span> <span class="n">pmax</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="k">maxvalue</span> <span class="n">ENGINE</span> <span class="o">=</span> <span class="n">InnoDB</span><span class="p">);</span><span class="mi">123456789</span>
-</code></pre></div></div>
-
-<p>2）然后插入4条数据：</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">insert</span> <span class="k">into</span> <span class="n">test_11</span> <span class="k">values</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nv">"20170722"</span><span class="p">),(</span><span class="mi">2</span><span class="p">,</span><span class="nv">"20170822"</span><span class="p">),(</span><span class="mi">3</span><span class="p">,</span><span class="nv">"20170823"</span><span class="p">),(</span><span class="mi">4</span><span class="p">,</span><span class="nv">"20170824"</span><span class="p">);</span><span class="mi">1</span>
-</code></pre></div></div>
-<p>3）然后查看information下partitions对分区别信息的统计：</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">PARTITION_NAME</span> <span class="k">as</span> <span class="nv">"分区"</span><span class="p">,</span><span class="n">TABLE_ROWS</span> <span class="k">as</span> <span class="nv">"行数"</span> <span class="k">from</span> <span class="n">information_schema</span><span class="p">.</span><span class="n">partitions</span> <span class="k">where</span> <span class="n">table_schema</span><span class="o">=</span><span class="nv">"mysql_test"</span> <span class="k">and</span> <span class="k">table_name</span><span class="o">=</span><span class="nv">"test_11"</span><span class="p">;</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-----------+--------+
-| 分区      | 行数   |
-+-----------+--------+
-| p20170801 |      1 |
-| p20170901 |      3 |
-+-----------+--------+
-2 rows in set (0.00 sec)12345678
-</code></pre></div></div>
-<p>可以看出分区p20170801插入1行数据，p20170901插入的3行数据。
-可以是用year、to_days、unix_timestamp等函数对相应的时间字段进行转换，然后分区。</p>
-<h3 id="2list分区">2、list分区</h3>
-
-<p>和range分区一样，只是list分区面向的是离散的值</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">h2</span> <span class="p">(</span>
-    <span class="o">-&gt;</span>   <span class="n">c1</span> <span class="nb">INT</span><span class="p">,</span>
-    <span class="o">-&gt;</span>   <span class="n">c2</span> <span class="nb">INT</span>
-    <span class="o">-&gt;</span> <span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">LIST</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span> <span class="p">(</span>
-    <span class="o">-&gt;</span>   <span class="n">PARTITION</span> <span class="n">p0</span> <span class="k">VALUES</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
-    <span class="o">-&gt;</span>   <span class="n">PARTITION</span> <span class="n">p1</span> <span class="k">VALUES</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-    <span class="o">-&gt;</span> <span class="p">);</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">11</span> <span class="n">sec</span><span class="p">)</span><span class="mi">123456789</span>
-</code></pre></div></div>
-<p>与RANGE分区的情况不同，没有“catch-all”，如MAXVALUE; 分区表达式的所有预期值应在PARTITION … VALUES IN（…）子句中涵盖。 包含不匹配的分区列值的INSERT语句失败并显示错误，如此示例所示：</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">h2</span> <span class="k">VALUES</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
-<span class="n">ERROR</span> <span class="mi">1525</span> <span class="p">(</span><span class="n">HY000</span><span class="p">):</span> <span class="k">Table</span> <span class="n">has</span> <span class="k">no</span> <span class="n">partition</span> <span class="k">for</span> <span class="n">value</span> <span class="mi">312</span>
-</code></pre></div></div>
-<h4 id="3hash分区">3、hash分区</h4>
-
-<p>根据用户自定义表达式的返回值来进行分区，返回值不能为负数</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="p">(</span><span class="n">col1</span> <span class="nb">INT</span><span class="p">,</span> <span class="n">col2</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">col3</span> <span class="nb">DATE</span><span class="p">)</span>
-    <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">HASH</span><span class="p">(</span> <span class="nb">YEAR</span><span class="p">(</span><span class="n">col3</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">PARTITIONS</span> <span class="mi">4</span><span class="p">;</span><span class="mi">123</span>
-</code></pre></div></div>
-<p>如果你插入col3的数值为’2005-09-15’，那么根据以下计算来选择插入的分区：</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">MOD</span><span class="p">(</span><span class="nb">YEAR</span><span class="p">(</span><span class="s1">'2005-09-01'</span><span class="p">),</span><span class="mi">4</span><span class="p">)</span>
-    <span class="o">=</span>  <span class="k">MOD</span><span class="p">(</span><span class="mi">2005</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-    <span class="o">=</span>  <span class="mi">1123</span>
-</code></pre></div></div>
-<h4 id="4key分区">4、key分区</h4>
-
-<p>根据MySQL数据库提供的散列函数进行分区</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">k1</span> <span class="p">(</span>
-    <span class="n">id</span> <span class="nb">INT</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-    <span class="n">name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span>
-    <span class="k">UNIQUE</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">PARTITION</span> <span class="k">BY</span> <span class="k">KEY</span><span class="p">()</span>
-<span class="n">PARTITIONS</span> <span class="mi">2</span><span class="p">;</span><span class="mi">1234567</span>
-</code></pre></div></div>
-<p>KEY仅列出零个或多个列名称。 用作分区键的任何列必须包含表的主键的一部分或全部，如果该表具有一个。 如果没有列名称作为分区键，则使用表的主键（如果有）。如果没有主键，但是有一个唯一的键，那么唯一键用于分区键。但是，如果唯一键列未定义为NOT NULL，则上一条语句将失败。
-与其他分区类型不同，KEY使用的分区不限于整数或空值。 例如，以下CREATE TABLE语句是有效的：</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">tm1</span> <span class="p">(</span>
-    <span class="n">s1</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="k">PRIMARY</span> <span class="k">KEY</span>
-<span class="p">)</span>
-<span class="n">PARTITION</span> <span class="k">BY</span> <span class="k">KEY</span><span class="p">(</span><span class="n">s1</span><span class="p">)</span>
-<span class="n">PARTITIONS</span> <span class="mi">10</span><span class="p">;</span><span class="mi">12345</span>
-</code></pre></div></div>
-<p>注意：对于key分区表，不能执行ALTER TABLE DROP PRIMARY KEY，因为这样做会生成错误 ERROR 1466 (HY000): Field in list of fields for partition function not found in table.</p>
-<h4 id="5column分区">5、Column分区</h4>
-
-<p>COLUMN分区是5.5开始引入的分区功能，只有RANGE COLUMN和LIST COLUMN这两种分区；支持整形、日期、字符串；RANGE和LIST的分区方式非常的相似。
-COLUMNS和RANGE和LIST分区的区别
-1）针对日期字段的分区就不需要再使用函数进行转换了，例如针对date字段进行分区不需要再使用YEAR()表达式进行转换。  <br />
-2）COLUMN分区支持多个字段作为分区键但是不支持表达式作为分区键。</p>
-
-<h5 id="column支持的数据类型">column支持的数据类型：</h5>
-
-<p>1）所有的整型，float和decimal不支持  <br />
-2）日期类型：date和datetime，其他不支持  <br />
-3）字符类型：CHAR, VARCHAR, BINARY和VARBINARY，blob和text不支持 <br />
-单列的column range分区mysql&gt; show create table list_c;</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`list_c`</span> <span class="p">(</span>
-  <span class="nv">`c1`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`c2`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span>
-<span class="cm">/*!50500 PARTITION BY RANGE  COLUMNS(c1)
-(PARTITION p0 VALUES LESS THAN (5) ENGINE = InnoDB,
- PARTITION p1 VALUES LESS THAN (10) ENGINE = InnoDB) */</span>
-</code></pre></div></div>
-<p>多列的column range分区mysql&gt; show create table list_c;</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`list_c`</span> <span class="p">(</span>
-  <span class="nv">`c1`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`c2`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`c3`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span>
-<span class="cm">/*!50500 PARTITION BY RANGE  COLUMNS(c1,c3)
-(PARTITION p0 VALUES LESS THAN (5,'aaa') ENGINE = InnoDB,
- PARTITION p1 VALUES LESS THAN (10,'bbb') ENGINE = InnoDB) */</span>
-<span class="err">单列的</span><span class="k">column</span> <span class="n">list</span><span class="err">分区</span><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">show</span> <span class="k">create</span> <span class="k">table</span> <span class="n">list_c</span><span class="p">;</span>
- <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`list_c`</span> <span class="p">(</span>
-  <span class="nv">`c1`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`c2`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`c3`</span> <span class="nb">char</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="k">DEFAULT</span> <span class="k">NULL</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">latin1</span>
-<span class="cm">/*!50500 PARTITION BY LIST  COLUMNS(c3)
-(PARTITION p0 VALUES IN ('aaa') ENGINE = InnoDB,
- PARTITION p1 VALUES IN ('bbb') ENGINE = InnoDB) */</span>
-</code></pre></div></div>
-<h4 id="6子分区组合分区">6、子分区（组合分区）</h4>
-
-<p>在分区的基础上再进一步分区，有时成为复合分区;
-MySQL数据库允许在range和list的分区上进行HASH和KEY的子分区。例如：</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">ts</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INT</span><span class="p">,</span> <span class="n">purchased</span> <span class="nb">DATE</span><span class="p">)</span>
-    <span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">RANGE</span><span class="p">(</span> <span class="nb">YEAR</span><span class="p">(</span><span class="n">purchased</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">SUBPARTITION</span> <span class="k">BY</span> <span class="n">HASH</span><span class="p">(</span> <span class="n">TO_DAYS</span><span class="p">(</span><span class="n">purchased</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">SUBPARTITIONS</span> <span class="mi">2</span> <span class="p">(</span>
-        <span class="n">PARTITION</span> <span class="n">p0</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1990</span><span class="p">),</span>
-        <span class="n">PARTITION</span> <span class="n">p1</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">2000</span><span class="p">),</span>
-        <span class="n">PARTITION</span> <span class="n">p2</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="k">MAXVALUE</span>
-    <span class="p">);</span>
-</code></pre></div></div>
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@mycat-3 ~]# ll /data/mysql_data_3306/mysql_test/ts*
--rw-r----- 1 mysql mysql  8596 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts.frm
--rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p0#SP#p0sp0.ibd
--rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p0#SP#p0sp1.ibd
--rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p1#SP#p1sp0.ibd
--rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p1#SP#p1sp1.ibd
--rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p2#SP#p2sp0.ibd
--rw-r----- 1 mysql mysql 98304 Aug  8 13:54 /data/mysql_data_3306/mysql_test/ts#P#p2#SP#p2sp1.ibd
-1234567891011121314151617
-</code></pre></div></div>
-<p>ts表根据purchased进行range分区，然后又进行了一次hash分区，最后形成了3*2个分区，可以从物理文件证实此分区方式。可以通过subpartition语法来显示指定子分区名称。
-注意：每个子分区的数量必须相同；如果一个分区表的任何子分区已经使用subpartition，那么必须表明所有的子分区名称；每个subpartition子句必须包括子分区的一个名字；子分区的名字必须是一致的
-另外，对于MyISAM表可以使用index directory和data direactory来指定各个分区的数据和索引目录，但是对于innodb表来说，因为该存储引擎使用表空间自动的进行数据和索引的管理，因此会忽略指定index和data的语法。</p>
-
-<h3 id="四普通表转换为分区表">四、普通表转换为分区表</h3>
-<p>1、用alter table table_name partition by命令重建分区表</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">alter</span> <span class="k">table</span> <span class="n">jxfp_data_bak</span> <span class="n">PARTITION</span> <span class="k">BY</span> <span class="k">KEY</span><span class="p">(</span><span class="n">SH</span><span class="p">)</span> <span class="n">PARTITIONS</span> <span class="mi">8</span><span class="p">;</span>
-</code></pre></div></div>
-
-<h3 id="五分区表操作">五、分区表操作</h3>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="p">(</span>
-    <span class="n">id</span> <span class="nb">INT</span><span class="p">,</span>
-    <span class="n">year_col</span> <span class="nb">INT</span>
-<span class="p">)</span>
-<span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">RANGE</span> <span class="p">(</span><span class="n">year_col</span><span class="p">)</span> <span class="p">(</span>
-    <span class="n">PARTITION</span> <span class="n">p0</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1991</span><span class="p">),</span>
-    <span class="n">PARTITION</span> <span class="n">p1</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1995</span><span class="p">),</span>
-    <span class="n">PARTITION</span> <span class="n">p2</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1999</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div></div>
-<h4 id="1add-partition-新增分区">1、ADD PARTITION （新增分区）</h4>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">ADD</span> <span class="n">PARTITION</span> <span class="p">(</span><span class="n">PARTITION</span> <span class="n">p3</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">2002</span><span class="p">));</span>
-</code></pre></div></div>
-<h4 id="2drop-partition-删除分区">2、DROP PARTITION （删除分区）</h4>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">DROP</span> <span class="n">PARTITION</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="3truncate-partition截取分区">3、TRUNCATE PARTITION（截取分区）</h4>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">TRUNCATE</span> <span class="n">PARTITION</span> <span class="n">p0</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">TRUNCATE</span> <span class="n">PARTITION</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p3</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="4coalesce-partition合并分区">4、COALESCE PARTITION（合并分区）</h4>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t2</span> <span class="p">(</span>
-    <span class="n">name</span> <span class="nb">VARCHAR</span> <span class="p">(</span><span class="mi">30</span><span class="p">),</span>
-    <span class="n">started</span> <span class="nb">DATE</span>
-<span class="p">)</span>
-<span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">HASH</span><span class="p">(</span> <span class="nb">YEAR</span><span class="p">(</span><span class="n">started</span><span class="p">)</span> <span class="p">)</span>
-<span class="n">PARTITIONS</span> <span class="mi">6</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t2</span> <span class="n">COALESCE</span> <span class="n">PARTITION</span> <span class="mi">2</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="5reorganize-partition拆分重组分区">5、REORGANIZE PARTITION（拆分/重组分区）</h4>
-
-<h5 id="1拆分分区">1）拆分分区</h5>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">table</span> <span class="n">ALGORITHM</span><span class="o">=</span><span class="n">INPLACE</span><span class="p">,</span> <span class="n">REORGANIZE</span> <span class="n">PARTITION</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">employees</span> <span class="k">ADD</span> <span class="n">PARTITION</span> <span class="p">(</span>
-    <span class="n">PARTITION</span> <span class="n">p5</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">2010</span><span class="p">),</span>
-    <span class="n">PARTITION</span> <span class="n">p6</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="k">MAXVALUE</span>
-<span class="p">);</span>
-</code></pre></div></div>
-<h5 id="2重组分区">2）重组分区</h5>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">members</span> <span class="n">REORGANIZE</span> <span class="n">PARTITION</span> <span class="n">s0</span><span class="p">,</span><span class="n">s1</span> <span class="k">INTO</span> <span class="p">(</span>
-    <span class="n">PARTITION</span> <span class="n">p0</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1970</span><span class="p">)</span>
-<span class="p">);</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">tbl_name</span>
-    <span class="n">REORGANIZE</span> <span class="n">PARTITION</span> <span class="n">partition_list</span>
-    <span class="k">INTO</span> <span class="p">(</span><span class="n">partition_definitions</span><span class="p">);</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">members</span> <span class="n">REORGANIZE</span> <span class="n">PARTITION</span> <span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">,</span><span class="n">p3</span> <span class="k">INTO</span> <span class="p">(</span>
-    <span class="n">PARTITION</span> <span class="n">m0</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1980</span><span class="p">),</span>
-    <span class="n">PARTITION</span> <span class="n">m1</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
-<span class="p">);</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">tt</span> <span class="k">ADD</span> <span class="n">PARTITION</span> <span class="p">(</span><span class="n">PARTITION</span> <span class="n">np</span> <span class="k">VALUES</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">));</span>
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">tt</span> <span class="n">REORGANIZE</span> <span class="n">PARTITION</span> <span class="n">p1</span><span class="p">,</span><span class="n">np</span> <span class="k">INTO</span> <span class="p">(</span>
-    <span class="n">PARTITION</span> <span class="n">p1</span> <span class="k">VALUES</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">18</span><span class="p">),</span>
-    <span class="n">PARTITION</span> <span class="n">np</span> <span class="k">VALUES</span> <span class="k">in</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
-<span class="p">);</span>
-</code></pre></div></div>
-<h4 id="6analyze-check-partition分析与检查分区">6、ANALYZE 、CHECK PARTITION（分析与检查分区）</h4>
-
-<p>1）ANALYZE 读取和存储分区中值的分布情况</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">ANALYZE</span> <span class="n">PARTITION</span> <span class="n">p1</span><span class="p">,</span> <span class="k">ANALYZE</span> <span class="n">PARTITION</span> <span class="n">p2</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">ANALYZE</span> <span class="n">PARTITION</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">;</span>
-</code></pre></div></div>
-<p>2）CHECK 检查分区是否存在错误</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="k">ANALYZE</span> <span class="n">PARTITION</span> <span class="n">p1</span><span class="p">,</span> <span class="k">CHECK</span> <span class="n">PARTITION</span> <span class="n">p2</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="7repair分区">7、REPAIR分区</h4>
-
-<p>修复被破坏的分区</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="n">REPAIR</span> <span class="n">PARTITION</span> <span class="n">p0</span><span class="p">,</span><span class="n">p1</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="8optimize">8、OPTIMIZE</h4>
-
-<p>该命令主要是用于回收空闲空间和分区的碎片整理。对分区执行该命令,相当于依次对分区执行 CHECK PARTITION, ANALYZE PARTITION,REPAIR PARTITION命令。</p>
-
-<p>譬如:</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="n">OPTIMIZE</span> <span class="n">PARTITION</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="9rebuild分区">9、REBUILD分区</h4>
-
-<p>重建分区,它相当于先删除分区中的数据,然后重新插入。这个主要是用于分区的碎片整理。</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="n">REBUILD</span> <span class="n">PARTITION</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">;</span>
-</code></pre></div></div>
-<h4 id="10exchange-partition分区交换">10、EXCHANGE PARTITION（分区交换）</h4>
-
-<p>分区交换的语法如下:</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">pt</span> <span class="n">EXCHANGE</span> <span class="n">PARTITION</span> <span class="n">p</span> <span class="k">WITH</span> <span class="k">TABLE</span> <span class="n">nt</span>
-</code></pre></div></div>
-<p>其中,pt是分区表,p是pt的分区(注:也可以是子分区),nt是目标表。</p>
-
-<p>其实,分区交换的限制还是蛮多的:</p>
-
-<p>1） nt不能为分区表</p>
-
-<p>2）nt不能为临时表</p>
-
-<p>3）nt和pt的结构必须一致</p>
-
-<p>4）nt不存在任何外键约束,即既不能是主键,也不能是外键。</p>
-
-<p>5）nt中的数据不能位于p分区的范围之外。</p>
-
-<p>具体可参考MySQL的官方文档</p>
-
-<h4 id="11迁移分区discard-import-">11、迁移分区（DISCARD 、IMPORT ）</h4>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="n">DISCARD</span> <span class="n">PARTITION</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="n">TABLESPACE</span><span class="p">;</span>
-
-<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="n">IMPORT</span> <span class="n">PARTITION</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="n">TABLESPACE</span><span class="p">;</span>
-</code></pre></div></div>
-<p>实验环境：（都是mysql5.7）
-源库：192.168.2.200      mysql5.7.16    zhangdb下的emp_2分区表的
-目标库：192.168.2.100    mysql5.7.18    test下  （将zhangdb的emp表，导入到目标库的test schema下）
-–：在源数据库中创建测试分区表emp_2，然后导入数据</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MySQL</span> <span class="p">[</span><span class="n">zhangdb</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">emp_2</span><span class="p">(</span>
-<span class="n">id</span> <span class="nb">BIGINT</span> <span class="nb">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-<span class="n">x</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-<span class="n">y</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-<span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">RANGE</span> <span class="n">COLUMNS</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
-<span class="p">(</span>
-<span class="n">PARTITION</span> <span class="n">p1</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">1000</span><span class="p">),</span>  
-<span class="n">PARTITION</span> <span class="n">p2</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">2000</span><span class="p">),</span>  
-<span class="n">PARTITION</span> <span class="n">p3</span> <span class="k">VALUES</span> <span class="k">LESS</span> <span class="k">THAN</span> <span class="p">(</span><span class="mi">3000</span><span class="p">)</span>     
-<span class="p">);</span>  
-</code></pre></div></div>
-<p>（接着创建存储过程，导入测试数据）</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">DELIMITER</span> <span class="o">//</span>
-<span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">insert_batch</span><span class="p">()</span>
-<span class="k">begin</span>
-<span class="k">DECLARE</span> <span class="n">num</span> <span class="nb">INT</span><span class="p">;</span>
-<span class="k">SET</span> <span class="n">num</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
-<span class="n">WHILE</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">3000</span> <span class="k">DO</span>
-<span class="n">IF</span> <span class="p">(</span><span class="n">num</span><span class="o">%</span><span class="mi">10000</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">THEN</span>
-<span class="k">COMMIT</span><span class="p">;</span>
-<span class="k">END</span> <span class="n">IF</span><span class="p">;</span>
-<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">emp_2</span> <span class="k">VALUES</span><span class="p">(</span><span class="k">NULL</span><span class="p">,</span> <span class="n">REPEAT</span><span class="p">(</span><span class="s1">'X'</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">REPEAT</span><span class="p">(</span><span class="s1">'Y'</span><span class="p">,</span> <span class="mi">500</span><span class="p">));</span>
-<span class="k">SET</span> <span class="n">num</span><span class="o">=</span><span class="n">num</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
-<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
-<span class="k">COMMIT</span><span class="p">;</span>
-<span class="k">END</span> <span class="o">//</span>
-<span class="k">DELIMITER</span> <span class="p">;</span>
-</code></pre></div></div>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">TABLE_NAME</span><span class="p">,</span><span class="n">PARTITION_NAME</span> <span class="k">from</span> <span class="n">information_schema</span><span class="p">.</span><span class="n">partitions</span> <span class="k">where</span> <span class="n">table_schema</span><span class="o">=</span><span class="s1">'zhangdb'</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">------------+----------------+</span>
-<span class="o">|</span> <span class="k">TABLE_NAME</span> <span class="o">|</span> <span class="n">PARTITION_NAME</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------+</span>
-<span class="o">|</span> <span class="n">emp</span>        <span class="o">|</span> <span class="k">NULL</span>           <span class="o">|</span>
-<span class="o">|</span> <span class="n">emp_2</span>      <span class="o">|</span> <span class="n">p1</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">emp_2</span>      <span class="o">|</span> <span class="n">p2</span>             <span class="o">|</span>
-<span class="o">|</span> <span class="n">emp_2</span>      <span class="o">|</span> <span class="n">p3</span>             <span class="o">|</span>
-<span class="o">+</span><span class="c1">------------+----------------+</span>
-<span class="mi">4</span> <span class="k">rows</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
-
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">from</span> <span class="n">emp_2</span> <span class="n">partition</span> <span class="p">(</span><span class="n">p1</span><span class="p">);</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span>      <span class="mi">999</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">from</span> <span class="n">emp_2</span> <span class="n">partition</span> <span class="p">(</span><span class="n">p2</span><span class="p">);</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span>     <span class="mi">1000</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
-<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">from</span> <span class="n">emp_2</span> <span class="n">partition</span> <span class="p">(</span><span class="n">p3</span><span class="p">);</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span>     <span class="mi">1000</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
-</code></pre></div></div>
-<p>从上面可以看出，emp_2分区表已经创建完成，并且有3个子分区，每个分区都有一点数据。
-–：在目标数据库中，创建emp_2表的结构，不要数据（要在源库，使用show create table emp_2\G 的方法 查看创建该表的sql）</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MySQL</span> <span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`emp_2`</span> <span class="p">(</span>
-  <span class="nv">`id`</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="nb">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-  <span class="nv">`x`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`y`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`id`</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">3000</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span>
-<span class="cm">/*!50500 PARTITION BY RANGE  COLUMNS(id)
-(PARTITION p1 VALUES LESS THAN (1000) ENGINE = InnoDB,
- PARTITION p2 VALUES LESS THAN (2000) ENGINE = InnoDB,
- PARTITION p3 VALUES LESS THAN (3000) ENGINE = InnoDB) */</span> <span class="p">;</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost test]# ll
--rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p0.ibd
--rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p1.ibd
--rw-r----- 1 mysql mysql 98304 May 25 15:58 emp_2#P#p2.ibd
-</code></pre></div></div>
-<p>注意：
-※约束条件、字符集等等也必须一致，建议使用show create table t1; 来获取创建表的SQL，否则在新服务器上导入表空间的时候会提示1808错误。
-–：在目标数据库上，丢弃分区表的表空间</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">MySQL</span> <span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">alter</span> <span class="k">table</span> <span class="n">emp_2</span> <span class="n">discard</span> <span class="n">tablespace</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">12</span> <span class="n">sec</span><span class="p">)</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost test]# ll    ---这时候在看，刚才的3个分区的idb文件都没有了
--rw-r----- 1 mysql mysql  8604 May 25 04:14 emp_2.frm
-</code></pre></div></div>
-<p>–：在源数据库上运行FLUSH TABLES … FOR EXPORT 锁定表并生成.cfg元数据文件，最后将cfg和ibd文件传输到目标数据库中</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="n">flush</span> <span class="n">tables</span> <span class="n">emp_2</span> <span class="k">for</span> <span class="n">export</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span> <span class="n">sec</span><span class="p">)</span>
-</code></pre></div></div>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@localhost zhangdb]# scp emp_2* root@192.168.2.100:/mysql/data/test/   --将文件cp到目标数据库
-mysql&gt; unlock tables;   ---最后将表的锁是否
-</code></pre></div></div>
-<p>–：在目标数据库中对文件授权，然后导入表空间查看数据是否完整可用</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="n">root</span><span class="o">@</span><span class="n">localhost</span> <span class="n">test</span><span class="p">]</span><span class="o">#</span> <span class="n">chown</span> <span class="n">mysql</span><span class="p">.</span><span class="n">mysql</span> <span class="n">emp_2</span><span class="o">#*</span>
-<span class="n">MySQL</span> <span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">alter</span> <span class="k">table</span> <span class="n">emp_2</span> <span class="n">import</span> <span class="n">tablespace</span><span class="p">;</span>
-<span class="n">Query</span> <span class="n">OK</span><span class="p">,</span> <span class="mi">0</span> <span class="k">rows</span> <span class="n">affected</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">96</span> <span class="n">sec</span><span class="p">)</span>
-<span class="n">MySQL</span> <span class="p">[</span><span class="n">test</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">from</span> <span class="n">emp_2</span><span class="p">;</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="o">|</span>     <span class="mi">2999</span> <span class="o">|</span>
-<span class="o">+</span><span class="c1">----------+</span>
-<span class="mi">1</span> <span class="k">row</span> <span class="k">in</span> <span class="k">set</span> <span class="p">(</span><span class="mi">0</span><span class="p">.</span><span class="mi">63</span> <span class="n">sec</span><span class="p">)</span>
-</code></pre></div></div>
-<p>从上面的查看得知，分区表都已经导入到目标数据库中了，
-另外，也可以将部分子分区导入到目标数据库中，（往往整个分区表会很大，可用只将需要用到的子分区导入到目标数据库中），
-将部分子分区导入到目标数据库的方法是：
-1）在创建目标表的时候，只需要创建要导入的分区即可，如： 只创建了p2 p3两个分区</p>
-<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">`emp_2`</span> <span class="p">(</span>
-  <span class="nv">`id`</span> <span class="nb">bigint</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="nb">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
-  <span class="nv">`x`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="nv">`y`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
-  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="nv">`id`</span><span class="p">)</span>
-<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="n">AUTO_INCREMENT</span><span class="o">=</span><span class="mi">3000</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8mb4</span>
-<span class="cm">/*!50500 PARTITION BY RANGE  COLUMNS(id)
-(
- PARTITION p2 VALUES LESS THAN (2000) ENGINE = InnoDB,
- PARTITION p3 VALUES LESS THAN (3000) ENGINE = InnoDB) */</span>
-</code></pre></div></div>
-<p>2）从源库cp到目标库的文件，当然也就是这俩的，就不需要其他分区的了，
-3）其他的操作方法都一样了。</p>
-
-<h3 id="六如何获取分区的相关信息">六、如何获取分区的相关信息</h3>
-<ol>
-  <li>通过 SHOW CREATE TABLE 语句来查看分区表的分区子句</li>
-</ol>
-
-<p>譬如:mysql&gt; show create table e/G</p>
-
-<ol>
-  <li>通过 SHOW TABLE STATUS 语句来查看表是否分区对应Create_options字段</li>
-</ol>
-
-<p>譬如:
-mysql&gt; show table status/G</p>
-
-<p><strong>**</strong><strong>**</strong><strong>**</strong><strong>**</strong><strong>* 1. row **</strong><strong>**</strong><strong>**</strong><strong>**</strong>*****</p>
-
-<p>Name: e Engine: InnoDB Version: 10 Row_format: Compact Rows: 6 Avg_row_length: 10922 Data_length: 65536Max_data_length: 0 Index_length: 0 Data_free: 0 Auto_increment: NULL Create_time: 2015-12-07 22:26:06 Update_time: NULL Check_time: NULL Collation: latin1_swedish_ci Checksum: NULL Create_options: partitioned Comment:</p>
-
-<ol>
-  <li>
-    <p>查看 INFORMATION_SCHEMA.PARTITIONS表</p>
-  </li>
-  <li>
-    <p>通过 EXPLAIN PARTITIONS SELECT 语句查看对于具体的SELECT语句,会访问哪个分区。</p>
-  </li>
-</ol>
-
-<h3 id="七mysql57对于partition表的改进">七、MySQL5.7对于partition表的改进</h3>
-<ul>
-  <li>HANDLER statements：MySQL 5.7.1分区表开始支持HANDLER语句；</li>
-  <li>index condition pushdown：MySQL5.7.3分区表开始支持ICP；</li>
-  <li>load data：MySQL5.7开始使用缓存来实现性能提升，每个分区使用130KB缓冲区来实现这一点；</li>
-  <li>Per-partition索引缓存：MySQL5.7开始支持使用CACHE INDEX和LOAD INDEX INTO CACHE语句对分区的MyISAM表支持索引缓存；</li>
-  <li>FOR EXPORT选项（FLUSH TABLES）:MySQL 5.7.4分区的InnoDB表开始支持FLUSH TABLES语句FOR EXPORT选项；</li>
-  <li>从MySQL 5.7.2开始，子分区支持ANALYZE，CHECK，OPTIMIZE，REPAIR和TRUNCATE操作；</li>
-</ul>
-</div><p><a href="/mysql/partition">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=mysql">mysql</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jun 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mysql-2020-06-20-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-06-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="mysql"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>260 post articles, 33 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>261 post articles, 33 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
