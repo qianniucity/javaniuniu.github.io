@@ -374,1129 +374,1448 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/thread/0704"><h2 itemprop="headline" class="item__header">Java多线程中提到的原子性和可见性、有序性</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="1原子性atomicity">1、原子性（Atomicity）</h3>
+          <header><a href="/mianshi/SpringBoot/0704-03"><h2 itemprop="headline" class="item__header">SpringBoot打成war包，部署到Tomcat服务器</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>SpringBoot默认达成jar包，使用SpringBoot构想web应用，默认使用内置的Tomcat。但考虑到项目需要集群部署或者进行优化时，就需要打成war包部署到外部的Tomcat服务器中。</p>
 
-<p>原子性是指在一个操作中就是cpu不可以在中途暂停然后再调度，既不被中断操作，要不执行完成，要不就不执行。</p>
+<p>==本文所使用SpringBoot版本为：2.0.3.RELEASE==</p>
 
-<p>如果一个操作时原子性的，那么多线程并发的情况下，就不会出现变量被修改的情况</p>
+<h4 id="一修改pomxml文件将默认的jar方式改为war">一、修改pom.xml文件将默认的jar方式改为war：</h4>
 
-<p>比如 a=0；（a非long和double类型） 这个操作是不可分割的，那么我们说这个操作时原子操作。再比如：a++； 这个操作实际是a = a + 1；是可分割的，所以他不是一个原子操作。</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;groupId&gt;</span>com.example<span class="nt">&lt;/groupId&gt;</span>
+<span class="nt">&lt;artifactId&gt;</span>application<span class="nt">&lt;/artifactId&gt;</span>
+<span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<span class="c">&lt;!--默认为jar方式--&gt;</span>
+<span class="c">&lt;!--&lt;packaging&gt;jar&lt;/packaging&gt;--&gt;</span>
+<span class="c">&lt;!--改为war方式--&gt;</span>
+<span class="nt">&lt;packaging&gt;</span>war<span class="nt">&lt;/packaging&gt;</span>
+</code></pre></div></div>
 
-<p>非原子操作都会存在线程安全问题，需要我们使用同步技术（sychronized）来让它变成一个原子操作。一个操作是原子操作，那么我们称它具有原子性。java的concurrent包下提供了一些原子类，我们可以通过阅读API来了解这些原子类的用法。比如：AtomicInteger、AtomicLong、AtomicReference等。</p>
+<h4 id="二排除内置的tomcat容器两种方式都可">二、排除内置的Tomcat容器（两种方式都可）：</h4>
 
-<p>（由Java内存模型来直接保证的原子性变量操作包括read、load、use、assign、store和write六个，大致可以认为基础数据类型的访问和读写是具备原子性的。如果应用场景需要一个更大范围的原子性保证，Java内存模型还提供了lock和unlock操作来满足这种需求，尽管虚拟机未把lock与unlock操作直接开放给用户使用，但是却提供了更高层次的字节码指令monitorenter和monitorexit来隐匿地使用这两个操作，这两个字节码指令反映到Java代码中就是同步块—synchronized关键字，因此在synchronized块之间的操作也具备原子性。）</p>
+<p>1.排除spring-boot-starter-web中的Tomcat</p>
 
-<h3 id="2可见性visibility">2、可见性(Visibility)</h3>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;exclusions&gt;</span>
+        <span class="nt">&lt;exclusion&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-tomcat<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/exclusion&gt;</span>
+    <span class="nt">&lt;/exclusions&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
 
-<p>可见性就是指当一个线程修改了线程共享变量的值，其它线程能够立即得知这个修改。Java内存模型是通过在变量修改后将新值同步回主内存，在变量读取前从主内存刷新变量值这种依赖主内存作为传递媒介的方法来实现可见性的，无论是普通变量还是volatile变量都是如此，普通变量与volatile变量的区别是volatile的特殊规则保证了新值能立即同步到主内存，以及每使用前立即从内存刷新。因为我们可以说volatile保证了线程操作时变量的可见性，而普通变量则不能保证这一点。</p>
+<p>2.添加依赖</p>
 
-<p>除了volatile之外，Java还有两个关键字能实现可见性，它们是synchronized。同步块的可见性是由“对一个变量执行unlock操作之前，必须先把此变量同步回主内存中(执行store和write操作)”这条规则获得的，而final关键字的可见性是指：被final修饰的字段是构造器一旦初始化完成，并且构造器没有把“this”引用传递出去，那么在其它线程中就能看见final字段的值。</p>
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-tomcat<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="c">&lt;!--打包的时候可以不用包进去，别的设施会提供。事实上该依赖理论上可以参与编译，测试，运行等周期。
+        相当于compile，但是打包阶段做了exclude操作--&gt;</span>
+    <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></div></div>
 
-<p>（可见性，是指线程之间的可见性，一个线程修改的状态对另一个线程是可见的。也就是一个线程修改的结果。另一个线程马上就能看到。比如：用volatile修饰的变量，就会具有可见性。volatile修饰的变量不允许线程内部缓存和重排序，即直接修改内存。所以对其他线程是可见的。但是这里需要注意一个问题，volatile只能让被他修饰内容具有可见性，但不能保证它具有原子性。比如 volatile int a = 0；之后有一个操作 a++；这个变量a具有可见性，但是a++ 依然是一个非原子操作，也就这这个操作同样存在线程安全问题。）</p>
+<h4 id="三继承orgspringframeworkbootwebservletsupportspringbootservletinitializer实现configure方法">三、继承org.springframework.boot.web.servlet.support.SpringBootServletInitializer，实现configure方法：</h4>
 
-<h3 id="3有序性ordering">3、有序性(Ordering)</h3>
+<p>为什么继承该类，SpringBootServletInitializer源码注释：</p>
 
-<p>Java内存模型中的程序天然有序性可以总结为一句话：如果在本线程内观察，所有操作都是有序的；如果在一个线程中观察另一个线程，所有操作都是无序的。前半句是指“线程内表现为串行语义”，后半句是指“指令重排序”现象和“工作内存中主内存同步延迟”现象。</p>
+<p>Note that a WebApplicationInitializer is only needed if you are building a war file and deploying it.</p>
 
-<p>Java语言提供了volatile和synchronized两个关键字来保证线程之间操作的有序性，volatile关键字本身就包含了禁止指令重排序的语义，而synchronized则是由“一个变量在同一时刻只允许一条线程对其进行lock操作”这条规则来获得的，这个规则决定了持有同一个锁的两个同步块只能串行地进入。</p>
+<p>If you prefer to run an embedded web server then you won’t need this at all.</p>
 
-<p>先行发生原则：</p>
+<p>注意，如果您正在构建WAR文件并部署它，则需要WebApplicationInitializer。</p>
 
-<p>如果Java内存模型中所有的有序性都只靠volatile和synchronized来完成，那么有一些操作将会变得很啰嗦，但是我们在编写Java并发代码的时候并没有感觉到这一点，这是因为Java语言中有一个“先行发生”(Happen-Before)的原则。这个原则非常重要，它是判断数据是否存在竞争，线程是否安全的主要依赖。</p>
+<p>如果你喜欢运行一个嵌入式Web服务器，那么你根本不需要这个。</p>
 
-<p>先行发生原则是指Java内存模型中定义的两项操作之间的依序关系，如果说操作A先行发生于操作B，其实就是说发生操作B之前，操作A产生的影响能被操作B观察到，“影响”包含了修改了内存中共享变量的值、发送了消息、调用了方法等。它意味着什么呢？如下例：</p>
+<p>启动类代码：</p>
 
-<p>//线程A中执行
-i = 1;</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
 
-<p>//线程B中执行
-j = i;</p>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
 
-<p>//线程C中执行
-i = 2;
-假设线程A中的操作”i=1“先行发生于线程B的操作”j=i“，那么我们就可以确定在线程B的操作执行后，变量j的值一定是等于1，结出这个结论的依据有两个，一是根据先行发生原则，”i=1“的结果可以被观察到；二是线程C登场之前，线程A操作结束之后没有其它线程会修改变量i的值。现在再来考虑线程C，我们依然保持线程A和B之间的先行发生关系，而线程C出现在线程A和B操作之间，但是C与B没有先行发生关系，那么j的值可能是1，也可能是2，因为线程C对应变量i的影响可能会被线程B观察到，也可能观察不到，这时线程B就存在读取到过期数据的风险，不具备多线程的安全性。</p>
+<span class="o">}</span>
+</code></pre></div></div>
 
-<p>下面是Java内存模型下一些”天然的“先行发生关系，这些先行发生关系无须任何同步器协助就已经存在，可以在编码中直接使用。如果两个操作之间的关系不在此列，并且无法从下列规则推导出来的话，它们就没有顺序性保障，虚拟机可以对它们进行随意地重排序。</p>
+<p>1.方式一，启动类继承SpringBootServletInitializer实现configure：</p>
 
-<p>a.程序次序规则(Pragram Order Rule)：在一个线程内，按照程序代码顺序，书写在前面的操作先行发生于书写在后面的操作。准确地说应该是控制流顺序而不是程序代码顺序，因为要考虑分支、循环结构。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="kd">extends</span> <span class="nc">SpringBootServletInitializer</span> <span class="o">{</span>
 
-<p>b.管程锁定规则(Monitor Lock Rule)：一个unlock操作先行发生于后面对同一个锁的lock操作。这里必须强调的是同一个锁，而”后面“是指时间上的先后顺序。</p>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="nc">SpringApplicationBuilder</span> <span class="nf">configure</span><span class="o">(</span><span class="nc">SpringApplicationBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">sources</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
 
-<p>c.volatile变量规则(Volatile Variable Rule)：对一个volatile变量的写操作先行发生于后面对这个变量的读取操作，这里的”后面“同样指时间上的先后顺序。</p>
+<span class="o">}</span>
+</code></pre></div></div>
 
-<p>d.线程启动规则(Thread Start Rule)：Thread对象的start()方法先行发生于此线程的每一个动作。</p>
+<p>2.方式二，新增加一个类继承SpringBootServletInitializer实现configure：</p>
 
-<p>e.线程终于规则(Thread Termination Rule)：线程中的所有操作都先行发生于对此线程的终止检测，我们可以通过Thread.join()方法结束，Thread.isAlive()的返回值等作段检测到线程已经终止执行。</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ServletInitializer</span> <span class="kd">extends</span> <span class="nc">SpringBootServletInitializer</span> <span class="o">{</span>
 
-<p>f.线程中断规则(Thread Interruption Rule)：对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread.interrupted()方法检测是否有中断发生。</p>
+    <span class="nd">@Override</span>
+    <span class="kd">protected</span> <span class="nc">SpringApplicationBuilder</span> <span class="nf">configure</span><span class="o">(</span><span class="nc">SpringApplicationBuilder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//此处的Application.class为带有@SpringBootApplication注解的启动类</span>
+        <span class="k">return</span> <span class="n">builder</span><span class="o">.</span><span class="na">sources</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="o">}</span>
 
-<p>g.对象终结规则(Finalizer Rule)：一个对象初始化完成(构造方法执行完成)先行发生于它的finalize()方法的开始。</p>
+<span class="o">}</span>
+</code></pre></div></div>
 
-<p>g.传递性(Transitivity)：如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出操作A先行发生于操作C的结论。</p>
+<p>注意事项：</p>
 
-<p>一个操作”时间上的先发生“不代表这个操作会是”先行发生“，那如果一个操作”先行发生“是否就能推导出这个操作必定是”时间上的先发生“呢？也是不成立的，一个典型的例子就是指令重排序。所以时间上的先后顺序与先生发生原则之间基本没有什么关系，所以衡量并发安全问题一切必须以先行发生原则为准。</p>
-</div><p><a href="/mianshi/thread/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<p>使用外部Tomcat部署访问的时候，application.properties(或者application.yml)中配置的</p>
+
+<p>server.port=</p>
+
+<p>server.servlet.context-path=</p>
+
+<p>将失效，请使用tomcat的端口，tomcat，webapps下项目名进行访问。</p>
+
+<p>为了防止应用上下文所导致的项目访问资源加载不到的问题，</p>
+
+<p>建议pom.xml文件中<build></build>标签下添加<finalName></finalName>标签：</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+    <span class="c">&lt;!-- 应与application.properties(或application.yml)中context-path保持一致 --&gt;</span>
+    <span class="nt">&lt;finalName&gt;</span>war包名称<span class="nt">&lt;/finalName&gt;</span>
+    <span class="nt">&lt;plugins&gt;</span>
+        <span class="nt">&lt;plugin&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/plugin&gt;</span>
+    <span class="nt">&lt;/plugins&gt;</span>
+<span class="nt">&lt;/build&gt;</span>
+</code></pre></div></div>
+
+<p>使用mvn命令行打包，运行：</p>
+
+<p>clean是清除之前的包，-Dmaven.test.skip=true是忽略测试代码</p>
+
+<p>jar 方式打包，使用内置Tomcat：mvn clean install -Dmaven.test.skip=true</p>
+
+<p>运行：java -jar 包名.jar</p>
+
+<p>war方式打包，使用外置Tomcat：mvn clean package -Dmaven.test.skip=true</p>
+
+<p>运行：${Tomcat_home}/bin/目录下执行startup.bat(windows)或者startup.sh(linux)</p>
+</div><p><a href="/mianshi/SpringBoot/0704-03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-05">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/lock/0703"><h2 itemprop="headline" class="item__header">活锁例子</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>我们都知道死锁，然而还存在一种锁叫做活锁。死锁是一直死等，活锁他不死等，它会一直执行，但是线程就是不能继续，因为它不断重试相同的操作。换句话说，就是信息处理线程并没有发生阻塞，但是永远都不会前进了。</p>
+          <header><a href="/mianshi/socket/0704"><h2 itemprop="headline" class="item__header">长连接与短连接的区别以及使用场景</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>首先介绍下短链接和长连接的区别：
+短连接</strong>
+连接-&gt;传输数据-&gt;关闭连接
+比如HTTP是无状态的的短链接，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。
+具体就是 浏览器client发起并建立TCP连接 -&gt; client发送HttpRequest报文 -&gt; server接收到报文-&gt;server handle并发送HttpResponse报文给前端,发送完毕之后立即调用socket.close方法-&gt;client接收response报文-&gt;client最终会收到server端断开TCP连接的信号-&gt;client 端断开TCP连接，具体就是调用close方法。</p>
 
-<p>活锁同样会发生在多个相互协作的线程间，当他们为了彼此间的响应而相互礼让，使得没有一个线程能够继续前进，那么就发生了活锁。</p>
+<p>也可以这样说：短连接是指SOCKET连接后，发送接收完数据后马上断开连接。
+因为连接后接收了数据就断开了，所以每次数据接受处理不会有联系。 这也是HTTP协议无状态的原因之一。</p>
 
-<p>好比两个过于礼貌的人在半路相遇，出于礼貌他们相互礼让，避开对方的路，但是在另一条路上又相遇了。就这样，不停地一直避让下去。。。。</p>
+<p><strong>长连接</strong>
+连接-&gt;传输数据-&gt;保持连接 -&gt; 传输数据-&gt; ………..-&gt;直到一方关闭连接，多是客户端关闭连接。
+长连接指建立SOCKET连接后不管是否使用都保持连接，但安全性较差。</p>
 
-<p>活锁典型的例子实在一些重试机制中，比如以太网络上，两个基站尝试使用相同的载波发送数据包，包会发生冲突。发生冲突后，稍后都会重发。如果这时他们都是在 1s 后重发，那么他们又会再次发生冲突，一直循环下去，导致数据包永远不能发送。为了解决这个问题，我们可以对重试机制引入一些随机性，不指定 1s 重发，而是重发的时间内是随机的。通过随机的等待再发送能够相当有效的避免活锁的发生。</p>
+<p><strong>HTTP在短链接和长连接上的选择：</strong></p>
 
-<p>下面看一个活锁例子：</p>
+<p>HTTP是无状态的 ，也就是说，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。如果客户端浏览器访问的某个HTML或其他类型的 Web页中包含有其他的Web资源，如JavaScript文件、图像文件、CSS文件等；当浏览器每遇到这样一个Web资源，就会建立一个HTTP会话</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/************************
- * 活锁例子
- * 创建一个勺子类，有且只有一个。
- * 丈夫和妻子用餐时，需要使用勺子，这时只能有一人持有，也就是说同一时刻只有一个人能够进餐。
- * 但是丈夫和妻子互相谦让，都想让对方先吃，所以勺子一直传递来传递去，谁都没法用餐。
- * */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LiveLockTest</span> <span class="o">{</span>
+<p>HTTP1.1和HTTP1.0相比较而言，最大的区别就是增加了持久连接支持(貌似最新的HTTP1.1 可以显示的指定 keep-alive),但还是无状态的，或者说是不可以信任的。
+如果浏览器或者服务器在其头信息加入了这行代码 Connection:keep-alive
+TCP连接在发送后将仍然保持打开状态，于是，浏览器可以继续通过相同的连接发送请求。保持连接节省了为每个请求建立新连接所需的时间，还节约了带宽。
+实现长连接要客户端和服务端都支持长连接。</p>
 
-    <span class="c1">//定义一个勺子，ower 表示这个勺子的拥有者</span>
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Spoon</span> <span class="o">{</span>
-        <span class="nc">Diner</span> <span class="n">owner</span><span class="o">;</span><span class="c1">//勺子的拥有者</span>
+<p><strong>什么时候用长连接，短连接？</strong>
+长连接多用于操作频繁，点对点的通讯，而且连接数不能太多情况，。每个TCP连接都需要三步握手，这需要时间，如果每个操作都是先连接，再操作的话那么处理速度会降低很多，所以每个操作完后都不断开，次处理时直接发送数据包就OK了，不用建立TCP连接。例如：数据库的连接用长连接， 如果用短连接频繁的通信会造成socket错误，而且频繁的socket 创建也是对资源的浪费。</p>
 
-        <span class="c1">//获取拥有者</span>
-        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getOwnerName</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">owner</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="c1">//设置拥有者</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setOwner</span><span class="o">(</span><span class="nc">Diner</span> <span class="n">diner</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">owner</span> <span class="o">=</span> <span class="n">diner</span><span class="o">;</span>
-        <span class="o">}</span>
+<p>而像WEB网站的http服务一般都用短链接，因为长连接对于服务端来说会耗费一定的资源，而像WEB网站这么频繁的成千上万甚至上亿客户端的连接用短连接会更省一些资源，如果用长连接，而且同时有成千上万的用户，如果每个用户都占用一个连接的话，那可想而知吧。所以并发量大，但每个用户无需频繁操作情况下需用短连好。</p>
 
-        <span class="kd">public</span> <span class="nf">Spoon</span><span class="o">(</span><span class="nc">Diner</span> <span class="n">diner</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">owner</span> <span class="o">=</span> <span class="n">diner</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="c1">//表示正在用餐</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">use</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">owner</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">" use this spoon and finish eat."</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
+<p>总之，长连接和短连接的选择要视情况而定。</p>
 
-    <span class="c1">//定义一个晚餐类</span>
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Diner</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="nf">Diner</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">isHungry</span><span class="o">,</span> <span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">isHungry</span> <span class="o">=</span> <span class="n">isHungry</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">isHungry</span><span class="o">;</span><span class="c1">//是否饿了</span>
-        <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span><span class="c1">//定义当前用餐者的名字</span>
+<p>具体网络中的应用的话：</p>
 
-        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span><span class="c1">//获取当前用餐者</span>
-            <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="c1">//可以理解为和某人吃饭</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eatWith</span><span class="o">(</span><span class="nc">Diner</span> <span class="n">spouse</span><span class="o">,</span> <span class="nc">Spoon</span> <span class="n">sharedSpoon</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="kd">synchronized</span> <span class="o">(</span><span class="n">sharedSpoon</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">while</span> <span class="o">(</span><span class="n">isHungry</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="c1">//当前用餐者和勺子拥有者不是同一个人，则进行等待</span>
-                        <span class="k">while</span> <span class="o">(!</span><span class="n">sharedSpoon</span><span class="o">.</span><span class="na">getOwnerName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">name</span><span class="o">))</span> <span class="o">{</span>
-                            <span class="n">sharedSpoon</span><span class="o">.</span><span class="na">wait</span><span class="o">();</span>
-                            <span class="c1">//System.out.println("sharedSpoon belongs to" + sharedSpoon.getOwnerName())</span>
-                        <span class="o">}</span>
-                        <span class="c1">//spouse此时是饿了，把勺子分给他，并通知他可以用餐</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="n">spouse</span><span class="o">.</span><span class="na">isHungry</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"I am "</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s">", and my "</span> <span class="o">+</span> <span class="n">spouse</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">" is hungry, I should give it to him(her).\n"</span><span class="o">);</span>
-                            <span class="n">sharedSpoon</span><span class="o">.</span><span class="na">setOwner</span><span class="o">(</span><span class="n">spouse</span><span class="o">);</span>
-                            <span class="n">sharedSpoon</span><span class="o">.</span><span class="na">notifyAll</span><span class="o">();</span>
-                        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                            <span class="c1">//用餐</span>
-                            <span class="n">sharedSpoon</span><span class="o">.</span><span class="na">use</span><span class="o">();</span>
-                            <span class="n">sharedSpoon</span><span class="o">.</span><span class="na">setOwner</span><span class="o">(</span><span class="n">spouse</span><span class="o">);</span>
-                            <span class="n">isHungry</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-                        <span class="o">}</span>
-                        <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">500</span><span class="o">);</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">" is interrupted."</span><span class="o">);</span>
+<div class="language-tex highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http 1.0一般就指短连接，smtp,pop3,telnet这种就可以认为是长连接。一般的网络游戏应用都是长连接
+</code></pre></div></div>
+</div><p><a href="/mianshi/socket/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-07">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/concurrent/0704"><h2 itemprop="headline" class="item__header">同步类容器和并发类容器</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一集合容器框架">一、集合容器框架</h3>
+
+<p>在Java的集合容器框架中，主要有四大类别：List、Set、Queue、Map。</p>
+
+<p>注意Collection和Map是顶层接口，而List、Set、Queue接口则分别继承了Collection接口，分别代表数组、集合和队列这三大类容器。</p>
+
+<p>像ArrayList、LinkedList都是实现了List接口，HashSet实现了Set接口，而Deque（双向队列，允许在队首、队尾进行入队和出队操作）继承了Queue接口，PriorityQueue实现了Queue接口。另外LinkedList（实际上是双向链表）同时也实现了Deque接口。</p>
+
+<p>但以上容器都是非线程安全的。如果有多个线程并发地访问这些容器时，就会出现问题。因此，在编写程序时，必须要求程序员手动地在访问到这些容器的地方进行同步处理，这样导致在使用这些容器的时候非常地不方便。所以，Java提供了同步容器供用户使用。</p>
+
+<h3 id="二java中的同步类容器">二、Java中的同步类容器</h3>
+
+<p>在Java中，同步容器主要包括2类：</p>
+
+<p>　　1）Vector、Stack、HashTable</p>
+
+<p>　　2）Collections类中提供的静态工厂方法创建的类</p>
+
+<p>Vector实现了List接口，Vector实际上就是一个数组，和ArrayList类似，但是Vector中的方法都是synchronized方法，即进行了同步措施；Stack也是一个同步容器，它的方法也用synchronized进行了同步，它实际上是继承于Vector类；HashTable实现了Map接口，它和HashMap很相似，但是HashTable进行了同步处理，而HashMap没有。</p>
+
+<p>Collections类是一个工具提供类，注意，它和Collection不同，Collection是一个顶层的接口。在Collections类中提供了大量的方法，比如对集合或者容器进行排序、查找等操作。最重要的是，在它里面提供了几个静态工厂方法来创建同步容器类，如下图所示：</p>
+
+<p>这些同步容器都是通过synchronized进行同步来实现线程安全的，那么很显然，这必然会影响到执行性能。</p>
+
+<p>而且虽然他们都是线程安全的，但这并不说明在任何情况下都可以线程安全，看你怎么用了，例如下面的这个例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="nc">Vector</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">vector</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Vector</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;();</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span>
+                <span class="n">vector</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(){</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">.</span><span class="na">size</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span>
+                        <span class="n">vector</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="o">};</span>
+            <span class="o">};</span>
+            <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(){</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">.</span><span class="na">size</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span>
+                        <span class="n">vector</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="o">};</span>
+            <span class="o">};</span>
+            <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="nc">Thread</span><span class="o">.</span><span class="na">activeCount</span><span class="o">()&gt;</span><span class="mi">10</span><span class="o">)</span>   <span class="o">{</span>
+
             <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="nc">Diner</span> <span class="n">husband</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Diner</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="s">"husband"</span><span class="o">);</span><span class="c1">//创建一个丈夫用餐类</span>
-        <span class="kd">final</span> <span class="nc">Diner</span> <span class="n">wife</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Diner</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="s">"wife"</span><span class="o">);</span><span class="c1">//创建一个妻子用餐类</span>
-        <span class="kd">final</span> <span class="nc">Spoon</span> <span class="n">sharedSpoon</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Spoon</span><span class="o">(</span><span class="n">wife</span><span class="o">);</span><span class="c1">//创建一个勺子，初始状态并由妻子持有</span>
-
-        <span class="c1">//创建一个 线程，由丈夫进行用餐</span>
-        <span class="nc">Thread</span> <span class="n">h</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                <span class="c1">//表示和妻子用餐，这个过程判断妻子是否饿了，如果是，则会把勺子分给妻子，并通知她</span>
-                <span class="n">husband</span><span class="o">.</span><span class="na">eatWith</span><span class="o">(</span><span class="n">wife</span><span class="o">,</span> <span class="n">sharedSpoon</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">};</span>
-        <span class="n">h</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-
-        <span class="c1">//创建一个 线程，由妻子进行用餐</span>
-        <span class="nc">Thread</span> <span class="n">w</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nd">@Override</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-                <span class="c1">//表示和妻子用餐，这个过程判断丈夫是否饿了，如果是，则会把勺子分给丈夫，并通知他</span>
-                <span class="n">wife</span><span class="o">.</span><span class="na">eatWith</span><span class="o">(</span><span class="n">husband</span><span class="o">,</span> <span class="n">sharedSpoon</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">};</span>
-        <span class="n">w</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="n">h</span><span class="o">.</span><span class="na">interrupt</span><span class="o">();</span>
-        <span class="n">w</span><span class="o">.</span><span class="na">interrupt</span><span class="o">();</span>
-
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="n">h</span><span class="o">.</span><span class="na">join</span><span class="o">();</span><span class="c1">//join()方法阻塞调用此方法的线程(calling thread)，直到线程t完成，此线程再继续；通常用于在main()主线程内，等待其它线程完成再结束main()主线程。</span>
-            <span class="n">w</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
 
 </code></pre></div></div>
 
-<p><strong>输出结果：</strong></p>
+<p>运行结果是在执行过程中会出现数组下标越界的运行时异常。也许有朋友会问：Vector是线程安全的，为什么还会报这个错？很简单，对于Vector，虽然能保证每一个时刻只能有一个线程访问它，但是不排除这种可能，当某个线程在某个时刻执行这句时：</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>I am wife, and my husband is hungry, I should give it to him(her).
-
-I am husband, and my wife is hungry, I should give it to him(her).
-
-I am wife, and my husband is hungry, I should give it to him(her).
-
-I am husband, and my wife is hungry, I should give it to him(her).
-
-I am wife, and my husband is hungry, I should give it to him(her).
-
-I am husband, and my wife is hungry, I should give it to him(her).
-
-I am wife, and my husband is hungry, I should give it to him(her).
-
-I am husband, and my wife is hungry, I should give it to him(her).
-
-I am wife, and my husband is hungry, I should give it to him(her).
-
-I am husband, and my wife is hungry, I should give it to him(her).
-
-I am wife, and my husband is hungry, I should give it to him(her).
-
-I am husband, and my wife is hungry, I should give it to him(her).
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> for(int i=0;i&lt;vector.size();i++)
+ vector.get(i);
 </code></pre></div></div>
 
-</div><p><a href="/mianshi/lock/0703">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-03-07">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/juc/01"><h2 itemprop="headline" class="item__header">并发面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="1在-java-中守护线程和本地线程区别">1、在 java 中守护线程和本地线程区别？</h4>
-
-<ul>
-  <li>守护线程：任何线程可通过Thread.setDaemon(bool on) 设置为守护线程 ，GC是守护线程</li>
-  <li>本地线程：也是普通线程，</li>
-</ul>
-
-<h4 id="2线程与进程的区别">2、线程与进程的区别？</h4>
-
-<ul>
-  <li>一个程序至少有一个进程，一个进程至少有一个线程</li>
-  <li>线程的划分尺度小于进程，使得多线程程序的并发性高</li>
-  <li>进程在执行的过程中有独立的内存单元，而多线程共享内存，从而极大的提高了程序的效率</li>
-  <li>线程依托于应用程序，由应用程序提高多线程的执行控制</li>
-  <li>
-    <p>从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分配。<strong>这就是进程和线程的重要区别。</strong></p>
-  </li>
-  <li>现在有自己的堆栈和局部变量，进程之间有单独的地址空间</li>
-  <li>进程是操作系统分配资源的最小单元，线程是操作系统调度的最小单元。</li>
-</ul>
-
-<h4 id="3什么是多线程中的上下文切换">3、什么是多线程中的上下文切换？</h4>
-
-<p>多线程编程中一般线程的个数都大于 CPU 核心的个数，而一个 CPU 核心在任意时刻只能被一个线程使用，为了让这些线程都能得到有效执行，CPU 采取的策略是为每个线程分配时间片并轮转的形式。当一个线程的时间片用完的时候就会重新处于就绪状态让给其他线程使用，这个过程就属于一次上下文切换。</p>
-
-<p>概括来说就是：<strong>当前任务在执行完 CPU 时间片切换到另一个任务之前会先保存自己的状态，以便下次再切换回这个任务时，可以再加载这个任务的状态。任务从保存到再加载的过程就是一次上下文切换。</strong></p>
-
-<p>上下文切换通常是计算密集型的。也就是说，它需要相当可观的处理器时间，在每秒几十上百次的切换中，每次切换都需要纳秒量级的时间。所以，<strong>上下文切换对系统来说意味着消耗大量的 CPU 时间，事实上，可能是操作系统中时间消耗最大的操作</strong></p>
-
-<h4 id="4死锁与活锁的区别死锁与饥饿的区别">4、死锁与活锁的区别，死锁与饥饿的区别？</h4>
-
-<p><strong>1.死锁</strong>：通俗地说，死锁是两个或者多个线程，相互占用对方需要的资源，而都不进行释放，导致彼此之间都相互等待对方释放资源，产生了无限制等待的现象，死锁一旦发生，如果没有外力介入，这种等待将永远存在，从而对程序产生严重的影响</p>
-
-<p><strong>产生死锁的必要条件</strong>：</p>
-
-<ol>
-  <li>互斥条件：所谓互斥就是进程在某一时间内独占资源。</li>
-  <li>请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放。</li>
-  <li>不剥夺条件:进程已获得资源，在末使用完之前，不能强行剥夺。</li>
-  <li>循环等待条件:若干进程之间形成一种头尾相接的循环等待资源关系</li>
-</ol>
-
-<p><strong>降低死锁的方法：</strong></p>
-
-<ol>
-  <li>尽可能减小锁的作用范围，比如使用同步代码块而不使用同步方法</li>
-  <li>尽量不编写在通时刻获取多个锁的代码，因为在一个线程持有多个资源的时候很容易发生死锁</li>
-  <li>根据情况将过大范围的锁进行切分，让每个锁的作用范围减小，从而降低死锁发生的概率。这以原则的典型应用是ConcurrentHashMap的锁分段技术，具体可以参看这篇文章。</li>
-</ol>
-
-<p><strong>2.饥饿：</strong>  指的线程无法访问到它需要的资源而不能继续执行时，引发饥饿最常见资源就是CPU时钟周期。虽然在Thread API中由指定线程优先级的机制，但是只能作为操作系统进行线程调度的一个参考，换句话说就是操作系统在进行线程调度是平台无关的，会尽可能提供公平的、活跃性良好的调度，那么即使在程序中指定了线程的优先级，也有可能在操作系统进行调度的时候映射到了同一个优先级。</p>
-
-<p><strong>产生饥饿的可能情况：</strong></p>
-
-<ol>
-  <li>引发饥饿最常见资源就是CPU时钟周期</li>
-  <li>不要区修改线程的优先级，一旦修改程序的行为就会与平台相关，并且会导致饥饿问题的产生</li>
-  <li>线程被永久堵塞在一个等待进入同步块的状态，因为其他线程总是能在它之前持续地对该同步块进行访问。</li>
-  <li>线程在等待一个本身也处于永久等待完成的对象(比如调用这个对象的wait方法)，因为其他线程总是被持续地获得唤醒。</li>
-</ol>
-
-<p><strong>解决饥饿的方法：</strong></p>
-
-<ol>
-  <li>在程序中使用的Thread.yield或者Thread.sleep表明该程序试图客服优先级调整问题，让优先级更低的线程拥有被CPU调度的机会。</li>
-</ol>
-
-<p><strong>3.活锁</strong>  指的是线程不断重复执行相同的操作，但每次操作的结果都是失败的。尽管这个问题不会阻塞线程，但是程序也无法继续执行。<strong>活锁通常发生在处理事务消息的应用程序中</strong>，如果不能成功处理这个事务那么事务将回滚整个操作。解决活锁的办法是在每次重复执行的时候引入随机机制，这样由于出现的可能性不同使得程序可以继续执行其他的任务。</p>
-
-<h4 id="5java-中用到的线程调度算法是什么">5、Java 中用到的线程调度算法是什么？</h4>
-
-<p><strong>抢占式</strong>。一个线程用完CPU之后，操作系统会根据线程优先级、线程饥饿情况等数据算出一个总的优先级并分配下一个时间片给某个线程执行。</p>
-
-<p>操作系统中可能会出现某条线程常常获取到VPU控制权的情况，为了让某些优先级比较低的线程也能获取到CPU控制权，可以使用Thread.sleep(0)手动触发一次操作系统分配时间片的操作，这也是平衡CPU控制权的一种操作。</p>
-
-<h4 id="6什么是线程组为什么在-java-中不推荐使用">6、什么是线程组，为什么在 Java 中不推荐使用？</h4>
-
-<ul>
-  <li>1.线程组ThreadGroup对象中比较有用的方法是stop、resume、suspend等方法，由于这几个方法会导致线程的安全问题（主要是死锁问题），已经被官方废弃掉了，所以线程组本身的应用价值就大打折扣了。</li>
-  <li>2.线程组ThreadGroup不是线程安全的，这在使用过程中获取的信息并不全是及时有效的，这就降低了它的统计使用价值。</li>
-</ul>
-
-<p>虽然线程组现在已经不被推荐使用了，但是它在线程的异常处理方面还是做出了一定的贡献。当线程运行过程中出现异常情况时，在某些情况下JVM会把线程的控制权交到线程关联的线程组对象上来进行处理。所以对线程组的了解还是有一定必要的。</p>
-
-<h4 id="7为什么使用-executor-框架其实问的是线程池">7、为什么使用 Executor 框架？(其实问的是线程池)</h4>
-
-<ul>
-  <li>每次执行任务创建线程 new Thread()比较消耗性能，创建一个线程是比较耗时、耗资源的。</li>
-  <li>调用 new Thread()创建的线程缺乏管理，被称为野线程，而且可以无限制的创建，线程之间的相互竞争会导致过多占用系统资源而导致系统瘫痪，还有线程之间的频繁交替也会消耗很多系统资源。</li>
-  <li>接使用new Thread() 启动的线程不利于扩展，比如定时执行、定期执行、定时定期执行、线程中断等都不便实现。</li>
-</ul>
-
-<h4 id="8在-java-中-executor-和-executors-的区别">8、在 Java 中 Executor 和 Executors 的区别？</h4>
-
-<ul>
-  <li>Executors 工具类的不同方法按照我们的需求创建了不同的线程池，来满足业务的需求。</li>
-  <li>Executor 接口对象能执行我们的线程任务。</li>
-  <li>ExecutorService接口继承了Executor接口并进行了扩展，提供了更多的方法我们能获得任务执行的状态并且可以获取任务的返回值。</li>
-  <li>使用ThreadPoolExecutor 可以创建自定义线程池。</li>
-  <li>Future 表示异步计算的结果，他提供了检查计算是否完成的方法，以等待计算的完成，并可以使用get()方法获取计算的结果。<strong>Future 可异步执行任务，但是Future.get() 方法是阻塞的</strong></li>
-</ul>
-
-<p>9、如何在 Windows 和 Linux 上查找哪个线程使用的 CPU 时间最长？</p>
-
-<p>（1）获取项目的pid，jps或者ps -ef  | grep java</p>
-
-<p>（2）top -H -p pid，顺序不能改变</p>
-
-<p>10、什么是原子操作？在 Java Concurrency API 中有哪些原子类(atomic classes)？</p>
-
-<p>原子操作（atomic operation）意为”不可被中断的一个或一系列操作” 。 	
-处理器使用基于对缓存加锁或总线加锁的方式来实现多处理器之间的原子操作。 
-在Java中可以通过锁和循环CAS的方式来实现原子操作。 CAS操作——Compare &amp; Set，或是 Compare &amp; Swap，现在几乎所有的CPU指令都支持CAS的原子操作。</p>
-
-<p>原子操作是指一个不受其他操作影响的操作任务单元。原子操作是在多线程环境下避免数据不一致必须的手段。 
-int++并不是一个原子操作，所以当一个线程读取它的值并加1时，另外一个线程有可能会读到之前的值，这就会引发错误。 
-为了解决这个问题，必须保证增加操作是原子的，在JDK1.5之前我们可以使用同步技术来做到这一点。到JDK1.5，java.util.concurrent.atomic包提供了int和long类型的原子包装类，它们可以自动的保证对于他们的操作是原子的并且不需要使用同步。</p>
-
-<p>java.util.concurrent这个包里面提供了一组原子类。其基本的特性就是在多线程环境下，当有多个线程同时执行这些类的实例包含的方法时，具有排他性，即当某个线程进入方法，执行其中的指令时，不会被其他线程打断，而别的线程就像自旋锁一样，一直等到该方法执行完成，才由JVM从等待队列中选择一个另一个线程进入，这只是一种逻辑上的理解。</p>
-
-<p>原子类：
-AtomicBoolean，AtomicInteger，AtomicLong，AtomicReference 
-原子数组：
-AtomicIntegerArray，AtomicLongArray，AtomicReferenceArray 
-原子属性更新器：
-AtomicLongFieldUpdater，AtomicIntegerFieldUpdater，AtomicReferenceFieldUpdater 
-解决ABA问题的原子类：
-AtomicMarkableReference（通过引入一个boolean来反映中间有没有变过），AtomicStampedReference（通过引入一个int来累加来反映中间有没有变过）</p>
-
-<p>11、Java Concurrency API 中的 Lock 接口(Lock interface)是什么？对比同步它有什么优势？</p>
-
-<ul>
-  <li>ReccentLock</li>
-  <li>优势
-    <ul>
-      <li>执行效率</li>
-      <li>可以获取锁状态</li>
-      <li>可以指定锁的位置</li>
-      <li></li>
-    </ul>
-  </li>
-</ul>
-
-<p>12、什么是 Executors 框架？</p>
-
-<p>13、什么是阻塞队列？阻塞队列的实现原理是什么？如何使用阻塞队列来实现生产者-消费者模型？</p>
-
-<ul>
-  <li>BlockQueue 继承于Queue 遵循FIFO原则，在队列空的时候，做remove操作，需等待资源插入队列，承阻塞状态；同样在队列满了后，再需要插入，承阻塞状态</li>
-</ul>
-
-<p>14、什么是 Callable 和 Future?</p>
-
-<ul>
-  <li>Future 的 FutureTask 可用于包装 Callable</li>
-</ul>
-
-<p>15、什么是 FutureTask?使用 ExecutorService 启动任务。</p>
-
-<ul>
-  <li></li>
-</ul>
-
-<p>16、什么是并发容器的实现？</p>
-
-<ul>
-  <li>并发</li>
-</ul>
-
-<p>17、多线程同步和互斥有几种实现方法，都是什么？
-18、什么是竞争条件？你怎样发现和解决竞争？</p>
-
-<ul>
-  <li>在多线程下，</li>
-</ul>
-
-<p>19、你将如何使用 thread dump？你将如何分析 Thread dump？165</p>
-
-<ul>
-  <li>可通过工具查看线程执行情况，需要在jvm中配置</li>
-</ul>
-
-<p>20、为什么我们调用 start()方法时会执行 run()方法，为什么我们不能直接调用 run()方法？</p>
-
-<ul>
-  <li>start() 方法会新建一个线程，并启动，启动方法使用的是run方法</li>
-  <li>run方法会启动当前线程</li>
-</ul>
-
-<p>21、进程和线程的优缺点</p>
-
-<ul>
-  <li>线程执行开销小，但不利于资源的管理和保护，而进程相反</li>
-</ul>
-
-<p>22、java Future 接口介绍</p>
-
-<ul>
-  <li>
-    <p>Future是JAVA并发框架Executor中的一个类，Executor就是Runnable和Callable的调度容器，Future就是对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果、设置结果操作，用get()可以获得执行结果；</p>
-  </li>
-  <li>
-    <p>如果在主线程中需要执行比较耗时的操作时，但又不想阻塞主线程时，可以把这些作业交给Future对象在后台完成，当主线程将来需要时，就可以通过Future对象获得后台作业的计算结果或者执行状态</p>
-  </li>
-</ul>
-</div><p><a href="/mianshi/juc/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-03-05">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/redis/01"><h2 itemprop="headline" class="item__header">redis面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>1.Redis 面试题</p>
-
-<p>1、什么是 Redis?.
-2、Redis 的数据类型？
-3、使用 Redis 有哪些好处？
-4、Redis 相比 Memcached 有哪些优势？
-5、Memcache 与 Redis 的区别都有哪些？
-6、Redis 是单进程单线程的？
-7、一个字符串类型的值能存储最大容量是多少？
-8、Redis 的持久化机制是什么？各自的优缺点？
-9、Redis 常见性能问题和解决方案：
-10、redis 过期键的删除策略？
-11、Redis 的回收策略（淘汰策略）?
-12、为什么 edis 需要把所有数据放到内存中？
-13、Redis 的同步机制了解么？
-14、Pipeline 有什么好处，为什么要用 pipeline？
-15、是否使用过 Redis 集群，集群的原理是什么？
-16、Redis 集群方案什么情况下会导致整个集群不可用？
-17、Redis 支持的 Java 客户端都有哪些？官方推荐用哪个？
-18、Jedis 与 Redisson 对比有什么优缺点？
-19、Redis 如何设置密码及验证密码？
-20、说说 Redis 哈希槽的概念？</p>
-</div><p><a href="/mianshi/redis/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-03-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/jvm/01"><h2 itemprop="headline" class="item__header">jvm面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="5jvm面试题">5.JVM面试题</h3>
-
-<p>1、JVM三大性能调优参数，JVM 几个重要的参数
-2、JVM调优
-3、JVM内存管理，JVM的常见的垃圾收集器，Ｇ１垃圾收集器。GC调优，Minor GC ，Full GC 触发条件
-4、java内存模型
-5、Java垃圾回收机制
-6、jvm怎样 判断一个对象是否可回收，怎样的对象才能作为GC root
-7、OOM说一下？怎么排查？哪些会导致OOM? OOM出现在什么时候
-8、什么是Full GC？GC? major GC? stop the world
-9、描述JVM中一次full gc过程。
-10、JVM中类加载机制，类加载过程，什么是双亲委派模型？，类加载器有哪些
-11、如何判断是否有内存泄露？定位 Full GC 发生的原因，有哪些方式？
-12、Java 中都有哪些引用类型？</p>
-</div><p><a href="/mianshi/jvm/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/dubbo/01"><h2 itemprop="headline" class="item__header">dubbo面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>1、Dubbo是什么？
-2、为什么要用Dubbo？
-3、Dubbo 和 Spring Cloud 有什么区别？
-4、dubbo都支持什么协议，推荐用哪种？
-5、Dubbo需要 Web 容器吗？
-6、Dubbo内置了哪几种服务容器？
-7、Dubbo里面有哪几种节点角色？
-8、画一画服务注册与发现的流程图
-9、Dubbo默认使用什么注册中心，还有别的选择吗？
-10、Dubbo有哪几种配置方式？
-11、Dubbo 核心的配置有哪些？
-12、在 Provider 上可以配置的 Consumer 端的属性有哪些？
-13、Dubbo启动时如果依赖的服务不可用会怎样？
-14、Dubbo推荐使用什么序列化框架，你知道的还有哪些？
-15、Dubbo默认使用的是什么通信框架，还有别的选择吗？
-16、Dubbo有哪几种集群容错方案，默认是哪种？
-17、Dubbo有哪几种负载均衡策略，默认是哪种？
-18、注册了多个同一样的服务，如果测试指定的某一个服务呢？
-19、Dubbo支持服务多协议吗？
-20、当一个服务接口有多种实现时怎么做？</p>
-</div><p><a href="/mianshi/dubbo/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-03-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/Executor/0703"><h2 itemprop="headline" class="item__header">Java线程Executor框架详解与使用</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>在HotSpot VM的线程模型中，Java线程被一对一映射为本地操作系统线程。Java线程启动时会创建一个本地操作系统线程；当该Java线程终止时，这个操作系统线程也会被回收，在JVM中我们可以通过-Xss设置每个线程的大小。操作系统会调度所有线程并将它们分配给可用的CPU。
-在上层，Java多线程程序通常把应用分解为若干个任务，然后使用用户级的调度器（Executor框架）将这些任务映射为固定数量的线程；在底层，操作系统内核将这些线程映射到硬件处理器上。这种两级调度模型的示意图如下图所示</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526224420307.png" alt="1" /></p>
-
-<p>通过上图可以看出应用程序通过Executor控制上层调度，操作系统内核控制下层调度。
-注：oskernel操作系统核心包括操作系统软件和应用，只是操作系统最基本的功能，例如内存管理，进程管理，硬件驱动等</p>
-
-<h4 id="executor结构">Executor结构</h4>
-
-<p>executor结构主要包括任务、任务的执行和异步结果的计算。
-任务
-包括被执行任务需要实现的接口：Runnable接口或Callable接口
-任务的执行
-包括任务执行机制的核心接口Executor，以及继承自Executor的ExecutorService接口。Executor框架有两个关键类实现了ExecutorService接口（ThreadPoolExecutor和ScheduledThreadPoolExecutor）
-异步计算的结果
-包括接口Future和实现Future接口的FutureTask类
-下面我们来看看executor类图</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526224504401.png" alt="2" /></p>
-
-<p>在Executor使用过程中，主线程首先要创建实现Runnable或者Callable接口的任务对象。工具类Executors可以把一个Runnable对象封装为一个Callable对象（Executors.callable（Runnable task）或Executors.callable（Runnable task，Object resule））。
-如果执行ExecutorService.submit（…），ExecutorService将返回一个实现Future接口的对象（FutureTask）。由于FutureTask实现了Runnable，我们也可以创建FutureTask，然后直接交给ExecutorService执行。最后，主线程可以执行FutureTask.get()方法来等待任务执行完成。主线程也可以执行FutureTask.cancel（boolean mayInterruptIfRunning）来取消此任务的执行。</p>
-
-<h4 id="fixedthreadpool">FixedThreadPool</h4>
-
-<h5 id="初始化">初始化</h5>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newFixedThreadPool</span><span class="o">(</span><span class="kt">int</span> <span class="n">nThreads</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="n">nThreads</span><span class="o">,</span> <span class="n">nThreads</span><span class="o">,</span>
-                                      <span class="mi">0L</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span>
-                                      <span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;());</span>
+<p>假若此时vector的size方法返回的是10，i的值为9，在他要获取下标为9的元素时，有另外一个线程先执行了这句：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> for(int i=0;i&lt;vector.size();i++)
+ 	vector.remove(i);
+</code></pre></div></div>
+
+<p>将下标为9的元素删除了，在删除过程中因为有锁，所以之前的那个线程无法执行vector.get(i);处于阻塞状态，等这个线程把下标为9的元素删除了之后获取到锁再执行。那么通过get方法访问下标为9的元素肯定就会出问题了。说明这是程序逻辑本身存在线程安全问题，因此为了保证线程安全，必须在方法调用端做额外的同步措施，如下面所示：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="nc">Vector</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;</span> <span class="n">vector</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Vector</span><span class="o">&lt;</span><span class="nc">Integer</span><span class="o">&gt;();</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="o">;</span><span class="n">i</span><span class="o">++)</span>
+                <span class="n">vector</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="nc">Thread</span> <span class="n">thread1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(){</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="kd">synchronized</span> <span class="o">(</span><span class="nc">Test</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>   <span class="c1">//进行额外的同步</span>
+                        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">.</span><span class="na">size</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span>
+                            <span class="n">vector</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+            <span class="o">};</span>
+            <span class="nc">Thread</span> <span class="n">thread2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(){</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="kd">synchronized</span> <span class="o">(</span><span class="nc">Test</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">.</span><span class="na">size</span><span class="o">();</span><span class="n">i</span><span class="o">++)</span>
+                            <span class="n">vector</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+            <span class="o">};</span>
+            <span class="n">thread1</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="n">thread2</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="nc">Thread</span><span class="o">.</span><span class="na">activeCount</span><span class="o">()&gt;</span><span class="mi">10</span><span class="o">)</span>   <span class="o">{</span>
+
+            <span class="o">}</span>
+        <span class="o">}</span>
     <span class="o">}</span>
- <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newFixedThreadPool</span><span class="o">(</span><span class="kt">int</span> <span class="n">nThreads</span><span class="o">,</span> <span class="nc">ThreadFactory</span> <span class="n">threadFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="n">nThreads</span><span class="o">,</span> <span class="n">nThreads</span><span class="o">,</span>
-                                      <span class="mi">0L</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span>
-                                      <span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;(),</span>
-                                      <span class="n">threadFactory</span><span class="o">);</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h3 id="三java中的并发类容器">三、Java中的并发类容器</h3>
+
+<p>为了解决同步类容器的性能问题，在Java 1.5之后提供了并发容器，位于java.util.concurrent目录下，这个目录俗称并发包。</p>
+
+<h4 id="31concurrentmap">3.1、ConcurrentMap</h4>
+
+<p>ConcurrentMap接口下有两个重要的实现：ConcurrentHashMap、ConcurrentSkipListMap。ConcurrentHashMap把整个哈希表分成多个segment，每个segment一把锁，主要通过锁分段技术减小了锁的粒度，降低了冲突，从而提高了并发性。在实际的应用中，散列表一般是读多写少。ConcurrentHashMap 就针对读操作做了大量的优化，运用了很多并发技巧，如不可变对象和使用volatile保证内存可见性，这样，在大多数情况下读操作甚至无需加锁也能获得正确的值。ConcurrentHashMap的concurrencyLevel（默认值为16）表示并发级别，这个值用来确定Segment的个数，Segment的个数是大于等于concurrencyLevel的第一个2的n次方的数。比如，如果concurrencyLevel为12，13，14，15，16这些数，则Segment的数目为16(2的4次方)。理想情况下ConcurrentHashMap的真正的并发访问量能够达到concurrencyLevel，因为有concurrencyLevel个Segment，假如有concurrencyLevel个线程需要访问Map，并且需要访问的数据都恰好分别落在不同的Segment中，则这些线程能够无竞争地自由访问（因为他们不需要竞争同一把锁），达到同时访问的效果。这也是为什么这个参数起名为“并发级别”的原因。该值设置过高会照成空间的浪费，设置过低会降低并发性。这种对调优的把握是要通过对底层实现的深刻理解和不断的实践积累才能获取的。</p>
+
+<h4 id="32copyonwirte容器">3.2、CopyOnWirte容器</h4>
+
+<p>Cope-On-Write简称COW，是一种用于程序设计中的优化策略，称为写时复制，理解起来很简单，就是执行修改操作时进行底层数组复制，使得修改操作在新的数组上进行，不妨碍原数组的并发读操作，复制修改完成后把原数组引用指向新数组。这样做的好处是可以并发的读而不需要加锁，因为当前容器不会添加任何元素，所以也是一种读写分离的思想。但正是因为写时复制，所以不能保证数据的实时性，而只能保证最终一致性。</p>
+
+<p>在concurrent包下实现CopyOnWrite机制的容器有两种，CopyOnWriteArrayList和CopyOnWriteArraySet。</p>
+
+<p>CopyOnWriteArrayList中有一个Object数组array用来存放数据，对于set()、add()、remove()等修改数据的操作会加上重入锁ReentrantLock，等修改操作完成替换掉array的引用之后才释放锁，从而保证写操作的线程安全，而针对读操作没有任何锁。</p>
+
+<p>CopyOnWriteArraySet其实就是一个CopyOnWriteArrayList，不过就是在方法中避免重复数据而已，甚至这些避免重复数据的函数也是在CopyOnWriteArrayList中定义的，CopyOnWriteArraySet中只是包含一个CopyOnWriteArrayList的属性，然后在方法上做个包装，除了equals方法外，其他当前类中的所有函数都是调用的CopyOnWriteArrayList的方法，所以严格来讲可以使用一个CopyOnWriteArrayList作为具有Set特性的写时复制数组（不过就是没有继承AbstractSet）。</p>
+
+<p>根据CopyOnWirte容器的实现原理可知，CopyOnWirte容器保证读写分离，十分适合读多写少的场景，但不适合写多的场景。</p>
+
+<h4 id="33线程安全队列">3.3、线程安全队列</h4>
+
+<p>在并发编程中我们有时候需要使用线程安全的队列。如果我们要实现一个线程安全的队列有两种实现方式一种是使用阻塞算法，另一种是使用非阻塞算法。使用阻塞算法的队列可以用一个锁（入队和出队用同一把锁）或两个锁（入队和出队用不同的锁）等方式来实现，而非阻塞的实现方式则可以使用循环CAS的方式来实现。java.util.concurrent.atomic包相关类就是CAS的实现。</p>
+
+<p>ConcurrentLinkedQueue是一个适用于高并发场景下的非阻塞的队列，通过无锁的方式(采用CAS操作)，实现了高并发状态下的高性能，通常ConcurrentLinkedQueue的性能优于BlockingQueue。ConcurrentLinkedQueue是一个基于链接节点的无界线程安全队列，它采用先进先出的规则对节点进行排序，当我们添加一个元素的时候，它会添加到队列的尾部，当我们获取一个元素时，它会返回队列头部的元素，该队列不允许NULL元素。</p>
+
+<p>阻塞队列当队列是空的时候，再想获取元素就会阻塞进入等待状态，所以非常适合生产者-消费者模式。阻塞队列BlockingQueue接口JDK提供了7种实现：</p>
+
+<ul>
+  <li>ArrayBlockingQueue ：一个由数组结构组成的有界阻塞队列。</li>
+  <li>LinkedBlockingQueue ：一个由链表结构组成的有界阻塞队列。</li>
+  <li>PriorityBlockingQueue ：一个支持优先级排序的无界阻塞队列。</li>
+  <li>DelayQueue：一个使用优先级队列实现的无界阻塞队列。</li>
+  <li>SynchronousQueue：一个不存储元素的阻塞队列。</li>
+  <li>LinkedTransferQueue：一个由链表结构组成的无界阻塞队列。</li>
+  <li>LinkedBlockingDeque：一个由链表结构组成的双向阻塞队列。</li>
+</ul>
+</div><p><a href="/mianshi/concurrent/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/Transactional/0704/05"><h2 itemprop="headline" class="item__header">只读事务（@Transactional(readOnly = true)）的一些概念</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>念：从这一点设置的时间点开始（时间点a）到这个事务结束的过程中，其他事务所提交的数据，该事务将看不见！（查询中不会出现别人在时间点a之后提交的数据）</p>
+
+<p>应用场合：</p>
+
+<p>如果你一次执行单条查询语句，则没有必要启用事务支持，数据库默认支持SQL执行期间的读一致性；
+如果你一次执行多条查询语句，例如统计查询，报表查询，在这种场景下，多条查询SQL必须保证整体的读一致性，否则，在前条SQL查询之后，后条SQL查询之前，数据被其他用户改变，则该次整体的统计查询将会出现读数据不一致的状态，此时，应该启用事务支持。
+【注意是一次执行多次查询来统计某些信息，这时为了保证数据整体的一致性，要用只读事务】</p>
+
+<p>怎样设置：</p>
+
+<p>对于只读查询，可以指定事务类型为readonly，即只读事务。
+由于只读事务不存在数据的修改，因此数据库将会为只读事务提供一些优化手段，例如Oracle对于只读事务，不启动回滚段，不记录回滚log。</p>
+
+<p>（1）在JDBC中，指定只读事务的办法为： connection.setReadOnly(true);</p>
+
+<p>（2）在Hibernate中，指定只读事务的办法为： session.setFlushMode(FlushMode.NEVER);
+此时，Hibernate也会为只读事务提供Session方面的一些优化手段</p>
+
+<p>（3）在Spring的Hibernate封装中，指定只读事务的办法为： bean配置文件中，prop属性增加“readOnly”
+或者用注解方式@Transactional(readOnly=true)
+【 if the transaction is marked as read-only, Spring will set the Hibernate Session’s flush mode to FLUSH_NEVER,
+and will set the JDBC transaction to read-only】也就是说在Spring中设置只读事务是利用上面两种方式</p>
+
+<p>在将事务设置成只读后，相当于将数据库设置成只读数据库，此时若要进行写的操作，会出现错误</p>
+</div><p><a href="/mianshi/Transactional/0704/05">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/queue/0704"><h2 itemprop="headline" class="item__header">什么是阻塞队列？如何使用阻塞队列来实现生产者-消费者模型？</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="什么是阻塞队列">什么是阻塞队列？</h2>
+
+<p>阻塞队列是一个在队列基础上又支持了两个附加操作的队列。</p>
+
+<p>2个附加操作：</p>
+
+<p>支持阻塞的<strong>插入</strong>方法：队列满时，队列会阻塞插入元素的线程，直到队列不满。</p>
+
+<p>支持阻塞的<strong>移除</strong>方法：队列空时，获取元素的线程会等待队列变为非空。</p>
+
+<h2 id="阻塞队列的应用场景">阻塞队列的应用场景</h2>
+
+<p>阻塞队列常用于生产者和消费者的场景，生产者是向队列里添加元素的线程，消费者是从队列里取元素的线程。简而言之，阻塞队列是生产者用来存放元素、消费者获取元素的容器。</p>
+
+<h2 id="几个方法">几个方法</h2>
+
+<p>在阻塞队列不可用的时候，上述2个附加操作提供了四种处理方法</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">方法处理方式</th>
+      <th style="text-align: left">抛出异常</th>
+      <th style="text-align: left">返回特殊值</th>
+      <th style="text-align: left">一直阻塞</th>
+      <th style="text-align: left">超时退出</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">插入方法</td>
+      <td style="text-align: left">add(e)</td>
+      <td style="text-align: left">offer(e)</td>
+      <td style="text-align: left">put(e)</td>
+      <td style="text-align: left">offer(e,time,unit)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">移除方法</td>
+      <td style="text-align: left">remove()</td>
+      <td style="text-align: left">poll()</td>
+      <td style="text-align: left">take()</td>
+      <td style="text-align: left">poll(time,unit)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">检查方法</td>
+      <td style="text-align: left">element()</td>
+      <td style="text-align: left">peek()</td>
+      <td style="text-align: left">不可用</td>
+      <td style="text-align: left">不可用</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="java里的阻塞队列">JAVA里的阻塞队列</h2>
+
+<p>JDK 7 提供了7个阻塞队列，如下</p>
+
+<p>1、<strong>ArrayBlockingQueue</strong> 数组结构组成的有界阻塞队列。</p>
+
+<p>此队列按照先进先出（FIFO）的原则对元素进行排序，但是默认情况下不保证线程公平的访问队列，即如果队列满了，那么被阻塞在外面的线程对队列访问的顺序是不能保证线程公平（即先阻塞，先插入）的。</p>
+
+<p>2、<strong>LinkedBlockingQueue</strong>一个由链表结构组成的有界阻塞队列</p>
+
+<p>此队列按照先出先进的原则对元素进行排序</p>
+
+<p>3、<strong>PriorityBlockingQueue</strong> 支持优先级的无界阻塞队列</p>
+
+<p>4、<strong>DelayQueue</strong> 支持延时获取元素的无界阻塞队列，即可以指定多久才能从队列中获取当前元素</p>
+
+<p>5、<strong>SynchronousQueue</strong>不存储元素的阻塞队列，每一个put必须等待一个take操作，否则不能继续添加元素。并且他支持公平访问队列。</p>
+
+<p>6、<strong>LinkedTransferQueue</strong>由链表结构组成的无界阻塞TransferQueue队列。相对于其他阻塞队列，多了tryTransfer和transfer方法</p>
+
+<p>transfer方法</p>
+
+<p>如果当前有消费者正在等待接收元素（take或者待时间限制的poll方法），transfer可以把生产者传入的元素立刻传给消费者。如果没有消费者等待接收元素，则将元素放在队列的tail节点，并等到该元素被消费者消费了才返回。</p>
+
+<p>tryTransfer方法</p>
+
+<p>用来试探生产者传入的元素能否直接传给消费者。，如果没有消费者在等待，则返回false。和上述方法的区别是该方法无论消费者是否接收，方法立即返回。而transfer方法是必须等到消费者消费了才返回。</p>
+
+<p>7、LinkedBlockingDeque链表结构的双向阻塞队列，优势在于多线程入队时，减少一半的竞争。</p>
+
+<h2 id="如何使用阻塞队列来实现生产者-消费者模型">如何使用阻塞队列来实现生产者-消费者模型？</h2>
+
+<p>通知模式实现：所谓通知模式，就是当生产者往满的队列里添加元素时会阻塞住生产者，当消费者消费了一个队列中的元素后，会通知生产者当前队列可用。</p>
+
+<h2 id="使用blockingqueue解决生产者消费者问题">使用BlockingQueue解决生产者消费者问题</h2>
+
+<p><strong>为什么BlockingQueue适合解决生产者消费者问题</strong></p>
+
+<p>任何有效的生产者-消费者问题解决方案都是通过控制生产者put()方法（生产资源）和消费者take()方法（消费资源）的调用来实现的，一旦你实现了对方法的阻塞控制，那么你将解决该问题。</p>
+
+<p>Java通过BlockingQueue提供了开箱即用的支持来控制这些方法的调用（一个线程创建资源，另一个消费资源）。java.util.concurrent包下的BlockingQueue接口是一个线程安全的可用于存取对象的队列。</p>
+
+<p><strong>BlockingQueue是一种数据结构，支持一个线程往里存资源，另一个线程从里取资源。这正是解决生产者消费者问题所需要的，那么让我们开始解决该问题吧。</strong></p>
+
+<p><strong>生产者</strong></p>
+
+<p>以下代码用于生产者线程</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">io.ymq.example.thread</span><span class="o">;</span>
+ 
+<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
+ 
+<span class="cm">/**
+ * 描述:生产者
+ *
+ * @author yanpenglei
+ * @create 2018-03-14 15:52
+ **/</span>
+<span class="kd">class</span> <span class="nc">Producer</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+ 
+    <span class="kd">protected</span> <span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">queue</span><span class="o">;</span>
+ 
+    <span class="nc">Producer</span><span class="o">(</span><span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">theQueue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">queue</span> <span class="o">=</span> <span class="n">theQueue</span><span class="o">;</span>
+    <span class="o">}</span>
+ 
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">Object</span> <span class="n">justProduced</span> <span class="o">=</span> <span class="n">getResource</span><span class="o">();</span>
+                <span class="n">queue</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">justProduced</span><span class="o">);</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"生产者资源队列大小= "</span> <span class="o">+</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"生产者 中断"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+ 
+    <span class="nc">Object</span> <span class="nf">getResource</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"生产者 读 中断"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+</code></pre></div></div>
+
+<p><strong>消费者</strong></p>
+
+<p>以下代码用于消费者线程</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">io.ymq.example.thread</span><span class="o">;</span>
+ 
+<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
+ 
+<span class="cm">/**
+ * 描述: 消费者
+ *
+ * @author yanpenglei
+ * @create 2018-03-14 15:54
+ **/</span>
+<span class="kd">class</span> <span class="nc">Consumer</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+    <span class="kd">protected</span> <span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">queue</span><span class="o">;</span>
+ 
+    <span class="nc">Consumer</span><span class="o">(</span><span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">theQueue</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">queue</span> <span class="o">=</span> <span class="n">theQueue</span><span class="o">;</span>
+    <span class="o">}</span>
+ 
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">take</span><span class="o">();</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费者 资源 队列大小 "</span> <span class="o">+</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+                <span class="n">take</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费者 中断"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+ 
+    <span class="kt">void</span> <span class="nf">take</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span> <span class="c1">// simulate time passing</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费者 读 中断"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费对象 "</span> <span class="o">+</span> <span class="n">obj</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+</code></pre></div></div>
+
+<p><strong>测试该解决方案是否运行正常</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">io.ymq.example.thread</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.LinkedBlockingQueue</span><span class="o">;</span>
+ 
+<span class="cm">/**
+ * 描述: 测试
+ *
+ * @author yanpenglei
+ * @create 2018-03-14 15:58
+ **/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProducerConsumerExample</span> <span class="o">{</span>
+ 
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+ 
+        <span class="kt">int</span> <span class="n">numProducers</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">numConsumers</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+ 
+        <span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">myQueue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;(</span><span class="mi">5</span><span class="o">);</span>
+ 
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numProducers</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">Producer</span><span class="o">(</span><span class="n">myQueue</span><span class="o">)).</span><span class="na">start</span><span class="o">();</span>
+        <span class="o">}</span>
+ 
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numConsumers</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">Consumer</span><span class="o">(</span><span class="n">myQueue</span><span class="o">)).</span><span class="na">start</span><span class="o">();</span>
+        <span class="o">}</span>
+ 
+        <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+ 
+        <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+</code></pre></div></div>
+
+<p><strong>运行结果</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>生产者资源队列大小= 1
+生产者资源队列大小= 1
+消费者 资源 队列大小 1
+生产者资源队列大小= 1
+消费者 资源 队列大小 1
+消费者 资源 队列大小 1
+生产者资源队列大小= 1
+生产者资源队列大小= 3
+消费对象 java.lang.Object@1e1aa52b
+生产者资源队列大小= 2
+生产者资源队列大小= 5
+消费对象 java.lang.Object@6e740a76
+消费对象 java.lang.Object@697853f6
+ 
+......
+ 
+消费对象 java.lang.Object@41a10cbc
+消费对象 java.lang.Object@4963c8d1
+消费者 资源 队列大小 5
+生产者资源队列大小= 5
+生产者资源队列大小= 5
+消费者 资源 队列大小 4
+消费对象 java.lang.Object@3e49c35d
+消费者 资源 队列大小 4
+生产者资源队列大小= 5
+
+
+</code></pre></div></div>
+
+<p><strong>从输出结果中,我们可以发现队列大小永远不会超过5，消费者线程消费了生产者生产的资源</strong></p>
+</div><p><a href="/mianshi/queue/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/Transactional/0704/03"><h2 itemprop="headline" class="item__header">Spring事务管理的两种方式</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>事务管理对于企业应用来说是至关重要的，当出现异常情况时，它也可以保证数据的一致性。</p>
+
+<h2 id="spring事务管理的两种方式">Spring事务管理的两种方式</h2>
+
+<p><strong>spring支持编程式事务管理和声明式事务管理两种方式。</strong></p>
+
+<ul>
+  <li><strong>编程式事务</strong> 使用TransactionTemplate或者直接使用底层的PlatformTransactionManager。对于编程式事务管理，spring推荐使用TransactionTemplate。</li>
+  <li><strong>声明式事务</strong> 是建立在AOP之上的。其本质是对方法前后进行拦截，然后在目标方法开始之前创建或者加入一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。声明式事务最大的优点就是不需要通过编程的方式管理事务，这样就不需要在业务逻辑代码中掺杂事务管理的代码，只需在配置文件中做相关的事务规则声明(或通过基于@Transactional注解的方式)，便可以将事务规则应用到业务逻辑中。</li>
+</ul>
+
+<p>显然声明式事务管理要优于编程式事务管理，这正是spring倡导的非侵入式的开发方式。声明式事务管理使业务代码不受污染，一个普通的POJO对象，只要加上注解就可以获得完全的事务支持。和编程式事务相比，声明式事务唯一不足地方是，它的最细粒度只能作用到方法级别，无法做到像编程式事务那样可以作用到代码块级别。但是即便有这样的需求，也存在很多变通的方法，比如，可以将需要进行事务管理的代码块独立为方法等等。</p>
+
+<p>声明式事务管理也有两种常用的方式，一种是基于tx和aop名字空间的xml配置文件，另一种就是基于@Transactional注解。显然基于注解的方式更简单易用，更清爽。</p>
+
+<h2 id="spring事务特性">spring事务特性</h2>
+
+<p>spring所有的事务管理策略类都继承自<code class="language-plaintext highlighter-rouge">org.springframework.transaction.PlatformTransactionManager</code>接口。</p>
+
+<p>其中<code class="language-plaintext highlighter-rouge">TransactionDefinition</code>接口定义以下特性：</p>
+
+<h3 id="事务隔离级别">事务隔离级别</h3>
+
+<p>隔离级别是指若干个并发的事务之间的隔离程度。TransactionDefinition 接口中定义了五个表示隔离级别的常量：</p>
+
+<ul>
+  <li>TransactionDefinition.ISOLATION_DEFAULT：这是默认值，表示使用底层数据库的默认隔离级别。对大部分数据库而言，通常这值就是TransactionDefinition.ISOLATION_READ_COMMITTED。</li>
+  <li>TransactionDefinition.ISOLATION_READ_UNCOMMITTED：该隔离级别表示一个事务可以读取另一个事务修改但还没有提交的数据。该级别不能防止脏读，不可重复读和幻读，因此很少使用该隔离级别。比如PostgreSQL实际上并没有此级别。</li>
+  <li>TransactionDefinition.ISOLATION_READ_COMMITTED：该隔离级别表示一个事务只能读取另一个事务已经提交的数据。该级别可以防止脏读，这也是大多数情况下的推荐值。</li>
+  <li>TransactionDefinition.ISOLATION_REPEATABLE_READ：该隔离级别表示一个事务在整个过程中可以多次重复执行某个查询，并且每次返回的记录都相同。该级别可以防止脏读和不可重复读。</li>
+  <li>TransactionDefinition.ISOLATION_SERIALIZABLE：所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</li>
+</ul>
+
+<h3 id="事务传播行为">事务传播行为</h3>
+
+<p>所谓事务的传播行为是指，如果在开始当前事务之前，一个事务上下文已经存在，此时有若干选项可以指定一个事务性方法的执行行为。在TransactionDefinition定义中包括了如下几个表示传播行为的常量：</p>
+
+<ul>
+  <li>TransactionDefinition.PROPAGATION_REQUIRED：如果当前存在事务，则加入该事务；如果当前没有事务，则创建一个新的事务。这是默认值。</li>
+  <li>TransactionDefinition.PROPAGATION_REQUIRES_NEW：创建一个新的事务，如果当前存在事务，则把当前事务挂起。</li>
+  <li>TransactionDefinition.PROPAGATION_SUPPORTS：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。</li>
+  <li>TransactionDefinition.PROPAGATION_NOT_SUPPORTED：以非事务方式运行，如果当前存在事务，则把当前事务挂起。</li>
+  <li>TransactionDefinition.PROPAGATION_NEVER：以非事务方式运行，如果当前存在事务，则抛出异常。</li>
+  <li>TransactionDefinition.PROPAGATION_MANDATORY：如果当前存在事务，则加入该事务；如果当前没有事务，则抛出异常。</li>
+  <li>TransactionDefinition.PROPAGATION_NESTED：如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行；如果当前没有事务，则该取值等价于TransactionDefinition.PROPAGATION_REQUIRED。</li>
+</ul>
+
+<h3 id="事务超时">事务超时</h3>
+
+<p>所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。</p>
+
+<p>默认设置为底层事务系统的超时值，如果底层数据库事务系统没有设置超时值，那么就是none，没有超时限制。</p>
+
+<h3 id="spring事务回滚规则">spring事务回滚规则</h3>
+
+<p>默认配置下，spring只有在抛出的异常为运行时unchecked异常时才回滚该事务，也就是抛出的异常为RuntimeException的子类(Errors也会导致事务回滚)，而抛出checked异常则不会导致事务回滚。可以明确的配置在抛出哪些异常时回滚事务，包括checked异常。也可以明确定义那些异常抛出时不回滚事务。还可以编程性的通过setRollbackOnly()方法来指示一个事务必须回滚，在调用完setRollbackOnly()后你所能执行的唯一操作就是回滚。</p>
+
+<h2 id="以mybatis为例基于注解的声明式事务配置">以MyBatis为例，基于注解的声明式事务配置</h2>
+
+<p>1、添加tx名字空间</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xmlns:tx="http://www.springframework.org/schema/tx"
+</code></pre></div></div>
+
+<p>2、开启事务的注解支持</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="c">&lt;!-- 开启事务控制的注解支持 --&gt;</span>  
+<span class="nt">&lt;tx:annotation-driven</span> <span class="na">transaction-manager=</span><span class="s">"transactionManager"</span><span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<p>3、MyBatis自动参与到spring事务管理中，无需额外配置，只要org.mybatis.spring.SqlSessionFactoryBean引用的数据源与DataSourceTransactionManager引用的数据源一致即可。</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"sqlSessionFactory"</span> <span class="na">class=</span><span class="s">"org.mybatis.spring.SqlSessionFactoryBean"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataSource"</span> <span class="na">ref=</span><span class="s">"dataSource"</span> <span class="nt">/&gt;</span>  
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"configLocation"</span><span class="nt">&gt;</span>  
+		<span class="nt">&lt;value&gt;</span>classpath:mybatis-config.xml<span class="nt">&lt;/value&gt;</span>  
+	<span class="nt">&lt;/property&gt;</span>  
+<span class="nt">&lt;/bean&gt;</span>
+
+<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"transactionManager"</span> <span class="na">class=</span><span class="s">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span><span class="nt">&gt;</span>  
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataSource"</span> <span class="na">ref=</span><span class="s">"dataSource"</span> <span class="nt">/&gt;</span>  
+<span class="nt">&lt;/bean&gt;</span>  
+</code></pre></div></div>
+
+<p><strong>4、使用@Transactional注解</strong></p>
+
+<p>@Transactional 可以作用于接口、接口方法、类以及类方法上。当作用于类上时，该类的所有 public 方法将都具有该类型的事务属性，同时，我们也可以在方法级别使用该注解来覆盖类级别的定义。</p>
+
+<p>虽然 @Transactional 注解可以作用于接口、接口方法、类以及类方法上，但是 Spring 建议不要在接口或者接口方法上使用该注解，因为这只有在使用基于接口的代理时它才会生效。另外， @Transactional 注解应该只被应用到 public 方法上，这是由 Spring AOP 的本质决定的。如果你在 protected、private 或者默认可见性的方法上使用 @Transactional 注解，这将被忽略，也不会抛出任何异常。</p>
+
+<h2 id="以mybatis为例基于xml文件的声明式事务配置">以MyBatis为例，基于.xml文件的声明式事务配置</h2>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nt">&lt;tx:advice</span> <span class="na">id=</span><span class="s">"advice"</span> <span class="na">transaction-manager=</span><span class="s">"transactionManager"</span><span class="nt">&gt;</span>  
+    <span class="nt">&lt;tx:attributes&gt;</span>  
+        <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">"update*"</span> <span class="na">propagation=</span><span class="s">"REQUIRED"</span> <span class="na">read-only=</span><span class="s">"false"</span> <span class="na">rollback-for=</span><span class="s">"java.lang.Exception"</span><span class="nt">/&gt;</span>  
+        <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">"insert"</span> <span class="na">propagation=</span><span class="s">"REQUIRED"</span> <span class="na">read-only=</span><span class="s">"false"</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;/tx:attributes&gt;</span>  
+<span class="nt">&lt;/tx:advice&gt;</span>  
+
+<span class="nt">&lt;aop:config&gt;</span>  
+    <span class="nt">&lt;aop:pointcut</span> <span class="na">id=</span><span class="s">"testService"</span> <span class="na">expression=</span><span class="s">"execution (* com.nnngu.service.MyBatisService.*(..))"</span><span class="nt">/&gt;</span>  
+    <span class="nt">&lt;aop:advisor</span> <span class="na">advice-ref=</span><span class="s">"advice"</span> <span class="na">pointcut-ref=</span><span class="s">"testService"</span><span class="nt">/&gt;</span>  
+<span class="nt">&lt;/aop:config&gt;</span>  
+</code></pre></div></div>
+</div><p><a href="/mianshi/Transactional/0704/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-06">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/SpringBoot/0704"><h2 itemprop="headline" class="item__header">SpringBoot面试题</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="1spring-bootspring-mvc-和-spring-有什么区别">1、Spring Boot、Spring MVC 和 Spring 有什么区别？</h4>
+
+<h5 id="什么是spring它解决了什么问题">什么是Spring？它解决了什么问题？</h5>
+
+<p>我们说到Spring，一般指代的是Spring Framework，它是一个开源的应用程序框架，提供了一个简易的开发方式，<strong>通过这种开发方式，将避免那些可能致使代码变得繁杂混乱的大量的业务/工具对象，说的更通俗一点就是由框架来帮你管理这些对象，包括它的创建，销毁等</strong>，比如基于Spring的项目里经常能看到的<code class="language-plaintext highlighter-rouge">Bean</code>，它代表的就是由Spring管辖的对象。</p>
+
+<h5 id="什么是spring-mvc它解决了什么问题">什么是Spring MVC？它解决了什么问题？</h5>
+
+<p>Spring MVC是Spring的一部分，Spring 出来以后，大家觉得很好用，于是按照这种模式设计了一个 MVC框架（一些用Spring 解耦的组件），<strong>主要用于开发WEB应用和网络接口，它是Spring的一个模块，通过Dispatcher Servlet, ModelAndView 和 View Resolver，让应用开发变得很容易</strong></p>
+
+<h5 id="什么是spring-boot它解决了什么问题">什么是Spring Boot？它解决了什么问题？</h5>
+
+<p>初期的Spring通过代码加配置的形式为项目提供了良好的灵活性和扩展性，但随着Spring越来越庞大，其配置文件也越来越繁琐，太多复杂的xml文件也一直是Spring被人诟病的地方，特别是近些年其他简洁的WEB方案层出不穷，如基于Python或Node.Js，几行代码就能实现一个WEB服务器，对比起来，大家渐渐觉得Spring那一套太过繁琐，此时，Spring社区推出了Spring Boot，它的目的在于<strong>实现自动配置，降低项目搭建的复杂度</strong></p>
+
+<h4 id="2什么是自动配置">2、什么是自动配置？</h4>
+
+<p><strong>Spring Boot：__该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置</strong>。__Spring Boot采用约定大约配置的方式，大量的减少了配置文件的使用</p>
+
+<p>可以通过查看源码的run方法，通过一个简单的run方法，<strong>将引发的是一系列复杂的内部调用和加载过程，从而初始化一个应用所需的配置、环境、资源以及各种自定义的类。在这个阶段，会导入一些列自动配置的类，实现强大的自动配置的功能</strong></p>
+
+<p>我们可以点开@SpringBootApplicaton 注解， 其中，<strong>@ComponentScan将扫描和加载一些自定义的类</strong>，<strong>@EnableAutoConfiguration将导入一些自动配置的类</strong></p>
+
+<h4 id="3我们说的springboot约定大于配置是什么意思呢">3、我们说的springboot约定大于配置是什么意思呢？</h4>
+
+<p>自动配置在加载一个类的时候，会首先去读取项目当中的配置文件，假如没有，就会启用默认值，这就是springboot约定大于配置原理。以Thymeleaf为例：看下下面我们就知道，为什么我们使用Thymeleaf模板引擎，html文件默认放在resources下面的templates文件夹下面，因为这是Thymeleaf的默认配置。</p>
+
+<h4 id="4什么是-spring-boot-stater">4、什么是 Spring Boot Stater</h4>
+
+<p>starter可以理解成pom配置了一堆jar组合的空maven项目，<strong>用来简化maven依赖配置</strong>，starter可以继承也可以依赖于别的starter。</p>
+
+<p>如果我要使用redis，我直接引入redis驱动jar包就行了，何必要引入starter包？<strong>starter和普通jar包的区别在于，它能够实现自动配置，和Spring Boot无缝衔接，从而节省我们大量开发时间。</strong></p>
+
+<h4 id="5你能否举一个例子来解释更多-staters-的内容">5、你能否举一个例子来解释更多 Staters 的内容</h4>
+
+<p>比如 我们开发一个web 应用程序或者是公开的 REST 服务的应用程序 Spring Boot Stater Web，是首选，它会加载 ：</p>
+
+<p>Spring - core，beans，context，aop</p>
+
+<p>Web MVC - （Spring MVC）</p>
+
+<p>Jackson - for JSON Binding</p>
+
+<p>Validation - Hibernate,Validation API</p>
+
+<p>Enbedded Servlet Container - Tomcat</p>
+
+<p>Logging - logback,slf4j</p>
+
+<p>而且我不用担心这个些依赖项之间的版本兼容性</p>
+
+<h4 id="6spring-boot-还提供了其它的哪些-starter-project-options">6、Spring Boot 还提供了其它的哪些 Starter Project Options</h4>
+
+<p>Spring Boot 也提供了其它的启动器项目包括，包括用于开发特定类型应用程序的典型依赖项。</p>
+
+<p>spring-boot-starter-web-services - SOAP Web Services</p>
+
+<p>spring-boot-starter-web - Web 和 RESTful 应用程序</p>
+
+<p>spring-boot-starter-test - 单元测试和集成测试</p>
+
+<p>spring-boot-starter-jdbc - 传统的 JDBC</p>
+
+<p>spring-boot-starter-hateoas - 为服务添加 HATEOAS 功能</p>
+
+<p>spring-boot-starter-security - 使用 SpringSecurity 进行身份验证和授权</p>
+
+<p>spring-boot-starter-data-jpa - 带有 Hibeernate 的 Spring Data JPA</p>
+
+<p>spring-boot-starter-data-rest - 使用 Spring Data REST 公布简单的 REST 服务</p>
+
+<h4 id="7spring-是如何快速创建产品就绪应用程序的">7、Spring 是如何快速创建产品就绪应用程序的</h4>
+
+<p><strong>Spring Boot 致力于快速产品就绪应用程序。为此，它提供了一些譬如高速缓存，日志记录，监控和嵌入式服务器等开箱即用的非功能性特征。</strong></p>
+
+<p>spring-boot-starter-actuator - 使用一些如监控和跟踪应用的高级功能</p>
+
+<p>spring-boot-starter-undertow, spring-boot-starter-jetty, spring-boot-starter-tomcat - 选择您的特定嵌入式 Servlet 容器</p>
+
+<p>spring-boot-starter-logging - 使用 logback 进行日志记录</p>
+
+<p>spring-boot-starter-cache - 启用 Spring Framework 的缓存支持</p>
+
+<h4 id="8创建一个-spring-boot-project-的最简单的方法是什么">8、创建一个 Spring Boot Project 的最简单的方法是什么</h4>
+
+<p>Spring Initializr是启动 Spring Boot Projects 的一个很好的工具</p>
+
+<h4 id="9spring-initializr-是创建-spring-boot-projects-的唯一方法吗">9、Spring Initializr 是创建 Spring Boot Projects 的唯一方法吗？</h4>
+
+<p>Spring Initializr，还有通过maven创建</p>
+
+<h4 id="10为什么我们需要-spring-boot-maven-plugin">10、为什么我们需要 spring-boot-maven-plugin?</h4>
+
+<ul>
+  <li>
+    <p>spring-boot-maven-plugin 提供了一些像 jar 一样打包或者运行应用程序的命令。</p>
+  </li>
+  <li>spring-boot:run 运行你的 SpringBooty 应用程序。</li>
+  <li>spring-boot：repackage 重新打包你的 jar 包或者是 war 包使其可执行</li>
+  <li>spring-boot：start 和 spring-boot：stop 管理 Spring Boot 应用程序的生命周期（也可以说是为了集成测试）。</li>
+  <li>spring-boot:build-info 生成执行器可以使用的构造信息。</li>
+</ul>
+
+<h4 id="11如何使用-springboot-自动重装我的应用程序">11、如何使用 SpringBoot 自动重装我的应用程序？</h4>
+
+<p>把下面的依赖项添加至你的 Spring Boot Project pom.xml 中</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
+     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+     &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+     &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre></div></div>
+
+<p>重启应用程序，然后就可以了。</p>
+
+<h4 id="12什么是嵌入式服务器我们为什么要使用嵌入式服务器呢">12、什么是嵌入式服务器？我们为什么要使用嵌入式服务器呢?</h4>
+
+<p>思考一下在你的虚拟机上部署应用程序需要些什么。</p>
+
+<p>第一步： 安装 Java</p>
+
+<p>第二部： 安装 Web 或者是应用程序的服务器（Tomat/Wbesphere/Weblogic 等等）</p>
+
+<p>第三部： 部署应用程序 war 包</p>
+
+<p>如果我们想简化这些步骤，应该如何做呢？</p>
+
+<p>让我们来思考如何使服务器成为应用程序的一部分？</p>
+
+<blockquote>
+  <p>你只需要一个安装了 Java 的虚拟机，就可以直接在上面部署应用程序了，
+是不是很爽？</p>
+</blockquote>
+
+<p>这个想法是嵌入式服务器的起源。</p>
+
+<p>当我们创建一个可以部署的应用程序的时候，我们将会把服务器（例如，tomcat）嵌入到可部署的服务器中。</p>
+
+<blockquote>
+  <p>例如，对于一个 Spring Boot 应用程序来说，你可以生成一个包含 Embedded Tomcat 的应用程序 jar。你就可以想运行正常 Java 应用程序一样来运行 web 应用程序了。</p>
+</blockquote>
+
+<p>嵌入式服务器就是我们的可执行单元包含服务器的二进制文件</p>
+
+<h4 id="13如何在-spring-boot-中添加通用的-js-代码">13、如何在 Spring Boot 中添加通用的 JS 代码？</h4>
+
+<p>在源文件夹下，创建一个名为 static 的文件夹。然后，你可以把你的静态的内容放在这里面。</p>
+
+<p>例如，myapp.js 的路径是 resources\static\js\myapp.js</p>
+
+<p>你可以参考它在 jsp 中的使用方法</p>
+
+<script src="/js/myapp.js"></script>
+
+<h4 id="14错误hal-browser-gives-me-unauthorized-error---full-authenticaition-is-required-to-access-this-resource该如何来修复这个错误呢">14、错误：HAL browser gives me unauthorized error - Full authenticaition is required to access this resource.该如何来修复这个错误呢？</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+  "timestamp": 1488656019562,
+  "status": 401,
+  "error": "Unauthorized",
+  "message": "Full authentication is required to access this resource.",
+  "path": "/beans"
+}
+</code></pre></div></div>
+
+<p>两种方法：</p>
+
+<h5 id="方法-1关闭安全验证">方法 1：关闭安全验证</h5>
+
+<p>application.properties</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>management.security.enabled:FALSE
+</code></pre></div></div>
+
+<h5 id="方法二在日志中搜索密码并传递至请求标头中">方法二：在日志中搜索密码并传递至请求标头中</h5>
+
+<h4 id="15什么是-spring-date">15、什么是 Spring Date</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Spring Data的使命是为数据访问提供熟悉且一致的基于Spring的编程模型，同时仍保留底层数据存储的特​​殊特性。
+它使数据访问技术，关系数据库和非关系数据库，map-reduce框架和基于云的数据服务变得简单易用。这是一个伞形项目，其中包含许多特定于给定数据库的子项目。这些项目是通过与这些激动人心的技术背后的许多公司和开发人员合作开发的。
+</code></pre></div></div>
+
+<p><strong>主要模块</strong>
+Spring Data主要使用的一些模块，根据需要选择对应的一些功能模块。</p>
+
+<ul>
+  <li>Spring Data common- 支持每个Spring Data模块的Core Spring概念。</li>
+  <li>Spring Data JDBC- 对JDBC的Spring Data存储库支持。</li>
+  <li>Spring Data JPA - 对JPA的Spring Data存储库支持。</li>
+  <li>Spring Data MongoDB - 对MongoDB的基于Spring对象文档的存储库支持。</li>
+  <li>Spring Data Redis - 从Spring应用程序轻松配置和访问Redis。</li>
+  <li>Spring Data JDBC Ext- 支持标准JDBC的数据库特定扩展，包括对Oracle RAC快速连接故障转移的支持，AQ JMS支持以及对使用高级数据类型的支持。</li>
+  <li>Spring Data KeyValue - Map基于库和SPI轻松建立键值存储一个Spring数据模块。</li>
+  <li>Spring Data LDAP - 对Spring LDAP的 Spring Data存储库支持。</li>
+  <li>Spring Data REST- 将Spring Data存储库导出为超媒体驱动的RESTful资源。</li>
+  <li>Spring Data for Pivotal GemFire - 轻松配置和访问Pivotal GemFire，实现高度一致，低延迟/高吞吐量，面向数据的Spring应用程序。</li>
+  <li>Spring Data for Apache Cassandra- 轻松配置和访问Apache Cassandra或大规模，高可用性，面向数据的Spring应用程序。</li>
+  <li>Spring Data for Apace Geode- 轻松配置和访问Apache Geode，实现高度一致，低延迟，面向数据的Spring应用程序。</li>
+  <li>Spring Data for Apache Solr- 为面向搜索的Spring应用程序轻松配置和访问Apache Solr。</li>
+</ul>
+
+<h4 id="16什么是-spring-data-rest">16、什么是 Spring Data REST</h4>
+
+<p>Spring Data REST是基于Spring Data的repository之上，可以把 repository <strong>自动</strong> 输出为REST资源，目前支持Spring Data JPA、Spring Data MongoDB、Spring Data Neo4j、Spring Data GemFire、Spring Data Cassandra的 repository <strong>自动</strong> 转换成REST服务。</p>
+
+<h4 id="17当-spring-boot-应用程序作为-java-应用程序运行时后台会发生什么">17、当 Spring Boot 应用程序作为 Java 应用程序运行时，后台会发生什么？</h4>
+
+<p>当你启动 java 应用程序的时候，spring boot 自动配置文件就会魔法般的启用了。</p>
+
+<ul>
+  <li>当 Spring Boot 应用程序检测到你正在开发一个 web 应用程序的时候，它就会启动 tomcat。</li>
+</ul>
+
+<h4 id="18我们能否在-spring-boot-starter-web-中用-jetty-代替-tomcat">18、我们能否在 spring-boot-starter-web 中用 jetty 代替 tomcat？</h4>
+
+<p>在 spring-boot-starter-web 移除现有的依赖项，并把下面这些添加进去。</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;exclusions&gt;</span>
+        <span class="nt">&lt;exclusion&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-tomcat<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/exclusion&gt;</span>
+    <span class="nt">&lt;/exclusions&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-jetty<span class="nt">&lt;/artifactId&gt;</span>
+<span class="err">&lt;</span>/dependency
+</code></pre></div></div>
+
+<h4 id="19如何使用-spring-boot-生成一个-war-文件">19、如何使用 Spring Boot 生成一个 WAR 文件？</h4>
+
+<ol>
+  <li>
+    <packaging>war</packaging>
+  </li>
+  <li>
+    <p>在pom.xml中加入build节点,build节点中的finalName可改成项目名称(包名)</p>
+  </li>
+  <li>
+    <p>在spring-boot-starter-web依赖中移除tomcat模块：</p>
+  </li>
+  <li>
+    <p>新建启动类：主要是SpringApplicationBuilder configure 方法</p>
+
+    <p><a href="./0704-03">详情配置</a></p>
+  </li>
+</ol>
+
+<h4 id="20如何使用-spring-boot-部署到不同的服务器">20、如何使用 Spring Boot 部署到不同的服务器？</h4>
+
+<ul>
+  <li>在一个项目中生成一个 war 文件。</li>
+  <li>将它部署到你最喜欢的服务器（websphere 或者 Weblogic 或者 Tomcat and so on）。</li>
+</ul>
+
+<p>21、RequestMapping 和 GetMapping 的不同之处在哪里？</p>
+
+<ul>
+  <li>RequestMapping 具有类属性的，可以进行 GET,POST,PUT 或者其它的注释中具有的请求方法。</li>
+  <li>GetMapping 是 GET 请求方法中的一个特例。它只是 ResquestMapping 的一个延伸，目的是为了提高清晰度</li>
+</ul>
+
+<h4 id="22为什么我们不建议在实际的应用程序中使用-spring-data-rest">22、为什么我们不建议在实际的应用程序中使用 Spring Data Rest?</h4>
+
+<p>我们认为 Spring Data Rest 很适合快速原型制造！在大型应用程序中使用需要谨慎。</p>
+
+<p>通过 Spring Data REST 你可以把你的数据实体作为 RESTful 服务直接发布。</p>
+
+<p>当你设计 RESTful 服务器的时候，最佳实践表明，你的接口应该考虑到两件重要的事情：</p>
+
+<ul>
+  <li>你的模型范围。</li>
+  <li>你的客户。</li>
+  <li>Spring Data Rest 在做复杂数据库查询不适合</li>
+</ul>
+
+<p>通过 With Spring Data REST，你不需要再考虑这两个方面，只需要作为 TEST 服务发布实体。</p>
+
+<p>这就是为什么我们建议使用 Spring Data Rest 在快速原型构造上面，或者作为项目的初始解决方法。对于完整演变项目来说，这并不是一个好的注意。</p>
+
+<h4 id="23jpa-和-hibernate-有哪些区别">23、JPA 和 Hibernate 有哪些区别？</h4>
+
+<ul>
+  <li>JPA 是一个规范或者接口</li>
+  <li>Hibernate 是 JPA 的一个实现
+<img src="/assets/images/mianshiti/0704/1436045-20180817162031268-1675607816.png" alt="1" /></li>
+</ul>
+
+<h4 id="24业务边界应该从哪一层开始">24、业务边界应该从哪一层开始？</h4>
+
+<p>我们建议在服务层管理业务。商业业务逻辑在商业层或者服务层，与此同时，你想要执行的业务管理也在该层。</p>
+
+<h4 id="25使用-spring-boot-启动连接到内存数据库-h2-的-jpa-应用程序需要哪些依赖项">25、使用 Spring Boot 启动连接到内存数据库 H2 的 JPA 应用程序需要哪些依赖项？</h4>
+
+<p>在 Spring Boot 项目中，当你确保下面的依赖项都在类路里面的时候，你可以加载 H2 控制台。</p>
+
+<ul>
+  <li>web 启动器</li>
+  <li>h2</li>
+  <li>jpa 数据启动器</li>
+</ul>
+
+<h4 id="26如何不通过任何配置来选择-hibernate-作为-jpa-的默认实现">26、如何不通过任何配置来选择 Hibernate 作为 JPA 的默认实现？</h4>
+
+<p>因为 Spring Boot 是自动配置的。</p>
+
+<p>下面是我们添加的依赖项</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
+     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+     &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre></div></div>
+
+<p>spring-boot-stater-data-jpa 对于 Hibernate 和 JPA 有过渡依赖性。</p>
+
+<p>当 Spring Boot 在类路径中检测到 Hibernate 中，将会自动配置它为默认的 JPA 实现</p>
+
+<h4 id="27指定的数据库连接信息在哪里它是如何知道自动连接至-h2-的">27、指定的数据库连接信息在哪里？它是如何知道自动连接至 H2 的？</h4>
+
+<p>这就是 Spring Boot 自动配置的魔力。</p>
+
+<p>来自：https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-auto-configuration.html</p>
+
+<p>Spring Boot auto-configuration 试图自动配置你已经添加的基于 jar 依赖项的 Spring 应用程序。比如说，如果 HSQLDBis 存在你的类路径中，并且，数据库连接 bean 还没有手动配置，那么我们可以自动配置一个内存数据库。</p>
+
+<p>进一步的阅读：</p>
+
+<p>http://www.springboottutorial.com/spring-boot-auto-configuration</p>
+
+<h4 id="28我们如何连接一个像-mysql-或者-orcale-一样的外部数据库">28、我们如何连接一个像 MYSQL 或者 orcale 一样的外部数据库？</h4>
+
+<p>让我们以 MySQL 为例来思考这个问题：</p>
+
+<h5 id="第一步---把-mysql-连接器的依赖项添加至-pomxml">第一步 - 把 mysql 连接器的依赖项添加至 pom.xml</h5>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre></div></div>
+
+<h5 id="第二步---从-pomxml-中移除-h2-的依赖项">第二步 - 从 pom.xml 中移除 H2 的依赖项</h5>
+
+<p>或者至少把它作为测试的范围。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!--
+&lt;dependency&gt;
+    &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+    &lt;artifactId&gt;h2&lt;/artifactId&gt;
+&lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+--&gt;   
+</code></pre></div></div>
+
+<h5 id="第三步---安装你的-mysql-数据库">第三步 - 安装你的 MySQL 数据库</h5>
+
+<p>更多的来看看这里 -https://github.com/in28minutes/jpa-with-hibernate#installing-and-setting-up-mysql</p>
+
+<h5 id="第四步---配置你的-mysql-数据库连接">第四步 - 配置你的 MySQL 数据库连接</h5>
+
+<p>配置 application.properties</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring.jpa.hibernate.ddl-auto=none
+spring.datasource.url=jdbc:mysql://localhost:3306/todo_example
+spring.datasource.username=todouser
+spring.datasource.password=YOUR_PASSWORD   
+</code></pre></div></div>
+
+<h5 id="第五步---重新启动你就准备好了">第五步 - 重新启动，你就准备好了！</h5>
+
+<p>就是这么简单！</p>
+
+<h4 id="29spring-boot-配置的默认-h2-数据库的名字是上面为什么默认的数据库名字是-testdb">29、Spring Boot 配置的默认 H2 数据库的名字是上面？为什么默认的数据库名字是 testdb？</h4>
+
+<p>在 application.properties 里面，列出了所有的默认值</p>
+
+<ul>
+  <li>https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html</li>
+</ul>
+
+<p>找到下面的属性</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring.datasource.name=testdb # Name of the datasource.
+</code></pre></div></div>
+
+<p>如果你使用了 H2 内部存储数据库，它里面确定了 Spring Boot 用来安装你的 H2 数据库的名字。</p>
+
+<h4 id="30你能否举一个以-readonly-为事务管理的例子">30、你能否举一个以 ReadOnly 为事务管理的例子？</h4>
+
+<ul>
+  <li>当你从数据库读取内容的时候，你想把事物中的用户描述或者是其它描述设置为只读模式，以便于 Hebernate 不需要再次检查实体的变化。这是非常高效的。</li>
+</ul>
+
+<p><a href="./0704/03">Spring事务管理的两种方式</a><br />
+<a href="./0704/05">只读事务（@Transactional(readOnly = true)）的一些概念</a></p>
+
+<h4 id="31发布-spring-boot-用户应用程序自定义配置的最好方法是什么">31、发布 Spring Boot 用户应用程序自定义配置的最好方法是什么？</h4>
+
+<p>@Value 的问题在于，您可以通过应用程序分配你配置值。更好的操作是采取集中的方法。
+你可以使用 @ConfigurationProperties 定义一个配置组件。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
+<span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">"basic"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BasicConfiguration</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">value</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">number</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>你可以在 application.properties 中配置参数。</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>basic.value: true
+basic.message: Dynamic Message
+basic.number: 100
+</code></pre></div></div>
+
+<h4 id="32配置文件的需求是什么">32、配置文件的需求是什么？</h4>
+
+<p>企业应用程序的开发是复杂的，你需要混合的环境：</p>
+
+<ul>
+  <li>Dev</li>
+  <li>QA</li>
+  <li>Stage</li>
+  <li>Production</li>
+</ul>
+
+<p>在每个环境中，你想要不同的应用程序配置。</p>
+
+<blockquote>
+  <p>配置文件有助于在不同的环境中进行不同的应用程序配置。</p>
+</blockquote>
+
+<p>Spring 和 Spring Boot 提供了你可以制定的功能。</p>
+
+<ul>
+  <li>不同配置文件中，不同环境的配置是什么？</li>
+  <li>为一个制定的环境设置活动的配置文件。</li>
+</ul>
+
+<p>Spring Boot 将会根据特定环境中设置的活动配置文件来选择应用程序的配置</p>
+
+<h4 id="33如何使用配置文件通过-spring-boot-配置特定环境的配置">33、如何使用配置文件通过 Spring Boot 配置特定环境的配置？</h4>
+
+<p>配置文件不是设别环境的关键。</p>
+
+<p>在下面的例子中，我们将会用到两个配置文件</p>
+
+<ul>
+  <li>dev</li>
+  <li>prod</li>
+</ul>
+
+<p>缺省的应用程序配置在 application.properties 中。让我们来看下面的例子：</p>
+
+<p>application.properties</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>basic.value= true
+basic.message= Dynamic Message
+basic.number= 100
+</code></pre></div></div>
+
+<p>我们想要为 dev 文件自定义 application.properties 属性。我们需要创建一个名为 application-dev.properties 的文件，并且重写我们想要自定义的属性。</p>
+
+<p>application-dev.properties</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>basic.message: Dynamic Message in DEV
+</code></pre></div></div>
+
+<p>一旦你特定配置了配置文件，你需要在环境中设定一个活动的配置文件。</p>
+
+<p>有多种方法可以做到这一点：</p>
+
+<ul>
+  <li>在 VM 参数中使用 Dspring.profiles.active=prod</li>
+  <li>在 application.properties 中使用 spring.profiles.active=prod</li>
+</ul>
+</div><p><a href="/mianshi/SpringBoot/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/SpringBoot/0704-02"><h2 itemprop="headline" class="item__header">Spring Boot自动配置实现原理</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>我们在使用Spring Boot构建Java Web项目的时候，实现起来非常的简单，那么SpringBoot是如何做到看似简单，却能够实现我们之前使用SSM或者SSH结合复杂配置实现的功能的呢？</p>
+
+<p>我们在看Spring Boot的介绍的时候，常看到下面一段话：Spring Boot 是由 Pivotal 团队提供的全新框架，其__设计目的是用来简化新 Spring 应用的初始搭建以及开发过程__。<strong>该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置</strong>。<strong>Spring Boot采用约定大约配置的方式，大量的减少了配置文件的使用</strong>。那么，Spring Boot是如何做到约定大于配置的呢？</p>
+
+<p>首先我们看一下Spring Boot的主程序功能，也就是Spring Boot官方文档里面写的，你可以直接run</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+ 
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+ 
+		<span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>一个非常简单的run方法的执行，加上@SpringBootApplication的注解，我们看一下run方法的源代码：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringApplication</span><span class="o">{</span>
+      <span class="o">......</span>
+ 
+    <span class="kd">public</span> <span class="nc">ConfigurableApplicationContext</span> <span class="nf">run</span><span class="o">(</span><span class="nc">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//监控任务执行时间</span>
+		<span class="nc">StopWatch</span> <span class="n">stopWatch</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StopWatch</span><span class="o">();</span>
+		<span class="n">stopWatch</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="c1">//创建应用上下文</span>
+		<span class="nc">ConfigurableApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="c1">//用来记录关于启动的错误报告</span>
+		<span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">SpringBootExceptionReporter</span><span class="o">&gt;</span> <span class="n">exceptionReporters</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
+		<span class="n">configureHeadlessProperty</span><span class="o">();</span>
+        <span class="c1">//可以监听springboot应用启动过程中的一些生命周期事件</span>
+		<span class="nc">SpringApplicationRunListeners</span> <span class="n">listeners</span> <span class="o">=</span> <span class="n">getRunListeners</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
+		<span class="n">listeners</span><span class="o">.</span><span class="na">starting</span><span class="o">();</span>
+		<span class="k">try</span> <span class="o">{</span>
+            <span class="c1">//程序运行参数</span>
+			<span class="nc">ApplicationArguments</span> <span class="n">applicationArguments</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultApplicationArguments</span><span class="o">(</span>
+					<span class="n">args</span><span class="o">);</span>
+            <span class="c1">//加载相关的配置文件</span>
+			<span class="nc">ConfigurableEnvironment</span> <span class="n">environment</span> <span class="o">=</span> <span class="n">prepareEnvironment</span><span class="o">(</span><span class="n">listeners</span><span class="o">,</span>
+					<span class="n">applicationArguments</span><span class="o">);</span>
+			<span class="n">configureIgnoreBeanInfo</span><span class="o">(</span><span class="n">environment</span><span class="o">);</span>
+            <span class="c1">//打印Banner,也就是springboot启动后最开始打印的图像</span>
+			<span class="nc">Banner</span> <span class="n">printedBanner</span> <span class="o">=</span> <span class="n">printBanner</span><span class="o">(</span><span class="n">environment</span><span class="o">);</span>
+            <span class="c1">//真正的创建应用上下文</span>
+			<span class="n">context</span> <span class="o">=</span> <span class="n">createApplicationContext</span><span class="o">();</span>
+			<span class="n">exceptionReporters</span> <span class="o">=</span> <span class="n">getSpringFactoriesInstances</span><span class="o">(</span>
+					<span class="nc">SpringBootExceptionReporter</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+					<span class="k">new</span> <span class="nc">Class</span><span class="o">[]</span> <span class="o">{</span> <span class="nc">ConfigurableApplicationContext</span><span class="o">.</span><span class="na">class</span> <span class="o">},</span> <span class="n">context</span><span class="o">);</span>
+			<span class="n">prepareContext</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">environment</span><span class="o">,</span> <span class="n">listeners</span><span class="o">,</span> <span class="n">applicationArguments</span><span class="o">,</span>
+					<span class="n">printedBanner</span><span class="o">);</span>
+			<span class="n">refreshContext</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+			<span class="n">afterRefresh</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">applicationArguments</span><span class="o">);</span>
+			<span class="n">stopWatch</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logStartupInfo</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">new</span> <span class="nf">StartupInfoLogger</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">mainApplicationClass</span><span class="o">)</span>
+						<span class="o">.</span><span class="na">logStarted</span><span class="o">(</span><span class="n">getApplicationLog</span><span class="o">(),</span> <span class="n">stopWatch</span><span class="o">);</span>
+			<span class="o">}</span>
+			<span class="n">listeners</span><span class="o">.</span><span class="na">started</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+			<span class="n">callRunners</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">applicationArguments</span><span class="o">);</span>
 		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">handleRunFailure</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">ex</span><span class="o">,</span> <span class="n">exceptionReporters</span><span class="o">,</span> <span class="n">listeners</span><span class="o">);</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
+		<span class="o">}</span>
+ 
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">listeners</span><span class="o">.</span><span class="na">running</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">handleRunFailure</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">ex</span><span class="o">,</span> <span class="n">exceptionReporters</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="n">context</span><span class="o">;</span>
+	<span class="o">}</span>
+ 
+    <span class="o">......</span>
+<span class="o">}</span>
+
 </code></pre></div></div>
 
-<p>FixedThreadPool的corePoolSize和maximumPoolSize都被设置为创建FixedThreadPool时指定的参数nThreads。当线程池中的线程数大于corePoolSize时，keepAliveTime为多余的空闲线程等待新任务的最长时间，超过这个时间后多余的线程将被终止。这里把keepAliveTime设置为0L，意味着多余的空闲线程会被立即终止</p>
+<p>在上面这段run方法的源代码当中，有一个context = createApplicationContext();方法</p>
 
-<h4 id="运行过程">运行过程</h4>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">protected</span> <span class="nc">ConfigurableApplicationContext</span> <span class="nf">createApplicationContext</span><span class="o">()</span> <span class="o">{</span>
+		<span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">contextClass</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">applicationContextClass</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">contextClass</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span>
+				<span class="k">switch</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">webApplicationType</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">case</span> <span class="nl">SERVLET:</span>
+                    <span class="c1">//假如是servlet应用，默认加载DEFAULT_WEB_CONTEXT_CLASS</span>
+					<span class="n">contextClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="no">DEFAULT_WEB_CONTEXT_CLASS</span><span class="o">);</span>
+					<span class="k">break</span><span class="o">;</span>
+				<span class="k">case</span> <span class="nl">REACTIVE:</span>
+					<span class="n">contextClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="no">DEFAULT_REACTIVE_WEB_CONTEXT_CLASS</span><span class="o">);</span>
+					<span class="k">break</span><span class="o">;</span>
+				<span class="k">default</span><span class="o">:</span>
+					<span class="n">contextClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="no">DEFAULT_CONTEXT_CLASS</span><span class="o">);</span>
+				<span class="o">}</span>
+			<span class="o">}</span>
+			<span class="k">catch</span> <span class="o">(</span><span class="nc">ClassNotFoundException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+				<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span>
+						<span class="s">"Unable create a default ApplicationContext, "</span>
+								<span class="o">+</span> <span class="s">"please specify an ApplicationContextClass"</span><span class="o">,</span>
+						<span class="n">ex</span><span class="o">);</span>
+			<span class="o">}</span>
+		<span class="o">}</span>
+		<span class="k">return</span> <span class="o">(</span><span class="nc">ConfigurableApplicationContext</span><span class="o">)</span> <span class="nc">BeanUtils</span><span class="o">.</span><span class="na">instantiateClass</span><span class="o">(</span><span class="n">contextClass</span><span class="o">);</span>
+	<span class="o">}</span>
 
-<p>下面是FixedThreadPool运行过程示意图</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526224620746.png" alt="3" /></p>
-
-<ol>
-  <li>如果当前运行的线程数少于corePoolSize，则创建新线程来执行任务。</li>
-  <li>在线程池完成预热之后（当前运行的线程数等于corePoolSize），将任务加入LinkedBlockingQueue。</li>
-  <li>线程执行完1中的任务后，会在循环中反复从LinkedBlockingQueue获取任务来执行。
-FixedThreadPool使用无界队列LinkedBlockingQueue作为线程池的工作队列（队列的容量为Integer.MAX_VALUE）。</li>
-</ol>
-
-<p>使用无界队列作为工作队列会对线程池带来如下影响</p>
-
-<ol>
-  <li>当线程池中的线程数达到corePoolSize后，新任务将在无界队列中等待，因此线程池中的线程数不会超过corePoolSize。</li>
-  <li>由于1，使用无界队列时maximumPoolSize将是一个无效参数。</li>
-  <li>由于1和2，使用无界队列时keepAliveTime将是一个无效参数。</li>
-  <li>由于使用无界队列，运行中的FixedThreadPool（未执行方法shutdown()或shutdownNow()）不会拒绝任务（不会调用RejectedExecutionHandler.rejectedExecution方法）。</li>
-</ol>
-
-<h5 id="使用场景">使用场景</h5>
-
-<p>FixedThreadPool适用于为了满足资源管理的需求，而需要限制当前线程数量的应用场景，它适用于负载比较重的服务器</p>
-
-<h4 id="singlethreadexecutor">SingleThreadExecutor</h4>
-
-<h5 id="初始化-1">初始化</h5>
-
-<p>创建使用单个线程的SingleThread-Executor</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newSingleThreadExecutor</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">FinalizableDelegatedExecutorService</span>
-            <span class="o">(</span><span class="k">new</span> <span class="nc">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span>
-                                    <span class="mi">0L</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span>
-                                    <span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;()));</span>
-    <span class="o">}</span>
- <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newSingleThreadExecutor</span><span class="o">(</span><span class="nc">ThreadFactory</span> <span class="n">threadFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">FinalizableDelegatedExecutorService</span>
-            <span class="o">(</span><span class="k">new</span> <span class="nc">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span>
-                                    <span class="mi">0L</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span>
-                                    <span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;(),</span>
-                                    <span class="n">threadFactory</span><span class="o">));</span>
-    <span class="o">}</span>
 </code></pre></div></div>
 
-<p>SingleThreadExecutor的corePoolSize和maximumPoolSize被设置为1。其他参数与FixedThreadPool相同。SingleThreadExecutor使用无界队列LinkedBlockingQueue作为线程池的工作队列（队列的容量为Integer.MAX_VALUE）。SingleThreadExecutor使用无界队列作为工作队列对线程池带来的影响与FixedThreadPool相同</p>
+<p>也就是说，<strong>通过一个简单的run方法，将引发的是一系列复杂的内部调用和加载过程，从而初始化一个应用所需的配置、环境、资源以及各种自定义的类。在这个阶段，会导入一些列自动配置的类，实现强大的自动配置的功能</strong>。那么自动配置类是从哪里来的呢？这就需要@SpringBootApplicaton起到作用了。</p>
 
-<h5 id="运行过程-1">运行过程</h5>
-
-<p>下图是SingleThreadExecutor的运行过程示意图</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526224710434.png" alt="4" /></p>
-
-<ol>
-  <li>如果当前运行的线程数少于corePoolSize（即线程池中无运行的线程），则创建一个新线程来执行任务。</li>
-  <li>在线程池完成预热之后（当前线程池中有一个运行的线程），将任务加入LinkedBlockingQueue。</li>
-  <li>线程执行完1中的任务后，会在一个无限循环中反复从LinkedBlockingQueue获取任务来执行。</li>
-</ol>
-
-<h5 id="使用场景-1">使用场景</h5>
-
-<p>SingleThreadExecutor适用于需要保证顺序地执行各个任务；并且在任意时间点，不会有多个线程是活动的应用场景。</p>
-
-<h4 id="cachedthreadpool">CachedThreadPool</h4>
-
-<h5 id="初始化-2">初始化</h5>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newCachedThreadPool</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span>
-                                      <span class="mi">60L</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span>
-                                      <span class="k">new</span> <span class="nc">SynchronousQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;());</span>
-    <span class="o">}</span>
-<span class="kd">public</span> <span class="kd">static</span> <span class="nc">ExecutorService</span> <span class="nf">newCachedThreadPool</span><span class="o">(</span><span class="nc">ThreadFactory</span> <span class="n">threadFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span>
-                                      <span class="mi">60L</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span>
-                                      <span class="k">new</span> <span class="nc">SynchronousQueue</span><span class="o">&lt;</span><span class="nc">Runnable</span><span class="o">&gt;(),</span>
-                                      <span class="n">threadFactory</span><span class="o">);</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<p>CachedThreadPool的corePoolSize被设置为0，即corePool为空；maximumPoolSize被设置为Integer.MAX_VALUE，即maximumPool是无界的。这里把keepAliveTime设置为60L，意味着CachedThreadPool中的空闲线程等待新任务的最长时间为60秒，空闲线程超过60秒后将会被终止。
-FixedThreadPool和SingleThreadExecutor使用无界队列LinkedBlockingQueue作为线程池的工作队列。CachedThreadPool使用没有容量的SynchronousQueue作为线程池的工作队列，但CachedThreadPool的maximumPool是无界的。这意味着，如果主线程提交任务的速度高于maximumPool中线程处理任务的速度时，CachedThreadPool会不断创建新线程。极端情况下，CachedThreadPool会因为创建过多线程而耗尽CPU和内存资源。</p>
-
-<h5 id="运行过程-2">运行过程</h5>
-
-<p>下图是CachedThreadPool的运行过程示意图</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526224757059.png" alt="5" /></p>
-
-<ol>
-  <li>首先执行SynchronousQueue.offer（Runnable task）。如果当前maximumPool中有空闲线程正在执行SynchronousQueue.poll（keepAliveTime，TimeUnit.NANOSECONDS），那么主线程执行offer操作与空闲线程执行的poll操作配对成功，主线程把任务交给空闲线程执行，execute()方法执行完成；否则执行下面的步骤2）。</li>
-  <li>当初始maximumPool为空，或者maximumPool中当前没有空闲线程时，将没有线程执行SynchronousQueue.poll
-（keepAliveTime，TimeUnit.NANOSECONDS）。这种情况下，步骤1）将失败。此时CachedThreadPool会创建一个新线程执行任务，execute()方法执行完成。</li>
-  <li>在步骤2）中新创建的线程将任务执行完后，会执行SynchronousQueue.poll（keepAliveTime，
-TimeUnit.NANOSECONDS）。这个poll操作会让空闲线程最多在SynchronousQueue中等待60秒钟。如果60秒钟内主线程提交了一个新任务（主线程执行步骤1）），那么这个空闲线程将执行主线程提交的新任务；否则，这个空闲线程将终止。由于空闲60秒的空闲线程会被终止，因此长时间保持空闲的CachedThreadPool不会使用任何资源。
-前面提到过，SynchronousQueue是一个没有容量的阻塞队列。每个插入操作必须等待另一个线程的对应移除操作，反之亦然。CachedThreadPool使用SynchronousQueue，把主线程提交的任务传递给空闲线程执行。CachedThreadPool中任务传递的示意图如下图所示：</li>
-</ol>
-
-<p><img src="/assets/images/mianshiti/0704/20170526225011190.png" alt="6" /></p>
-
-<h5 id="使用场景-2">使用场景</h5>
-
-<p>看名字我们可以知道cached缓存，CachedThreadPool可以创建一个可根据需要创建新线程的线程池，但是在以前构造的线程可用时将重用它们，对于执行很多短期异步任务的程序而言，这些线程池通常可提高程序性能。调用 execute 将重用以前构造的线程（如果线程可用）。如果现有线程没有可用的，则创建一个新线程并添加到池中。
-CachedThreadPool是大小无界的线程池，适用于执行很多的短期异步任务的小程序，或者是负载较轻的服务器。</p>
-
-<h4 id="scheduledthreadpoolexecutor">ScheduledThreadPoolExecutor</h4>
-
-<p>ScheduledThreadPoolExecutor继承自ThreadPoolExecutor。它主要用来在给定的延迟之后运行任务，或者定期执行任务。ScheduledThreadPoolExecutor的功能与Timer类似，但ScheduledThreadPoolExecutor功能更强大、更灵活。Timer对应的是单个后台线程，而ScheduledThreadPoolExecutor可以在构造函数中指定多个对应的后台线程数</p>
-
-<h5 id="初始化-3">初始化</h5>
-
-<p>ScheduledThreadPoolExecutor通常使用工厂类Executors来创建。Executors可以创建2种类型的
-ScheduledThreadPoolExecutor，如下。
-ScheduledThreadPoolExecutor：包含若干个线程的ScheduledThreadPoolExecutor。
-SingleThreadScheduledExecutor：只包含一个线程的ScheduledThreadPoolExecutor。
-下面分别介绍这两种ScheduledThreadPoolExecutor。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">ScheduledThreadPoolExecutor</span><span class="o">(</span><span class="kt">int</span> <span class="n">corePoolSize</span><span class="o">,</span>
-                                       <span class="nc">ThreadFactory</span> <span class="n">threadFactory</span><span class="o">,</span>
-                                       <span class="nc">RejectedExecutionHandler</span> <span class="n">handler</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">corePoolSize</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">NANOSECONDS</span><span class="o">,</span>
-              <span class="k">new</span> <span class="nf">DelayedWorkQueue</span><span class="o">(),</span> <span class="n">threadFactory</span><span class="o">,</span> <span class="n">handler</span><span class="o">);</span>
-    <span class="o">}</span>
- <span class="kd">public</span> <span class="nf">ScheduledThreadPoolExecutor</span><span class="o">(</span><span class="kt">int</span> <span class="n">corePoolSize</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">corePoolSize</span><span class="o">,</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">NANOSECONDS</span><span class="o">,</span>
-              <span class="k">new</span> <span class="nf">DelayedWorkQueue</span><span class="o">());</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<p>直接调用父类ThreadPoolExecutor构造方法进行初始化。ScheduledThreadPoolExecutor适用于需要多个后台线程执行周期任务，同时为了满足资源管理的需求而需要限制后台线程的数量的应用场景。
-下面看看如何创建SingleThreadScheduledExecutor</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ScheduledExecutorService</span> <span class="nf">newSingleThreadScheduledExecutor</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">DelegatedScheduledExecutorService</span>
-            <span class="o">(</span><span class="k">new</span> <span class="nc">ScheduledThreadPoolExecutor</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
-    <span class="o">}</span>
-  <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ScheduledExecutorService</span> <span class="nf">newSingleThreadScheduledExecutor</span><span class="o">(</span><span class="nc">ThreadFactory</span> <span class="n">threadFactory</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">DelegatedScheduledExecutorService</span>
-            <span class="o">(</span><span class="k">new</span> <span class="nc">ScheduledThreadPoolExecutor</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">threadFactory</span><span class="o">));</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<h5 id="运行过程-3">运行过程</h5>
-
-<p>DelayQueue是一个无界队列，所以ThreadPoolExecutor的maximumPoolSize在ScheduledThreadPoolExecutor中没有什么意义（设置maximumPoolSize的大小没有什么效果）。ScheduledThreadPoolExecutor的执行主要分为两大部分。</p>
-
-<ol>
-  <li>当调用ScheduledThreadPoolExecutor的scheduleAtFixedRate()方法或者scheduleWithFixedDelay()方法时，会向ScheduledThreadPoolExecutor的DelayQueue添加一个实现了RunnableScheduledFutur接口的ScheduledFutureTask。</li>
-  <li>线程池中的线程从DelayQueue中获取ScheduledFutureTask，然后执行任务。</li>
-</ol>
-
-<p>下面看看ScheduedThreadPoolExecutor运行过程示意图</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526225114202.png" alt="6" /></p>
-
-<p>ScheduledThreadPoolExecutor为了实现周期性的执行任务，对ThreadPoolExecutor做了如下
-的修改。</p>
-
-<ol>
-  <li>使用DelayQueue作为任务队列。</li>
-  <li>获取任务的方式不同（后文会说明）。</li>
-  <li>执行周期任务后，增加了额外的处理（后文会说明）。</li>
-</ol>
-
-<h5 id="实现过程分析">实现过程分析</h5>
-
-<p>ScheduledThreadPoolExecutor会把待调度的任务（ScheduledFutureTask）放到一个DelayQueue中。ScheduledFutureTask主要包含3个成员变量，如下。</p>
-
-<ol>
-  <li>
-    <p>long time，表示这个任务将要被执行的具体时间。</p>
-  </li>
-  <li>
-    <p>long sequenceNumber，表示这个任务被添加到ScheduledThreadPoolExecutor中的序号。</p>
-  </li>
-  <li>
-    <p>long period，表示任务执行的间隔周期。</p>
-  </li>
-</ol>
-
-<p>DelayQueue封装了一个PriorityQueue，这个PriorityQueue会对队列中的ScheduledFutureTask进行排序。排序时，time小的排在前面（时间早的任务将被先执行）。如果两个ScheduledFutureTask的time相同，就比较sequenceNumber，sequenceNumber小的排在前面（也就是说，如果两个任务的执行时间相同，那么先提交的任务将被先执行）。首先，让我们看看ScheduledThreadPoolExecutor中的线程执行周期任务的过程。如下图所示</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526225157614.png" alt="8" /></p>
-
-<ol>
-  <li>线程1从DelayQueue中获取已到期的ScheduledFutureTask（DelayQueue.take()）。到期任务是指ScheduledFutureTask的time大于等于当前时间。</li>
-  <li>线程1执行这个ScheduledFutureTask。</li>
-  <li>线程1修改ScheduledFutureTask的time变量为下次将要被执行的时间。</li>
-  <li>线程1把这个修改time之后的ScheduledFutureTask放回DelayQueue中（DelayQueue.add()）。</li>
-</ol>
-
-<p>下面我们看看DelayQueue.take()的源码是如何实现的</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="no">E</span> <span class="nf">take</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
-        <span class="kd">final</span> <span class="nc">ReentrantLock</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">lock</span><span class="o">;</span>
-        <span class="n">lock</span><span class="o">.</span><span class="na">lockInterruptibly</span><span class="o">();</span> <span class="c1">// 1</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">for</span> <span class="o">(;;)</span> <span class="o">{</span>
-                <span class="no">E</span> <span class="n">first</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
-                <span class="k">if</span> <span class="o">(</span><span class="n">first</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">available</span><span class="o">.</span><span class="na">await</span><span class="o">();</span> <span class="c1">// 2.1</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="kt">long</span> <span class="n">delay</span> <span class="o">=</span> <span class="n">first</span><span class="o">.</span><span class="na">getDelay</span><span class="o">(</span><span class="nc">TimeUnit</span><span class="o">.</span><span class="na">NANOSECONDS</span><span class="o">);</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="n">delay</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="kt">long</span> <span class="n">tl</span> <span class="o">=</span> <span class="n">available</span><span class="o">.</span><span class="na">awaitNanos</span><span class="o">(</span><span class="n">delay</span><span class="o">);</span> <span class="c1">// 2.2</span>
-                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="no">E</span> <span class="n">x</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">poll</span><span class="o">();</span> <span class="c1">// 2.3.1</span>
-                        <span class="k">assert</span> <span class="n">x</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="n">q</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span>
-                            <span class="n">available</span><span class="o">.</span><span class="na">signalAll</span><span class="o">();</span> <span class="c1">// 2.3.2</span>
-                        <span class="k">return</span> <span class="n">x</span><span class="o">;</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-            <span class="n">lock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span> <span class="c1">// 3</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-</code></pre></div></div>
-
-<p>下面我们对上面的代码用流程图展示出来</p>
-
-<p><img src="/assets/images/mianshiti/0704/20170526225243703.png" alt="9" /></p>
-
-<ol>
-  <li>获取Lock。</li>
-  <li>获取周期任务。
-a、如果PriorityQueue为空，当前线程到Condition中等待；否则执行下面的2.2。
-b、如果PriorityQueue的头元素的time时间比当前时间大，到Condition中等待到time时间；否则执行下面的2.3。
-c、获取PriorityQueue的头元素（2.3.1）；如果PriorityQueue不为空，则唤醒在Condition中等待的所有线程（2.3.2）。</li>
-  <li>释放Lock。</li>
-</ol>
-
-<p>ScheduledThreadPoolExecutor在一个循环中执行步骤2，直到线程从PriorityQueue获取到一个元素之后（执行2.3.1之后），才会退出无限循环（结束步骤2）。
-下面我来看看DelayQueue.add()源码实现</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">offer</span><span class="o">(</span><span class="no">E</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">final</span> <span class="nc">ReentrantLock</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">lock</span><span class="o">;</span>
-    <span class="n">lock</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span> <span class="c1">// 1</span>
-    <span class="k">try</span> <span class="o">{</span>
-        <span class="no">E</span> <span class="n">first</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="na">peek</span><span class="o">();</span>
-        <span class="n">q</span><span class="o">.</span><span class="na">offer</span><span class="o">(</span><span class="n">e</span><span class="o">);</span> <span class="c1">// 2.1</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">first</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">e</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">first</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
-            <span class="n">available</span><span class="o">.</span><span class="na">signalAll</span><span class="o">();</span> <span class="c1">// 2.2</span>
-        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-        <span class="n">lock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span> <span class="c1">// 3</span>
-    <span class="o">}</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
+<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
+<span class="nd">@Documented</span>
+<span class="nd">@Inherited</span>
+<span class="nd">@SpringBootConfiguration</span>
+<span class="nd">@EnableAutoConfiguration</span>
+<span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">excludeFilters</span> <span class="o">=</span> <span class="o">{</span>
+		<span class="nd">@Filter</span><span class="o">(</span><span class="n">type</span> <span class="o">=</span> <span class="nc">FilterType</span><span class="o">.</span><span class="na">CUSTOM</span><span class="o">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="nc">TypeExcludeFilter</span><span class="o">.</span><span class="na">class</span><span class="o">),</span>
+		<span class="nd">@Filter</span><span class="o">(</span><span class="n">type</span> <span class="o">=</span> <span class="nc">FilterType</span><span class="o">.</span><span class="na">CUSTOM</span><span class="o">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="nc">AutoConfigurationExcludeFilter</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">})</span>
+<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">SpringBootApplication</span> <span class="o">{</span>
+     <span class="o">......</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>下面我们对上面的代码用流程图展示出来</p>
+<p>其中，<strong>@ComponentScan将扫描和加载一些自定义的类</strong>，<strong>@EnableAutoConfiguration将导入一些自动配置的类</strong>。这些自动配置的类很多，并且他们都处于org.springframework.boot.autoconfigure这个包下面。这些配置类都会被导入并处于备用状态。假如你在maven文件当中引入了相关的包的时候，相关功能将被启用。</p>
 
-<p><img src="/assets/images/mianshiti/0704/20170526225324890.png" alt="10" /></p>
+<p>那么，我们说的springboot约定大于配置是什么意思呢？自动配置在加载一个类的时候，会首先去读取项目当中的配置文件，假如没有，就会启用默认值，这就是springboot约定大于配置原理。以Thymeleaf为例：看下下面我们就知道，为什么我们使用Thymeleaf模板引擎，html文件默认放在resources下面的templates文件夹下面，因为这是Thymeleaf的默认配置。</p>
 
-<ol>
-  <li>获取Lock。</li>
-  <li>添加任务。
-a、向PriorityQueue添加任务。
-b、如果在上面2.1中添加的任务是PriorityQueue的头元素，唤醒在Condition中等待的所有线程。</li>
-  <li>释放Lock。</li>
-</ol>
+<p>@ConfigurationProperties(prefix = “spring.thymeleaf”)
+public class ThymeleafProperties {</p>
 
-<h5 id="使用场景-3">使用场景</h5>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"spring.thymeleaf"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThymeleafProperties</span> <span class="o">{</span>
+ 
+	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Charset</span> <span class="no">DEFAULT_ENCODING</span> <span class="o">=</span> <span class="nc">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">;</span>
+ 
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEFAULT_PREFIX</span> <span class="o">=</span> <span class="s">"classpath:/templates/"</span><span class="o">;</span>
+ 
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEFAULT_SUFFIX</span> <span class="o">=</span> <span class="s">".html"</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">checkTemplate</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">checkTemplateLocation</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="nc">String</span> <span class="n">prefix</span> <span class="o">=</span> <span class="no">DEFAULT_PREFIX</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="nc">String</span> <span class="n">suffix</span> <span class="o">=</span> <span class="no">DEFAULT_SUFFIX</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="nc">String</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">"HTML"</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="nc">Charset</span> <span class="n">encoding</span> <span class="o">=</span> <span class="no">DEFAULT_ENCODING</span><span class="o">;</span>
+ 
+	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">cache</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+ 
+    <span class="o">......</span>
+<span class="o">}</span>
 
-<p>SingleThreadScheduledExecutor适用于需要单个后台线程执行周期任务，同时需要保证顺序地执行各个任务的应用场景。</p>
-</div><p><a href="/mianshi/Executor/0703">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+</code></pre></div></div>
+<p>}
+并且这些约定的配置一般都以Properties为结尾，比如</p>
+
+<p>org.springframework.boot.autoconfigure.jdbc.DataSourceProperties（数据库连接配置）</p>
+
+<p>org.springframework.boot.autoconfigure.data.redis.RedisProperties（Redis连接配置）</p>
+
+<p>org.springframework.boot.autoconfigure.amqp.RabbitProperties（RabbitMQ连接配置）</p>
+
+<p>org.springframework.boot.autoconfigure.web.ResourceProperties（Web资源配置）</p>
+
+<p>org.springframework.boot.autoconfigure.kafka.KafkaProperties（Kafka连接配置）</p>
+
+<p>org.springframework.boot.autoconfigure.cache.CacheProperties（缓存配置）</p>
+
+<p>那么，我们知道程序会自动装配加载很多类，但是我们假如不想程序去加载某些类（毕竟加载需要耗时），我们如何去自定义我们想加载的配置类呢？</p>
+
+<p>我们只需要把@SpringBootApplication注解去掉，换成@Congfiguation注解，并通过@Import注解去指定需要加载的配置类就可以了（非常不建议这么做，因为我们可能不是特别了解所有自动加载的类的特性）。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
+<span class="nd">@Import</span><span class="o">({</span>
+		<span class="nc">DispatcherServletAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+		<span class="nc">HttpEncodingAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+		<span class="nc">ThymeleafAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+		<span class="nc">WebMvcAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+		<span class="nc">WebSocketServletAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+		<span class="nc">MultipartAutoConfiguration</span><span class="o">.</span><span class="na">class</span>
+		<span class="c1">//继续加载你需要的配置</span>
+<span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
+ 
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+ 
+		<span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+</div><p><a href="/mianshi/SpringBoot/0704-02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-08">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/copy/01"><h2 itemprop="headline" class="item__header">Java深入理解深拷贝和浅拷贝区别</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一拷贝的引入">一、拷贝的引入</h3>
-
-<h4 id="1引用拷贝">（1）、引用拷贝</h4>
-
-<p>创建一个指向对象的引用变量的拷贝。</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Teacher</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher</span><span class="o">(</span><span class="s">"Taylor"</span><span class="o">,</span><span class="mi">26</span><span class="o">);</span>
-<span class="nc">Teacher</span> <span class="n">otherteacher</span> <span class="o">=</span> <span class="n">teacher</span><span class="o">;</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">otherteacher</span><span class="o">);</span>
-</code></pre></div></div>
-
-<p>输出结果：</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>blog.Teacher@355da254
-blog.Teacher@355da254
-</code></pre></div></div>
-
-<p>结果分析：由输出结果可以看出，它们的地址值是相同的，那么它们肯定是同一个对象。teacher和otherteacher的只是引用而已，他们都指向了一个相同的对象Teacher(“Taylor”,26)。 这就叫做引用拷贝。</p>
-
-<p><img src="/assets/images/mianshiti/0703/20190213224407919.png" alt="1" /></p>
-
-<h4 id="2对象拷贝">（2）、对象拷贝</h4>
-
-<p>创建对象本身的一个副本。</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Teacher</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher</span><span class="o">(</span><span class="s">"Swift"</span><span class="o">,</span><span class="mi">26</span><span class="o">);</span>
-<span class="nc">Teacher</span> <span class="n">otherteacher</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Teacher</span><span class="o">)</span><span class="n">teacher</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
-<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">otherteacher</span><span class="o">);</span>
-</code></pre></div></div>
-
-<p>输出结果：</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>blog.Teacher@355da254
-blog.Teacher@4dc63996
-</code></pre></div></div>
-
-<p>结果分析：由输出结果可以看出，它们的地址是不同的，也就是说创建了新的对象， 而不是把原对象的地址赋给了一个新的引用变量,这就叫做对象拷贝。</p>
-
-<p><img src="/assets/images/mianshiti/0703/20190213224646355.png" alt="2" /></p>
-
-<p><strong>==注：深拷贝和浅拷贝都是对象拷贝==</strong></p>
-
-<h3 id="二浅拷贝">二、浅拷贝</h3>
-
-<h4 id="1定义">（1）、定义</h4>
-
-<p>被复制对象的所有变量都含有与原来的对象相同的值，而所有的对其他对象的引用仍然指向原来的对象。即对象的浅拷贝会对“主”对象进行拷贝，但不会复制主对象里面的对象。”里面的对象“会在原来的对象和它的副本之间共享。</p>
-
-<p>简而言之，浅拷贝仅仅复制所考虑的对象，而不复制它所引用的对象</p>
-
-<h4 id="2浅拷贝实例">（2）、浅拷贝实例</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ShallowCopy</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
-        <span class="nc">Teacher</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher</span><span class="o">();</span>
-        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"riemann"</span><span class="o">);</span>
-        <span class="n">teacher</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">27</span><span class="o">);</span>
-
-        <span class="nc">Student2</span> <span class="n">student1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Student2</span><span class="o">();</span>
-        <span class="n">student1</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"edgar"</span><span class="o">);</span>
-        <span class="n">student1</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">18</span><span class="o">);</span>
-        <span class="n">student1</span><span class="o">.</span><span class="na">setTeacher</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
-
-        <span class="nc">Student2</span> <span class="n">student2</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Student2</span><span class="o">)</span> <span class="n">student1</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拷贝后"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getAge</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getAge</span><span class="o">());</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"修改老师的信息后-------------"</span><span class="o">);</span>
-        <span class="c1">// 修改老师的信息</span>
-        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Games"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">Teacher</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">Student2</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">Teacher</span> <span class="n">teacher</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">Teacher</span> <span class="nf">getTeacher</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">teacher</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTeacher</span><span class="o">(</span><span class="nc">Teacher</span> <span class="n">teacher</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">teacher</span> <span class="o">=</span> <span class="n">teacher</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
-        <span class="nc">Object</span> <span class="n">object</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-        <span class="k">return</span> <span class="n">object</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>输出结果：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>拷贝后
-edgar
-18
-riemann
-27
-修改老师的信息后-------------
-Games
-Games
-</code></pre></div></div>
-
-<p>结果分析： 两个引用student1和student2指向不同的两个对象，但是两个引用student1和student2中的两个teacher引用指向的是同一个对象，所以说明是浅拷贝。</p>
-
-<p><img src="/assets/images/mianshiti/0703/20190213231318786.png" alt="3" /></p>
-
-<h3 id="三深拷贝">三、深拷贝</h3>
-
-<h4 id="1定义-1">（1）、定义</h4>
-
-<p>深拷贝是一个整个独立的对象拷贝，深拷贝会拷贝所有的属性,并拷贝属性指向的动态分配的内存。当对象和它所引用的对象一起拷贝时即发生深拷贝。深拷贝相比于浅拷贝速度较慢并且花销较大。</p>
-
-<p>简而言之，深拷贝把要复制的对象所引用的对象都复制了一遍。</p>
-
-<h4 id="2深拷贝实例">（2）、深拷贝实例</h4>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DeepCopy</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
-        <span class="nc">Teacher2</span> <span class="n">teacher</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Teacher2</span><span class="o">();</span>
-        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"riemann"</span><span class="o">);</span>
-        <span class="n">teacher</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">27</span><span class="o">);</span>
-
-        <span class="nc">Student3</span> <span class="n">student1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Student3</span><span class="o">();</span>
-        <span class="n">student1</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"edgar"</span><span class="o">);</span>
-        <span class="n">student1</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">18</span><span class="o">);</span>
-        <span class="n">student1</span><span class="o">.</span><span class="na">setTeacher</span><span class="o">(</span><span class="n">teacher</span><span class="o">);</span>
-
-        <span class="nc">Student3</span> <span class="n">student2</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Student3</span><span class="o">)</span> <span class="n">student1</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"拷贝后"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getAge</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getAge</span><span class="o">());</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"修改老师的信息后-------------"</span><span class="o">);</span>
-        <span class="c1">// 修改老师的信息</span>
-        <span class="n">teacher</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">"Games"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student1</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">student2</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">getName</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">Teacher2</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">Student3</span> <span class="kd">implements</span> <span class="nc">Cloneable</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">Teacher2</span> <span class="n">teacher</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">Teacher2</span> <span class="nf">getTeacher</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">teacher</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setTeacher</span><span class="o">(</span><span class="nc">Teacher2</span> <span class="n">teacher</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">teacher</span> <span class="o">=</span> <span class="n">teacher</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">clone</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">CloneNotSupportedException</span> <span class="o">{</span>
-        <span class="c1">// 浅复制时：</span>
-        <span class="c1">// Object object = super.clone();</span>
-        <span class="c1">// return object;</span>
-
-        <span class="c1">// 改为深复制：</span>
-        <span class="nc">Student3</span> <span class="n">student</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Student3</span><span class="o">)</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-        <span class="c1">// 本来是浅复制，现在将Teacher对象复制一份并重新set进来</span>
-        <span class="n">student</span><span class="o">.</span><span class="na">setTeacher</span><span class="o">((</span><span class="nc">Teacher2</span><span class="o">)</span> <span class="n">student</span><span class="o">.</span><span class="na">getTeacher</span><span class="o">().</span><span class="na">clone</span><span class="o">());</span>
-        <span class="k">return</span> <span class="n">student</span><span class="o">;</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>输出结果：</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>拷贝后
-edgar
-18
-riemann
-27
-修改老师的信息后-------------
-Games
-riemann
-</code></pre></div></div>
-
-<p>结果分析：
-两个引用student1和student2指向不同的两个对象，两个引用student1和student2中的两个teacher引用指向的是两个对象，但对teacher对象的修改只能影响student1对象,所以说是深拷贝。</p>
-
-<p><img src="/assets/images/mianshiti/0703/20190213232800511.png" alt="4" /></p>
-</div><p><a href="/mianshi/copy/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 03, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-03T00:00:00+08:00">
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>268 post articles, 34 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>276 post articles, 35 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1509,7 +1828,7 @@ riemann
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page34"><span>34</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page35"><span>35</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
