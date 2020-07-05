@@ -374,6 +374,537 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/Redis/0705/04"><h2 itemprop="headline" class="item__header">降低Redis内存占用</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>1、降低redis内存占用的优点</strong></p>
+
+<p>　　1、有助于减少创建快照和加载快照所用的时间</p>
+
+<p>　　2、提升载入AOF文件和重写AOF文件时的效率</p>
+
+<p>　　3、缩短从服务器进行同步所需的时间</p>
+
+<p>　　4、无需添加额外的硬件就可以让redis存贮更多的数据</p>
+
+<p><strong>2、短结构</strong></p>
+
+<p>　　Redis为列表、集合、散列、有序集合提供了一组配置选项，这些选项可以让redis以更节约的方式存储较短的结构。</p>
+
+<p>　　<strong>2.1、ziplist压缩列表（列表、散列、有续集和）</strong></p>
+
+<p>　　通常情况下使用的存储方式</p>
+
+<p><img src="/assets/images/mianshiti/0705/1734531-20190723145231193-1166923194.jpg" alt="img" /></p>
+
+<p>　　</p>
+
+<p>　　当列表、散列、有序集合的长度较短或者体积较小的时候，redis将会采用一种名为ziplist的紧凑存储方式来存储这些结构。</p>
+
+<p>　　ziplist是列表、散列、有序集合这三种不同类型的对象的一种非结构化表示，它会以序列化的方式存储数据，这些序列化的数据每次被读取的时候都需要进行解码，每次写入的时候也要进行编码。</p>
+
+<p><strong>双向列表与压缩列表的区别：</strong></p>
+
+<p>　  为了了解压缩列表比其他数据结构更加节约内存，我们以列表结构为例进行深入研究。</p>
+
+<p>　　<strong>典型的双向列表</strong></p>
+
+<p>　　　　1、在典型双向列表里面，每个值都都会有一个节点表示。每个节点都会带有指向链表前一个节点和后一个节点的指针，以及一个指向节点包含的字符串值的指针。</p>
+
+<p>　　　　2、每个节点包含的字符串值都会分为三部分进行存储。包括字符串长度、字符串值中剩余可用字节数量、以空字符结尾的字符串本身。</p>
+
+<p>　　<strong>例子：</strong></p>
+
+<p>　　假若一个某个节点存储了’abc’字符串，在32位的平台下保守估计需要21个字节的额外开销（三个指针+两个int+空字符即：3<em>4+2</em>4+1=21）</p>
+
+<p>　　由例子可知存储一个3字节字符串就需要付出至少21个字节的额外开销。</p>
+
+<p>　　<strong>ziplist</strong></p>
+
+<p>　　　　压缩列表是由节点组成的序列，每个节点包含两个长度和一个字符串。第一个长度记录前一个节点的长度（用于对压缩列表从后向前遍历）；第二个长度是记录本当前点的长度；被存储的字符串。</p>
+
+<p>　　<strong>例子：</strong></p>
+
+<p>　　存储字符串’abc’，两个长度都可以用1字节来存储，因此所带来的额外开销为2字节（两个长度即1+1=2）</p>
+
+<p>　　<strong>结论：</strong></p>
+
+<p>　　压缩列表是通过避免存储额外的指针和元数据，从而达到降低额外的开销。</p>
+
+<p>　　<strong>配置：</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 #list2 list-max-ziplist-entries 51
+2 #表示允许包含的最大元素数量
+3 list-max-ziplist-value 64    #表示压缩节点允许存储的最大体积
+4 #hash                  #当超过任一限制后，将不会使用ziplist方式进行存储
+5 hash-max-ziplist-entries 512
+6 hash-max-ziplist-value 64
+7 #zset
+8 zset-max-ziplist-entries 128
+9 zset-max-ziplist-value 64
+</code></pre></div></div>
+
+<p>　　<strong>测试list:</strong></p>
+
+<p>　　<strong>1、建立test.php文件</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 #test.php
+2 &lt;?php
+3     $redis=new Redis();
+4     $redis-&gt;connect('192.168.95.11','6379');
+5         for ($i=0; $i&lt;512  ; $i++) 
+6     { 
+7         $redis-&gt;lpush('test-list',$i.'-test-list');  #往test-list推入512条数据
+8     }
+9 ?&gt;    
+</code></pre></div></div>
+
+<p><img src="/Users/minp/GitHub/javaniuniu.github.io/_posts/docs-mianshi/1734531-20190723145957416-1822584668.png" alt="img" /></p>
+
+<p>　　　　此时的test-list中含有512条数据，没有超除配置文件中的限制</p>
+
+<p>　　<strong>2、往test-list中再推入一条数据</strong></p>
+
+<p><img src="/assets/images/mianshiti/0705/1734531-20190723150126455-831466601.png" alt="img" /></p>
+
+<p>　　　　此时test-list含有513条数据，大于配置文件中限制的512条，索引将放弃ziplist存储方式，采用其原来的linkedlist存储方式,散列与有序集合同理。</p>
+
+<p>　　　　<strong>2.2、intset整数集合（集合）</strong></p>
+
+<p>　　　　前提条件，集合中包含的所有member都可以被解析为十进制整数。</p>
+
+<p>　　　　以有序数组的方式存储集合不仅可以降低内存消耗，还可以提升集合操作的执行速度。</p>
+
+<p>　　　　<strong>配置：</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1 set-max-intset-entries  512   #限制集合中member个数，超出则不采取i那个tset存储
+</code></pre></div></div>
+
+<p>　　　<strong>测试：</strong></p>
+
+<p>　　　　建立test.php文件</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1 #test.php
+ 2 &lt;?php
+ 3     $redis=new Redis();
+ 4     $redis-&gt;connect('192.168.95.11','6379');
+ 5         for ($i=0; $i&lt;512  ; $i++) 
+ 6     { 
+ 7         $redis-&gt;sadd('test-set',$i);   #给集合test-set插入512个member
+ 8     } 
+ 9 ?&gt;           
+10  
+</code></pre></div></div>
+
+<p>　　　<strong>2.3、性能问题</strong></p>
+
+<p>　　　　不管列表、散列、有序集合、集合，当超出限制的条件后，就会转换为更为典型的底层结构类型。因为随着紧凑结构的体积不断变大，操作这些结构的速度将会变得越来越慢。</p>
+
+<p>　　　　<strong>测试：</strong></p>
+
+<p>　　　　#将采用list进行代表性测试</p>
+
+<p>　　　　<strong>测试思路：</strong></p>
+
+<p>　　　　　　<strong>1、在默认配置下往test-list推入50000条数据，查看所需时间；接着在使用rpoplpush将test-list数据全部推入到新列表list-new中，查看所需时间</strong></p>
+
+<p>　　　　　　<strong>2、修改配置，list-max-ziplist-entries 100000，再执行上面的同样操作</strong></p>
+
+<p>　　　　　　<strong>3、对比时间，得出结论</strong></p>
+
+<p>　　　　　　　　<strong>默认配置下测试：</strong></p>
+
+<p>　　　　　　　　<strong>1、插入数据，查看时间</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1 #test1.php 
+ 2 &lt;?php 
+ 3     header("content-type: text/html;charset=utf8;"); 
+ 4     $redis=new Redis(); 
+ 5     $redis-&gt;connect('192.168.95.11','6379'); 
+ 6     $start=time(); 
+ 7         for ($i=0; $i&lt;50000  ; $i++) 
+ 8     { 
+ 9         $redis-&gt;lpush('test-list',$i.'-aaaassssssddddddkkk');
+10     }
+11     $end=time();
+12 echo "插入耗时为：".($end-$start).'s';
+13 ?&gt;                
+</code></pre></div></div>
+
+<p><img src="/assets/images/mianshiti/0705/1734531-20190723150824482-2109961153.png" alt="img" /></p>
+
+<p>　　　　　　结果耗时4秒</p>
+
+<p>　　　　　　　　<strong>2、执行相应命令，查看耗时</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1 #test2.php 
+ 2 &lt;?php 
+ 3     header("content-type: text/html;charset=utf8;"); 
+ 4     $redis=new Redis(); 
+ 5     $redis-&gt;connect('192.168.95.11','6379'); 
+ 6     $start=time(); 
+ 7     $num=0;  
+ 8     while($redis-&gt;rpoplpush('test-list','test-new')) 
+ 9     {
+10         $num+=1;
+11     }
+12     echo '执行次数为：'.$num."&lt;br/&gt;";
+13 $end=time();
+14 echo "耗时为：".($end-$start).'s';
+15 ?&gt;
+</code></pre></div></div>
+
+<p>　　　　　　　　<strong>更改配置文件下测试</strong>　　</p>
+
+<p>　　　　　　　　　　<strong>1、先修改配置文件</strong></p>
+
+<p>　　　　　　　　　　list-max-ziplist-entries 100000 #将这个值修改大一点，可以更好的凸显对性能的影响</p>
+
+<p>　　　　　　　　　　list-max-ziplist-value 64  #此值可不做修改</p>
+
+<p>　　　　　　　　　　<strong>2、插入数据</strong></p>
+
+<p>　　　　　　　　　　执行test1.php</p>
+
+<p>　　　　　　　　　　结果为：耗时12s</p>
+
+<p><img src="/assets/images/mianshiti/0705/1734531-20190723151326952-1965499675.png" alt="img" /></p>
+
+<p>　　　　　　　　　　<strong>3、执行相应命令，查看耗时</strong></p>
+
+<p>　　　　　　　　　　执行test2.php</p>
+
+<p>　　　　　　　　　　结果为：执行次数：50000，耗时12s</p>
+
+<p>　　　　　　<strong>结论：</strong></p>
+
+<p>　　　　　　<strong>在本机中执行测试50000条数据就相差8s，若在高并发下，长压缩列表和大整数集合将起不到任何的优化，反而使得性能降低。</strong></p>
+
+<p><strong>3、片结构</strong></p>
+
+<p>　　分片的本质就是基于简单的规则将数据划分为更小的部分，然后根据数据所属的部分来决定将数据发送到哪个位置上。很多数据库使用这种技术来扩展存储空间，并提高自己所能处理的负载量。</p>
+
+<p>　　结合前面讲到的，我们不难发现分片结构对于redis的重要意义。因此我们需要在配置文件中关于ziplist以及intset的相关配置做出适当的调整。</p>
+
+<p>　　<strong>3.1、分片式散列</strong></p>
+
+<p>　　#ShardHash.class.php</p>
+
+<p>　　散列分片主要是根据基础键以及散列包含的键计算出分片键ID，然后再与基础键拼接成一个完整的分片键。在执行hset与hget以及大部分hash命令时，都需要先将key（field）通过shardKey方法处理，得到分片键才能够进行下一步操作。</p>
+
+<p>回到顶部</p>
+
+<p>　　<strong>3.2、分片式集合</strong></p>
+
+<p>　　如何构造分片式集合才能够让它更节省内存，性能更加强大呢？主要的思路就是，将集合里面的存储的数据尽量在不改变其原有功能的情况下转换成可以被解析为十进制的数据。根据前面所讲到的，当集合中的所有成员都能够被解析为十进制数据时，将会采用intset存储方式，这不仅能够节省内存，而且还可以提高响应的性能。</p>
+
+<p><strong>4、将信息打包转换成存储字节</strong></p>
+
+<p>　　结合前面所讲的分片技术，采用string分片结构为大量连续的ID用户存储信息。</p>
+
+<p>　　使用定长字符串，为每一个ID分配n个字节进行存储相应的信息。</p>
+</div><p><a href="/mianshi/Redis/0705/04">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-05-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/Redis/0705/02"><h2 itemprop="headline" class="item__header">单进程单线程的Redis如何能够高并发</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="1基本原理">1、基本原理</h4>
+
+<p>采用多路 I/O 复用技术可以让单个线程高效的处理多个连接请求（尽量减少网络IO的时间消耗）</p>
+
+<h5 id="1为什么不采用多进程或多线程处理">（1）为什么不采用多进程或多线程处理？</h5>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>多线程处理可能涉及到锁 
+多线程处理会涉及到线程切换而消耗CPU
+</code></pre></div></div>
+
+<h5 id="2单线程处理的缺点">（2）单线程处理的缺点？</h5>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>无法发挥多核CPU性能，不过可以通过在单机开多个Redis实例来完善
+</code></pre></div></div>
+
+<h4 id="2redis不存在线程安全问题">2、Redis不存在线程安全问题？</h4>
+
+<p>Redis采用了线程封闭的方式，把任务封闭在一个线程，自然避免了线程安全问题，不过对于需要依赖多个redis操作的复合操作来说，依然需要锁，而且有可能是分布式锁</p>
+
+<h4 id="3什么是多路io复用epoll">3、什么是多路I/O复用（Epoll）</h4>
+
+<p>（1） 网络IO都是通过Socket实现，Server在某一个端口持续监听，客户端通过Socket（IP+Port）与服务器建立连接（ServerSocket.accept），成功建立连接之后，就可以使用Socket中封装的InputStream和OutputStream进行IO交互了。针对每个客户端，Server都会创建一个新线程专门用于处理 
+（2） 默认情况下，网络IO是阻塞模式，即服务器线程在数据到来之前处于【阻塞】状态，等到数据到达，会自动唤醒服务器线程，着手进行处理。阻塞模式下，一个线程只能处理一个流的IO事件 
+（3） 为了提升服务器线程处理效率，有以下三种思路</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>（1）非阻塞【忙轮询】：采用死循环方式轮询每一个流，如果有IO事件就处理，这样可以使得一个线程可以处理多个流，但是效率不高，容易导致CPU空转
+
+（2）Select代理（无差别轮询）：可以观察多个流的IO事件，如果所有流都没有IO事件，则将线程进入阻塞状态，如果有一个或多个发生了IO事件，则唤醒线程去处理。但是还是得遍历所有的流，才能找出哪些流需要处理。如果流个数为N，则时间复杂度为O（N）
+
+（3）Epoll代理：Select代理有一个缺点，线程在被唤醒后轮询所有的Stream，还是存在无效操作。 Epoll会哪个流发生了怎样的I/O事件通知处理线程，因此对这些流的操作都是有意义的，复杂度降低到了O(1)
+</code></pre></div></div>
+
+<h4 id="4其它开源软件采用的模型">4、其它开源软件采用的模型</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nginx：多进程单线程模型 
+Memcached：单进程多线程模型
+</code></pre></div></div>
+
+<h5 id="redis为什么是单线程的">Redis为什么是单线程的？</h5>
+
+<p><strong>因为CPU不是Redis的瓶颈。Redis的瓶颈最有可能是机器内存或者网络带宽</strong>。（以上主要来自官方FAQ）既然单线程容易实现，而且CPU不会成为瓶颈，那就顺理成章地采用单线程的方案了。关于redis的性能，官方网站也有，普通笔记本轻松处理每秒几十万的请求，参见：<a href="https://link.zhihu.com/?target=https%3A//redis.io/topics/benchmarks">How fast is Redis?</a></p>
+
+<h5 id="如果万一cpu成为你的redis瓶颈了或者你就是不想让服务器其他核闲置那怎么办">如果万一CPU成为你的Redis瓶颈了，或者，你就是不想让服务器其他核闲置，那怎么办？</h5>
+
+<p>那也很简单，<strong>你多起几个Redis进程就好了</strong>。Redis是keyvalue数据库，又不是关系数据库，数据之间没有约束。只要客户端分清哪些key放在哪个Redis进程上就可以了。redis-cluster可以帮你做的更好。</p>
+
+<h5 id="单线程可以处理高并发请求吗">单线程可以处理高并发请求吗？</h5>
+
+<p>当然可以了，Redis都实现了。</p>
+
+<p>有一点概念需要澄清，并发并不是并行。</p>
+
+<p>（相关概念：并发性I/O流，意味着能够让一个计算单元来处理来自多个客户端的流请求。并行性，意味着服务器能够同时执行几个事情，具有多个计算单元）</p>
+
+<h5 id="redis总体快速的原因">Redis总体快速的原因：</h5>
+
+<p>采用队列模式将并发访问变为串行访问（？）</p>
+
+<p>单线程指的是网络请求模块使用了一个线程（所以不需考虑并发安全性），其他模块仍用了多个线程。</p>
+
+<h4 id="总体来说快速的原因如下">总体来说快速的原因如下：</h4>
+
+<p>1）绝大部分请求是纯粹的内存操作（非常快速）</p>
+
+<p>2）采用单线程,避免了不必要的上下文切换和竞争条件</p>
+
+<p>3）非阻塞IO</p>
+
+<p>内部实现采用epoll，采用了epoll+自己实现的简单的事件框架。epoll中的读、写、关闭、连接都转化成了事件，然后利用epoll的多路复用特性，绝不在io上浪费一点时间</p>
+
+<p>这3个条件不是相互独立的，特别是第一条，如果请求都是耗时的，采用单线程吞吐量及性能可想而知了。应该说redis为特殊的场景选择了合适的技术方案。</p>
+
+<ol>
+  <li>Redis服务端是个单线程的架构，不同的Client虽然看似可以同时保持连接，但发出去的命令是序列化执行的，这在通常的数据库理论下是最高级别的隔离（serialize）</li>
+  <li>用MULTI/EXEC 来把多个命令组装成一次发送，达到原子性</li>
+  <li>用WATCH提供的乐观锁功能，在你EXEC的那一刻，如果被WATCH的键发生过改动，则MULTI到EXEC之间的指令全部不执行，不需要rollback</li>
+  <li>其他回答中提到的DISCARD指令只是用来撤销EXEC之前被暂存的指令，并不是回滚</li>
+</ol>
+
+<p>多线程对同一个Key操作时，Redis服务是根据先到先作的原则，其他排队（可设置为直接丢弃），因为是单线程。</p>
+
+<p>修改默认的超时时间，默认2秒。但是大部份的操作都在30ms以内。</p>
+
+<ol>
+  <li>
+    <h5 id="使用redis有哪些好处">使用<a href="http://lib.csdn.net/base/redis">Redis</a>有哪些好处？</h5>
+  </li>
+</ol>
+
+<p>(1) 速度快，因为数据存在内存中，类似于HashMap，HashMap的优势就是查找和操作的时间复杂度都是O(1)</p>
+
+<p>(2) 支持丰富数据类型，支持string，list，set，sorted set，hash</p>
+
+<p>(3) 支持事务，操作都是原子性，所谓的原子性就是对数据的更改要么全部执行，要么全部不执行</p>
+
+<p>(4) 丰富的特性：可用于缓存，消息，按key设置过期时间，过期后将会自动删除</p>
+
+<ol>
+  <li>
+    <h5 id="redis相比memcached有哪些优势"><a href="http://lib.csdn.net/base/redis">Redis</a>相比memcached有哪些优势？</h5>
+  </li>
+</ol>
+
+<p>(1) memcached所有的值均是简单的字符串，<a href="http://lib.csdn.net/base/redis">redis</a>作为其替代者，支持更为丰富的数据类型</p>
+
+<p>(2) redis的速度比memcached快很多</p>
+
+<p>(3) redis可以持久化其数据</p>
+
+<p>(4)Redis支持数据的备份，即master-slave模式的数据备份。</p>
+
+<p>(5)、使用底层模型不同</p>
+
+<p>它们之间底层实现方式 以及与客户端之间通信的应用协议不一样。</p>
+
+<p>Redis直接自己构建了VM 机制 ，因为一般的系统调用系统函数的话，会浪费一定的时间去移动和请求。</p>
+
+<p>(6）value大小：redis最大可以达到1GB，而memcache只有1MB</p>
+
+<ol>
+  <li>
+    <h5 id="redis常见性能问题和解决方案">redis常见性能问题和解决方案：</h5>
+  </li>
+</ol>
+
+<p>(1) Master最好不要做任何持久化工作，如RDB内存快照和AOF日志文件</p>
+
+<p>(Master写内存快照，save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照;AOF文件过大会影响Master重启的恢复速度)</p>
+
+<p>(2) 如果数据比较重要，某个Slave开启AOF备份数据，策略设置为每秒同步一次</p>
+
+<p>(3) 为了主从复制的速度和连接的稳定性，Master和Slave最好在同一个局域网内</p>
+
+<p>(4) 尽量避免在压力很大的主库上增加从库</p>
+
+<p>(5) 主从复制不要用图状结构，用单向链表结构更为稳定，即：Master &lt;- Slave1 &lt;- Slave2 &lt;- Slave3…</p>
+
+<p>这样的结构方便解决单点故障问题，实现Slave对Master的替换。如果Master挂了，可以立刻启用Slave1做Master，其他不变。</p>
+
+<h4 id="redis的一些其他特点">redis的一些其他特点：</h4>
+
+<h5 id="1redis是单进程单线程的">（1）Redis是单进程单线程的</h5>
+
+<p>redis利用队列技术将并发访问变为串行访问，消除了传统<a href="http://lib.csdn.net/base/mysql">数据库</a>串行控制的开销</p>
+
+<h5 id="2读写分离模型">（2）读写分离模型</h5>
+
+<p>通过增加Slave DB的数量，读的性能可以线性增长。为了避免Master DB的单点故障，集群一般都会采用两台Master DB做双机热备，所以整个集群的读和写的可用性都非常高。
+读写分离<a href="http://lib.csdn.net/base/architecture">架构</a>的缺陷在于，不管是Master还是Slave，每个节点都必须保存完整的数据，如果在数据量很大的情况下，集群的扩展能力还是受限于单个节点的存储能力，而且对于Write-intensive类型的应用，读写分离<a href="http://lib.csdn.net/base/architecture">架构</a>并不适合。</p>
+
+<h5 id="3数据分片模型">（3）数据分片模型</h5>
+
+<p>为了解决读写分离模型的缺陷，可以将数据分片模型应用进来。</p>
+
+<p>可以将每个节点看成都是独立的master，然后通过业务实现数据分片。</p>
+
+<p>结合上面两种模型，可以将每个master设计成由一个master和多个slave组成的模型。</p>
+
+<h5 id="4redis的回收策略">（4）Redis的回收策略</h5>
+
+<ul>
+  <li>
+    <ul>
+      <li>
+        <p>volatile-lru：从已设置过期时间的数据集（server.db[i].expires）中挑选最近最少使用的数据淘汰</p>
+      </li>
+      <li>
+        <p>volatile-ttl：从已设置过期时间的数据集（server.db[i].expires）中挑选将要过期的数据淘汰</p>
+      </li>
+      <li>
+        <p>volatile-random：从已设置过期时间的数据集（server.db[i].expires）中任意选择数据淘汰</p>
+      </li>
+      <li>
+        <p>allkeys-lru：从数据集（server.db[i].dict）中挑选最近最少使用的数据淘汰</p>
+      </li>
+      <li>
+        <p>allkeys-random：从数据集（server.db[i].dict）中任意选择数据淘汰</p>
+      </li>
+      <li>
+        <p>no-enviction（驱逐）：禁止驱逐数据</p>
+      </li>
+      <li></li>
+    </ul>
+
+    <p>注意这里的6种机制，volatile和allkeys规定了是对已设置过期时间的数据集淘汰数据还是从全部数据集淘汰数据，后面的lru、ttl以及random是三种不同的淘汰策略，再加上一种no-enviction永不回收的策略。</p>
+
+    <p>　　使用策略规则：</p>
+
+    <p>　　1、如果数据呈现幂律分布，也就是一部分数据访问频率高，一部分数据访问频率低，则使用allkeys-lru</p>
+
+    <p>　　2、如果数据呈现平等分布，也就是所有的数据访问频率都相同，则使用allkeys-random</p>
+  </li>
+</ul>
+</div><p><a href="/mianshi/Redis/0705/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-05-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/Redis/0705/03"><h2 itemprop="headline" class="item__header">redis 的持久化有哪几种方式？不同的持久化机制都有什么优缺点？持久化机制具体底层是如何实现的？</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="redis-的持久化有哪几种方式">redis 的持久化有哪几种方式？</h4>
+
+<ul>
+  <li>RDB：RDB 持久化机制，是对 redis 中的数据执行周期性的持久化。</li>
+  <li>AOF：AOF 机制对每条写入命令作为日志，以 append-only 的模式写入一个日志文件中，在 redis 重启的时候，可以通过回放 AOF 日志中的写入指令来重新构建整个数据集。
+通过 RDB 或 AOF，都可以将 redis 内存中的数据给持久化到磁盘上面来，然后可以将这些数据备份到别的地方去，比如说阿里云等云服务。</li>
+</ul>
+
+<p>如果 redis 挂了，服务器上的内存和磁盘上的数据都丢了，可以从云服务上拷贝回来之前的数据，放到指定的目录中，然后重新启动 redis，redis 就会自动根据持久化数据文件中的数据，去恢复内存中的数据，继续对外提供服务。</p>
+
+<p>如果同时使用 RDB 和 AOF 两种持久化机制，那么在 redis 重启的时候，会使用 AOF 来重新构建数据，<strong>因为 AOF 中的数据更加完整。</strong></p>
+
+<h4 id="不同的持久化机制都有什么优缺点">不同的持久化机制都有什么优缺点？</h4>
+
+<h5 id="rdb-优缺点">RDB 优缺点</h5>
+
+<ul>
+  <li>
+    <p>RDB 会生成多个数据文件，每个数据文件都代表了某一个时刻中 redis 的数据，这种多个数据文件的方式，非常适合做冷备，可以将这种完整的数据文件发送到一些远程的安全存储上去，比如说 Amazon 的 S3 云服务上去，在国内可以是阿里云的 ODPS 分布式存储上，以预定好的备份策略来定期备份 redis 中的数据。</p>
+  </li>
+  <li>
+    <p>RDB 对 redis 对外提供的读写服务，影响非常小，可以让 redis 保持高性能，因为 redis 主进程只需要 fork 一个子进程，让子进程执行磁盘 IO 操作来进行 RDB 持久化即可。</p>
+  </li>
+  <li>
+    <p>相对于 AOF 持久化机制来说，直接基于 RDB 数据文件来重启和恢复 redis 进程，更加快速。</p>
+  </li>
+  <li>
+    <p>如果想要在 redis 故障时，尽可能少的丢失数据，那么 RDB 没有 AOF 好。一般来说，RDB 数据快照文件，都是每隔 5 分钟，或者更长时间生成一次，这个时候就得接受一旦 redis 进程宕机，那么会丢失最近 5 分钟的数据。</p>
+  </li>
+  <li>
+    <p>RDB 每次在 fork 子进程来执行 RDB 快照数据文件生成的时候，如果数据文件特别大，可能会导致对客户端提供的服务暂停数毫秒，或者甚至数秒。</p>
+  </li>
+</ul>
+
+<h5 id="aof-优缺点">AOF 优缺点</h5>
+
+<ul>
+  <li>AOF 可以更好的保护数据不丢失，一般 AOF 会每隔 1 秒，通过一个后台线程执行一次fsync操作，最多丢失 1 秒钟的数据。</li>
+  <li>AOF 日志文件以 append-only 模式写入，所以没有任何磁盘寻址的开销，写入性能非常高，而且文件不容易破损，即使文件尾部破损，也很容易修复。</li>
+  <li>AOF 日志文件即使过大的时候，出现后台重写操作，也不会影响客户端的读写。因为在 rewrite log 的时候，会对其中的指令进行压缩，创建出一份需要恢复数据的最小日志出来。在创建新日志文件的时候，老的日志文件还是照常写入。当新的 merge 后的日志文件 ready 的时候，再交换新老日志文件即可。</li>
+  <li>AOF 日志文件的命令通过非常可读的方式进行记录，这个特性非常适合做灾难性的误删除的紧急恢复。比如某人不小心用 flushall 命令清空了所有数据，只要这个时候后台 rewrite 还没有发生，那么就可以立即拷贝 AOF 文件，将最后一条 flushall 命令给删了，然后再将该 AOF 文件放回去，就可以通过恢复机制，自动恢复所有数据。</li>
+  <li>对于同一份数据来说，AOF 日志文件通常比 RDB 数据快照文件更大。</li>
+  <li>AOF 开启后，支持的写 QPS 会比 RDB 支持的写 QPS 低，因为 AOF 一般会配置成每秒 fsync 一次日志文件，当然，每秒一次 fsync，性能也还是很高的。（如果实时写入，那么 QPS 会大降，redis 性能会大大降低）</li>
+  <li>以前 AOF 发生过 bug，就是通过 AOF 记录的日志，进行数据恢复的时候，没有恢复一模一样的数据出来。所以说，类似 AOF 这种较为复杂的基于命令日志 / merge / 回放的方式，比基于 RDB 每次持久化一份完整的数据快照文件的方式，更加脆弱一些，容易有 bug。不过 AOF 就是为了避免 rewrite 过程导致的 bug，因此每次 rewrite 并不是基于旧的指令日志进行 merge 的，而是基于当时内存中的数据进行指令的重新构建，这样健壮性会好很多。</li>
+</ul>
+
+<h4 id="rdb-和-aof-到底该如何选择">RDB 和 AOF 到底该如何选择</h4>
+
+<ul>
+  <li>不要仅仅使用 RDB，因为那样会导致你丢失很多数据；</li>
+  <li>也不要仅仅使用 AOF，因为那样有两个问题：第一，你通过 AOF 做冷备，没有 RDB 做冷备来的恢复速度更快；第二，RDB 每次简单粗暴生成数据快照，更加健壮，可以避免 AOF 这种复杂的备份和恢复机制的 bug；</li>
+  <li>redis 支持同时开启开启两种持久化方式，我们可以综合使用 AOF 和 RDB 两种持久化机制，用 AOF 来保证数据不丢失，作为数据恢复的第一选择; 用 RDB 来做不同程度的冷备，在 AOF 文件都丢失或损坏不可用的时候，还可以使用 RDB 来进行快速的数据恢复。</li>
+</ul>
+</div><p><a href="/mianshi/Redis/0705/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-05-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/Redis/0705/01"><h2 itemprop="headline" class="item__header">Redis常见性能问题和解决办法</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>1.Master写内存快照，save命令调度rdbSave函数，会阻塞主线程的工作，当快照比较大时对性能影响是非常大的，会间断性暂停服务，所以Master最好不要写内存快照。</p>
+
+<p>2.Master AOF持久化，如果不重写AOF文件，这个持久化方式对性能的影响是最小的，但是AOF文件会不断增大，AOF文件过大会影响Master重启的恢复速度。</p>
+
+<p>3.Master调用BGREWRITEAOF重写AOF文件，AOF在重写的时候会占大量的CPU和内存资源，导致服务load过高，出现短暂服务暂停现象。</p>
+
+<p>下面是我的一个实际项目的情况，大概情况是这样的：一个Master，4个Slave，没有Sharding机制，仅是读写分离，Master负责写入操作和AOF日志备份，AOF文件大概5G，Slave负责读操作，当Master调用BGREWRITEAOF时，Master和Slave负载会突然陡增，Master的写入请求基本上都不响应了，持续了大概5分钟，Slave的读请求过半也无法及时响应，上面的情况本来不会也不应该发生的，是因为以前Master的这个机器是Slave，在上面有一个shell定时任务在每天的上午10点调用BGREWRITEAOF重写AOF文件，后来由于Master机器down了，就把备份的这个Slave切成Master了，但是这个定时任务忘记删除了，就导致了上面悲剧情况的发生，原因还是找了几天才找到的。</p>
+
+<p>将no-appendfsync-on-rewrite的配置设为yes可以缓解这个问题，设置为yes表示rewrite期间对新写操作不fsync，暂时存在内存中，等rewrite完成后再写入。最好是不开启Master的AOF备份功能。</p>
+
+<p>4.Redis主从复制的性能问题，第一次Slave向Master同步的实现是：Slave向Master发出同步请求，Master先dump出rdb文件，然后将rdb文件全量传输给slave，然后Master把缓存的命令转发给Slave，初次同步完成。第二次以及以后的同步实现是：Master将变量的快照直接实时依次发送给各个Slave。不管什么原因导致Slave和Master断开重连都会重复以上过程。Redis的主从复制是建立在内存快照的持久化基础上，只要有Slave就一定会有内存快照发生。虽然Redis宣称主从复制无阻塞，但由于磁盘io的限制，如果Master快照文件比较大，那么dump会耗费比较长的时间，这个过程中Master可能无法响应请求，也就是说服务会中断，对于关键服务，这个后果也是很可怕的。</p>
+
+<p>以上1.2.3.4根本问题的原因都离不开系统io瓶颈问题，也就是硬盘读写速度不够快，主进程 fsync()/write() 操作被阻塞。</p>
+
+<p>5.单点故障问题，由于目前Redis的主从复制还不够成熟，所以存在明显的单点故障问题，这个目前只能自己做方案解决，如：主动复制，Proxy实现Slave对Master的替换等，这个也是Redis作者目前比较优先的任务之一，作者的解决方案思路简单优雅，详情可见 Redis Sentinel design draft http://redis.io/topics/sentinel-spec。</p>
+
+<p>总结：</p>
+
+<p>1.Master最好不要做任何持久化工作，包括内存快照和AOF日志文件，特别是不要启用内存快照做持久化。</p>
+
+<p>2.如果数据比较关键，某个Slave开启AOF备份数据，策略为每秒同步一次。</p>
+
+<p>3.为了主从复制的速度和连接的稳定性，Slave和Master最好在同一个局域网内。</p>
+
+<p>4.尽量避免在压力较大的主库上增加从库</p>
+
+<p>5.为了Master的稳定性，主从复制不要用图状结构，用单向链表结构更稳定，即主从关系为：Master&lt;–Slave1&lt;–Slave2&lt;–Slave3…….，这样的结构也方便解决单点故障问题，实现Slave对Master的替换，也即，如果Master挂了，可以立马启用Slave1做Master，其他不变。</p>
+</div><p><a href="/mianshi/Redis/0705/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 05, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-05-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-05T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/SpringBoot/0704-03"><h2 itemprop="headline" class="item__header">SpringBoot打成war包，部署到Tomcat服务器</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>SpringBoot默认达成jar包，使用SpringBoot构想web应用，默认使用内置的Tomcat。但考虑到项目需要集群部署或者进行优化时，就需要打成war包部署到外部的Tomcat服务器中。</p>
 
@@ -734,1088 +1265,8 @@ and will set the JDBC transaction to read-only】也就是说在Spring中设置�
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/queue/0704"><h2 itemprop="headline" class="item__header">什么是阻塞队列？如何使用阻塞队列来实现生产者-消费者模型？</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="什么是阻塞队列">什么是阻塞队列？</h2>
-
-<p>阻塞队列是一个在队列基础上又支持了两个附加操作的队列。</p>
-
-<p>2个附加操作：</p>
-
-<p>支持阻塞的<strong>插入</strong>方法：队列满时，队列会阻塞插入元素的线程，直到队列不满。</p>
-
-<p>支持阻塞的<strong>移除</strong>方法：队列空时，获取元素的线程会等待队列变为非空。</p>
-
-<h2 id="阻塞队列的应用场景">阻塞队列的应用场景</h2>
-
-<p>阻塞队列常用于生产者和消费者的场景，生产者是向队列里添加元素的线程，消费者是从队列里取元素的线程。简而言之，阻塞队列是生产者用来存放元素、消费者获取元素的容器。</p>
-
-<h2 id="几个方法">几个方法</h2>
-
-<p>在阻塞队列不可用的时候，上述2个附加操作提供了四种处理方法</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: left">方法处理方式</th>
-      <th style="text-align: left">抛出异常</th>
-      <th style="text-align: left">返回特殊值</th>
-      <th style="text-align: left">一直阻塞</th>
-      <th style="text-align: left">超时退出</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: left">插入方法</td>
-      <td style="text-align: left">add(e)</td>
-      <td style="text-align: left">offer(e)</td>
-      <td style="text-align: left">put(e)</td>
-      <td style="text-align: left">offer(e,time,unit)</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">移除方法</td>
-      <td style="text-align: left">remove()</td>
-      <td style="text-align: left">poll()</td>
-      <td style="text-align: left">take()</td>
-      <td style="text-align: left">poll(time,unit)</td>
-    </tr>
-    <tr>
-      <td style="text-align: left">检查方法</td>
-      <td style="text-align: left">element()</td>
-      <td style="text-align: left">peek()</td>
-      <td style="text-align: left">不可用</td>
-      <td style="text-align: left">不可用</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="java里的阻塞队列">JAVA里的阻塞队列</h2>
-
-<p>JDK 7 提供了7个阻塞队列，如下</p>
-
-<p>1、<strong>ArrayBlockingQueue</strong> 数组结构组成的有界阻塞队列。</p>
-
-<p>此队列按照先进先出（FIFO）的原则对元素进行排序，但是默认情况下不保证线程公平的访问队列，即如果队列满了，那么被阻塞在外面的线程对队列访问的顺序是不能保证线程公平（即先阻塞，先插入）的。</p>
-
-<p>2、<strong>LinkedBlockingQueue</strong>一个由链表结构组成的有界阻塞队列</p>
-
-<p>此队列按照先出先进的原则对元素进行排序</p>
-
-<p>3、<strong>PriorityBlockingQueue</strong> 支持优先级的无界阻塞队列</p>
-
-<p>4、<strong>DelayQueue</strong> 支持延时获取元素的无界阻塞队列，即可以指定多久才能从队列中获取当前元素</p>
-
-<p>5、<strong>SynchronousQueue</strong>不存储元素的阻塞队列，每一个put必须等待一个take操作，否则不能继续添加元素。并且他支持公平访问队列。</p>
-
-<p>6、<strong>LinkedTransferQueue</strong>由链表结构组成的无界阻塞TransferQueue队列。相对于其他阻塞队列，多了tryTransfer和transfer方法</p>
-
-<p>transfer方法</p>
-
-<p>如果当前有消费者正在等待接收元素（take或者待时间限制的poll方法），transfer可以把生产者传入的元素立刻传给消费者。如果没有消费者等待接收元素，则将元素放在队列的tail节点，并等到该元素被消费者消费了才返回。</p>
-
-<p>tryTransfer方法</p>
-
-<p>用来试探生产者传入的元素能否直接传给消费者。，如果没有消费者在等待，则返回false。和上述方法的区别是该方法无论消费者是否接收，方法立即返回。而transfer方法是必须等到消费者消费了才返回。</p>
-
-<p>7、LinkedBlockingDeque链表结构的双向阻塞队列，优势在于多线程入队时，减少一半的竞争。</p>
-
-<h2 id="如何使用阻塞队列来实现生产者-消费者模型">如何使用阻塞队列来实现生产者-消费者模型？</h2>
-
-<p>通知模式实现：所谓通知模式，就是当生产者往满的队列里添加元素时会阻塞住生产者，当消费者消费了一个队列中的元素后，会通知生产者当前队列可用。</p>
-
-<h2 id="使用blockingqueue解决生产者消费者问题">使用BlockingQueue解决生产者消费者问题</h2>
-
-<p><strong>为什么BlockingQueue适合解决生产者消费者问题</strong></p>
-
-<p>任何有效的生产者-消费者问题解决方案都是通过控制生产者put()方法（生产资源）和消费者take()方法（消费资源）的调用来实现的，一旦你实现了对方法的阻塞控制，那么你将解决该问题。</p>
-
-<p>Java通过BlockingQueue提供了开箱即用的支持来控制这些方法的调用（一个线程创建资源，另一个消费资源）。java.util.concurrent包下的BlockingQueue接口是一个线程安全的可用于存取对象的队列。</p>
-
-<p><strong>BlockingQueue是一种数据结构，支持一个线程往里存资源，另一个线程从里取资源。这正是解决生产者消费者问题所需要的，那么让我们开始解决该问题吧。</strong></p>
-
-<p><strong>生产者</strong></p>
-
-<p>以下代码用于生产者线程</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">io.ymq.example.thread</span><span class="o">;</span>
- 
-<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
- 
-<span class="cm">/**
- * 描述:生产者
- *
- * @author yanpenglei
- * @create 2018-03-14 15:52
- **/</span>
-<span class="kd">class</span> <span class="nc">Producer</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
- 
-    <span class="kd">protected</span> <span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">queue</span><span class="o">;</span>
- 
-    <span class="nc">Producer</span><span class="o">(</span><span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">theQueue</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">queue</span> <span class="o">=</span> <span class="n">theQueue</span><span class="o">;</span>
-    <span class="o">}</span>
- 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nc">Object</span> <span class="n">justProduced</span> <span class="o">=</span> <span class="n">getResource</span><span class="o">();</span>
-                <span class="n">queue</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">justProduced</span><span class="o">);</span>
-                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"生产者资源队列大小= "</span> <span class="o">+</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"生产者 中断"</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
- 
-    <span class="nc">Object</span> <span class="nf">getResource</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"生产者 读 中断"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-
-</code></pre></div></div>
-
-<p><strong>消费者</strong></p>
-
-<p>以下代码用于消费者线程</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">io.ymq.example.thread</span><span class="o">;</span>
- 
-<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
- 
-<span class="cm">/**
- * 描述: 消费者
- *
- * @author yanpenglei
- * @create 2018-03-14 15:54
- **/</span>
-<span class="kd">class</span> <span class="nc">Consumer</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
-    <span class="kd">protected</span> <span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">queue</span><span class="o">;</span>
- 
-    <span class="nc">Consumer</span><span class="o">(</span><span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">theQueue</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">queue</span> <span class="o">=</span> <span class="n">theQueue</span><span class="o">;</span>
-    <span class="o">}</span>
- 
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nc">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="na">take</span><span class="o">();</span>
-                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费者 资源 队列大小 "</span> <span class="o">+</span> <span class="n">queue</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
-                <span class="n">take</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费者 中断"</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
- 
-    <span class="kt">void</span> <span class="nf">take</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span> <span class="c1">// simulate time passing</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费者 读 中断"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"消费对象 "</span> <span class="o">+</span> <span class="n">obj</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-
-</code></pre></div></div>
-
-<p><strong>测试该解决方案是否运行正常</strong></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">io.ymq.example.thread</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.BlockingQueue</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.concurrent.LinkedBlockingQueue</span><span class="o">;</span>
- 
-<span class="cm">/**
- * 描述: 测试
- *
- * @author yanpenglei
- * @create 2018-03-14 15:58
- **/</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProducerConsumerExample</span> <span class="o">{</span>
- 
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
- 
-        <span class="kt">int</span> <span class="n">numProducers</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>
-        <span class="kt">int</span> <span class="n">numConsumers</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
- 
-        <span class="nc">BlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;</span> <span class="n">myQueue</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">LinkedBlockingQueue</span><span class="o">&lt;</span><span class="nc">Object</span><span class="o">&gt;(</span><span class="mi">5</span><span class="o">);</span>
- 
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numProducers</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">Producer</span><span class="o">(</span><span class="n">myQueue</span><span class="o">)).</span><span class="na">start</span><span class="o">();</span>
-        <span class="o">}</span>
- 
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numConsumers</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
-            <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">Consumer</span><span class="o">(</span><span class="n">myQueue</span><span class="o">)).</span><span class="na">start</span><span class="o">();</span>
-        <span class="o">}</span>
- 
-        <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
- 
-        <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-
-</code></pre></div></div>
-
-<p><strong>运行结果</strong></p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>生产者资源队列大小= 1
-生产者资源队列大小= 1
-消费者 资源 队列大小 1
-生产者资源队列大小= 1
-消费者 资源 队列大小 1
-消费者 资源 队列大小 1
-生产者资源队列大小= 1
-生产者资源队列大小= 3
-消费对象 java.lang.Object@1e1aa52b
-生产者资源队列大小= 2
-生产者资源队列大小= 5
-消费对象 java.lang.Object@6e740a76
-消费对象 java.lang.Object@697853f6
- 
-......
- 
-消费对象 java.lang.Object@41a10cbc
-消费对象 java.lang.Object@4963c8d1
-消费者 资源 队列大小 5
-生产者资源队列大小= 5
-生产者资源队列大小= 5
-消费者 资源 队列大小 4
-消费对象 java.lang.Object@3e49c35d
-消费者 资源 队列大小 4
-生产者资源队列大小= 5
-
-
-</code></pre></div></div>
-
-<p><strong>从输出结果中,我们可以发现队列大小永远不会超过5，消费者线程消费了生产者生产的资源</strong></p>
-</div><p><a href="/mianshi/queue/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/Transactional/0704/03"><h2 itemprop="headline" class="item__header">Spring事务管理的两种方式</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>事务管理对于企业应用来说是至关重要的，当出现异常情况时，它也可以保证数据的一致性。</p>
-
-<h2 id="spring事务管理的两种方式">Spring事务管理的两种方式</h2>
-
-<p><strong>spring支持编程式事务管理和声明式事务管理两种方式。</strong></p>
-
-<ul>
-  <li><strong>编程式事务</strong> 使用TransactionTemplate或者直接使用底层的PlatformTransactionManager。对于编程式事务管理，spring推荐使用TransactionTemplate。</li>
-  <li><strong>声明式事务</strong> 是建立在AOP之上的。其本质是对方法前后进行拦截，然后在目标方法开始之前创建或者加入一个事务，在执行完目标方法之后根据执行情况提交或者回滚事务。声明式事务最大的优点就是不需要通过编程的方式管理事务，这样就不需要在业务逻辑代码中掺杂事务管理的代码，只需在配置文件中做相关的事务规则声明(或通过基于@Transactional注解的方式)，便可以将事务规则应用到业务逻辑中。</li>
-</ul>
-
-<p>显然声明式事务管理要优于编程式事务管理，这正是spring倡导的非侵入式的开发方式。声明式事务管理使业务代码不受污染，一个普通的POJO对象，只要加上注解就可以获得完全的事务支持。和编程式事务相比，声明式事务唯一不足地方是，它的最细粒度只能作用到方法级别，无法做到像编程式事务那样可以作用到代码块级别。但是即便有这样的需求，也存在很多变通的方法，比如，可以将需要进行事务管理的代码块独立为方法等等。</p>
-
-<p>声明式事务管理也有两种常用的方式，一种是基于tx和aop名字空间的xml配置文件，另一种就是基于@Transactional注解。显然基于注解的方式更简单易用，更清爽。</p>
-
-<h2 id="spring事务特性">spring事务特性</h2>
-
-<p>spring所有的事务管理策略类都继承自<code class="language-plaintext highlighter-rouge">org.springframework.transaction.PlatformTransactionManager</code>接口。</p>
-
-<p>其中<code class="language-plaintext highlighter-rouge">TransactionDefinition</code>接口定义以下特性：</p>
-
-<h3 id="事务隔离级别">事务隔离级别</h3>
-
-<p>隔离级别是指若干个并发的事务之间的隔离程度。TransactionDefinition 接口中定义了五个表示隔离级别的常量：</p>
-
-<ul>
-  <li>TransactionDefinition.ISOLATION_DEFAULT：这是默认值，表示使用底层数据库的默认隔离级别。对大部分数据库而言，通常这值就是TransactionDefinition.ISOLATION_READ_COMMITTED。</li>
-  <li>TransactionDefinition.ISOLATION_READ_UNCOMMITTED：该隔离级别表示一个事务可以读取另一个事务修改但还没有提交的数据。该级别不能防止脏读，不可重复读和幻读，因此很少使用该隔离级别。比如PostgreSQL实际上并没有此级别。</li>
-  <li>TransactionDefinition.ISOLATION_READ_COMMITTED：该隔离级别表示一个事务只能读取另一个事务已经提交的数据。该级别可以防止脏读，这也是大多数情况下的推荐值。</li>
-  <li>TransactionDefinition.ISOLATION_REPEATABLE_READ：该隔离级别表示一个事务在整个过程中可以多次重复执行某个查询，并且每次返回的记录都相同。该级别可以防止脏读和不可重复读。</li>
-  <li>TransactionDefinition.ISOLATION_SERIALIZABLE：所有的事务依次逐个执行，这样事务之间就完全不可能产生干扰，也就是说，该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</li>
-</ul>
-
-<h3 id="事务传播行为">事务传播行为</h3>
-
-<p>所谓事务的传播行为是指，如果在开始当前事务之前，一个事务上下文已经存在，此时有若干选项可以指定一个事务性方法的执行行为。在TransactionDefinition定义中包括了如下几个表示传播行为的常量：</p>
-
-<ul>
-  <li>TransactionDefinition.PROPAGATION_REQUIRED：如果当前存在事务，则加入该事务；如果当前没有事务，则创建一个新的事务。这是默认值。</li>
-  <li>TransactionDefinition.PROPAGATION_REQUIRES_NEW：创建一个新的事务，如果当前存在事务，则把当前事务挂起。</li>
-  <li>TransactionDefinition.PROPAGATION_SUPPORTS：如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。</li>
-  <li>TransactionDefinition.PROPAGATION_NOT_SUPPORTED：以非事务方式运行，如果当前存在事务，则把当前事务挂起。</li>
-  <li>TransactionDefinition.PROPAGATION_NEVER：以非事务方式运行，如果当前存在事务，则抛出异常。</li>
-  <li>TransactionDefinition.PROPAGATION_MANDATORY：如果当前存在事务，则加入该事务；如果当前没有事务，则抛出异常。</li>
-  <li>TransactionDefinition.PROPAGATION_NESTED：如果当前存在事务，则创建一个事务作为当前事务的嵌套事务来运行；如果当前没有事务，则该取值等价于TransactionDefinition.PROPAGATION_REQUIRED。</li>
-</ul>
-
-<h3 id="事务超时">事务超时</h3>
-
-<p>所谓事务超时，就是指一个事务所允许执行的最长时间，如果超过该时间限制但事务还没有完成，则自动回滚事务。在 TransactionDefinition 中以 int 的值来表示超时时间，其单位是秒。</p>
-
-<p>默认设置为底层事务系统的超时值，如果底层数据库事务系统没有设置超时值，那么就是none，没有超时限制。</p>
-
-<h3 id="spring事务回滚规则">spring事务回滚规则</h3>
-
-<p>默认配置下，spring只有在抛出的异常为运行时unchecked异常时才回滚该事务，也就是抛出的异常为RuntimeException的子类(Errors也会导致事务回滚)，而抛出checked异常则不会导致事务回滚。可以明确的配置在抛出哪些异常时回滚事务，包括checked异常。也可以明确定义那些异常抛出时不回滚事务。还可以编程性的通过setRollbackOnly()方法来指示一个事务必须回滚，在调用完setRollbackOnly()后你所能执行的唯一操作就是回滚。</p>
-
-<h2 id="以mybatis为例基于注解的声明式事务配置">以MyBatis为例，基于注解的声明式事务配置</h2>
-
-<p>1、添加tx名字空间</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xmlns:tx="http://www.springframework.org/schema/tx"
-</code></pre></div></div>
-
-<p>2、开启事务的注解支持</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="c">&lt;!-- 开启事务控制的注解支持 --&gt;</span>  
-<span class="nt">&lt;tx:annotation-driven</span> <span class="na">transaction-manager=</span><span class="s">"transactionManager"</span><span class="nt">/&gt;</span>
-</code></pre></div></div>
-
-<p>3、MyBatis自动参与到spring事务管理中，无需额外配置，只要org.mybatis.spring.SqlSessionFactoryBean引用的数据源与DataSourceTransactionManager引用的数据源一致即可。</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"sqlSessionFactory"</span> <span class="na">class=</span><span class="s">"org.mybatis.spring.SqlSessionFactoryBean"</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataSource"</span> <span class="na">ref=</span><span class="s">"dataSource"</span> <span class="nt">/&gt;</span>  
-	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"configLocation"</span><span class="nt">&gt;</span>  
-		<span class="nt">&lt;value&gt;</span>classpath:mybatis-config.xml<span class="nt">&lt;/value&gt;</span>  
-	<span class="nt">&lt;/property&gt;</span>  
-<span class="nt">&lt;/bean&gt;</span>
-
-<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"transactionManager"</span> <span class="na">class=</span><span class="s">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span><span class="nt">&gt;</span>  
-	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"dataSource"</span> <span class="na">ref=</span><span class="s">"dataSource"</span> <span class="nt">/&gt;</span>  
-<span class="nt">&lt;/bean&gt;</span>  
-</code></pre></div></div>
-
-<p><strong>4、使用@Transactional注解</strong></p>
-
-<p>@Transactional 可以作用于接口、接口方法、类以及类方法上。当作用于类上时，该类的所有 public 方法将都具有该类型的事务属性，同时，我们也可以在方法级别使用该注解来覆盖类级别的定义。</p>
-
-<p>虽然 @Transactional 注解可以作用于接口、接口方法、类以及类方法上，但是 Spring 建议不要在接口或者接口方法上使用该注解，因为这只有在使用基于接口的代理时它才会生效。另外， @Transactional 注解应该只被应用到 public 方法上，这是由 Spring AOP 的本质决定的。如果你在 protected、private 或者默认可见性的方法上使用 @Transactional 注解，这将被忽略，也不会抛出任何异常。</p>
-
-<h2 id="以mybatis为例基于xml文件的声明式事务配置">以MyBatis为例，基于.xml文件的声明式事务配置</h2>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
-<span class="nt">&lt;tx:advice</span> <span class="na">id=</span><span class="s">"advice"</span> <span class="na">transaction-manager=</span><span class="s">"transactionManager"</span><span class="nt">&gt;</span>  
-    <span class="nt">&lt;tx:attributes&gt;</span>  
-        <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">"update*"</span> <span class="na">propagation=</span><span class="s">"REQUIRED"</span> <span class="na">read-only=</span><span class="s">"false"</span> <span class="na">rollback-for=</span><span class="s">"java.lang.Exception"</span><span class="nt">/&gt;</span>  
-        <span class="nt">&lt;tx:method</span> <span class="na">name=</span><span class="s">"insert"</span> <span class="na">propagation=</span><span class="s">"REQUIRED"</span> <span class="na">read-only=</span><span class="s">"false"</span><span class="nt">/&gt;</span>  
-    <span class="nt">&lt;/tx:attributes&gt;</span>  
-<span class="nt">&lt;/tx:advice&gt;</span>  
-
-<span class="nt">&lt;aop:config&gt;</span>  
-    <span class="nt">&lt;aop:pointcut</span> <span class="na">id=</span><span class="s">"testService"</span> <span class="na">expression=</span><span class="s">"execution (* com.nnngu.service.MyBatisService.*(..))"</span><span class="nt">/&gt;</span>  
-    <span class="nt">&lt;aop:advisor</span> <span class="na">advice-ref=</span><span class="s">"advice"</span> <span class="na">pointcut-ref=</span><span class="s">"testService"</span><span class="nt">/&gt;</span>  
-<span class="nt">&lt;/aop:config&gt;</span>  
-</code></pre></div></div>
-</div><p><a href="/mianshi/Transactional/0704/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-06">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/SpringBoot/0704"><h2 itemprop="headline" class="item__header">SpringBoot面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="1spring-bootspring-mvc-和-spring-有什么区别">1、Spring Boot、Spring MVC 和 Spring 有什么区别？</h4>
-
-<h5 id="什么是spring它解决了什么问题">什么是Spring？它解决了什么问题？</h5>
-
-<p>我们说到Spring，一般指代的是Spring Framework，它是一个开源的应用程序框架，提供了一个简易的开发方式，<strong>通过这种开发方式，将避免那些可能致使代码变得繁杂混乱的大量的业务/工具对象，说的更通俗一点就是由框架来帮你管理这些对象，包括它的创建，销毁等</strong>，比如基于Spring的项目里经常能看到的<code class="language-plaintext highlighter-rouge">Bean</code>，它代表的就是由Spring管辖的对象。</p>
-
-<h5 id="什么是spring-mvc它解决了什么问题">什么是Spring MVC？它解决了什么问题？</h5>
-
-<p>Spring MVC是Spring的一部分，Spring 出来以后，大家觉得很好用，于是按照这种模式设计了一个 MVC框架（一些用Spring 解耦的组件），<strong>主要用于开发WEB应用和网络接口，它是Spring的一个模块，通过Dispatcher Servlet, ModelAndView 和 View Resolver，让应用开发变得很容易</strong></p>
-
-<h5 id="什么是spring-boot它解决了什么问题">什么是Spring Boot？它解决了什么问题？</h5>
-
-<p>初期的Spring通过代码加配置的形式为项目提供了良好的灵活性和扩展性，但随着Spring越来越庞大，其配置文件也越来越繁琐，太多复杂的xml文件也一直是Spring被人诟病的地方，特别是近些年其他简洁的WEB方案层出不穷，如基于Python或Node.Js，几行代码就能实现一个WEB服务器，对比起来，大家渐渐觉得Spring那一套太过繁琐，此时，Spring社区推出了Spring Boot，它的目的在于<strong>实现自动配置，降低项目搭建的复杂度</strong></p>
-
-<h4 id="2什么是自动配置">2、什么是自动配置？</h4>
-
-<p><strong>Spring Boot：__该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置</strong>。__Spring Boot采用约定大约配置的方式，大量的减少了配置文件的使用</p>
-
-<p>可以通过查看源码的run方法，通过一个简单的run方法，<strong>将引发的是一系列复杂的内部调用和加载过程，从而初始化一个应用所需的配置、环境、资源以及各种自定义的类。在这个阶段，会导入一些列自动配置的类，实现强大的自动配置的功能</strong></p>
-
-<p>我们可以点开@SpringBootApplicaton 注解， 其中，<strong>@ComponentScan将扫描和加载一些自定义的类</strong>，<strong>@EnableAutoConfiguration将导入一些自动配置的类</strong></p>
-
-<h4 id="3我们说的springboot约定大于配置是什么意思呢">3、我们说的springboot约定大于配置是什么意思呢？</h4>
-
-<p>自动配置在加载一个类的时候，会首先去读取项目当中的配置文件，假如没有，就会启用默认值，这就是springboot约定大于配置原理。以Thymeleaf为例：看下下面我们就知道，为什么我们使用Thymeleaf模板引擎，html文件默认放在resources下面的templates文件夹下面，因为这是Thymeleaf的默认配置。</p>
-
-<h4 id="4什么是-spring-boot-stater">4、什么是 Spring Boot Stater</h4>
-
-<p>starter可以理解成pom配置了一堆jar组合的空maven项目，<strong>用来简化maven依赖配置</strong>，starter可以继承也可以依赖于别的starter。</p>
-
-<p>如果我要使用redis，我直接引入redis驱动jar包就行了，何必要引入starter包？<strong>starter和普通jar包的区别在于，它能够实现自动配置，和Spring Boot无缝衔接，从而节省我们大量开发时间。</strong></p>
-
-<h4 id="5你能否举一个例子来解释更多-staters-的内容">5、你能否举一个例子来解释更多 Staters 的内容</h4>
-
-<p>比如 我们开发一个web 应用程序或者是公开的 REST 服务的应用程序 Spring Boot Stater Web，是首选，它会加载 ：</p>
-
-<p>Spring - core，beans，context，aop</p>
-
-<p>Web MVC - （Spring MVC）</p>
-
-<p>Jackson - for JSON Binding</p>
-
-<p>Validation - Hibernate,Validation API</p>
-
-<p>Enbedded Servlet Container - Tomcat</p>
-
-<p>Logging - logback,slf4j</p>
-
-<p>而且我不用担心这个些依赖项之间的版本兼容性</p>
-
-<h4 id="6spring-boot-还提供了其它的哪些-starter-project-options">6、Spring Boot 还提供了其它的哪些 Starter Project Options</h4>
-
-<p>Spring Boot 也提供了其它的启动器项目包括，包括用于开发特定类型应用程序的典型依赖项。</p>
-
-<p>spring-boot-starter-web-services - SOAP Web Services</p>
-
-<p>spring-boot-starter-web - Web 和 RESTful 应用程序</p>
-
-<p>spring-boot-starter-test - 单元测试和集成测试</p>
-
-<p>spring-boot-starter-jdbc - 传统的 JDBC</p>
-
-<p>spring-boot-starter-hateoas - 为服务添加 HATEOAS 功能</p>
-
-<p>spring-boot-starter-security - 使用 SpringSecurity 进行身份验证和授权</p>
-
-<p>spring-boot-starter-data-jpa - 带有 Hibeernate 的 Spring Data JPA</p>
-
-<p>spring-boot-starter-data-rest - 使用 Spring Data REST 公布简单的 REST 服务</p>
-
-<h4 id="7spring-是如何快速创建产品就绪应用程序的">7、Spring 是如何快速创建产品就绪应用程序的</h4>
-
-<p><strong>Spring Boot 致力于快速产品就绪应用程序。为此，它提供了一些譬如高速缓存，日志记录，监控和嵌入式服务器等开箱即用的非功能性特征。</strong></p>
-
-<p>spring-boot-starter-actuator - 使用一些如监控和跟踪应用的高级功能</p>
-
-<p>spring-boot-starter-undertow, spring-boot-starter-jetty, spring-boot-starter-tomcat - 选择您的特定嵌入式 Servlet 容器</p>
-
-<p>spring-boot-starter-logging - 使用 logback 进行日志记录</p>
-
-<p>spring-boot-starter-cache - 启用 Spring Framework 的缓存支持</p>
-
-<h4 id="8创建一个-spring-boot-project-的最简单的方法是什么">8、创建一个 Spring Boot Project 的最简单的方法是什么</h4>
-
-<p>Spring Initializr是启动 Spring Boot Projects 的一个很好的工具</p>
-
-<h4 id="9spring-initializr-是创建-spring-boot-projects-的唯一方法吗">9、Spring Initializr 是创建 Spring Boot Projects 的唯一方法吗？</h4>
-
-<p>Spring Initializr，还有通过maven创建</p>
-
-<h4 id="10为什么我们需要-spring-boot-maven-plugin">10、为什么我们需要 spring-boot-maven-plugin?</h4>
-
-<ul>
-  <li>
-    <p>spring-boot-maven-plugin 提供了一些像 jar 一样打包或者运行应用程序的命令。</p>
-  </li>
-  <li>spring-boot:run 运行你的 SpringBooty 应用程序。</li>
-  <li>spring-boot：repackage 重新打包你的 jar 包或者是 war 包使其可执行</li>
-  <li>spring-boot：start 和 spring-boot：stop 管理 Spring Boot 应用程序的生命周期（也可以说是为了集成测试）。</li>
-  <li>spring-boot:build-info 生成执行器可以使用的构造信息。</li>
-</ul>
-
-<h4 id="11如何使用-springboot-自动重装我的应用程序">11、如何使用 SpringBoot 自动重装我的应用程序？</h4>
-
-<p>把下面的依赖项添加至你的 Spring Boot Project pom.xml 中</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
-     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-     &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
-     &lt;scope&gt;runtime&lt;/scope&gt;
-&lt;/dependency&gt;
-</code></pre></div></div>
-
-<p>重启应用程序，然后就可以了。</p>
-
-<h4 id="12什么是嵌入式服务器我们为什么要使用嵌入式服务器呢">12、什么是嵌入式服务器？我们为什么要使用嵌入式服务器呢?</h4>
-
-<p>思考一下在你的虚拟机上部署应用程序需要些什么。</p>
-
-<p>第一步： 安装 Java</p>
-
-<p>第二部： 安装 Web 或者是应用程序的服务器（Tomat/Wbesphere/Weblogic 等等）</p>
-
-<p>第三部： 部署应用程序 war 包</p>
-
-<p>如果我们想简化这些步骤，应该如何做呢？</p>
-
-<p>让我们来思考如何使服务器成为应用程序的一部分？</p>
-
-<blockquote>
-  <p>你只需要一个安装了 Java 的虚拟机，就可以直接在上面部署应用程序了，
-是不是很爽？</p>
-</blockquote>
-
-<p>这个想法是嵌入式服务器的起源。</p>
-
-<p>当我们创建一个可以部署的应用程序的时候，我们将会把服务器（例如，tomcat）嵌入到可部署的服务器中。</p>
-
-<blockquote>
-  <p>例如，对于一个 Spring Boot 应用程序来说，你可以生成一个包含 Embedded Tomcat 的应用程序 jar。你就可以想运行正常 Java 应用程序一样来运行 web 应用程序了。</p>
-</blockquote>
-
-<p>嵌入式服务器就是我们的可执行单元包含服务器的二进制文件</p>
-
-<h4 id="13如何在-spring-boot-中添加通用的-js-代码">13、如何在 Spring Boot 中添加通用的 JS 代码？</h4>
-
-<p>在源文件夹下，创建一个名为 static 的文件夹。然后，你可以把你的静态的内容放在这里面。</p>
-
-<p>例如，myapp.js 的路径是 resources\static\js\myapp.js</p>
-
-<p>你可以参考它在 jsp 中的使用方法</p>
-
-<script src="/js/myapp.js"></script>
-
-<h4 id="14错误hal-browser-gives-me-unauthorized-error---full-authenticaition-is-required-to-access-this-resource该如何来修复这个错误呢">14、错误：HAL browser gives me unauthorized error - Full authenticaition is required to access this resource.该如何来修复这个错误呢？</h4>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-  "timestamp": 1488656019562,
-  "status": 401,
-  "error": "Unauthorized",
-  "message": "Full authentication is required to access this resource.",
-  "path": "/beans"
-}
-</code></pre></div></div>
-
-<p>两种方法：</p>
-
-<h5 id="方法-1关闭安全验证">方法 1：关闭安全验证</h5>
-
-<p>application.properties</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>management.security.enabled:FALSE
-</code></pre></div></div>
-
-<h5 id="方法二在日志中搜索密码并传递至请求标头中">方法二：在日志中搜索密码并传递至请求标头中</h5>
-
-<h4 id="15什么是-spring-date">15、什么是 Spring Date</h4>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Spring Data的使命是为数据访问提供熟悉且一致的基于Spring的编程模型，同时仍保留底层数据存储的特​​殊特性。
-它使数据访问技术，关系数据库和非关系数据库，map-reduce框架和基于云的数据服务变得简单易用。这是一个伞形项目，其中包含许多特定于给定数据库的子项目。这些项目是通过与这些激动人心的技术背后的许多公司和开发人员合作开发的。
-</code></pre></div></div>
-
-<p><strong>主要模块</strong>
-Spring Data主要使用的一些模块，根据需要选择对应的一些功能模块。</p>
-
-<ul>
-  <li>Spring Data common- 支持每个Spring Data模块的Core Spring概念。</li>
-  <li>Spring Data JDBC- 对JDBC的Spring Data存储库支持。</li>
-  <li>Spring Data JPA - 对JPA的Spring Data存储库支持。</li>
-  <li>Spring Data MongoDB - 对MongoDB的基于Spring对象文档的存储库支持。</li>
-  <li>Spring Data Redis - 从Spring应用程序轻松配置和访问Redis。</li>
-  <li>Spring Data JDBC Ext- 支持标准JDBC的数据库特定扩展，包括对Oracle RAC快速连接故障转移的支持，AQ JMS支持以及对使用高级数据类型的支持。</li>
-  <li>Spring Data KeyValue - Map基于库和SPI轻松建立键值存储一个Spring数据模块。</li>
-  <li>Spring Data LDAP - 对Spring LDAP的 Spring Data存储库支持。</li>
-  <li>Spring Data REST- 将Spring Data存储库导出为超媒体驱动的RESTful资源。</li>
-  <li>Spring Data for Pivotal GemFire - 轻松配置和访问Pivotal GemFire，实现高度一致，低延迟/高吞吐量，面向数据的Spring应用程序。</li>
-  <li>Spring Data for Apache Cassandra- 轻松配置和访问Apache Cassandra或大规模，高可用性，面向数据的Spring应用程序。</li>
-  <li>Spring Data for Apace Geode- 轻松配置和访问Apache Geode，实现高度一致，低延迟，面向数据的Spring应用程序。</li>
-  <li>Spring Data for Apache Solr- 为面向搜索的Spring应用程序轻松配置和访问Apache Solr。</li>
-</ul>
-
-<h4 id="16什么是-spring-data-rest">16、什么是 Spring Data REST</h4>
-
-<p>Spring Data REST是基于Spring Data的repository之上，可以把 repository <strong>自动</strong> 输出为REST资源，目前支持Spring Data JPA、Spring Data MongoDB、Spring Data Neo4j、Spring Data GemFire、Spring Data Cassandra的 repository <strong>自动</strong> 转换成REST服务。</p>
-
-<h4 id="17当-spring-boot-应用程序作为-java-应用程序运行时后台会发生什么">17、当 Spring Boot 应用程序作为 Java 应用程序运行时，后台会发生什么？</h4>
-
-<p>当你启动 java 应用程序的时候，spring boot 自动配置文件就会魔法般的启用了。</p>
-
-<ul>
-  <li>当 Spring Boot 应用程序检测到你正在开发一个 web 应用程序的时候，它就会启动 tomcat。</li>
-</ul>
-
-<h4 id="18我们能否在-spring-boot-starter-web-中用-jetty-代替-tomcat">18、我们能否在 spring-boot-starter-web 中用 jetty 代替 tomcat？</h4>
-
-<p>在 spring-boot-starter-web 移除现有的依赖项，并把下面这些添加进去。</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;exclusions&gt;</span>
-        <span class="nt">&lt;exclusion&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-tomcat<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;/exclusion&gt;</span>
-    <span class="nt">&lt;/exclusions&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-jetty<span class="nt">&lt;/artifactId&gt;</span>
-<span class="err">&lt;</span>/dependency
-</code></pre></div></div>
-
-<h4 id="19如何使用-spring-boot-生成一个-war-文件">19、如何使用 Spring Boot 生成一个 WAR 文件？</h4>
-
-<ol>
-  <li>
-    <packaging>war</packaging>
-  </li>
-  <li>
-    <p>在pom.xml中加入build节点,build节点中的finalName可改成项目名称(包名)</p>
-  </li>
-  <li>
-    <p>在spring-boot-starter-web依赖中移除tomcat模块：</p>
-  </li>
-  <li>
-    <p>新建启动类：主要是SpringApplicationBuilder configure 方法</p>
-
-    <p><a href="./0704-03">详情配置</a></p>
-  </li>
-</ol>
-
-<h4 id="20如何使用-spring-boot-部署到不同的服务器">20、如何使用 Spring Boot 部署到不同的服务器？</h4>
-
-<ul>
-  <li>在一个项目中生成一个 war 文件。</li>
-  <li>将它部署到你最喜欢的服务器（websphere 或者 Weblogic 或者 Tomcat and so on）。</li>
-</ul>
-
-<p>21、RequestMapping 和 GetMapping 的不同之处在哪里？</p>
-
-<ul>
-  <li>RequestMapping 具有类属性的，可以进行 GET,POST,PUT 或者其它的注释中具有的请求方法。</li>
-  <li>GetMapping 是 GET 请求方法中的一个特例。它只是 ResquestMapping 的一个延伸，目的是为了提高清晰度</li>
-</ul>
-
-<h4 id="22为什么我们不建议在实际的应用程序中使用-spring-data-rest">22、为什么我们不建议在实际的应用程序中使用 Spring Data Rest?</h4>
-
-<p>我们认为 Spring Data Rest 很适合快速原型制造！在大型应用程序中使用需要谨慎。</p>
-
-<p>通过 Spring Data REST 你可以把你的数据实体作为 RESTful 服务直接发布。</p>
-
-<p>当你设计 RESTful 服务器的时候，最佳实践表明，你的接口应该考虑到两件重要的事情：</p>
-
-<ul>
-  <li>你的模型范围。</li>
-  <li>你的客户。</li>
-  <li>Spring Data Rest 在做复杂数据库查询不适合</li>
-</ul>
-
-<p>通过 With Spring Data REST，你不需要再考虑这两个方面，只需要作为 TEST 服务发布实体。</p>
-
-<p>这就是为什么我们建议使用 Spring Data Rest 在快速原型构造上面，或者作为项目的初始解决方法。对于完整演变项目来说，这并不是一个好的注意。</p>
-
-<h4 id="23jpa-和-hibernate-有哪些区别">23、JPA 和 Hibernate 有哪些区别？</h4>
-
-<ul>
-  <li>JPA 是一个规范或者接口</li>
-  <li>Hibernate 是 JPA 的一个实现
-<img src="/assets/images/mianshiti/0704/1436045-20180817162031268-1675607816.png" alt="1" /></li>
-</ul>
-
-<h4 id="24业务边界应该从哪一层开始">24、业务边界应该从哪一层开始？</h4>
-
-<p>我们建议在服务层管理业务。商业业务逻辑在商业层或者服务层，与此同时，你想要执行的业务管理也在该层。</p>
-
-<h4 id="25使用-spring-boot-启动连接到内存数据库-h2-的-jpa-应用程序需要哪些依赖项">25、使用 Spring Boot 启动连接到内存数据库 H2 的 JPA 应用程序需要哪些依赖项？</h4>
-
-<p>在 Spring Boot 项目中，当你确保下面的依赖项都在类路里面的时候，你可以加载 H2 控制台。</p>
-
-<ul>
-  <li>web 启动器</li>
-  <li>h2</li>
-  <li>jpa 数据启动器</li>
-</ul>
-
-<h4 id="26如何不通过任何配置来选择-hibernate-作为-jpa-的默认实现">26、如何不通过任何配置来选择 Hibernate 作为 JPA 的默认实现？</h4>
-
-<p>因为 Spring Boot 是自动配置的。</p>
-
-<p>下面是我们添加的依赖项</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
-     &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-     &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre></div></div>
-
-<p>spring-boot-stater-data-jpa 对于 Hibernate 和 JPA 有过渡依赖性。</p>
-
-<p>当 Spring Boot 在类路径中检测到 Hibernate 中，将会自动配置它为默认的 JPA 实现</p>
-
-<h4 id="27指定的数据库连接信息在哪里它是如何知道自动连接至-h2-的">27、指定的数据库连接信息在哪里？它是如何知道自动连接至 H2 的？</h4>
-
-<p>这就是 Spring Boot 自动配置的魔力。</p>
-
-<p>来自：https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-auto-configuration.html</p>
-
-<p>Spring Boot auto-configuration 试图自动配置你已经添加的基于 jar 依赖项的 Spring 应用程序。比如说，如果 HSQLDBis 存在你的类路径中，并且，数据库连接 bean 还没有手动配置，那么我们可以自动配置一个内存数据库。</p>
-
-<p>进一步的阅读：</p>
-
-<p>http://www.springboottutorial.com/spring-boot-auto-configuration</p>
-
-<h4 id="28我们如何连接一个像-mysql-或者-orcale-一样的外部数据库">28、我们如何连接一个像 MYSQL 或者 orcale 一样的外部数据库？</h4>
-
-<p>让我们以 MySQL 为例来思考这个问题：</p>
-
-<h5 id="第一步---把-mysql-连接器的依赖项添加至-pomxml">第一步 - 把 mysql 连接器的依赖项添加至 pom.xml</h5>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;dependency&gt;
-    &lt;groupId&gt;mysql&lt;/groupId&gt;
-    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre></div></div>
-
-<h5 id="第二步---从-pomxml-中移除-h2-的依赖项">第二步 - 从 pom.xml 中移除 H2 的依赖项</h5>
-
-<p>或者至少把它作为测试的范围。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!--
-&lt;dependency&gt;
-    &lt;groupId&gt;com.h2database&lt;/groupId&gt;
-    &lt;artifactId&gt;h2&lt;/artifactId&gt;
-&lt;scope&gt;test&lt;/scope&gt;
-&lt;/dependency&gt;
---&gt;   
-</code></pre></div></div>
-
-<h5 id="第三步---安装你的-mysql-数据库">第三步 - 安装你的 MySQL 数据库</h5>
-
-<p>更多的来看看这里 -https://github.com/in28minutes/jpa-with-hibernate#installing-and-setting-up-mysql</p>
-
-<h5 id="第四步---配置你的-mysql-数据库连接">第四步 - 配置你的 MySQL 数据库连接</h5>
-
-<p>配置 application.properties</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring.jpa.hibernate.ddl-auto=none
-spring.datasource.url=jdbc:mysql://localhost:3306/todo_example
-spring.datasource.username=todouser
-spring.datasource.password=YOUR_PASSWORD   
-</code></pre></div></div>
-
-<h5 id="第五步---重新启动你就准备好了">第五步 - 重新启动，你就准备好了！</h5>
-
-<p>就是这么简单！</p>
-
-<h4 id="29spring-boot-配置的默认-h2-数据库的名字是上面为什么默认的数据库名字是-testdb">29、Spring Boot 配置的默认 H2 数据库的名字是上面？为什么默认的数据库名字是 testdb？</h4>
-
-<p>在 application.properties 里面，列出了所有的默认值</p>
-
-<ul>
-  <li>https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html</li>
-</ul>
-
-<p>找到下面的属性</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spring.datasource.name=testdb # Name of the datasource.
-</code></pre></div></div>
-
-<p>如果你使用了 H2 内部存储数据库，它里面确定了 Spring Boot 用来安装你的 H2 数据库的名字。</p>
-
-<h4 id="30你能否举一个以-readonly-为事务管理的例子">30、你能否举一个以 ReadOnly 为事务管理的例子？</h4>
-
-<ul>
-  <li>当你从数据库读取内容的时候，你想把事物中的用户描述或者是其它描述设置为只读模式，以便于 Hebernate 不需要再次检查实体的变化。这是非常高效的。</li>
-</ul>
-
-<p><a href="./0704/03">Spring事务管理的两种方式</a><br />
-<a href="./0704/05">只读事务（@Transactional(readOnly = true)）的一些概念</a></p>
-
-<h4 id="31发布-spring-boot-用户应用程序自定义配置的最好方法是什么">31、发布 Spring Boot 用户应用程序自定义配置的最好方法是什么？</h4>
-
-<p>@Value 的问题在于，您可以通过应用程序分配你配置值。更好的操作是采取集中的方法。
-你可以使用 @ConfigurationProperties 定义一个配置组件。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Component</span>
-<span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="s">"basic"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">BasicConfiguration</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">value</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">number</span><span class="o">;</span>
-</code></pre></div></div>
-
-<p>你可以在 application.properties 中配置参数。</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>basic.value: true
-basic.message: Dynamic Message
-basic.number: 100
-</code></pre></div></div>
-
-<h4 id="32配置文件的需求是什么">32、配置文件的需求是什么？</h4>
-
-<p>企业应用程序的开发是复杂的，你需要混合的环境：</p>
-
-<ul>
-  <li>Dev</li>
-  <li>QA</li>
-  <li>Stage</li>
-  <li>Production</li>
-</ul>
-
-<p>在每个环境中，你想要不同的应用程序配置。</p>
-
-<blockquote>
-  <p>配置文件有助于在不同的环境中进行不同的应用程序配置。</p>
-</blockquote>
-
-<p>Spring 和 Spring Boot 提供了你可以制定的功能。</p>
-
-<ul>
-  <li>不同配置文件中，不同环境的配置是什么？</li>
-  <li>为一个制定的环境设置活动的配置文件。</li>
-</ul>
-
-<p>Spring Boot 将会根据特定环境中设置的活动配置文件来选择应用程序的配置</p>
-
-<h4 id="33如何使用配置文件通过-spring-boot-配置特定环境的配置">33、如何使用配置文件通过 Spring Boot 配置特定环境的配置？</h4>
-
-<p>配置文件不是设别环境的关键。</p>
-
-<p>在下面的例子中，我们将会用到两个配置文件</p>
-
-<ul>
-  <li>dev</li>
-  <li>prod</li>
-</ul>
-
-<p>缺省的应用程序配置在 application.properties 中。让我们来看下面的例子：</p>
-
-<p>application.properties</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>basic.value= true
-basic.message= Dynamic Message
-basic.number= 100
-</code></pre></div></div>
-
-<p>我们想要为 dev 文件自定义 application.properties 属性。我们需要创建一个名为 application-dev.properties 的文件，并且重写我们想要自定义的属性。</p>
-
-<p>application-dev.properties</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>basic.message: Dynamic Message in DEV
-</code></pre></div></div>
-
-<p>一旦你特定配置了配置文件，你需要在环境中设定一个活动的配置文件。</p>
-
-<p>有多种方法可以做到这一点：</p>
-
-<ul>
-  <li>在 VM 参数中使用 Dspring.profiles.active=prod</li>
-  <li>在 application.properties 中使用 spring.profiles.active=prod</li>
-</ul>
-</div><p><a href="/mianshi/SpringBoot/0704">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/SpringBoot/0704-02"><h2 itemprop="headline" class="item__header">Spring Boot自动配置实现原理</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>我们在使用Spring Boot构建Java Web项目的时候，实现起来非常的简单，那么SpringBoot是如何做到看似简单，却能够实现我们之前使用SSM或者SSH结合复杂配置实现的功能的呢？</p>
-
-<p>我们在看Spring Boot的介绍的时候，常看到下面一段话：Spring Boot 是由 Pivotal 团队提供的全新框架，其__设计目的是用来简化新 Spring 应用的初始搭建以及开发过程__。<strong>该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置</strong>。<strong>Spring Boot采用约定大约配置的方式，大量的减少了配置文件的使用</strong>。那么，Spring Boot是如何做到约定大于配置的呢？</p>
-
-<p>首先我们看一下Spring Boot的主程序功能，也就是Spring Boot官方文档里面写的，你可以直接run</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@SpringBootApplication</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
- 
-	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
- 
-		<span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-	<span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>一个非常简单的run方法的执行，加上@SpringBootApplication的注解，我们看一下run方法的源代码：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringApplication</span><span class="o">{</span>
-      <span class="o">......</span>
- 
-    <span class="kd">public</span> <span class="nc">ConfigurableApplicationContext</span> <span class="nf">run</span><span class="o">(</span><span class="nc">String</span><span class="o">...</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">//监控任务执行时间</span>
-		<span class="nc">StopWatch</span> <span class="n">stopWatch</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StopWatch</span><span class="o">();</span>
-		<span class="n">stopWatch</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
-        <span class="c1">//创建应用上下文</span>
-		<span class="nc">ConfigurableApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="c1">//用来记录关于启动的错误报告</span>
-		<span class="nc">Collection</span><span class="o">&lt;</span><span class="nc">SpringBootExceptionReporter</span><span class="o">&gt;</span> <span class="n">exceptionReporters</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;&gt;();</span>
-		<span class="n">configureHeadlessProperty</span><span class="o">();</span>
-        <span class="c1">//可以监听springboot应用启动过程中的一些生命周期事件</span>
-		<span class="nc">SpringApplicationRunListeners</span> <span class="n">listeners</span> <span class="o">=</span> <span class="n">getRunListeners</span><span class="o">(</span><span class="n">args</span><span class="o">);</span>
-		<span class="n">listeners</span><span class="o">.</span><span class="na">starting</span><span class="o">();</span>
-		<span class="k">try</span> <span class="o">{</span>
-            <span class="c1">//程序运行参数</span>
-			<span class="nc">ApplicationArguments</span> <span class="n">applicationArguments</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultApplicationArguments</span><span class="o">(</span>
-					<span class="n">args</span><span class="o">);</span>
-            <span class="c1">//加载相关的配置文件</span>
-			<span class="nc">ConfigurableEnvironment</span> <span class="n">environment</span> <span class="o">=</span> <span class="n">prepareEnvironment</span><span class="o">(</span><span class="n">listeners</span><span class="o">,</span>
-					<span class="n">applicationArguments</span><span class="o">);</span>
-			<span class="n">configureIgnoreBeanInfo</span><span class="o">(</span><span class="n">environment</span><span class="o">);</span>
-            <span class="c1">//打印Banner,也就是springboot启动后最开始打印的图像</span>
-			<span class="nc">Banner</span> <span class="n">printedBanner</span> <span class="o">=</span> <span class="n">printBanner</span><span class="o">(</span><span class="n">environment</span><span class="o">);</span>
-            <span class="c1">//真正的创建应用上下文</span>
-			<span class="n">context</span> <span class="o">=</span> <span class="n">createApplicationContext</span><span class="o">();</span>
-			<span class="n">exceptionReporters</span> <span class="o">=</span> <span class="n">getSpringFactoriesInstances</span><span class="o">(</span>
-					<span class="nc">SpringBootExceptionReporter</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
-					<span class="k">new</span> <span class="nc">Class</span><span class="o">[]</span> <span class="o">{</span> <span class="nc">ConfigurableApplicationContext</span><span class="o">.</span><span class="na">class</span> <span class="o">},</span> <span class="n">context</span><span class="o">);</span>
-			<span class="n">prepareContext</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">environment</span><span class="o">,</span> <span class="n">listeners</span><span class="o">,</span> <span class="n">applicationArguments</span><span class="o">,</span>
-					<span class="n">printedBanner</span><span class="o">);</span>
-			<span class="n">refreshContext</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
-			<span class="n">afterRefresh</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">applicationArguments</span><span class="o">);</span>
-			<span class="n">stopWatch</span><span class="o">.</span><span class="na">stop</span><span class="o">();</span>
-			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">logStartupInfo</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">new</span> <span class="nf">StartupInfoLogger</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">mainApplicationClass</span><span class="o">)</span>
-						<span class="o">.</span><span class="na">logStarted</span><span class="o">(</span><span class="n">getApplicationLog</span><span class="o">(),</span> <span class="n">stopWatch</span><span class="o">);</span>
-			<span class="o">}</span>
-			<span class="n">listeners</span><span class="o">.</span><span class="na">started</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
-			<span class="n">callRunners</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">applicationArguments</span><span class="o">);</span>
-		<span class="o">}</span>
-		<span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-			<span class="n">handleRunFailure</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">ex</span><span class="o">,</span> <span class="n">exceptionReporters</span><span class="o">,</span> <span class="n">listeners</span><span class="o">);</span>
-			<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
-		<span class="o">}</span>
- 
-		<span class="k">try</span> <span class="o">{</span>
-			<span class="n">listeners</span><span class="o">.</span><span class="na">running</span><span class="o">(</span><span class="n">context</span><span class="o">);</span>
-		<span class="o">}</span>
-		<span class="k">catch</span> <span class="o">(</span><span class="nc">Throwable</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-			<span class="n">handleRunFailure</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">ex</span><span class="o">,</span> <span class="n">exceptionReporters</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
-			<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
-		<span class="o">}</span>
-		<span class="k">return</span> <span class="n">context</span><span class="o">;</span>
-	<span class="o">}</span>
- 
-    <span class="o">......</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>在上面这段run方法的源代码当中，有一个context = createApplicationContext();方法</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">protected</span> <span class="nc">ConfigurableApplicationContext</span> <span class="nf">createApplicationContext</span><span class="o">()</span> <span class="o">{</span>
-		<span class="nc">Class</span><span class="o">&lt;?&gt;</span> <span class="n">contextClass</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">applicationContextClass</span><span class="o">;</span>
-		<span class="k">if</span> <span class="o">(</span><span class="n">contextClass</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">try</span> <span class="o">{</span>
-				<span class="k">switch</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">webApplicationType</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">case</span> <span class="nl">SERVLET:</span>
-                    <span class="c1">//假如是servlet应用，默认加载DEFAULT_WEB_CONTEXT_CLASS</span>
-					<span class="n">contextClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="no">DEFAULT_WEB_CONTEXT_CLASS</span><span class="o">);</span>
-					<span class="k">break</span><span class="o">;</span>
-				<span class="k">case</span> <span class="nl">REACTIVE:</span>
-					<span class="n">contextClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="no">DEFAULT_REACTIVE_WEB_CONTEXT_CLASS</span><span class="o">);</span>
-					<span class="k">break</span><span class="o">;</span>
-				<span class="k">default</span><span class="o">:</span>
-					<span class="n">contextClass</span> <span class="o">=</span> <span class="nc">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="no">DEFAULT_CONTEXT_CLASS</span><span class="o">);</span>
-				<span class="o">}</span>
-			<span class="o">}</span>
-			<span class="k">catch</span> <span class="o">(</span><span class="nc">ClassNotFoundException</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
-				<span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalStateException</span><span class="o">(</span>
-						<span class="s">"Unable create a default ApplicationContext, "</span>
-								<span class="o">+</span> <span class="s">"please specify an ApplicationContextClass"</span><span class="o">,</span>
-						<span class="n">ex</span><span class="o">);</span>
-			<span class="o">}</span>
-		<span class="o">}</span>
-		<span class="k">return</span> <span class="o">(</span><span class="nc">ConfigurableApplicationContext</span><span class="o">)</span> <span class="nc">BeanUtils</span><span class="o">.</span><span class="na">instantiateClass</span><span class="o">(</span><span class="n">contextClass</span><span class="o">);</span>
-	<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>也就是说，<strong>通过一个简单的run方法，将引发的是一系列复杂的内部调用和加载过程，从而初始化一个应用所需的配置、环境、资源以及各种自定义的类。在这个阶段，会导入一些列自动配置的类，实现强大的自动配置的功能</strong>。那么自动配置类是从哪里来的呢？这就需要@SpringBootApplicaton起到作用了。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Target</span><span class="o">(</span><span class="nc">ElementType</span><span class="o">.</span><span class="na">TYPE</span><span class="o">)</span>
-<span class="nd">@Retention</span><span class="o">(</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="na">RUNTIME</span><span class="o">)</span>
-<span class="nd">@Documented</span>
-<span class="nd">@Inherited</span>
-<span class="nd">@SpringBootConfiguration</span>
-<span class="nd">@EnableAutoConfiguration</span>
-<span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">excludeFilters</span> <span class="o">=</span> <span class="o">{</span>
-		<span class="nd">@Filter</span><span class="o">(</span><span class="n">type</span> <span class="o">=</span> <span class="nc">FilterType</span><span class="o">.</span><span class="na">CUSTOM</span><span class="o">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="nc">TypeExcludeFilter</span><span class="o">.</span><span class="na">class</span><span class="o">),</span>
-		<span class="nd">@Filter</span><span class="o">(</span><span class="n">type</span> <span class="o">=</span> <span class="nc">FilterType</span><span class="o">.</span><span class="na">CUSTOM</span><span class="o">,</span> <span class="n">classes</span> <span class="o">=</span> <span class="nc">AutoConfigurationExcludeFilter</span><span class="o">.</span><span class="na">class</span><span class="o">)</span> <span class="o">})</span>
-<span class="kd">public</span> <span class="nd">@interface</span> <span class="nc">SpringBootApplication</span> <span class="o">{</span>
-     <span class="o">......</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>其中，<strong>@ComponentScan将扫描和加载一些自定义的类</strong>，<strong>@EnableAutoConfiguration将导入一些自动配置的类</strong>。这些自动配置的类很多，并且他们都处于org.springframework.boot.autoconfigure这个包下面。这些配置类都会被导入并处于备用状态。假如你在maven文件当中引入了相关的包的时候，相关功能将被启用。</p>
-
-<p>那么，我们说的springboot约定大于配置是什么意思呢？自动配置在加载一个类的时候，会首先去读取项目当中的配置文件，假如没有，就会启用默认值，这就是springboot约定大于配置原理。以Thymeleaf为例：看下下面我们就知道，为什么我们使用Thymeleaf模板引擎，html文件默认放在resources下面的templates文件夹下面，因为这是Thymeleaf的默认配置。</p>
-
-<p>@ConfigurationProperties(prefix = “spring.thymeleaf”)
-public class ThymeleafProperties {</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@ConfigurationProperties</span><span class="o">(</span><span class="n">prefix</span> <span class="o">=</span> <span class="s">"spring.thymeleaf"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThymeleafProperties</span> <span class="o">{</span>
- 
-	<span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Charset</span> <span class="no">DEFAULT_ENCODING</span> <span class="o">=</span> <span class="nc">StandardCharsets</span><span class="o">.</span><span class="na">UTF_8</span><span class="o">;</span>
- 
-	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEFAULT_PREFIX</span> <span class="o">=</span> <span class="s">"classpath:/templates/"</span><span class="o">;</span>
- 
-	<span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">DEFAULT_SUFFIX</span> <span class="o">=</span> <span class="s">".html"</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">checkTemplate</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">checkTemplateLocation</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="nc">String</span> <span class="n">prefix</span> <span class="o">=</span> <span class="no">DEFAULT_PREFIX</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="nc">String</span> <span class="n">suffix</span> <span class="o">=</span> <span class="no">DEFAULT_SUFFIX</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="nc">String</span> <span class="n">mode</span> <span class="o">=</span> <span class="s">"HTML"</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="nc">Charset</span> <span class="n">encoding</span> <span class="o">=</span> <span class="no">DEFAULT_ENCODING</span><span class="o">;</span>
- 
-	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">cache</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
- 
-    <span class="o">......</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-<p>}
-并且这些约定的配置一般都以Properties为结尾，比如</p>
-
-<p>org.springframework.boot.autoconfigure.jdbc.DataSourceProperties（数据库连接配置）</p>
-
-<p>org.springframework.boot.autoconfigure.data.redis.RedisProperties（Redis连接配置）</p>
-
-<p>org.springframework.boot.autoconfigure.amqp.RabbitProperties（RabbitMQ连接配置）</p>
-
-<p>org.springframework.boot.autoconfigure.web.ResourceProperties（Web资源配置）</p>
-
-<p>org.springframework.boot.autoconfigure.kafka.KafkaProperties（Kafka连接配置）</p>
-
-<p>org.springframework.boot.autoconfigure.cache.CacheProperties（缓存配置）</p>
-
-<p>那么，我们知道程序会自动装配加载很多类，但是我们假如不想程序去加载某些类（毕竟加载需要耗时），我们如何去自定义我们想加载的配置类呢？</p>
-
-<p>我们只需要把@SpringBootApplication注解去掉，换成@Congfiguation注解，并通过@Import注解去指定需要加载的配置类就可以了（非常不建议这么做，因为我们可能不是特别了解所有自动加载的类的特性）。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Configuration</span>
-<span class="nd">@Import</span><span class="o">({</span>
-		<span class="nc">DispatcherServletAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
-		<span class="nc">HttpEncodingAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
-		<span class="nc">ThymeleafAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
-		<span class="nc">WebMvcAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
-		<span class="nc">WebSocketServletAutoConfiguration</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
-		<span class="nc">MultipartAutoConfiguration</span><span class="o">.</span><span class="na">class</span>
-		<span class="c1">//继续加载你需要的配置</span>
-<span class="o">})</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Application</span> <span class="o">{</span>
- 
-	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
- 
-		<span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">Application</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-	<span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-</div><p><a href="/mianshi/SpringBoot/0704-02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 04, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-04-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-04T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>276 post articles, 35 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>282 post articles, 36 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1828,7 +1279,7 @@ public class ThymeleafProperties {</p>
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page35"><span>35</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page36"><span>36</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
