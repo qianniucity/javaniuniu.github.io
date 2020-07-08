@@ -374,6 +374,402 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/mysql/0708/04"><h2 itemprop="headline" class="item__header">sql语句优化</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>关系型数据库本身比较容易成为系统瓶颈，单机存储容量、连接数、处理能力都有限。当单表的数据量达到1000W或100G以后，由于查询维度较多，即使添加从库、优化索引，做很多操作时性能仍下降严重。此时就要考虑对其进行切分了，切分的目的就在于减少数据库的负担，缩短查询时间。</p>
+
+<p>数据库分布式核心内容无非就是数据切分（Sharding），以及切分后对数据的定位、整合。数据切分就是将数据分散存储到多个数据库中，使得单一数据库中的数据量变小，通过扩充主机的数量缓解单一数据库的性能问题，从而达到提升数据库操作性能的目的。</p>
+
+<p>数据切分根据其切分类型，可以分为两种方式：垂直（纵向）切分和水平（横向）切分</p>
+
+<h3 id="1垂直纵向切分">1、垂直（纵向）切分</h3>
+
+<p>垂直切分常见有垂直分库和垂直分表两种。</p>
+
+<p>垂直分库就是根据业务耦合性，将关联度低的不同表存储在不同的数据库。做法与大系统拆分为多个小系统类似，按业务分类进行独立划分。与”微服务治理”的做法相似，每个微服务使用单独的一个数据库。如图：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514014303109-1826311184.png" alt="img" /></p>
+
+<p>垂直分表是基于数据库中的”列”进行，某个表字段较多，可以新建一张扩展表，将不经常用或字段长度较大的字段拆分出去到扩展表中。在字段很多的情况下（例如一个大表有100多个字段），通过”大表拆小表”，更便于开发与维护，也能避免跨页问题，MySQL底层是通过数据页存储的，一条记录占用空间过大会导致跨页，造成额外的性能开销。另外数据库以行为单位将数据加载到内存中，这样表中字段长度较短且访问频率较高，内存能加载更多的数据，命中率更高，减少了磁盘IO，从而提升了数据库性能。</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514014417237-1672001359.png" alt="img" /></p>
+
+<p>垂直切分的优点：</p>
+
+<ul>
+  <li>解决业务系统层面的耦合，业务清晰</li>
+  <li>与微服务的治理类似，也能对不同业务的数据进行分级管理、维护、监控、扩展等</li>
+  <li>高并发场景下，垂直切分一定程度的提升IO、数据库连接数、单机硬件资源的瓶颈</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+  <li>部分表无法join，只能通过接口聚合方式解决，提升了开发的复杂度</li>
+  <li>分布式事务处理复杂</li>
+  <li>依然存在单表数据量过大的问题（需要水平切分）</li>
+</ul>
+
+<h3 id="2水平横向切分">2、水平（横向）切分</h3>
+
+<p>当一个应用难以再细粒度的垂直切分，或切分后数据量行数巨大，存在单库读写、存储性能瓶颈，这时候就需要进行水平切分了。</p>
+
+<p>水平切分分为库内分表和分库分表，是根据表内数据内在的逻辑关系，将同一个表按不同的条件分散到多个数据库或多个表中，每个表中只包含一部分数据，从而使得单个表的数据量变小，达到分布式的效果。如图所示：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514014833061-560502066.png" alt="img" /></p>
+
+<p>库内分表只解决了单一表数据量过大的问题，但没有将表分布到不同机器的库上，因此对于减轻MySQL数据库的压力来说，帮助不是很大，大家还是竞争同一个物理机的CPU、内存、网络IO，最好通过分库分表来解决。</p>
+
+<p>水平切分的优点：</p>
+
+<ul>
+  <li>不存在单库数据量过大、高并发的性能瓶颈，提升系统稳定性和负载能力</li>
+  <li>应用端改造较小，不需要拆分业务模块</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+  <li>跨分片的事务一致性难以保证</li>
+  <li>跨库的join关联查询性能较差</li>
+  <li>数据多次扩展难度和维护量极大</li>
+</ul>
+
+<p>水平切分后同一张表会出现在多个数据库/表中，每个库/表的内容不同。几种典型的数据分片规则为：</p>
+
+<h4 id="1根据数值范围">1、根据数值范围</h4>
+
+<p>按照时间区间或ID区间来切分。例如：按日期将不同月甚至是日的数据分散到不同的库中；将userId为1~9999的记录分到第一个库，10000~20000的分到第二个库，以此类推。某种意义上，某些系统中使用的”冷热数据分离”，将一些使用较少的历史数据迁移到其他库中，业务功能上只提供热点数据的查询，也是类似的实践。</p>
+
+<p>这样的优点在于：</p>
+
+<ul>
+  <li>单表大小可控</li>
+  <li>天然便于水平扩展，后期如果想对整个分片集群扩容时，只需要添加节点即可，无需对其他分片的数据进行迁移</li>
+  <li>使用分片字段进行范围查找时，连续分片可快速定位分片进行快速查询，有效避免跨分片查询的问题。</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+  <li>热点数据成为性能瓶颈。连续分片可能存在数据热点，例如按时间字段分片，有些分片存储最近时间段内的数据，可能会被频繁的读写，而有些分片存储的历史数据，则很少被查询</li>
+</ul>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514015656387-1154395691.png" alt="img" /></p>
+
+<h4 id="2根据数值取模">2、根据数值取模</h4>
+
+<p>一般采用hash取模mod的切分方式，例如：将 Customer 表根据 cusno 字段切分到4个库中，余数为0的放到第一个库，余数为1的放到第二个库，以此类推。这样同一个用户的数据会分散到同一个库中，如果查询条件带有cusno字段，则可明确定位到相应库去查询。</p>
+
+<p>优点：</p>
+
+<ul>
+  <li>数据分片相对比较均匀，不容易出现热点和并发访问的瓶颈</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+  <li>后期分片集群扩容时，需要迁移旧的数据（使用一致性hash算法能较好的避免这个问题）</li>
+  <li>容易面临跨分片查询的复杂问题。比如上例中，如果频繁用到的查询条件中不带cusno时，将会导致无法定位数据库，从而需要同时向4个库发起查询，再在内存中合并数据，取最小集返回给应用，分库反而成为拖累。</li>
+</ul>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514015805333-1409715906.png" alt="img" /></p>
+
+<h2 id="二-分库分表带来的问题">二. 分库分表带来的问题</h2>
+
+<p>分库分表能有效的环节单机和单库带来的性能瓶颈和压力，突破网络IO、硬件资源、连接数的瓶颈，同时也带来了一些问题。下面将描述这些技术挑战以及对应的解决思路。</p>
+
+<h3 id="1事务一致性问题">1、事务一致性问题</h3>
+
+<h4 id="分布式事务">分布式事务</h4>
+
+<p>当更新内容同时分布在不同库中，不可避免会带来跨库事务问题。跨分片事务也是分布式事务，没有简单的方案，一般可使用”XA协议”和”两阶段提交”处理。</p>
+
+<p>分布式事务能最大限度保证了数据库操作的原子性。但在提交事务时需要协调多个节点，推后了提交事务的时间点，延长了事务的执行时间。导致事务在访问共享资源时发生冲突或死锁的概率增高。随着数据库节点的增多，这种趋势会越来越严重，从而成为系统在数据库层面上水平扩展的枷锁。</p>
+
+<h4 id="最终一致性">最终一致性</h4>
+
+<p>对于那些性能要求很高，但对一致性要求不高的系统，往往不苛求系统的实时一致性，只要在允许的时间段内达到最终一致性即可，可采用事务补偿的方式。与事务在执行中发生错误后立即回滚的方式不同，事务补偿是一种事后检查补救的措施，一些常见的实现方法有：对数据进行对账检查，基于日志进行对比，定期同标准数据来源进行同步等等。事务补偿还要结合业务系统来考虑。</p>
+
+<h3 id="2跨节点关联查询-join-问题">2、跨节点关联查询 join 问题</h3>
+
+<p>切分之前，系统中很多列表和详情页所需的数据可以通过sql join来完成。而切分之后，数据可能分布在不同的节点上，此时join带来的问题就比较麻烦了，考虑到性能，尽量避免使用join查询。</p>
+
+<p>解决这个问题的一些方法：</p>
+
+<h4 id="1全局表">1）全局表</h4>
+
+<p>全局表，也可看做是”数据字典表”，就是系统中所有模块都可能依赖的一些表，为了避免跨库join查询，可以将这类表在每个数据库中都保存一份。这些数据通常很少会进行修改，所以也不担心一致性的问题。</p>
+
+<h4 id="2字段冗余">2）字段冗余</h4>
+
+<p>一种典型的反范式设计，利用空间换时间，为了性能而避免join查询。例如：订单表保存userId时候，也将userName冗余保存一份，这样查询订单详情时就不需要再去查询”买家user表”了。</p>
+
+<p>但这种方法适用场景也有限，比较适用于依赖字段比较少的情况。而冗余字段的数据一致性也较难保证，就像上面订单表的例子，买家修改了userName后，是否需要在历史订单中同步更新呢？这也要结合实际业务场景进行考虑。</p>
+
+<h4 id="3数据组装">3）数据组装</h4>
+
+<p>在系统层面，分两次查询，第一次查询的结果集中找出关联数据id，然后根据id发起第二次请求得到关联数据。最后将获得到的数据进行字段拼装。</p>
+
+<h4 id="4er分片">4）ER分片</h4>
+
+<p>关系型数据库中，如果可以先确定表之间的关联关系，并将那些存在关联关系的表记录存放在同一个分片上，那么就能较好的避免跨分片join问题。在1:1或1:n的情况下，通常按照主表的ID主键切分。如下图所示：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514020222377-732069408.png" alt="img" /></p>
+
+<p>这样一来，Data Node1上面的order订单表与orderdetail订单详情表就可以通过orderId进行局部的关联查询了，Data Node2上也一样。</p>
+
+<h3 id="3跨节点分页排序函数问题">3、跨节点分页、排序、函数问题</h3>
+
+<p>跨节点多库进行查询时，会出现limit分页、order by排序等问题。分页需要按照指定字段进行排序，当排序字段就是分片字段时，通过分片规则就比较容易定位到指定的分片；当排序字段非分片字段时，就变得比较复杂了。需要先在不同的分片节点中将数据进行排序并返回，然后将不同分片返回的结果集进行汇总和再次排序，最终返回给用户。如图所示：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514020338000-1035095990.png" alt="img" /></p>
+
+<p>上图中只是取第一页的数据，对性能影响还不是很大。但是如果取得页数很大，情况则变得复杂很多，因为各分片节点中的数据可能是随机的，为了排序的准确性，需要将所有节点的前N页数据都排序好做合并，最后再进行整体的排序，这样的操作时很耗费CPU和内存资源的，所以页数越大，系统的性能也会越差。</p>
+
+<p>在使用Max、Min、Sum、Count之类的函数进行计算的时候，也需要先在每个分片上执行相应的函数，然后将各个分片的结果集进行汇总和再次计算，最终将结果返回。如图所示：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514020407207-1066476374.png" alt="img" /></p>
+
+<p>###</p>
+
+<h3 id="4全局主键避重问题">4、全局主键避重问题</h3>
+
+<p>在分库分表环境中，由于表中数据同时存在不同数据库中，主键值平时使用的自增长将无用武之地，某个分区数据库自生成的ID无法保证全局唯一。因此需要单独设计全局主键，以避免跨库主键重复问题。有一些常见的主键生成策略：</p>
+
+<h4 id="1uuid">1）UUID</h4>
+
+<p>UUID标准形式包含32个16进制数字，分为5段，形式为8-4-4-4-12的36个字符，例如：550e8400-e29b-41d4-a716-446655440000</p>
+
+<p>UUID是主键是最简单的方案，本地生成，性能高，没有网络耗时。但缺点也很明显，由于UUID非常长，会占用大量的存储空间；另外，作为主键建立索引和基于索引进行查询时都会存在性能问题，在InnoDB下，UUID的无序性会引起数据位置频繁变动，导致分页。</p>
+
+<h4 id="2结合数据库维护主键id表">2）结合数据库维护主键ID表</h4>
+
+<p>在数据库中建立 sequence 表：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE TABLE `sequence` (  
+  `id` bigint(20) unsigned NOT NULL auto_increment,  
+  `stub` char(1) NOT NULL default '',  
+  PRIMARY KEY  (`id`),  
+  UNIQUE KEY `stub` (`stub`)  
+) ENGINE=MyISAM;
+</code></pre></div></div>
+
+<p>stub字段设置为唯一索引，同一stub值在sequence表中只有一条记录，可以同时为多张表生成全局ID。sequence表的内容，如下所示：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-------------------+------+  
+| id                | stub |  
++-------------------+------+  
+| 72157623227190423 |    a |  
++-------------------+------+  
+</code></pre></div></div>
+
+<p>使用 MyISAM 存储引擎而不是 InnoDB，以获取更高的性能。MyISAM使用的是表级别的锁，对表的读写是串行的，所以不用担心在并发时两次读取同一个ID值。</p>
+
+<p>当需要全局唯一的64位ID时，执行：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>REPLACE INTO sequence (stub) VALUES ('a');  
+SELECT LAST_INSERT_ID();  
+</code></pre></div></div>
+
+<p>这两条语句是Connection级别的，select last_insert_id() 必须与 replace into 在同一数据库连接下才能得到刚刚插入的新ID。</p>
+
+<p>使用replace into代替insert into好处是避免了表行数过大，不需要另外定期清理。</p>
+
+<p>此方案较为简单，但缺点也明显：存在单点问题，强依赖DB，当DB异常时，整个系统都不可用。配置主从可以增加可用性，但当主库挂了，主从切换时，数据一致性在特殊情况下难以保证。另外性能瓶颈限制在单台MySQL的读写性能。</p>
+
+<p>flickr团队使用的一种主键生成策略，与上面的sequence表方案类似，但更好的解决了单点和性能瓶颈的问题。</p>
+
+<p>这一方案的整体思想是：建立2个以上的全局ID生成的服务器，每个服务器上只部署一个数据库，每个库有一张sequence表用于记录当前全局ID。表中ID增长的步长是库的数量，起始值依次错开，这样能将ID的生成散列到各个数据库上。如下图所示：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514020903056-1177673891.png" alt="img" /></p>
+
+<p>由两个数据库服务器生成ID，设置不同的auto_increment值。第一台sequence的起始值为1，每次步长增长2，另一台的sequence起始值为2，每次步长增长也是2。结果第一台生成的ID都是奇数（1, 3, 5, 7 …），第二台生成的ID都是偶数（2, 4, 6, 8 …）。</p>
+
+<p>这种方案将生成ID的压力均匀分布在两台机器上。同时提供了系统容错，第一台出现了错误，可以自动切换到第二台机器上获取ID。但有以下几个缺点：系统添加机器，水平扩展时较复杂；每次获取ID都要读写一次DB，DB的压力还是很大，只能靠堆机器来提升性能。</p>
+
+<p>可以基于flickr的方案继续优化，使用批量的方式降低数据库的写压力，每次获取一段区间的ID号段，用完之后再去数据库获取，可以大大减轻数据库的压力。如下图所示：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514021005283-2029806965.png" alt="img" /></p>
+
+<p>还是使用两台DB保证可用性，数据库中只存储当前的最大ID。ID生成服务每次批量拉取6个ID，先将max_id修改为5，当应用访问ID生成服务时，就不需要访问数据库，从号段缓存中依次派发0~5的ID。当这些ID发完后，再将max_id修改为11，下次就能派发6~11的ID。于是，数据库的压力降低为原来的1/6。</p>
+
+<h4 id="3snowflake分布式自增id算法">3）Snowflake分布式自增ID算法</h4>
+
+<p>Twitter的snowflake算法解决了分布式系统生成全局ID的需求，生成64位的Long型数字，组成部分：</p>
+
+<ul>
+  <li>第一位未使用</li>
+  <li>接下来41位是毫秒级时间，41位的长度可以表示69年的时间</li>
+  <li>5位datacenterId，5位workerId。10位的长度最多支持部署1024个节点</li>
+  <li>最后12位是毫秒内的计数，12位的计数顺序号支持每个节点每毫秒产生4096个ID序列</li>
+</ul>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514021100630-1326514542.png" alt="img" /></p>
+
+<p>这样的好处是：毫秒数在高位，生成的ID整体上按时间趋势递增；不依赖第三方系统，稳定性和效率较高，理论上QPS约为409.6w/s（1000*2^12），并且整个分布式系统内不会产生ID碰撞；可根据自身业务灵活分配bit位。</p>
+
+<p>不足就在于：强依赖机器时钟，如果时钟回拨，则可能导致生成ID重复。</p>
+
+<h4 id="综上">综上</h4>
+
+<p>结合数据库和snowflake的唯一ID方案，可以参考业界较为成熟的解法：<a href="https://tech.meituan.com/MT_Leaf.html">Leaf——美团点评分布式ID生成系统</a>，并考虑到了高可用、容灾、分布式下时钟等问题。</p>
+
+<h3 id="5数据迁移扩容问题">5、数据迁移、扩容问题</h3>
+
+<p>当业务高速发展，面临性能和存储的瓶颈时，才会考虑分片设计，此时就不可避免的需要考虑历史数据迁移的问题。一般做法是先读出历史数据，然后按指定的分片规则再将数据写入到各个分片节点中。此外还需要根据当前的数据量和QPS，以及业务发展的速度，进行容量规划，推算出大概需要多少分片（一般建议单个分片上的单表数据量不超过1000W）</p>
+
+<p>如果采用数值范围分片，只需要添加节点就可以进行扩容了，不需要对分片数据迁移。如果采用的是数值取模分片，则考虑后期的扩容问题就相对比较麻烦。</p>
+
+<h2 id="三-什么时候考虑切分">三. 什么时候考虑切分</h2>
+
+<p>下面讲述一下什么时候需要考虑做数据切分。</p>
+
+<h3 id="1能不切分尽量不要切分">1、能不切分尽量不要切分</h3>
+
+<p>并不是所有表都需要进行切分，主要还是看数据的增长速度。切分后会在某种程度上提升业务的复杂度，数据库除了承载数据的存储和查询外，协助业务更好的实现需求也是其重要工作之一。</p>
+
+<p>不到万不得已不用轻易使用分库分表这个大招，避免”过度设计”和”过早优化”。分库分表之前，不要为分而分，先尽力去做力所能及的事情，例如：升级硬件、升级网络、读写分离、索引优化等等。当数据量达到单表的瓶颈时候，再考虑分库分表。</p>
+
+<h3 id="2数据量过大正常运维影响业务访问">2、数据量过大，正常运维影响业务访问</h3>
+
+<p>这里说的运维，指：</p>
+
+<p>1）对数据库备份，如果单表太大，备份时需要大量的磁盘IO和网络IO。例如1T的数据，网络传输占50MB时候，需要20000秒才能传输完毕，整个过程的风险都是比较高的</p>
+
+<p>2）对一个很大的表进行DDL修改时，MySQL会锁住全表，这个时间会很长，这段时间业务不能访问此表，影响很大。如果使用pt-online-schema-change，使用过程中会创建触发器和影子表，也需要很长的时间。在此操作过程中，都算为风险时间。将数据表拆分，总量减少，有助于降低这个风险。</p>
+
+<p>3）大表会经常访问与更新，就更有可能出现锁等待。将数据切分，用空间换时间，变相降低访问压力</p>
+
+<h3 id="3随着业务发展需要对某些字段垂直拆分">3、随着业务发展，需要对某些字段垂直拆分</h3>
+
+<p>举个例子，假如项目一开始设计的用户表如下：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id                   bigint             #用户的ID
+name                 varchar            #用户的名字
+last_login_time      datetime           #最近登录时间
+personal_info        text               #私人信息
+.....                                   #其他信息字段
+</code></pre></div></div>
+
+<p>在项目初始阶段，这种设计是满足简单的业务需求的，也方便快速迭代开发。而当业务快速发展时，用户量从10w激增到10亿，用户非常的活跃，每次登录会更新 last_login_name 字段，使得 user 表被不断update，压力很大。而其他字段：id, name, personal_info 是不变的或很少更新的，此时在业务角度，就要将 last_login_time 拆分出去，新建一个 user_time 表。</p>
+
+<p>personal_info 属性是更新和查询频率较低的，并且text字段占据了太多的空间。这时候，就要对此垂直拆分出 user_ext 表了。</p>
+
+<h3 id="4数据量快速增长">4、数据量快速增长</h3>
+
+<p>随着业务的快速发展，单表中的数据量会持续增长，当性能接近瓶颈时，就需要考虑水平切分，做分库分表了。此时一定要选择合适的切分规则，提前预估好数据容量</p>
+
+<h3 id="5安全性和可用性">5、安全性和可用性</h3>
+
+<p>鸡蛋不要放在一个篮子里。在业务层面上垂直切分，将不相关的业务的数据库分隔，因为每个业务的数据量、访问量都不同，不能因为一个业务把数据库搞挂而牵连到其他业务。利用水平切分，当一个数据库出现问题时，不会影响到100%的用户，每个库只承担业务的一部分数据，这样整体的可用性就能提高。</p>
+
+<h2 id="四-案例分析">四. 案例分析</h2>
+
+<h3 id="1用户中心业务场景">1、用户中心业务场景</h3>
+
+<p>用户中心是一个非常常见的业务，主要提供用户注册、登录、查询/修改等功能，其核心表为：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User(uid, login_name, passwd, sex, age, nickname)
+
+uid为用户ID,  主键
+login_name, passwd, sex, age, nickname,  用户属性
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">任何脱离业务的架构设计都是耍流氓</code>，在进行分库分表前，需要对业务场景需求进行梳理：</p>
+
+<ul>
+  <li>用户侧：前台访问，访问量较大，需要保证高可用和高一致性。主要有两类需求：
+    <ul>
+      <li>用户登录：通过login_name/phone/email查询用户信息，1%请求属于这种类型</li>
+      <li>用户信息查询：登录之后，通过uid来查询用户信息，99%请求属这种类型</li>
+    </ul>
+  </li>
+  <li>运营侧：后台访问，支持运营需求，按照年龄、性别、登陆时间、注册时间等进行分页的查询。是内部系统，访问量较低，对可用性、一致性的要求不高。</li>
+</ul>
+
+<h3 id="2水平切分方法">2、水平切分方法</h3>
+
+<p>当数据量越来越大时，需要对数据库进行水平切分，上文描述的切分方法有”根据数值范围”和”根据数值取模”。</p>
+
+<p>“根据数值范围”：以主键uid为划分依据，按uid的范围将数据水平切分到多个数据库上。例如：user-db1存储uid范围为0~1000w的数据，user-db2存储uid范围为1000w~2000wuid数据。</p>
+
+<ul>
+  <li>优点是：扩容简单，如果容量不够，只要增加新db即可。</li>
+  <li>不足是：请求量不均匀，一般新注册的用户活跃度会比较高，所以新的user-db2会比user-db1负载高，导致服务器利用率不平衡</li>
+</ul>
+
+<p>“根据数值取模”：也是以主键uid为划分依据，按uid取模的值将数据水平切分到多个数据库上。例如：user-db1存储uid取模得1的数据，user-db2存储uid取模得0的uid数据。</p>
+
+<ul>
+  <li>优点是：数据量和请求量分布均均匀</li>
+  <li>不足是：扩容麻烦，当容量不够时，新增加db，需要rehash。需要考虑对数据进行平滑的迁移。</li>
+</ul>
+
+<h3 id="3非uid的查询方法">3、非uid的查询方法</h3>
+
+<p>水平切分后，对于按uid查询的需求能很好的满足，可以直接路由到具体数据库。而按非uid的查询，例如login_name，就不知道具体该访问哪个库了，此时需要遍历所有库，性能会降低很多。</p>
+
+<p>对于用户侧，可以采用”建立非uid属性到uid的映射关系”的方案；对于运营侧，可以采用”前台与后台分离”的方案。</p>
+
+<h4 id="31建立非uid属性到uid的映射关系">3.1、建立非uid属性到uid的映射关系</h4>
+
+<p>1）映射关系</p>
+
+<p>例如：login_name不能直接定位到数据库，可以建立<code class="language-plaintext highlighter-rouge">login_name→uid的映射关系</code>，用索引表或缓存来存储。当访问login_name时，先通过映射表查询出login_name对应的uid，再通过uid定位到具体的库。</p>
+
+<p>映射表只有两列，可以承载很多数据，当数据量过大时，也可以对映射表再做水平切分。这类kv格式的索引结构，可以很好的使用cache来优化查询性能，而且映射关系不会频繁变更，缓存命中率会很高。</p>
+
+<p>2）基因法</p>
+
+<p>分库基因：假如通过uid分库，分为8个库，采用uid%8的方式进行路由，此时是由uid的最后3bit来决定这行User数据具体落到哪个库上，那么这3bit可以看为分库基因。</p>
+
+<p>上面的映射关系的方法需要额外存储映射表，按非uid字段查询时，还需要多一次数据库或cache的访问。如果想要消除多余的存储和查询，可以通过f函数取login_name的基因作为uid的分库基因。生成uid时，参考上文所述的分布式唯一ID生成方案，再加上最后3位bit值=f(login_name)。当查询login_name时，只需计算f(login_name)%8的值，就可以定位到具体的库。不过这样需要提前做好容量规划，预估未来几年的数据量需要分多少库，要预留一定bit的分库基因。</p>
+
+<p><img src="/assets/images/mianshiti/0708/1278254-20180514215400436-1634253632.png" alt="img" /></p>
+
+<h4 id="32前台与后台分离">3.2、前台与后台分离</h4>
+
+<p>对于用户侧，主要需求是以单行查询为主，需要建立login_name/phone/email到uid的映射关系，可以解决这些字段的查询问题。</p>
+
+<p>而对于运营侧，很多批量分页且条件多样的查询，这类查询计算量大，返回数据量大，对数据库的性能消耗较高。此时，如果和用户侧公用同一批服务或数据库，可能因为后台的少量请求，占用大量数据库资源，而导致用户侧访问性能降低或超时。</p>
+
+<p>这类业务最好采用”前台与后台分离”的方案，运营侧后台业务抽取独立的service和db，解决和前台业务系统的耦合。由于运营侧对可用性、一致性的要求不高，可以不访问实时库，而是通过binlog异步同步数据到运营库进行访问。在数据量很大的情况下，还可以使用ES搜索引擎或Hive来满足后台复杂的查询方式。</p>
+
+<h2 id="五-支持分库分表中间件">五. 支持分库分表中间件</h2>
+
+<p>站在巨人的肩膀上能省力很多，目前分库分表已经有一些较为成熟的开源解决方案：</p>
+
+<ul>
+  <li><a href="https://github.com/shardingjdbc">sharding-jdbc（当当）</a></li>
+  <li><a href="https://github.com/baihui212/tsharding">TSharding（蘑菇街）</a></li>
+  <li><a href="https://github.com/Qihoo360/Atlas">Atlas（奇虎360）</a></li>
+  <li><a href="https://github.com/alibaba/cobar">Cobar（阿里巴巴）</a></li>
+  <li><a href="http://www.mycat.io/">MyCAT（基于Cobar）</a></li>
+  <li><a href="https://github.com/58code/Oceanus">Oceanus（58同城）</a></li>
+  <li><a href="https://github.com/vitessio/vitess">Vitess（谷歌）</a></li>
+</ul>
+
+<h2 id="六-参考">六. 参考</h2>
+
+<p><a href="https://zhuanlan.zhihu.com/p/27871998">数据库分布式架构扫盲——分库分表（及银行核心系统适用性思考）</a></p>
+
+<p><a href="https://www.cnblogs.com/jshen/p/7682502.html">分库分表的思想</a></p>
+
+<p><a href="http://www.infoq.com/cn/articles/key-steps-and-likely-problems-of-horizontal-split-table">水平分库分表的关键步骤以及可能遇到的问题</a></p>
+
+<p><a href="http://www.ywnds.com/?p=7239">从原则、方案、策略及难点阐述分库分表</a></p>
+
+<p><a href="https://tech.meituan.com/MT_Leaf.html">Leaf——美团点评分布式ID生成系统</a></p>
+
+<p><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651960212&amp;idx=1&amp;sn=ab4c52ab0309f7380f7e0207fa357128&amp;pass_ticket=G8v3RrpK9Is7NJZH0fOShUfY8lp5oz9un8K5L24LeGGVtiBTXkBMc9UKkTMdQeDS">数据库水平切分架构实践-【架构师之路】公众号</a></p>
+</div><p><a href="/mianshi/mysql/0708/04">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mysql-2020-07-08-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/mysql/0708/03"><h2 itemprop="headline" class="item__header">sql语句优化</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="性能不理想的系统">性能不理想的系统：</h4>
 
@@ -1354,6 +1750,116 @@ MySQL没有这么笨，可以使用force index 强制指定索引。在原来的
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mq/kafaka/0708/01"><h2 itemprop="headline" class="item__header">为什么Kafka速度那么快</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>Kafka的消息是保存或缓存在磁盘上的，一般认为在磁盘上读写数据是会降低性能的，因为寻址会比较消耗时间，但是实际上，Kafka的特性之一就是高吞吐率。</p>
+
+<p>即使是普通的服务器，Kafka也可以轻松支持每秒百万级的写入请求，超过了大部分的消息中间件，这种特性也使得Kafka在日志处理等海量数据场景广泛应用。</p>
+
+<p>针对Kafka的基准测试可以参考，<a href="http://ifeve.com/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines/">Apache Kafka基准测试：每秒写入2百万（在三台廉价机器上）</a></p>
+
+<p>下面从数据写入和读取两方面分析，为什么为什么Kafka速度这么快。</p>
+
+<h3 id="写入数据">写入数据</h3>
+
+<p>Kafka会把收到的消息都写入到硬盘中，它绝对不会丢失数据。为了优化写入速度Kafka采用了两个技术， 顺序写入 和 MMFile 。</p>
+
+<h4 id="顺序写入">顺序写入</h4>
+
+<p>磁盘读写的快慢取决于你怎么使用它，也就是顺序读写或者随机读写。在顺序读写的情况下，某些优化场景磁盘的读写速度可以和内存持平（注：此处有疑问， 不推敲细节，参考 http://searene.me/2017/07/09/Why-is-Kafka-so-fast/
+）。
+因为硬盘是机械结构，每次读写都会寻址-&gt;写入，其中寻址是一个“机械动作”，它是最耗时的。所以硬盘最讨厌随机I/O，最喜欢顺序I/O。为了提高读写硬盘的速度，Kafka就是使用顺序I/O。</p>
+
+<p>而且Linux对于磁盘的读写优化也比较多，包括read-ahead和write-behind，磁盘缓存等。如果在内存做这些操作的时候，一个是JAVA对象的内存开销很大，另一个是随着堆内存数据的增多，JAVA的GC时间会变得很长，使用磁盘操作有以下几个好处：</p>
+
+<ul>
+  <li>磁盘顺序读写速度超过内存随机读写</li>
+  <li>JVM的GC效率低，内存占用大。使用磁盘可以避免这一问题</li>
+  <li>系统冷启动后，磁盘缓存依然可用</li>
+</ul>
+
+<p><img src="/assets/images/mianshiti/0708/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xlcmVhZA==,size_16,color_FFFFFF,t_70.png" alt="在这里插入图片描述" /></p>
+
+<p>上图就展示了Kafka是如何写入数据的， 每一个Partition其实都是一个文件 ，收到消息后Kafka会把数据插入到文件末尾（虚框部分）。</p>
+
+<p>这种方法有一个缺陷—— 没有办法删除数据 ，所以Kafka是不会删除数据的，它会把所有的数据都保留下来，每个消费者（Consumer）对每个Topic都有一个offset用来表示 读取到了第几条数据 。</p>
+
+<p><img src="/assets/images/mianshiti/0708/20190407224620236.png" alt="在这里插入图片描述" /></p>
+
+<p>两个消费者，Consumer1有两个offset分别对应Partition0、Partition1（假设每一个Topic一个Partition）；Consumer2有一个offset对应Partition2。这个offset是由客户端SDK负责保存的，Kafka的Broker完全无视这个东西的存在；一般情况下SDK会把它保存到zookeeper里面。(所以需要给Consumer提供zookeeper的地址)。</p>
+
+<p>如果不删除硬盘肯定会被撑满，所以Kakfa提供了两种策略来删除数据。一是基于时间，二是基于partition文件大小。具体配置可以参看它的配置文档。</p>
+
+<h4 id="memory-mapped-files">Memory Mapped Files</h4>
+
+<p>即便是顺序写入硬盘，硬盘的访问速度还是不可能追上内存。所以Kafka的数据并 不是实时的写入硬盘 ，它充分利用了现代操作系统 分页存储 来利用内存提高I/O效率。</p>
+
+<p>Memory Mapped Files(后面简称mmap)也被翻译成 内存映射文件 ，在64位操作系统中一般可以表示20G的数据文件，它的工作原理是直接利用操作系统的Page来实现文件到物理内存的直接映射。完成映射之后你对物理内存的操作会被同步到硬盘上（操作系统在适当的时候）。</p>
+
+<p>通过mmap，进程像读写硬盘一样读写内存（当然是虚拟机内存），也不必关心内存的大小有虚拟内存为我们兜底。</p>
+
+<p>使用这种方式可以获取很大的I/O提升， 省去了用户空间到内核空间 复制的开销（调用文件的read会把数据先放到内核空间的内存中，然后再复制到用户空间的内存中。）也有一个很明显的缺陷——不可靠， 写到mmap中的数据并没有被真正的写到硬盘，操作系统会在程序主动调用flush的时候才把数据真正的写到硬盘。 Kafka提供了一个参数——producer.type来控制是不是主动flush，如果Kafka写入到mmap之后就立即flush然后再返回Producer叫 同步 (sync)；写入mmap之后立即返回Producer不调用flush叫 异步 (async)。</p>
+
+<h3 id="读取数据">读取数据</h3>
+
+<p>Kafka在读取磁盘时做了哪些优化？</p>
+
+<h4 id="基于sendfile实现zero-copy">基于sendfile实现Zero Copy</h4>
+
+<p>传统模式下，当需要对一个文件进行传输的时候，其具体流程细节如下：</p>
+
+<ol>
+  <li>调用read函数，文件数据被copy到内核缓冲区</li>
+  <li>read函数返回，文件数据从内核缓冲区copy到用户缓冲区</li>
+  <li>write函数调用，将文件数据从用户缓冲区copy到内核与socket相关的缓冲区。</li>
+  <li>数据从socket缓冲区copy到相关协议引擎。</li>
+</ol>
+
+<p>以上细节是传统read/write方式进行网络文件传输的方式，我们可以看到，在这个过程当中，文件数据实际上是经过了四次copy操作：</p>
+
+<blockquote>
+  <p>硬盘—&gt;内核buf—&gt;用户buf—&gt;socket相关缓冲区—&gt;协议引擎</p>
+</blockquote>
+
+<p>而sendfile系统调用则提供了一种减少以上多次copy，提升文件传输性能的方法。
+在内核版本2.1中，引入了sendfile系统调用，以简化网络上和两个本地文件之间的数据传输。 sendfile的引入不仅减少了数据复制，还减少了上下文切换。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sendfile(socket, file, len);
+</code></pre></div></div>
+
+<p>运行流程如下：</p>
+
+<ol>
+  <li>sendfile系统调用，文件数据被copy至内核缓冲区</li>
+  <li>再从内核缓冲区copy至内核中socket相关的缓冲区</li>
+  <li>最后再socket相关的缓冲区copy到协议引擎</li>
+</ol>
+
+<p>相较传统read/write方式，2.1版本内核引进的sendfile已经减少了内核缓冲区到user缓冲区，再由user缓冲区到socket相关缓冲区的文件copy，而在内核版本2.4之后，文件描述符结果被改变，sendfile实现了更简单的方式，再次减少了一次copy操作。</p>
+
+<p>在apache，nginx，lighttpd等web服务器当中，都有一项sendfile相关的配置，使用sendfile可以大幅提升文件传输性能。</p>
+
+<p>Kafka把所有的消息都存放在一个一个的文件中，当消费者需要数据的时候Kafka直接把文件发送给消费者，配合mmap作为文件读写方式，直接把它传给sendfile。</p>
+
+<h4 id="批量压缩">批量压缩</h4>
+
+<p>在很多情况下，系统的瓶颈不是CPU或磁盘，而是网络IO，对于需要在广域网上的数据中心之间发送消息的数据流水线尤其如此。进行数据压缩会消耗少量的CPU资源,不过对于kafka而言,网络IO更应该需要考虑。</p>
+
+<ul>
+  <li>如果每个消息都压缩，但是压缩率相对很低，所以Kafka使用了批量压缩，即将多个消息一起压缩而不是单个消息压缩</li>
+  <li>Kafka允许使用递归的消息集合，批量的消息可以通过压缩的形式传输并且在日志中也可以保持压缩格式，直到被消费者解压缩</li>
+  <li>Kafka支持多种压缩协议，包括Gzip和Snappy压缩协议</li>
+</ul>
+
+<h3 id="总结">总结</h3>
+
+<p>Kafka速度的秘诀在于，它把所有的消息都变成一个批量的文件，并且进行合理的批量压缩，减少网络IO损耗，通过mmap提高I/O速度，写入数据的时候由于单个Partion是末尾添加所以速度最优；读取数据的时候配合sendfile直接暴力输出。</p>
+</div><p><a href="/mq/kafaka/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="kafka-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/JVM/0708/01"><h2 itemprop="headline" class="item__header">系统运行缓慢，CPU 100%，以及Full GC次数过多问题的排查思路</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="前言">前言</h1>
 
@@ -1361,7 +1867,7 @@ MySQL没有这么笨，可以使用force index 强制指定索引。在原来的
 
 <p>本文主要针对系统运行缓慢这一问题，提供该问题的排查思路，从而定位出问题的代码点，进而提供解决该问题的思路。</p>
 
-<p>对于线上系统突然产生的运行缓慢问题，如果该问题导致线上系统不可用，那么首先需要做的就是，导出jstack和内存信息，然后重启系统，尽快保证系统的可用性。这种情况可能的原因主要有两种：</p>
+<p><strong>对于线上系统突然产生的运行缓慢问题，如果该问题导致线上系统不可用，那么首先需要做的就是，导出jstack和内存信息，然后重启系统，尽快保证系统的可用性。这种情况可能的原因主要有两种：</strong></p>
 
 <ul>
   <li>代码中某个位置读取数据量较大，导致系统内存耗尽，从而导致Full GC次数过多，系统缓慢；</li>
@@ -1376,7 +1882,7 @@ MySQL没有这么笨，可以使用force index 强制指定索引。在原来的
   <li>由于锁使用不当，导致多个线程进入死锁状态，从而导致系统整体比较缓慢。</li>
 </ul>
 
-<p>对于这三种情况，通过查看CPU和系统内存情况是无法查看出具体问题的，因为它们相对来说都是具有一定阻塞性操作，CPU和系统内存使用情况都不高，但是功能却很慢。下面我们就通过查看系统日志来一步一步甄别上述几种问题。</p>
+<p><strong>对于这三种情况，通过查看CPU和系统内存情况是无法查看出具体问题的，因为它们相对来说都是具有一定阻塞性操作，CPU和系统内存使用情况都不高，但是功能却很慢</strong>。下面我们就通过查看系统日志来一步一步甄别上述几种问题。</p>
 
 <h1 id="full-gc次数过多">Full GC次数过多</h1>
 
@@ -1576,975 +2082,454 @@ a
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/springboot/0707/01"><h2 itemprop="headline" class="item__header">各种 Spring-Boot-Starters系列 介绍</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="spring-boot-application-starters">Spring Boot application starters</h1>
+          <header><a href="/javabase/0708/01"><h2 itemprop="headline" class="item__header">http协议和https协议的区别</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息，HTTP协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此，HTTP协议不适合传输一些敏感信息，比如：信用卡号、密码等支付信息。</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>备注</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>spring-boot-starter-thymeleaf</td>
-      <td>使MVC Web applications 支持Thymeleaf</td>
-      <td>Thymeleaf是一个JAVA库，一个XML/XHTML/HTML5的可扩展的模板引擎，同类事物：Jsp</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-couchbase</td>
-      <td>使用Couchbase 文件存储数据库、Spring Data Couchbase</td>
-      <td>Spring Data是一个用于简化数据库访问，并支持云服务的开源框架</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-artemis</td>
-      <td>为JMS messaging使用Apache Artemis</td>
-      <td>JMS是Java消息服务；HornetQ代码库捐献给 Apache ActiveMQ 社区，它现在成为ActiveMQ旗下的一个子项目，名为 “Artemis”</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-web-services</td>
-      <td>使用Spring Web Services</td>
-      <td>Spring Web Services是基于Spring框架的Web服务框架，主要侧重于基于文档驱动的Web服务，提供SOAP服务开发，允许通过多种方式创建 Web 服务。</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-mail</td>
-      <td>使用Java Mail、Spring email发送支持</td>
-      <td>Java Mail、Spring email为邮件发送工具</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-redis</td>
-      <td>通过Spring Data Redis 、Jedis client使用Redis键值存储数据库</td>
-      <td>Jedis 是 Redis 官方首选的 Java 客户端开发包</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-web</td>
-      <td>构建Web，包含RESTful风格框架SpringMVC和默认的嵌入式容器Tomcat</td>
-      <td>RESTful是一种软件架构风格，设计风格而不是标准，只是提供了一组设计原则和约束条件</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-activemq</td>
-      <td>为JMS使用Apache ActiveMQ</td>
-      <td>ActiveMQ 是Apache出品，最流行的，能力强劲的开源消息总线</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-elasticsearch</td>
-      <td>使用Elasticsearch、analytics engine、Spring Data Elasticsearch</td>
-      <td>ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-integration</td>
-      <td>使用Spring Integration</td>
-      <td>Spring Integration是Spring框架创建的一个API，面向企业应用集成（EAI）</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-test</td>
-      <td>测试 Spring Boot applications包含JUnit、 Hamcrest、Mockito</td>
-      <td>JUnit、 Hamcrest、Mockito为测试框架</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jdbc</td>
-      <td>通过 Tomcat JDBC 连接池使用JDBC</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-mobile</td>
-      <td>通过Spring Mobile构建Web应用</td>
-      <td>Spring Mobile 是 Spring MVC 的扩展,用来简化手机上的Web应用开发</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-validation</td>
-      <td>通过Hibernate Validator使用 Java Bean Validation</td>
-      <td>Bean Validation 是一个数据验证的规范；Hibernate Validator是一个数据验证框架</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-hateoas</td>
-      <td>使用Spring MVC、Spring HATEOAS构建 hypermedia-based RESTful Web 应用</td>
-      <td>hypermedia-based似乎是专业术语，博主表示不会翻译；Spring HATEOAS 是一个用于支持实现超文本驱动的 REST Web 服务的开发库</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jersey</td>
-      <td>通过 JAX-RS、Jersey构建 RESTful web applications；spring-boot-starter-web的另一替代方案</td>
-      <td>JAX-RS是JAVA EE6 引入的一个新技术；Jersey不仅仅是一个JAX-RS的参考实现，Jersey提供自己的API，其API继承自JAX-RS，提供更多的特性和功能以进一步简化RESTful service和客户端的开发</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-neo4j</td>
-      <td>使用Neo4j图形数据库、Spring Data Neo4j</td>
-      <td>Neo4j是一个高性能的,NOSQL图形数据库，它将结构化数据存储在网络上而不是表中</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-websocket</td>
-      <td>使用Spring WebSocket构建 WebSocket 应用</td>
-      <td>Websocket是一个持久化的协议，相对于HTTP这种非持久的协议来说</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-aop</td>
-      <td>通过Spring AOP、AspectJ面向切面编程</td>
-      <td>AspectJ是一个面向切面的框架，它扩展了Java语言</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-amqp</td>
-      <td>使用Spring AMQP、Rabbit MQ</td>
-      <td>Spring AMQP 是基于 Spring 框架的 AMQP 消息解决方案,提供模板化的发送和接收消息的抽象层,提供基于消息驱动的 POJO；RabbitMQ是一个在AMQP基础上完整的，可复用的企业消息系统</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-cassandra</td>
-      <td>使用Cassandra分布式数据库、Spring Data Cassandra</td>
-      <td>Apache Cassandra是一套开源分布式NoSQL数据库系统</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-social-facebook</td>
-      <td>使用 Spring Social Facebook</td>
-      <td>Facebook提供用户使用第三方社交网络的账号API，同类事物：QQ第三方登录接口</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jta-atomikos</td>
-      <td>为 JTA 使用 Atomikos</td>
-      <td>JTA，即Java Transaction API，JTA允许应用程序执行分布式事务处理；Atomikos 是一个为Java平台提供增值服务的并且开源类事务管理</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-security</td>
-      <td>使用 Spring Security</td>
-      <td>Spring Security是一个能够为基于Spring的企业应用系统提供声明式的安全访问控制解决方案的安全框架</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-mustache</td>
-      <td>使MVC Web applications 支持Mustache</td>
-      <td>Mustache是基于JavaScript实现的模版引擎，类似于jQuery Template，但是这个模版更加的轻量级，语法更加的简单易用，很容易上手</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-jpa</td>
-      <td>通过 Hibernate 使用 Spring Data JPA （Spring-data-jpa依赖于Hibernate）</td>
-      <td>JPA全称Java Persistence API.JPA通过JDK 5.0注解或XML描述对象－关系表的映射关系，并将运行期的实体对象持久化到数据库中</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter</td>
-      <td>Core starter,包括 自动配置支持、 logging and YAML</td>
-      <td>logging是指的Starter的专有框架；YAML是“另一种标记语言”的外语缩写，它参考了其他多种语言，包括：XML、C语言、Python、Perl以及电子邮件格式RFC2822</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-groovy-templates</td>
-      <td>使MVC Web applications 支持Groovy Templates</td>
-      <td>Groovy Templates是模视图模板，同类事物：Jsp</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-freemarker</td>
-      <td>使MVC Web applications 支持 FreeMarker</td>
-      <td>FreeMarker是模视图模板，同类事物：Jsp</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-batch</td>
-      <td>使用Spring Batch</td>
-      <td>Spring Batch是一个轻量级的,完全面向Spring的批处理框架,可以应用于企业级大量的数据处理系统</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-social-linkedin</td>
-      <td>使用Spring Social LinkedIn</td>
-      <td>LinkedIn提供用户使用第三方社交网络的账号API，同类事物：QQ第三方登录接口</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-cache</td>
-      <td>使用 Spring caching 支持</td>
-      <td>Spring caching是Spring的提供的缓存框架</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-solr</td>
-      <td>通过 Spring Data Solr 使用 Apache Solr</td>
-      <td>Apache Solr 是一个开源的搜索服务器。Solr 使用 Java 语言开发，主要基于 HTTP 和 Apache Lucene 实现</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-mongodb</td>
-      <td>使用 MongoDB 文件存储数据库、Spring Data MongoDB</td>
-      <td>Spring Data是一个用于简化数据库访问，并支持云服务的开源框架</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jooq</td>
-      <td>使用JOOQ链接SQL数据库；spring-boot-starter-data-jpa、spring-boot-starter-jdbc的另一替代方案</td>
-      <td>jOOQ（Java Object Oriented Querying，即面向Java对象查询）是一个高效地合并了复杂SQL、类型安全、源码生成、ActiveRecord、存储过程以及高级数据类型的Java API的类库。</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jta-narayana</td>
-      <td>Spring Boot Narayana JTA Starter</td>
-      <td>似乎和jboss.narayana.jta有关</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-cloud-connectors</td>
-      <td>用连接简化的 Spring Cloud 连接器进行云服务就像Cloud Foundry、Heroku那样</td>
-      <td>Cloud Foundry是VMware推出的业界第一个开源PaaS云平台；Heroku是一个支持多种编程语言的云平台即服务</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jta-bitronix</td>
-      <td>为JTA transactions 使用 Bitronix</td>
-      <td>Bitronix Transaction Manager (BTM) 是一个简单但完整实现了 JTA 1.1 API 的类库，完全支持 XA 事务管理器，提供 JTA API 所需的所有服务，并让代码保持简洁</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-social-twitter</td>
-      <td>使用 Spring Social Twitter</td>
-      <td>Twitter提供用户使用第三方社交网络的账号API，同类事物：QQ第三方登录接口</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-data-rest</td>
-      <td>使用Spring Data REST 以 REST 方式暴露 Spring Data repositories</td>
-      <td>博主也不是很明白。原文：exposing Spring Data repositories over REST using Spring Data REST</td>
-    </tr>
-  </tbody>
-</table>
+<p>　　为了解决HTTP协议的这一缺陷，需要使用另一种协议：安全套接字层超文本传输协议HTTPS，为了数据传输的安全，HTTPS在HTTP的基础上加入了SSL协议，SSL依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密。</p>
 
-<h1 id="spring-boot-production-starters">Spring Boot production starters</h1>
+<p><strong>一、HTTP和HTTPS的基本概念</strong></p>
 
-<p>下列 starters 可用于添加<a href="http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready"> production ready</a> 功能</p>
+<p>　　HTTP：是互联网上应用最为广泛的一种网络协议，是一个客户端和服务器端请求和应答的标准（TCP），用于从WWW服务器传输超文本到本地浏览器的传输协议，它可以使浏览器更加高效，使网络传输减少。</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>备注</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>spring-boot-starter-actuator</td>
-      <td>使用Spring Boot Actuator 的 production-ready 功能来帮助你监视和管理应用</td>
-      <td>production-ready 目前博主不知道该如何翻译</td>
-    </tr>
-  </tbody>
-</table>
+<p>　　HTTPS：是以安全为目标的HTTP通道，简单讲是HTTP的安全版，即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</p>
 
-<h1 id="spring-boot-technical-starters">Spring Boot technical starters</h1>
+<p>　　HTTPS协议的主要作用可以分为两种：一种是建立一个信息安全通道，来保证数据传输的安全；另一种就是确认网站的真实性。</p>
 
-<p>最后, Spring Boot 还包括一些 starters ，如果你想剔除或替换某些专门的功能，你可以使用这些 starters :</p>
+<p><strong>二、HTTP与HTTPS有什么区别？</strong></p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>备注</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>spring-boot-starter-undertow</td>
-      <td>使用 Undertow 作为嵌入式服务容器；spring-boot-starter-tomcat的另一替代方案</td>
-      <td>Undertow是JBoss开源组织旗下一款Web服务器的名称</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-jetty</td>
-      <td>使用 Jetty 作为嵌入式服务容器；spring-boot-starter-tomcat的另一替代方案</td>
-      <td>Jetty 是开源 Java 应用服务器，有篇英语新闻译文称“Webtide —— Jetty背后的公司”</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-logging</td>
-      <td>为 logging 使用Logback.默认 logging starter</td>
-      <td>Logback是由log4j创始人设计的又一个开源日志组件</td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-tomcat</td>
-      <td>使用 Tomcat 作为嵌入式服务容器；作为默认嵌入式服务容器被spring-boot-starter-web使用</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>spring-boot-starter-log4j2</td>
-      <td>使用Log4j2记录日志；spring-boot-starter-logging的另一替代方案</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<p>　　HTTP协议传输的数据都是未加密的，也就是明文的，因此使用HTTP协议传输隐私信息非常不安全，为了保证这些隐私数据能加密传输，于是网景公司设计了SSL（Secure Sockets Layer）协议用于对HTTP协议传输的数据进行加密，从而就诞生了HTTPS。简单来说，HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全。</p>
 
-<p>剔除logging使用log4j栗子：</p>
+<p>　　HTTPS和HTTP的区别主要如下：</p>
 
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nt">&lt;dependencies&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;exclusions&gt;</span>
-            <span class="c">&lt;!-- 剔除logging --&gt;</span>
-                <span class="nt">&lt;exclusion&gt;</span>
-                    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-                    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-logging<span class="nt">&lt;/artifactId&gt;</span>
-                <span class="nt">&lt;/exclusion&gt;</span>
-            <span class="nt">&lt;/exclusions&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="c">&lt;!-- 添加Log4j --&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-log4j2<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-<span class="nt">&lt;/dependencies&gt;</span>
-</code></pre></div></div>
-</div><p><a href="/mianshi/springboot/0707/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<p>　　1、https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。</p>
+
+<p>　　2、http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。</p>
+
+<p>　　3、http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。</p>
+
+<p>　　4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。</p>
+
+<p><strong>三、HTTPS的工作原理</strong></p>
+
+<p>　　我们都知道HTTPS能够加密信息，以免敏感信息被第三方获取，所以很多银行网站或电子邮箱等等安全级别较高的服务都会采用HTTPS协议。</p>
+
+<p><img src="/assets/images/mianshiti/0708/1-150H120343I41.jpg" alt="HTTP与HTTPS的区别-马海祥博客" /></p>
+
+<p>　客户端在使用HTTPS方式与Web服务器通信时有以下几个步骤，如图所示。</p>
+
+<p>　　（1）客户使用https的URL访问Web服务器，要求与Web服务器建立SSL连接。</p>
+
+<p>　　（2）Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。</p>
+
+<p>　　（3）客户端的浏览器与Web服务器开始协商SSL连接的安全等级，也就是信息加密的等级。</p>
+
+<p>　　（4）客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。</p>
+
+<p>　　（5）Web服务器利用自己的私钥解密出会话密钥。</p>
+
+<p>　　（6）Web服务器利用会话密钥加密与客户端之间的通信。</p>
+
+<p><img src="/assets/images/mianshiti/0708/2012071410212142.gif" alt="img" /></p>
+
+<p><strong>四、HTTPS的优点</strong></p>
+
+<p>　　尽管HTTPS并非绝对安全，掌握根证书的机构、掌握加密算法的组织同样可以进行中间人形式的攻击，但HTTPS仍是现行架构下最安全的解决方案，主要有以下几个好处：</p>
+
+<p>　　（1）使用HTTPS协议可认证用户和服务器，确保数据发送到正确的客户机和服务器；</p>
+
+<p>　　（2）HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全，可防止数据在传输过程中不被窃取、改变，确保数据的完整性。</p>
+
+<p>　　（3）HTTPS是现行架构下最安全的解决方案，虽然不是绝对安全，但它大幅增加了中间人攻击的成本。</p>
+
+<p>　　（4）谷歌曾在2014年8月份调整搜索引擎算法，并称“比起同等HTTP网站，采用HTTPS加密的网站在搜索结果中的排名将会更高”。</p>
+
+<p><strong>五、HTTPS的缺点</strong></p>
+
+<p>　　虽然说HTTPS有很大的优势，但其相对来说，还是存在不足之处的：</p>
+
+<p>　　（1）HTTPS协议握手阶段比较费时，会使页面的加载时间延长近50%，增加10%到20%的耗电；</p>
+
+<p>　　（2）HTTPS连接缓存不如HTTP高效，会增加数据开销和功耗，甚至已有的安全措施也会因此而受到影响；</p>
+
+<p>　　（3）SSL证书需要钱，功能越强大的证书费用越高，个人网站、小网站没有必要一般不会用。</p>
+
+<p>　  （4）SSL证书通常需要绑定IP，不能在同一IP上绑定多个域名，IPv4资源不可能支撑这个消耗。</p>
+
+<p>　　（5）HTTPS协议的加密范围也比较有限，在黑客攻击、拒绝服务攻击、服务器劫持等方面几乎起不到什么作用。最关键的，SSL证书的信用链体系并不安全，特别是在某些国家可以控制CA根证书的情况下，中间人攻击一样可行。</p>
+
+<p><strong>六、http切换到HTTPS</strong></p>
+
+<p>　　如果需要将网站从http切换到https到底该如何实现呢？</p>
+
+<p>这里需要将页面中所有的链接，例如js，css，图片等等链接都由http改为https。例如：http://www.baidu.com改为https://www.baidu.com</p>
+
+<p>　　BTW，这里虽然将http切换为了https，还是建议保留http。所以我们在切换的时候可以做http和https的兼容，具体实现方式是，去掉页面链接中的http头部，这样可以自动匹配http头和https头。例如：将http://www.baidu.com改为//www.baidu.com。然后当用户从http的入口进入访问页面时，页面就是http，如果用户是从https的入口进入访问页面，页面即使https的。</p>
+</div><p><a href="/javabase/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="javabase-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/spring/0707/11"><h2 itemprop="headline" class="item__header">Spring中的后置处理器BeanPostProcessor讲解</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>BeanPostProcessor接口作用：</p>
+          <header><a href="/mianshi/map/0708/01"><h2 itemprop="headline" class="item__header">HashMap实现原理及源码分析</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>哈希表（hash table）也叫散列表，是一种非常重要的数据结构，应用场景及其丰富，许多缓存技术（比如memcached）的核心其实就是在内存中维护一张大的哈希表，而HashMap的实现原理也常常出现在各类的面试题中，重要性可见一斑。本文会对java集合框架中的对应实现HashMap的实现原理进行讲解，然后会对JDK7的HashMap源码进行分析。</p>
 
-<p>如果我们想在Spring容器中完成bean实例化、配置以及其他初始化方法前后要添加一些自己逻辑处理。我们需要定义一个或多个BeanPostProcessor接口实现类，然后注册到Spring IoC容器中。</p>
+<h1 id="一什么是哈希表">一、什么是哈希表</h1>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test.spring</span><span class="o">;</span>
+<p>　　在讨论哈希表之前，我们先大概了解下其他数据结构在新增，查找等基础操作执行性能</p>
 
-<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
-<span class="cm">/**
- * bean后置处理器
- * @author zss
- *
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostProcessor</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span> <span class="o">{</span>
+<p>　　<strong>数组</strong>：采用一段连续的存储单元来存储数据。对于指定下标的查找，时间复杂度为O(1)；通过给定值进行查找，需要遍历数组，逐一比对给定关键字和数组元素，时间复杂度为O(n)，当然，对于有序数组，则可采用二分查找，插值查找，斐波那契查找等方式，可将查找复杂度提高为O(logn)；对于一般的插入删除操作，涉及到数组元素的移动，其平均复杂度也为O(n)</p>
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="s">"narCodeService"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">beanName</span><span class="o">))</span> <span class="o">{</span><span class="c1">//过滤掉bean实例ID为narCodeService</span>
-            <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
+<p>　　<strong>线性链表</strong>：对于链表的新增，删除等操作（在找到指定操作位置后），仅需处理结点间的引用即可，时间复杂度为O(1)，而查找操作需要遍历链表逐一进行比对，复杂度为O(n)</p>
+
+<p>　　<strong>二叉树</strong>：对一棵相对平衡的有序二叉树，对其进行插入，查找，删除等操作，平均复杂度均为O(logn)。</p>
+
+<p>　　<strong>哈希表</strong>：相比上述几种数据结构，在哈希表中进行添加，删除，查找等操作，性能十分之高，不考虑哈希冲突的情况下，仅需一次定位即可完成，时间复杂度为O(1)，接下来我们就来看看哈希表是如何实现达到惊艳的常数阶O(1)的。</p>
+
+<p>　　我们知道，数据结构的物理存储结构只有两种：<strong>顺序存储结构</strong>和<strong>链式存储结构</strong>（像栈，队列，树，图等是从逻辑结构去抽象的，映射到内存中，也这两种物理组织形式），而在上面我们提到过，在数组中根据下标查找某个元素，一次定位就可以达到，哈希表利用了这种特性，<strong>哈希表的主干就是数组</strong>。</p>
+
+<p>　　比如我们要新增或查找某个元素，我们通过把当前元素的关键字 通过某个函数映射到数组中的某个位置，通过数组下标一次定位就可完成操作。</p>
+
+<p>　　　　　　　　<strong>存储位置 = f(关键字)</strong></p>
+
+<p>　　其中，这个函数f一般称为<strong>哈希函数</strong>，这个函数的设计好坏会直接影响到哈希表的优劣。举个例子，比如我们要在哈希表中执行插入操作：</p>
+
+<p>　　<img src="/assets/images/mianshiti/0708/1024555-20161113180447499-1953916974.png" alt="img" /></p>
+
+<p>　　查找操作同理，先通过哈希函数计算出实际存储地址，然后从数组中对应地址取出即可。</p>
+
+<p>　　<strong>哈希冲突</strong></p>
+
+<p>　　然而万事无完美，如果两个不同的元素，通过哈希函数得出的实际存储地址相同怎么办？也就是说，当我们对某个元素进行哈希运算，得到一个存储地址，然后要进行插入的时候，发现已经被其他元素占用了，其实这就是所谓的<strong>哈希冲突</strong>，也叫哈希碰撞。前面我们提到过，哈希函数的设计至关重要，好的哈希函数会尽可能地保证 <strong>计算简单</strong>和<strong>散列地址分布均匀,</strong>但是，我们需要清楚的是，数组是一块连续的固定长度的内存空间，再好的哈希函数也不能保证得到的存储地址绝对不发生冲突。那么哈希冲突如何解决呢？哈希冲突的解决方案有多种:开放定址法（发生冲突，继续寻找下一块未被占用的存储地址），再散列函数法，链地址法，而HashMap即是采用了链地址法，也就是<strong>数组+链表</strong>的方式，</p>
+
+<h1 id="二hashmap实现原理">二、HashMap实现原理</h1>
+
+<p>　HashMap的主干是一个Entry数组。Entry是HashMap的基本组成单元，每一个Entry包含一个key-value键值对。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//HashMap的主干数组，可以看到就是一个Entry数组，初始值为空数组{}，主干数组的长度一定是2的次幂，至于为什么这么做，后面会有详细分析。</span>
+<span class="kd">transient</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;[]</span> <span class="n">table</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;[])</span> <span class="no">EMPTY_TABLE</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>Entry是HashMap中的一个静态内部类。代码如下</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">static</span> <span class="kd">class</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">final</span> <span class="no">K</span> <span class="n">key</span><span class="o">;</span>
+  <span class="no">V</span> <span class="n">value</span><span class="o">;</span>
+  <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">next</span><span class="o">;</span><span class="c1">//存储指向下一个Entry的引用，单链表结构</span>
+  <span class="kt">int</span> <span class="n">hash</span><span class="o">;</span><span class="c1">//对key的hashcode值进行hash运算后得到的值，存储在Entry，避免重复计算</span>
+
+  <span class="cm">/**
+         * Creates new entry.
+         */</span>
+  <span class="nc">Entry</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">,</span> <span class="no">K</span> <span class="n">k</span><span class="o">,</span> <span class="no">V</span> <span class="n">v</span><span class="o">,</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">v</span><span class="o">;</span>
+    <span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">k</span><span class="o">;</span>
+    <span class="n">hash</span> <span class="o">=</span> <span class="n">h</span><span class="o">;</span>
+  <span class="o">}</span> 
+</code></pre></div></div>
+
+<p>所以，HashMap的整体结构如下</p>
+
+<p><img src="/assets/images/mianshiti/0708/1024555-20161113235348670-746615111.png" alt="img" />　　</p>
+
+<p>　　<strong>简单来说，HashMap由数组+链表组成的，数组是HashMap的主体，链表则是主要为了解决哈希冲突而存在的，如果定位到的数组位置不含链表（当前entry的next指向null）,那么对于查找，添加等操作很快，仅需一次寻址即可；如果定位到的数组包含链表，对于添加操作，其时间复杂度为O(n)，首先遍历链表，存在即覆盖，否则新增；对于查找操作来讲，仍需遍历链表，然后通过key对象的equals方法逐一比对查找。所以，性能考虑，HashMap中的链表出现越少，性能才会越好。</strong></p>
+
+<p>其他几个重要字段</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//实际存储的key-value键值对的个数</span>
+<span class="kd">transient</span> <span class="kt">int</span> <span class="n">size</span><span class="o">;</span>
+<span class="c1">//阈值，当table == {}时，该值为初始容量（初始容量默认为16）；当table被填充了，也就是为table分配内存空间后，threshold一般为 capacity*loadFactory。HashMap在进行扩容时需要参考threshold，后面会详细谈到</span>
+<span class="kt">int</span> <span class="n">threshold</span><span class="o">;</span>
+<span class="c1">//负载因子，代表了table的填充度有多少，默认是0.75</span>
+<span class="kd">final</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">;</span>
+<span class="c1">//用于快速失败，由于HashMap非线程安全，在对HashMap进行迭代时，如果期间其他线程的参与导致HashMap的结构发生变化了（比如put，remove等操作），需要抛出异常ConcurrentModificationException</span>
+<span class="kd">transient</span> <span class="kt">int</span> <span class="n">modCount</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>HashMap有4个构造器，其他构造器如果用户没有传入initialCapacity 和loadFactor这两个参数，会使用默认值</p>
+
+<p>initialCapacity默认为16，loadFactory默认为0.75</p>
+
+<p>我们看下其中一个</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">HashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">)</span> <span class="o">{</span>
+<span class="err">　　　　　</span><span class="c1">//此处对传入的初始容量进行校验，最大不能超过MAXIMUM_CAPACITY = 1&lt;&lt;30(230)</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">initialCapacity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Illegal initial capacity: "</span> <span class="o">+</span>
+                                               <span class="n">initialCapacity</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">initialCapacity</span> <span class="o">&gt;</span> <span class="no">MAXIMUM_CAPACITY</span><span class="o">)</span>
+            <span class="n">initialCapacity</span> <span class="o">=</span> <span class="no">MAXIMUM_CAPACITY</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">loadFactor</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="nc">Float</span><span class="o">.</span><span class="na">isNaN</span><span class="o">(</span><span class="n">loadFactor</span><span class="o">))</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Illegal load factor: "</span> <span class="o">+</span>
+                                               <span class="n">loadFactor</span><span class="o">);</span>
+
+        <span class="k">this</span><span class="o">.</span><span class="na">loadFactor</span> <span class="o">=</span> <span class="n">loadFactor</span><span class="o">;</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="n">initialCapacity</span><span class="o">;</span>
+<span class="err">　　　　　</span>
+        <span class="n">init</span><span class="o">();</span><span class="c1">//init方法在HashMap中没有实际实现，不过在其子类如 linkedHashMap中就会有对应实现</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>　　从上面这段代码我们可以看出，<strong>在常规构造器中，没有为数组table分配内存空间（有一个入参为指定Map的构造器例外），而是在执行put操作的时候才真正构建table数组</strong></p>
+
+<p>　　OK,接下来我们来看看put操作的实现吧</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="no">V</span> <span class="nf">put</span><span class="o">(</span><span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//如果table数组为空数组{}，进行数组填充（为table分配实际内存空间），入参为threshold，此时threshold为initialCapacity 默认是1&lt;&lt;4(24=16)</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">table</span> <span class="o">==</span> <span class="no">EMPTY_TABLE</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">inflateTable</span><span class="o">(</span><span class="n">threshold</span><span class="o">);</span>
         <span class="o">}</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器处理bean=【"</span><span class="o">+</span><span class="n">beanName</span><span class="o">+</span><span class="s">"】开始"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+       <span class="c1">//如果key为null，存储位置为table[0]或table[0]的冲突链上</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="nf">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+        <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span><span class="c1">//对key的hashcode进一步计算，确保散列均匀</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span><span class="c1">//获取在table中的实际位置</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//如果该对应数据已存在，执行覆盖操作。用新value替换旧value，并返回旧value</span>
+            <span class="nc">Object</span> <span class="n">k</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>
+                <span class="no">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+                <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+            <span class="o">}</span>
         <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
+        <span class="n">modCount</span><span class="o">++;</span><span class="c1">//保证并发访问时，若HashMap内部结构发生变化，快速响应失败</span>
+        <span class="n">addEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span><span class="c1">//新增一个entry</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>    
+</code></pre></div></div>
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="s">"narCodeService"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">beanName</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
+<p>先来看看inflateTable这个方法</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">inflateTable</span><span class="o">(</span><span class="kt">int</span> <span class="n">toSize</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">capacity</span> <span class="o">=</span> <span class="n">roundUpToPowerOf2</span><span class="o">(</span><span class="n">toSize</span><span class="o">);</span><span class="c1">//capacity一定是2的次幂</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">capacity</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="no">MAXIMUM_CAPACITY</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span><span class="c1">//此处为threshold赋值，取capacity*loadFactor和MAXIMUM_CAPACITY+1的最小值，capaticy一定不会超过MAXIMUM_CAPACITY，除非loadFactor大于1</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">[</span><span class="n">capacity</span><span class="o">];</span>
+        <span class="n">initHashSeedAsNeeded</span><span class="o">(</span><span class="n">capacity</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>　　inflateTable这个方法用于为主干数组table在内存中分配存储空间，通过roundUpToPowerOf2(toSize)可以确保capacity为大于或等于toSize的最接近toSize的二次幂，比如toSize=13,则capacity=16;to_size=16,capacity=16;to_size=17,capacity=32.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">roundUpToPowerOf2</span><span class="o">(</span><span class="kt">int</span> <span class="n">number</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// assert number &gt;= 0 : "number must be non-negative";</span>
+        <span class="k">return</span> <span class="n">number</span> <span class="o">&gt;=</span> <span class="no">MAXIMUM_CAPACITY</span>
+                <span class="o">?</span> <span class="no">MAXIMUM_CAPACITY</span>
+                <span class="o">:</span> <span class="o">(</span><span class="n">number</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">?</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">highestOneBit</span><span class="o">((</span><span class="n">number</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">:</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>roundUpToPowerOf2中的这段处理使得数组长度一定为2的次幂，Integer.highestOneBit是用来获取最左边的bit（其他bit位为0）所代表的数值.</p>
+
+<p>hash函数</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//这是一个神奇的函数，用了很多的异或，移位等运算，对key的hashcode进一步进行计算以及二进制位的调整等来保证最终获取的存储位置尽量分布均匀</span>
+<span class="kd">final</span> <span class="kt">int</span> <span class="nf">hash</span><span class="o">(</span><span class="nc">Object</span> <span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">hashSeed</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="mi">0</span> <span class="o">!=</span> <span class="n">h</span> <span class="o">&amp;&amp;</span> <span class="n">k</span> <span class="k">instanceof</span> <span class="nc">String</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">Hashing</span><span class="o">.</span><span class="na">stringHash32</span><span class="o">((</span><span class="nc">String</span><span class="o">)</span> <span class="n">k</span><span class="o">);</span>
         <span class="o">}</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器处理bean=【"</span><span class="o">+</span><span class="n">beanName</span><span class="o">+</span><span class="s">"】完毕!"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
 
-<span class="o">}</span>
+        <span class="n">h</span> <span class="o">^=</span> <span class="n">k</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
 
-<span class="c1">//注意:接口中两个方法不能返回null，如果返回null那么在后续初始化方法将报空指针异常或者通过getBean()方法获取不到bena实例对象</span>
-<span class="c1">//因为后置处理器从Spring IoC容器中取出bean实例对象没有再次放回IoC容器中</span>
-</code></pre></div></div>
-
-<p>将Spring的后置处理器PostProcessor配置到Spring配置文件中</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
-
-    <span class="c">&lt;!-- 定义一个bean --&gt;</span>
-     <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"narCodeService"</span> <span class="na">class=</span><span class="s">"com.test.service.impl.NarCodeServiceImpl"</span><span class="nt">&gt;</span>
-     <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"beanLifecycle"</span> <span class="na">class=</span><span class="s">"com.test.spring.BeanLifecycle"</span> <span class="na">init-method=</span><span class="s">"init"</span> <span class="na">destroy-method=</span><span class="s">"close"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"张三"</span><span class="nt">&gt;&lt;/property&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"sex"</span> <span class="na">value=</span><span class="s">"男"</span><span class="nt">&gt;&lt;/property&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-
-    <span class="c">&lt;!-- Spring后置处理器 --&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"postProcessor"</span> <span class="na">class=</span><span class="s">"com.test.spring.PostProcessor"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/beans&gt;</span>
-</code></pre></div></div>
-
-<p>BeanPostProcessor API：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">BeanPostProcessor</span> <span class="o">{</span>  
-  
-    <span class="cm">/** 
-     * Apply this BeanPostProcessor to the given new bean instance &lt;i&gt;before&lt;/i&gt; any bean 
-     * initialization callbacks (like InitializingBean's {@code afterPropertiesSet} 
-     * or a custom init-method). The bean will already be populated with property values.    
-     */</span>  
-    <span class="c1">//实例化、依赖注入完毕，在调用显示的初始化之前完成一些定制的初始化任务  </span>
-    <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span><span class="o">;</span>  
-  
-      
-    <span class="cm">/** 
-     * Apply this BeanPostProcessor to the given new bean instance &lt;i&gt;after&lt;/i&gt; any bean 
-     * initialization callbacks (like InitializingBean's {@code afterPropertiesSet}   
-     * or a custom init-method). The bean will already be populated with property values.       
-     */</span>  
-    <span class="c1">//实例化、依赖注入、初始化完毕时执行  </span>
-    <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span><span class="o">;</span>  
-  
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>由API可以看出:
-1：后置处理器的postProcessorBeforeInitailization方法是在bean实例化，依赖注入之后及自定义初始化方法(例如：配置文件中bean标签添加init-method属性指定Java类中初始化方法、
-@PostConstruct注解指定初始化方法，Java类实现InitailztingBean接口)之前调用
-2：后置处理器的postProcessorAfterInitailization方法是在bean实例化、依赖注入及自定义初始化方法之后调用</p>
-
-<p>注意：
-   1.BeanFactory和ApplicationContext两个容器对待bean的后置处理器稍微有些不同。ApplicationContext容器会自动检测Spring配置文件中那些bean所对应的Java类实现了BeanPostProcessor
-接口，并自动把它们注册为后置处理器。在创建bean过程中调用它们，所以部署一个后置处理器跟普通的bean没有什么太大区别。</p>
-
-<p>2.BeanFactory容器注册bean后置处理器时必须通过代码显示的注册，在IoC容器继承体系中的ConfigurableBeanFactory接口中定义了注册方法</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="cm">/**  
-     * Add a new BeanPostProcessor that will get applied to beans created  
-     * by this factory. To be invoked during factory configuration.  
-     * &lt;p&gt;Note: Post-processors submitted here will be applied in the order of  
-     * registration; any ordering semantics expressed through implementing the  
-     * {@link org.springframework.core.Ordered} interface will be ignored. Note  
-     * that autodetected post-processors (e.g. as beans in an ApplicationContext)  
-     * will always be applied after programmatically registered ones.  
-     * @param beanPostProcessor the post-processor to register  
-     */</span>    
-    <span class="kt">void</span> <span class="nf">addBeanPostProcessor</span><span class="o">(</span><span class="nc">BeanPostProcessor</span> <span class="n">beanPostProcessor</span><span class="o">);</span>   
-</code></pre></div></div>
-
-<p>Spring如何调用多个BeanPostProcessor实现类：</p>
-
-<p>我们可以在Spring配置文件中添加多个BeanPostProcessor(后置处理器)接口实现类，在默认情况下Spring容器会根据后置处理器的定义顺序来依次调用。</p>
-
-<p>Spring配置文件：</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
-    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
-    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- bean定义 --&gt;</span>    
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"narCodeService"</span> <span class="na">class=</span><span class="s">"com.test.service.impl.NarCodeServiceImpl"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"postProcessor"</span> <span class="na">class=</span><span class="s">"com.test.spring.PostProcessor"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"postProcessorB"</span> <span class="na">class=</span><span class="s">"com.test.spring.PostProcessorB"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/beans&gt;</span>
-</code></pre></div></div>
-
-<p>BeanPostProcessor实现类：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test.spring</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
-<span class="cm">/**
- * bean后置处理器
- * @author zss
- *
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostProcessor</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span> <span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器处理bean=【"</span><span class="o">+</span><span class="n">beanName</span><span class="o">+</span><span class="s">"】开始"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器处理bean=【"</span><span class="o">+</span><span class="n">beanName</span><span class="o">+</span><span class="s">"】完毕!"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">----------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="kn">package</span> <span class="nn">com.test.spring</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostProcessorB</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span> <span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器开始调用了"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器调用结束了"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>测试：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test.spring</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.junit.Before</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.context.support.AbstractApplicationContext</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">T</span> <span class="o">{</span>
-    <span class="nc">AbstractApplicationContext</span> <span class="n">applicationcontext</span><span class="o">=</span><span class="kc">null</span><span class="o">;</span>
-    <span class="nd">@Before</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">before</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"》》》Spring ApplicationContext容器开始初始化了......"</span><span class="o">);</span>
-        <span class="n">applicationcontext</span><span class="o">=</span> <span class="k">new</span> <span class="nc">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">[]{</span><span class="s">"test1-service.xml"</span><span class="o">});</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"》》》Spring ApplicationContext容器初始化完毕了......"</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="nd">@Test</span>
-    <span class="kd">public</span> <span class="kt">void</span>  <span class="nf">test</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">applicationcontext</span><span class="o">.</span><span class="na">registerShutdownHook</span><span class="o">();</span>   
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>测试结果：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>》》》Spring ApplicationContext容器开始初始化了......
-2017-03-19 10:50:29  INFO:ClassPathXmlApplicationContext-Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@18c92ff9: startup date [Sun Mar 19 10:50:29 CST 2017]; root of context hierarchy
-2017-03-19 10:50:29  INFO:XmlBeanDefinitionReader-Loading XML bean definitions from class path resource [test1-service.xml]
-后置处理器处理bean=【narCodeService】开始
-后置处理器开始调用了
-后置处理器处理bean=【narCodeService】完毕!
-后置处理器调用结束了
-》》》Spring ApplicationContext容器初始化完毕了......
-2017-03-19 10:50:34  INFO:ClassPathXmlApplicationContext-Closing org.springframework.context.support.ClassPathXmlApplicationContext@18c92ff9: startup date [Sun Mar 19 10:50:29 CST 2017]; root of context hierarchy
-</code></pre></div></div>
-
-<p>在Spring机制中可以指定后置处理器调用顺序，通过让BeanPostProcessor接口实现类实现Ordered接口getOrder方法，该方法返回一整数，默认值为 0，优先级最高，值越大优先级越低</p>
-
-<p>例如：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.test.spring</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.core.Ordered</span><span class="o">;</span>
-<span class="cm">/**
- * bean后置处理器
- * @author zss
- *
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostProcessor</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span><span class="o">,</span><span class="nc">Ordered</span><span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器处理bean=【"</span><span class="o">+</span><span class="n">beanName</span><span class="o">+</span><span class="s">"】开始"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器处理bean=【"</span><span class="o">+</span><span class="n">beanName</span><span class="o">+</span><span class="s">"】完毕!"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getOrder</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">----------------------------------------------------------------------------</span>
-<span class="kn">package</span> <span class="nn">com.test.spring</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.core.Ordered</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">PostProcessorB</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span><span class="o">,</span><span class="nc">Ordered</span> <span class="o">{</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器开始调用了"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span>
-            <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"后置处理器调用结束了"</span><span class="o">);</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getOrder</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>测试结果：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>》》》Spring ApplicationContext容器开始初始化了......
-2017-03-19 11:04:10 INFO:ClassPathXmlApplicationContext-Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@18c92ff9: startup date [Sun Mar 19 11:04:10 CST 2017]; root of context hierarchy
-2017-03-19 11:04:10 INFO:XmlBeanDefinitionReader-Loading XML bean definitions from class path resource [test1-service.xml]
-后置处理器开始调用了
-后置处理器处理bean=【narCodeService】开始
-后置处理器调用结束了
-后置处理器处理bean=【narCodeService】完毕!
-》》》Spring ApplicationContext容器初始化完毕了......
-2017-03-19 11:04:14 INFO:ClassPathXmlApplicationContext-Closing org.springframework.context.support.ClassPathXmlApplicationContext@18c92ff9: startup date [Sun Mar 19 11:04:10 CST 2017]; root of context hierarchy
-</code></pre></div></div>
-</div><p><a href="/mianshi/spring/0707/11">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-21">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/spring/0707/10"><h2 itemprop="headline" class="item__header">Spring中的aware接口</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>Spring中有很多继承于<code class="language-plaintext highlighter-rouge">aware</code>中的接口，这些接口到底是做什么用到的。</p>
-
-<p><img src="/assets/images/mianshiti/0707/3397380-6ef519bbc705ce28.png" alt="img" /></p>
-
-<p><code class="language-plaintext highlighter-rouge">aware</code>,翻译过来是知道的，已感知的，意识到的，所以这些接口从字面意思应该是能感知到所有<code class="language-plaintext highlighter-rouge">Aware</code>前面的含义。</p>
-
-<p>先举个<code class="language-plaintext highlighter-rouge">BeanNameAware</code>的例子，实现<code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口，可以让该<code class="language-plaintext highlighter-rouge">Bean</code>感知到自身的<code class="language-plaintext highlighter-rouge">BeanName</code>（对应Spring容器的<code class="language-plaintext highlighter-rouge">BeanId</code>属性）属性,举个例子：</p>
-
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口的定义</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">BeanNameAware</span> <span class="kd">extends</span> <span class="nc">Aware</span> <span class="o">{</span>
-      <span class="kt">void</span> <span class="nf">setBeanName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>定义两个<code class="language-plaintext highlighter-rouge">User</code>,一个实现<code class="language-plaintext highlighter-rouge">BeanNameAware</code>,一个不实现。</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.github.jettyrun.springinterface.demo.aware.beannameaware</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.BeanNameAware</span><span class="o">;</span>
-
-<span class="cm">/**
- * Created by jetty on 18/1/31.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">implements</span> <span class="nc">BeanNameAware</span><span class="o">{</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBeanName</span><span class="o">(</span><span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">//ID保存BeanName的值</span>
-        <span class="n">id</span><span class="o">=</span><span class="n">beanName</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAddress</span><span class="o">(</span><span class="nc">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s">"User{"</span> <span class="o">+</span>
-                <span class="s">"id='"</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
-                <span class="s">", name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
-                <span class="s">", address='"</span> <span class="o">+</span> <span class="n">address</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
-                <span class="sc">'}'</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.github.jettyrun.springinterface.demo.aware.beannameaware</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.BeanNameAware</span><span class="o">;</span>
-
-<span class="cm">/**
- * Created by jetty on 18/1/31.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User2</span> <span class="o">{</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">id</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAddress</span><span class="o">(</span><span class="nc">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s">"User{"</span> <span class="o">+</span>
-                <span class="s">"id='"</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
-                <span class="s">", name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
-                <span class="s">", address='"</span> <span class="o">+</span> <span class="n">address</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
-                <span class="sc">'}'</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<ul>
-  <li>在Spring配置文件中初始化两个对象。</li>
-</ul>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"zhangsan"</span>  <span class="na">class=</span><span class="s">"com.github.jettyrun.springinterface.demo.aware.beannameaware.User"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"zhangsan"</span><span class="nt">&gt;&lt;/property&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"address"</span> <span class="na">value=</span><span class="s">"火星"</span><span class="nt">&gt;&lt;/property&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-
-    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"lisi"</span>  <span class="na">class=</span><span class="s">"com.github.jettyrun.springinterface.demo.aware.beannameaware.User2"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"lisi"</span><span class="nt">&gt;&lt;/property&gt;</span>
-        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"address"</span> <span class="na">value=</span><span class="s">"火星"</span><span class="nt">&gt;&lt;/property&gt;</span>
-    <span class="nt">&lt;/bean&gt;</span>
-</code></pre></div></div>
-
-<ul>
-  <li>main方法测试一下<code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口所起的作用。</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"classpath:application-beanaware.xml"</span><span class="o">);</span>
-
-        <span class="nc">User</span> <span class="n">user</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">User</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"实现了BeanNameAware接口的信息BeanId=%s,所有信息=%s"</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="n">user</span><span class="o">.</span><span class="na">toString</span><span class="o">()));</span>
-
-        <span class="nc">User2</span> <span class="n">user2</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">User2</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"未实现BeanNameAware接口的信息BeanId=%s,所有信息=%s"</span><span class="o">,</span><span class="n">user2</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="n">user2</span><span class="o">.</span><span class="na">toString</span><span class="o">()));</span>
+        <span class="n">h</span> <span class="o">^=</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">20</span><span class="o">)</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">12</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">h</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">7</span><span class="o">)</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">4</span><span class="o">);</span>
     <span class="o">}</span>
 </code></pre></div></div>
 
-<ul>
-  <li>运行结果</li>
-</ul>
+<p>以上hash函数计算出的值，通过indexFor进一步处理来获取实际的存储位置</p>
 
-<pre><code class="language-txt">实现了BeanNameAware接口的信息BeanId=zhangsan,所有信息=User{id='zhangsan', name='zhangsan', address='火星'}
-未实现BeanNameAware接口的信息BeanId=null,所有信息=User{id='null', name='lisi', address='火星'}
-</code></pre>
-
-<p>能够看到，我们在实现了<code class="language-plaintext highlighter-rouge">BeanNameAware</code>的 <code class="language-plaintext highlighter-rouge">User</code>中，获取到了Spring容器中的<code class="language-plaintext highlighter-rouge">BeanId</code>（对应<code class="language-plaintext highlighter-rouge">spring配置文件</code>中的<code class="language-plaintext highlighter-rouge">id</code>属性），而没有实现<code class="language-plaintext highlighter-rouge">BeanNameAware</code>的<code class="language-plaintext highlighter-rouge">User2</code>，则不能获取到Spring容器中的Id属性。</p>
-
-<p><strong>所以<code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口是为了让自身<code class="language-plaintext highlighter-rouge">Bean</code>能够感知到，获取到自身在Spring容器中的id属性。</strong></p>
-
-<p><strong>同理，其他的<code class="language-plaintext highlighter-rouge">Aware</code>接口也是为了能够感知到自身的一些属性。
- 比如实现了<code class="language-plaintext highlighter-rouge">ApplicationContextAware</code>接口的类，能够获取到<code class="language-plaintext highlighter-rouge">ApplicationContext</code>，实现了<code class="language-plaintext highlighter-rouge">BeanFactoryAware</code>接口的类，能够获取到<code class="language-plaintext highlighter-rouge">BeanFactory</code>对象。</strong></p>
-
-</div><p><a href="/mianshi/spring/0707/10">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-20">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/spring/0707/11"><h2 itemprop="headline" class="item__header">SpringBean 生命周期</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>最近面试过程中被问到了SpringBean生命周期，当时答了个印象中的大概，详细整理一下</p>
-
-<p>Spring容器管理的类在定位，加载之后，初始化到能用的过程如下图：</p>
-
-<p><img src="/assets/images/mianshiti/0707/2081031-20200702193359366-206975160.png" alt="img" /></p>
-
-<p>1、调用构造方法new一个实例到容器中</p>
-
-<p>2、对于依赖的属性进行注入</p>
-
-<p>注意：由于注入的属性在构造方法之后，所以在构造方法中使用被注解的字段（@Autowire、@Value等）会拿不到注入的值或者实例；</p>
-
-<p>3、bean如果集成了Aware接口的各种子接口，那么可以执行相应Aware接口的方法，Aware接口主要是获取当前bean被放入容器的信息，不如beanId，beanFactory,ClassLoader等。</p>
-
-<p>执行顺序，大概是BeanNameAware-&gt;BeanFactoryAware…</p>
-
-<p>4、BeanPostProcessor（后置处理器）的postProcessBeforeInitialization方法</p>
-
-<p>这个before初始化的意思是调用显式初始化方法之前的方法，BeanPostProcessor的方法逻辑是什么也不做，直接返回bean,</p>
-
-<p>BeanPostProcessor:</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//为在Bean的初始化前提供回调入口
-@Nullable
-default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-	return bean;
-}
-</code></pre></div></div>
-
-<p>可以自己定义一个处理器，来做一些想做的事</p>
-
-<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1 　  
- 2 
- 3 <span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
- 4 <span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
- <span class="err">5</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
- <span class="err">6</span> <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans 
- 7 http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
- 8 
- 9 <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"com.dpb.pojo.XXX"</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">init-method=</span><span class="s">"xxx"</span><span class="nt">&gt;</span>
-10 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"xxx"</span> <span class="na">value=</span><span class="s">"波波烤鸭"</span> <span class="nt">/&gt;</span>
-11 <span class="nt">&lt;/bean&gt;</span>
-12 
-13 <span class="c">&lt;!-- 注册处理器 --&gt;</span>
-14 <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"com.dpb.processor.MyBeanPostProcessor"</span><span class="nt">&gt;&lt;/bean&gt;</span>
-15 <span class="nt">&lt;/beans&gt;</span>　　
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.dpb.processor</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
-<span class="cm">/**
- * 自定义BeanPostProcessor实现类
- * BeanPostProcessor接口的作用是：
- *      我们可以通过该接口中的方法在bean实例化、配置以及其他初始化方法前后添加一些我们自己的逻辑
- * @author dengp
- *
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBeanPostProcessor</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span><span class="o">{</span>
-
-    <span class="cm">/**
-     * 实例化、依赖注入完毕，在调用显示的初始化之前完成一些定制的初始化任务
-     * 注意：方法返回值不能为null
-     * 如果返回null那么在后续初始化方法将报空指针异常或者通过getBean()方法获取不到bena实例对象
-     * 因为后置处理器从Spring IoC容器中取出bean实例对象没有再次放回IoC容器中
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+     * 返回数组下标
      */</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"初始化 before--实例化的bean对象:"</span><span class="o">+</span><span class="n">bean</span><span class="o">+</span><span class="s">"\t"</span><span class="o">+</span><span class="n">beanName</span><span class="o">);</span>
-        <span class="c1">// 可以根据beanName不同执行不同的处理操作</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * 实例化、依赖注入、初始化完毕时执行 
-     * 注意：方法返回值不能为null
-     * 如果返回null那么在后续初始化方法将报空指针异常或者通过getBean()方法获取不到bena实例对象
-     * 因为后置处理器从Spring IoC容器中取出bean实例对象没有再次放回IoC容器中
-     */</span>
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"初始化 after...实例化的bean对象:"</span><span class="o">+</span><span class="n">bean</span><span class="o">+</span><span class="s">"\t"</span><span class="o">+</span><span class="n">beanName</span><span class="o">);</span>
-        <span class="c1">// 可以根据beanName不同执行不同的处理操作</span>
-        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
-    <span class="o">}</span>
-
+<span class="kd">static</span> <span class="kt">int</span> <span class="nf">indexFor</span><span class="o">(</span><span class="kt">int</span> <span class="n">h</span><span class="o">,</span> <span class="kt">int</span> <span class="n">length</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="n">h</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="o">);</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>5、执行@PostConstruct 注解的方法，比如：</p>
+<p>h&amp;（length-1）保证获取的index一定在数组范围内，举个例子，默认容量16，length-1=15，h=18,转换成二进制计算为</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@PostConstruct</span>
-<span class="kd">private</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(){</span>
-  <span class="n">doSomething</span><span class="o">...</span>
-<span class="o">}</span>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        1  0  0  1  0
+    &amp;   0  1  1  1  1
+    __________________
+        0  0  0  1  0    = 2
 </code></pre></div></div>
 
-<p>6、bean实现了InitializingBean，执行afterPropertiesSet方法,比如：</p>
+<p>　　最终计算出的index=2。有些版本的对于此处的计算会使用 取模运算，也能保证index一定在数组范围内，不过位运算对计算机来说，性能更高一些（HashMap中有大量位运算）</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServiceImpl</span> <span class="kd">implements</span> <span class="nc">InitializingBean</span> <span class="o">{</span>
+<p>所以最终存储位置的确定流程是这样的：</p>
 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AfterPropertiesSet method: myServiceImpl"</span><span class="o">);</span>
+<p><img src="/assets/images/mianshiti/0708/1024555-20161115133556388-1098209938.png" alt="img" /></p>
+
+<p>再来看看addEntry的实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">((</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">]))</span> <span class="o">{</span>
+            <span class="n">resize</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span><span class="c1">//当size超过临界阈值threshold，并且即将发生哈希冲突时进行扩容</span>
+            <span class="n">hash</span> <span class="o">=</span> <span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">key</span><span class="o">)</span> <span class="o">?</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">)</span> <span class="o">:</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="n">bucketIndex</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="n">createEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">bucketIndex</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>　　通过以上代码能够得知，当发生哈希冲突并且size大于阈值的时候，需要进行数组扩容，扩容时，需要新建一个长度为之前数组2倍的新的数组，然后将当前的Entry数组中的元素全部传输过去，扩容后的新数组长度为之前的2倍，所以扩容相对来说是个耗资源的操作。</p>
+
+<h1 id="三为何hashmap的数组长度一定是2的次幂">三、为何HashMap的数组长度一定是2的次幂？</h1>
+
+<p>我们来继续看上面提到的resize方法</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">void</span> <span class="nf">resize</span><span class="o">(</span><span class="kt">int</span> <span class="n">newCapacity</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Entry</span><span class="o">[]</span> <span class="n">oldTable</span> <span class="o">=</span> <span class="n">table</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">oldCapacity</span> <span class="o">=</span> <span class="n">oldTable</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">oldCapacity</span> <span class="o">==</span> <span class="no">MAXIMUM_CAPACITY</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">threshold</span> <span class="o">=</span> <span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+            <span class="k">return</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">Entry</span><span class="o">[]</span> <span class="n">newTable</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">[</span><span class="n">newCapacity</span><span class="o">];</span>
+        <span class="n">transfer</span><span class="o">(</span><span class="n">newTable</span><span class="o">,</span> <span class="n">initHashSeedAsNeeded</span><span class="o">(</span><span class="n">newCapacity</span><span class="o">));</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">newTable</span><span class="o">;</span>
+        <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="n">newCapacity</span> <span class="o">*</span> <span class="n">loadFactor</span><span class="o">,</span> <span class="no">MAXIMUM_CAPACITY</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>如果数组进行扩容，数组长度发生变化，而存储位置 index = h&amp;(length-1),index也可能会发生变化，需要重新计算index，我们先来看看transfer这个方法</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">transfer</span><span class="o">(</span><span class="nc">Entry</span><span class="o">[]</span> <span class="n">newTable</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">rehash</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">newCapacity</span> <span class="o">=</span> <span class="n">newTable</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+<span class="err">　　　　　</span><span class="c1">//for循环中的代码，逐个遍历链表，重新计算索引位置，将老数组数据复制到新数组中去（数组不存储实际数据，所以仅仅是拷贝引用而已）</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">:</span> <span class="n">table</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">while</span><span class="o">(</span><span class="kc">null</span> <span class="o">!=</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">next</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">;</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">rehash</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">=</span> <span class="kc">null</span> <span class="o">==</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">hash</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span><span class="o">,</span> <span class="n">newCapacity</span><span class="o">);</span>
+<span class="err">　　　　　　　　　</span> <span class="c1">//将当前entry的next链指向新的索引位置,newTable[i]有可能为空，有可能也是个entry链，如果是entry链，直接在链表头部插入。</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">newTable</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+                <span class="n">newTable</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>　　这个方法将老数组中的数据逐个链表地遍历，扔到新的扩容后的数组中，我们的数组索引位置的计算是通过 对key值的hashcode进行hash扰乱运算后，再通过和 length-1进行位运算得到最终数组索引位置。</p>
+
+<p>　　hashMap的数组长度一定保持2的次幂，比如16的二进制表示为 10000，那么length-1就是15，二进制为01111，同理扩容后的数组长度为32，二进制表示为100000，length-1为31，二进制表示为011111。从下图可以我们也能看到这样会保证低位全为1，而扩容后只有一位差异，也就是多出了最左位的1，这样在通过 h&amp;(length-1)的时候，只要h对应的最左边的那一个差异位为0，就能保证得到的新的数组索引和老数组索引一致(大大减少了之前已经散列良好的老数组的数据位置重新调换)，个人理解。</p>
+
+<p>　　<img src="/assets/images/mianshiti/0708/1024555-20161115215812138-679881037.png" alt="img" /></p>
+
+<p>还有，数组长度保持2的次幂，length-1的低位都为1，会使得获得的数组索引index更加均匀，比如：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1024555-20161116001404732-625340289.png" alt="img" /></p>
+
+<p>　　我们看到，上面的&amp;运算，高位是不会对结果产生影响的（hash函数采用各种位运算可能也是为了使得低位更加散列），我们只关注低位bit，如果低位全部为1，那么对于h低位部分来说，任何一位的变化都会对结果产生影响，也就是说，要得到index=21这个存储位置，h的低位只有这一种组合。这也是数组长度设计为必须为2的次幂的原因。</p>
+
+<p><img src="/assets/images/mianshiti/0708/1024555-20161116001717560-1455096254.png" alt="img" /></p>
+
+<p>　　如果不是2的次幂，也就是低位不是全为1此时，要使得index=21，h的低位部分不再具有唯一性了，哈希冲突的几率会变的更大，同时，index对应的这个bit位无论如何不会等于1了，而对应的那些数组位置也就被白白浪费了。</p>
+
+<p>get方法</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="no">V</span> <span class="nf">get</span><span class="o">(</span><span class="nc">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+<span class="err">　　　　</span> <span class="c1">//如果key为null,则直接去table[0]处去检索即可。</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">return</span> <span class="nf">getForNullKey</span><span class="o">();</span>
+        <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">=</span> <span class="n">getEntry</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="k">return</span> <span class="kc">null</span> <span class="o">==</span> <span class="n">entry</span> <span class="o">?</span> <span class="kc">null</span> <span class="o">:</span> <span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">();</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>get方法通过key值返回对应value，如果key为null，直接去table[0]处检索。我们再看一下getEntry这个方法</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="nf">getEntry</span><span class="o">(</span><span class="nc">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+            
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="c1">//通过key的hashcode值计算hash值</span>
+        <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+        <span class="c1">//indexFor (hash&amp;length-1) 获取最终数组索引，然后遍历链表，通过equals方法比对找出对应记录</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">)];</span>
+             <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span>
+             <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">Object</span> <span class="n">k</span><span class="o">;</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> 
+                <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="o">(</span><span class="n">key</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">))))</span>
+                <span class="k">return</span> <span class="n">e</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="o">}</span>    
+</code></pre></div></div>
+
+<p>　　可以看出，get方法的实现相对简单，key(hashcode)–&gt;hash–&gt;indexFor–&gt;最终索引位置，找到对应位置table[i]，再查看是否有链表，遍历链表，通过key的equals方法比对查找对应的记录。要注意的是，有人觉得上面在定位到数组位置之后然后遍历链表的时候，e.hash == hash这个判断没必要，仅通过equals判断就可以。其实不然，试想一下，如果传入的key对象重写了equals方法却没有重写hashCode，而恰巧此对象定位到这个数组位置，如果仅仅用equals判断可能是相等的，但其hashCode和当前对象不一致，这种情况，根据Object的hashCode的约定，不能返回当前对象，而应该返回null，后面的例子会做出进一步解释。</p>
+
+<h1 id="四重写equals方法需同时重写hashcode方法">四、重写equals方法需同时重写hashCode方法</h1>
+
+<p>　　关于HashMap的源码分析就介绍到这儿了，最后我们再聊聊老生常谈的一个问题，各种资料上都会提到，“重写equals时也要同时覆盖hashcode”，我们举个小例子来看看，如果重写了equals而不重写hashcode会发生什么样的问题</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Created by chengxiao on 2016/11/15.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Person</span><span class="o">{</span>
+        <span class="kt">int</span> <span class="n">idCard</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">Person</span><span class="o">(</span><span class="kt">int</span> <span class="n">idCard</span><span class="o">,</span> <span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">idCard</span> <span class="o">=</span> <span class="n">idCard</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">o</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">getClass</span><span class="o">()</span> <span class="o">!=</span> <span class="n">o</span><span class="o">.</span><span class="na">getClass</span><span class="o">()){</span>
+                <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="nc">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Person</span><span class="o">)</span> <span class="n">o</span><span class="o">;</span>
+            <span class="c1">//两个对象是否等值，通过idCard来确定</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">idCard</span> <span class="o">==</span> <span class="n">person</span><span class="o">.</span><span class="na">idCard</span><span class="o">;</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span> <span class="o">[]</span><span class="n">args</span><span class="o">){</span>
+        <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">,</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;();</span>
+        <span class="nc">Person</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="mi">1234</span><span class="o">,</span><span class="s">"乔峰"</span><span class="o">);</span>
+        <span class="c1">//put到hashmap中去</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">person</span><span class="o">,</span><span class="s">"天龙八部"</span><span class="o">);</span>
+        <span class="c1">//get取出，从逻辑上讲应该能输出“天龙八部”</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"结果:"</span><span class="o">+</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="mi">1234</span><span class="o">,</span><span class="s">"萧峰"</span><span class="o">)));</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>7、执行配置文件中的init-method</p>
+<p>实际输出结果：</p>
 
-<p>8、BeanPostProcessor的postProcessAfterInitialization方法</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>结果：null
+</code></pre></div></div>
 
-<p>9、至此完成bean的准备，可以使用。</p>
+<p>　　如果我们已经对HashMap的原理有了一定了解，这个结果就不难理解了。尽管我们在进行get和put操作的时候，使用的key从逻辑上讲是等值的（通过equals比较是相等的），但由于没有重写hashCode方法，所以put操作时，key(hashcode1)–&gt;hash–&gt;indexFor–&gt;最终索引位置 ，而通过key取出value的时候 key(hashcode1)–&gt;hash–&gt;indexFor–&gt;最终索引位置，由于hashcode1不等于hashcode2，导致没有定位到一个数组位置而返回逻辑上错误的值null（也有可能碰巧定位到一个数组位置，但是也会判断其entry的hash值是否相等，上面get方法中有提到。）</p>
 
-<p><strong>当bean不在被使用，容器关闭时，bean会被销毁</strong>。可以有一下方法参与销毁行为</p>
+<p>　　所以，在重写equals的方法的时候，必须注意重写hashCode方法，同时还要保证通过equals判断相等的两个对象，调用hashCode方法要返回同样的整数值。而如果equals判断不相等的两个对象，其hashCode可以相同（只不过会发生哈希冲突，应尽量避免）。</p>
 
-<p><img src="/assets/images/mianshiti/0707/2081031-20200702195852697-627239963.png" alt="img" /></p>
+<h1 id="五总结">五、总结</h1>
 
-<p>1、执行@PostDestroy 注解的方法</p>
-
-<p>2、bean实现了DisposableBean，执行destroy方法</p>
-
-<p>3、执行配置文件中的destroy-method</p>
-</div><p><a href="/mianshi/spring/0707/11">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<p>　　本文描述了HashMap的实现原理，并结合源码做了进一步的分析，也涉及到一些源码细节设计缘由，最后简单介绍了为什么重写equals的时候需要重写hashCode方法。</p>
+</div><p><a href="/mianshi/map/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-21">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="map-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>308 post articles, 39 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>313 post articles, 40 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -2557,7 +2542,7 @@ default Object postProcessBeforeInitialization(Object bean, String beanName) thr
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page39"><span>39</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page40"><span>40</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
