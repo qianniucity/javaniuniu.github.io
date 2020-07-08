@@ -374,183 +374,1206 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0707/01"><h2 itemprop="headline" class="item__header">大厂面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="一面-电话面试"><strong>一面 （电话面试）</strong></h3>
+          <header><a href="/mianshi/mysql/0708/03"><h2 itemprop="headline" class="item__header">sql语句优化</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="性能不理想的系统">性能不理想的系统：</h4>
 
+<ul>
+  <li>应用程序的负载确实超过了服务器的实际处理能力外</li>
+  <li><strong>系统存在大量的SQL语句需要优化</strong></li>
+</ul>
+
+<h4 id="优化原则一sql语句越简单越好">优化原则一：SQL语句越简单越好</h4>
+
+<ul>
+  <li>不要有超过5个以上的表连接（JOIN）</li>
+  <li>考虑使用临时表或表变量存放中间结果。</li>
+  <li>少用子查询</li>
+  <li>视图嵌套不要过深,一般视图嵌套不要超过2个为宜。</li>
+</ul>
+
+<h5 id="使用推荐">使用推荐：</h5>
+
+<ul>
+  <li>
+    <p>连接的表越多，其编译的时间和连接的开销也越大，性能越不好控制。</p>
+  </li>
+  <li>
+    <p>最好是把连接拆开成较小的几个部分逐个顺序执行。</p>
+  </li>
+  <li>
+    <p>优先执行那些能够大量减少结果的连接。</p>
+  </li>
+  <li>
+    <p>拆分的好处不仅仅是减少SQL Server优化的时间，更使得SQL语句能够以你可以预测的方式和顺序执行。</p>
+  </li>
+</ul>
+
+<p><strong>如果一定需要连接很多表才能得到数据，那么很可能意味着设计上的缺陷。</strong></p>
+
+<h5 id="outer-join-使用的缺点">outer join 使用的缺点</h5>
+<p>连接是outer join，非常不好。因为outer join意味着必须对左表或右表查询所有行。<strong>如果表很大而没有相应的where语句，那么outer join很容易导致table scan或index scan。</strong> 要尽量使用inner join避免scan整个表。</p>
+
+<h4 id="优化建议">优化建议：</h4>
 <ol>
-  <li>
-    <h4 id="介绍自己比较熟悉的项目和项目中遇到的难点">介绍自己比较熟悉的项目和项目中遇到的难点</h4>
-  </li>
-  <li>
-    <h4 id="springbean生命周期">Springbean生命周期</h4>
-
-    <p><strong>bean创建：</strong> new一个对象到容器–&gt;属性注入–&gt;是否实现了Aware类–&gt;后置处理器，执行初始化前的方法–&gt;初始化–&gt;后置处理器，执行初始化完成后的方法–&gt;完成bean创建</p>
-
-    <p><strong>销毁：</strong> 执行@PostDestroy 注解的方法–&gt;bean实现了DisposableBean，执行destroy方法–&gt;执行配置文件中的destroy-method</p>
-  </li>
-  <li>
-    <h4 id="谈谈依赖注入和面向切面">谈谈依赖注入和面向切面</h4>
-
-    <p><strong>依赖注入：</strong> 通过发射的方式，把创建bean的权限交由spring来统一管理，可以避免硬编码造成的代码耦合</p>
-
-    <p><strong>面向切面：</strong> aop是面向切面编程的思想，spring通过代理的方式，将面向切面编程定义成一个规范，通过代理模式，将两个或多个有关联的业务，在代码层面实现节藕</p>
-  </li>
-  <li>
-    <h4 id="hashmap原理和扩容机制">HashMap原理和扩容机制</h4>
-
-    <p>hashmap的内部实现是数组和链表的结合，新建hashmap的时候会默认初始化数组长度为16，精准度为0.75；执行插入操作时，通过通过给key做hash处理，将得到的值和16求膜，将value插入与之对应的小标；当出现相同的下标，value将通过链表的形式链接起来，并且是将value插入到最顶端；</p>
-  </li>
-  <li>
-    <h4 id="常用并发包下的类">常用并发包下的类</h4>
-
-    <p><strong>接口：</strong> Callback，Future ，FutureService ，Executor，BlockingQueue</p>
-
-    <p><strong>类：</strong> ConcurrentHashMap，ConcurrentListMap，ConcurrentListSet，CopyOnWriteArrayList， CopyOnWriteArraySet，ArrayBlockingQueue，FutureTask，ListedBlockingQueue，Executors，ThreadPoolExecutor</p>
-  </li>
-  <li>
-    <h4 id="redis持久化方式为什么这么快">Redis持久化方式，为什么这么快？</h4>
-
-    <p><strong>自己总结：</strong></p>
-
-    <ol>
-      <li>内存数据库，一减少对磁盘读取的IO</li>
-      <li>非阻塞IO，IO多路复用</li>
-      <li>单线程模型，减少线程上下文切换和竞争</li>
-    </ol>
-
-    <p><strong>参考其他的总结：</strong></p>
-
-    <p>一、 <strong>Redis是纯内存数据库</strong>，一般都是简单的存取操作，线程占用的时间很多，时间的花费主要集中在IO上，所以读取速度快。</p>
-
-    <p>二、 再说一下IO，Redis使用的是__非阻塞IO，IO多路复用__，使用了__单线程来轮询描述符__，将数据库的开、关、读、写都转换成了事件，减少了线程切换时上下文的切 换和竞争。</p>
-
-    <p>三、 Redis采用了__单线程的模型__，保证了每个操作的原子性，也减少了线程的上下文切换和竞争。</p>
-
-    <p>四、另外，数据结构也帮了不少忙，Redis全程使用hash结构，读取速度快，还有一些特殊的数据结构，对数据存储进行了优化，如压缩表，对短数据进行压缩存储   ，再如，跳表，使用有序的数据结构加快读取的速度。</p>
-
-    <p>五、还有一点，Redis采用自己实现的事件分离器，效率比较高，内部采用非阻塞的执行方式，吞吐能力比较大。</p>
-  </li>
-  <li>
-    <h4 id="自己平时如何提升的看书或者网站"><strong>自己平时如何提升的，看书或者网站？</strong></h4>
-  </li>
+  <li>使用临时表存放t1表的结果,能大大减少logical reads（或返回行数）的操作要优先执行。</li>
 </ol>
 
-<h3 id="二面"><strong>二面</strong></h3>
-
+<p>仔细分析语句，你会发现where中的条件全是针对表t1的，所以直接使用上面的where子句查询表t1，然后把结果存放再临时表＃t1中：</p>
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Select</span> <span class="n">t1</span><span class="err">…</span><span class="p">..</span> <span class="k">into</span> <span class="o">#</span><span class="n">tt1</span> <span class="k">from</span> <span class="n">t1</span> <span class="k">where</span><span class="err">…</span><span class="p">(</span><span class="err">和上面的</span><span class="k">where</span><span class="err">一样</span><span class="p">)</span>
+</code></pre></div></div>
 <ol>
-  <li>
-    <h4 id="jvm类加载机制分别每一步做了什么工作">Jvm类加载机制，分别每一步做了什么工作？</h4>
-
-    <p>加载–&gt;校验–&gt;解析–&gt;准备–&gt;解析–&gt;初始化–&gt;使用–&gt;卸载</p>
-
-    <p><strong>加载：</strong> 将Class类加载到内存，接着在JVM的方法区创建一个对应的Class对象</p>
-
-    <p><strong>校验：</strong> JVM代码规范娇艳，代码逻辑校验</p>
-
-    <p><strong>准备：</strong> 分配内存并初始化，这里需要注意两个关键点，内存分配的对象以及初始化的类型。初始化的是static 修饰的类变量</p>
-
-    <p><strong>解析：</strong>  JVM 针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符 7 类引用进行解析</p>
-
-    <p><strong>初始化：</strong> JVM 会根据语句执行顺序对类对象进行初始化，一般来说当 JVM 遇到下面 5 种情况的时候会触发初始化</p>
-
-    <p><strong>使用：</strong>  JVM 开始从入口方法开始执行用户的程序代码</p>
-
-    <p><strong>卸载：</strong>  JVM 开始销毁创建的 Class 对象</p>
+  <li>再把＃tt1和其他表进行连接:
+    <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">Select</span> <span class="o">#</span><span class="n">t1</span><span class="err">…</span>
+<span class="k">Left</span> <span class="k">outer</span> <span class="k">join</span> <span class="err">…</span>
+<span class="k">Left</span> <span class="k">outer</span> <span class="k">join</span><span class="err">…</span>
+</code></pre></div>    </div>
   </li>
-  <li>
-    <h4 id="jvm内存模型垃圾回收机制如何确定被清除的对象">Jvm内存模型，垃圾回收机制，如何确定被清除的对象？</h4>
-
-    <p><strong>共享内存区：</strong> 堆，方法区</p>
-
-    <p><strong>私有内存区：</strong> 栈，计数器，本地方法区</p>
-
-    <p><strong>堆：</strong> 存放对象和数组，也是GC处理的区域</p>
-
-    <p><strong>方法区：</strong> 用于存放常量，静态变量，Class</p>
-
-    <p><strong>栈：</strong> 保存栈帧，<strong>栈帧中包括：局部变量表(方法参数，也可以是方法的局部变量)、操作数栈、动态链接、方法出口</strong></p>
-
-    <p><strong>计数器：</strong> 当线程数大于CPU核数，线程之间就要根据时间片轮询抢夺CPU时间资源，计数器会记录线程的状态及上下文</p>
-
-    <p><strong>本地方法区：</strong> 调用扩展方法，通常是通过 JNI 调用 C或C++</p>
-
-    <p><strong>垃圾回收机制:</strong> 引用计数算法 可达性分析算法 分代收集算法</p>
-
-    <p><strong>触发轻GC的条件：</strong></p>
-
-    <p>当新对象生成，并且在Eden申请空间失败时，就会触发，通常就是 Eden 空间满的时候触发</p>
-
-    <p><strong>触发重GC的条件：</strong></p>
-
-    <p>a) 年老代（Tenured）被写满；</p>
-
-    <p>b) 持久代（Perm）被写满；</p>
-
-    <p>c) System.gc()被显示调用；</p>
-
-    <p>d) 上一次GC之后Heap的各域分配策略动态变化；</p>
-  </li>
-  <li>
-    <h4 id="了解哪些垃圾回收器和区别">了解哪些垃圾回收器和区别？</h4>
-  </li>
-  <li>
-    <h4 id="多线程相关线程池的参数列表和拒绝策略">多线程相关，线程池的参数列表和拒绝策略</h4>
-  </li>
-  <li>
-    <h4 id="jvm如何分析出哪个对象上锁">Jvm如何分析出哪个对象上锁？</h4>
-  </li>
-  <li>
-    <h4 id="mysql索引类型和区别事务的隔离级别和事务原理">Mysql索引类型和区别，事务的隔离级别和事务原理</h4>
-  </li>
-  <li>
-    <h4 id="spring-scope-和设计模式">Spring scope 和设计模式</h4>
-  </li>
-  <li>
-    <h4 id="sql优化">Sql优化</h4>
-  </li>
+  <li><strong>修改 like 程序</strong>，去掉前置百分号。like语句却因为前置百分号而无法使用索引</li>
+  <li>从系统设计的角度修改语句，去掉outer join。</li>
+  <li><strong>考虑组合索引或覆盖索引消除</strong> clustered index scan。</li>
 </ol>
 
-<h3 id="三面"><strong>三面</strong></h3>
+<p><strong>上面1和2点建议立即消除了worktable，性能提高了几倍以上，效果非常明显。</strong></p>
 
-<ol>
-  <li>
-    <h4 id="fullgc的时候会导致接口的响应速度特别慢该如何排查和解决">fullgc的时候会导致接口的响应速度特别慢，该如何排查和解决？</h4>
-  </li>
-  <li>
-    <h4 id="项目内存或者cpu占用率过高如何排查">项目内存或者CPU占用率过高如何排查？</h4>
-  </li>
-  <li>
-    <h4 id="concurrenthashmap原理">ConcurrentHashmap原理</h4>
-  </li>
-  <li>
-    <h4 id="数据库分库分表">数据库分库分表</h4>
-  </li>
-  <li>
-    <h4 id="mq相关为什么kafka这么快什么是零拷贝">MQ相关，为什么kafka这么快，什么是零拷贝？</h4>
-  </li>
-  <li>
-    <h4 id="小算法题">小算法题</h4>
-  </li>
-  <li>
-    <h4 id="http和https协议区别具体原理">http和https协议区别，具体原理</h4>
-  </li>
-</ol>
+<h5 id="限制结果集">限制结果集</h5>
+<p><strong>要尽量减少返回的结果行，包括行数和字段列数。</strong></p>
 
-<h3 id="四面leader"><strong>四面（Leader）</strong></h3>
+<p>返回的结果越大，意味着相应的SQL语句的logical reads 就越大，对服务器的性能影响就越甚。</p>
 
-<ol>
-  <li>
-    <h4 id="手画自己项目的架构图并且针对架构和中间件提问">手画自己项目的架构图，并且针对架构和中间件提问</h4>
-  </li>
-  <li>
-    <h4 id="印象最深的一本技术书籍是什么"><strong>印象最深的一本技术书籍是什么？</strong></h4>
-  </li>
-</ol>
-</div><p><a href="/mianshi/0707/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+<p>一个很不好的设计就是返回表的所有数据：</p>
+
+<p>Select * from tablename</p>
+
+<p>即使表很小也会导致并发问题。更坏的情况是，如果表有上百万行的话，那后果将是灾难性的。</p>
+
+<p>它不但可能带来极重的磁盘IO，更有可能把数据库缓冲区中的其他缓存数据挤出，使得这些数据下次必须再从磁盘读取。</p>
+
+<p>必须设计良好的SQL语句，使得其有where语句或TOP语句来限制结果集大小。</p>
+
+<h5 id="合理的表设计">合理的表设计</h5>
+
+<p>SQL Server 2005将支持表分区技术。利用表分区技术可以实现数据表的流动窗口功能。</p>
+
+<p>在流动窗口中可以轻易的把历史数据移出，把新的数据加入，从而使表的大小基本保持稳定。</p>
+
+<p>另外，表的设计未必需要非常范式化。有一定的字段冗余可以增加SQL语句的效率，减少JOIN的数目，提高语句的执行速度。</p>
+
+<h5 id="olap和oltp模块要分开">OLAP和OLTP模块要分开</h5>
+
+<p>OLAP和OLTP类型的语句是截然不同的。前者往往需要扫描整个表做统计分析，索引对这样的语句几乎没有多少用处。</p>
+
+<p>索引只能够加快那些如sum，group by之类的聚合运算。因为这个原因，几乎很难对OLAP类型的SQL语句进行优化。</p>
+
+<p>而OLTP语句则只需要访问表的很小一部分数据，而且这些数据往往可以从内存缓存中得到。</p>
+
+<p>为了避免OLAP 和OLTP语句相互影响，这两类模块需要分开运行在不同服务器上。</p>
+
+<p>因为OLAP语句几乎都是读取数据，没有更新和写入操作，所以一个好的经验是配置一台standby 服务器，然后OLAP只访问standby服务器。</p>
+
+<h5 id="使用存储过程">使用存储过程</h5>
+
+<p>可以考虑使用存储过程封装那些复杂的SQL语句或商业逻辑，这样做有几个好处。</p>
+
+<p>一是存储过程的执行计划可以被缓存在内存中较长时间，减少了重新编译的时间。</p>
+
+<p>二是存储过程减少了客户端和服务器的繁复交互。</p>
+
+<p>三是如果程序发布后需要做某些改变你可以直接修改存储过程而不用修改程序，避免需要重新安装部署程序。</p>
+
+<h4 id="索引优化">索引优化</h4>
+
+<p>很多数据库系统性能不理想是因为系统没有经过整体优化，存在大量性能低下的SQL 语句。</p>
+
+<p>这类SQL语句性能不好的首要原因是缺乏高效的索引。</p>
+
+<p>没有索引除了导致语句本身运行速度慢外，更是导致大量的磁盘读写操作，使得整个系统性能都受之影响而变差。</p>
+
+<p>解决这类系统的首要办法是优化这些没有索引或索引不够好的SQL语句。</p>
+
+<p>创建索引的关键</p>
+
+<p>优化SQL语句的关键是尽可能减少语句的logical reads。</p>
+
+<p>这里说的logical reads是指语句执行时需要访问的单位为8K的数据页总数。</p>
+
+<p>logical reads 越少，其需要的内存和CPU时间也就越少，语句执行速度就越快。</p>
+
+<p>不言而喻，索引的最大好处是它可以极大减少SQL语句的logical reads数目，从而极大减少语句的执行时间。</p>
+
+<p>创建索引的关键是索引要能够大大减少语句的logical reads。一个索引好不好，主要看它减少的logical reads多不多。</p>
+
+<p>运行set statistics io命令可以得到SQL语句的logical reads信息。</p>
+
+<p>set statistics io on</p>
+
+<p>select au_id,au_lname ,au_fname</p>
+
+<p>from pubs..authors where au_lname =’Green’</p>
+
+<p>set statistics io on</p>
+
+<p>如果Logical reads很大，而返回的行数很少，也即两者相差较大，那么往往意味者语句需要优化。</p>
+
+<p>Logical reads中包含该语句从内存数据缓冲区中访问的页数和从物理磁盘读取的页数。</p>
+
+<p>而physical reads表示那些没有驻留在内存缓冲区中需要从磁盘读取的数据页。</p>
+
+<p>Read-ahead reads是SQL Server为了提高性能而产生的预读。预读可能会多读取一些数据。</p>
+
+<p>优化的时候我们主要关注Logical Reads就可以了。</p>
+
+<p>注意如果physical Reads或Read-ahead reads很大，那么往往意味着语句的执行时间（duration）里面会有一部分耗费在等待物理磁盘IO上。</p>
+
+<p>二、单字段索引，组合索引和覆盖索引</p>
+
+<p>单字段索引是指只有一个字段的索引，而组合索引指有多个字段构成的索引。</p>
+
+<p>1． 对出现在where子句中的字段加索引</p>
+
+<p>set statistics profile on</p>
+
+<p>set statistics io on</p>
+
+<p>go</p>
+
+<p>select …. from tb where …</p>
+
+<p>go</p>
+
+<p>set statistics profile off</p>
+
+<p>set statistics io off</p>
+
+<p>set statistics profile命令将输出语句的执行计划。</p>
+
+<p>也许你会问，为什么不用SET SHOWPLAN_ALL呢？使用SET SHOWPLAN_ALL也是可以的。</p>
+
+<p>不过set statistics profile输出的是SQL 语句的运行时候真正使用的执行计划，</p>
+
+<p>而SET SHOWPLAN_ALL输出的是预计（Estimate）的执行计划。</p>
+
+<p>使用SET SHOWPLAN_ALL是后面的语句并不会真正运行。</p>
+
+<p>用了Table Scan，也就是对整个表进行了全表扫描。全表扫描的性能通常是很差的，要尽量避免。</p>
+
+<p>如果上面的select语句是数据库系统经常运行的关键语句， 那么应该对它创建相应的索引。</p>
+
+<p>创建索引的技巧之一是对经常出现在where条件中的字段创建索引</p>
+
+<p>Table Scan也变成了Index Seek，性能极大提高</p>
+
+<p>设法避免Table scan或Index scan是优化SQL 语句使用的常用技巧。通常Index Seek需要的logical reads比前两者要少得多。</p>
+
+<p>2．组合索引</p>
+
+<p>如果where语句中有多个字段，那么可以考虑创建组合索引。</p>
+
+<p>组合索引中字段的顺序是非常重要的，越是唯一的字段越是要靠前。</p>
+
+<p>另外，无论是组合索引还是单个列的索引，尽量不要选择那些唯一性很低的字段。</p>
+
+<p>比如说，在只有两个值0和1的字段上建立索引没有多大意义。</p>
+
+<p>所以如果对单字段进行索引，建议使用set statistics profile来验证索引确实被充分使用。logical reads越少的索引越好。</p>
+
+<p>3．覆盖索引</p>
+
+<p>覆盖索引能够使得语句不需要访问表仅仅访问索引就能够得到所有需要的数据。</p>
+
+<p>因为聚集索引叶子节点就是数据所以无所谓覆盖与否，所以覆盖索引主要是针对非聚集索引而言。</p>
+
+<p>执行计划中除了index seek外，还有一个Bookmark Lookup关键字。</p>
+
+<p>Bookmark Lookup表示语句在访问索引后还需要对表进行额外的Bookmark Lookup操作才能得到数据。</p>
+
+<p>也就是说为得到一行数据起码有两次IO，一次访问索引，一次访问基本表。</p>
+
+<p>如果语句返回的行数很多，那么Bookmark Lookup操作的开销是很大的。</p>
+
+<p>覆盖索引能够避免昂贵的Bookmark Lookup操作，减少IO的次数，提高语句的性能。</p>
+
+<p>覆盖索引需要包含select子句和WHERE子句中出现的所有字段。Where语句中的字段在前面，select中的在后面。</p>
+
+<p>logical reads，是大大减少了。Bookmark Lookup操作也消失了。所以创建覆盖索引是减少logical reads提升语句性能的非常有用的优化技巧。</p>
+
+<p>实际上索引的创建原则是比较复杂的。有时候你无法在索引中包含了Where子句中所有的字段。</p>
+
+<p>在考虑索引是否应该包含一个字段时，应考虑该字段在语句中的作用。</p>
+
+<p>比如说如果经常以某个字段作为where条件作精确匹配返回很少的行，那么就绝对值得为这个字段建立索引。</p>
+
+<p>再比如说，对那些非常唯一的字段如主键和外键，经常出现在group by，order by中的字段等等都值得创建索引。</p>
+
+<p>问题1，是否值得在identity字段上建立聚集索引。</p>
+
+<p>答案取决于identity 字段如何在语句中使用。如果你经常根据该字段搜索返回很少的行，那么在其上建立索引是值得的。</p>
+
+<p>反之如果identity字段根本很少在语句中使用，那么就不应该对其建立任何索引。</p>
+
+<p>问题2，一个表应该建立多少索引合适。</p>
+
+<p>如果表的80％以上的语句都是读操作，那么索引可以多些。但是不要太多。</p>
+
+<p>特别是不要对那些更新频繁的表其建立很多的索引。很少表有超过5个以上的索引。</p>
+
+<p>过多的索引不但增加其占用的磁盘空间，也增加了SQL Server 维护索引的开销。</p>
+
+<p>问题4：为什么SQL Server 在执行计划中没有使用你认为应该使用的索引？原因是多样的。</p>
+
+<p>一种原因是该语句返回的结果超过了表的20％数据，使得SQL Server 认为scan比seek更有效。</p>
+
+<p>另一种原因可能是表字段的statistics过期了，不能准确反映数据的分布情况。</p>
+
+<p>你可以使用命令UPDATE STATISTICS tablename with FULLSCAN来更新它。</p>
+
+<p>只有同步的准确的statistics才能保证SQL Server 产生正确的执行计划。</p>
+
+<p>过时的老的statistics常会导致SQL Server生成不够优化的甚至愚蠢的执行计划。</p>
+
+<p>所以如果你的表频繁更新，而你又觉得和之相关的SQL语句运行缓慢，不妨试试UPDATE STATISTIC with FULLSCAN 语句。</p>
+
+<p>问题5、什么使用聚集索引，什么时候使用非聚集索引</p>
+
+<p>在SQL Server 中索引有聚集索引和非聚集索引两种。它们的主要差别是前者的索引叶子就是数据本身，而后者的叶子节点包含的是指向数据的书签（即数据行号或聚集索引的key）。</p>
+
+<p>对一个表而言聚集索引只能有一个，而非聚集索引可以有多个。</p>
+
+<p>只是聚集索引没有Bookmark Lookup操作。</p>
+
+<p>什么时候应该使用聚集索引?  什么时候使用非聚集索引? 取决于应用程序的访问模式。</p>
+
+<p>我的建议是在那些关键的字段上使用聚集索引。一个表一般都需要建立一个聚集索引。</p>
+
+<p>对于什么时候使用聚集索引，SQL Server 2000联机手册中有如下描述：</p>
+
+<p>在创建聚集索引之前，应先了解您的数据是如何被访问的。可考虑将聚集索引用于：</p>
+
+<p>包含大量非重复值的列。</p>
+
+<p>使用下列运算符返回一个范围值的查询：BETWEEN、&gt;、&gt;=、&lt; 和 &lt;=。</p>
+
+<p>被连续访问的列。</p>
+
+<p>返回大型结果集的查询。</p>
+
+<p>经常被使用联接或 GROUP BY 子句的查询访问的列；一般来说，这些是外键列。</p>
+
+<p>对 ORDER BY 或 GROUP BY 子句中指定的列进行索引，可以使 SQL Server 不必对数据进行排序，因为这些行已经排序。这样可以提高查询性能。</p>
+
+<p>OLTP 类型的应用程序，这些程序要求进行非常快速的单行查找（一般通过主键）。应在主键上创建聚集索引。</p>
+
+<p>聚集索引不适用于：</p>
+
+<p>频繁更改的列</p>
+
+<p>这将导致整行移动（因为 SQL Server 必须按物理顺序保留行中的数据值）。这一点要特别注意，因为在大数据量事务处理系统中数据是易失的。</p>
+
+<p>宽键</p>
+
+<p>来自聚集索引的键值由所有非聚集索引作为查找键使用，因此存储在每个非聚集索引的叶条目内。</p>
+
+<p>总结：</p>
+
+<p>如何使一个性能缓慢的系统运行更快更高效，不但需要整体分析数据库系统，找出系统的性能瓶颈，更需要优化数据库系统发出的SQL 语句。</p>
+
+<p>一旦找出关键的SQL 语句并加与优化，性能问题就会迎刃而解。</p>
+
+<p><img src="/assets/images/mianshiti/0708/_1221791481690.jpg" alt="img" /></p>
+
+<p><strong>《 数据库技术内幕 》</strong></p>
+
+<p>处理百万级以上的数据提高查询速度的方法：</p>
+
+<p><strong>1</strong>.应尽量避免在 where 子句中使用!=或&lt;&gt;操作符，否则将引擎放弃使用索引而进行全表扫描。</p>
+
+<p><strong>2</strong>.对查询进行优化，应尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引。</p>
+
+<p><strong>3</strong>.应尽量避免在 where 子句中对字段进行 null 值判断，否则将导致引擎放弃使用索引而进行全表扫描，如：
+   select id from t where num is null
+   可以在num上设置默认值0，确保表中num列没有null值，然后这样查询：
+   select id from t where num=<strong>0
+**
+ **4</strong>.应尽量避免在 where 子句中使用 or 来连接条件，否则将导致引擎放弃使用索引而进行全表扫描，如：
+   select id from t where num=<strong>10</strong> or num=<strong>20</strong>
+   可以这样查询：
+   select id from t where num=<strong>10</strong>
+   union all
+   select id from t where num=<strong>20
+**
+ **5</strong>.下面的查询也将导致全表扫描：(不能前置百分号)
+   select id from t where name like ‘%abc%’
+  若要提高效率，可以考虑全文检索。</p>
+
+<p><strong>6</strong>.in 和 not in 也要慎用，否则会导致全表扫描，如：
+   select id from t where num in(<strong>1</strong>,<strong>2</strong>,<strong>3</strong>)
+   对于连续的数值，能用 between 就不要用 in 了：
+   select id from t where num between <strong>1</strong> and **3</p>
+
+<p>**</p>
+
+<p>select xx,phone FROM send a JOIN (
+ select ‘13891030091’ phone union select ‘13992085916’ ………… UNION SELECT ‘13619100234’ ) b
+ on a.Phone=b.phone
+–替代下面 很多数据隔开的时候
+in(‘13891030091’,’13992085916’,’13619100234’…………)</p>
+
+<p><strong>7</strong>.如果在 where 子句中使用参数，也会导致全表扫描。因为SQL只有在运行时才会解析局部变量，但优化程序不能将访问计划的选择推迟到运行时；它必须在编译时进行选择。然 而，如果在编译时建立访问计划，变量的值还是未知的，因而无法作为索引选择的输入项。如下面语句将进行全表扫描：
+   select id from t where num=@num   可以改为强制查询使用索引：
+   select id from t with(index(索引名)) where <a href="mailto:num=@num">num</a><a href="mailto:num=@num">=@num</a></p>
+
+<p><strong>8</strong>.应尽量避免在 where 子句中对字段进行表达式操作，这将导致引擎放弃使用索引而进行全表扫描。如：
+   select id from t where num/<strong>2</strong>=<strong>100</strong>
+   应改为:
+   select id from t where num=<strong>100</strong><strong>*2
+**
+ **9</strong>.应尽量避免在where子句中对字段进行函数操作，这将导致引擎放弃使用索引而进行全表扫描。如：
+   select id from t where substring(name,<strong>1</strong>,<strong>3</strong>)=’abc’–name以abc开头的id
+   select id from t where datediff(day,createdate,’<strong>2005</strong>-<strong>11</strong>-<strong>30</strong>′)=<strong>0</strong>–’<strong>2005</strong>-<strong>11</strong>-<strong>30</strong>′生成的id
+   应改为:
+   select id from t where name like ‘abc%’
+   select id from t where createdate&gt;=’<strong>2005</strong>-<strong>11</strong>-<strong>30</strong>′ and createdate&lt;’<strong>2005</strong>-<strong>12</strong>-<strong>1</strong>′</p>
+
+<p><strong>10</strong>.不要在 where 子句中的“=”左边进行函数、算术运算或其他表达式运算，否则系统将可能无法正确使用索引。</p>
+
+<p><strong>11</strong>.在使用索引字段作为条件时，如果该索引是复合索引，那么必须使用到该索引中的第一个字段作为条件时才能保证系统使用该索引，否则该索引将不会被使 用，并且应尽可能的让字段顺序与索引顺序相一致。</p>
+
+<p><strong>12</strong>.不要写一些没有意义的查询，如需要生成一个空表结构：
+   select col1,col2 into #t from t where <strong>1</strong>=<strong>0</strong>
+   这类代码不会返回任何结果集，但是会消耗系统资源的，应改成这样：
+   create table #t(…)</p>
+
+<p><strong>13</strong>.很多时候用 exists 代替 in 是一个好的选择：
+   select num from a where num in(select num from b)
+   用下面的语句替换：
+   select num from a where exists(select <strong>1</strong> from b where num=a.num)**
+**
+ <strong>14</strong>.并不是所有索引对查询都有效，SQL是根据表中数据来进行查询优化的，当索引列有大量数据重复时，SQL查询可能不会去利用索引，如一表中有字段 sex，male、female几乎各一半，那么即使在sex上建了索引也对查询效率起不了作用。</p>
+
+<p><strong>15</strong>.索引并不是越多越好，索引固然可以提高相应的 select 的效率，但同时也降低了 insert 及 update 的效率，因为 insert 或 update 时有可能会重建索引，所以怎样建索引需要慎重考虑，视具体情况而定。一个表的索引数最好不要超过6个，若太多则应考虑一些不常使用到的列上建的索引是否有 必要。</p>
+
+<p><strong>16</strong>.应尽可能的避免更新 clustered 索引数据列，因为 clustered 索引数据列的顺序就是表记录的物理存储顺序，一旦该列值改变将导致整个表记录的顺序的调整，会耗费相当大的资源。若应用系统需要频繁更新 clustered 索引数据列，那么需要考虑是否应将该索引建为 clustered 索引。</p>
+
+<p><strong>17</strong>.尽量使用数字型字段，若只含数值信息的字段尽量不要设计为字符型，这会降低查询和连接的性能，并会增加存储开销。这是因为引擎在处理查询和连接时会 逐个比较字符串中每一个字符，而对于数字型而言只需要比较一次就够了。</p>
+
+<p><strong>18</strong>.尽可能的使用 varchar/nvarchar 代替 char/nchar ，因为首先变长字段存储空间小，可以节省存储空间，其次对于查询来说，在一个相对较小的字段内搜索效率显然要高些。</p>
+
+<p><strong>19</strong>.任何地方都不要使用 select * from t ，用具体的字段列表代替“*”，不要返回用不到的任何字段。</p>
+
+<p><strong>20</strong>.尽量使用表变量来代替临时表。如果表变量包含大量数据，请注意索引非常有限（只有主键索引）。</p>
+
+<p><strong>21</strong>.避免频繁创建和删除临时表，以减少系统表资源的消耗。</p>
+
+<p><strong>22</strong>.临时表并不是不可使用，适当地使用它们可以使某些例程更有效，例如，当需要重复引用大型表或常用表中的某个数据集时。但是，对于一次性事件，最好使 用导出表。</p>
+
+<p><strong>23</strong>.在新建临时表时，如果一次性插入数据量很大，那么可以使用 select into 代替 create table，避免造成大量 log ，以提高速度；如果数据量不大，为了缓和系统表的资源，应先create table，然后insert。</p>
+
+<p><strong>24</strong>.如果使用到了临时表，在存储过程的最后务必将所有的临时表显式删除，先 truncate table ，然后 drop table ，这样可以避免系统表的较长时间锁定。</p>
+
+<p><strong>25</strong>.尽量避免使用游标，因为游标的效率较差，如果游标操作的数据超过1万行，那么就应该考虑改写。</p>
+
+<p><strong>26</strong>.使用基于游标的方法或临时表方法之前，应先寻找基于集的解决方案来解决问题，基于集的方法通常更有效。</p>
+
+<p><strong>27</strong>.与临时表一样，游标并不是不可使用。对小型数据集使用 FAST_FORWARD 游标通常要优于其他逐行处理方法，尤其是在必须引用几个表才能获得所需的数据时。在结果集中包括“合计”的例程通常要比使用游标执行的速度快。如果开发时 间允许，基于游标的方法和基于集的方法都可以尝试一下，看哪一种方法的效果更好。</p>
+
+<p><strong>28</strong>.在所有的存储过程和触发器的开始处设置 SET NOCOUNT ON ，在结束时设置 SET NOCOUNT OFF 。无需在执行存储过程和触发器的每个语句后向客户端发送 DONE_IN_PROC 消息。</p>
+
+<p><strong>29</strong>.尽量避免向客户端返回大数据量，若数据量过大，应该考虑相应需求是否合理。</p>
+
+<p><strong>30</strong>.尽量避免大事务操作，提高系统并发能力。</p>
+
+<p><strong>查询速度慢的原因：</strong></p>
+
+<p><strong>1</strong>、没有索引或者没有用到索引(这是查询慢最常见的问题，是程序设计的缺陷)</p>
+
+<p><strong>2</strong>、I/O吞吐量小，形成了瓶颈效应。</p>
+
+<p><strong>3</strong>、没有创建计算列导致查询不优化。</p>
+
+<p><strong>4</strong>、内存不足</p>
+
+<p><strong>5</strong>、网络速度慢</p>
+
+<p><strong>6</strong>、查询出的数据量过大（可以采用多次查询，其他的方法降低数据量）</p>
+
+<p><strong>7</strong>、锁或者死锁(这也是查询慢最常见的问题，是程序设计的缺陷)</p>
+
+<p><strong>8</strong>、sp_lock,sp_who,活动的用户查看,原因是读写竞争资源。</p>
+
+<p><strong>9</strong>、返回了不必要的行和列</p>
+
+<p><strong>10</strong>、查询语句不好，没有优化</p>
+
+<p>可以通过如下方法来优化查询</p>
+
+<p><strong>1</strong>、把数据、日志、索引放到不同的I/O设备上，增加读取速度，以前可以将Tempdb应放在RAID0上，SQL2000不在支持。数据量（尺寸）越大，提高I/O越重要.</p>
+
+<p><strong>2</strong>、纵向、横向分割表，减少表的尺寸(sp_spaceuse)</p>
+
+<p><strong>3</strong>、升级硬件</p>
+
+<p><strong>4</strong>、根据查询条件,建立索引,优化索引、优化访问方式，限制结果集的数据量。注意填充因子要适当（最好是使用默认值0）。索引应该尽量小，使用字节数小的列建索引好（参照索引的创建）,不要对有限的几个值的字段建单一索引如性别字段</p>
+
+<p><strong>5</strong>、提高网速;</p>
+
+<p><strong>6</strong>、扩大服务器的内存,Windows  2000和SQL  server  2000能支持4-8G的内存。配置虚拟内存：虚拟内存大小应基于计算机上并发运行的服务进行配置。运行  Microsoft  SQL  Server?  <strong>2000</strong>  时，可考虑将虚拟内存大小设置为计算机中安装的物理内存的  <strong>1.5</strong>  倍。如果另外安装了全文检索功能，并打算运行  Microsoft  搜索服务以便执行全文索引和查询，可考虑：将虚拟内存大小配置为至少是计算机中安装的物理内存的  <strong>3</strong>  倍。将  SQL  Server  max  server  memory  服务器配置选项配置为物理内存的  <strong>1.5</strong>  倍（虚拟内存大小设置的一半）。</p>
+
+<p><strong>7</strong>、增加服务器CPU个数;但是必须明白并行处理串行处理更需要资源例如内存。使用并行还是串行程是MsSQL自动评估选择的。单个任务分解成多个任务，就可以在处理器上运行。例如耽搁查询的排序、连接、扫描和GROUP  BY字句同时执行，SQL  SERVER根据系统的负载情况决定最优的并行等级，复杂的需要消耗大量的CPU的查询最适合并行处理。但是更新操作UPDATE,INSERT， DELETE还不能并行处理。</p>
+
+<p><strong>8</strong>、如果是使用like进行查询的话，简单的使用index是不行的，但是全文索引，耗空间。  like  ‘a%’  使用索引  like  ‘%a’  不使用索引用  like  ‘%a%’  查询时，查询耗时和字段值总长度成正比,所以不能用CHAR类型，而是VARCHAR。对于字段的值很长的建全文索引。</p>
+
+<p><strong>9</strong>、DB  Server  和APPLication  Server  分离；OLTP和OLAP分离</p>
+
+<p><strong>10</strong>、分布式分区视图可用于实现数据库服务器联合体。联合体是一组分开管理的服务器，但它们相互协作分担系统的处理负荷。这种通过分区数据形成数据库服务器联合体的机制能够扩大一组服务器，以支持大型的多层  Web  站点的处理需要。有关更多信息，参见设计联合数据库服务器。（参照SQL帮助文件’分区视图’）
+  a、在实现分区视图之前，必须先水平分区表
+  b、在创建成员表后，在每个成员服务器上定义一个分布式分区视图，并且每个视图具有相同的名称。这样，引用分布式分区视图名的查询可以在任何一个成员服务器上运行。系统操作如同每个成员服务器上都有一个原始表的复本一样，但其实每个服务器上只有一个成员表和一个分布式分区视图。数据的位置对应用程序是透明的。</p>
+
+<p><strong>11</strong>、重建索引  DBCC  REINDEX  ,DBCC  INDEXDEFRAG,收缩数据和日志  DBCC  SHRINKDB,DBCC  SHRINKFILE.  设置自动收缩日志.对于大的数据库不要设置数据库自动增长，它会降低服务器的性能。  在T-sql的写法上有很大的讲究，下面列出常见的要点：首先，DBMS处理查询计划的过程是这样的：
+  <strong>1</strong>、  查询语句的词法、语法检查   <br />
+  <strong>2</strong>、  将语句提交给DBMS的查询优化器
+  <strong>3</strong>、  优化器做代数优化和存取路径的优化
+  <strong>4</strong>、  由预编译模块生成查询规划
+  <strong>5</strong>、  然后在合适的时间提交给系统处理执行
+  <strong>6</strong>、  最后将执行结果返回给用户其次，看一下SQL  SERVER的数据存放的结构：一个页面的大小为8K(<strong>8060</strong>)字节，8个页面为一个盘区，按照B树存放。</p>
+
+<p><strong>12</strong>、Commit和rollback的区别  Rollback:回滚所有的事物。  Commit:提交当前的事物.  没有必要在动态SQL里写事物，如果要写请写在外面如：  begin  tran  exec(@s)  commit  trans  或者将动态SQL  写成函数或者存储过程。</p>
+
+<p><strong>13</strong>、在查询Select语句中用Where字句限制返回的行数,避免表扫描,如果返回不必要的数据，浪费了服务器的I/O资源，加重了网络的负担降低性能。如果表很大，在表扫描的期间将表锁住，禁止其他的联接访问表,后果严重。</p>
+
+<p><strong>14</strong>、SQL的注释申明对执行没有任何影响</p>
+
+<p><strong>15</strong>、尽可能不使用游标，它占用大量的资源。如果需要row-by-row地执行，尽量采用非光标技术,如：在客户端循环，用临时表，Table变量，用子查询，用Case语句等等。游标可以按照它所支持的提取选项进行分类：  只进  必须按照从第一行到最后一行的顺序提取行。FETCH  NEXT  是唯一允许的提取操作,也是默认方式。可滚动性  可以在游标中任何地方随机提取任意行。游标的技术在SQL2000下变得功能很强大，他的目的是支持循环。
+有四个并发选项
+READ_ONLY：不允许通过游标定位更新(Update)，且在组成结果集的行中没有锁。
+OPTIMISTIC  WITH  valueS:乐观并发控制是事务控制理论的一个标准部分。乐观并发控制用于这样的情形，即在打开游标及更新行的间隔中，只有很小的机会让第二个用户更新某一行。当某个游标以此选项打开时，没有锁控制其中的行，这将有助于最大化其处理能力。如果用户试图修改某一行，则此行的当前值会与最后一次提取此行时获取的值进行比较。如果任何值发生改变，则服务器就会知道其他人已更新了此行，并会返回一个错误。如果值是一样的，服务器就执行修改。  选择这个并发选项OPTIMISTIC  WITH  ROW  VERSIONING:此乐观并发控制选项基于行版本控制。使用行版本控制，其中的表必须具有某种版本标识符，服务器可用它来确定该行在读入游标后是否有所更改。
+在  SQL  Server  中，这个性能由  timestamp  数据类型提供，它是一个二进制数字，表示数据库中更改的相对顺序。每个数据库都有一个全局当前时间戳值：<strong>@@DBTS</strong>。每次以任何方式更改带有  timestamp  列的行时，SQL  Server  先在时间戳列中存储当前的  <strong>@@DBTS</strong>  值，然后增加  <strong>@@DBTS</strong>  的值。如果某  个表具有  timestamp  列，则时间戳会被记到行级。服务器就可以比较某行的当前时间戳值和上次提取时所存储的时间戳值，从而确定该行是否已更新。服务器不必比较所有列的值，只需比较  timestamp  列即可。如果应用程序对没有  timestamp  列的表要求基于行版本控制的乐观并发，则游标默认为基于数值的乐观并发控制。
+SCROLL  LOCKS  这个选项实现悲观并发控制。在悲观并发控制中，在把数据库的行读入游标结果集时，应用程序将试图锁定数据库行。在使用服务器游标时，将行读入游标时会在其上放置一个更新锁。如果在事务内打开游标，则该事务更新锁将一直保持到事务被提交或回滚；当提取下一行时，将除去游标锁。如果在事务外打开游标，则提取下一行时，锁就被丢弃。因此，每当用户需要完全的悲观并发控制时，游标都应在事务内打开。更新锁将阻止任何其它任务获取更新锁或排它锁，从而阻止其它任务更新该行。
+然而，更新锁并不阻止共享锁，所以它不会阻止其它任务读取行，除非第二个任务也在要求带更新锁的读取。滚动锁根据在游标定义的  SELECT  语句中指定的锁提示，这些游标并发选项可以生成滚动锁。滚动锁在提取时在每行上获取，并保持到下次提取或者游标关闭，以先发生者为准。下次提取时，服务器为新提取中的行获取滚动锁，并释放上次提取中行的滚动锁。滚动锁独立于事务锁，并可以保持到一个提交或回滚操作之后。如果提交时关闭游标的选项为关，则  COMMIT  语句并不关闭任何打开的游标，而且滚动锁被保留到提交之后，以维护对所提取数据的隔离。所获取滚动锁的类型取决于游标并发选项和游标  SELECT  语句中的锁提示。
+锁提示  只读  乐观数值  乐观行版本控制  锁定无提示  未锁定  未锁定  未锁定  更新  NOLOCK  未锁定  未锁定  未锁定  未锁定  HOLDLOCK  共享  共享  共享  更新  UPDLOCK  错误  更新  更新  更新  TABLOCKX  错误  未锁定  未锁定  更新其它  未锁定  未锁定  未锁定  更新  *指定  NOLOCK  提示将使指定了该提示的表在游标内是只读的。</p>
+
+<p><strong>16</strong>、用Profiler来跟踪查询，得到查询所需的时间，找出SQL的问题所在;用索引优化器优化索引</p>
+
+<p><strong>17</strong>、注意UNion和UNion  all  的区别。UNION  all好</p>
+
+<p><strong>18</strong>、注意使用DISTINCT，在没有必要时不要用，它同UNION一样会使查询变慢。重复的记录在查询里是没有问题的</p>
+
+<p><strong>19</strong>、查询时不要返回不需要的行、列</p>
+
+<p><strong>20</strong>、用sp_configure  ‘query  governor  cost  limit’或者SET  QUERY_GOVERNOR_COST_LIMIT来限制查询消耗的资源。当评估查询消耗的资源超出限制时，服务器自动取消查询,在查询之前就扼杀掉。 SET  LOCKTIME设置锁的时间</p>
+
+<p><strong>21</strong>、用select  top  <strong>100</strong>  /  <strong>10</strong>  Percent  来限制用户返回的行数或者SET  ROWCOUNT来限制操作的行</p>
+
+<p><strong>22</strong>、在SQL2000以前，一般不要用如下的字句 “IS  NULL”,  “ &lt;&gt; “,  “!=”,  “!&gt; “,  “! &lt;”,  “NOT”,  “NOT  EXISTS”,  “NOT  IN”,  “NOT  LIKE”,  and  “LIKE  ‘%500’“，因为他们不走索引全是表扫描。
+也不要在WHere字句中的列名加函数，如Convert，substring等,如果必须用函数的时候，创建计算列再创建索引来替代.还可以变通写法：WHERE  SUBSTRING(firstname,<strong>1</strong>,<strong>1</strong>)  =  ‘m’改为WHERE  firstname  like  ‘m%’（索引扫描），一定要将函数和列名分开。并且索引不能建得太多和太大。
+NOT  IN会多次扫描表，使用EXISTS、NOT  EXISTS  ，IN  ,  LEFT  OUTER  JOIN  来替代，特别是左连接,而Exists比IN更快，最慢的是NOT操作.如果列的值含有空，以前它的索引不起作用，现在2000的优化器能够处理了。相同的是IS  NULL，“NOT”,  “NOT  EXISTS”,  “NOT  IN”能优化她，而” &lt;&gt; ”等还是不能优化，用不到索引。</p>
+
+<p><strong>23</strong>、使用Query  Analyzer，查看SQL语句的查询计划和评估分析是否是优化的SQL。一般的20%的代码占据了80%的资源，我们优化的重点是这些慢的地方。</p>
+
+<p><strong>24</strong>、如果使用了IN或者OR等时发现查询没有走索引，使用显示申明指定索引：  SELECT  *  FROM  PersonMember  (INDEX  =  IX_Title)  WHERE  processid  IN  (‘男’，‘女’)</p>
+
+<p><strong>25</strong>、将需要查询的结果预先计算好放在表中，查询的时候再SELECT。这在SQL7.0以前是最重要的手段。例如医院的住院费计算。</p>
+
+<p><strong>26</strong>、MIN()  和  MAX()能使用到合适的索引</p>
+
+<p><strong>27</strong>、数据库有一个原则是代码离数据越近越好，所以优先选择Default,依次为Rules,Triggers,  Constraint（约束如外健主健CheckUNIQUE……,数据类型的最大长度等等都是约束）,Procedure.这样不仅维护工作小，编写程序质量高，并且执行的速度快。</p>
+
+<p><strong>28</strong>、如果要插入大的二进制值到Image列，使用存储过程，千万不要用内嵌INsert来插入(不知JAVA是否)。因为这样应用程序首先将二进制值转换成字符串（尺寸是它的两倍），服务器受到字符后又将他转换成二进制值.存储过程就没有这些动作:  方法：Create  procedure  p_insert  as  insert  into  table(Fimage)  values  (@image),  在前台调用这个存储过程传入二进制参数，这样处理速度明显改善。</p>
+
+<p><strong>29</strong>、Between在某些时候比IN速度更快,Between能够更快地根据索引找到范围。用查询优化器可见到差别。  select  *  from  chineseresume  where  title  in  (‘男’,’女’)  Select  *  from  chineseresume  where  between  ‘男’  and  ‘女’  是一样的。由于in会在比较多次，所以有时会慢些。</p>
+
+<p><strong>30</strong>、在必要是对全局或者局部临时表创建索引，有时能够提高速度，但不是一定会这样，因为索引也耗费大量的资源。他的创建同是实际表一样。</p>
+
+<p><strong>31</strong>、不要建没有作用的事物例如产生报表时，浪费资源。只有在必要使用事物时使用它。</p>
+
+<p><strong>32</strong>、用OR的字句可以分解成多个查询，并且通过UNION  连接多个查询。他们的速度只同是否使用索引有关,如果查询需要用到联合索引，用UNION  all执行的效率更高.多个OR的字句没有用到索引，改写成UNION的形式再试图与索引匹配。一个关键的问题是否用到索引。</p>
+
+<p><strong>33</strong>、尽量少用视图，它的效率低。对视图操作比直接对表操作慢,可以用stored  procedure来代替她。特别的是不要用视图嵌套,嵌套视图增加了寻找原始资料的难度。我们看视图的本质：它是存放在服务器上的被优化好了的已经产生了查询规划的SQL。对单个表检索数据时，不要使用指向多个表的视图，直接从表检索或者仅仅包含这个表的视图上读，否则增加了不必要的开销,查询受到干扰.为了加快视图的查询，MsSQL增加了视图索引的功能。</p>
+
+<p><strong>34</strong>、没有必要时不要用DISTINCT和ORDER  BY，这些动作可以改在客户端执行。它们增加了额外的开销。这同UNION  和UNION  ALL一样的道理。  SELECT  top  <strong>20</strong>  ad.companyname,comid,position,ad.referenceid,worklocation,  convert(varchar(<strong>10</strong>),ad.postDate,<strong>120</strong>)  as  postDate1,workyear,degreedescription  FROM  jobcn_query.dbo.COMPANYAD_query  ad  where  referenceID  in(‘JCNAD00329667’,’JCNAD132168’,’JCNAD00337748’,’JCNAD00338345’,’JCNAD00333138’,’JCNAD00303570’,  ‘JCNAD00303569’,’JCNAD00303568’,’JCNAD00306698’,’JCNAD00231935’,’JCNAD00231933’,’JCNAD00254567’,  ‘JCNAD00254585’,’JCNAD00254608’,’JCNAD00254607’,’JCNAD00258524’,’JCNAD00332133’,’JCNAD00268618’,  ‘JCNAD00279196’,’JCNAD00268613’)  order  by  postdate  desc</p>
+
+<p><strong>35</strong>、在IN后面值的列表中，将出现最频繁的值放在最前面，出现得最少的放在最后面，减少判断的次数</p>
+
+<p><strong>36</strong>、当用SELECT  INTO时，它会锁住系统表(sysobjects，sysindexes等等)，阻塞其他的连接的存取。创建临时表时用显示申明语句，而不是 select  INTO.  drop  table  t_lxh  begin  tran  select  *  into  t_lxh  from  chineseresume  where  name  =  ‘XYZ’  –commit  在另一个连接中SELECT  *  from  sysobjects可以看到  SELECT  INTO  会锁住系统表，Create  table  也会锁系统表(不管是临时表还是系统表)。所以千万不要在事物内使用它！！！这样的话如果是经常要用的临时表请使用实表，或者临时表变量。</p>
+
+<p><strong>37</strong>、一般在GROUP  BY  个HAVING字句之前就能剔除多余的行，所以尽量不要用它们来做剔除行的工作。他们的执行顺序应该如下最优：select  的Where字句选择所有合适的行，Group  By用来分组个统计行，Having字句用来剔除多余的分组。这样Group  By  个Having的开销小，查询快.对于大的数据行进行分组和Having十分消耗资源。如果Group  BY的目的不包括计算，只是分组，那么用Distinct更快</p>
+
+<p><strong>38</strong>、一次更新多条记录比分多次更新每次一条快,就是说批处理好</p>
+
+<p><strong>39</strong>、少用临时表，尽量用结果集和Table类性的变量来代替它,Table  类型的变量比临时表好</p>
+
+<p><strong>40</strong>、在SQL2000下，计算字段是可以索引的，需要满足的条件如下：</p>
+
+<p>a、计算字段的表达是确定的
+ b、不能用在TEXT,Ntext，Image数据类型
+ c、必须配制如下选项  ANSI_NULLS  =  ON,  ANSI_PADDINGS  =  ON,  …….</p>
+
+<p><strong>41</strong>、尽量将数据的处理工作放在服务器上，减少网络的开销，如使用存储过程。存储过程是编译好、优化过、并且被组织到一个执行规划里、且存储在数据库中的 SQL语句，是控制流语言的集合，速度当然快。反复执行的动态SQL,可以使用临时存储过程，该过程（临时表）被放在Tempdb中。以前由于SQL  SERVER对复杂的数学计算不支持，所以不得不将这个工作放在其他的层上而增加网络的开销。SQL2000支持UDFs,现在支持复杂的数学计算，函数的返回值不要太大，这样的开销很大。用户自定义函数象光标一样执行的消耗大量的资源，如果返回大的结果采用存储过程</p>
+
+<p><strong>42</strong>、不要在一句话里再三的使用相同的函数，浪费资源,将结果放在变量里再调用更快</p>
+
+<p><strong>43</strong>、SELECT  COUNT(*)的效率教低，尽量变通他的写法，而EXISTS快.同时请注意区别：  select  count(Field  of  null)  from  Table  和  select  count(Field  of  NOT  null)  from  Table  的返回值是不同的。</p>
+
+<p><strong>44</strong>、当服务器的内存够多时，配制线程数量  =  最大连接数+<strong>5</strong>，这样能发挥最大的效率；否则使用  配制线程数量 &lt;最大连接数启用SQL  SERVER的线程池来解决,如果还是数量  =  最大连接数+<strong>5</strong>，严重的损害服务器的性能。</p>
+
+<p><strong>45</strong>、按照一定的次序来访问你的表。如果你先锁住表A，再锁住表B，那么在所有的存储过程中都要按照这个顺序来锁定它们。如果你（不经意的）某个存储过程中先锁定表B，再锁定表A，这可能就会导致一个死锁。如果锁定顺序没有被预先详细的设计好，死锁很难被发现</p>
+
+<p><strong>46</strong>、通过SQL  Server  Performance  Monitor监视相应硬件的负载  Memory:  Page  Faults  /  sec计数器如果该值偶尔走高，表明当时有线程竞争内存。如果持续很高，则内存可能是瓶颈。  Process:</p>
+
+<p><strong>1</strong>、%  DPC  Time  指在范例间隔期间处理器用在缓延程序调用(DPC)接收和提供服务的百分比。(DPC  正在运行的为比标准间隔优先权低的间隔)。  由于  DPC  是以特权模式执行的，DPC  时间的百分比为特权时间  百分比的一部分。这些时间单独计算并且不属于间隔计算总数的一部  分。这个总数显示了作为实例时间百分比的平均忙时。
+  <strong>2</strong>、%Processor  Time计数器　如果该参数值持续超过95%，表明瓶颈是CPU。可以考虑增加一个处理器或换一个更快的处理器。
+  <strong>3</strong>、%  Privileged  Time  指非闲置处理器时间用于特权模式的百分比。(特权模式是为操作系统组件和操纵硬件驱动程序而设计的一种处理模式。它允许直接访问硬件和所有内存。另一种模式为用户模式，它是一种为应用程序、环境分系统和整数分系统设计的一种有限处理模式。操作系统将应用程序线程转换成特权模式以访问操作系统服务)。  特权时间的  %  包括为间断和  DPC  提供服务的时间。特权时间比率高可能是由于失败设备产生的大数量的间隔而引起的。这个计数器将平均忙时作为样本时间的一部分显示。
+  <strong>4</strong>、%  User  Time表示耗费CPU的数据库操作，如排序，执行aggregate  functions等。如果该值很高，可考虑增加索引，尽量使用简单的表联接，水平分割大表格等方法来降低该值。  Physical  Disk:  Curretn  Disk  Queue  Length计数器该值应不超过磁盘数的1.<strong>5</strong>~2倍。要提高性能，可增加磁盘。  SQLServer:Cache  Hit  Ratio计数器该值越高越好。如果持续低于80%，应考虑增加内存。  注意该参数值是从SQL  Server启动后，就一直累加记数，所以运行经过一段时间后，该值将不能反映系统当前值。</p>
+
+<p><strong>47</strong>、分析select  emp_name  form  employee  where  salary  &gt;  <strong>3000</strong>  在此语句中若salary是Float类型的，则优化器对其进行优化为Convert(float,<strong>3000</strong>)，因为3000是个整数，我们应在编程时使用3000.0而不要等运行时让DBMS进行转化。同样字符和整型数据的转换。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--查找所有索引
+SELECT  'dbcc showcontig (' + CONVERT(VARCHAR(20), i.id) + ',' + -- table id
+CONVERT(VARCHAR(20), i.indid) + ')--' + --index id
+OBJECT_NAME(i.id) + '.' + -- table name
+i.name--index name
+FROM    sysobjects o
+        INNER JOIN sysindexes i ON ( o.id = i.id )
+WHERE   o.type = 'U'
+        AND i.indid &lt; 2
+        AND i.id = OBJECT_ID(o.name)
+ORDER BY OBJECT_NAME(i.id), i.indid
+
+
+--结果
+dbcc showcontig (2052202361,1)--AddBusiness.PK_AddBusiness
+</code></pre></div></div>
+
+<p><strong>何时需要重建索引：</strong></p>
+
+<p>DBCC showcontig(‘Send’)</p>
+
+<p><img src="/assets/images/mianshiti/0708/04162141-e255aa29d6624144bbe743e11591d2b4.jpg" alt="img" /></p>
+</div><p><a href="/mianshi/mysql/0708/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-10">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-08-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/mysql/0708/02"><h2 itemprop="headline" class="item__header">mysql视图的作用（详细）</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="测试表">测试表：</h4>
+
+<p>测试表:user有id，name，age，sex字段</p>
+
+<p>测试表:goods有id，name，price字段</p>
+
+<p>测试表:ug有id，userid，goodsid字段</p>
+
+<p>视图的作用实在是太强大了，以下是我体验过的好处：</p>
+
+<h4 id="作用一提高了重用性">作用一：提高了重用性</h4>
+<p>提高了重用性，就像一个函数。如果要频繁获取user的name和goods的name。就应该使用以下sql语言。示例：</p>
+
+<pre><code class="language-mysql">select a.name as username, b.name as goodsname from user as a, goods as b, ug as c where a.id=c.userid and c.goodsid=b.id;
+</code></pre>
+
+<p>但有了视图就不一样了，创建视图other。示例</p>
+<pre><code class="language-mysql">create view other as select a.name as username, b.name as goodsname from user as a, goods as b, ug as c where a.id=c.userid and c.goodsid=b.id;
+</code></pre>
+
+<p>创建好视图后，就可以这样获取user的name和goods的name。示例：</p>
+<pre><code class="language-mysql">select * from other;
+</code></pre>
+
+<p>以上sql语句，就能获取user的name和goods的name了。</p>
+
+<p><strong>作用二：</strong>
+对数据库重构，却不影响程序的运行。假如因为某种需求，需要将user拆房表usera和表userb，该两张表的结构如下：</p>
+
+<p>测试表:usera有id，name，age字段</p>
+
+<p>测试表:userb有id，name，sex字段</p>
+
+<p>这时如果php端使用sql语句：select * from user;那就会提示该表不存在，这时该如何解决呢。解决方案：创建视图。以下sql语句创建视图：</p>
+<pre><code class="language-mysql">create view user as select a.name,a.age,b.sex from usera as a, userb as b where a.name=b.name;
+</code></pre>
+
+<p>以上假设name都是唯一的。此时php端使用sql语句：select * from user;就不会报错什么的。这就__实现了更改数据库结构，不更改脚本程序的功能了__。</p>
+
+<h4 id="作用三安全性能">作用三：安全性能</h4>
+
+<p>提高了安全性能。可以对不同的用户，设定不同的视图。例如：某用户只能获取user表的name和age数据，不能获取sex数据。则可以这样创建视图。示例如下：</p>
+<pre><code class="language-mysql"> create view other as select a.name, a.age from user as a;
+</code></pre>
+
+<p>这样的话，使用sql语句：select * from other; 最多就只能获取name和age的数据，其他的数据就获取不了了。</p>
+
+<h4 id="作用四数据更加清晰">作用四：数据更加清晰</h4>
+
+<p>让数据更加清晰。想要什么样的数据，就创建什么样的视图。经过以上三条作用的解析，这条作用应该很容易理解了吧</p>
+
+<p><strong>优点及缺点</strong></p>
+
+<p><strong>优点</strong></p>
+
+<blockquote>
+  <p>简单化，数据所见即所得</p>
+
+  <p>安全性，用户只能查询或修改他们所能见到得到的数据</p>
+
+  <p>逻辑独立性，可以屏蔽真实表结构变化带来的影响</p>
+</blockquote>
+
+<p><strong>缺点</strong></p>
+
+<blockquote>
+  <p>性能相对较差，简单的查询也会变得稍显复杂</p>
+
+  <p>修改不方便，特变是复杂的聚合视图基本无法修改</p>
+</blockquote>
+</div><p><a href="/mianshi/mysql/0708/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-08-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/mysql/0708/01"><h2 itemprop="headline" class="item__header">MySQL索引优化分析</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>为什么你写的sql查询慢？为什么你建的索引常失效？通过本章内容，你将学会MySQL性能下降的原因，索引的简介，索引创建的原则，explain命令的使用，以及explain输出字段的意义。助你了解索引，分析索引，使用索引，从而写出更高性能的sql语句。还在等啥子？撸起袖子就是干！</p>
+
+<h2 id="案例分析">案例分析</h2>
+
+<p>我们先简单了解一下<strong>非关系型数据库</strong>和<strong>关系型数据库</strong>的区别。
+MongoDB是NoSQL中的一种。NoSQL的全称是Not only SQL，非关系型数据库。它的特点是<strong>性能高</strong>，<strong>扩张性强</strong>，<strong>模式灵活</strong>，在高并发场景表现得尤为突出。但目前它还只是关系型数据库的补充，它在数据的一致性，数据的安全性，查询的复杂性问题上和关系型数据库还存在一定差距。
+MySQL是关系性数据库中的一种，<strong>查询功能强</strong>，<strong>数据一致性高</strong>，<strong>数据安全性高</strong>，<strong>支持二级索引</strong>。但性能方面稍逊与MongoDB，特别是百万级别以上的数据，很容易出现查询慢的现象。这时候需要分析查询慢的原因，一般情况下是程序员sql写的烂，或者是没有键索引，或者是索引失效等原因导致的。
+公司ERP系统数据库主要是MongoDB（最接近关系型数据的NoSQL），其次是Redis，MySQL只占很少的部分。现在又重新使用MySQL，归功于阿里巴巴的奇门系统和聚石塔系统。考虑到订单数量已经是百万级以上，对MySQL的性能分析也就显得格外重要。</p>
+
+<p>我们先通过两个简单的例子来入门。后面会详细介绍各个参数的作用和意义。
+说明：需要用到的sql已经放在了github上了，喜欢的同学可以点一下star，哈哈。https://github.com/ITDragonBlog/daydayup/tree/master/MySQL/</p>
+
+<h3 id="场景一订单导入通过交易号避免重复导单">场景一：订单导入，通过交易号避免重复导单</h3>
+
+<p>业务逻辑：订单导入时，为了避免重复导单，一般会通过交易号去数据库中查询，判断该订单是否已经存在。</p>
+
+<h4 id="最基础的sql语句">最基础的sql语句</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">where</span> <span class="n">transaction_id</span> <span class="o">=</span> <span class="nv">"81X97310V32236260E"</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">-------+--------------------+-------+------+----------+--------------+----------+------------------+-------------+-------------+------------+---------------------+</span>
+<span class="o">|</span> <span class="n">id</span>    <span class="o">|</span> <span class="n">transaction_id</span>     <span class="o">|</span> <span class="n">gross</span> <span class="o">|</span> <span class="n">net</span>  <span class="o">|</span> <span class="n">stock_id</span> <span class="o">|</span> <span class="n">order_status</span> <span class="o">|</span> <span class="n">descript</span> <span class="o">|</span> <span class="n">finance_descript</span> <span class="o">|</span> <span class="n">create_type</span> <span class="o">|</span> <span class="n">order_level</span> <span class="o">|</span> <span class="n">input_user</span> <span class="o">|</span> <span class="n">input_date</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------+--------------------+-------+------+----------+--------------+----------+------------------+-------------+-------------+------------+---------------------+</span>
+<span class="o">|</span> <span class="mi">10000</span> <span class="o">|</span> <span class="mi">81</span><span class="n">X97310V32236260E</span> <span class="o">|</span>   <span class="mi">6</span><span class="p">.</span><span class="mi">6</span> <span class="o">|</span> <span class="mi">6</span><span class="p">.</span><span class="mi">13</span> <span class="o">|</span>        <span class="mi">1</span> <span class="o">|</span>           <span class="mi">10</span> <span class="o">|</span> <span class="n">ok</span>       <span class="o">|</span> <span class="n">ok</span>               <span class="o">|</span> <span class="n">auto</span>        <span class="o">|</span>           <span class="mi">1</span> <span class="o">|</span> <span class="n">itdragon</span>   <span class="o">|</span> <span class="mi">2017</span><span class="o">-</span><span class="mi">08</span><span class="o">-</span><span class="mi">18</span> <span class="mi">17</span><span class="p">:</span><span class="mi">01</span><span class="p">:</span><span class="mi">49</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">-------+--------------------+-------+------+----------+--------------+----------+------------------+-------------+-------------+------------+---------------------+</span>
+
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">where</span> <span class="n">transaction_id</span> <span class="o">=</span> <span class="nv">"81X97310V32236260E"</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span> <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>  <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">ALL</span>  <span class="o">|</span> <span class="k">NULL</span>          <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span>    <span class="mi">3</span> <span class="o">|</span>    <span class="mi">33</span><span class="p">.</span><span class="mi">33</span> <span class="o">|</span> <span class="k">Using</span> <span class="k">where</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+-------------+</span>
+</code></pre></div></div>
+
+<p>查询的本身没有任何问题，在线下的测试环境也没有任何问题。可是，功能一旦上线，查询慢的问题就迎面而来。几百上千万的订单，用全表扫描？啊？哼!
+怎么知道该sql是全表扫描呢？通过explain命令可以清楚MySQL是如何处理sql语句的。打印的内容分别表示：
+<strong>id</strong> : 查询序列号为1。
+<strong>select_type</strong> : 查询类型是简单查询，简单的select语句没有union和子查询。
+<strong>table</strong> : 表是 itdragon_order_list。
+<strong>partitions</strong> : 没有分区。
+<strong>type</strong> : 连接类型，all表示采用全表扫描的方式。
+<strong>possible_keys</strong> : 可能用到索引为null。
+<strong>key</strong> : 实际用到索引是null。
+<strong>key_len</strong> : 索引长度当然也是null。
+<strong>ref</strong> : 没有哪个列或者参数和key一起被使用。
+<strong>Extra</strong> : 使用了where查询。
+因为数据库中只有三条数据，所以rows和filtered的信息作用不大。这里需要重点了解的是type为ALL，全表扫描的性能是最差的，假设数据库中有几百万条数据，在没有索引的帮助下会异常卡顿。</p>
+
+<h4 id="初步优化为transaction_id创建索引">初步优化：为transaction_id创建索引</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">unique</span> <span class="k">index</span> <span class="n">idx_order_transaID</span> <span class="k">on</span> <span class="n">itdragon_order_list</span> <span class="p">(</span><span class="n">transaction_id</span><span class="p">);</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">where</span> <span class="n">transaction_id</span> <span class="o">=</span> <span class="nv">"81X97310V32236260E"</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+--------------------+--------------------+---------+-------+------+----------+-------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span>  <span class="o">|</span> <span class="n">possible_keys</span>      <span class="o">|</span> <span class="k">key</span>                <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>   <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+--------------------+--------------------+---------+-------+------+----------+-------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="n">const</span> <span class="o">|</span> <span class="n">idx_order_transaID</span> <span class="o">|</span> <span class="n">idx_order_transaID</span> <span class="o">|</span> <span class="mi">453</span>     <span class="o">|</span> <span class="n">const</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">NULL</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+--------------------+--------------------+---------+-------+------+----------+-------+</span>
+</code></pre></div></div>
+
+<p>这里创建的索引是唯一索引，而非普通索引。
+唯一索引打印的type值是const。表示通过索引一次就可以找到。即找到值就结束扫描返回查询结果。
+普通索引打印的type值是ref。表示非唯一性索引扫描。找到值还要继续扫描，直到将索引文件扫描完为止。(这里没有贴出代码)
+显而易见，const的性能要远高于ref。并且根据业务逻辑来判断，创建唯一索引是合情合理的。</p>
+
+<h4 id="再次优化覆盖索引">再次优化：覆盖索引</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="n">transaction_id</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">where</span> <span class="n">transaction_id</span> <span class="o">=</span> <span class="nv">"81X97310V32236260E"</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+--------------------+--------------------+---------+-------+------+----------+-------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span>  <span class="o">|</span> <span class="n">possible_keys</span>      <span class="o">|</span> <span class="k">key</span>                <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>   <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+--------------------+--------------------+---------+-------+------+----------+-------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="n">const</span> <span class="o">|</span> <span class="n">idx_order_transaID</span> <span class="o">|</span> <span class="n">idx_order_transaID</span> <span class="o">|</span> <span class="mi">453</span>     <span class="o">|</span> <span class="n">const</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">Using</span> <span class="k">index</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+--------------------+--------------------+---------+-------+------+----------+-------------+</span>
+</code></pre></div></div>
+
+<p>这里将<code class="language-plaintext highlighter-rouge">select * from</code> 改为了 <code class="language-plaintext highlighter-rouge">select transaction_id from</code> 后
+Extra 显示 Using index，表示该查询使用了覆盖索引，这是一个非常好的消息，说明该sql语句的性能很好。若提示的是Using filesort(使用内部排序)和Using temporary(使用临时表)则表明该sql需要立即优化了。
+根据业务逻辑来的，查询结构返回transaction_id 是可以满足业务逻辑要求的。</p>
+
+<h3 id="场景二订单管理页面通过订单级别和订单录入时间排序">场景二，订单管理页面，通过订单级别和订单录入时间排序</h3>
+
+<p>业务逻辑：优先处理订单级别高，录入时间长的订单。
+既然是排序，首先想到的应该是order by， 还有一个可怕的 Using filesort 等着你。</p>
+
+<h4 id="最基础的sql语句-1">最基础的sql语句</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">order</span> <span class="k">by</span> <span class="n">order_level</span><span class="p">,</span><span class="n">input_date</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+----------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span> <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>  <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+----------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">ALL</span>  <span class="o">|</span> <span class="k">NULL</span>          <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span>    <span class="mi">3</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">Using</span> <span class="n">filesort</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+----------------+</span>
+</code></pre></div></div>
+
+<p>首先，采用全表扫描就不合理，还使用了文件排序Using filesort，更加拖慢了性能。
+MySQL在4.1版本之前文件排序是采用双路排序的算法，由于两次扫描磁盘，I/O耗时太长。后优化成单路排序算法。其本质就是用空间换时间，但如果数据量太大，buffer的空间不足，会导致多次I/O的情况。其效果反而更差。与其找运维同事修改MySQL配置，还不如自己乖乖地建索引。</p>
+
+<h4 id="初步优化为order_levelinput_date-创建复合索引">初步优化：为order_level,input_date 创建复合索引</h4>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">index</span> <span class="n">idx_order_levelDate</span> <span class="k">on</span> <span class="n">itdragon_order_list</span> <span class="p">(</span><span class="n">order_level</span><span class="p">,</span><span class="n">input_date</span><span class="p">);</span>
+<span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">order</span> <span class="k">by</span> <span class="n">order_level</span><span class="p">,</span><span class="n">input_date</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+----------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span> <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>  <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span>          <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+----------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">ALL</span>  <span class="o">|</span> <span class="k">NULL</span>          <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span> <span class="k">NULL</span>    <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span>    <span class="mi">3</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">Using</span> <span class="n">filesort</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------+------+---------+------+------+----------+----------------+</span>
+</code></pre></div></div>
+
+<p>创建复合索引后你会惊奇的发现，和没创建索引一样？？？都是全表扫描，都用到了文件排序。是索引失效？还是索引创建失败？我们试着看看下面打印情况</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="n">order_level</span><span class="p">,</span><span class="n">input_date</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">order</span> <span class="k">by</span> <span class="n">order_level</span><span class="p">,</span><span class="n">input_date</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+---------------+---------------------+---------+------+------+----------+-------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span>  <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>                 <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span>       <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+---------------+---------------------+---------+------+------+----------+-------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">index</span> <span class="o">|</span> <span class="k">NULL</span>          <span class="o">|</span> <span class="n">idx_order_levelDate</span> <span class="o">|</span> <span class="mi">68</span>      <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span>    <span class="mi">3</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">Using</span> <span class="k">index</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+---------------+---------------------+---------+------+------+----------+-------------+</span>
+</code></pre></div></div>
+
+<p>将<code class="language-plaintext highlighter-rouge">select * from</code> 换成了 <code class="language-plaintext highlighter-rouge">select order_level,input_date from</code> 后。type从all升级为index，表示（full index scan）全索引文件扫描，Extra也显示使用了覆盖索引。可是不对啊！！！！检索虽然快了，但返回的内容只有order_level和input_date 两个字段，让业务同事怎么用？难道把每个字段都建一个复合索引？
+MySQL没有这么笨，可以使用force index 强制指定索引。在原来的sql语句上修改 <code class="language-plaintext highlighter-rouge">force index(idx_order_levelDate)</code> 即可。</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">force</span> <span class="k">index</span><span class="p">(</span><span class="n">idx_order_levelDate</span><span class="p">)</span> <span class="k">order</span> <span class="k">by</span> <span class="n">order_level</span><span class="p">,</span><span class="n">input_date</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+---------------+---------------------+---------+------+------+----------+-------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span>  <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span>                 <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+---------------+---------------------+---------+------+------+----------+-------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">index</span> <span class="o">|</span> <span class="k">NULL</span>          <span class="o">|</span> <span class="n">idx_order_levelDate</span> <span class="o">|</span> <span class="mi">68</span>      <span class="o">|</span> <span class="k">NULL</span> <span class="o">|</span>    <span class="mi">3</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">NULL</span>  <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+-------+---------------+---------------------+---------+------+------+----------+-------+</span>
+</code></pre></div></div>
+
+<h4 id="再次优化订单级别真的要排序么">再次优化：订单级别真的要排序么？</h4>
+
+<p>其实给订单级别排序意义并不大，给订单级别添加索引意义也不大。因为order_level的值可能只有，低，中，高，加急，这四种。对于这种重复且分布平均的字段，排序和加索引的作用不大。
+我们能否先固定 order_level 的值，然后再给 input_date 排序？如果查询效果明显，是可以推荐业务同事使用该查询方式。</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mysql</span><span class="o">&gt;</span> <span class="k">explain</span> <span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">itdragon_order_list</span> <span class="k">where</span> <span class="n">order_level</span><span class="o">=</span><span class="mi">3</span> <span class="k">order</span> <span class="k">by</span> <span class="n">input_date</span><span class="p">;</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------------+---------------------+---------+-------+------+----------+-----------------------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span>               <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span> <span class="o">|</span> <span class="n">possible_keys</span>       <span class="o">|</span> <span class="k">key</span>                 <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>   <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span>                 <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------------+---------------------+---------+-------+------+----------+-----------------------+</span>
+<span class="o">|</span>  <span class="mi">1</span> <span class="o">|</span> <span class="k">SIMPLE</span>      <span class="o">|</span> <span class="n">itdragon_order_list</span> <span class="o">|</span> <span class="k">NULL</span>       <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="n">idx_order_levelDate</span> <span class="o">|</span> <span class="n">idx_order_levelDate</span> <span class="o">|</span> <span class="mi">5</span>       <span class="o">|</span> <span class="n">const</span> <span class="o">|</span>    <span class="mi">1</span> <span class="o">|</span>      <span class="mi">100</span> <span class="o">|</span> <span class="k">Using</span> <span class="k">index</span> <span class="n">condition</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+---------------------+------------+------+---------------------+---------------------+---------+-------+------+----------+-----------------------+</span>
+</code></pre></div></div>
+
+<p>和之前的sql比起来，type从index 升级为 ref(非唯一性索引扫描)。索引的长度从68变成了5，说明只用了一个索引。ref也是一个常量。Extra 为Using index condition 表示自动根据临界值，选择索引扫描还是全表扫描。总的来说性能远胜于之前的sql。</p>
+
+<p>上面两个案例只是快速入门，我们需严记一点：优化是基于业务逻辑来的。绝对不能为了优化而擅自修改业务逻辑。如果能修改当然是最好的。</p>
+
+<h2 id="索引简介">索引简介</h2>
+
+<p>官方定义：索引（Index） 是帮助MySQL高效获取数据的数据结构。
+大家一定很好奇，索引为什么是一种数据结构，它又是怎么提高查询的速度？我们拿最常用的二叉树来分析索引的工作原理。看下面的图片：
+<img src="/assets/images/mianshiti/0708/806956-20180103215956799-1078068423.png" alt="img" /></p>
+
+<p>创建索引的优势
+1 提高数据的检索速度，降低数据库IO成本：使用索引的意义就是通过缩小表中需要查询的记录的数目从而加快搜索的速度。
+2 降低数据排序的成本，降低CPU消耗：索引之所以查的快，是因为先将数据排好序，若该字段正好需要排序，则真好降低了排序的成本。</p>
+
+<p>创建索引的劣势
+1 占用存储空间：索引实际上也是一张表，记录了主键与索引字段，一般以索引文件的形式存储在磁盘上。
+2 降低更新表的速度：表的数据发生了变化，对应的索引也需要一起变更，从而减低的更新速度。否则索引指向的物理数据可能不对，这也是索引失效的原因之一。
+3 优质索引创建难：索引的创建并非一日之功，也并非一直不变。需要频繁根据用户的行为和具体的业务逻辑去创建最佳的索引。</p>
+
+<h2 id="索引分类">索引分类</h2>
+
+<p>我们常说的索引一般指的是BTree（多路搜索树）结构组织的索引。其中还有聚合索引，次要索引，复合索引，前缀索引，唯一索引，统称索引，当然除了B+树外，还有哈希索引（hash index）等。</p>
+
+<p><strong>单值索引</strong>：一个索引只包含单个列，一个表可以有多个单列索引
+<strong>唯一索引</strong>：索引列的值必须唯一，但允许有空值
+<strong>复合索引</strong>：一个索引包含多个列，实际开发中推荐使用
+实际开发中推荐使用复合索引，并且单表创建的索引个数建议不要超过五个</p>
+
+<p>基本语法：
+创建：</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">create</span> <span class="p">[</span><span class="k">unique</span><span class="p">]</span> <span class="k">index</span> <span class="n">indexName</span> <span class="k">on</span> <span class="n">tableName</span> <span class="p">(</span><span class="n">columnName</span><span class="p">...)</span>
+<span class="k">alter</span> <span class="n">tableName</span> <span class="k">add</span> <span class="p">[</span><span class="k">unique</span><span class="p">]</span> <span class="k">index</span> <span class="p">[</span><span class="n">indexName</span><span class="p">]</span> <span class="k">on</span> <span class="p">(</span><span class="n">columnName</span><span class="p">...)</span>
+</code></pre></div></div>
+
+<p>删除：</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">drop</span> <span class="k">index</span> <span class="p">[</span><span class="n">indexName</span><span class="p">]</span> <span class="k">on</span> <span class="n">tableName</span>
+</code></pre></div></div>
+
+<p>查看：</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">show</span> <span class="k">index</span> <span class="k">from</span> <span class="n">tableName</span>
+</code></pre></div></div>
+
+<p>哪些情况需要建索引：
+1 主键，唯一索引
+2 经常用作查询条件的字段需要创建索引
+3 经常需要排序、分组和统计的字段需要建立索引
+4 查询中与其他表关联的字段，外键关系建立索引</p>
+
+<p>哪些情况不要建索引：
+1 表的记录太少，百万级以下的数据不需要创建索引
+2 经常增删改的表不需要创建索引
+3 数据重复且分布平均的字段不需要创建索引，如 true,false 之类。
+4 频发更新的字段不适合创建索引
+5 where条件里用不到的字段不需要创建索引</p>
+
+<h2 id="性能分析">性能分析</h2>
+
+<h3 id="mysql-自身瓶颈">MySQL 自身瓶颈</h3>
+
+<p>MySQL自身参见的性能问题有磁盘空间不足，磁盘I/O太大，服务器硬件性能低。
+1 CPU：CPU 在饱和的时候一般发生在数据装入内存或从磁盘上读取数据时候
+2 IO：磁盘I/O 瓶颈发生在装入数据远大于内存容量的时候
+3 服务器硬件的性能瓶颈：top,free,iostat 和 vmstat来查看系统的性能状态</p>
+
+<h3 id="explain-分析sql语句">explain 分析sql语句</h3>
+
+<p>使用explain关键字可以模拟优化器执行sql查询语句，从而得知MySQL 是如何处理sql语句。</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">+</span><span class="c1">----+-------------+-------+------------+------+---------------+-----+---------+------+------+----------+-------+</span>
+<span class="o">|</span> <span class="n">id</span> <span class="o">|</span> <span class="n">select_type</span> <span class="o">|</span> <span class="k">table</span> <span class="o">|</span> <span class="n">partitions</span> <span class="o">|</span> <span class="k">type</span> <span class="o">|</span> <span class="n">possible_keys</span> <span class="o">|</span> <span class="k">key</span> <span class="o">|</span> <span class="n">key_len</span> <span class="o">|</span> <span class="k">ref</span>  <span class="o">|</span> <span class="k">rows</span> <span class="o">|</span> <span class="n">filtered</span> <span class="o">|</span> <span class="n">Extra</span> <span class="o">|</span>
+<span class="o">+</span><span class="c1">----+-------------+-------+------------+------+---------------+-----+---------+------+------+----------+-------+</span>
+</code></pre></div></div>
+
+<h4 id="id">id</h4>
+
+<p>select 查询的序列号，包含一组可以重复的数字，表示查询中执行sql语句的顺序。一般有三种情况：
+第一种：id全部相同，sql的执行顺序是由上至下；
+第二种：id全部不同，sql的执行顺序是根据id大的优先执行；
+第三种：id既存在相同，又存在不同的。先根据id大的优先执行，再根据相同id从上至下的执行。</p>
+
+<h4 id="select_type">select_type</h4>
+
+<p>select 查询的类型，主要是用于区别普通查询，联合查询，嵌套的复杂查询
+<strong>simple</strong>：简单的select 查询，查询中不包含子查询或者union
+<strong>primary</strong>：查询中若包含任何复杂的子查询，最外层查询则被标记为primary
+<strong>subquery</strong>：在select或where 列表中包含了子查询
+<strong>derived</strong>：在from列表中包含的子查询被标记为derived（衍生）MySQL会递归执行这些子查询，把结果放在临时表里。
+<strong>union</strong>：若第二个select出现在union之后，则被标记为union，若union包含在from子句的子查询中，外层select将被标记为：derived
+<strong>union result</strong>：从union表获取结果的select</p>
+
+<h4 id="partitions">partitions</h4>
+
+<p>表所使用的分区，如果要统计十年公司订单的金额，可以把数据分为十个区，每一年代表一个区。这样可以大大的提高查询效率。</p>
+
+<h4 id="type">type</h4>
+
+<p>这是一个非常重要的参数，连接类型，常见的有：all , index , range , ref , eq_ref , const , system , null 八个级别。
+性能从最优到最差的排序：system &gt; const &gt; eq_ref &gt; ref &gt; range &gt; index &gt; all
+对java程序员来说，若保证查询至少达到range级别或者最好能达到ref则算是一个优秀而又负责的程序员。
+<strong>all</strong>：（full table scan）全表扫描无疑是最差，若是百万千万级数据量，全表扫描会非常慢。
+<strong>index</strong>：（full index scan）全索引文件扫描比all好很多，毕竟从索引树中找数据，比从全表中找数据要快。
+<strong>range</strong>：只检索给定范围的行，使用索引来匹配行。范围缩小了，当然比全表扫描和全索引文件扫描要快。sql语句中一般会有between，in，&gt;，&lt; 等查询。
+<strong>ref</strong>：非唯一性索引扫描，本质上也是一种索引访问，返回所有匹配某个单独值的行。比如查询公司所有属于研发团队的同事，匹配的结果是多个并非唯一值。
+<strong>eq_ref</strong>：唯一性索引扫描，对于每个索引键，表中有一条记录与之匹配。比如查询公司的CEO，匹配的结果只可能是一条记录，
+<strong>const</strong>：表示通过索引一次就可以找到，const用于比较primary key 或者unique索引。因为只匹配一行数据，所以很快，若将主键至于where列表中，MySQL就能将该查询转换为一个常量。
+<strong>system</strong>：表只有一条记录（等于系统表），这是const类型的特列，平时不会出现，了解即可</p>
+
+<h4 id="possible_keys">possible_keys</h4>
+
+<p>显示查询语句可能用到的索引(一个或多个或为null)，不一定被查询实际使用。仅供参考使用。</p>
+
+<h4 id="key">key</h4>
+
+<p>显示查询语句实际使用的索引。若为null，则表示没有使用索引。</p>
+
+<h4 id="key_len">key_len</h4>
+
+<p>显示索引中使用的字节数，可通过key_len计算查询中使用的索引长度。在不损失精确性的情况下索引长度越短越好。key_len 显示的值为索引字段的最可能长度，并非实际使用长度，即key_len是根据表定义计算而得，并不是通过表内检索出的。</p>
+
+<h4 id="ref">ref</h4>
+
+<p>显示索引的哪一列或常量被用于查找索引列上的值。</p>
+
+<h4 id="rows">rows</h4>
+
+<p>根据表统计信息及索引选用情况，大致估算出找到所需的记录所需要读取的行数，值越大越不好。</p>
+
+<h4 id="extra">extra</h4>
+
+<p><strong>Using filesort</strong>： 说明MySQL会对数据使用一个外部的索引排序，而不是按照表内的索引顺序进行读取。MySQL中无法利用索引完成的排序操作称为“文件排序” 。出现这个就要立刻优化sql。
+<strong>Using temporary</strong>： 使用了临时表保存中间结果，MySQL在对查询结果排序时使用临时表。常见于排序 order by 和 分组查询 group by。 出现这个更要立刻优化sql。
+<strong>Using index</strong>： 表示相应的select 操作中使用了覆盖索引（Covering index），避免访问了表的数据行，效果不错！如果同时出现Using where，表明索引被用来执行索引键值的查找。如果没有同时出现Using where，表示索引用来读取数据而非执行查找动作。
+覆盖索引（Covering Index） ：也叫索引覆盖，就是select 的数据列只用从索引中就能够取得，不必读取数据行，MySQL可以利用索引返回select 列表中的字段，而不必根据索引再次读取数据文件。
+<strong>Using index condition</strong>： 在5.6版本后加入的新特性，优化器会在索引存在的情况下，通过符合RANGE范围的条数 和 总数的比例来选择是使用索引还是进行全表遍历。
+<strong>Using where</strong>： 表明使用了where 过滤
+<strong>Using join buffer</strong>： 表明使用了连接缓存
+<strong>impossible where</strong>： where 语句的值总是false，不可用，不能用来获取任何元素
+<strong>distinct</strong>： 优化distinct操作，在找到第一匹配的元组后即停止找同样值的动作。</p>
+
+<h4 id="filtered">filtered</h4>
+
+<p>一个百分比的值，和rows 列的值一起使用，可以估计出查询执行计划(QEP)中的前一个表的结果集，从而确定join操作的循环次数。小表驱动大表，减轻连接的次数。</p>
+
+<p>通过explain的参数介绍，我们可以得知:
+1 表的读取顺序(id)
+2 数据读取操作的操作类型(type)
+3 哪些索引被实际使用(key)
+4 表之间的引用(ref)
+5 每张表有多少行被优化器查询(rows)</p>
+
+<h2 id="性能下降的原因">性能下降的原因</h2>
+
+<p>从程序员的角度
+1 查询语句写的不好
+2 没建索引，索引建的不合理或索引失效
+3 关联查询有太多的join
+从服务器的角度
+1 服务器磁盘空间不足
+2 服务器调优配置参数设置不合理</p>
+
+<h2 id="总结">总结</h2>
+
+<p>1 索引是排好序且快速查找的数据结构。其目的是为了提高查询的效率。
+2 创建索引后，查询数据变快，但更新数据变慢。
+3 性能下降的原因很可能是索引失效导致。
+4 索引创建的原则，经常查询的字段适合创建索引，频繁需要更新的数据不适合创建索引。
+5 索引字段频繁更新，或者表数据物理删除容易造成索引失效。
+6 擅用 explain 分析sql语句
+7 除了优化sql语句外，还可以优化表的设计。如尽量做成单表查询，减少表之间的关联。设计归档表等。</p>
+
+<p>到这里，MySQL的索引优化分析就结束了，有什么不对的地方，大家可以提出来。如果觉得不错可以点一下推荐。</p>
+</div><p><a href="/mianshi/mysql/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/JVM/0708/01"><h2 itemprop="headline" class="item__header">系统运行缓慢，CPU 100%，以及Full GC次数过多问题的排查思路</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="前言">前言</h1>
+
+<p>处理过线上问题的同学基本上都会遇到系统突然运行缓慢，CPU 100%，以及Full GC次数过多的问题。当然，这些问题的最终导致的直观现象就是系统运行缓慢，并且有大量的报警。</p>
+
+<p>本文主要针对系统运行缓慢这一问题，提供该问题的排查思路，从而定位出问题的代码点，进而提供解决该问题的思路。</p>
+
+<p>对于线上系统突然产生的运行缓慢问题，如果该问题导致线上系统不可用，那么首先需要做的就是，导出jstack和内存信息，然后重启系统，尽快保证系统的可用性。这种情况可能的原因主要有两种：</p>
+
+<ul>
+  <li>代码中某个位置读取数据量较大，导致系统内存耗尽，从而导致Full GC次数过多，系统缓慢；</li>
+  <li>代码中有比较耗CPU的操作，导致CPU过高，系统运行缓慢；</li>
+</ul>
+
+<p>相对来说，这是出现频率最高的两种线上问题，而且它们会直接导致系统不可用。另外有几种情况也会导致某个功能运行缓慢，但是不至于导致系统不可用：</p>
+
+<ul>
+  <li>代码某个位置有阻塞性的操作，导致该功能调用整体比较耗时，但出现是比较随机的；</li>
+  <li>某个线程由于某种原因而进入WAITING状态，此时该功能整体不可用，但是无法复现；</li>
+  <li>由于锁使用不当，导致多个线程进入死锁状态，从而导致系统整体比较缓慢。</li>
+</ul>
+
+<p>对于这三种情况，通过查看CPU和系统内存情况是无法查看出具体问题的，因为它们相对来说都是具有一定阻塞性操作，CPU和系统内存使用情况都不高，但是功能却很慢。下面我们就通过查看系统日志来一步一步甄别上述几种问题。</p>
+
+<h1 id="full-gc次数过多">Full GC次数过多</h1>
+
+<p>相对来说，这种情况是最容易出现的，尤其是新功能上线时。对于Full GC较多的情况，其主要有如下两个特征：</p>
+
+<ul>
+  <li>线上多个线程的CPU都超过了100%，通过jstack命令可以看到这些线程主要是垃圾回收线程</li>
+  <li>通过jstat命令监控GC情况，可以看到Full GC次数非常多，并且次数在不断增加。</li>
+</ul>
+
+<p>首先我们可以使用top命令查看系统CPU的占用情况，如下是系统CPU较高的一个示例：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top - 08:31:10 up 30 min,  0 users,  load average: 0.73, 0.58, 0.34
+KiB Mem:   2046460 total,  1923864 used,   122596 free,    14388 buffers
+KiB Swap:  1048572 total,        0 used,  1048572 free.  1192352 cached Mem
+
+PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+9   root      20  0  2557160 288976  15812 S  98.0 14.1   0:42.60 java
+</code></pre></div></div>
+
+<p>可以看到，有一个Java程序此时CPU占用量达到了98.8%，此时我们可以复制该进程id9，并且使用如下命令查看呢该进程的各个线程运行情况：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top -Hp 9
+</code></pre></div></div>
+
+<p>该进程下的各个线程运行情况如下：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top - 08:31:16 up 30 min,  0 users,  load average: 0.75, 0.59, 0.35
+Threads:  11 total,   1 running,  10 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  3.5 us,  0.6 sy,  0.0 ni, 95.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem:   2046460 total,  1924856 used,   121604 free,    14396 buffers
+KiB Swap:  1048572 total,        0 used,  1048572 free.  1192532 cached Mem
+
+PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
+10  root      20   0 2557160 289824  15872 R 79.3 14.2   0:41.49 java
+11  root      20   0 2557160 289824  15872 S 13.2 14.2   0:06.78 java
+</code></pre></div></div>
+
+<p>可以看到，在进程为9的Java程序中各个线程的CPU占用情况，接下来我们可以通过jstack命令查看线程id为10的线程为什么耗费CPU最高。需要注意的是，在jsatck命令展示的结果中，线程id都转换成了十六进制形式。可以用如下命令查看转换结果，也可以找一个科学计算器进行转换：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@a39de7e7934b:/# printf "%x\n" 10
+a
+</code></pre></div></div>
+
+<p>这里打印结果说明该线程在jstack中的展现形式为0xa，通过jstack命令我们可以看到如下信息：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"main" #1 prio=5 os_prio=0 tid=0x00007f8718009800 nid=0xb runnable [0x00007f871fe41000]
+   java.lang.Thread.State: RUNNABLE
+	at com.aibaobei.chapter2.eg2.UserDemo.main(UserDemo.java:9)
+
+"VM Thread" os_prio=0 tid=0x00007f871806e000 nid=0xa runnable
+</code></pre></div></div>
+
+<p>这里的VM Thread一行的最后显示nid=0xa，这里nid的意思就是操作系统线程id的意思。而VM Thread指的就是垃圾回收的线程。这里我们基本上可以确定，当前系统缓慢的原因主要是垃圾回收过于频繁，导致GC停顿时间较长。我们通过如下命令可以查看GC的情况：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@8d36124607a0:/# jstat -gcutil 9 1000 10
+  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
+  0.00   0.00   0.00  75.07  59.09  59.60   3259    0.919  6517    7.715    8.635
+  0.00   0.00   0.00   0.08  59.09  59.60   3306    0.930  6611    7.822    8.752
+  0.00   0.00   0.00   0.08  59.09  59.60   3351    0.943  6701    7.924    8.867
+  0.00   0.00   0.00   0.08  59.09  59.60   3397    0.955  6793    8.029    8.984
+</code></pre></div></div>
+
+<p>可以看到，这里FGC指的是Full GC数量，这里高达6793，而且还在不断增长。从而进一步证实了是由于内存溢出导致的系统缓慢。那么这里确认了内存溢出，但是如何查看你是哪些对象导致的内存溢出呢，这个可以dump出内存日志，然后通过eclipse的mat工具进行查看，如下是其展示的一个对象树结构：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1162587-20190322153700612-1005782884.png" alt="img" /></p>
+
+<p>经过mat工具分析之后，我们基本上就能确定内存中主要是哪个对象比较消耗内存，然后找到该对象的创建位置，进行处理即可。这里的主要是PrintStream最多，但是我们也可以看到，其内存消耗量只有12.2%。也就是说，其还不足以导致大量的Full GC，此时我们需要考虑另外一种情况，就是代码或者第三方依赖的包中有显示的System.gc()调用。这种情况我们查看dump内存得到的文件即可判断，因为其会打印GC原因：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Full GC (System.gc()) [Tenured: 262546K-&gt;262546K(349568K), 0.0014879 secs] 262546K-&gt;262546K(506816K), [Metaspace: 3109K-&gt;3109K(1056768K)], 0.0015151 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
+[GC (Allocation Failure) [DefNew: 2795K-&gt;0K(157248K), 0.0001504 secs][Tenured: 262546K-&gt;402K(349568K), 0.0012949 secs] 265342K-&gt;402K(506816K), [Metaspace: 3109K-&gt;3109K(1056768K)], 0.0014699 secs] [Times: user=0.00
+</code></pre></div></div>
+
+<p>比如这里第一次GC是由于<code class="language-plaintext highlighter-rouge">System.gc()</code>的显示调用导致的，而第二次GC则是JVM主动发起的。总结来说，对于Full GC次数过多，主要有以下两种原因：</p>
+
+<ul>
+  <li>代码中一次获取了大量的对象，导致内存溢出，此时可以通过eclipse的mat工具查看内存中有哪些对象比较多；</li>
+  <li>内存占用不高，但是Full GC次数还是比较多，此时可能是显示的<code class="language-plaintext highlighter-rouge">System.gc()</code>调用导致GC次数过多，这可以通过添加<code class="language-plaintext highlighter-rouge">-XX:+DisableExplicitGC</code>来禁用JVM对显示GC的响应。</li>
+</ul>
+
+<h1 id="cpu过高">CPU过高</h1>
+
+<p>在前面第一点中，我们讲到，CPU过高可能是系统频繁的进行Full GC，导致系统缓慢。而我们平常也肯能遇到比较耗时的计算，导致CPU过高的情况，此时查看方式其实与上面的非常类似。首先我们通过top命令查看当前CPU消耗过高的进程是哪个，从而得到进程id；然后通过top -Hp 来查看该进程中有哪些线程CPU过高，一般超过80%就是比较高的，80%左右是合理情况。这样我们就能得到CPU消耗比较高的线程id。接着通过该线程id的十六进制表示在jstack日志中查看当前线程具体的堆栈信息。</p>
+
+<p>在这里我们就可以区分导致CPU过高的原因具体是Full GC次数过多还是代码中有比较耗时的计算了。如果是Full GC次数过多，那么通过jstack得到的线程信息会是类似于VM Thread之类的线程，而如果是代码中有比较耗时的计算，那么我们得到的就是一个线程的具体堆栈信息。如下是一个代码中有比较耗时的计算，导致CPU过高的线程信息：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1162587-20190322153649853-1357401438.png" alt="img" /></p>
+
+<p>这里可以看到，在请求UserController的时候，由于该Controller进行了一个比较耗时的调用，导致该线程的CPU一直处于100%。我们可以根据堆栈信息，直接定位到UserController的34行，查看代码中具体是什么原因导致计算量如此之高。</p>
+
+<h1 id="不定期出现的接口耗时现象">不定期出现的接口耗时现象</h1>
+
+<p>对于这种情况，比较典型的例子就是，我们某个接口访问经常需要2~3s才能返回。这是比较麻烦的一种情况，因为一般来说，其消耗的CPU不多，而且占用的内存也不高，也就是说，我们通过上述两种方式进行排查是无法解决这种问题的。而且由于这样的接口耗时比较大的问题是不定时出现的，这就导致了我们在通过jstack命令即使得到了线程访问的堆栈信息，我们也没法判断具体哪个线程是正在执行比较耗时操作的线程。</p>
+
+<p>对于不定时出现的接口耗时比较严重的问题，我们的定位思路基本如下：首先找到该接口，通过压测工具不断加大访问力度，如果说该接口中有某个位置是比较耗时的，由于我们的访问的频率非常高，那么大多数的线程最终都将阻塞于该阻塞点，这样通过多个线程具有相同的堆栈日志，我们基本上就可以定位到该接口中比较耗时的代码的位置。如下是一个代码中有比较耗时的阻塞操作通过压测工具得到的线程堆栈日志：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"http-nio-8080-exec-2" #29 daemon prio=5 os_prio=31 tid=0x00007fd08cb26000 nid=0x9603 waiting on condition [0x00007000031d5000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+	at java.lang.Thread.sleep(Native Method)
+	at java.lang.Thread.sleep(Thread.java:340)
+	at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
+	at com.aibaobei.user.controller.UserController.detail(UserController.java:18)
+
+"http-nio-8080-exec-3" #30 daemon prio=5 os_prio=31 tid=0x00007fd08cb27000 nid=0x6203 waiting on condition [0x00007000032d8000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+	at java.lang.Thread.sleep(Native Method)
+	at java.lang.Thread.sleep(Thread.java:340)
+	at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
+	at com.aibaobei.user.controller.UserController.detail(UserController.java:18)
+
+"http-nio-8080-exec-4" #31 daemon prio=5 os_prio=31 tid=0x00007fd08d0fa000 nid=0x6403 waiting on condition [0x00007000033db000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+	at java.lang.Thread.sleep(Native Method)
+	at java.lang.Thread.sleep(Thread.java:340)
+	at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
+	at com.aibaobei.user.controller.UserController.detail(UserController.java:18)
+</code></pre></div></div>
+
+<p>从上面的日志可以看你出，这里有多个线程都阻塞在了UserController的第18行，说明这是一个阻塞点，也就是导致该接口比较缓慢的原因。</p>
+
+<h1 id="某个线程进入waiting状态">某个线程进入WAITING状态</h1>
+
+<p>对于这种情况，这是比较罕见的一种情况，但是也是有可能出现的，而且由于其具有一定的“不可复现性”，因而我们在排查的时候是非常难以发现的。笔者曾经就遇到过类似的这种情况，具体的场景是，在使用CountDownLatch时，由于需要每一个并行的任务都执行完成之后才会唤醒主线程往下执行。而当时我们是通过CountDownLatch控制多个线程连接并导出用户的gmail邮箱数据，这其中有一个线程连接上了用户邮箱，但是连接被服务器挂起了，导致该线程一直在等待服务器的响应。最终导致我们的主线程和其余几个线程都处于WAITING状态。</p>
+
+<p>对于这样的问题，查看过jstack日志的读者应该都知道，正常情况下，线上大多数线程都是处于TIMED_WAITING状态，而我们这里出问题的线程所处的状态与其是一模一样的，这就非常容易混淆我们的判断。解决这个问题的思路主要如下：</p>
+
+<ul>
+  <li>通过grep在jstack日志中找出所有的处于TIMED_WAITING状态的线程，将其导出到某个文件中，如a1.log，如下是一个导出的日志文件示例：</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Attach Listener" #13 daemon prio=9 os_prio=31 tid=0x00007fe690064000 nid=0xd07 waiting on condition [0x0000000000000000]
+"DestroyJavaVM" #12 prio=5 os_prio=31 tid=0x00007fe690066000 nid=0x2603 waiting on condition [0x0000000000000000]
+"Thread-0" #11 prio=5 os_prio=31 tid=0x00007fe690065000 nid=0x5a03 waiting on condition [0x0000700003ad4000]
+"C1 CompilerThread3" #9 daemon prio=9 os_prio=31 tid=0x00007fe68c00a000 nid=0xa903 waiting on condition [0x0000000000000000]
+</code></pre></div></div>
+
+<ul>
+  <li>等待一段时间之后，比如10s，再次对jstack日志进行grep，将其导出到另一个文件，如a2.log，结果如下所示：</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"DestroyJavaVM" #12 prio=5 os_prio=31 tid=0x00007fe690066000 nid=0x2603 waiting on condition [0x0000000000000000]
+"Thread-0" #11 prio=5 os_prio=31 tid=0x00007fe690065000 nid=0x5a03 waiting on condition [0x0000700003ad4000]
+"VM Periodic Task Thread" os_prio=31 tid=0x00007fe68d114000 nid=0xa803 waiting on condition
+</code></pre></div></div>
+
+<ul>
+  <li>重复步骤2，待导出3~4个文件之后，我们对导出的文件进行对比，找出其中在这几个文件中一直都存在的用户线程，这个线程基本上就可以确认是包含了处于等待状态有问题的线程。因为正常的请求线程是不会在20~30s之后还是处于等待状态的。</li>
+  <li>经过排查得到这些线程之后，我们可以继续对其堆栈信息进行排查，如果该线程本身就应该处于等待状态，比如用户创建的线程池中处于空闲状态的线程，那么这种线程的堆栈信息中是不会包含用户自定义的类的。这些都可以排除掉，而剩下的线程基本上就可以确认是我们要找的有问题的线程。通过其堆栈信息，我们就可以得出具体是在哪个位置的代码导致该线程处于等待状态了。</li>
+</ul>
+
+<p>这里需要说明的是，我们在判断是否为用户线程时，可以通过线程最前面的线程名来判断，因为一般的框架的线程命名都是非常规范的，我们通过线程名就可以直接判断得出该线程是某些框架中的线程，这种线程基本上可以排除掉。而剩余的，比如上面的Thread-0，以及我们可以辨别的自定义线程名，这些都是我们需要排查的对象。</p>
+
+<p>经过上面的方式进行排查之后，我们基本上就可以得出这里的Thread-0就是我们要找的线程，通过查看其堆栈信息，我们就可以得到具体是在哪个位置导致其处于等待状态了。如下示例中则是在SyncTask的第8行导致该线程进入等待了。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Thread-0" #11 prio=5 os_prio=31 tid=0x00007f9de08c7000 nid=0x5603 waiting on condition [0x0000700001f89000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:304)
+	at com.aibaobei.chapter2.eg4.SyncTask.lambda$main$0(SyncTask.java:8)
+	at com.aibaobei.chapter2.eg4.SyncTask$$Lambda$1/1791741888.run(Unknown Source)
+	at java.lang.Thread.run(Thread.java:748)
+</code></pre></div></div>
+
+<h1 id="死锁">死锁</h1>
+
+<p>对于死锁，这种情况基本上很容易发现，因为jstack可以帮助我们检查死锁，并且在日志中打印具体的死锁线程信息。如下是一个产生死锁的一个jstack日志示例：</p>
+
+<p><img src="/assets/images/mianshiti/0708/1162587-20190322153623622-2014186194.png" alt="img" /></p>
+
+<p>可以看到，在jstack日志的底部，其直接帮我们分析了日志中存在哪些死锁，以及每个死锁的线程堆栈信息。这里我们有两个用户线程分别在等待对方释放锁，而被阻塞的位置都是在ConnectTask的第5行，此时我们就可以直接定位到该位置，并且进行代码分析，从而找到产生死锁的原因。</p>
+
+<h1 id="小结">小结</h1>
+
+<p>本文主要讲解了线上可能出现的五种导致系统缓慢的情况，详细分析了每种情况产生时的现象，已经根据现象我们可以通过哪些方式定位得到是这种原因导致的系统缓慢。简要的说，我们进行线上日志分析时，主要可以分为如下步骤：</p>
+
+<ol>
+  <li>通过top命令查看CPU情况，如果CPU比较高，则通过top -Hp 命令查看当前进程的各个线程运行情况，找出CPU过高的线程之后，将其线程id转换为十六进制的表现形式，然后在jstack日志中查看该线程主要在进行的工作。这里又分为两种情况:
+    <ul>
+      <li>如果是正常的用户线程，则通过该线程的堆栈信息查看其具体是在哪处用户代码处运行比较消耗CPU；</li>
+      <li>如果该线程是VM Thread，则通过<code class="language-plaintext highlighter-rouge">jstat -gcutil &lt;pid&gt; &lt;period&gt; &lt;times&gt;</code>命令监控当前系统的GC状况，然后通过<code class="language-plaintext highlighter-rouge">jmap dump:format=b,file=&lt;filepath&gt; &lt;pid&gt;</code>导出系统当前的内存数据。导出之后将内存情况放到eclipse的mat工具中进行分析即可得出内存中主要是什么对象比较消耗内存，进而可以处理相关代码；</li>
+    </ul>
+  </li>
+  <li>如果通过top命令看到CPU并不高，并且系统内存占用率也比较低。此时就可以考虑是否是由于另外三种情况导致的问题。具体的可以根据具体情况分析：
+    <ul>
+      <li>如果是接口调用比较耗时，并且是不定时出现，则可以通过压测的方式加大阻塞点出现的频率，从而通过jstack查看堆栈信息，找到阻塞点；</li>
+      <li>如果是某个功能突然出现停滞的状况，这种情况也无法复现，此时可以通过多次导出jstack日志的方式对比哪些用户线程是一直都处于等待状态，这些线程就是可能存在问题的线程；</li>
+      <li>如果通过jstack可以查看到死锁状态，则可以检查产生死锁的两个线程的具体阻塞点，从而处理相应的问题。</li>
+    </ul>
+  </li>
+</ol>
+
+<p>本文主要是提出了五种常见的导致线上功能缓慢的问题，以及排查思路。当然，线上的问题出现的形式是多种多样的，也不一定局限于这几种情况，如果我们能够仔细分析这些问题出现的场景，就可以根据具体情况具体分析，从而解决相应的问题。</p>
+</div><p><a href="/mianshi/JVM/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/springboot/0707/01"><h2 itemprop="headline" class="item__header">各种 Spring-Boot-Starters系列 介绍</h2></a></header>
@@ -856,424 +1879,6 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0707/05"><h2 itemprop="headline" class="item__header">腾讯（50道面试题）</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>线程池有什么作用？</p>
-
-<p>说说几种常见的线程池及使用场景。</p>
-
-<p>什么是反射机制？</p>
-
-<p>说说反射机制的作用。</p>
-
-<p>反射机制会不会有性能问题？</p>
-
-<p>你怎么理解http协议？</p>
-
-<p>说说http协议的工作流程。</p>
-
-<p>http有哪些请求提交方式？</p>
-
-<p>http中的200,302,403,404,500,503都代表什么状态？</p>
-
-<p>http get和post有什么区别？</p>
-
-<p>你怎么理解cookie和session，有哪些不同点？</p>
-
-<p>什么是web缓存？有什么优点？</p>
-
-<p>什么是https，说说https的工作原理？</p>
-
-<p>什么是http代理服务器，有什么用？</p>
-
-<p>什么是虚拟主机及实现原理？</p>
-
-<p>什么是Java虚拟机，为什么要使用？</p>
-
-<p>什么是分布式系统？</p>
-
-<p>分布式系统你会考虑哪些方面？</p>
-
-<p>讲一讲TCP协议的三次握手和四次挥手流程。</p>
-
-<p>为什么TCP建立连接协议是三次握手，而关闭连接却是四次握手呢？为什么不能用两次握手进行连接？</p>
-
-<p>为什么TCP TIME_WAIT状态还需要等2MSL后才能返回到CLOSED状态？</p>
-
-<p>什么是DoS、DDoS、DRDoS攻击？如何防御？</p>
-
-<p>描述一下Java异常层次结构。</p>
-
-<p>什么是检查异常，不受检查异常，运行时异常？并分别举例说明。</p>
-
-<p>finally块一定会执行吗？</p>
-
-<p>正常情况下，当在try块或catch块中遇到return语句时，finally语句块在方法返回之前还是之后被执行？</p>
-
-<p>try、catch、finally语句块的执行顺序。</p>
-
-<p>Java虚拟机中，数据类型可以分为哪几类？</p>
-
-<p>Java中，栈的大小通过什么参数来设置？</p>
-
-<p>一个空Object对象的占多大空间？</p>
-
-<p>讲一讲垃圾回收算法。</p>
-
-<p>如何解决内存碎片的问题？</p>
-
-<p>如何解决同时存在的对象创建和对象回收问题？</p>
-
-<p>讲一讲内存分代及生命周期。</p>
-
-<p>什么情况下触发垃圾回收？</p>
-
-<p>如何选择合适的垃圾收集算法？</p>
-
-<p>堆大小通过什么参数设置？</p>
-
-<p>JVM有哪三种垃圾回收器？</p>
-
-<p>吞吐量优先选择什么垃圾回收器？响应时间优先呢？</p>
-
-<p>如何进行JVM调优？有哪些方法？</p>
-
-<p>如何理解内存泄漏问题？有哪些情况会导致内存泄露？如何解决？</p>
-
-<p>讲讲CAP理念。</p>
-
-<p>怎么理解强一致性、单调一致性和最终一致性？</p>
-
-<p>分布式系统设计你会考虑哪些策略？</p>
-
-<p>最常见的数据分布方式是什么？</p>
-
-<p>谈一谈一致性哈希算法。</p>
-
-<p>如何理解选主算法？</p>
-
-<p>OSI有哪七层模型？TCP/IP是哪四层模型。</p>
-</div><p><a href="/mianshi/0707/05">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-15">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0707/05"><h2 itemprop="headline" class="item__header">美团（30道面试题）</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>#</p>
-
-<p>java虚拟机内存模型</p>
-
-<p>内存溢出一般发生在哪个区？永久代会不会导致内存溢出？</p>
-
-<p>动态加载类的框架了解哪些？</p>
-
-<p>动态代理一般有哪几种实现方式？动态代理的应用场景有哪些？</p>
-
-<p>栈会不会溢出？栈溢出一般抛什么异常？jvm在哪里设置栈的大小？设置的参数是什么？</p>
-
-<p>jvm的垃圾回收机制？</p>
-
-<p>java类加载机制？如何实现自定义类加载器？findClass与loadClass的区别？</p>
-
-<p>String、StringBuffer、StringBuilder的区别？对应的使用场景？</p>
-
-<p>如何实现不可变的类？</p>
-
-<p>浅复制和深复制？怎样实现深复制？</p>
-
-<p>HashMap、HashTable、ConcurrentHashMap的区别？</p>
-
-<p>CAS是一种什么样的同步机制？</p>
-
-<p>spring加载bean的流程？</p>
-
-<p>java线程池？线程池构造函数的几个参数含义？keepAliveTime解释一下？</p>
-
-<p>一个接口，要去调用另外5个接口，每一个接口都会返回数据给这个调用接口，调用接口要对数据进行合并并返回给上层。这样一种场景可能用到并发包下的哪些类？你会怎么去实现这样的业务场景？</p>
-
-<p>CountDownLatch和CyclicBarrier的区别？</p>
-
-<p>线程加锁有哪些方式？synchronized和lock的区别？</p>
-
-<p>volatile关键字的作用？为什么使用AtomicLong而不使用Long?AtomicLong的底层是怎么实现的？</p>
-
-<p>mysql的存储引擎有哪几种？</p>
-
-<p>sql优化有哪些着手点？组合索引的最左前缀原则的含义？</p>
-
-<p>springmvc处理请求的流程？</p>
-
-<p>spring的事务怎么使用？事务回滚？自定义异常？</p>
-
-<p>脏读？幻读？</p>
-
-<p>tcp四次挥手的过程？TIME_WAIT为什么至少设置两倍的MSL时间？</p>
-
-<p>了解哪些开源的中间件？缓存？消息？分布式框架？</p>
-
-<p>用到过哪些设计模式？单例模式的实现？</p>
-
-<p>数据库的脏读，幻读，不可重复读出现的原因原理，解决办法</p>
-
-<p>数据库的隔离级别、MVCC</p>
-
-<p>乐观锁、悲观锁、互斥锁、读写锁的原理实现与区别</p>
-
-<p>一致性hash算法原理与应用</p>
-
-<p>CAP原则</p>
-
-<p>CAS操作</p>
-
-</div><p><a href="/mianshi/0707/05">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-15">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0707/04"><h2 itemprop="headline" class="item__header">京东（20道面试题）</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>Tomcat的基本架构是什么？</p>
-
-<p>jvm调优，工作的是怎么用的，垃圾回收的策略有哪些？</p>
-
-<p>Java 中的线程池是如何实现的？创建线程池的几个核心构造参数？</p>
-
-<p>对比下 volatile 对比 Synchronized 的异同。</p>
-
-<p>GC机制是什么?</p>
-
-<p>垃圾回收器的基本原理是什么？垃圾回收器可以立马回收内存吗？怎样主动通知虚拟机进行垃圾回收？</p>
-
-<p>类加载器双亲委派模型机制？</p>
-
-<p>集合的种类以及区别，HashMap底层如何实现？HashMap中Hash冲突是怎么解决的？</p>
-
-<p>Spring IOC 怎么管理 Bean 之间的依赖关系，怎么避免循环依赖？</p>
-
-<p>Spring Bean 创建过程中的设计模式？</p>
-
-<p>InnoDB 支持的四种事务隔离级别名称，以及逐级之间的区别？</p>
-
-<p>简述事务的特性？</p>
-
-<p>什么是MySQL隔离级别？</p>
-
-<p>如何理解BTree机制？</p>
-
-<p>谈谈对慢查询分析？MySQL常用优化方式有哪些？？</p>
-
-<p>谈谈悲观锁和乐观锁及用SQL实现？</p>
-
-<p>简述三次握手及四次挥手的过程？</p>
-
-<p>对比B+树索引和 Hash索引？</p>
-
-<p>MySQL的锁并发？</p>
-
-<p>高并发场景（领红包）如何防止死锁，保证数据一致性？</p>
-
-<p>集群与负载均衡的算法与实现？</p>
-
-<p>简述分库与分表设计？</p>
-
-<p>分库与分表带来的分布式困境与应对之策？</p>
-
-<p>加锁机制是什么？</p>
-
-</div><p><a href="/mianshi/0707/04">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-14">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0707/03"><h2 itemprop="headline" class="item__header">百度（24道面试题）</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>手写ArrayList</p>
-
-<p>手写进制转换算法，求出一个数的二进制数1的个数</p>
-
-<p>AVA基础 equals和==</p>
-
-<p>多线程方式、threadlocal，各种锁，synchronized和lock</p>
-
-<p>设计模式、spring类加载方式、实例保存在哪、aop ioc、反射机制</p>
-
-<p>类加载器，双亲委派模型，热部署</p>
-
-<p>jvm内存模型，内存结构、堆的分代算法、堆的分区、gc算法、gc过程。</p>
-
-<p>tcp ip 七层模型 rest接口规范 get和post区别，长度，安全。</p>
-
-<p>tcp ip的arp协议，两个同一网络的主机如何获得对方的mac地址。</p>
-
-<p>负载均衡、高并发、高可用的架构</p>
-
-<p>mysql的引擎区别</p>
-
-<p>redis缓存，redis的集群部署，热备份，主从备份，主从数据库，hash映射找到知道指定节点。</p>
-
-<p>了解云计算么，了解云容器docker么，容器和虚拟机的区别。</p>
-
-<p>项目中的数据库备份，主从数据库、集群</p>
-
-<p>数据库的索引原理，b+树原理，trie树引申，二叉查找树的原理</p>
-
-<p>海量数据中查找一个单词，分布式计算map reduce ，或者用hsah映射筛选部分结果</p>
-
-<p>java的抽象类和接口区别、java的hashmap，java的内存模型，分区，分代垃圾回收算法。实例、常量放在哪里。</p>
-
-<p>int 4个字节，double 8个字节。</p>
-
-<p>多线程中的wait和sleep区别，notify的作用</p>
-
-<p>设计模式了解哪些，写一个观察者模式。实现两个接口，一个是主题一个是观察者，并写出对应方法。</p>
-
-<p>写一个生产者消费者队列的方法，分别写两个类代表生产者和消费者，并且用队列模拟其生产消费。用while循环和wait notify可以实现，但我忘记在队列上加synchronize关键字，于是让我再写一题。写的是：输入一个字符串，输入第一个只出现一次的字符，写出来了。</p>
-
-<p>tcp ip的四次挥手 子网掩码的作用， 子网掩码(subnet mask)又叫 网络掩码 、 地址掩码 、子网络遮罩，它是一种用来指明一个 IP地址 的哪些位标识的是 主机 所在的子网，以及哪些位标识的是主机的位掩码。子网掩码不能单独存在，它必须结合IP地址一起使用。子网掩码只有一个作用，就是将某个IP地址划分成 网络地址 和 主机地址 两部分。</p>
-
-<p>了解linux么，说一下linux的内核锁？没接触过。</p>
-
-<table>
-  <tbody>
-    <tr>
-      <td>有没有用过sed 使用shell脚本写一个将文本中的字符替换掉的脚本，大概说了一下用grep</td>
-      <td> </td>
-      <td>替换。没再问linux的</td>
-    </tr>
-  </tbody>
-</table>
-
-</div><p><a href="/mianshi/0707/03">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-13">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0707/02"><h2 itemprop="headline" class="item__header">阿里（60道面试题）</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>1.Java事件机制包括哪三个部分？分别介绍下。</p>
-
-<p>2.使用线程池的原因？</p>
-
-<p>3.线程池的作用有哪些？</p>
-
-<p>4.几种常见的线程池及其各自的使用场景是怎样的。</p>
-
-<p>5.线程池都有哪几种工作队列？</p>
-
-<p>6.怎么理解无界队列和有界队列？</p>
-
-<p>7.线程池中的几种重要的参数及流程说明。</p>
-
-<p>8.什么是反射机制？</p>
-
-<p>9.说说反射机制的作用。</p>
-
-<p>10.反射机制会不会有性能问题？</p>
-
-<p>11.你怎么理解http协议？</p>
-
-<p>12.说说http协议的工作流程。</p>
-
-<p>13.http有哪些请求提交方式？</p>
-
-<p>14.http中的200,302,403,404,500,503都代表什么状态？</p>
-
-<p>15.http get和post有什么区别？</p>
-
-<p>16.你怎么理解cookie和session，有哪些不同点？</p>
-
-<p>17.什么是web缓存？有什么优点？</p>
-
-<p>18.什么是https，说说https的工作原理？</p>
-
-<p>20.什么是虚拟主机及实现原理？</p>
-
-<p>21.什么是Java虚拟机，为什么要使用？</p>
-
-<p>22.说说Java虚拟机的生命周期及体系结构。</p>
-
-<p>23.说一说Java内存区域。</p>
-
-<p>24.什么是分布式系统？</p>
-
-<p>25.分布式系统你会考虑哪些方面？</p>
-
-<p>26.为什么说TCP/IP协议是不可靠的？</p>
-
-<p>27.OSI有哪七层模型？TCP/IP是哪四层模型。</p>
-
-<p>28.TCP协议的三次握手，四次挥手流程。</p>
-
-<p>29.为什么TCP建立连接协议是三次握手，而关闭连接却是四次握手呢？为什么不能用两次握手进行连接？</p>
-
-<p>32.描述一下Java异常层次结构。</p>
-
-<p>33.什么是检查异常，不受检查异常，运行时异常？并分别举例说明。</p>
-
-<p>34.finally块一定会执行吗？</p>
-
-<p>35.正常情况下，当在try块或catch块中遇到return语句时，finally语句块在方法返回之前还是之后被执行？</p>
-
-<p>36.try、catch、finally语句块的执行顺序。</p>
-
-<p>37.Java虚拟机中，数据类型可以分为哪几类？</p>
-
-<p>38.怎么理解栈、堆？堆中存什么？栈中存什么？</p>
-
-<p>39.为什么要把堆和栈区分出来呢？栈中不是也可以存储数据吗？</p>
-
-<p>40.在Java中，什么是是栈的起始点，同是也是程序的起始点？</p>
-
-<p>43.Java中有没有指针的概念？</p>
-
-<p>44.Java中，栈的大小通过什么参数来设置？</p>
-
-<p>45.一个空Object对象的占多大空间？</p>
-
-<p>46.对象引用类型分为哪几类？</p>
-
-<p>47.讲一讲垃圾回收算法。</p>
-
-<p>48.如何解决内存碎片的问题？</p>
-
-<p>49.如何解决同时存在的对象创建和对象回收问题？</p>
-
-<p>50.讲一讲内存分代及生命周期。</p>
-
-<p>51.什么情况下触发垃圾回收？</p>
-
-<p>52.如何选择合适的垃圾收集算法？</p>
-
-<p>53.JVM有哪三种垃圾回收器？</p>
-
-<p>54.JVM中最大堆大小有没有限制？</p>
-
-<p>55.如何进行JVM调优？有哪些方法？</p>
-
-<p>56.堆大小通过什么参数设置？</p>
-
-<p>60.如何解决业务层的数据访问问题？</p>
-
-<p>61.为了解决数据库服务器的负担，如何做数据库的分布？</p>
-
-<p>62.什么是著名的拜占庭将军问题？</p>
-
-<p>63.讲讲CAP理念。</p>
-
-<p>64.怎么理解强一致性、单调一致性和最终一致性？</p>
-
-<p>65.分布式系统设计你会考虑哪些策略？</p>
-</div><p><a href="/mianshi/0707/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-12">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/spring/0707/11"><h2 itemprop="headline" class="item__header">Spring中的后置处理器BeanPostProcessor讲解</h2></a></header>
@@ -1627,8 +2232,319 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-21">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/spring/0707/10"><h2 itemprop="headline" class="item__header">Spring中的aware接口</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>Spring中有很多继承于<code class="language-plaintext highlighter-rouge">aware</code>中的接口，这些接口到底是做什么用到的。</p>
+
+<p><img src="/assets/images/mianshiti/0707/3397380-6ef519bbc705ce28.png" alt="img" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">aware</code>,翻译过来是知道的，已感知的，意识到的，所以这些接口从字面意思应该是能感知到所有<code class="language-plaintext highlighter-rouge">Aware</code>前面的含义。</p>
+
+<p>先举个<code class="language-plaintext highlighter-rouge">BeanNameAware</code>的例子，实现<code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口，可以让该<code class="language-plaintext highlighter-rouge">Bean</code>感知到自身的<code class="language-plaintext highlighter-rouge">BeanName</code>（对应Spring容器的<code class="language-plaintext highlighter-rouge">BeanId</code>属性）属性,举个例子：</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口的定义</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">BeanNameAware</span> <span class="kd">extends</span> <span class="nc">Aware</span> <span class="o">{</span>
+      <span class="kt">void</span> <span class="nf">setBeanName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>定义两个<code class="language-plaintext highlighter-rouge">User</code>,一个实现<code class="language-plaintext highlighter-rouge">BeanNameAware</code>,一个不实现。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.github.jettyrun.springinterface.demo.aware.beannameaware</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.BeanNameAware</span><span class="o">;</span>
+
+<span class="cm">/**
+ * Created by jetty on 18/1/31.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User</span> <span class="kd">implements</span> <span class="nc">BeanNameAware</span><span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setBeanName</span><span class="o">(</span><span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">//ID保存BeanName的值</span>
+        <span class="n">id</span><span class="o">=</span><span class="n">beanName</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAddress</span><span class="o">(</span><span class="nc">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"User{"</span> <span class="o">+</span>
+                <span class="s">"id='"</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="s">", name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="s">", address='"</span> <span class="o">+</span> <span class="n">address</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="sc">'}'</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.github.jettyrun.springinterface.demo.aware.beannameaware</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.BeanNameAware</span><span class="o">;</span>
+
+<span class="cm">/**
+ * Created by jetty on 18/1/31.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">User2</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">id</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">address</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getId</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setId</span><span class="o">(</span><span class="nc">String</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getAddress</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAddress</span><span class="o">(</span><span class="nc">String</span> <span class="n">address</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">address</span> <span class="o">=</span> <span class="n">address</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"User{"</span> <span class="o">+</span>
+                <span class="s">"id='"</span> <span class="o">+</span> <span class="n">id</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="s">", name='"</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="s">", address='"</span> <span class="o">+</span> <span class="n">address</span> <span class="o">+</span> <span class="sc">'\''</span> <span class="o">+</span>
+                <span class="sc">'}'</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>在Spring配置文件中初始化两个对象。</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"zhangsan"</span>  <span class="na">class=</span><span class="s">"com.github.jettyrun.springinterface.demo.aware.beannameaware.User"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"zhangsan"</span><span class="nt">&gt;&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"address"</span> <span class="na">value=</span><span class="s">"火星"</span><span class="nt">&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+
+    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"lisi"</span>  <span class="na">class=</span><span class="s">"com.github.jettyrun.springinterface.demo.aware.beannameaware.User2"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"lisi"</span><span class="nt">&gt;&lt;/property&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"address"</span> <span class="na">value=</span><span class="s">"火星"</span><span class="nt">&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;/bean&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>main方法测试一下<code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口所起的作用。</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">ApplicationContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"classpath:application-beanaware.xml"</span><span class="o">);</span>
+
+        <span class="nc">User</span> <span class="n">user</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">User</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"实现了BeanNameAware接口的信息BeanId=%s,所有信息=%s"</span><span class="o">,</span><span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="n">user</span><span class="o">.</span><span class="na">toString</span><span class="o">()));</span>
+
+        <span class="nc">User2</span> <span class="n">user2</span><span class="o">=</span><span class="n">context</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="nc">User2</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"未实现BeanNameAware接口的信息BeanId=%s,所有信息=%s"</span><span class="o">,</span><span class="n">user2</span><span class="o">.</span><span class="na">getId</span><span class="o">(),</span><span class="n">user2</span><span class="o">.</span><span class="na">toString</span><span class="o">()));</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>运行结果</li>
+</ul>
+
+<pre><code class="language-txt">实现了BeanNameAware接口的信息BeanId=zhangsan,所有信息=User{id='zhangsan', name='zhangsan', address='火星'}
+未实现BeanNameAware接口的信息BeanId=null,所有信息=User{id='null', name='lisi', address='火星'}
+</code></pre>
+
+<p>能够看到，我们在实现了<code class="language-plaintext highlighter-rouge">BeanNameAware</code>的 <code class="language-plaintext highlighter-rouge">User</code>中，获取到了Spring容器中的<code class="language-plaintext highlighter-rouge">BeanId</code>（对应<code class="language-plaintext highlighter-rouge">spring配置文件</code>中的<code class="language-plaintext highlighter-rouge">id</code>属性），而没有实现<code class="language-plaintext highlighter-rouge">BeanNameAware</code>的<code class="language-plaintext highlighter-rouge">User2</code>，则不能获取到Spring容器中的Id属性。</p>
+
+<p><strong>所以<code class="language-plaintext highlighter-rouge">BeanNameAware</code>接口是为了让自身<code class="language-plaintext highlighter-rouge">Bean</code>能够感知到，获取到自身在Spring容器中的id属性。</strong></p>
+
+<p><strong>同理，其他的<code class="language-plaintext highlighter-rouge">Aware</code>接口也是为了能够感知到自身的一些属性。
+ 比如实现了<code class="language-plaintext highlighter-rouge">ApplicationContextAware</code>接口的类，能够获取到<code class="language-plaintext highlighter-rouge">ApplicationContext</code>，实现了<code class="language-plaintext highlighter-rouge">BeanFactoryAware</code>接口的类，能够获取到<code class="language-plaintext highlighter-rouge">BeanFactory</code>对象。</strong></p>
+
+</div><p><a href="/mianshi/spring/0707/10">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-20">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/spring/0707/11"><h2 itemprop="headline" class="item__header">SpringBean 生命周期</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>最近面试过程中被问到了SpringBean生命周期，当时答了个印象中的大概，详细整理一下</p>
+
+<p>Spring容器管理的类在定位，加载之后，初始化到能用的过程如下图：</p>
+
+<p><img src="/assets/images/mianshiti/0707/2081031-20200702193359366-206975160.png" alt="img" /></p>
+
+<p>1、调用构造方法new一个实例到容器中</p>
+
+<p>2、对于依赖的属性进行注入</p>
+
+<p>注意：由于注入的属性在构造方法之后，所以在构造方法中使用被注解的字段（@Autowire、@Value等）会拿不到注入的值或者实例；</p>
+
+<p>3、bean如果集成了Aware接口的各种子接口，那么可以执行相应Aware接口的方法，Aware接口主要是获取当前bean被放入容器的信息，不如beanId，beanFactory,ClassLoader等。</p>
+
+<p>执行顺序，大概是BeanNameAware-&gt;BeanFactoryAware…</p>
+
+<p>4、BeanPostProcessor（后置处理器）的postProcessBeforeInitialization方法</p>
+
+<p>这个before初始化的意思是调用显式初始化方法之前的方法，BeanPostProcessor的方法逻辑是什么也不做，直接返回bean,</p>
+
+<p>BeanPostProcessor:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//为在Bean的初始化前提供回调入口
+@Nullable
+default Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+	return bean;
+}
+</code></pre></div></div>
+
+<p>可以自己定义一个处理器，来做一些想做的事</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code> 1 　  
+ 2 
+ 3 <span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+ 4 <span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+ <span class="err">5</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+ <span class="err">6</span> <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans 
+ 7 http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+ 8 
+ 9 <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"com.dpb.pojo.XXX"</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">init-method=</span><span class="s">"xxx"</span><span class="nt">&gt;</span>
+10 <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"xxx"</span> <span class="na">value=</span><span class="s">"波波烤鸭"</span> <span class="nt">/&gt;</span>
+11 <span class="nt">&lt;/bean&gt;</span>
+12 
+13 <span class="c">&lt;!-- 注册处理器 --&gt;</span>
+14 <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"com.dpb.processor.MyBeanPostProcessor"</span><span class="nt">&gt;&lt;/bean&gt;</span>
+15 <span class="nt">&lt;/beans&gt;</span>　　
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.dpb.processor</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.BeansException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.BeanPostProcessor</span><span class="o">;</span>
+<span class="cm">/**
+ * 自定义BeanPostProcessor实现类
+ * BeanPostProcessor接口的作用是：
+ *      我们可以通过该接口中的方法在bean实例化、配置以及其他初始化方法前后添加一些我们自己的逻辑
+ * @author dengp
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyBeanPostProcessor</span> <span class="kd">implements</span> <span class="nc">BeanPostProcessor</span><span class="o">{</span>
+
+    <span class="cm">/**
+     * 实例化、依赖注入完毕，在调用显示的初始化之前完成一些定制的初始化任务
+     * 注意：方法返回值不能为null
+     * 如果返回null那么在后续初始化方法将报空指针异常或者通过getBean()方法获取不到bena实例对象
+     * 因为后置处理器从Spring IoC容器中取出bean实例对象没有再次放回IoC容器中
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessBeforeInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"初始化 before--实例化的bean对象:"</span><span class="o">+</span><span class="n">bean</span><span class="o">+</span><span class="s">"\t"</span><span class="o">+</span><span class="n">beanName</span><span class="o">);</span>
+        <span class="c1">// 可以根据beanName不同执行不同的处理操作</span>
+        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 实例化、依赖注入、初始化完毕时执行 
+     * 注意：方法返回值不能为null
+     * 如果返回null那么在后续初始化方法将报空指针异常或者通过getBean()方法获取不到bena实例对象
+     * 因为后置处理器从Spring IoC容器中取出bean实例对象没有再次放回IoC容器中
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">postProcessAfterInitialization</span><span class="o">(</span><span class="nc">Object</span> <span class="n">bean</span><span class="o">,</span> <span class="nc">String</span> <span class="n">beanName</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">BeansException</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"初始化 after...实例化的bean对象:"</span><span class="o">+</span><span class="n">bean</span><span class="o">+</span><span class="s">"\t"</span><span class="o">+</span><span class="n">beanName</span><span class="o">);</span>
+        <span class="c1">// 可以根据beanName不同执行不同的处理操作</span>
+        <span class="k">return</span> <span class="n">bean</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>5、执行@PostConstruct 注解的方法，比如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@PostConstruct</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(){</span>
+  <span class="n">doSomething</span><span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>6、bean实现了InitializingBean，执行afterPropertiesSet方法,比如：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServiceImpl</span> <span class="kd">implements</span> <span class="nc">InitializingBean</span> <span class="o">{</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AfterPropertiesSet method: myServiceImpl"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>7、执行配置文件中的init-method</p>
+
+<p>8、BeanPostProcessor的postProcessAfterInitialization方法</p>
+
+<p>9、至此完成bean的准备，可以使用。</p>
+
+<p><strong>当bean不在被使用，容器关闭时，bean会被销毁</strong>。可以有一下方法参与销毁行为</p>
+
+<p><img src="/assets/images/mianshiti/0707/2081031-20200702195852697-627239963.png" alt="img" /></p>
+
+<p>1、执行@PostDestroy 注解的方法</p>
+
+<p>2、bean实现了DisposableBean，执行destroy方法</p>
+
+<p>3、执行配置文件中的destroy-method</p>
+</div><p><a href="/mianshi/spring/0707/11">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 07, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-07-21">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-07T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>304 post articles, 38 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>308 post articles, 39 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1641,7 +2557,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page38"><span>38</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page39"><span>39</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
