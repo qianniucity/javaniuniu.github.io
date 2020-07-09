@@ -1,5 +1,5 @@
 ---
-title: @Autowired的使用：推荐使用构造函数进行注入
+title: Autowired的使用：推荐使用构造函数进行注入
 permalink: /spring/0709/01
 tags: 面试题
 key: spring-2020-07-09-01

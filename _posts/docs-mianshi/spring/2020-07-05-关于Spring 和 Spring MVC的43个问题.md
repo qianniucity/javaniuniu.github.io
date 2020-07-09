@@ -371,11 +371,14 @@ __窄化请求映射：__ 在类上添加
 
 ###### b. 对参数进行重新编码：
 
+
 ```java
-String userName = new String(request.getParamter("userName").getBytes("ISO8859-1"),"utf-8")
+String userName = new String(request.getParamter("userName").getBytes("ISO8859-1"),"utf-8");
 ```
 
+
 ISO8859-1是tomcat默认编码，需要将tomcat编码后的内容按utf-8编码
+
 
 #### 23、集合类型绑定
 
@@ -480,9 +483,9 @@ AOP--Aspect Oriented Programming面向切面编程；用来封装横切关注点
 
 Authentication 权限、Caching 缓存、Context passing 内容传递、Error handling 错误处理Lazy loading懒加载、Debugging调试、logging, tracing, profiling and monitoring 记录跟踪优化　校准、Performance optimization　性能优化、Persistence 持久化、Resource pooling　资源池、Synchronization　同步、Transactions 事务。
 
-**原理：**AOP是面向切面编程，是通过__动态代理__的方式为程序添加统一功能，集中解决一些公共问题。
+**原理：** AOP是面向切面编程，是通过__动态代理__的方式为程序添加统一功能，集中解决一些公共问题。
 
-**优点：**1.各个步骤之间的良好隔离性耦合性大大降低 	
+**优点：** 1.各个步骤之间的良好隔离性耦合性大大降低 	
       2.源代码无关性，再扩展功能的同时不对源码进行修改操作
 
 #### 32、Spring中IOC的作用与原理？对象创建的过程？
@@ -514,15 +517,15 @@ Class.forName(“com.spring.ioc.Hello”).newInstance()
 
 #### 35、Spring的优点？
 
-1.__降低了组件之间的耦合性__ ，实现了软件各层之间的解耦
-2.可以使用容易__提供的众多服务__，如事务管理，消息服务等
-3.容器提供__单例模式__支持
-4.容器提供了__AOP技术__，利用它很容易实现如权限拦截，运行期监控等功能
-5.容器提供了__众多的辅助类__，能加快应用的开发
-6.spring对于__主流的应用框架提供了集成支持__，如hibernate，JPA，Struts等
-7.spring属于低__侵入式设计__，代码的污染极低
-8.独立于各种应用服务器
-9.spring的DI机制降低了业务对象替换的复杂性
+1.  __降低了组件之间的耦合性__ ，实现了软件各层之间的解耦
+2. 可以使用容易 __提供的众多服务__，如事务管理，消息服务等
+3. 容器提供 __单例模式__ 支持
+4. 容器提供了 __AOP技术__，利用它很容易实现如权限拦截，运行期监控等功能
+5. 容器提供了 __众多的辅助类__ ，能加快应用的开发
+6. spring对于 __主流的应用框架提供了集成支持__ ，如hibernate，JPA，Struts等
+7. spring属于低 __侵入式设计__ ，代码的污染极低
+8. 独立于各种应用服务器
+9. spring的DI机制降低了业务对象替换的复杂性
 
 #### 36、Spring Bean的作用域之间有什么区别？
 
@@ -566,19 +569,25 @@ ApplicationContext:提供框架的实现，包括BeanFactory的所有功能
 
 有三种方式可以得到Bean并进行调用：
 1、使用BeanWrapper
+```java
 HelloWorld hw=new HelloWorld();
 BeanWrapper bw=new BeanWrapperImpl(hw);
 bw.setPropertyvalue(”msg”,”HelloWorld”);
 system.out.println(bw.getPropertyCalue(”msg”));
+```
 2、使用BeanFactory
+```java
 InputStream is=new FileInputStream(”config.xml”);
 XmlBeanFactory factory=new XmlBeanFactory(is);
 HelloWorld hw=(HelloWorld) factory.getBean(”HelloWorld”);
 system.out.println(hw.getMsg());
+```
 3、使用ApplicationConttext
+```java
 ApplicationContext actx=new FleSystemXmlApplicationContext(”config.xml”);
 HelloWorld hw=(HelloWorld) actx.getBean(”HelloWorld”);
 System.out.println(hw.getMsg());
+```
 
 #### 40、什么是IOC，什么又是DI，他们有什么区别？
 
@@ -588,22 +597,22 @@ System.out.println(hw.getMsg());
 
 #### 41、spring有两种代理方式？
 
-若目标对象实现了若干接口，spring使用JDK的java.lang.reflect.Proxy类代理。
+若目标对象实现了若干接口，spring使用JDK的java.lang.reflect.Proxy类代理。  
 
     优点：因为有接口，所以使系统更加松耦合
     缺点：为每一个目标类创建接口
 
-若目标对象没有实现任何接口，spring使用CGLIB库生成目标对象的子类。
+若目标对象没有实现任何接口，spring使用CGLIB库生成目标对象的子类。  
 
-    优点：因为代理类与目标类是继承关系，所以不需要有接口的存在。
-    缺点：因为没有使用接口，所以系统的耦合性没有使用JDK的动态代理好。
+    优点：因为代理类与目标类是继承关系，所以不需要有接口的存在。  
+    缺点：因为没有使用接口，所以系统的耦合性没有使用JDK的动态代理好。  
 #### 42、springMVC的流程？
 
 请求->dispaterServlet->映射处理器->适配器->handle->modelView->view
 
 #### 43、Springmvc的优点？
 
-__Spring MVC__是一个基于Java的实现了MVC设计模式的请求驱动类型的轻量级Web框架，通过把Model，View，Controller分离，将web层进行职责解耦，把复杂的web应用分成逻辑清晰的几部分，简化开发，减少出错，方便组内开发人员之间的配合。
+__Spring MVC__ 是一个基于Java的实现了MVC设计模式的请求驱动类型的轻量级Web框架，通过把Model，View，Controller分离，将web层进行职责解耦，把复杂的web应用分成逻辑清晰的几部分，简化开发，减少出错，方便组内开发人员之间的配合。
 
 ##### Springmvc的优点:
 
@@ -619,10 +628,9 @@ __Spring MVC__是一个基于Java的实现了MVC设计模式的请求驱动类�
 
 #### 44、过滤器和拦截器的区别：
 
-　　①拦截器是基于java的反射机制的，而过滤器是基于函数回调。
-　　②拦截器不依赖与servlet容器，过滤器依赖与servlet容器。
-　　③拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。
-　　④拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。
+　　①拦截器是基于java的反射机制的，而过滤器是基于函数回调。  
+　　②拦截器不依赖与servlet容器，过滤器依赖与servlet容器。  
+　　③拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。  
+　　④拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。  
 　　⑤在action的生命周期中，拦截器可以多次被调用，而过滤器只能在容器初始化时被调用一次。
-
-　　⑥拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。
+　　⑥拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。    
