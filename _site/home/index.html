@@ -374,6 +374,278 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/jvm/outofmemory"><h2 itemprop="headline" class="item__header">java内存泄漏与内存溢出</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>内存溢出 out of memory，是指程序在申请内存时，没有足够的内存空间供其使用，出现out of memory；</p>
+
+<p>内存泄露 memory leak，是指程序在申请内存后，无法释放已申请的内存空间，一次内存泄露危害可以忽略，但内存泄露堆积后果很严重，无论多少内存,迟早会被占光。</p>
+
+<p>memory leak会最终会导致out of memory！</p>
+
+<p>以发生的方式来分类，内存泄漏可以分为4类：</p>
+
+<ol>
+  <li>常发性内存泄漏。发生内存泄漏的代码会被多次执行到，每次被执行的时候都会导致一块内存泄漏。</li>
+  <li>偶发性内存泄漏。发生内存泄漏的代码只有在某些特定环境或操作过程下才会发生。常发性和偶发性是相对的。对于特定的环境，偶发性的也许就变成了常发性的。所以测试环境和测试方法对检测内存泄漏至关重要。</li>
+  <li>一次性内存泄漏。发生内存泄漏的代码只会被执行一次，或者由于算法上的缺陷，导致总会有一块仅且一块内存发生泄漏。比如，在类的构造函数中分配内存，在析构函数中却没有释放该内存，所以内存泄漏只会发生一次。</li>
+  <li>隐式内存泄漏。程序在运行过程中不停的分配内存，但是直到结束的时候才释放内存。严格的说这里并没有发生内存泄漏，因为最终程序释放了所有申请的内存。但是对于一个服务器程序，需要运行几天，几周甚至几个月，不及时释放内存也可能导致最终耗尽系统的所有内存。所以，我们称这类内存泄漏为隐式内存泄漏。</li>
+</ol>
+
+<p>从用户使用程序的角度来看，内存泄漏本身不会产生什么危害，作为一般的用户，根本感觉不到内存泄漏的存在。真正有危害的是内存泄漏的堆积，这会最终消耗尽系统所有的内存。从这个角度来说，一次性内存泄漏并没有什么危害，因为它不会堆积，而隐式内存泄漏危害性则非常大，因为较之于常发性和偶发性内存泄漏它更难被检测到</p>
+
+<h4 id="一java内存回收机制">一、Java内存回收机制</h4>
+<p>不论哪种语言的内存分配方式，都需要返回所分配内存的真实地址，也就是返回一个指针到内存块的首地址。Java中对象是采用new或者反射的方法创建的，这些对象的创建都是在堆（Heap）中分配的，所有对象的回收都是由Java虚拟机通过垃圾回收机制完成的。GC为了能够正确释放对象，会监控每个对象的运行状况，对他们的申请、引用、被引用、赋值等状况进行监控，Java会使用有向图的方法进行管理内存，实时监控对象是否可以达到，如果不可到达，则就将其回收，</p>
+
+<h4 id="二java内存泄露引起原因">二、Java内存泄露引起原因</h4>
+<p>内存泄露是指无用对象（不再使用的对象）持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。内存泄露有时不严重且不易察觉，这样开发者就不知道存在内存泄露，但有时也会很严重，会提示你Out of memory。</p>
+
+<p>那么，Java内存泄露根本原因是什么呢？长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。具体主要有如下几大类：</p>
+<h5 id="1静态集合类引起内存泄露">1、静态集合类引起内存泄露：</h5>
+<p>像HashMap、Vector等的使用最容易出现内存泄露，这些静态变量的生命周期和应用程序一致，他们所引用的所有的对象Object也不能被释放，因为他们也将一直被Vector等引用着。</p>
+
+<pre><code class="language-Java">Static Vector v = new Vector(10);
+for (int i = 1; i&lt;100; i++)
+{
+  Object o = new Object();
+  v.add(o);
+  o = null;
+}//
+</code></pre>
+
+<p>在这个例子中，循环申请Object 对象，并将所申请的对象放入一个Vector 中，如果仅仅释放引用本身（o=null），那么Vector 仍然引用该对象，所以这个对象对GC 来说是不可回收的。因此，如果对象加入到Vector 后，还必须从Vector 中删除，最简单的方法就是将Vector对象设置为null。</p>
+
+<h5 id="2当集合里面的对象属性被修改后再调用remove方法时不起作用">2、当集合里面的对象属性被修改后，再调用remove（）方法时不起作用。</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+<span class="o">{</span>
+  <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;();</span>
+  <span class="nc">Person</span> <span class="n">p1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"唐僧"</span><span class="o">,</span><span class="s">"pwd1"</span><span class="o">,</span><span class="mi">25</span><span class="o">);</span>
+  <span class="nc">Person</span> <span class="n">p2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"孙悟空"</span><span class="o">,</span><span class="s">"pwd2"</span><span class="o">,</span><span class="mi">26</span><span class="o">);</span>
+  <span class="nc">Person</span> <span class="n">p3</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"猪八戒"</span><span class="o">,</span><span class="s">"pwd3"</span><span class="o">,</span><span class="mi">27</span><span class="o">);</span>
+  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p1</span><span class="o">);</span>
+  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p2</span><span class="o">);</span>
+  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p3</span><span class="o">);</span>
+  <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"总共有:"</span><span class="o">+</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()+</span><span class="s">" 个元素!"</span><span class="o">);</span> <span class="c1">//结果：总共有:3 个元素!</span>
+  <span class="n">p3</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span> <span class="c1">//修改p3的年龄,此时p3元素对应的hashcode值发生改变</span>
+
+  <span class="n">set</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">p3</span><span class="o">);</span> <span class="c1">//此时remove不掉，造成内存泄漏</span>
+
+  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p3</span><span class="o">);</span> <span class="c1">//重新添加，居然添加成功</span>
+  <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"总共有:"</span><span class="o">+</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()+</span><span class="s">" 个元素!"</span><span class="o">);</span> <span class="c1">//结果：总共有:4 个元素!</span>
+  <span class="k">for</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">person</span> <span class="o">:</span> <span class="n">set</span><span class="o">)</span>
+  <span class="o">{</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<h5 id="3监听器">3、监听器</h5>
+<p>在java 编程中，我们都需要和监听器打交道，通常一个应用当中会用到很多监听器，我们会调用一个控件的诸如addXXXListener()等方法来增加监听器，但往往在释放对象的时候却没有记住去删除这些监听器，从而增加了内存泄漏的机会。</p>
+
+<h5 id="4各种连接">4、各种连接</h5>
+<p>比如数据库连接（dataSourse.getConnection()），网络连接(socket)和io连接，除非其显式的调用了其close（）方法将其连接关闭，否则是不会自动被GC 回收的。对于Resultset 和Statement 对象可以不进行显式回收，但Connection 一定要显式回收，因为Connection 在任何时候都无法自动回收，而Connection一旦回收，Resultset 和Statement 对象就会立即为NULL。但是如果使用连接池，情况就不一样了，除了要显式地关闭连接，还必须显式地关闭Resultset Statement 对象（关闭其中一个，另外一个也会关闭），否则就会造成大量的Statement 对象无法释放，从而引起内存泄漏。这种情况下一般都会在try里面去的连接，在finally里面释放连接。</p>
+
+<h5 id="5单例模式">5、单例模式</h5>
+
+<p>如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露。</p>
+
+<p>如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露</p>
+
+<p>不正确使用单例模式是引起内存泄露的一个常见问题，单例对象在被初始化后将在JVM的整个生命周期中存在（以静态变量的方式），如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露，考虑下面的例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span><span class="o">{</span>
+  <span class="kd">public</span> <span class="nf">A</span><span class="o">(){</span>
+    <span class="no">B</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">setA</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="o">....</span>
+<span class="o">}</span>
+<span class="c1">//B类采用单例模式</span>
+<span class="kd">class</span> <span class="nc">B</span><span class="o">{</span>
+  <span class="kd">private</span> <span class="no">A</span> <span class="n">a</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kd">static</span> <span class="no">B</span> <span class="n">instance</span><span class="o">=</span><span class="k">new</span> <span class="no">B</span><span class="o">();</span>
+  <span class="kd">public</span> <span class="nf">B</span><span class="o">(){}</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="no">B</span> <span class="nf">getInstance</span><span class="o">(){</span>
+    <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setA</span><span class="o">(</span><span class="no">A</span> <span class="n">a</span><span class="o">){</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">a</span><span class="o">=</span><span class="n">a</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="c1">//getter...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>显然B采用singleton模式，它持有一个A对象的引用，而这个A类的对象将不能被回收。想象下如果A是个比较复杂的对象或者集合类型会发生什么情况</p>
+</div><p><a href="/jvm/outofmemory">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=jvm">jvm</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 19, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-08-19-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-19T00:00:00+08:00">
+    <meta itemprop="keywords" content="jvm"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/thread/0818"><h2 itemprop="headline" class="item__header">阻塞式编程和非阻塞式编程</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li>阻塞IO的含义
+    <ol>
+      <li>阻塞（blocking）IO：资源不可用时，IO请求一直阻塞，知道反馈结果（有数据或者超时）。</li>
+      <li>非阻塞（non-blocking）IO：资源不可用时，IO请求离开返回，返回数据标识资源不可用。</li>
+      <li>同步（synchronous）IO：应用组社发送或接受说句状态，知道数据成功传输或返回失败。</li>
+      <li>异步（asynchronous）IO：应用发送或接受数据后立刻返回，实际处理是异步执行的。</li>
+    </ol>
+  </li>
+</ul>
+
+<p><strong>阻塞和非阻塞是获取资源的方式。同步/异步是程序如何处理资源的逻辑设计。</strong></p>
+
+<p>代码中使用的API：ServerSocket#accept、InputStream#read都是阻塞的API。<strong>操作系统底层API中，默认操作都是Blocking型</strong>。sent./rec等接口都是阻塞的。</p>
+
+<p>带来的问题：阻塞导致处理网络I/O时，一个线程只能处理一个网络连接。</p>
+</div><p><a href="/mianshi/thread/0818">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 18, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-18-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-18T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/0818/01"><h2 itemprop="headline" class="item__header">蚂蚁集团面试题</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="1-dubbo">1 Dubbo</h2>
+
+<p>1.1 服务调用超时问题怎么解决？
+ 1.2 Dubbo支持哪些序列化方式？
+ 1.3 Dubbo和SpringCloud的关系？
+ 1.4 Dubbo的架构设计？一共划分了哪些层？
+ 1.5 Dubbo的默认集群容错方案？
+ 1.6 Dubbo使用的是什么通信框架?
+ 1.7 Dubbo的主要应用场景？
+ 1.8 Dubbo服务注册与发现的流程？流程说明。
+ 1.9 Dubbo的集群容错方案有哪些？
+ 1.10 Dubbo的四大组件
+ 1.11 Dubbo在安全机制方面是如何解决的
+ 1.12 Dubbo和SpringCloud的区别？
+ 1.13 Dubbo支持哪些协议，每种协议的应用场景，优缺点？
+ 1.14 Dubbo的核心功能有哪些？
+ 1.15 Dubbo的注册中心集群挂掉，发布者和订阅者之间还能通信么？
+ 1.16 Dubbo集群的负载均衡有哪些策略
+ 1.17 为什么需要服务治理？
+ 1.18 Dubbo超时时间怎样设置？</p>
+
+<h2 id="2-elasticsearch">2 ElasticSearch</h2>
+
+<p>2.1 你们公司的ES集群，一个node一般会分配几个分片？
+ 2.2 Elasticsearch是如何实现Master选举的？
+ 2.3 你是如何做写入调优的？
+ 2.4 如何避免脑裂？
+ 2.5 Elasticsearch对于大数据量（上亿量级）的聚合如何实现？
+ 2.6 ES主分片数量可以在后期更改吗？为什么？
+ 2.7 如何监控集群状态？
+ 2.8 ElasticSearch中的副本是什么？
+ 2.9 ES更新数据的执行流程？
+ 2.10 shard里面是什么组成的？
+ 2.11 ElasticSearch中的分析器是什么？
+ 2.12 什么是脑裂？
+ 2.13 客户端在和集群连接时，如何选择特定的节点执行请求的？
+ 2.14 Elasticsearch中的倒排索引是什么？
+ 2.15 什么是索引？索引（名词） 一个索引(index)
+ 2.16 详细描述一下Elasticsearch更新和删除文档的过程</p>
+<h2 id="3-jvm">3 JVM</h2>
+
+<p>#### 3.1 JVM参数主要有⼏种分类</p>
+
+<p>IBM 微软的 hotpot</p>
+
+<p>####  3.2 Java中会存在内存泄漏吗，简述一下。</p>
+
+<p>会出现内存泄漏，当垃圾回收器清理内存后，现有内存使用量+申请新增内存&gt;最大使用内存时，会出现内存泄漏</p>
+
+<p>主要场景包括以下两种</p>
+
+<ol>
+  <li>机器内存不够用</li>
+  <li>内存分配不合理</li>
+</ol>
+
+<h4 id="33-java虚拟机是如何判定两个java类是相同的">3.3 Java虚拟机是如何判定两个Java类是相同的？</h4>
+
+<p>在新建对象的过程中，需要新通过类加载，而在类加载中通过 <strong>双亲委派机制</strong> 来判断两个类是否相同</p>
+
+<p>当某个加载器需要加载某个.class 文件时，他首先把这个任务委托过他的上一级加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。</p>
+
+<p>下面是类加载的过程</p>
+
+<p><strong>用于自定义类加载器 –&gt; 系统类加载器 –&gt; 扩展类加载 –&gt; 启动类加载</strong></p>
+
+<p>#### 3.4 Java 中都有哪些引用类型</p>
+
+<ol>
+  <li>__强引用（strongreference）__就是指在程序代码之中普遍存在的,类似“Object obj=new Object()” 这类的引用,只要强引用还存在,垃圾收集器永远不会回收掉被引用的对象实例。</li>
+  <li>__软引用（softreference）__是用来描述一些还有用但并非必需的对象。对于软引用关联着的对象, 在系统将要发生内存溢出异常之前,将会把这些对象实例列进回收范围之中进行 第二次回收。如果这次回收还没有足够的内存,才会抛出内存溢出异常。在 JDK 1.2 之后,提供了 SoftReference 类来实现软引用。</li>
+  <li>__弱引用（weakreference）__也是用来描述非必需对象的,但是它的强度比软引用更弱一些,被弱 引用关联的对象实例只能生存到下一次垃圾收集发生之前。当垃圾收集器工作时, 无论当前内存是否足够,都会回收掉只被弱引用关联的对象实例。在 JDK 1.2 之 后,提供了 WeakReference 类来实现弱引用。</li>
+  <li>__虚引用（phantomreference）__也称为幽灵引用或者幻影引用,它是最弱的一种引用关系。一个对象 实例是否有虚引用的存在,完全不会对其生存时间构成影响,也无法通过虚引用 来取得一个对象实例。为一个对象设置虚引用关联的唯一目的就是能在这个对象 实例被收集器回收时收到一个系统通知。在 JDK 1.2 之后,提供了 PhantomReference 类来实现虚引用</li>
+</ol>
+
+<p>#### 3.5 在 Java 中，对象什么时候可以被垃圾回收？</p>
+
+<p>当对象被判定已经“死去”时，对象可以被垃圾回收，判断对象是否存活可通过以下算法</p>
+
+<ol>
+  <li>__引用计数算法：__通过引用计数器，当被引用+1，当失去引用-1，计数为零的引用被清理</li>
+  <li><strong>可达性分析算法：</strong> 通过跟对象作为起始点，从这个节点开始向下搜索，搜索过程所走的路径称为“引用链”，如果某个对象的到 __GC Roots __间没有连接，则说明该对象不能再被引用</li>
+</ol>
+
+<h4 id="36-stackoverflow异常有没有遇到过一般你猜测会在什么情况下被触发">3.6 StackOverflow异常有没有遇到过？一般你猜测会在什么情况下被触发？</h4>
+
+<p>3.7 堆空间分哪些部分？以及如何设置各个部分？
+ 3.8 什么是栈帧？栈帧存储了什么？
+ 3.9 如何设置参数生成GC日志？
+ 3.10 GC 是什么？为什么要有 GC？
+ 3.12 使用过哪些jdk命令，并说明各个的作用是什么
+ 3.13 JVM运行时数据区区域分为哪⼏部分？
+ 3.14 是否了解类加载器双亲委派模型机制和破坏双亲委派模型？
+ 3.15 逃逸分析有几种类型？
+ 3.16 -Xms这些参数的含义是什么？
+ 3.17 你知道哪几种垃圾收集器,各自的优缺点，重点讲下cms和G1，包括原理，流程，优缺点。
+ 3.18 JVM的内存结构，Eden和Survivor比例是多少？</p>
+
+<h2 id="4-多线程高并发">4 多线程/高并发</h2>
+
+<p>4.1 负载平衡的意义什么？
+ 4.2 请说出同步线程及线程调度相关的方法？
+ 4.3 关于epoll和select的区别，哪些说法 是正确的？（多选）
+A. epoll 和 select 都是 I/O 多路复用的技术，都可以实现同时监听 多个I/O事件的状态。
+B. epoll 相比 select 效率更高，主要是基于其操作系统支持的 I/O 事件通知机制，而select是基于轮询机制。
+C. epoll支持水平触发和边沿触发两种模式。
+D. select能并行支持I/O比较小，且无法修改。
+ 4.4 启动一个线程是调用run()方法还是start()方法？
+ 4.5 如何确保N个线程可以访问N个资源同时又不导致死锁？
+ 4.6 编写多线程程序的几种实现方式（换个问法：创建多线程的方式）？
+ 4.7 线程和进程的区别？
+ 4.8 什么是线程池，有哪些常用线程池？
+ 4.9 什么是死锁？
+ 4.10 怎么保证缓存和数据库数据的一致性？</p>
+<h2 id="5-消息中间件">5 消息中间件</h2>
+
+<p>5.1 消费者获取消息有几种模式？
+ 5.2 RocketMQ的特点有哪些？
+ 5.3 kafka 同时设置了 7 天和 10G 清除数据，到第五天的时候消息达到了 10G，这个时候 kafka将如何处理？
+ 5.4 为何需要Kafka集群
+ 5.5 Kafka 数据存储设计
+ 5.6 Kafka如何判断一个节点是否存活？
+ 5.7 kafka消息发送的可靠性机制有几种
+ 5.8 请详细说一下推送模式和拉取模式。
+ 5.9 Kafka 与传统消息系统之间有三个关键区别
+ 5.10 RocketMQ 由哪些角色组成？
+ 5.12 Kafka的消费者如何消费数据
+ 5.13 Kafka的优点
+ 5.14 Kafka 的设计是什么样的呢？
+ 5.15 说说你对Consumer的了解？
+ 5.16 Kafka新建的分区会在哪个目录下创建
+ 5.17 说一下Kafka消费者消费过程
+ 5.18 介绍下Kafka
+ 5.19 什么情况会导致Kafka运行变慢？</p>
+</div><p><a href="/mianshi/0818/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 18, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-18-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-18T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/spring/0709/01"><h2 itemprop="headline" class="item__header">Autowired的使用：推荐使用构造函数进行注入</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>近期看同事用idea开发的代码，发现在使用@Autowired的时候，大多使用构造函数进行注入。</p>
 
@@ -1825,429 +2097,8 @@ MySQL没有这么笨，可以使用force index 强制指定索引。在原来的
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mq/kafaka/0708/01"><h2 itemprop="headline" class="item__header">为什么Kafka速度那么快</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>Kafka的消息是保存或缓存在磁盘上的，一般认为在磁盘上读写数据是会降低性能的，因为寻址会比较消耗时间，但是实际上，Kafka的特性之一就是高吞吐率。</p>
-
-<p>即使是普通的服务器，Kafka也可以轻松支持每秒百万级的写入请求，超过了大部分的消息中间件，这种特性也使得Kafka在日志处理等海量数据场景广泛应用。</p>
-
-<p>针对Kafka的基准测试可以参考，<a href="http://ifeve.com/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines/">Apache Kafka基准测试：每秒写入2百万（在三台廉价机器上）</a></p>
-
-<p>下面从数据写入和读取两方面分析，为什么为什么Kafka速度这么快。</p>
-
-<h3 id="写入数据">写入数据</h3>
-
-<p>Kafka会把收到的消息都写入到硬盘中，它绝对不会丢失数据。为了优化写入速度Kafka采用了两个技术， 顺序写入 和 MMFile 。</p>
-
-<h4 id="顺序写入">顺序写入</h4>
-
-<p>磁盘读写的快慢取决于你怎么使用它，也就是顺序读写或者随机读写。在顺序读写的情况下，某些优化场景磁盘的读写速度可以和内存持平（注：此处有疑问， 不推敲细节，参考 http://searene.me/2017/07/09/Why-is-Kafka-so-fast/
-）。
-因为硬盘是机械结构，每次读写都会寻址-&gt;写入，其中寻址是一个“机械动作”，它是最耗时的。所以硬盘最讨厌随机I/O，最喜欢顺序I/O。为了提高读写硬盘的速度，Kafka就是使用顺序I/O。</p>
-
-<p>而且Linux对于磁盘的读写优化也比较多，包括read-ahead和write-behind，磁盘缓存等。如果在内存做这些操作的时候，一个是JAVA对象的内存开销很大，另一个是随着堆内存数据的增多，JAVA的GC时间会变得很长，使用磁盘操作有以下几个好处：</p>
-
-<ul>
-  <li>磁盘顺序读写速度超过内存随机读写</li>
-  <li>JVM的GC效率低，内存占用大。使用磁盘可以避免这一问题</li>
-  <li>系统冷启动后，磁盘缓存依然可用</li>
-</ul>
-
-<p><img src="/assets/images/mianshiti/0708/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xlcmVhZA==,size_16,color_FFFFFF,t_70.png" alt="在这里插入图片描述" /></p>
-
-<p>上图就展示了Kafka是如何写入数据的， 每一个Partition其实都是一个文件 ，收到消息后Kafka会把数据插入到文件末尾（虚框部分）。</p>
-
-<p>这种方法有一个缺陷—— 没有办法删除数据 ，所以Kafka是不会删除数据的，它会把所有的数据都保留下来，每个消费者（Consumer）对每个Topic都有一个offset用来表示 读取到了第几条数据 。</p>
-
-<p><img src="/assets/images/mianshiti/0708/20190407224620236.png" alt="在这里插入图片描述" /></p>
-
-<p>两个消费者，Consumer1有两个offset分别对应Partition0、Partition1（假设每一个Topic一个Partition）；Consumer2有一个offset对应Partition2。这个offset是由客户端SDK负责保存的，Kafka的Broker完全无视这个东西的存在；一般情况下SDK会把它保存到zookeeper里面。(所以需要给Consumer提供zookeeper的地址)。</p>
-
-<p>如果不删除硬盘肯定会被撑满，所以Kakfa提供了两种策略来删除数据。一是基于时间，二是基于partition文件大小。具体配置可以参看它的配置文档。</p>
-
-<h4 id="memory-mapped-files">Memory Mapped Files</h4>
-
-<p>即便是顺序写入硬盘，硬盘的访问速度还是不可能追上内存。所以Kafka的数据并 不是实时的写入硬盘 ，它充分利用了现代操作系统 分页存储 来利用内存提高I/O效率。</p>
-
-<p>Memory Mapped Files(后面简称mmap)也被翻译成 内存映射文件 ，在64位操作系统中一般可以表示20G的数据文件，它的工作原理是直接利用操作系统的Page来实现文件到物理内存的直接映射。完成映射之后你对物理内存的操作会被同步到硬盘上（操作系统在适当的时候）。</p>
-
-<p>通过mmap，进程像读写硬盘一样读写内存（当然是虚拟机内存），也不必关心内存的大小有虚拟内存为我们兜底。</p>
-
-<p>使用这种方式可以获取很大的I/O提升， 省去了用户空间到内核空间 复制的开销（调用文件的read会把数据先放到内核空间的内存中，然后再复制到用户空间的内存中。）也有一个很明显的缺陷——不可靠， 写到mmap中的数据并没有被真正的写到硬盘，操作系统会在程序主动调用flush的时候才把数据真正的写到硬盘。 Kafka提供了一个参数——producer.type来控制是不是主动flush，如果Kafka写入到mmap之后就立即flush然后再返回Producer叫 同步 (sync)；写入mmap之后立即返回Producer不调用flush叫 异步 (async)。</p>
-
-<h3 id="读取数据">读取数据</h3>
-
-<p>Kafka在读取磁盘时做了哪些优化？</p>
-
-<h4 id="基于sendfile实现zero-copy">基于sendfile实现Zero Copy</h4>
-
-<p>传统模式下，当需要对一个文件进行传输的时候，其具体流程细节如下：</p>
-
-<ol>
-  <li>调用read函数，文件数据被copy到内核缓冲区</li>
-  <li>read函数返回，文件数据从内核缓冲区copy到用户缓冲区</li>
-  <li>write函数调用，将文件数据从用户缓冲区copy到内核与socket相关的缓冲区。</li>
-  <li>数据从socket缓冲区copy到相关协议引擎。</li>
-</ol>
-
-<p>以上细节是传统read/write方式进行网络文件传输的方式，我们可以看到，在这个过程当中，文件数据实际上是经过了四次copy操作：</p>
-
-<blockquote>
-  <p>硬盘—&gt;内核buf—&gt;用户buf—&gt;socket相关缓冲区—&gt;协议引擎</p>
-</blockquote>
-
-<p>而sendfile系统调用则提供了一种减少以上多次copy，提升文件传输性能的方法。
-在内核版本2.1中，引入了sendfile系统调用，以简化网络上和两个本地文件之间的数据传输。 sendfile的引入不仅减少了数据复制，还减少了上下文切换。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sendfile(socket, file, len);
-</code></pre></div></div>
-
-<p>运行流程如下：</p>
-
-<ol>
-  <li>sendfile系统调用，文件数据被copy至内核缓冲区</li>
-  <li>再从内核缓冲区copy至内核中socket相关的缓冲区</li>
-  <li>最后再socket相关的缓冲区copy到协议引擎</li>
-</ol>
-
-<p>相较传统read/write方式，2.1版本内核引进的sendfile已经减少了内核缓冲区到user缓冲区，再由user缓冲区到socket相关缓冲区的文件copy，而在内核版本2.4之后，文件描述符结果被改变，sendfile实现了更简单的方式，再次减少了一次copy操作。</p>
-
-<p>在apache，nginx，lighttpd等web服务器当中，都有一项sendfile相关的配置，使用sendfile可以大幅提升文件传输性能。</p>
-
-<p>Kafka把所有的消息都存放在一个一个的文件中，当消费者需要数据的时候Kafka直接把文件发送给消费者，配合mmap作为文件读写方式，直接把它传给sendfile。</p>
-
-<h4 id="批量压缩">批量压缩</h4>
-
-<p>在很多情况下，系统的瓶颈不是CPU或磁盘，而是网络IO，对于需要在广域网上的数据中心之间发送消息的数据流水线尤其如此。进行数据压缩会消耗少量的CPU资源,不过对于kafka而言,网络IO更应该需要考虑。</p>
-
-<ul>
-  <li>如果每个消息都压缩，但是压缩率相对很低，所以Kafka使用了批量压缩，即将多个消息一起压缩而不是单个消息压缩</li>
-  <li>Kafka允许使用递归的消息集合，批量的消息可以通过压缩的形式传输并且在日志中也可以保持压缩格式，直到被消费者解压缩</li>
-  <li>Kafka支持多种压缩协议，包括Gzip和Snappy压缩协议</li>
-</ul>
-
-<h3 id="总结">总结</h3>
-
-<p>Kafka速度的秘诀在于，它把所有的消息都变成一个批量的文件，并且进行合理的批量压缩，减少网络IO损耗，通过mmap提高I/O速度，写入数据的时候由于单个Partion是末尾添加所以速度最优；读取数据的时候配合sendfile直接暴力输出。</p>
-</div><p><a href="/mq/kafaka/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="kafka-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/JVM/0708/01"><h2 itemprop="headline" class="item__header">系统运行缓慢，CPU 100%，以及Full GC次数过多问题的排查思路</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="前言">前言</h1>
-
-<p>处理过线上问题的同学基本上都会遇到系统突然运行缓慢，CPU 100%，以及Full GC次数过多的问题。当然，这些问题的最终导致的直观现象就是系统运行缓慢，并且有大量的报警。</p>
-
-<p>本文主要针对系统运行缓慢这一问题，提供该问题的排查思路，从而定位出问题的代码点，进而提供解决该问题的思路。</p>
-
-<p><strong>对于线上系统突然产生的运行缓慢问题，如果该问题导致线上系统不可用，那么首先需要做的就是，导出jstack和内存信息，然后重启系统，尽快保证系统的可用性。这种情况可能的原因主要有两种：</strong></p>
-
-<ul>
-  <li>代码中某个位置读取数据量较大，导致系统内存耗尽，从而导致Full GC次数过多，系统缓慢；</li>
-  <li>代码中有比较耗CPU的操作，导致CPU过高，系统运行缓慢；</li>
-</ul>
-
-<p>相对来说，这是出现频率最高的两种线上问题，而且它们会直接导致系统不可用。另外有几种情况也会导致某个功能运行缓慢，但是不至于导致系统不可用：</p>
-
-<ul>
-  <li>代码某个位置有阻塞性的操作，导致该功能调用整体比较耗时，但出现是比较随机的；</li>
-  <li>某个线程由于某种原因而进入WAITING状态，此时该功能整体不可用，但是无法复现；</li>
-  <li>由于锁使用不当，导致多个线程进入死锁状态，从而导致系统整体比较缓慢。</li>
-</ul>
-
-<p><strong>对于这三种情况，通过查看CPU和系统内存情况是无法查看出具体问题的，因为它们相对来说都是具有一定阻塞性操作，CPU和系统内存使用情况都不高，但是功能却很慢</strong>。下面我们就通过查看系统日志来一步一步甄别上述几种问题。</p>
-
-<h1 id="full-gc次数过多">Full GC次数过多</h1>
-
-<p>相对来说，这种情况是最容易出现的，尤其是新功能上线时。对于Full GC较多的情况，其主要有如下两个特征：</p>
-
-<ul>
-  <li>线上多个线程的CPU都超过了100%，通过jstack命令可以看到这些线程主要是垃圾回收线程</li>
-  <li>通过jstat命令监控GC情况，可以看到Full GC次数非常多，并且次数在不断增加。</li>
-</ul>
-
-<p>首先我们可以使用top命令查看系统CPU的占用情况，如下是系统CPU较高的一个示例：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top - 08:31:10 up 30 min,  0 users,  load average: 0.73, 0.58, 0.34
-KiB Mem:   2046460 total,  1923864 used,   122596 free,    14388 buffers
-KiB Swap:  1048572 total,        0 used,  1048572 free.  1192352 cached Mem
-
-PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
-9   root      20  0  2557160 288976  15812 S  98.0 14.1   0:42.60 java
-</code></pre></div></div>
-
-<p>可以看到，有一个Java程序此时CPU占用量达到了98.8%，此时我们可以复制该进程id9，并且使用如下命令查看呢该进程的各个线程运行情况：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top -Hp 9
-</code></pre></div></div>
-
-<p>该进程下的各个线程运行情况如下：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>top - 08:31:16 up 30 min,  0 users,  load average: 0.75, 0.59, 0.35
-Threads:  11 total,   1 running,  10 sleeping,   0 stopped,   0 zombie
-%Cpu(s):  3.5 us,  0.6 sy,  0.0 ni, 95.9 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-KiB Mem:   2046460 total,  1924856 used,   121604 free,    14396 buffers
-KiB Swap:  1048572 total,        0 used,  1048572 free.  1192532 cached Mem
-
-PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND
-10  root      20   0 2557160 289824  15872 R 79.3 14.2   0:41.49 java
-11  root      20   0 2557160 289824  15872 S 13.2 14.2   0:06.78 java
-</code></pre></div></div>
-
-<p>可以看到，在进程为9的Java程序中各个线程的CPU占用情况，接下来我们可以通过jstack命令查看线程id为10的线程为什么耗费CPU最高。需要注意的是，在jsatck命令展示的结果中，线程id都转换成了十六进制形式。可以用如下命令查看转换结果，也可以找一个科学计算器进行转换：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@a39de7e7934b:/# printf "%x\n" 10
-a
-</code></pre></div></div>
-
-<p>这里打印结果说明该线程在jstack中的展现形式为0xa，通过jstack命令我们可以看到如下信息：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"main" #1 prio=5 os_prio=0 tid=0x00007f8718009800 nid=0xb runnable [0x00007f871fe41000]
-   java.lang.Thread.State: RUNNABLE
-	at com.aibaobei.chapter2.eg2.UserDemo.main(UserDemo.java:9)
-
-"VM Thread" os_prio=0 tid=0x00007f871806e000 nid=0xa runnable
-</code></pre></div></div>
-
-<p>这里的VM Thread一行的最后显示nid=0xa，这里nid的意思就是操作系统线程id的意思。而VM Thread指的就是垃圾回收的线程。这里我们基本上可以确定，当前系统缓慢的原因主要是垃圾回收过于频繁，导致GC停顿时间较长。我们通过如下命令可以查看GC的情况：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@8d36124607a0:/# jstat -gcutil 9 1000 10
-  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT
-  0.00   0.00   0.00  75.07  59.09  59.60   3259    0.919  6517    7.715    8.635
-  0.00   0.00   0.00   0.08  59.09  59.60   3306    0.930  6611    7.822    8.752
-  0.00   0.00   0.00   0.08  59.09  59.60   3351    0.943  6701    7.924    8.867
-  0.00   0.00   0.00   0.08  59.09  59.60   3397    0.955  6793    8.029    8.984
-</code></pre></div></div>
-
-<p>可以看到，这里FGC指的是Full GC数量，这里高达6793，而且还在不断增长。从而进一步证实了是由于内存溢出导致的系统缓慢。那么这里确认了内存溢出，但是如何查看你是哪些对象导致的内存溢出呢，这个可以dump出内存日志，然后通过eclipse的mat工具进行查看，如下是其展示的一个对象树结构：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1162587-20190322153700612-1005782884.png" alt="img" /></p>
-
-<p>经过mat工具分析之后，我们基本上就能确定内存中主要是哪个对象比较消耗内存，然后找到该对象的创建位置，进行处理即可。这里的主要是PrintStream最多，但是我们也可以看到，其内存消耗量只有12.2%。也就是说，其还不足以导致大量的Full GC，此时我们需要考虑另外一种情况，就是代码或者第三方依赖的包中有显示的System.gc()调用。这种情况我们查看dump内存得到的文件即可判断，因为其会打印GC原因：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[Full GC (System.gc()) [Tenured: 262546K-&gt;262546K(349568K), 0.0014879 secs] 262546K-&gt;262546K(506816K), [Metaspace: 3109K-&gt;3109K(1056768K)], 0.0015151 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
-[GC (Allocation Failure) [DefNew: 2795K-&gt;0K(157248K), 0.0001504 secs][Tenured: 262546K-&gt;402K(349568K), 0.0012949 secs] 265342K-&gt;402K(506816K), [Metaspace: 3109K-&gt;3109K(1056768K)], 0.0014699 secs] [Times: user=0.00
-</code></pre></div></div>
-
-<p>比如这里第一次GC是由于<code class="language-plaintext highlighter-rouge">System.gc()</code>的显示调用导致的，而第二次GC则是JVM主动发起的。总结来说，对于Full GC次数过多，主要有以下两种原因：</p>
-
-<ul>
-  <li>代码中一次获取了大量的对象，导致内存溢出，此时可以通过eclipse的mat工具查看内存中有哪些对象比较多；</li>
-  <li>内存占用不高，但是Full GC次数还是比较多，此时可能是显示的<code class="language-plaintext highlighter-rouge">System.gc()</code>调用导致GC次数过多，这可以通过添加<code class="language-plaintext highlighter-rouge">-XX:+DisableExplicitGC</code>来禁用JVM对显示GC的响应。</li>
-</ul>
-
-<h1 id="cpu过高">CPU过高</h1>
-
-<p>在前面第一点中，我们讲到，CPU过高可能是系统频繁的进行Full GC，导致系统缓慢。而我们平常也肯能遇到比较耗时的计算，导致CPU过高的情况，此时查看方式其实与上面的非常类似。首先我们通过top命令查看当前CPU消耗过高的进程是哪个，从而得到进程id；然后通过top -Hp 来查看该进程中有哪些线程CPU过高，一般超过80%就是比较高的，80%左右是合理情况。这样我们就能得到CPU消耗比较高的线程id。接着通过该线程id的十六进制表示在jstack日志中查看当前线程具体的堆栈信息。</p>
-
-<p>在这里我们就可以区分导致CPU过高的原因具体是Full GC次数过多还是代码中有比较耗时的计算了。如果是Full GC次数过多，那么通过jstack得到的线程信息会是类似于VM Thread之类的线程，而如果是代码中有比较耗时的计算，那么我们得到的就是一个线程的具体堆栈信息。如下是一个代码中有比较耗时的计算，导致CPU过高的线程信息：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1162587-20190322153649853-1357401438.png" alt="img" /></p>
-
-<p>这里可以看到，在请求UserController的时候，由于该Controller进行了一个比较耗时的调用，导致该线程的CPU一直处于100%。我们可以根据堆栈信息，直接定位到UserController的34行，查看代码中具体是什么原因导致计算量如此之高。</p>
-
-<h1 id="不定期出现的接口耗时现象">不定期出现的接口耗时现象</h1>
-
-<p>对于这种情况，比较典型的例子就是，我们某个接口访问经常需要2~3s才能返回。这是比较麻烦的一种情况，因为一般来说，其消耗的CPU不多，而且占用的内存也不高，也就是说，我们通过上述两种方式进行排查是无法解决这种问题的。而且由于这样的接口耗时比较大的问题是不定时出现的，这就导致了我们在通过jstack命令即使得到了线程访问的堆栈信息，我们也没法判断具体哪个线程是正在执行比较耗时操作的线程。</p>
-
-<p>对于不定时出现的接口耗时比较严重的问题，我们的定位思路基本如下：首先找到该接口，通过压测工具不断加大访问力度，如果说该接口中有某个位置是比较耗时的，由于我们的访问的频率非常高，那么大多数的线程最终都将阻塞于该阻塞点，这样通过多个线程具有相同的堆栈日志，我们基本上就可以定位到该接口中比较耗时的代码的位置。如下是一个代码中有比较耗时的阻塞操作通过压测工具得到的线程堆栈日志：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"http-nio-8080-exec-2" #29 daemon prio=5 os_prio=31 tid=0x00007fd08cb26000 nid=0x9603 waiting on condition [0x00007000031d5000]
-   java.lang.Thread.State: TIMED_WAITING (sleeping)
-	at java.lang.Thread.sleep(Native Method)
-	at java.lang.Thread.sleep(Thread.java:340)
-	at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
-	at com.aibaobei.user.controller.UserController.detail(UserController.java:18)
-
-"http-nio-8080-exec-3" #30 daemon prio=5 os_prio=31 tid=0x00007fd08cb27000 nid=0x6203 waiting on condition [0x00007000032d8000]
-   java.lang.Thread.State: TIMED_WAITING (sleeping)
-	at java.lang.Thread.sleep(Native Method)
-	at java.lang.Thread.sleep(Thread.java:340)
-	at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
-	at com.aibaobei.user.controller.UserController.detail(UserController.java:18)
-
-"http-nio-8080-exec-4" #31 daemon prio=5 os_prio=31 tid=0x00007fd08d0fa000 nid=0x6403 waiting on condition [0x00007000033db000]
-   java.lang.Thread.State: TIMED_WAITING (sleeping)
-	at java.lang.Thread.sleep(Native Method)
-	at java.lang.Thread.sleep(Thread.java:340)
-	at java.util.concurrent.TimeUnit.sleep(TimeUnit.java:386)
-	at com.aibaobei.user.controller.UserController.detail(UserController.java:18)
-</code></pre></div></div>
-
-<p>从上面的日志可以看你出，这里有多个线程都阻塞在了UserController的第18行，说明这是一个阻塞点，也就是导致该接口比较缓慢的原因。</p>
-
-<h1 id="某个线程进入waiting状态">某个线程进入WAITING状态</h1>
-
-<p>对于这种情况，这是比较罕见的一种情况，但是也是有可能出现的，而且由于其具有一定的“不可复现性”，因而我们在排查的时候是非常难以发现的。笔者曾经就遇到过类似的这种情况，具体的场景是，在使用CountDownLatch时，由于需要每一个并行的任务都执行完成之后才会唤醒主线程往下执行。而当时我们是通过CountDownLatch控制多个线程连接并导出用户的gmail邮箱数据，这其中有一个线程连接上了用户邮箱，但是连接被服务器挂起了，导致该线程一直在等待服务器的响应。最终导致我们的主线程和其余几个线程都处于WAITING状态。</p>
-
-<p>对于这样的问题，查看过jstack日志的读者应该都知道，正常情况下，线上大多数线程都是处于TIMED_WAITING状态，而我们这里出问题的线程所处的状态与其是一模一样的，这就非常容易混淆我们的判断。解决这个问题的思路主要如下：</p>
-
-<ul>
-  <li>通过grep在jstack日志中找出所有的处于TIMED_WAITING状态的线程，将其导出到某个文件中，如a1.log，如下是一个导出的日志文件示例：</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Attach Listener" #13 daemon prio=9 os_prio=31 tid=0x00007fe690064000 nid=0xd07 waiting on condition [0x0000000000000000]
-"DestroyJavaVM" #12 prio=5 os_prio=31 tid=0x00007fe690066000 nid=0x2603 waiting on condition [0x0000000000000000]
-"Thread-0" #11 prio=5 os_prio=31 tid=0x00007fe690065000 nid=0x5a03 waiting on condition [0x0000700003ad4000]
-"C1 CompilerThread3" #9 daemon prio=9 os_prio=31 tid=0x00007fe68c00a000 nid=0xa903 waiting on condition [0x0000000000000000]
-</code></pre></div></div>
-
-<ul>
-  <li>等待一段时间之后，比如10s，再次对jstack日志进行grep，将其导出到另一个文件，如a2.log，结果如下所示：</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"DestroyJavaVM" #12 prio=5 os_prio=31 tid=0x00007fe690066000 nid=0x2603 waiting on condition [0x0000000000000000]
-"Thread-0" #11 prio=5 os_prio=31 tid=0x00007fe690065000 nid=0x5a03 waiting on condition [0x0000700003ad4000]
-"VM Periodic Task Thread" os_prio=31 tid=0x00007fe68d114000 nid=0xa803 waiting on condition
-</code></pre></div></div>
-
-<ul>
-  <li>重复步骤2，待导出3~4个文件之后，我们对导出的文件进行对比，找出其中在这几个文件中一直都存在的用户线程，这个线程基本上就可以确认是包含了处于等待状态有问题的线程。因为正常的请求线程是不会在20~30s之后还是处于等待状态的。</li>
-  <li>经过排查得到这些线程之后，我们可以继续对其堆栈信息进行排查，如果该线程本身就应该处于等待状态，比如用户创建的线程池中处于空闲状态的线程，那么这种线程的堆栈信息中是不会包含用户自定义的类的。这些都可以排除掉，而剩下的线程基本上就可以确认是我们要找的有问题的线程。通过其堆栈信息，我们就可以得出具体是在哪个位置的代码导致该线程处于等待状态了。</li>
-</ul>
-
-<p>这里需要说明的是，我们在判断是否为用户线程时，可以通过线程最前面的线程名来判断，因为一般的框架的线程命名都是非常规范的，我们通过线程名就可以直接判断得出该线程是某些框架中的线程，这种线程基本上可以排除掉。而剩余的，比如上面的Thread-0，以及我们可以辨别的自定义线程名，这些都是我们需要排查的对象。</p>
-
-<p>经过上面的方式进行排查之后，我们基本上就可以得出这里的Thread-0就是我们要找的线程，通过查看其堆栈信息，我们就可以得到具体是在哪个位置导致其处于等待状态了。如下示例中则是在SyncTask的第8行导致该线程进入等待了。</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"Thread-0" #11 prio=5 os_prio=31 tid=0x00007f9de08c7000 nid=0x5603 waiting on condition [0x0000700001f89000]
-   java.lang.Thread.State: WAITING (parking)
-	at sun.misc.Unsafe.park(Native Method)
-	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:304)
-	at com.aibaobei.chapter2.eg4.SyncTask.lambda$main$0(SyncTask.java:8)
-	at com.aibaobei.chapter2.eg4.SyncTask$$Lambda$1/1791741888.run(Unknown Source)
-	at java.lang.Thread.run(Thread.java:748)
-</code></pre></div></div>
-
-<h1 id="死锁">死锁</h1>
-
-<p>对于死锁，这种情况基本上很容易发现，因为jstack可以帮助我们检查死锁，并且在日志中打印具体的死锁线程信息。如下是一个产生死锁的一个jstack日志示例：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1162587-20190322153623622-2014186194.png" alt="img" /></p>
-
-<p>可以看到，在jstack日志的底部，其直接帮我们分析了日志中存在哪些死锁，以及每个死锁的线程堆栈信息。这里我们有两个用户线程分别在等待对方释放锁，而被阻塞的位置都是在ConnectTask的第5行，此时我们就可以直接定位到该位置，并且进行代码分析，从而找到产生死锁的原因。</p>
-
-<h1 id="小结">小结</h1>
-
-<p>本文主要讲解了线上可能出现的五种导致系统缓慢的情况，详细分析了每种情况产生时的现象，已经根据现象我们可以通过哪些方式定位得到是这种原因导致的系统缓慢。简要的说，我们进行线上日志分析时，主要可以分为如下步骤：</p>
-
-<ol>
-  <li>通过top命令查看CPU情况，如果CPU比较高，则通过top -Hp 命令查看当前进程的各个线程运行情况，找出CPU过高的线程之后，将其线程id转换为十六进制的表现形式，然后在jstack日志中查看该线程主要在进行的工作。这里又分为两种情况:
-    <ul>
-      <li>如果是正常的用户线程，则通过该线程的堆栈信息查看其具体是在哪处用户代码处运行比较消耗CPU；</li>
-      <li>如果该线程是VM Thread，则通过<code class="language-plaintext highlighter-rouge">jstat -gcutil &lt;pid&gt; &lt;period&gt; &lt;times&gt;</code>命令监控当前系统的GC状况，然后通过<code class="language-plaintext highlighter-rouge">jmap dump:format=b,file=&lt;filepath&gt; &lt;pid&gt;</code>导出系统当前的内存数据。导出之后将内存情况放到eclipse的mat工具中进行分析即可得出内存中主要是什么对象比较消耗内存，进而可以处理相关代码；</li>
-    </ul>
-  </li>
-  <li>如果通过top命令看到CPU并不高，并且系统内存占用率也比较低。此时就可以考虑是否是由于另外三种情况导致的问题。具体的可以根据具体情况分析：
-    <ul>
-      <li>如果是接口调用比较耗时，并且是不定时出现，则可以通过压测的方式加大阻塞点出现的频率，从而通过jstack查看堆栈信息，找到阻塞点；</li>
-      <li>如果是某个功能突然出现停滞的状况，这种情况也无法复现，此时可以通过多次导出jstack日志的方式对比哪些用户线程是一直都处于等待状态，这些线程就是可能存在问题的线程；</li>
-      <li>如果通过jstack可以查看到死锁状态，则可以检查产生死锁的两个线程的具体阻塞点，从而处理相应的问题。</li>
-    </ul>
-  </li>
-</ol>
-
-<p>本文主要是提出了五种常见的导致线上功能缓慢的问题，以及排查思路。当然，线上的问题出现的形式是多种多样的，也不一定局限于这几种情况，如果我们能够仔细分析这些问题出现的场景，就可以根据具体情况具体分析，从而解决相应的问题。</p>
-</div><p><a href="/mianshi/JVM/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/javabase/0708/01"><h2 itemprop="headline" class="item__header">http协议和https协议的区别</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>超文本传输协议HTTP协议被用于在Web浏览器和网站服务器之间传递信息，HTTP协议以明文方式发送内容，不提供任何方式的数据加密，如果攻击者截取了Web浏览器和网站服务器之间的传输报文，就可以直接读懂其中的信息，因此，HTTP协议不适合传输一些敏感信息，比如：信用卡号、密码等支付信息。</p>
-
-<p>　　为了解决HTTP协议的这一缺陷，需要使用另一种协议：安全套接字层超文本传输协议HTTPS，为了数据传输的安全，HTTPS在HTTP的基础上加入了SSL协议，SSL依靠证书来验证服务器的身份，并为浏览器和服务器之间的通信加密。</p>
-
-<p><strong>一、HTTP和HTTPS的基本概念</strong></p>
-
-<p>　　HTTP：是互联网上应用最为广泛的一种网络协议，是一个客户端和服务器端请求和应答的标准（TCP），用于从WWW服务器传输超文本到本地浏览器的传输协议，它可以使浏览器更加高效，使网络传输减少。</p>
-
-<p>　　HTTPS：是以安全为目标的HTTP通道，简单讲是HTTP的安全版，即HTTP下加入SSL层，HTTPS的安全基础是SSL，因此加密的详细内容就需要SSL。</p>
-
-<p>　　HTTPS协议的主要作用可以分为两种：一种是建立一个信息安全通道，来保证数据传输的安全；另一种就是确认网站的真实性。</p>
-
-<p><strong>二、HTTP与HTTPS有什么区别？</strong></p>
-
-<p>　　HTTP协议传输的数据都是未加密的，也就是明文的，因此使用HTTP协议传输隐私信息非常不安全，为了保证这些隐私数据能加密传输，于是网景公司设计了SSL（Secure Sockets Layer）协议用于对HTTP协议传输的数据进行加密，从而就诞生了HTTPS。简单来说，HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全。</p>
-
-<p>　　HTTPS和HTTP的区别主要如下：</p>
-
-<p>　　1、https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。</p>
-
-<p>　　2、http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。</p>
-
-<p>　　3、http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。</p>
-
-<p>　　4、http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全。</p>
-
-<p><strong>三、HTTPS的工作原理</strong></p>
-
-<p>　　我们都知道HTTPS能够加密信息，以免敏感信息被第三方获取，所以很多银行网站或电子邮箱等等安全级别较高的服务都会采用HTTPS协议。</p>
-
-<p><img src="/assets/images/mianshiti/0708/1-150H120343I41.jpg" alt="HTTP与HTTPS的区别-马海祥博客" /></p>
-
-<p>　客户端在使用HTTPS方式与Web服务器通信时有以下几个步骤，如图所示。</p>
-
-<p>　　（1）客户使用https的URL访问Web服务器，要求与Web服务器建立SSL连接。</p>
-
-<p>　　（2）Web服务器收到客户端请求后，会将网站的证书信息（证书中包含公钥）传送一份给客户端。</p>
-
-<p>　　（3）客户端的浏览器与Web服务器开始协商SSL连接的安全等级，也就是信息加密的等级。</p>
-
-<p>　　（4）客户端的浏览器根据双方同意的安全等级，建立会话密钥，然后利用网站的公钥将会话密钥加密，并传送给网站。</p>
-
-<p>　　（5）Web服务器利用自己的私钥解密出会话密钥。</p>
-
-<p>　　（6）Web服务器利用会话密钥加密与客户端之间的通信。</p>
-
-<p><img src="/assets/images/mianshiti/0708/2012071410212142.gif" alt="img" /></p>
-
-<p><strong>四、HTTPS的优点</strong></p>
-
-<p>　　尽管HTTPS并非绝对安全，掌握根证书的机构、掌握加密算法的组织同样可以进行中间人形式的攻击，但HTTPS仍是现行架构下最安全的解决方案，主要有以下几个好处：</p>
-
-<p>　　（1）使用HTTPS协议可认证用户和服务器，确保数据发送到正确的客户机和服务器；</p>
-
-<p>　　（2）HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，要比http协议安全，可防止数据在传输过程中不被窃取、改变，确保数据的完整性。</p>
-
-<p>　　（3）HTTPS是现行架构下最安全的解决方案，虽然不是绝对安全，但它大幅增加了中间人攻击的成本。</p>
-
-<p>　　（4）谷歌曾在2014年8月份调整搜索引擎算法，并称“比起同等HTTP网站，采用HTTPS加密的网站在搜索结果中的排名将会更高”。</p>
-
-<p><strong>五、HTTPS的缺点</strong></p>
-
-<p>　　虽然说HTTPS有很大的优势，但其相对来说，还是存在不足之处的：</p>
-
-<p>　　（1）HTTPS协议握手阶段比较费时，会使页面的加载时间延长近50%，增加10%到20%的耗电；</p>
-
-<p>　　（2）HTTPS连接缓存不如HTTP高效，会增加数据开销和功耗，甚至已有的安全措施也会因此而受到影响；</p>
-
-<p>　　（3）SSL证书需要钱，功能越强大的证书费用越高，个人网站、小网站没有必要一般不会用。</p>
-
-<p>　  （4）SSL证书通常需要绑定IP，不能在同一IP上绑定多个域名，IPv4资源不可能支撑这个消耗。</p>
-
-<p>　　（5）HTTPS协议的加密范围也比较有限，在黑客攻击、拒绝服务攻击、服务器劫持等方面几乎起不到什么作用。最关键的，SSL证书的信用链体系并不安全，特别是在某些国家可以控制CA根证书的情况下，中间人攻击一样可行。</p>
-
-<p><strong>六、http切换到HTTPS</strong></p>
-
-<p>　　如果需要将网站从http切换到https到底该如何实现呢？</p>
-
-<p>这里需要将页面中所有的链接，例如js，css，图片等等链接都由http改为https。例如：http://www.baidu.com改为https://www.baidu.com</p>
-
-<p>　　BTW，这里虽然将http切换为了https，还是建议保留http。所以我们在切换的时候可以做http和https的兼容，具体实现方式是，去掉页面链接中的http头部，这样可以自动匹配http头和https头。例如：将http://www.baidu.com改为//www.baidu.com。然后当用户从http的入口进入访问页面时，页面就是http，如果用户是从https的入口进入访问页面，页面即使https的。</p>
-</div><p><a href="/javabase/0708/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="javabase-2020-07-08-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>314 post articles, 40 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>317 post articles, 40 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
