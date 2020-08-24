@@ -374,8 +374,192 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/mianshi/tcp/nio/01"><h2 itemprop="headline" class="item__header">tcp nio epoll等基本技术知识</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="tcp">TCP</h4>
+
+<p>应用层–&gt;传输层–&gt;网络层–&gt;链路层–物理层</p>
+
+<p>三次握手</p>
+
+<p>四次分手</p>
+
+<p><img src="/assets/images/nio/0824/Jietu20200824-155730@2x.jpg" alt="1" /></p>
+
+<h4 id="io消耗">IO消耗</h4>
+
+<ol>
+  <li>程序调用</li>
+  <li>用户态调用切换到系统调用</li>
+</ol>
+
+<h4 id="bio">BIO</h4>
+
+<p>每个线程对应每个连接</p>
+
+<p>优势：可接收很多的连接</p>
+
+<p>问题：</p>
+
+<ol>
+  <li>线程内存浪费</li>
+  <li>cpu调度消耗</li>
+</ol>
+
+<p>根本原因：</p>
+
+<p>​	BLOCKING 阻塞： accept recv</p>
+
+<p>演变的解决方法 –&gt;NONBLOCKING  非阻塞</p>
+
+<h4 id="nio">NIO</h4>
+
+<p>New IO</p>
+
+<p>NONBLOCKING</p>
+
+<p>优势：避免多线程问题</p>
+
+<p>弊端：假设有1w个连接，只有一个发来数据，每循环一次</p>
+
+<p>其实都需要向内核发生1w次reav系统调用，这里有9999是无意义的</p>
+
+<p>消耗时间和资源（用户空间向内核空间的循环遍历，复杂度在系统调用上）</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.mashibing.io.nio</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.net.InetSocketAddress</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.channels.SelectionKey</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.channels.Selector</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.channels.ServerSocketChannel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.channels.SocketChannel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Iterator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Server</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+        <span class="nc">ServerSocketChannel</span> <span class="n">ssc</span> <span class="o">=</span> <span class="nc">ServerSocketChannel</span><span class="o">.</span><span class="na">open</span><span class="o">();</span>
+        <span class="n">ssc</span><span class="o">.</span><span class="na">socket</span><span class="o">().</span><span class="na">bind</span><span class="o">(</span><span class="k">new</span> <span class="nc">InetSocketAddress</span><span class="o">(</span><span class="s">"127.0.0.1"</span><span class="o">,</span> <span class="mi">8888</span><span class="o">));</span>
+        <span class="n">ssc</span><span class="o">.</span><span class="na">configureBlocking</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"server started, listening on :"</span> <span class="o">+</span> <span class="n">ssc</span><span class="o">.</span><span class="na">getLocalAddress</span><span class="o">());</span>
+        <span class="nc">Selector</span> <span class="n">selector</span> <span class="o">=</span> <span class="nc">Selector</span><span class="o">.</span><span class="na">open</span><span class="o">();</span>
+        <span class="n">ssc</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">selector</span><span class="o">,</span> <span class="nc">SelectionKey</span><span class="o">.</span><span class="na">OP_ACCEPT</span><span class="o">);</span>
+
+        <span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">selector</span><span class="o">.</span><span class="na">select</span><span class="o">();</span>
+            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SelectionKey</span><span class="o">&gt;</span> <span class="n">keys</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="na">selectedKeys</span><span class="o">();</span>
+            <span class="nc">Iterator</span><span class="o">&lt;</span><span class="nc">SelectionKey</span><span class="o">&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+            <span class="k">while</span><span class="o">(</span><span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
+                <span class="nc">SelectionKey</span> <span class="n">key</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
+                <span class="n">it</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+                <span class="n">handle</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">handle</span><span class="o">(</span><span class="nc">SelectionKey</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isAcceptable</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="nc">ServerSocketChannel</span> <span class="n">ssc</span> <span class="o">=</span> <span class="o">(</span><span class="nc">ServerSocketChannel</span><span class="o">)</span> <span class="n">key</span><span class="o">.</span><span class="na">channel</span><span class="o">();</span>
+                <span class="nc">SocketChannel</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">ssc</span><span class="o">.</span><span class="na">accept</span><span class="o">();</span>
+                <span class="n">sc</span><span class="o">.</span><span class="na">configureBlocking</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+                <span class="c1">//new Client</span>
+                <span class="c1">//</span>
+                <span class="c1">//String hostIP = ((InetSocketAddress)sc.getRemoteAddress()).getHostString();</span>
+
+			<span class="cm">/*
+			log.info("client " + hostIP + " trying  to connect");
+			for(int i=0; i&lt;clients.size(); i++) {
+				String clientHostIP = clients.get(i).clientAddress.getHostString();
+				if(hostIP.equals(clientHostIP)) {
+					log.info("this client has already connected! is he alvie " + clients.get(i).live);
+					sc.close();
+					return;
+				}
+			}*/</span>
+
+                <span class="n">sc</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">selector</span><span class="o">(),</span> <span class="nc">SelectionKey</span><span class="o">.</span><span class="na">OP_READ</span> <span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isReadable</span><span class="o">())</span> <span class="o">{</span> <span class="c1">//flip</span>
+            <span class="nc">SocketChannel</span> <span class="n">sc</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">sc</span> <span class="o">=</span> <span class="o">(</span><span class="nc">SocketChannel</span><span class="o">)</span><span class="n">key</span><span class="o">.</span><span class="na">channel</span><span class="o">();</span>
+                <span class="nc">ByteBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="nc">ByteBuffer</span><span class="o">.</span><span class="na">allocate</span><span class="o">(</span><span class="mi">512</span><span class="o">);</span>
+                <span class="n">buffer</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
+                <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">);</span>
+
+                <span class="k">if</span><span class="o">(</span><span class="n">len</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">buffer</span><span class="o">.</span><span class="na">array</span><span class="o">(),</span> <span class="mi">0</span><span class="o">,</span> <span class="n">len</span><span class="o">));</span>
+                <span class="o">}</span>
+
+                <span class="nc">ByteBuffer</span> <span class="n">bufferToWrite</span> <span class="o">=</span> <span class="nc">ByteBuffer</span><span class="o">.</span><span class="na">wrap</span><span class="o">(</span><span class="s">"HelloClient"</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+                <span class="n">sc</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">bufferToWrite</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+            <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+                <span class="k">if</span><span class="o">(</span><span class="n">sc</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">try</span> <span class="o">{</span>
+                        <span class="n">sc</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                    <span class="o">}</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<h4 id="多路复用">多路复用</h4>
+
+<ul>
+  <li>
+    <p><strong>同步IO模型:</strong>   <strong>如果成自己读取IO，那么这个IO模型，无论是BIO，NIO，多路复用器，都叫做 同步IO模型</strong></p>
+  </li>
+  <li><strong>多路复用器：</strong>还是得自己来读取数据</li>
+  <li>select，poll，epoll 都是同步的</li>
+</ul>
+
+<p>优势：通过一次系统调用，把fds，传递给内核，内核进行遍历，想多NIO的遍历，多路复用减少了系统调用次数</p>
+
+<p>弊端：1. 因为在where循环中，所有会出现重复传递数据到系统调用</p>
+
+<p>​					- 解决方法：内核开辟内存空间保留fd</p>
+
+<p>​			2. 每次select，poll 都都用重复遍历全量的fd</p>
+
+<p><strong>shell命令 工具</strong></p>
+
+<ul>
+  <li>strace 追踪io 可打印出系统调用日志</li>
+</ul>
+
+</div><p><a href="/mianshi/tcp/nio/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 24, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-24-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-24T00:00:00+08:00">
+    <meta itemprop="keywords" content="面试题"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/SpringCloud/0823/01"><h2 itemprop="headline" class="item__header">SpringCloud面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ol>
+  <li>什么是微服务？</li>
+  <li>微服务之间如何独立通讯的?</li>
+  <li>SpringCloud 和 Dubbo 有哪些区别?</li>
+  <li>SpringBoot 和 SpringCloud 之间关系？</li>
+  <li>什么是熔断？什么是服务降级？</li>
+  <li>微服务的优缺点是什么？说下你在项目中碰到的坑。</li>
+  <li>eureka和zookeeper都可以提供服务注册与发现的功能，请说说两个的区别？</li>
+  <li>你所知道微服务的技术栈有哪些？列举一二。</li>
+  <li>什么是微服务架构？</li>
+</ol>
 </div><p><a href="/mianshi/SpringCloud/0823/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
@@ -963,7 +1147,7 @@ for (int i = 1; i&lt;100; i++)
   <li>dubbo 序列化：未成熟的高效 java 序列化实现，不建议在生产环境使用</li>
 </ul>
 
-<p>#### 1.3 Dubbo和SpringCloud的关系？</p>
+<h4 id="13--dubbo和springcloud的关系">1.3  Dubbo和SpringCloud的关系？</h4>
 
 <table>
   <thead>
@@ -1002,7 +1186,7 @@ for (int i = 1; i&lt;100; i++)
   <li>网络传输层(Transport)：抽象 mina 和 netty 为统一接口，以 Message 为中心</li>
 </ul>
 
-<p>#### 1.5 Dubbo的默认集群容错方案？</p>
+<h4 id="15--dubbo的默认集群容错方案">1.5  Dubbo的默认集群容错方案？</h4>
 
 <ul>
   <li>
@@ -1027,45 +1211,73 @@ for (int i = 1; i&lt;100; i++)
   </li>
 </ul>
 
-<p>1.6 Dubbo使用的是什么通信框架?
- 1.7 Dubbo的主要应用场景？
- 1.8 Dubbo服务注册与发现的流程？流程说明。
- 1.9 Dubbo的集群容错方案有哪些？
- 1.10 Dubbo的四大组件
- 1.11 Dubbo在安全机制方面是如何解决的
- 1.12 Dubbo和SpringCloud的区别？
- 1.13 Dubbo支持哪些协议，每种协议的应用场景，优缺点？
- 1.14 Dubbo的核心功能有哪些？
- 1.15 Dubbo的注册中心集群挂掉，发布者和订阅者之间还能通信么？
- 1.16 Dubbo集群的负载均衡有哪些策略
- 1.17 为什么需要服务治理？
- 1.18 Dubbo超时时间怎样设置？</p>
+<p>1.6 Dubbo使用的是什么通信框架?</p>
+
+<p>1.7 Dubbo的主要应用场景？</p>
+
+<p>1.8 Dubbo服务注册与发现的流程？流程说明。</p>
+
+<p>1.9 Dubbo的集群容错方案有哪些？</p>
+
+<p>1.10 Dubbo的四大组件</p>
+
+<p>1.11 Dubbo在安全机制方面是如何解决的</p>
+
+<p>1.12 Dubbo和SpringCloud的区别？</p>
+
+<p>1.13 Dubbo支持哪些协议，每种协议的应用场景，优缺点？</p>
+
+<p>1.14 Dubbo的核心功能有哪些？</p>
+
+<p>1.15 Dubbo的注册中心集群挂掉，发布者和订阅者之间还能通信么？</p>
+
+<p>1.16 Dubbo集群的负载均衡有哪些策略</p>
+
+<p>1.17 为什么需要服务治理？</p>
+
+<p>1.18 Dubbo超时时间怎样设置？</p>
 
 <h2 id="2-elasticsearch">2 ElasticSearch</h2>
 
-<p>2.1 你们公司的ES集群，一个node一般会分配几个分片？
- 2.2 Elasticsearch是如何实现Master选举的？
- 2.3 你是如何做写入调优的？
- 2.4 如何避免脑裂？
- 2.5 Elasticsearch对于大数据量（上亿量级）的聚合如何实现？
- 2.6 ES主分片数量可以在后期更改吗？为什么？
- 2.7 如何监控集群状态？
- 2.8 ElasticSearch中的副本是什么？
- 2.9 ES更新数据的执行流程？
- 2.10 shard里面是什么组成的？
- 2.11 ElasticSearch中的分析器是什么？
- 2.12 什么是脑裂？
- 2.13 客户端在和集群连接时，如何选择特定的节点执行请求的？
- 2.14 Elasticsearch中的倒排索引是什么？
- 2.15 什么是索引？索引（名词） 一个索引(index)
- 2.16 详细描述一下Elasticsearch更新和删除文档的过程</p>
+<p>2.1 你们公司的ES集群，一个node一般会分配几个分片？</p>
+
+<p>2.2 Elasticsearch是如何实现Master选举的？</p>
+
+<p>2.3 你是如何做写入调优的？</p>
+
+<p>2.4 如何避免脑裂？</p>
+
+<p>2.5 Elasticsearch对于大数据量（上亿量级）的聚合如何实现？</p>
+
+<p>2.6 ES主分片数量可以在后期更改吗？为什么？</p>
+
+<p>2.7 如何监控集群状态？</p>
+
+<p>2.8 ElasticSearch中的副本是什么？</p>
+
+<p>2.9 ES更新数据的执行流程？</p>
+
+<p>2.10 shard里面是什么组成的？</p>
+
+<p>2.11 ElasticSearch中的分析器是什么？</p>
+
+<p>2.12 什么是脑裂？</p>
+
+<p>2.13 客户端在和集群连接时，如何选择特定的节点执行请求的？</p>
+
+<p>2.14 Elasticsearch中的倒排索引是什么？</p>
+
+<p>2.15 什么是索引？索引（名词） 一个索引(index)</p>
+
+<p>2.16 详细描述一下Elasticsearch更新和删除文档的过程</p>
+
 <h2 id="3-jvm">3 JVM</h2>
 
-<p>#### 3.1 JVM参数主要有⼏种分类</p>
+<h4 id="31--jvm参数主要有种分类">3.1  JVM参数主要有⼏种分类</h4>
 
 <p>IBM 微软的 hotpot</p>
 
-<p>####  3.2 Java中会存在内存泄漏吗，简述一下。</p>
+<h4 id="32--java中会存在内存泄漏吗简述一下">3.2  Java中会存在内存泄漏吗，简述一下。</h4>
 
 <p>会出现内存泄漏，当垃圾回收器清理内存后，现有内存使用量+申请新增内存&gt;最大使用内存时，会出现内存泄漏</p>
 
@@ -1076,7 +1288,7 @@ for (int i = 1; i&lt;100; i++)
   <li>内存分配不合理</li>
 </ol>
 
-<h4 id="33-java虚拟机是如何判定两个java类是相同的">3.3 Java虚拟机是如何判定两个Java类是相同的？</h4>
+<h4 id="33--java虚拟机是如何判定两个java类是相同的">3.3  Java虚拟机是如何判定两个Java类是相同的？</h4>
 
 <p>在新建对象的过程中，需要新通过类加载，而在类加载中通过 <strong>双亲委派机制</strong> 来判断两个类是否相同</p>
 
@@ -1086,7 +1298,7 @@ for (int i = 1; i&lt;100; i++)
 
 <p><strong>用于自定义类加载器 –&gt; 系统类加载器 –&gt; 扩展类加载 –&gt; 启动类加载</strong></p>
 
-<p>#### 3.4 Java 中都有哪些引用类型</p>
+<h4 id="34--java-中都有哪些引用类型">3.4  Java 中都有哪些引用类型</h4>
 
 <ol>
   <li>__强引用（strongreference）__就是指在程序代码之中普遍存在的,类似“Object obj=new Object()” 这类的引用,只要强引用还存在,垃圾收集器永远不会回收掉被引用的对象实例。</li>
@@ -1095,7 +1307,7 @@ for (int i = 1; i&lt;100; i++)
   <li>__虚引用（phantomreference）__也称为幽灵引用或者幻影引用,它是最弱的一种引用关系。一个对象 实例是否有虚引用的存在,完全不会对其生存时间构成影响,也无法通过虚引用 来取得一个对象实例。为一个对象设置虚引用关联的唯一目的就是能在这个对象 实例被收集器回收时收到一个系统通知。在 JDK 1.2 之后,提供了 PhantomReference 类来实现虚引用</li>
 </ol>
 
-<p>#### 3.5 在 Java 中，对象什么时候可以被垃圾回收？</p>
+<h4 id="35--在-java-中对象什么时候可以被垃圾回收">3.5  在 Java 中，对象什么时候可以被垃圾回收？</h4>
 
 <p>当对象被判定已经“死去”时，对象可以被垃圾回收，判断对象是否存活可通过以下算法</p>
 
@@ -1104,7 +1316,7 @@ for (int i = 1; i&lt;100; i++)
   <li><strong>可达性分析算法：</strong> 通过跟对象作为起始点，从这个节点开始向下搜索，搜索过程所走的路径称为“引用链”，如果某个对象的到 __GC Roots __间没有连接，则说明该对象不能再被引用</li>
 </ol>
 
-<h4 id="36-stackoverflow异常有没有遇到过一般你猜测会在什么情况下被触发">3.6 StackOverflow异常有没有遇到过？一般你猜测会在什么情况下被触发？</h4>
+<h4 id="36--stackoverflow异常有没有遇到过一般你猜测会在什么情况下被触发">3.6  StackOverflow异常有没有遇到过？一般你猜测会在什么情况下被触发？</h4>
 
 <p>栈内存溢出。栈内存保存的信息包括：函数地址、函数参数、局部变量等</p>
 
@@ -1122,29 +1334,29 @@ for (int i = 1; i&lt;100; i++)
   <li>使用堆内存增加栈内存方法</li>
 </ol>
 
-<h4 id="37-堆空间分哪些部分以及如何设置各个部分">3.7 堆空间分哪些部分？以及如何设置各个部分？</h4>
+<h4 id="37--堆空间分哪些部分以及如何设置各个部分">3.7  堆空间分哪些部分？以及如何设置各个部分？</h4>
 
 <p>新生代，老年代</p>
 
 <p>其中新生代，分为 伊甸，to，from 按照 8:1:1 的比例进行分割</p>
 
-<h4 id="38-什么是栈帧栈帧存储了什么">3.8 什么是栈帧？栈帧存储了什么？</h4>
+<h4 id="38--什么是栈帧栈帧存储了什么">3.8  什么是栈帧？栈帧存储了什么？</h4>
 
 <p>栈帧是方法运行期最重要的基本数据结构</p>
 
 <p>存储包括：局部变量表，操作数栈，动态连接和方法返回地址</p>
 
-<h4 id="39-如何设置参数生成gc日志">3.9 如何设置参数生成GC日志？</h4>
+<h4 id="39--如何设置参数生成gc日志">3.9  如何设置参数生成GC日志？</h4>
 
 <p>-XX:+PrintGC</p>
 
-<p>#### 3.10 GC 是什么？为什么要有 GC？</p>
+<h4 id="310--gc-是什么为什么要有-gc">3.10  GC 是什么？为什么要有 GC？</h4>
 
 <p>Garbage Collection 垃圾回收系统，</p>
 
 <p>java提供的gc功能可以自动检测对象是否超出通过垃圾回收系统，由系统自动触发垃圾回收。java没有提供释放垃圾已分配内存的显示操作方法</p>
 
-<p>#### 3.12 使用过哪些jdk命令，并说明各个的作用是什么</p>
+<h4 id="312--使用过哪些jdk命令并说明各个的作用是什么">3.12  使用过哪些jdk命令，并说明各个的作用是什么</h4>
 
 <p><strong>jps：__用于显示__指定系统内所有HotSpot虚拟机进程</strong>，并且能显示虚拟机执行主类以及本地虚拟机唯一ID</p>
 
@@ -1158,11 +1370,11 @@ for (int i = 1; i&lt;100; i++)
 
 <p>__jinfo：__用来查看和调整虚拟机各项参数使用格式</p>
 
-<h4 id="313-jvm运行时数据区区域分为哪部分">3.13 JVM运行时数据区区域分为哪⼏部分？</h4>
+<h4 id="313--jvm运行时数据区区域分为哪部分">3.13  JVM运行时数据区区域分为哪⼏部分？</h4>
 
 <p>堆，方法区，本地方法区，计数器，栈</p>
 
-<h4 id="314-是否了解类加载器双亲委派模型机制和破坏双亲委派模型">3.14 是否了解类加载器双亲委派模型机制和破坏双亲委派模型？</h4>
+<h4 id="314--是否了解类加载器双亲委派模型机制和破坏双亲委派模型">3.14  是否了解类加载器双亲委派模型机制和破坏双亲委派模型？</h4>
 
 <p>在类加载的过程中，会用到双亲委派机制，目的是为了保障.class 文件的唯一性，</p>
 
@@ -1172,29 +1384,29 @@ for (int i = 1; i&lt;100; i++)
 
 <p>破坏双亲委派机制：通过继承 ClassLoader 并重写loadclass</p>
 
-<p>#### 3.15 逃逸分析有几种类型？</p>
+<h4 id="315--逃逸分析有几种类型">3.15  逃逸分析有几种类型？</h4>
 
 <p>方法逃逸：对象的方法被外部方法所引用</p>
 
 <p>线程逃逸：方法被外部线程访问到</p>
 
-<h4 id="316--xms这些参数的含义是什么">3.16 -Xms这些参数的含义是什么？</h4>
+<h4 id="316---xms这些参数的含义是什么">3.16  -Xms这些参数的含义是什么？</h4>
 
 <p>设置堆内存</p>
 
-<p>#### 3.17 你知道哪几种垃圾收集器,各自的优缺点，重点讲下cms和G1，包括原理，流程，优缺点。</p>
+<h4 id="317--你知道哪几种垃圾收集器各自的优缺点重点讲下cms和g1包括原理流程优缺点">3.17  你知道哪几种垃圾收集器,各自的优缺点，重点讲下cms和G1，包括原理，流程，优缺点。</h4>
 
-<p>#### 3.18 JVM的内存结构，Eden和Survivor比例是多少？</p>
+<h4 id="318--jvm的内存结构eden和survivor比例是多少">3.18  JVM的内存结构，Eden和Survivor比例是多少？</h4>
 
 <p>8:1:1</p>
 
 <h2 id="4-多线程高并发">4 多线程/高并发</h2>
 
-<p>#### 4.1 负载平衡的意义什么？</p>
+<h4 id="41--负载平衡的意义什么">4.1  负载平衡的意义什么？</h4>
 
 <p>提高硬件的使用率，提升系统的容量</p>
 
-<p>#### 4.2 请说出同步线程及线程调度相关的方法？</p>
+<h4 id="42--请说出同步线程及线程调度相关的方法">4.2  请说出同步线程及线程调度相关的方法？</h4>
 
 <p><strong>线程调度相关方法</strong>：</p>
 
@@ -1210,21 +1422,21 @@ for (int i = 1; i&lt;100; i++)
 
 <p>synchronized 同步代码快，同步方法</p>
 
-<p>#### 4.3 关于epoll和select的区别，哪些说法 是正确的？（多选）
-A. epoll 和 select 都是 I/O 多路复用的技术，都可以实现同时监听 多个I/O事件的状态。
+<h4 id="43--关于epoll和select的区别哪些说法-是正确的多选">4.3  关于epoll和select的区别，哪些说法 是正确的？（多选）</h4>
+<p>A. epoll 和 select 都是 I/O 多路复用的技术，都可以实现同时监听 多个I/O事件的状态。
 B. epoll 相比 select 效率更高，主要是基于其操作系统支持的 I/O 事件通知机制，而select是基于轮询机制。
 C. epoll支持水平触发和边沿触发两种模式。
 D. select能并行支持I/O比较小，且无法修改。</p>
 
-<p>#### 4.4 启动一个线程是调用run()方法还是start()方法？</p>
+<h4 id="44--启动一个线程是调用run方法还是start方法">4.4  启动一个线程是调用run()方法还是start()方法？</h4>
 
 <p>run() 方法，start() 中饱含 run() 方法</p>
 
-<p>#### 4.5 如何确保N个线程可以访问N个资源同时又不导致死锁？</p>
+<h4 id="45--如何确保n个线程可以访问n个资源同时又不导致死锁">4.5  如何确保N个线程可以访问N个资源同时又不导致死锁？</h4>
 
 <p>多线程产生死锁需要四个条件，分别是互斥性，保持和请求，不可剥夺性还有要形成闭环，这四个条件缺一不可，只要破坏了其中一个条件就可以破坏死锁，其中最简单的方法就是线程都是以同样的顺序加锁和释放锁，也就是破坏了第四个条件</p>
 
-<p>#### 4.6 编写多线程程序的几种实现方式（换个问法：创建多线程的方式）？</p>
+<h4 id="46--编写多线程程序的几种实现方式换个问法创建多线程的方式">4.6  编写多线程程序的几种实现方式（换个问法：创建多线程的方式）？</h4>
 
 <p>继承 Thread 重写run函数</p>
 
@@ -1232,7 +1444,7 @@ D. select能并行支持I/O比较小，且无法修改。</p>
 
 <p>实现Callable接口，重写call函数</p>
 
-<h4 id="47-线程和进程的区别">4.7 线程和进程的区别？</h4>
+<h4 id="47--线程和进程的区别">4.7  线程和进程的区别？</h4>
 
 <p>线程是进程执行程序的最小单元</p>
 
@@ -1240,7 +1452,7 @@ D. select能并行支持I/O比较小，且无法修改。</p>
 
 <p>线程：一个进程包含多个线程</p>
 
-<h4 id="48-什么是线程池有哪些常用线程池">4.8 什么是线程池，有哪些常用线程池？</h4>
+<h4 id="48--什么是线程池有哪些常用线程池">4.8  什么是线程池，有哪些常用线程池？</h4>
 
 <p>若干个线程放入同一个容器中，使用的时候从池中获取而不用自行创建，使用完毕不需 要销毁线程而是放回池中， 从而减少创建和销毁线程对象的开销</p>
 
@@ -1256,13 +1468,13 @@ D. select能并行支持I/O比较小，且无法修改。</p>
 
 <p>__newSingleThreadExecutor： __创建一个单线程的线程池。 此线程池支持定时以及周期性执行任务的需 求</p>
 
-<h4 id="49-什么是死锁">4.9 什么是死锁？</h4>
+<h4 id="49--什么是死锁">4.9  什么是死锁？</h4>
 
 <p>是指多个进程在运行过程中因争夺资源而造成的一种僵局，当进程处于这种僵持状态时，若无外力作用，它们都将无法再向前推进</p>
 
 <p>多线程产生死锁需要四个条件，分别是互斥性，保持和请求，不可剥夺性还有要形成闭环，这四个条件缺一不可</p>
 
-<h4 id="410-怎么保证缓存和数据库数据的一致性">4.10 怎么保证缓存和数据库数据的一致性？</h4>
+<h4 id="410--怎么保证缓存和数据库数据的一致性">4.10  怎么保证缓存和数据库数据的一致性？</h4>
 
 <ul>
   <li>Cache aside （旁路缓存 ）</li>
@@ -1290,13 +1502,13 @@ D. select能并行支持I/O比较小，且无法修改。</p>
 
 <h2 id="5-消息中间件">5 消息中间件</h2>
 
-<p>#### 5.1 消费者获取消息有几种模式？</p>
+<h4 id="51--消费者获取消息有几种模式">5.1  消费者获取消息有几种模式？</h4>
 
 <p><strong>推送模式:</strong> consumer把轮询过程封装了，并注册到MessageListener监听器中，对于offset进行自动保存。取到消息后，唤醒MessageListener的consumeMessage()来消费，这种触发方法才会被调用的方式对用户而言感觉就像是被推送过来。</p>
 
 <p>__拉取模式:__这种方法非常少用，它在取消息的过程中需要用户自己手动操作。首先在要消费的Topic中拿到MessageQueue的集合，遍历MessageQueue集合，然后针对每一个MessageQueue批量取消息，每取完一次，记录该队列下一次要取的开始offset，直到取完一整个MessageQueue，再换另一个MessageQueue。</p>
 
-<p>#### 5.2 RocketMQ的特点有哪些？</p>
+<h4 id="52--rocketmq的特点有哪些">5.2  RocketMQ的特点有哪些？</h4>
 
 <ol>
   <li>灵活可扩展性
@@ -1313,22 +1525,22 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
 回溯消费是指消费者已经消费成功的消息，由于业务上需求需要重新消费，RocketMQ 支持按照时间回溯消费，时间维度精确到毫秒，可以向前回溯，也可以向后回溯</li>
 </ol>
 
-<p>#### 5.3 kafka 同时设置了 7 天和 10G 清除数据，到第五天的时候消息达到了 10G，这个时候 kafka将如何处理？</p>
+<h4 id="53--kafka-同时设置了-7-天和-10g-清除数据到第五天的时候消息达到了-10g这个时候-kafka将如何处理">5.3  kafka 同时设置了 7 天和 10G 清除数据，到第五天的时候消息达到了 10G，这个时候 kafka将如何处理？</h4>
 
 <p>这个时候 kafka 会执行数据清除工作，时间和大小不论那个满足条件，都会清空数据。</p>
 
-<h4 id="54-为何需要kafka集群">5.4 为何需要Kafka集群</h4>
+<h4 id="54--为何需要kafka集群">5.4  为何需要Kafka集群</h4>
 
 <p>提高信息吞吐量，</p>
 
-<p>#### 5.5 Kafka 数据存储设计</p>
+<h4 id="55--kafka-数据存储设计">5.5  Kafka 数据存储设计</h4>
 
-<p>#### 5.6 Kafka如何判断一个节点是否存活？
- 5.7 kafka消息发送的可靠性机制有几种
+<h4 id="56--kafka如何判断一个节点是否存活">5.6  Kafka如何判断一个节点是否存活？</h4>
+<p>5.7 kafka消息发送的可靠性机制有几种
  5.8 请详细说一下推送模式和拉取模式。
  5.9 Kafka 与传统消息系统之间有三个关键区别</p>
 
-<p>#### 5.10 RocketMQ 由哪些角色组成？</p>
+<h4 id="510--rocketmq-由哪些角色组成">5.10  RocketMQ 由哪些角色组成？</h4>
 
 <p><strong>生产者（Producer）</strong>：负责产生消息，生产者向消息服务器发送由业务应用程序系统生成的消息。</p>
 
@@ -1344,7 +1556,7 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
  5.15 说说你对Consumer的了解？
  5.16 Kafka新建的分区会在哪个目录下创建</p>
 
-<p>#### 5.17 说一下Kafka消费者消费过程</p>
+<h4 id="517--说一下kafka消费者消费过程">5.17  说一下Kafka消费者消费过程</h4>
 
 <p>消息的消费模型有两种：推送模型(push)和拉取模型(pull)</p>
 
@@ -1356,11 +1568,11 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
 
 <p>Kafka采用拉取模型，由消费者自己记录消费状态，每个消费者互相独立地顺序读取每个分区的消息，有两个消费者(不同消费者组)拉取同一个主题的消息，消费者A的消费进度是3，消费者B的消费进度是6，消费者拉取的最大上限通过最高水位(watermark)控制，生产者最新写入的消息如果还没有达到备份数量，对消费者是不可见的，这种由消费者控制偏移量的优点是：消费者可以按照任意的顺序消费消息，比如：消费者可以重置到旧的偏移量，重新处理之前已经消费过的消息；或者直接跳到最近的位置，从当前的时刻开始消费</p>
 
-<p>#### 5.18 介绍下Kafka</p>
+<h4 id="518--介绍下kafka">5.18  介绍下Kafka</h4>
 
 <p>kafka是一个 <strong>分布式的</strong>， __可分区__的， __可备份__的日志提交服务，它使用独特的设计实现了一个消息系统的功能。</p>
 
-<p>#### 5.19 什么情况会导致Kafka运行变慢？</p>
+<h4 id="519--什么情况会导致kafka运行变慢">5.19  什么情况会导致Kafka运行变慢？</h4>
 
 <ul>
   <li>
@@ -1374,13 +1586,13 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
   </li>
 </ul>
 
-<h4 id="520-kafka-可以脱离-zookeeper-单独使用吗为什么">5.20 kafka 可以脱离 zookeeper 单独使用吗？为什么？</h4>
+<h4 id="520--kafka-可以脱离-zookeeper-单独使用吗为什么">5.20  kafka 可以脱离 zookeeper 单独使用吗？为什么？</h4>
 
 <p>kafka 不能脱离 zookeeper 单独使用，</p>
 
 <p>因为 kafka 使用 zookeeper 管理和协调 kafka 的节点服务器。</p>
 
-<h4 id="521-使用-kafka-集群需要注意什么">5.21 使用 kafka 集群需要注意什么？</h4>
+<h4 id="521--使用-kafka-集群需要注意什么">5.21  使用 kafka 集群需要注意什么？</h4>
 
 <ul>
   <li>
@@ -1394,7 +1606,7 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
   </li>
 </ul>
 
-<h4 id="522-为什么使用消息队列呢即优势所在">5.22 为什么使用消息队列呢（即优势所在）？</h4>
+<h4 id="522--为什么使用消息队列呢即优势所在">5.22  为什么使用消息队列呢（即优势所在）？</h4>
 
 <ol>
   <li>
@@ -1411,15 +1623,15 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
   </li>
 </ol>
 
-<h4 id="523-kafka数据丢失问题解决方案">5.23 Kafka数据丢失问题解决方案?</h4>
+<h4 id="523--kafka数据丢失问题解决方案">5.23  Kafka数据丢失问题解决方案?</h4>
 
 <p>首先对kafka进行限速， 其次启用重试机制，重试间隔时间设置长一些，最后Kafka设置 <strong>acks=all</strong>，即需要相应的所有处于ISR的分区都确认收到该消息后，才算发送成功。</p>
 
-<h4 id="524-kafka数据重复问题解决方案">5.24 Kafka数据重复问题解决方案?</h4>
+<h4 id="524--kafka数据重复问题解决方案">5.24  Kafka数据重复问题解决方案?</h4>
 
 <p>把kafka消费者的配置 <strong>enable.auto.commit设为false</strong>， <strong>禁止kafka自动提交offset，从而使用spring-kafka提供的offset提交策略</strong>。spring-kafka中的offset提交策略可以保证一批消息数据没有完成消费的情况下，也能提交offset，从而避免了提交失败而导致永远重复消费的问题。</p>
 
-<h4 id="524-kafka消息是否会丢失为什么">5.24 kafka消息是否会丢失？为什么？</h4>
+<h4 id="524--kafka消息是否会丢失为什么">5.24  kafka消息是否会丢失？为什么？</h4>
 
 <p>acks参数用于控制producer生产消息的持久性（durability）。对producer而言，kafka在乎的是已提交消息的持久性。一旦消息被提交成功，那么只要有任何一个保存了消息的副本存活，这条消息被视为不会丢失的。
   acks有3个值：0,1,all(-1)</p>
@@ -1513,404 +1725,8 @@ RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，�
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 09, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="spring-2020-07-09-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-09T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/mysql/0708/04"><h2 itemprop="headline" class="item__header">sql语句优化</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>关系型数据库本身比较容易成为系统瓶颈，单机存储容量、连接数、处理能力都有限。当单表的数据量达到1000W或100G以后，由于查询维度较多，即使添加从库、优化索引，做很多操作时性能仍下降严重。此时就要考虑对其进行切分了，切分的目的就在于减少数据库的负担，缩短查询时间。</p>
-
-<p>数据库分布式核心内容无非就是数据切分（Sharding），以及切分后对数据的定位、整合。数据切分就是将数据分散存储到多个数据库中，使得单一数据库中的数据量变小，通过扩充主机的数量缓解单一数据库的性能问题，从而达到提升数据库操作性能的目的。</p>
-
-<p>数据切分根据其切分类型，可以分为两种方式：垂直（纵向）切分和水平（横向）切分</p>
-
-<h3 id="1垂直纵向切分">1、垂直（纵向）切分</h3>
-
-<p>垂直切分常见有垂直分库和垂直分表两种。</p>
-
-<p>垂直分库就是根据业务耦合性，将关联度低的不同表存储在不同的数据库。做法与大系统拆分为多个小系统类似，按业务分类进行独立划分。与”微服务治理”的做法相似，每个微服务使用单独的一个数据库。如图：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514014303109-1826311184.png" alt="img" /></p>
-
-<p>垂直分表是基于数据库中的”列”进行，某个表字段较多，可以新建一张扩展表，将不经常用或字段长度较大的字段拆分出去到扩展表中。在字段很多的情况下（例如一个大表有100多个字段），通过”大表拆小表”，更便于开发与维护，也能避免跨页问题，MySQL底层是通过数据页存储的，一条记录占用空间过大会导致跨页，造成额外的性能开销。另外数据库以行为单位将数据加载到内存中，这样表中字段长度较短且访问频率较高，内存能加载更多的数据，命中率更高，减少了磁盘IO，从而提升了数据库性能。</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514014417237-1672001359.png" alt="img" /></p>
-
-<p>垂直切分的优点：</p>
-
-<ul>
-  <li>解决业务系统层面的耦合，业务清晰</li>
-  <li>与微服务的治理类似，也能对不同业务的数据进行分级管理、维护、监控、扩展等</li>
-  <li>高并发场景下，垂直切分一定程度的提升IO、数据库连接数、单机硬件资源的瓶颈</li>
-</ul>
-
-<p>缺点：</p>
-
-<ul>
-  <li>部分表无法join，只能通过接口聚合方式解决，提升了开发的复杂度</li>
-  <li>分布式事务处理复杂</li>
-  <li>依然存在单表数据量过大的问题（需要水平切分）</li>
-</ul>
-
-<h3 id="2水平横向切分">2、水平（横向）切分</h3>
-
-<p>当一个应用难以再细粒度的垂直切分，或切分后数据量行数巨大，存在单库读写、存储性能瓶颈，这时候就需要进行水平切分了。</p>
-
-<p>水平切分分为库内分表和分库分表，是根据表内数据内在的逻辑关系，将同一个表按不同的条件分散到多个数据库或多个表中，每个表中只包含一部分数据，从而使得单个表的数据量变小，达到分布式的效果。如图所示：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514014833061-560502066.png" alt="img" /></p>
-
-<p>库内分表只解决了单一表数据量过大的问题，但没有将表分布到不同机器的库上，因此对于减轻MySQL数据库的压力来说，帮助不是很大，大家还是竞争同一个物理机的CPU、内存、网络IO，最好通过分库分表来解决。</p>
-
-<p>水平切分的优点：</p>
-
-<ul>
-  <li>不存在单库数据量过大、高并发的性能瓶颈，提升系统稳定性和负载能力</li>
-  <li>应用端改造较小，不需要拆分业务模块</li>
-</ul>
-
-<p>缺点：</p>
-
-<ul>
-  <li>跨分片的事务一致性难以保证</li>
-  <li>跨库的join关联查询性能较差</li>
-  <li>数据多次扩展难度和维护量极大</li>
-</ul>
-
-<p>水平切分后同一张表会出现在多个数据库/表中，每个库/表的内容不同。几种典型的数据分片规则为：</p>
-
-<h4 id="1根据数值范围">1、根据数值范围</h4>
-
-<p>按照时间区间或ID区间来切分。例如：按日期将不同月甚至是日的数据分散到不同的库中；将userId为1~9999的记录分到第一个库，10000~20000的分到第二个库，以此类推。某种意义上，某些系统中使用的”冷热数据分离”，将一些使用较少的历史数据迁移到其他库中，业务功能上只提供热点数据的查询，也是类似的实践。</p>
-
-<p>这样的优点在于：</p>
-
-<ul>
-  <li>单表大小可控</li>
-  <li>天然便于水平扩展，后期如果想对整个分片集群扩容时，只需要添加节点即可，无需对其他分片的数据进行迁移</li>
-  <li>使用分片字段进行范围查找时，连续分片可快速定位分片进行快速查询，有效避免跨分片查询的问题。</li>
-</ul>
-
-<p>缺点：</p>
-
-<ul>
-  <li>热点数据成为性能瓶颈。连续分片可能存在数据热点，例如按时间字段分片，有些分片存储最近时间段内的数据，可能会被频繁的读写，而有些分片存储的历史数据，则很少被查询</li>
-</ul>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514015656387-1154395691.png" alt="img" /></p>
-
-<h4 id="2根据数值取模">2、根据数值取模</h4>
-
-<p>一般采用hash取模mod的切分方式，例如：将 Customer 表根据 cusno 字段切分到4个库中，余数为0的放到第一个库，余数为1的放到第二个库，以此类推。这样同一个用户的数据会分散到同一个库中，如果查询条件带有cusno字段，则可明确定位到相应库去查询。</p>
-
-<p>优点：</p>
-
-<ul>
-  <li>数据分片相对比较均匀，不容易出现热点和并发访问的瓶颈</li>
-</ul>
-
-<p>缺点：</p>
-
-<ul>
-  <li>后期分片集群扩容时，需要迁移旧的数据（使用一致性hash算法能较好的避免这个问题）</li>
-  <li>容易面临跨分片查询的复杂问题。比如上例中，如果频繁用到的查询条件中不带cusno时，将会导致无法定位数据库，从而需要同时向4个库发起查询，再在内存中合并数据，取最小集返回给应用，分库反而成为拖累。</li>
-</ul>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514015805333-1409715906.png" alt="img" /></p>
-
-<h2 id="二-分库分表带来的问题">二. 分库分表带来的问题</h2>
-
-<p>分库分表能有效的环节单机和单库带来的性能瓶颈和压力，突破网络IO、硬件资源、连接数的瓶颈，同时也带来了一些问题。下面将描述这些技术挑战以及对应的解决思路。</p>
-
-<h3 id="1事务一致性问题">1、事务一致性问题</h3>
-
-<h4 id="分布式事务">分布式事务</h4>
-
-<p>当更新内容同时分布在不同库中，不可避免会带来跨库事务问题。跨分片事务也是分布式事务，没有简单的方案，一般可使用”XA协议”和”两阶段提交”处理。</p>
-
-<p>分布式事务能最大限度保证了数据库操作的原子性。但在提交事务时需要协调多个节点，推后了提交事务的时间点，延长了事务的执行时间。导致事务在访问共享资源时发生冲突或死锁的概率增高。随着数据库节点的增多，这种趋势会越来越严重，从而成为系统在数据库层面上水平扩展的枷锁。</p>
-
-<h4 id="最终一致性">最终一致性</h4>
-
-<p>对于那些性能要求很高，但对一致性要求不高的系统，往往不苛求系统的实时一致性，只要在允许的时间段内达到最终一致性即可，可采用事务补偿的方式。与事务在执行中发生错误后立即回滚的方式不同，事务补偿是一种事后检查补救的措施，一些常见的实现方法有：对数据进行对账检查，基于日志进行对比，定期同标准数据来源进行同步等等。事务补偿还要结合业务系统来考虑。</p>
-
-<h3 id="2跨节点关联查询-join-问题">2、跨节点关联查询 join 问题</h3>
-
-<p>切分之前，系统中很多列表和详情页所需的数据可以通过sql join来完成。而切分之后，数据可能分布在不同的节点上，此时join带来的问题就比较麻烦了，考虑到性能，尽量避免使用join查询。</p>
-
-<p>解决这个问题的一些方法：</p>
-
-<h4 id="1全局表">1）全局表</h4>
-
-<p>全局表，也可看做是”数据字典表”，就是系统中所有模块都可能依赖的一些表，为了避免跨库join查询，可以将这类表在每个数据库中都保存一份。这些数据通常很少会进行修改，所以也不担心一致性的问题。</p>
-
-<h4 id="2字段冗余">2）字段冗余</h4>
-
-<p>一种典型的反范式设计，利用空间换时间，为了性能而避免join查询。例如：订单表保存userId时候，也将userName冗余保存一份，这样查询订单详情时就不需要再去查询”买家user表”了。</p>
-
-<p>但这种方法适用场景也有限，比较适用于依赖字段比较少的情况。而冗余字段的数据一致性也较难保证，就像上面订单表的例子，买家修改了userName后，是否需要在历史订单中同步更新呢？这也要结合实际业务场景进行考虑。</p>
-
-<h4 id="3数据组装">3）数据组装</h4>
-
-<p>在系统层面，分两次查询，第一次查询的结果集中找出关联数据id，然后根据id发起第二次请求得到关联数据。最后将获得到的数据进行字段拼装。</p>
-
-<h4 id="4er分片">4）ER分片</h4>
-
-<p>关系型数据库中，如果可以先确定表之间的关联关系，并将那些存在关联关系的表记录存放在同一个分片上，那么就能较好的避免跨分片join问题。在1:1或1:n的情况下，通常按照主表的ID主键切分。如下图所示：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514020222377-732069408.png" alt="img" /></p>
-
-<p>这样一来，Data Node1上面的order订单表与orderdetail订单详情表就可以通过orderId进行局部的关联查询了，Data Node2上也一样。</p>
-
-<h3 id="3跨节点分页排序函数问题">3、跨节点分页、排序、函数问题</h3>
-
-<p>跨节点多库进行查询时，会出现limit分页、order by排序等问题。分页需要按照指定字段进行排序，当排序字段就是分片字段时，通过分片规则就比较容易定位到指定的分片；当排序字段非分片字段时，就变得比较复杂了。需要先在不同的分片节点中将数据进行排序并返回，然后将不同分片返回的结果集进行汇总和再次排序，最终返回给用户。如图所示：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514020338000-1035095990.png" alt="img" /></p>
-
-<p>上图中只是取第一页的数据，对性能影响还不是很大。但是如果取得页数很大，情况则变得复杂很多，因为各分片节点中的数据可能是随机的，为了排序的准确性，需要将所有节点的前N页数据都排序好做合并，最后再进行整体的排序，这样的操作时很耗费CPU和内存资源的，所以页数越大，系统的性能也会越差。</p>
-
-<p>在使用Max、Min、Sum、Count之类的函数进行计算的时候，也需要先在每个分片上执行相应的函数，然后将各个分片的结果集进行汇总和再次计算，最终将结果返回。如图所示：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514020407207-1066476374.png" alt="img" /></p>
-
-<p>###</p>
-
-<h3 id="4全局主键避重问题">4、全局主键避重问题</h3>
-
-<p>在分库分表环境中，由于表中数据同时存在不同数据库中，主键值平时使用的自增长将无用武之地，某个分区数据库自生成的ID无法保证全局唯一。因此需要单独设计全局主键，以避免跨库主键重复问题。有一些常见的主键生成策略：</p>
-
-<h4 id="1uuid">1）UUID</h4>
-
-<p>UUID标准形式包含32个16进制数字，分为5段，形式为8-4-4-4-12的36个字符，例如：550e8400-e29b-41d4-a716-446655440000</p>
-
-<p>UUID是主键是最简单的方案，本地生成，性能高，没有网络耗时。但缺点也很明显，由于UUID非常长，会占用大量的存储空间；另外，作为主键建立索引和基于索引进行查询时都会存在性能问题，在InnoDB下，UUID的无序性会引起数据位置频繁变动，导致分页。</p>
-
-<h4 id="2结合数据库维护主键id表">2）结合数据库维护主键ID表</h4>
-
-<p>在数据库中建立 sequence 表：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CREATE TABLE `sequence` (  
-  `id` bigint(20) unsigned NOT NULL auto_increment,  
-  `stub` char(1) NOT NULL default '',  
-  PRIMARY KEY  (`id`),  
-  UNIQUE KEY `stub` (`stub`)  
-) ENGINE=MyISAM;
-</code></pre></div></div>
-
-<p>stub字段设置为唯一索引，同一stub值在sequence表中只有一条记录，可以同时为多张表生成全局ID。sequence表的内容，如下所示：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>+-------------------+------+  
-| id                | stub |  
-+-------------------+------+  
-| 72157623227190423 |    a |  
-+-------------------+------+  
-</code></pre></div></div>
-
-<p>使用 MyISAM 存储引擎而不是 InnoDB，以获取更高的性能。MyISAM使用的是表级别的锁，对表的读写是串行的，所以不用担心在并发时两次读取同一个ID值。</p>
-
-<p>当需要全局唯一的64位ID时，执行：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>REPLACE INTO sequence (stub) VALUES ('a');  
-SELECT LAST_INSERT_ID();  
-</code></pre></div></div>
-
-<p>这两条语句是Connection级别的，select last_insert_id() 必须与 replace into 在同一数据库连接下才能得到刚刚插入的新ID。</p>
-
-<p>使用replace into代替insert into好处是避免了表行数过大，不需要另外定期清理。</p>
-
-<p>此方案较为简单，但缺点也明显：存在单点问题，强依赖DB，当DB异常时，整个系统都不可用。配置主从可以增加可用性，但当主库挂了，主从切换时，数据一致性在特殊情况下难以保证。另外性能瓶颈限制在单台MySQL的读写性能。</p>
-
-<p>flickr团队使用的一种主键生成策略，与上面的sequence表方案类似，但更好的解决了单点和性能瓶颈的问题。</p>
-
-<p>这一方案的整体思想是：建立2个以上的全局ID生成的服务器，每个服务器上只部署一个数据库，每个库有一张sequence表用于记录当前全局ID。表中ID增长的步长是库的数量，起始值依次错开，这样能将ID的生成散列到各个数据库上。如下图所示：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514020903056-1177673891.png" alt="img" /></p>
-
-<p>由两个数据库服务器生成ID，设置不同的auto_increment值。第一台sequence的起始值为1，每次步长增长2，另一台的sequence起始值为2，每次步长增长也是2。结果第一台生成的ID都是奇数（1, 3, 5, 7 …），第二台生成的ID都是偶数（2, 4, 6, 8 …）。</p>
-
-<p>这种方案将生成ID的压力均匀分布在两台机器上。同时提供了系统容错，第一台出现了错误，可以自动切换到第二台机器上获取ID。但有以下几个缺点：系统添加机器，水平扩展时较复杂；每次获取ID都要读写一次DB，DB的压力还是很大，只能靠堆机器来提升性能。</p>
-
-<p>可以基于flickr的方案继续优化，使用批量的方式降低数据库的写压力，每次获取一段区间的ID号段，用完之后再去数据库获取，可以大大减轻数据库的压力。如下图所示：</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514021005283-2029806965.png" alt="img" /></p>
-
-<p>还是使用两台DB保证可用性，数据库中只存储当前的最大ID。ID生成服务每次批量拉取6个ID，先将max_id修改为5，当应用访问ID生成服务时，就不需要访问数据库，从号段缓存中依次派发0~5的ID。当这些ID发完后，再将max_id修改为11，下次就能派发6~11的ID。于是，数据库的压力降低为原来的1/6。</p>
-
-<h4 id="3snowflake分布式自增id算法">3）Snowflake分布式自增ID算法</h4>
-
-<p>Twitter的snowflake算法解决了分布式系统生成全局ID的需求，生成64位的Long型数字，组成部分：</p>
-
-<ul>
-  <li>第一位未使用</li>
-  <li>接下来41位是毫秒级时间，41位的长度可以表示69年的时间</li>
-  <li>5位datacenterId，5位workerId。10位的长度最多支持部署1024个节点</li>
-  <li>最后12位是毫秒内的计数，12位的计数顺序号支持每个节点每毫秒产生4096个ID序列</li>
-</ul>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514021100630-1326514542.png" alt="img" /></p>
-
-<p>这样的好处是：毫秒数在高位，生成的ID整体上按时间趋势递增；不依赖第三方系统，稳定性和效率较高，理论上QPS约为409.6w/s（1000*2^12），并且整个分布式系统内不会产生ID碰撞；可根据自身业务灵活分配bit位。</p>
-
-<p>不足就在于：强依赖机器时钟，如果时钟回拨，则可能导致生成ID重复。</p>
-
-<h4 id="综上">综上</h4>
-
-<p>结合数据库和snowflake的唯一ID方案，可以参考业界较为成熟的解法：<a href="https://tech.meituan.com/MT_Leaf.html">Leaf——美团点评分布式ID生成系统</a>，并考虑到了高可用、容灾、分布式下时钟等问题。</p>
-
-<h3 id="5数据迁移扩容问题">5、数据迁移、扩容问题</h3>
-
-<p>当业务高速发展，面临性能和存储的瓶颈时，才会考虑分片设计，此时就不可避免的需要考虑历史数据迁移的问题。一般做法是先读出历史数据，然后按指定的分片规则再将数据写入到各个分片节点中。此外还需要根据当前的数据量和QPS，以及业务发展的速度，进行容量规划，推算出大概需要多少分片（一般建议单个分片上的单表数据量不超过1000W）</p>
-
-<p>如果采用数值范围分片，只需要添加节点就可以进行扩容了，不需要对分片数据迁移。如果采用的是数值取模分片，则考虑后期的扩容问题就相对比较麻烦。</p>
-
-<h2 id="三-什么时候考虑切分">三. 什么时候考虑切分</h2>
-
-<p>下面讲述一下什么时候需要考虑做数据切分。</p>
-
-<h3 id="1能不切分尽量不要切分">1、能不切分尽量不要切分</h3>
-
-<p>并不是所有表都需要进行切分，主要还是看数据的增长速度。切分后会在某种程度上提升业务的复杂度，数据库除了承载数据的存储和查询外，协助业务更好的实现需求也是其重要工作之一。</p>
-
-<p>不到万不得已不用轻易使用分库分表这个大招，避免”过度设计”和”过早优化”。分库分表之前，不要为分而分，先尽力去做力所能及的事情，例如：升级硬件、升级网络、读写分离、索引优化等等。当数据量达到单表的瓶颈时候，再考虑分库分表。</p>
-
-<h3 id="2数据量过大正常运维影响业务访问">2、数据量过大，正常运维影响业务访问</h3>
-
-<p>这里说的运维，指：</p>
-
-<p>1）对数据库备份，如果单表太大，备份时需要大量的磁盘IO和网络IO。例如1T的数据，网络传输占50MB时候，需要20000秒才能传输完毕，整个过程的风险都是比较高的</p>
-
-<p>2）对一个很大的表进行DDL修改时，MySQL会锁住全表，这个时间会很长，这段时间业务不能访问此表，影响很大。如果使用pt-online-schema-change，使用过程中会创建触发器和影子表，也需要很长的时间。在此操作过程中，都算为风险时间。将数据表拆分，总量减少，有助于降低这个风险。</p>
-
-<p>3）大表会经常访问与更新，就更有可能出现锁等待。将数据切分，用空间换时间，变相降低访问压力</p>
-
-<h3 id="3随着业务发展需要对某些字段垂直拆分">3、随着业务发展，需要对某些字段垂直拆分</h3>
-
-<p>举个例子，假如项目一开始设计的用户表如下：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id                   bigint             #用户的ID
-name                 varchar            #用户的名字
-last_login_time      datetime           #最近登录时间
-personal_info        text               #私人信息
-.....                                   #其他信息字段
-</code></pre></div></div>
-
-<p>在项目初始阶段，这种设计是满足简单的业务需求的，也方便快速迭代开发。而当业务快速发展时，用户量从10w激增到10亿，用户非常的活跃，每次登录会更新 last_login_name 字段，使得 user 表被不断update，压力很大。而其他字段：id, name, personal_info 是不变的或很少更新的，此时在业务角度，就要将 last_login_time 拆分出去，新建一个 user_time 表。</p>
-
-<p>personal_info 属性是更新和查询频率较低的，并且text字段占据了太多的空间。这时候，就要对此垂直拆分出 user_ext 表了。</p>
-
-<h3 id="4数据量快速增长">4、数据量快速增长</h3>
-
-<p>随着业务的快速发展，单表中的数据量会持续增长，当性能接近瓶颈时，就需要考虑水平切分，做分库分表了。此时一定要选择合适的切分规则，提前预估好数据容量</p>
-
-<h3 id="5安全性和可用性">5、安全性和可用性</h3>
-
-<p>鸡蛋不要放在一个篮子里。在业务层面上垂直切分，将不相关的业务的数据库分隔，因为每个业务的数据量、访问量都不同，不能因为一个业务把数据库搞挂而牵连到其他业务。利用水平切分，当一个数据库出现问题时，不会影响到100%的用户，每个库只承担业务的一部分数据，这样整体的可用性就能提高。</p>
-
-<h2 id="四-案例分析">四. 案例分析</h2>
-
-<h3 id="1用户中心业务场景">1、用户中心业务场景</h3>
-
-<p>用户中心是一个非常常见的业务，主要提供用户注册、登录、查询/修改等功能，其核心表为：</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User(uid, login_name, passwd, sex, age, nickname)
-
-uid为用户ID,  主键
-login_name, passwd, sex, age, nickname,  用户属性
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">任何脱离业务的架构设计都是耍流氓</code>，在进行分库分表前，需要对业务场景需求进行梳理：</p>
-
-<ul>
-  <li>用户侧：前台访问，访问量较大，需要保证高可用和高一致性。主要有两类需求：
-    <ul>
-      <li>用户登录：通过login_name/phone/email查询用户信息，1%请求属于这种类型</li>
-      <li>用户信息查询：登录之后，通过uid来查询用户信息，99%请求属这种类型</li>
-    </ul>
-  </li>
-  <li>运营侧：后台访问，支持运营需求，按照年龄、性别、登陆时间、注册时间等进行分页的查询。是内部系统，访问量较低，对可用性、一致性的要求不高。</li>
-</ul>
-
-<h3 id="2水平切分方法">2、水平切分方法</h3>
-
-<p>当数据量越来越大时，需要对数据库进行水平切分，上文描述的切分方法有”根据数值范围”和”根据数值取模”。</p>
-
-<p>“根据数值范围”：以主键uid为划分依据，按uid的范围将数据水平切分到多个数据库上。例如：user-db1存储uid范围为0~1000w的数据，user-db2存储uid范围为1000w~2000wuid数据。</p>
-
-<ul>
-  <li>优点是：扩容简单，如果容量不够，只要增加新db即可。</li>
-  <li>不足是：请求量不均匀，一般新注册的用户活跃度会比较高，所以新的user-db2会比user-db1负载高，导致服务器利用率不平衡</li>
-</ul>
-
-<p>“根据数值取模”：也是以主键uid为划分依据，按uid取模的值将数据水平切分到多个数据库上。例如：user-db1存储uid取模得1的数据，user-db2存储uid取模得0的uid数据。</p>
-
-<ul>
-  <li>优点是：数据量和请求量分布均均匀</li>
-  <li>不足是：扩容麻烦，当容量不够时，新增加db，需要rehash。需要考虑对数据进行平滑的迁移。</li>
-</ul>
-
-<h3 id="3非uid的查询方法">3、非uid的查询方法</h3>
-
-<p>水平切分后，对于按uid查询的需求能很好的满足，可以直接路由到具体数据库。而按非uid的查询，例如login_name，就不知道具体该访问哪个库了，此时需要遍历所有库，性能会降低很多。</p>
-
-<p>对于用户侧，可以采用”建立非uid属性到uid的映射关系”的方案；对于运营侧，可以采用”前台与后台分离”的方案。</p>
-
-<h4 id="31建立非uid属性到uid的映射关系">3.1、建立非uid属性到uid的映射关系</h4>
-
-<p>1）映射关系</p>
-
-<p>例如：login_name不能直接定位到数据库，可以建立<code class="language-plaintext highlighter-rouge">login_name→uid的映射关系</code>，用索引表或缓存来存储。当访问login_name时，先通过映射表查询出login_name对应的uid，再通过uid定位到具体的库。</p>
-
-<p>映射表只有两列，可以承载很多数据，当数据量过大时，也可以对映射表再做水平切分。这类kv格式的索引结构，可以很好的使用cache来优化查询性能，而且映射关系不会频繁变更，缓存命中率会很高。</p>
-
-<p>2）基因法</p>
-
-<p>分库基因：假如通过uid分库，分为8个库，采用uid%8的方式进行路由，此时是由uid的最后3bit来决定这行User数据具体落到哪个库上，那么这3bit可以看为分库基因。</p>
-
-<p>上面的映射关系的方法需要额外存储映射表，按非uid字段查询时，还需要多一次数据库或cache的访问。如果想要消除多余的存储和查询，可以通过f函数取login_name的基因作为uid的分库基因。生成uid时，参考上文所述的分布式唯一ID生成方案，再加上最后3位bit值=f(login_name)。当查询login_name时，只需计算f(login_name)%8的值，就可以定位到具体的库。不过这样需要提前做好容量规划，预估未来几年的数据量需要分多少库，要预留一定bit的分库基因。</p>
-
-<p><img src="/assets/images/mianshiti/0708/1278254-20180514215400436-1634253632.png" alt="img" /></p>
-
-<h4 id="32前台与后台分离">3.2、前台与后台分离</h4>
-
-<p>对于用户侧，主要需求是以单行查询为主，需要建立login_name/phone/email到uid的映射关系，可以解决这些字段的查询问题。</p>
-
-<p>而对于运营侧，很多批量分页且条件多样的查询，这类查询计算量大，返回数据量大，对数据库的性能消耗较高。此时，如果和用户侧公用同一批服务或数据库，可能因为后台的少量请求，占用大量数据库资源，而导致用户侧访问性能降低或超时。</p>
-
-<p>这类业务最好采用”前台与后台分离”的方案，运营侧后台业务抽取独立的service和db，解决和前台业务系统的耦合。由于运营侧对可用性、一致性的要求不高，可以不访问实时库，而是通过binlog异步同步数据到运营库进行访问。在数据量很大的情况下，还可以使用ES搜索引擎或Hive来满足后台复杂的查询方式。</p>
-
-<h2 id="五-支持分库分表中间件">五. 支持分库分表中间件</h2>
-
-<p>站在巨人的肩膀上能省力很多，目前分库分表已经有一些较为成熟的开源解决方案：</p>
-
-<ul>
-  <li><a href="https://github.com/shardingjdbc">sharding-jdbc（当当）</a></li>
-  <li><a href="https://github.com/baihui212/tsharding">TSharding（蘑菇街）</a></li>
-  <li><a href="https://github.com/Qihoo360/Atlas">Atlas（奇虎360）</a></li>
-  <li><a href="https://github.com/alibaba/cobar">Cobar（阿里巴巴）</a></li>
-  <li><a href="http://www.mycat.io/">MyCAT（基于Cobar）</a></li>
-  <li><a href="https://github.com/58code/Oceanus">Oceanus（58同城）</a></li>
-  <li><a href="https://github.com/vitessio/vitess">Vitess（谷歌）</a></li>
-</ul>
-
-<h2 id="六-参考">六. 参考</h2>
-
-<p><a href="https://zhuanlan.zhihu.com/p/27871998">数据库分布式架构扫盲——分库分表（及银行核心系统适用性思考）</a></p>
-
-<p><a href="https://www.cnblogs.com/jshen/p/7682502.html">分库分表的思想</a></p>
-
-<p><a href="http://www.infoq.com/cn/articles/key-steps-and-likely-problems-of-horizontal-split-table">水平分库分表的关键步骤以及可能遇到的问题</a></p>
-
-<p><a href="http://www.ywnds.com/?p=7239">从原则、方案、策略及难点阐述分库分表</a></p>
-
-<p><a href="https://tech.meituan.com/MT_Leaf.html">Leaf——美团点评分布式ID生成系统</a></p>
-
-<p><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651960212&amp;idx=1&amp;sn=ab4c52ab0309f7380f7e0207fa357128&amp;pass_ticket=G8v3RrpK9Is7NJZH0fOShUfY8lp5oz9un8K5L24LeGGVtiBTXkBMc9UKkTMdQeDS">数据库水平切分架构实践-【架构师之路】公众号</a></p>
-</div><p><a href="/mianshi/mysql/0708/04">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 08, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mysql-2020-07-08-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-08T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>320 post articles, 40 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>321 post articles, 41 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -1923,7 +1739,7 @@ login_name, passwd, sex, age, nickname,  用户属性
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page40"><span>40</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page41"><span>41</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
