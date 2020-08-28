@@ -374,6 +374,1135 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/one/01"><h2 itemprop="headline" class="item__header">一句话介绍</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="what-why-how">what why how</h1>
+<h1 id="相应的查下-某些技术存在的坑">相应的查下 某些技术存在的坑</h1>
+<ul>
+  <li>mysql 分库分表 有哪些技术 这些技术有哪些坑</li>
+  <li>mysql 读写分离 有哪些技术 这些技术有哪些坑</li>
+  <li>linkedHashMap 有哪些应用场景 存数据有什么缺点</li>
+  <li>redis有哪些必须要用到的技术点</li>
+  <li>如何处理大文件的问题</li>
+  <li>init方法和内部类有什么区别</li>
+  <li>内部类
+    <ul>
+      <li>内部类解决了java不能多继承的问题</li>
+    </ul>
+  </li>
+  <li>枚举为什么可以直接使用
+    <ul>
+      <li>枚举类默认被 final static 修饰</li>
+      <li>枚举类的成员变量也 默认被 final static 修饰</li>
+    </ul>
+  </li>
+  <li>hashmap treemap linkedhashmap 对比
+    <ul>
+      <li>一般情况下，我们用的最多的是HashMap,在Map 中插入、删除和定位元素，HashMap 是最好的选择。但如果要按顺序或自定义顺序遍历键，那么TreeMap会更好。如果需要输出的顺序和输入的相同,用LinkedHashMap 可以实现,它还可以按读取顺序来排列.</li>
+    </ul>
+  </li>
+</ul>
+</div><p><a href="/java/one/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-one-2020-08-28-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="java基础"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/juc/01"><h2 itemprop="headline" class="item__header">多线程基础</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody">
+</div><p><a href="/java/juc/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 28, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-juc-2020-08-27-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="多线程"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/InnerClass/01"><h2 itemprop="headline" class="item__header">java提高篇(八)----详解内部类</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><blockquote>
+  <p><strong>可以将一个类的定义放在另一个类的定义内部，这就是内部类。</strong></p>
+</blockquote>
+
+<p>内部类是一个非常有用的特性但又比较难理解使用的特性(鄙人到现在都没有怎么使用过内部类，对内部类也只是略知一二)。</p>
+
+<h2 id="第一次见面">第一次见面</h2>
+
+<p>内部类我们从外面看是非常容易理解的，无非就是在一个类的内部在定义一个类。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span> <span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">InnerClass</span><span class="o">(){</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">"chenssy"</span><span class="o">;</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="mi">23</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>在这里InnerClass就是内部类，对于初学者来说内部类实在是使用的不多，鄙人菜鸟一个同样没有怎么使用过(貌似仅仅只在做swing 注册事件中使用过)，但是随着编程能力的提高，我们会领悟到它的魅力所在，它可以使用能够更加优雅的设计我们的程序结构。在使用内部类之间我们需要明白为什么要使用内部类，内部类能够为我们带来什么样的好处。</p>
+
+<h2 id="一为什么要使用内部类">一、为什么要使用内部类</h2>
+
+<p>为什么要使用内部类？在《Think in java》中有这样一句话：使用内部类最吸引人的原因是：每个内部类都能独立地继承一个（接口的）实现，所以无论外围类是否已经继承了某个（接口的）实现，对于内部类都没有影响。</p>
+
+<p>在我们程序设计中有时候会存在一些使用接口很难解决的问题，这个时候我们可以利用内部类提供的、可以继承多个具体的或者抽象的类的能力来解决这些程序设计问题。可以这样说，接口只是解决了部分问题，而 <strong>内部类使得多重继承的解决方案变得更加完整。</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Father</span> <span class="o">{</span>
+
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Mother</span> <span class="o">{</span>
+
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Son</span> <span class="kd">implements</span> <span class="nc">Father</span><span class="o">,</span> <span class="nc">Mother</span> <span class="o">{</span>
+
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Daughter</span> <span class="kd">implements</span> <span class="nc">Father</span><span class="o">{</span>
+
+    <span class="kd">class</span> <span class="nc">Mother_</span> <span class="kd">implements</span> <span class="nc">Mother</span><span class="o">{</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>其实对于这个实例我们确实是看不出来使用内部类存在何种优点，但是如果Father、Mother不是接口，而是抽象类或者具体类呢？这个时候我们就只能使用内部类才能实现多重继承了。</p>
+
+<p>其实使用内部类最大的优点就在于它能够非常好的解决多重继承的问题，但是如果我们不需要解决多重继承问题，那么我们自然可以使用其他的编码方式，但是使用内部类还能够为我们带来如下特性（摘自《Think in java》）：</p>
+
+<p><strong>1、</strong>内部类可以用多个实例，每个实例都有自己的状态信息，并且与其他外围对象的信息相互独立。</p>
+
+<p><strong>2、</strong>在单个外围类中，可以让多个内部类以不同的方式实现同一个接口，或者继承同一个类。</p>
+
+<p><strong>3、</strong>创建内部类对象的时刻并不依赖于外围类对象的创建。</p>
+
+<p><strong>4、</strong>内部类并没有令人迷惑的“is-a”关系，他就是一个独立的实体。</p>
+
+<p><strong>5、</strong>内部类提供了更好的封装，除了该外围类，其他类都不能访问。</p>
+
+<h2 id="二内部类基础">二、内部类基础</h2>
+
+<p>在这个部分主要介绍内部类如何使用外部类的属性和方法，以及使用.this与.new。</p>
+
+<p>当我们在创建一个内部类的时候，它无形中就与外围类有了一种联系，依赖于这种联系，它可以无限制地访问外围类的元素。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span> <span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+    <span class="cm">/**省略getter和setter方法**/</span>
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="nf">InnerClass</span><span class="o">(){</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s">"chenssy"</span><span class="o">;</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="mi">23</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name："</span> <span class="o">+</span> <span class="n">getName</span><span class="o">()</span> <span class="o">+</span><span class="s">"   ;age："</span> <span class="o">+</span> <span class="n">getAge</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">OuterClass</span> <span class="n">outerClass</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
+        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass</span> <span class="n">innerClass</span> <span class="o">=</span> <span class="n">outerClass</span><span class="o">.</span><span class="na">new</span> <span class="nf">InnerClass</span><span class="o">();</span>
+        <span class="n">innerClass</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">--------------</span>
+<span class="nc">Output</span><span class="err">：</span>
+<span class="n">name</span><span class="err">：</span><span class="n">chenssy</span>   <span class="o">;</span><span class="n">age</span><span class="err">：</span><span class="mi">23</span>
+</code></pre></div></div>
+
+<p>在这个应用程序中，我们可以看到内部了InnerClass可以对外围类OuterClass的属性进行无缝的访问，尽管它是private修饰的。这是因为当我们在创建某个外围类的内部类对象时，此时内部类对象必定会捕获一个指向那个外围类对象的引用，只要我们在访问外围类的成员时，就会用这个引用来选择外围类的成员。</p>
+
+<p>其实在这个应用程序中我们还看到了如何来引用内部类：引用内部类我们需要指明这个对象的类型：OuterClasName.InnerClassName。同时如果我们需要创建某个内部类对象，必须要利用外部类的对象通过.new来创建内部类： OuterClass.InnerClass innerClass = outerClass.new InnerClass();。</p>
+
+<p>同时如果我们需要生成对外部类对象的引用，可以使用OuterClassName.this，这样就能够产生一个正确引用外部类的引用了。当然这点实在编译期就知晓了，没有任何运行时的成本。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"OuterClass..."</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="nc">OuterClass</span> <span class="nf">getOuterClass</span><span class="o">(){</span>
+            <span class="k">return</span> <span class="nc">OuterClass</span><span class="o">.</span><span class="na">this</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">OuterClass</span> <span class="n">outerClass</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
+        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass</span> <span class="n">innerClass</span> <span class="o">=</span> <span class="n">outerClass</span><span class="o">.</span><span class="na">new</span> <span class="nf">InnerClass</span><span class="o">();</span>
+        <span class="n">innerClass</span><span class="o">.</span><span class="na">getOuterClass</span><span class="o">().</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">-------------</span>
+<span class="nl">Output:</span>
+<span class="nc">OuterClass</span><span class="o">...</span>
+</code></pre></div></div>
+
+<p>到这里了我们需要明确一点，内部类是个编译时的概念，一旦编译成功后，它就与外围类属于两个完全不同的类（当然他们之间还是有联系的）。对于一个名为OuterClass的外围类和一个名为InnerClass的内部类，在编译成功后，会出现这样两个class文件：OuterClass.class和OuterClass$InnerClass.class。</p>
+
+<p>在Java中内部类主要分为成员内部类、局部内部类、匿名内部类、静态内部类。</p>
+
+<h2 id="三成员内部类">三、成员内部类</h2>
+
+<p>成员内部类也是最普通的内部类，它是外围类的一个成员，所以他是可以无限制的访问外围类的所有 成员属性和方法，尽管是private的，但是外围类要访问内部类的成员属性和方法则需要通过内部类实例来访问。</p>
+
+<p>在成员内部类中要注意两点，<strong>第一：</strong>成员内部类中不能存在任何static的变量和方法；<strong>第二：</strong>成员内部类是依附于外围类的，所以只有先创建了外围类才能够创建内部类。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">outerDisplay</span><span class="o">(){</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"outerClass..."</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">innerDisplay</span><span class="o">(){</span>
+            <span class="c1">//使用外围内的属性</span>
+            <span class="n">str</span> <span class="o">=</span> <span class="s">"chenssy..."</span><span class="o">;</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+            <span class="c1">//使用外围内的方法</span>
+            <span class="n">outerDisplay</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/*推荐使用getxxx()来获取成员内部类，尤其是该内部类的构造函数无参数时 */</span>
+    <span class="kd">public</span> <span class="nc">InnerClass</span> <span class="nf">getInnerClass</span><span class="o">(){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">InnerClass</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">OuterClass</span> <span class="n">outer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
+        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">outer</span><span class="o">.</span><span class="na">getInnerClass</span><span class="o">();</span>
+        <span class="n">inner</span><span class="o">.</span><span class="na">innerDisplay</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">--------------------</span>
+<span class="n">chenssy</span><span class="o">...</span>
+<span class="n">outerClass</span><span class="o">...</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>推荐使用getxxx()来获取成员内部类，尤其是该内部类的构造函数无参数时 。</strong></p>
+</blockquote>
+
+<h2 id="四局部内部类">四、局部内部类</h2>
+
+<p>有这样一种内部类，它是嵌套在方法和作用于内的，对于这个类的使用主要是应用与解决比较复杂的问题，想创建一个类来辅助我们的解决方案，到那时又不希望这个类是公共可用的，所以就产生了局部内部类，局部内部类和成员内部类一样被编译，只是它的作用域发生了改变，它只能在该方法和属性中被使用，出了该方法和属性就会失效。</p>
+
+<p>对于局部内部类实在是想不出什么好例子，所以就引用《Think in java》中的经典例子了。</p>
+
+<p>定义在方法里：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Parcel5</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">Destionation</span> <span class="nf">destionation</span><span class="o">(</span><span class="nc">String</span> <span class="n">str</span><span class="o">){</span>
+        <span class="kd">class</span> <span class="nc">PDestionation</span> <span class="kd">implements</span> <span class="nc">Destionation</span><span class="o">{</span>
+            <span class="kd">private</span> <span class="nc">String</span> <span class="n">label</span><span class="o">;</span>
+            <span class="kd">private</span> <span class="nf">PDestionation</span><span class="o">(</span><span class="nc">String</span> <span class="n">whereTo</span><span class="o">){</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">whereTo</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="kd">public</span> <span class="nc">String</span> <span class="nf">readLabel</span><span class="o">(){</span>
+                <span class="k">return</span> <span class="n">label</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">PDestionation</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Parcel5</span> <span class="n">parcel5</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Parcel5</span><span class="o">();</span>
+        <span class="nc">Destionation</span> <span class="n">d</span> <span class="o">=</span> <span class="n">parcel5</span><span class="o">.</span><span class="na">destionation</span><span class="o">(</span><span class="s">"chenssy"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>定义在作用域内:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Parcel6</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">internalTracking</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">b</span><span class="o">){</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">b</span><span class="o">){</span>
+            <span class="kd">class</span> <span class="nc">TrackingSlip</span><span class="o">{</span>
+                <span class="kd">private</span> <span class="nc">String</span> <span class="n">id</span><span class="o">;</span>
+                <span class="nc">TrackingSlip</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">id</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+                <span class="o">}</span>
+                <span class="nc">String</span> <span class="nf">getSlip</span><span class="o">(){</span>
+                    <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            <span class="nc">TrackingSlip</span> <span class="n">ts</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TrackingSlip</span><span class="o">(</span><span class="s">"chenssy"</span><span class="o">);</span>
+            <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="na">getSlip</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">track</span><span class="o">(){</span>
+        <span class="n">internalTracking</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Parcel6</span> <span class="n">parcel6</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Parcel6</span><span class="o">();</span>
+        <span class="n">parcel6</span><span class="o">.</span><span class="na">track</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="五匿名内部类">五、匿名内部类</h2>
+
+<p>在做Swing编程中，我们经常使用这种方式来绑定事件</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">button2</span><span class="o">.</span><span class="na">addActionListener</span><span class="o">(</span>  
+                <span class="k">new</span> <span class="nf">ActionListener</span><span class="o">(){</span>  
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="nc">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>  
+                        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"你按了按钮二"</span><span class="o">);</span>  
+                    <span class="o">}</span>  
+                <span class="o">});</span>
+</code></pre></div></div>
+
+<p>我们咋一看可能觉得非常奇怪，因为这个内部类是没有名字的，在看如下这个例子：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nc">InnerClass</span> <span class="nf">getInnerClass</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">num</span><span class="o">,</span><span class="nc">String</span> <span class="n">str2</span><span class="o">){</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">InnerClass</span><span class="o">(){</span>
+            <span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">3</span><span class="o">;</span>
+            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNumber</span><span class="o">(){</span>
+                <span class="k">return</span> <span class="n">number</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">};</span>        <span class="cm">/* 注意：分号不能省 */</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">OuterClass</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
+        <span class="nc">InnerClass</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="na">getInnerClass</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"chenssy"</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">inner</span><span class="o">.</span><span class="na">getNumber</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">interface</span> <span class="nc">InnerClass</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="nf">getNumber</span><span class="o">();</span>
+<span class="o">}</span>
+
+<span class="o">----------------</span>
+<span class="nl">Output:</span>
+<span class="mi">5</span>
+</code></pre></div></div>
+
+<p>这里我们就需要看清几个地方</p>
+
+<p>​    <strong>1、</strong> 匿名内部类是没有访问修饰符的。</p>
+
+<p>​     <strong>2、</strong> new 匿名内部类，这个类首先是要存在的。如果我们将那个InnerClass接口注释掉，就会出现编译出错。</p>
+
+<p>​     <strong>3、</strong> 注意getInnerClass()方法的形参，第一个形参是用final修饰的，而第二个却没有。同时我们也发现第二个形参在匿名内部类中没有使用过，所以当所在方法的形参需要被匿名内部类使用，那么这个形参就必须为final。</p>
+
+<p>​    <strong>4、</strong> 匿名内部类是没有构造方法的。因为它连名字都没有何来构造方法。</p>
+
+<blockquote>
+  <p><strong>PS：</strong>由于篇幅有限，对匿名内部类就介绍到这里，有关更多关于匿名内部类的知识，我就会在下篇博客（java提高篇—–详解匿名内部类）做详细的介绍，包括为何形参要定义成final，怎么对匿名内部类进行初始化等等，敬请期待……</p>
+</blockquote>
+
+<h2 id="六静态内部类">六、静态内部类</h2>
+
+<p>在java提高篇—–关键字static中提到Static可以修饰成员变量、方法、代码块，其他它还可以修饰内部类，使用static修饰的内部类我们称之为静态内部类，不过我们更喜欢称之为嵌套内部类。静态内部类与非静态内部类之间存在一个最大的区别，我们知道非静态内部类在编译完成之后会隐含地保存着一个引用，该引用是指向创建它的外围内，但是静态内部类却没有。没有这个引用就意味着：</p>
+
+<p><strong>1、</strong> 它的创建是不需要依赖于外围类的。</p>
+
+<p><strong>2、</strong> 它不能使用任何外围类的非static成员变量和方法。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">sex</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"chenssy"</span><span class="o">;</span>
+
+    <span class="cm">/**
+     *静态内部类
+     */</span>
+    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">InnerClass1</span><span class="o">{</span>
+        <span class="cm">/* 在静态内部类中可以存在静态成员 */</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="n">_name1</span> <span class="o">=</span> <span class="s">"chenssy_static"</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
+            <span class="cm">/*
+             * 静态内部类只能访问外围类的静态成员变量和方法
+             * 不能访问外围类的非静态成员变量和方法
+             */</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"OutClass name :"</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * 非静态内部类
+     */</span>
+    <span class="kd">class</span> <span class="nc">InnerClass2</span><span class="o">{</span>
+        <span class="cm">/* 非静态内部类中不能存在静态成员 */</span>
+        <span class="kd">public</span> <span class="nc">String</span> <span class="n">_name2</span> <span class="o">=</span> <span class="s">"chenssy_inner"</span><span class="o">;</span>
+        <span class="cm">/* 非静态内部类中可以调用外围类的任何成员,不管是静态的还是非静态的 */</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"OuterClass name："</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * @desc 外围类方法
+     * @author chenssy
+     * @data 2013-10-25
+     * @return void
+     */</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
+        <span class="cm">/* 外围类访问静态内部类：内部类. */</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">InnerClass1</span><span class="o">.</span><span class="na">_name1</span><span class="o">);</span>
+        <span class="cm">/* 静态内部类 可以直接创建实例不需要依赖于外围类 */</span>
+        <span class="k">new</span> <span class="nf">InnerClass1</span><span class="o">().</span><span class="na">display</span><span class="o">();</span>
+
+        <span class="cm">/* 非静态内部的创建需要依赖于外围类 */</span>
+        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass2</span> <span class="n">inner2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">().</span><span class="na">new</span> <span class="nc">InnerClass2</span><span class="o">();</span>
+        <span class="cm">/* 方位非静态内部类的成员需要使用非静态内部类的实例 */</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">inner2</span><span class="o">.</span><span class="na">_name2</span><span class="o">);</span>
+        <span class="n">inner2</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">OuterClass</span> <span class="n">outer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
+        <span class="n">outer</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="o">----------------</span>
+<span class="nl">Output:</span>
+<span class="n">chenssy_static</span>
+<span class="nc">OutClass</span> <span class="n">name</span> <span class="o">:</span><span class="n">chenssy</span>
+<span class="n">chenssy_inner</span>
+<span class="nc">OuterClass</span> <span class="n">name</span><span class="err">：</span><span class="n">chenssy</span>
+</code></pre></div></div>
+
+<p>上面这个例子充分展现了静态内部类和非静态内部类的区别。</p>
+
+<p>​    到这里内部类的介绍就基本结束了！对于内部类其实本人认识也只是皮毛，逼近菜鸟一枚，认知有限！我会利用这几天时间好好研究内部类!</p>
+</div><p><a href="/java/InnerClass/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-InnerClass-2020-08-28-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="java基础"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/LinkedHashMap/01"><h2 itemprop="headline" class="item__header">Java集合之LinkedHashMap</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>一、初识LinkedHashMap</strong></p>
+
+<p>上篇文章讲了HashMap。HashMap是一种非常常见、非常有用的集合，但在多线程情况下使用不当会有线程安全问题。</p>
+
+<p>大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是<strong>迭代HashMap的顺序并不是HashMap放置的顺序</strong>，也就是无序。HashMap的这一缺点往往会带来困扰，因为有些场景，我们期待一个有序的Map。</p>
+
+<p>这个时候，LinkedHashMap就闪亮登场了，它虽然增加了时间和空间上的开销，但是<strong>通过维护一个运行于所有条目的双向链表，LinkedHashMap保证了元素迭代的顺序</strong>。<strong>该迭代顺序可以是插入顺序或者是访问顺序。</strong></p>
+
+<p><strong>二、四个关注点在LinkedHashMap上的答案</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>关  注  点</strong></th>
+      <th><strong>结    论</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LinkedHashMap是否允许空</td>
+      <td>Key和Value都允许空</td>
+    </tr>
+    <tr>
+      <td>LinkedHashMap是否允许重复数据</td>
+      <td>Key重复会覆盖、Value允许重复</td>
+    </tr>
+    <tr>
+      <td>LinkedHashMap是否有序</td>
+      <td><strong>有序</strong></td>
+    </tr>
+    <tr>
+      <td>LinkedHashMap是否线程安全</td>
+      <td>非线程安全</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>三、LinkedHashMap基本结构</strong></p>
+
+<p>关于LinkedHashMap，先提两点：</p>
+
+<p>1、LinkedHashMap可以认为是<strong>HashMap+LinkedList</strong>，即它既使用HashMap操作数据结构，又使用LinkedList维护插入元素的先后顺序。</p>
+
+<p>2、LinkedHashMap的基本实现思想就是—-<strong>多态</strong>。可以说，理解多态，再去理解LinkedHashMap原理会事半功倍；反之也是，对于LinkedHashMap原理的学习，也可以促进和加深对于多态的理解。</p>
+
+<p>为什么可以这么说，首先看一下，LinkedHashMap的定义：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span>
+    <span class="kd">extends</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span>
+    <span class="kd">implements</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span>
+<span class="o">{</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>看到，LinkedHashMap是HashMap的子类，自然LinkedHashMap也就继承了HashMap中所有非private的方法。再看一下LinkedHashMap中本身的方法：</p>
+
+<p><img src="/assets/images/javabase/249993-20161213135723526-1007577204.png" alt="img" /></p>
+
+<p>看到LinkedHashMap中并没有什么操作数据结构的方法，也就是说LinkedHashMap操作数据结构（比如put一个数据），和HashMap操作数据的方法完全一样，无非就是细节上有一些的不同罢了。</p>
+
+<p>LinkedHashMap只定义了两个属性：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * The head of the doubly linked list.
+ * 双向链表的头节点
+ */</span>
+<span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">header</span><span class="o">;</span>
+<span class="cm">/**
+ * The iteration ordering method for this linked hash map: true
+ * for access-order, false for insertion-order.
+ * true表示最近最少使用次序，false表示插入顺序
+ */</span>
+<span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">accessOrder</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>LinkedHashMap一共提供了五个构造方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 构造方法1，构造一个指定初始容量和负载因子的、按照插入顺序的LinkedList</span>
+<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="n">loadFactor</span><span class="o">);</span>
+    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="c1">// 构造方法2，构造一个指定初始容量的LinkedHashMap，取得键值对的顺序是插入顺序</span>
+<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">);</span>
+    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="c1">// 构造方法3，用默认的初始化容量和负载因子创建一个LinkedHashMap，取得键值对的顺序是插入顺序</span>
+<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">();</span>
+    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="c1">// 构造方法4，通过传入的map创建一个LinkedHashMap，容量为默认容量（16）和(map.zise()/DEFAULT_LOAD_FACTORY)+1的较大者，装载因子为默认值</span>
+<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="no">K</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="no">V</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">m</span><span class="o">);</span>
+    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="c1">// 构造方法5，根据指定容量、装载因子和键值对保持顺序创建一个LinkedHashMap</span>
+<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span>
+             <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span>
+                         <span class="kt">boolean</span> <span class="n">accessOrder</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="n">loadFactor</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">accessOrder</span> <span class="o">=</span> <span class="n">accessOrder</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>从构造方法中可以看出，默认都采用<strong>插入顺序</strong>来维持取出键值对的次序。所有构造方法都是通过调用父类的构造方法来创建对象的。</p>
+
+<p>LinkedHashMap和HashMap的区别在于它们的基本数据结构上，看一下LinkedHashMap的基本数据结构，也就是Entry：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">HashMap</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="c1">// These fields comprise the doubly linked list used for iteration.</span>
+    <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">before</span><span class="o">,</span> <span class="n">after</span><span class="o">;</span>
+
+    <span class="nc">Entry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="nc">HashMap</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">next</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>列一下Entry里面有的一些属性吧：</p>
+
+<p>1、K key</p>
+
+<p>2、V value</p>
+
+<p>3、Entry&lt;K, V&gt; next</p>
+
+<p>4、int hash</p>
+
+<p>5、Entry&lt;K, V&gt; before</p>
+
+<p>6、Entry&lt;K, V&gt; after</p>
+
+<p>其中前面四个，也就是红色部分是从HashMap.Entry中继承过来的；后面两个，也就是蓝色部分是LinkedHashMap独有的。不要搞错了next和before、After，<strong>next是用于维护HashMap指定table位置上连接的Entry的顺序的，before、After是用于维护Entry插入的先后顺序的</strong>。</p>
+
+<p>还是用图表示一下，列一下属性而已：</p>
+
+<p><img src="/assets/images/javabase/249993-20161213140338917-602479781.png" alt="img" /></p>
+
+<p><img src="/assets/images/javabase/249993-20161215143120620-1544337380.png" alt="img" /></p>
+
+<p><img src="/assets/images/javabase/249993-20161215143544401-1850524627.jpg" alt="img" /></p>
+
+<p>第一张图为LinkedHashMap整体结构图，第二张图专门把循环双向链表抽取出来，直观一点，注意该循环双向链表的头部存放的是最久访问的节点或最先插入的节点，尾部为最近访问的或最近插入的节点，迭代器遍历方向是从链表的头部开始到链表尾部结束，在链表尾部有一个空的header节点，该节点不存放key-value内容，为LinkedHashMap类的成员属性，循环双向链表的入口。</p>
+
+<p><strong>四、初始化LinkedHashMap</strong></p>
+
+<p>假如有这么一段代码：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+<span class="o">{</span>
+     <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">linkedHashMap</span> <span class="o">=</span>
+             <span class="k">new</span> <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;();</span>
+     <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"111"</span><span class="o">,</span> <span class="s">"111"</span><span class="o">);</span>
+     <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"222"</span><span class="o">,</span> <span class="s">"222"</span><span class="o">);</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>首先是第3行~第4行，new一个LinkedHashMap出来，看一下做了什么：</p>
+
+<p>通过源代码可以看出，在LinkedHashMap的构造方法中，实际调用了父类HashMap的相关构造方法来构造一个底层存放的table数组。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">()</span> <span class="o">{</span>
+     <span class="kd">super</span><span class="o">();</span>
+     <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+ <span class="o">}</span>
+ <span class="kd">public</span> <span class="nf">HashMap</span><span class="o">()</span> <span class="o">{</span>
+     <span class="k">this</span><span class="o">.</span><span class="na">loadFactor</span> <span class="o">=</span> <span class="no">DEFAULT_LOAD_FACTOR</span><span class="o">;</span>
+     <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="no">DEFAULT_INITIAL_CAPACITY</span> <span class="o">*</span> <span class="no">DEFAULT_LOAD_FACTOR</span><span class="o">);</span>
+     <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">[</span><span class="no">DEFAULT_INITIAL_CAPACITY</span><span class="o">];</span>
+     <span class="n">init</span><span class="o">();</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>我们已经知道LinkedHashMap的Entry元素继承HashMap的Entry，提供了双向链表的功能。在上述HashMap的构造器中，最后会调用init()方法，进行相关的初始化，这个方法在HashMap的实现中并无意义，只是提供给子类实现相关的初始化调用。
+LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造后，进一步实现了对其元素Entry的初始化操作。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
+      <span class="n">header</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;(-</span><span class="mi">1</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+      <span class="n">header</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="n">header</span><span class="o">;</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>这里出现了第一个多态：init()方法。尽管init()方法定义在HashMap中，但是由于：</p>
+
+<p>1、LinkedHashMap重写了init方法</p>
+
+<p>2、实例化出来的是LinkedHashMap</p>
+
+<p>因此实际调用的init方法是LinkedHashMap重写的init方法。假设header的地址是0x00000000，那么初始化完毕，实际上是这样的：</p>
+
+<p><img src="/assets/images/javabase/249993-20161213164756542-224440628.png" alt="img" /></p>
+
+<p>注意这个header，hash值为-1，其他都为null，也就是说这个header不放在数组中，就是用来指示开始元素和标志结束元素的。</p>
+
+<p>header的目的是为了记录第一个插入的元素是谁，在遍历的时候能够找到第一个元素。</p>
+
+<p><strong>五、LinkedHashMap存储元素</strong></p>
+
+<p>LinkedHashMap并未重写父类HashMap的put方法，而是重写了父类HashMap的put方法调用的子方法void recordAccess(HashMap m) ，void addEntry(int hash, K key, V value, int bucketIndex) 和void createEntry(int hash, K key, V value, int bucketIndex)，提供了自己特有的双向链接列表的实现。</p>
+
+<p>继续看LinkedHashMap存储元素，也就是put(“111”,”111”)做了什么，首先当然是调用HashMap的put方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">//这个方法应该挺熟悉的，如果看了HashMap的解析的话</span>
+ <span class="kd">public</span> <span class="no">V</span> <span class="nf">put</span><span class="o">(</span><span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">//key为null的情况</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+          <span class="k">return</span> <span class="nf">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+      <span class="c1">//通过key算hash，进而算出在数组中的位置，也就是在第几个桶中</span>
+      <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">());</span>
+      <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+      <span class="c1">//查看桶中是否有相同的key值，如果有就直接用新值替换旧值，而不用再创建新的entry了</span>
+     <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+         <span class="nc">Object</span> <span class="n">k</span><span class="o">;</span>
+         <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>
+             <span class="no">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+             <span class="n">e</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+             <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+             <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+         <span class="o">}</span>
+     <span class="o">}</span>
+
+     <span class="n">modCount</span><span class="o">++;</span>    
+     <span class="c1">//上面度是熟悉的东西，最重要的地方来了，就是这个方法，LinkedHashMap执行到这里，addEntry()方法不会执行HashMap中的方法，</span>
+     <span class="c1">//而是执行自己类中的addEntry方法，</span>
+     <span class="n">addEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>第23行又是一个多态，因为LinkedHashMap重写了addEntry方法，因此addEntry调用的是LinkedHashMap重写了的方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">void</span> <span class="nf">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">//调用create方法，将新元素以双向链表的的形式加入到映射中</span>
+      <span class="n">createEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">bucketIndex</span><span class="o">);</span>
+
+      <span class="c1">// Remove eldest entry if instructed, else grow capacity if appropriate</span>
+      <span class="c1">// 删除最近最少使用元素的策略定义  </span>
+      <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">eldest</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="na">after</span><span class="o">;</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">removeEldestEntry</span><span class="o">(</span><span class="n">eldest</span><span class="o">))</span> <span class="o">{</span>
+          <span class="n">removeEntryForKey</span><span class="o">(</span><span class="n">eldest</span><span class="o">.</span><span class="na">key</span><span class="o">);</span>
+     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+         <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">)</span>
+             <span class="n">resize</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+     <span class="o">}</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>因为LinkedHashMap由于其本身维护了插入的先后顺序，因此LinkedHashMap可以用来做缓存，第7行~第9行是用来支持FIFO算法的，这里暂时不用去关心它。看一下createEntry方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">void</span> <span class="nf">createEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
+     <span class="nc">HashMap</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">old</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">];</span>
+     <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">old</span><span class="o">);</span>
+     <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+     <span class="c1">//将该节点插入到链表尾部</span>
+     <span class="n">e</span><span class="o">.</span><span class="na">addBefore</span><span class="o">(</span><span class="n">header</span><span class="o">);</span>
+     <span class="n">size</span><span class="o">++;</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">addBefore</span><span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">existingEntry</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">after</span>  <span class="o">=</span> <span class="n">existingEntry</span><span class="o">;</span>
+    <span class="n">before</span> <span class="o">=</span> <span class="n">existingEntry</span><span class="o">.</span><span class="na">before</span><span class="o">;</span>
+    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>createEntry(int hash,K key,V value,int bucketIndex)方法覆盖了父类HashMap中的方法。这个方法不会拓展table数组的大小。该方法首先保留table中bucketIndex处的节点，然后调用Entry的构造方法（将调用到父类HashMap.Entry的构造方法）添加一个节点，即将当前节点的next引用指向table[bucketIndex] 的节点，之后调用的e.addBefore(header)是修改链表，将e节点添加到header节点之前。</p>
+
+<p>第2行~第4行的代码和HashMap没有什么不同，新添加的元素放在table[i]上，差别在于LinkedHashMap还做了addBefore操作，这四行代码的意思就是让新的Entry和原链表生成一个双向链表。假设字符串111放在位置table[1]上，生成的Entry地址为0x00000001，那么用图表示是这样的：</p>
+
+<p><img src="/assets/images/javabase/249993-20161214110719058-422696089.png" alt="img" /></p>
+
+<p>如果熟悉LinkedList的源码应该不难理解，还是解释一下，注意下existingEntry表示的是header：</p>
+
+<p>1、after=existingEntry，即新增的Entry的after=header地址，即after=0x00000000</p>
+
+<p>2、before=existingEntry.before，即新增的Entry的before是header的before的地址，header的before此时是0x00000000，因此新增的Entry的before=0x00000000</p>
+
+<p>3、before.after=this，新增的Entry的before此时为0x00000000即header，header的after=this，即header的after=0x00000001</p>
+
+<p>4、after.before=this，新增的Entry的after此时为0x00000000即header，header的before=this，即header的before=0x00000001</p>
+
+<p>这样，header与新增的Entry的一个双向链表就形成了。再看，新增了字符串222之后是什么样的，假设新增的Entry的地址为0x00000002，生成到table[2]上，用图表示是这样的：</p>
+
+<p><img src="/assets/images/javabase/249993-20161214112800604-1097231647.png" alt="img" /></p>
+
+<p>就不细解释了，只要before、after清除地知道代表的是哪个Entry的就不会有什么问题。</p>
+
+<p>注意，这里的插入有两重含义：</p>
+
+<p><strong>1.从table的角度看，新的entry需要插入到对应的bucket里，当有哈希冲突时，采用头插法将新的entry插入到冲突链表的头部。</strong>
+<strong>2.从header的角度看，新的entry需要插入到双向链表的尾部。</strong></p>
+
+<p>总得来看，再说明一遍，LinkedHashMap的实现就是HashMap+LinkedList的实现方式，以HashMap维护数据结构，以LinkList的方式维护数据插入顺序。</p>
+
+<p><strong>六、LinkedHashMap读取元素</strong></p>
+
+<p>LinkedHashMap重写了父类HashMap的get方法，实际在调用父类getEntry()方法取得查找的元素后，再判断当排序模式accessOrder为true时（即按访问顺序排序），先将当前节点从链表中移除，然后再将当前节点插入到链表尾部。由于的链表的增加、删除操作是常量级的，故并不会带来性能的损失。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 通过key获取value，与HashMap的区别是：当LinkedHashMap按访问顺序排序的时候，会将访问的当前节点移到链表尾部(头结点的前一个节点)
+ */</span>
+<span class="kd">public</span> <span class="no">V</span> <span class="nf">get</span><span class="o">(</span><span class="nc">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 调用父类HashMap的getEntry()方法，取得要查找的元素。  </span>
+    <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">getEntry</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="c1">// 记录访问顺序。</span>
+    <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 在HashMap的put和get方法中，会调用该方法，在HashMap中该方法为空
+ * 在LinkedHashMap中，当按访问顺序排序时，该方法会将当前节点插入到链表尾部(头结点的前一个节点)，否则不做任何事
+ */</span>
+<span class="kt">void</span> <span class="nf">recordAccess</span><span class="o">(</span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">lm</span> <span class="o">=</span> <span class="o">(</span><span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">m</span><span class="o">;</span>
+    <span class="c1">//当LinkedHashMap按访问排序时</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">accessOrder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">lm</span><span class="o">.</span><span class="na">modCount</span><span class="o">++;</span>
+        <span class="c1">//移除当前节点</span>
+        <span class="n">remove</span><span class="o">();</span>
+        <span class="c1">//将当前节点插入到头结点前面</span>
+        <span class="n">addBefore</span><span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">header</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 移除节点，并修改前后引用
+ */</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="n">after</span><span class="o">;</span>
+    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="n">before</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">addBefore</span><span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">existingEntry</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">after</span>  <span class="o">=</span> <span class="n">existingEntry</span><span class="o">;</span>
+    <span class="n">before</span> <span class="o">=</span> <span class="n">existingEntry</span><span class="o">.</span><span class="na">before</span><span class="o">;</span>
+    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>七、利用LinkedHashMap实现LRU算法缓存</strong></p>
+
+<p>前面讲了LinkedHashMap添加元素，删除、修改元素就不说了，比较简单，和HashMap+LinkedList的删除、修改元素大同小异，下面讲一个新的内容。</p>
+
+<p>LinkedHashMap可以用来作缓存，比方说LRUCache，看一下这个类的代码，很简单，就十几行而已：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LRUCache</span> <span class="kd">extends</span> <span class="nc">LinkedHashMap</span>
+<span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">LRUCache</span><span class="o">(</span><span class="kt">int</span> <span class="n">maxSize</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">maxSize</span><span class="o">,</span> <span class="mf">0.75</span><span class="no">F</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+        <span class="n">maxElements</span> <span class="o">=</span> <span class="n">maxSize</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">removeEldestEntry</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Map</span><span class="o">.</span><span class="na">Entry</span> <span class="n">eldest</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">maxElements</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">protected</span> <span class="kt">int</span> <span class="n">maxElements</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>顾名思义，LRUCache就是基于LRU算法的Cache（缓存），这个类继承自LinkedHashMap，而类中看到没有什么特别的方法，这说明LRUCache实现缓存LRU功能都是源自LinkedHashMap的。LinkedHashMap可以实现LRU算法的缓存基于两点：</p>
+
+<p>1、LinkedList首先它是一个Map，Map是基于K-V的，和缓存一致</p>
+
+<p>2、LinkedList提供了一个boolean值可以让用户指定是否实现LRU</p>
+
+<p>那么，首先我们了解一下什么是LRU：<strong>LRU即Least Recently Used，最近最少使用，也就是说，当缓存满了，会优先淘汰那些最近最不常访问的数据</strong>。比方说数据a，1天前访问了；数据b，2天前访问了，缓存满了，优先会淘汰数据b。</p>
+
+<p>我们看一下LinkedList带boolean型参数的构造方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span>
+         <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span>
+                     <span class="kt">boolean</span> <span class="n">accessOrder</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="n">loadFactor</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">accessOrder</span> <span class="o">=</span> <span class="n">accessOrder</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>就是这个accessOrder，它表示：</p>
+
+<p><strong>（1）false，所有的Entry按照插入的顺序排列</strong></p>
+
+<p><strong>（2）true，所有的Entry按照访问的顺序排列</strong></p>
+
+<p>第二点的意思就是，如果有1 2 3这3个Entry，那么访问了1，就把1移到尾部去，即2 3 1。每次访问都把访问的那个数据移到双向队列的尾部去，那么每次要淘汰数据的时候，双向队列最头的那个数据不就是最不常访问的那个数据了吗？换句话说，双向链表最头的那个数据就是要淘汰的数据。</p>
+
+<p>“访问”，这个词有两层意思：</p>
+
+<p>1、根据Key拿到Value，也就是get方法</p>
+
+<p>2、修改Key对应的Value，也就是put方法</p>
+
+<p>首先看一下get方法，它在LinkedHashMap中被重写：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="no">V</span> <span class="nf">get</span><span class="o">(</span><span class="nc">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">getEntry</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>然后是put方法，沿用父类HashMap的：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">public</span> <span class="no">V</span> <span class="nf">put</span><span class="o">(</span><span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+          <span class="k">return</span> <span class="nf">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+      <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">());</span>
+      <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+      <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
+          <span class="nc">Object</span> <span class="n">k</span><span class="o">;</span>
+          <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>
+              <span class="no">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+             <span class="n">e</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+             <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+             <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
+         <span class="o">}</span>
+     <span class="o">}</span>
+
+     <span class="n">modCount</span><span class="o">++;</span>
+     <span class="n">addEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+ <span class="o">}</span>
+</code></pre></div></div>
+
+<p>修改数据也就是第6行~第14行的代码。看到两端代码都有一个共同点：<strong>都调用了recordAccess方法</strong>，且这个方法是Entry中的方法，也就是说每次的recordAccess操作的都是某一个固定的Entry。</p>
+
+<p>recordAccess，顾名思义，记录访问，也就是说你这次访问了双向链表，我就把你记录下来，怎么记录？<strong>把你访问的Entry移到尾部去</strong>。这个方法在HashMap中是一个空方法，就是用来给子类记录访问用的，看一下LinkedHashMap中的实现：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">recordAccess</span><span class="o">(</span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">lm</span> <span class="o">=</span> <span class="o">(</span><span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">m</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">accessOrder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">lm</span><span class="o">.</span><span class="na">modCount</span><span class="o">++;</span>
+        <span class="n">remove</span><span class="o">();</span>
+        <span class="n">addBefore</span><span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">header</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="n">after</span><span class="o">;</span>
+    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="n">before</span><span class="o">;</span>
+<span class="o">}</span>
+<span class="kd">private</span> <span class="kt">void</span> <span class="nf">addBefore</span><span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">existingEntry</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">after</span>  <span class="o">=</span> <span class="n">existingEntry</span><span class="o">;</span>
+    <span class="n">before</span> <span class="o">=</span> <span class="n">existingEntry</span><span class="o">.</span><span class="na">before</span><span class="o">;</span>
+    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>看到每次recordAccess的时候做了两件事情：</p>
+
+<p>1、把待移动的Entry的前后Entry相连</p>
+
+<p>2、把待移动的Entry移动到尾部</p>
+
+<p>当然，这一切都是基于<strong>accessOrder=true</strong>的情况下。最后用一张图表示一下整个recordAccess的过程吧：</p>
+
+<p><img src="/assets/images/javabase/249993-20161214141549995-522671418.png" alt="img" /></p>
+
+<p>void recordAccess(HashMap&lt;K,V&gt; m) 这个方法就是我们一开始说的，accessOrder为true时，就是使用的访问顺序，访问次数最少到访问次数最多，此时要做特殊处理。处理机制就是访问了一次，就将自己往后移一位，这里就是先将自己删除了，然后在把自己添加，这样，近期访问的少的就在链表的开始，最近访问的元素就会在链表的末尾。如果为false。那么默认就是插入顺序，直接通过链表的特点就能依次找到插入元素，不用做特殊处理。</p>
+
+<p><strong>八、代码演示LinkedHashMap按照访问顺序排序的效果</strong></p>
+
+<p>最后代码演示一下LinkedList按照访问顺序排序的效果，验证一下上一部分LinkedHashMap的LRU功能：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">linkedHashMap</span> <span class="o">=</span>
+            <span class="k">new</span> <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;(</span><span class="mi">16</span><span class="o">,</span> <span class="mf">0.75f</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"111"</span><span class="o">,</span> <span class="s">"111"</span><span class="o">);</span>
+    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"222"</span><span class="o">,</span> <span class="s">"222"</span><span class="o">);</span>
+    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"333"</span><span class="o">,</span> <span class="s">"333"</span><span class="o">);</span>
+    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"444"</span><span class="o">,</span> <span class="s">"444"</span><span class="o">);</span>
+    <span class="n">loopLinkedHashMap</span><span class="o">(</span><span class="n">linkedHashMap</span><span class="o">);</span>
+    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"111"</span><span class="o">);</span>
+    <span class="n">loopLinkedHashMap</span><span class="o">(</span><span class="n">linkedHashMap</span><span class="o">);</span>
+    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"222"</span><span class="o">,</span> <span class="s">"2222"</span><span class="o">);</span>
+    <span class="n">loopLinkedHashMap</span><span class="o">(</span><span class="n">linkedHashMap</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">loopLinkedHashMap</span><span class="o">(</span><span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">linkedHashMap</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="n">inkedHashMap</span><span class="o">.</span><span class="na">entrySet</span><span class="o">();</span>
+    <span class="nc">Iterator</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
+
+    <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span>
+    <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">()</span> <span class="o">+</span> <span class="s">"\t"</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>注意这里的构造方法要用三个参数那个且最后的要传入true，这样才表示按照访问顺序排序。看一下代码运行结果：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">111</span><span class="o">=</span><span class="mi">111</span>    <span class="mi">222</span><span class="o">=</span><span class="mi">222</span>    <span class="mi">333</span><span class="o">=</span><span class="mi">333</span>    <span class="mi">444</span><span class="o">=</span><span class="mi">444</span>    
+<span class="mi">222</span><span class="o">=</span><span class="mi">222</span>    <span class="mi">333</span><span class="o">=</span><span class="mi">333</span>    <span class="mi">444</span><span class="o">=</span><span class="mi">444</span>    <span class="mi">111</span><span class="o">=</span><span class="mi">111</span>    
+<span class="mi">333</span><span class="o">=</span><span class="mi">333</span>    <span class="mi">444</span><span class="o">=</span><span class="mi">444</span>    <span class="mi">111</span><span class="o">=</span><span class="mi">111</span>    <span class="mi">222</span><span class="o">=</span><span class="mi">2222</span>   
+</code></pre></div></div>
+
+<p>代码运行结果证明了两点：</p>
+
+<p>1、LinkedList是有序的</p>
+
+<p>2、每次访问一个元素（get或put），被访问的元素都被提到最后面去了</p>
+</div><p><a href="/java/LinkedHashMap/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-LinkedHashMap-2020-08-28-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
+    <meta itemprop="keywords" content="java基础"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/enums/01"><h2 itemprop="headline" class="item__header">Java 枚举(enum) 详解五种常见的用法</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="一枚举型常量">一、枚举型常量</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
+<span class="c1">//首先枚举是一个特殊的class</span>
+<span class="c1">//这个class相当于final static修饰，不能被继承</span>
+<span class="c1">//他的构造方法强制被私有化，下面有一个默认的构造方法private ColorEnum();</span>
+<span class="c1">//所有的枚举都继承自java.lang.Enum类。由于Java 不支持多继承，所以枚举对象不能再继承其他类</span>
+<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">ColorEnum</span> <span class="o">{</span>
+    <span class="c1">//每个枚举变量都是枚举类ColorEnum的实例，相当于RED=new ColorEnum（1），按序号来。</span>
+    <span class="c1">//每个成员变量都是final static修饰</span>
+    <span class="no">RED</span><span class="o">,</span> <span class="no">GREEN</span><span class="o">,</span> <span class="no">BLANK</span><span class="o">,</span> <span class="no">YELLOW</span><span class="o">;</span>
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>测试类：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">ColorTest</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">//ordinal返回枚举变量的序号</span>
+    <span class="k">for</span><span class="o">(</span><span class="nc">ColorEnum</span> <span class="nl">color:</span><span class="nc">ColorEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color</span><span class="o">+</span><span class="s">",ordinal:"</span><span class="o">+</span><span class="n">color</span><span class="o">.</span><span class="na">ordinal</span><span class="o">()+</span><span class="s">",name:"</span><span class="o">+</span><span class="n">color</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="二带一个参数的枚举">二、带一个参数的枚举</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">TypeEnum</span> <span class="o">{</span>
+
+    <span class="no">FIREWALL</span><span class="o">(</span><span class="s">"firewall"</span><span class="o">),</span>  
+    <span class="no">SECRET</span><span class="o">(</span><span class="s">"secretMac"</span><span class="o">),</span>  
+    <span class="no">BALANCE</span><span class="o">(</span><span class="s">"f5"</span><span class="o">);</span>  
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">typeName</span><span class="o">;</span>  
+
+    <span class="nc">TypeEnum</span><span class="o">(</span><span class="nc">String</span> <span class="n">typeName</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">typeName</span> <span class="o">=</span> <span class="n">typeName</span><span class="o">;</span>  
+    <span class="o">}</span>  
+
+    <span class="cm">/**
+     * 根据类型的名称，返回类型的枚举实例。
+     *
+     * @param typeName 类型名称
+     */</span>  
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">TypeEnum</span> <span class="nf">fromTypeName</span><span class="o">(</span><span class="nc">String</span> <span class="n">typeName</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">for</span> <span class="o">(</span><span class="nc">TypeEnum</span> <span class="n">type</span> <span class="o">:</span> <span class="nc">TypeEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>  
+            <span class="k">if</span> <span class="o">(</span><span class="n">type</span><span class="o">.</span><span class="na">getTypeName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">typeName</span><span class="o">))</span> <span class="o">{</span>  
+                <span class="k">return</span> <span class="n">type</span><span class="o">;</span>  
+            <span class="o">}</span>  
+        <span class="o">}</span>  
+        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>  
+    <span class="o">}</span>  
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getTypeName</span><span class="o">()</span> <span class="o">{</span>  
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">typeName</span><span class="o">;</span>  
+    <span class="o">}</span>    
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>测试类：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">TypeTest</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">typeName</span> <span class="o">=</span> <span class="s">"f5"</span><span class="o">;</span>  
+    <span class="nc">TypeEnum</span> <span class="n">type</span> <span class="o">=</span> <span class="nc">TypeEnum</span><span class="o">.</span><span class="na">fromTypeName</span><span class="o">(</span><span class="n">typeName</span><span class="o">);</span>
+    <span class="c1">//type:是TypeEnum类实例化对象     typeName：实例化对象type的值             </span>
+    <span class="c1">// ordinal：实例化对象type的序号（int）          排序值(默认自带的属性 ordinal 的值)</span>
+    <span class="c1">//name：实化对象的名字（String）                            枚举名称(即默认自带的属性 name 的值)</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">type</span><span class="o">+</span><span class="s">",typeName:"</span><span class="o">+</span><span class="n">type</span><span class="o">.</span><span class="na">getTypeName</span><span class="o">()+</span><span class="s">",ordinal:"</span><span class="o">+</span><span class="n">type</span><span class="o">.</span><span class="na">ordinal</span><span class="o">()+</span><span class="s">",name:"</span><span class="o">+</span><span class="n">type</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="三向枚举中添加新方法">三、向枚举中添加新方法</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">SeasonEunm</span> <span class="o">{</span>
+    <span class="c1">//每一个枚举变量都是枚举类SeasonEunm的实例化</span>
+    <span class="c1">//SeasonEunm.SPRING获得的对象相当于new SeasonEunm("春","春困");获得的对象</span>
+    <span class="no">SPRING</span><span class="o">(</span><span class="s">"春"</span><span class="o">,</span><span class="s">"春困"</span><span class="o">),</span><span class="no">SUMMER</span><span class="o">(</span><span class="s">"夏"</span><span class="o">,</span><span class="s">"夏睡"</span><span class="o">),</span><span class="no">AUTUMN</span><span class="o">(</span><span class="s">"秋"</span><span class="o">,</span><span class="s">"秋乏"</span><span class="o">),</span><span class="no">WINTER</span><span class="o">(</span><span class="s">"冬"</span><span class="o">,</span><span class="s">"冬眠"</span><span class="o">);</span>
+
+    <span class="c1">//强制私有化的构造方法，因为枚举类默认继承Eunm类，被final static修饰，不能被继承</span>
+    <span class="c1">//由于被强制private，所以不能使用new去生成枚举对象</span>
+    <span class="c1">//在SeasonEunm.SPRING获得对象，隐式调用了下面的构造方法</span>
+    <span class="c1">// 构造方法 ,赋值给成员变量</span>
+    <span class="kd">private</span> <span class="nf">SeasonEunm</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+    <span class="c1">//添加成员变量的原因是，方便够着方法赋值，使用SeasonEunm.SPRING.getName就能获取对应的值</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">value</span><span class="o">;</span>
+
+
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setValue</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+
+
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>测试类：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">SessionTest</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">//ordinal返回枚举变量的序号</span>
+    <span class="k">for</span><span class="o">(</span><span class="nc">SeasonEunm</span> <span class="nl">seasion:</span><span class="nc">SeasonEunm</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">seasion</span><span class="o">+</span><span class="s">",ordinal:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">ordinal</span><span class="o">()+</span><span class="s">",name:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"枚举变量值:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">",枚举变量值:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="四覆盖枚举的方法">四、覆盖枚举的方法</h2>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">RGBEnum</span> <span class="o">{</span>
+    <span class="no">RED</span><span class="o">(</span><span class="s">"红色"</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span> <span class="no">GREEN</span><span class="o">(</span><span class="s">"绿色"</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span> <span class="no">BLANK</span><span class="o">(</span><span class="s">"白色"</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="no">YELLO</span><span class="o">(</span><span class="s">"黄色"</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span>  
+    <span class="c1">// 成员变量  </span>
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>  
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>  
+    <span class="c1">// 构造方法 ,赋值给成员变量</span>
+    <span class="kd">private</span> <span class="nf">RGBEnum</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>  
+        <span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>  
+    <span class="o">}</span>  
+
+    <span class="c1">//覆盖方法  :只能使用toString方法来输出枚举变量值</span>
+    <span class="nd">@Override</span>  
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>  
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">index</span><span class="o">+</span><span class="s">"_"</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>
+
+</code></pre></div></div>
+
+<p>测试方法：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">RGBEnumTest</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="nc">RGBEnum</span> <span class="nl">rgb:</span><span class="nc">RGBEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">rgb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+</div><p><a href="/java/enums/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-enums-2020-08-27-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-27T00:00:00+08:00">
+    <meta itemprop="keywords" content="java基础"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/mianshi/tcp/nio/01"><h2 itemprop="headline" class="item__header">tcp nio epoll等基本技术知识</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="tcp">TCP</h4>
 
@@ -527,6 +1656,8 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
   <li>select，poll，epoll 都是同步的</li>
 </ul>
 
+<p><strong>select 和poll的优劣</strong></p>
+
 <p>优势：通过一次系统调用，把fds，传递给内核，内核进行遍历，想多NIO的遍历，多路复用减少了系统调用次数</p>
 
 <p>弊端：1. 因为在where循环中，所有会出现重复传递数据到系统调用</p>
@@ -534,6 +1665,18 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 <p>​					- 解决方法：内核开辟内存空间保留fd</p>
 
 <p>​			2. 每次select，poll 都都用重复遍历全量的fd</p>
+
+<ul>
+  <li>
+    <p>多路复用器解释：解决的是IO状态的问题</p>
+
+    <p>​								用更少的系统调用解决所有的IO状态，而不是每一次IO都发送系统调用，减少了用户态到内核态切换的过程</p>
+  </li>
+</ul>
+
+<p>epoll</p>
+
+<p>在内核态中开辟一个空间，</p>
 
 <p><strong>shell命令 工具</strong></p>
 
@@ -568,7 +1711,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <meta itemprop="keywords" content="面试题"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/jvm/stackoverflow"><h2 itemprop="headline" class="item__header">栈溢出(stackoverflow)的原因及解决办法</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>__栈溢出(stackoverflow)__的原因及解决办法：程序功能大概有网络通信、数据库、绘图等。测试的时候程序一运行到某个函数就出现此错误，查了很多地方，试了很多解决办法，终于把问题解决了。
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>栈溢出(stackoverflow)</strong> 的原因及解决办法：程序功能大概有网络通信、数据库、绘图等。测试的时候程序一运行到某个函数就出现此错误，查了很多地方，试了很多解决办法，终于把问题解决了。
 大家都知道,Windows程序的内存机制大概是这样的:
 全局变量(局部的静态变量本质也属于此范围)存储于堆内存,该段内存较大,一般不会溢出;
 函数地址、函数参数、局部变量等信息存储于栈内存;
@@ -620,1113 +1763,8 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 20, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-08-20-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-20T00:00:00+08:00">
     <meta itemprop="keywords" content="jvm"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/docker/distributed"><h2 itemprop="headline" class="item__header">分布式锁用 Redis 还是 Zookeeper</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="为什么用分布式锁">为什么用分布式锁？</h3>
-
-<p>在讨论这个问题之前，我们先来看一个业务场景：系统A是一个电商系统，目前是一台机器部署，系统中有一个用户下订单的接口，但是用户下订单之前一定要去检查一下库存，确保库存足够了才会给用户下单。由于系统有一定的并发，所以会预先将商品的库存保存在redis中，用户下单的时候会更新redis的库存。此时系统架构如下：</p>
-
-<p><img src="/assets/images/distributed/0820/v2-873d013a21d4f1b01f6251fb7d3d44c0_1440w.jpg" alt="1" /></p>
-
-<p>但是这样一来会产生一个问题：假如某个时刻，redis里面的某个商品库存为1，此时两个请求同时到来，其中一个请求执行到上图的第3步，更新数据库的库存为0，但是第4步还没有执行。而另外一个请求执行到了第2步，发现库存还是1，就继续执行第3步。这样的结果，是导致卖出了2个商品，然而其实库存只有1个。很明显不对啊！这就是典型的库存超卖问题此时，我们很容易想到解决方案：用锁把2、3、4步锁住，让他们执行完之后，另一个线程才能进来执行第2步。</p>
-
-<p><img src="/assets/images/distributed/0820/v2-10bcf2d5309db9aecd74ff2c21497018_1440w.jpg" alt="2" /></p>
-
-<p>按照上面的图，在执行第2步时，使用Java提供的synchronized或者ReentrantLock来锁住，然后在第4步执行完之后才释放锁。这样一来，2、3、4 这3个步骤就被“锁”住了，多个线程之间只能串行化执行。关注公众号互联网架构师，回复关键字2T，获取最新架构视频但是好景不长，整个系统的并发飙升，一台机器扛不住了。现在要增加一台机器，如下图：</p>
-
-<p><img src="/assets/images/distributed/0820/v2-da24fb879b15402f6f900dedefae2b5c_1440w.jpg" alt="3" /></p>
-
-<p>增加机器之后，系统变成上图所示，我的天！假设此时两个用户的请求同时到来，但是落在了不同的机器上，那么这两个请求是可以同时执行了，还是会出现库存超卖的问题。为什么呢？因为上图中的两个A系统，运行在两个不同的JVM里面，他们加的锁只对属于自己JVM里面的线程有效，对于其他JVM的线程是无效的。因此，这里的问题是：Java提供的原生锁机制在多机部署场景下失效了这是因为两台机器加的锁不是同一个锁(两个锁在不同的JVM里面)。那么，我们只要保证两台机器加的锁是同一个锁，问题不就解决了吗？此时，就该分布式锁隆重登场了，分布式锁的思路是：在整个系统提供一个全局、唯一的获取锁的“东西”，然后每个系统在需要加锁时，都去问这个“东西”拿到一把锁，这样不同的系统拿到的就可以认为是同一把锁。至于这个“东西”，可以是Redis、Zookeeper，也可以是数据库。文字描述不太直观，我们来看下图：</p>
-
-<p><img src="/assets/images/distributed/0820/v2-422bcb831480f1aa6b635219eab10d11_1440w.jpg" alt="4" /></p>
-
-<p>通过上面的分析，我们知道了库存超卖场景在分布式部署系统的情况下使用Java原生的锁机制无法保证线程安全，所以我们需要用到分布式锁的方案。那么，如何实现分布式锁呢？接着往下看！</p>
-
-<h3 id="基于redis实现分布式锁">基于Redis实现分布式锁</h3>
-
-<p>上面分析为啥要使用分布式锁了，这里我们来具体看看分布式锁落地的时候应该怎么样处理。扩展：Redisson是如何实现分布式锁的？</p>
-
-<p>最常见的一种方案就是使用Redis做分布式锁使用Redis做分布式锁的思路大概是这样的：在redis中设置一个值表示加了锁，然后释放锁的时候就把这个key删除。具体代码是这样的：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 获取锁</span>
-<span class="c1">// NX是指如果key不存在就成功，key存在返回false，PX可以指定过期时间</span>
-<span class="no">SET</span> <span class="n">anyLock</span> <span class="n">unique_value</span> <span class="no">NX</span> <span class="no">PX</span> <span class="mi">30000</span>
-
-
-<span class="c1">// 释放锁：通过执行一段lua脚本</span>
-<span class="c1">// 释放锁涉及到两条指令，这两条指令不是原子性的</span>
-<span class="c1">// 需要用到redis的lua脚本支持特性，redis执行lua脚本是原子性的</span>
-<span class="k">if</span> <span class="n">redis</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="s">"get"</span><span class="o">,</span><span class="no">KEYS</span><span class="o">[</span><span class="mi">1</span><span class="o">])</span> <span class="o">==</span> <span class="no">ARGV</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="n">then</span>
-<span class="k">return</span> <span class="n">redis</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="s">"del"</span><span class="o">,</span><span class="no">KEYS</span><span class="o">[</span><span class="mi">1</span><span class="o">])</span>
-<span class="k">else</span>
-<span class="k">return</span> <span class="mi">0</span>
-<span class="n">end</span>
-</code></pre></div></div>
-
-<p>这种方式有几大要点：</p>
-
-<ul>
-  <li>一定要用SET key value NX PX milliseconds 命令
-如果不用，先设置了值，再设置过期时间，这个不是原子性操作，有可能在设置过期时间之前宕机，会造成死锁(key永久存在)</li>
-  <li>value要具有唯一性
-这个是为了在解锁的时候，需要验证value是和加锁的一致才删除key。
-这是避免了一种情况：假设A获取了锁，过期时间30s，此时35s之后，锁已经自动释放了，A去释放锁，但是此时可能B获取了锁。A客户端就不能删除B的锁了。</li>
-</ul>
-
-<p><img src="/assets/images/distributed/0820/v2-d7ea289a12162d3801d98cf2dfaa0030_1440w.jpg" alt="5" /></p>
-
-<p>除了要考虑客户端要怎么实现分布式锁之外，还需要考虑redis的部署问题。redis有3种部署方式：</p>
-
-<ul>
-  <li>单机模式</li>
-  <li>master-slave + sentinel选举模式</li>
-  <li>redis cluster模式</li>
-</ul>
-
-<p>使用redis做分布式锁的缺点在于：如果采用单机部署模式，会存在单点问题，只要redis故障了。加锁就不行了。采用master-slave模式，加锁的时候只对一个节点加锁，即便通过sentinel做了高可用，但是如果master节点故障了，发生主从切换，此时就会有可能出现锁丢失的问题。基于以上的考虑，其实redis的作者也考虑到这个问题，他提出了一个RedLock的算法，这个算法的意思大概是这样的：假设redis的部署模式是redis cluster，总共有5个master节点，通过以下步骤获取一把锁：</p>
-
-<ul>
-  <li>获取当前时间戳，单位是毫秒</li>
-  <li>轮流尝试在每个master节点上创建锁，过期时间设置较短，一般就几十毫秒</li>
-  <li>尝试在大多数节点上建立一个锁，比如5个节点就要求是3个节点（n / 2 +1）</li>
-  <li>客户端计算建立好锁的时间，如果建立锁的时间小于超时时间，就算建立成功了</li>
-  <li>要是锁建立失败了，那么就依次删除这个锁</li>
-  <li>只要别人建立了一把分布式锁，你就得不断轮询去尝试获取锁</li>
-  <li>但是这样的这种算法还是颇具争议的，可能还会存在不少的问题，无法保证加锁的过程一定正确。</li>
-</ul>
-
-<p><img src="/assets/images/distributed/0820/v2-0c606f11d018368945c0efc1e3cb5de4_1440w.jpg" alt="6" /></p>
-
-<h4 id="另一种方式redisson">另一种方式：Redisson</h4>
-
-<p>此外，实现Redis的分布式锁，除了自己基于redis client原生api来实现之外，还可以使用开源框架：RedissionRedisson是一个企业级的开源Redis Client，也提供了分布式锁的支持。我也非常推荐大家使用，为什么呢？回想一下上面说的，如果自己写代码来通过redis设置一个值，是通过下面这个命令设置的。</p>
-
-<ul>
-  <li>SET anyLock unique_value NX PX 30000</li>
-</ul>
-
-<p>这里设置的超时时间是30s，假如我超过30s都还没有完成业务逻辑的情况下，key会过期，其他线程有可能会获取到锁。这样一来的话，第一个线程还没执行完业务逻辑，第二个线程进来了也会出现线程安全问题。所以我们还需要额外的去维护这个过期时间，太麻烦了~我们来看看redisson是怎么实现的？先感受一下使用redission的爽：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Config</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Config</span><span class="o">();</span>
-<span class="n">config</span><span class="o">.</span><span class="na">useClusterServers</span><span class="o">()</span>
-<span class="o">.</span><span class="na">addNodeAddress</span><span class="o">(</span><span class="s">"redis://192.168.31.101:7001"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">addNodeAddress</span><span class="o">(</span><span class="s">"redis://192.168.31.101:7002"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">addNodeAddress</span><span class="o">(</span><span class="s">"redis://192.168.31.101:7003"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">addNodeAddress</span><span class="o">(</span><span class="s">"redis://192.168.31.102:7001"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">addNodeAddress</span><span class="o">(</span><span class="s">"redis://192.168.31.102:7002"</span><span class="o">)</span>
-<span class="o">.</span><span class="na">addNodeAddress</span><span class="o">(</span><span class="s">"redis://192.168.31.102:7003"</span><span class="o">);</span>
-
-<span class="nc">RedissonClient</span> <span class="n">redisson</span> <span class="o">=</span> <span class="nc">Redisson</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>
-
-
-<span class="nc">RLock</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">redisson</span><span class="o">.</span><span class="na">getLock</span><span class="o">(</span><span class="s">"anyLock"</span><span class="o">);</span>
-<span class="n">lock</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
-<span class="n">lock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
-</code></pre></div></div>
-
-<p>就是这么简单，我们只需要通过它的api中的lock和unlock即可完成分布式锁，他帮我们考虑了很多细节：</p>
-
-<ul>
-  <li>
-    <p>redisson所有指令都通过lua脚本执行，redis支持lua脚本原子性执行</p>
-  </li>
-  <li>
-    <p>redisson设置一个key的默认过期时间为30s,如果某个客户端持有一个锁超过了30s怎么办？</p>
-
-    <p>redisson中有一个watchdog的概念，翻译过来就是看门狗，它会在你获取锁之后，每隔10秒帮你把key的超时时间设为30s
-这样的话，就算一直持有锁也不会出现key过期了，其他线程获取到锁的问题了。</p>
-  </li>
-  <li>
-    <p>redisson的“看门狗”逻辑保证了没有死锁发生。
-(如果机器宕机了，看门狗也就没了。此时就不会延长key的过期时间，到了30s之后就会自动过期了，其他线程可以获取到锁)</p>
-  </li>
-</ul>
-
-<p><img src="/assets/images/distributed/0820/v2-1f2f1e05c7a1d1101ac6fb53c4186f9b_1440w.jpg" alt="7" /></p>
-
-<p>这里稍微贴出来其实现代码：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 加锁逻辑</span>
-<span class="kd">private</span> <span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nc">RFuture</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="nf">tryAcquireAsync</span><span class="o">(</span><span class="kt">long</span> <span class="n">leaseTime</span><span class="o">,</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">,</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">threadId</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">leaseTime</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="nf">tryLockInnerAsync</span><span class="o">(</span><span class="n">leaseTime</span><span class="o">,</span> <span class="n">unit</span><span class="o">,</span> <span class="n">threadId</span><span class="o">,</span> <span class="nc">RedisCommands</span><span class="o">.</span><span class="na">EVAL_LONG</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="c1">// 调用一段lua脚本，设置一些key、过期时间</span>
-    <span class="nc">RFuture</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">ttlRemainingFuture</span> <span class="o">=</span> <span class="n">tryLockInnerAsync</span><span class="o">(</span><span class="n">commandExecutor</span><span class="o">.</span><span class="na">getConnectionManager</span><span class="o">().</span><span class="na">getCfg</span><span class="o">().</span><span class="na">getLockWatchdogTimeout</span><span class="o">(),</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">,</span> <span class="n">threadId</span><span class="o">,</span> <span class="nc">RedisCommands</span><span class="o">.</span><span class="na">EVAL_LONG</span><span class="o">);</span>
-    <span class="n">ttlRemainingFuture</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">FutureListener</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">operationComplete</span><span class="o">(</span><span class="nc">Future</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">&gt;</span> <span class="n">future</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(!</span><span class="n">future</span><span class="o">.</span><span class="na">isSuccess</span><span class="o">())</span> <span class="o">{</span>
-                <span class="k">return</span><span class="o">;</span>
-            <span class="o">}</span>
-
-            <span class="nc">Long</span> <span class="n">ttlRemaining</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="na">getNow</span><span class="o">();</span>
-            <span class="c1">// lock acquired</span>
-            <span class="k">if</span> <span class="o">(</span><span class="n">ttlRemaining</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c1">// 看门狗逻辑</span>
-                <span class="n">scheduleExpirationRenewal</span><span class="o">(</span><span class="n">threadId</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">});</span>
-    <span class="k">return</span> <span class="n">ttlRemainingFuture</span><span class="o">;</span>
-<span class="o">}</span>
-
-
-<span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nc">RFuture</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="nf">tryLockInnerAsync</span><span class="o">(</span><span class="kt">long</span> <span class="n">leaseTime</span><span class="o">,</span> <span class="nc">TimeUnit</span> <span class="n">unit</span><span class="o">,</span> <span class="kt">long</span> <span class="n">threadId</span><span class="o">,</span> <span class="nc">RedisStrictCommand</span><span class="o">&lt;</span><span class="no">T</span><span class="o">&gt;</span> <span class="n">command</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">internalLockLeaseTime</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="na">toMillis</span><span class="o">(</span><span class="n">leaseTime</span><span class="o">);</span>
-
-    <span class="k">return</span> <span class="n">commandExecutor</span><span class="o">.</span><span class="na">evalWriteAsync</span><span class="o">(</span><span class="n">getName</span><span class="o">(),</span> <span class="nc">LongCodec</span><span class="o">.</span><span class="na">INSTANCE</span><span class="o">,</span> <span class="n">command</span><span class="o">,</span>
-              <span class="s">"if (redis.call('exists', KEYS[1]) == 0) then "</span> <span class="o">+</span>
-                  <span class="s">"redis.call('hset', KEYS[1], ARGV[2], 1); "</span> <span class="o">+</span>
-                  <span class="s">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> <span class="o">+</span>
-                  <span class="s">"return nil; "</span> <span class="o">+</span>
-              <span class="s">"end; "</span> <span class="o">+</span>
-              <span class="s">"if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then "</span> <span class="o">+</span>
-                  <span class="s">"redis.call('hincrby', KEYS[1], ARGV[2], 1); "</span> <span class="o">+</span>
-                  <span class="s">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> <span class="o">+</span>
-                  <span class="s">"return nil; "</span> <span class="o">+</span>
-              <span class="s">"end; "</span> <span class="o">+</span>
-              <span class="s">"return redis.call('pttl', KEYS[1]);"</span><span class="o">,</span>
-                <span class="nc">Collections</span><span class="o">.&lt;</span><span class="nc">Object</span><span class="o">&gt;</span><span class="n">singletonList</span><span class="o">(</span><span class="n">getName</span><span class="o">()),</span> <span class="n">internalLockLeaseTime</span><span class="o">,</span> <span class="n">getLockName</span><span class="o">(</span><span class="n">threadId</span><span class="o">));</span>
-<span class="o">}</span>
-
-<span class="c1">// 看门狗最终会调用了这里</span>
-<span class="kd">private</span> <span class="kt">void</span> <span class="nf">scheduleExpirationRenewal</span><span class="o">(</span><span class="kd">final</span> <span class="kt">long</span> <span class="n">threadId</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">expirationRenewalMap</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">getEntryName</span><span class="o">()))</span> <span class="o">{</span>
-        <span class="k">return</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="c1">// 这个任务会延迟10s执行</span>
-    <span class="nc">Timeout</span> <span class="n">task</span> <span class="o">=</span> <span class="n">commandExecutor</span><span class="o">.</span><span class="na">getConnectionManager</span><span class="o">().</span><span class="na">newTimeout</span><span class="o">(</span><span class="k">new</span> <span class="nc">TimerTask</span><span class="o">()</span> <span class="o">{</span>
-        <span class="nd">@Override</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(</span><span class="nc">Timeout</span> <span class="n">timeout</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-
-            <span class="c1">// 这个操作会将key的过期时间重新设置为30s</span>
-            <span class="nc">RFuture</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">future</span> <span class="o">=</span> <span class="n">renewExpirationAsync</span><span class="o">(</span><span class="n">threadId</span><span class="o">);</span>
-
-            <span class="n">future</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">FutureListener</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
-                <span class="nd">@Override</span>
-                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">operationComplete</span><span class="o">(</span><span class="nc">Future</span><span class="o">&lt;</span><span class="nc">Boolean</span><span class="o">&gt;</span> <span class="n">future</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span> <span class="o">{</span>
-                    <span class="n">expirationRenewalMap</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">getEntryName</span><span class="o">());</span>
-                    <span class="k">if</span> <span class="o">(!</span><span class="n">future</span><span class="o">.</span><span class="na">isSuccess</span><span class="o">())</span> <span class="o">{</span>
-                        <span class="n">log</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"Can't update lock "</span> <span class="o">+</span> <span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">" expiration"</span><span class="o">,</span> <span class="n">future</span><span class="o">.</span><span class="na">cause</span><span class="o">());</span>
-                        <span class="k">return</span><span class="o">;</span>
-                    <span class="o">}</span>
-
-                    <span class="k">if</span> <span class="o">(</span><span class="n">future</span><span class="o">.</span><span class="na">getNow</span><span class="o">())</span> <span class="o">{</span>
-                        <span class="c1">// reschedule itself</span>
-                        <span class="c1">// 通过递归调用本方法，无限循环延长过期时间</span>
-                        <span class="n">scheduleExpirationRenewal</span><span class="o">(</span><span class="n">threadId</span><span class="o">);</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-            <span class="o">});</span>
-        <span class="o">}</span>
-
-    <span class="o">},</span> <span class="n">internalLockLeaseTime</span> <span class="o">/</span> <span class="mi">3</span><span class="o">,</span> <span class="nc">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">);</span>
-
-    <span class="k">if</span> <span class="o">(</span><span class="n">expirationRenewalMap</span><span class="o">.</span><span class="na">putIfAbsent</span><span class="o">(</span><span class="n">getEntryName</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">ExpirationEntry</span><span class="o">(</span><span class="n">threadId</span><span class="o">,</span> <span class="n">task</span><span class="o">))</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">task</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">另外</span><span class="err">，</span><span class="n">redisson还提供了对redlock算法的支持</span><span class="o">,</span><span class="n">它的用法也很简单</span><span class="err">：</span>
-<span class="nc">RedissonClient</span> <span class="n">redisson</span> <span class="o">=</span> <span class="nc">Redisson</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>
-<span class="nc">RLock</span> <span class="n">lock1</span> <span class="o">=</span> <span class="n">redisson</span><span class="o">.</span><span class="na">getFairLock</span><span class="o">(</span><span class="s">"lock1"</span><span class="o">);</span>
-<span class="nc">RLock</span> <span class="n">lock2</span> <span class="o">=</span> <span class="n">redisson</span><span class="o">.</span><span class="na">getFairLock</span><span class="o">(</span><span class="s">"lock2"</span><span class="o">);</span>
-<span class="nc">RLock</span> <span class="n">lock3</span> <span class="o">=</span> <span class="n">redisson</span><span class="o">.</span><span class="na">getFairLock</span><span class="o">(</span><span class="s">"lock3"</span><span class="o">);</span>
-<span class="nc">RedissonRedLock</span> <span class="n">multiLock</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">RedissonRedLock</span><span class="o">(</span><span class="n">lock1</span><span class="o">,</span> <span class="n">lock2</span><span class="o">,</span> <span class="n">lock3</span><span class="o">);</span>
-<span class="n">multiLock</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
-<span class="n">multiLock</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
-<span class="n">小结</span><span class="err">：</span>
-<span class="n">本节分析了使用redis作为分布式锁的具体落地方案以及其一些局限性然后介绍了一个redis的客户端框架redisson</span><span class="err">，</span><span class="n">这也是我推荐大家使用的</span><span class="err">，</span><span class="n">比自己写代码实现会少care很多细节</span><span class="err">。</span>
-</code></pre></div></div>
-
-<h4 id="基于zookeeper实现分布式锁">基于zookeeper实现分布式锁</h4>
-
-<p>常见的分布式锁实现方案里面，除了使用redis来实现之外，使用zookeeper也可以实现分布式锁。在介绍zookeeper(下文用zk代替)实现分布式锁的机制之前，先粗略介绍一下zk是什么东西：Zookeeper是一种提供配置管理、分布式协同以及命名的中心化服务。zk的模型是这样的：zk包含一系列的节点，叫做znode，就好像文件系统一样每个znode表示一个目录，然后znode有一些特性：</p>
-
-<ul>
-  <li>
-    <p><strong>有序节点</strong>：假如当前有一个父节点为/lock，我们可以在这个父节点下面创建子节点；
-zookeeper提供了一个可选的有序特性，例如我们可以创建子节点“/lock/node-”并且指明有序，那么zookeeper在生成子节点时会根据当前的子节点数量自动添加整数序号
-也就是说，如果是第一个创建的子节点，那么生成的子节点为/lock/node-0000000000，下一个节点则为/lock/node-0000000001，依次类推。</p>
-  </li>
-  <li>
-    <p>__临时节点：__客户端可以建立一个临时节点，在会话结束或者会话超时后，zookeeper会自动删除该节点。</p>
-  </li>
-  <li>
-    <p>__事件监听：__在读取数据时，我们可以同时对节点设置事件监听，当节点数据或结构变化时，zookeeper会通知客户端。当前</p>
-  </li>
-  <li>
-    <p>zookeeper有如下四种事件：</p>
-
-    <ul>
-      <li>节点创建</li>
-      <li>节点删除</li>
-      <li>节点数据修改</li>
-      <li>子节点变更</li>
-    </ul>
-  </li>
-</ul>
-
-<p>基于以上的一些zk的特性，我们很容易得出使用zk实现分布式锁的落地方案：</p>
-
-<ol>
-  <li>使用zk的临时节点和有序节点，每个线程获取锁就是在zk创建一个临时有序的节点，比如在/lock/目录下。</li>
-  <li>创建节点成功后，获取/lock目录下的所有临时节点，再判断当前线程创建的节点是否是所有的节点的序号最小的节点</li>
-  <li>如果当前线程创建的节点是所有节点序号最小的节点，则认为获取锁成功。</li>
-  <li>如果当前线程创建的节点不是所有节点序号最小的节点，则对节点序号的前一个节点添加一个事件监听。
-比如当前线程获取到的节点序号为/lock/003,然后所有的节点列表为[/lock/001,/lock/002,/lock/003],则对/lock/002这个节点添加一个事件监听器。
-如果锁释放了，会唤醒下一个序号的节点，然后重新执行第3步，判断是否自己的节点序号是最小。比如/lock/001释放了，/lock/002监听到时间，此时节点集合为[/lock/002,/lock/003],则/lock/002为最小序号节点，获取到锁。</li>
-</ol>
-
-<p>整个过程如下：</p>
-
-<p><img src="/assets/images/distributed/0820/v2-513fed78f8eb51568f1c392003a394a6_1440w.jpg" alt="8" /></p>
-
-<p>具体的实现思路就是这样，至于代码怎么写，这里比较复杂就不贴出来了。</p>
-
-<h4 id="curator介绍">Curator介绍</h4>
-
-<p>Curator是一个zookeeper的开源客户端，也提供了分布式锁的实现。他的使用方式也比较简单：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">InterProcessMutex</span> <span class="n">interProcessMutex</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">InterProcessMutex</span><span class="o">(</span><span class="n">client</span><span class="o">,</span><span class="s">"/anyLock"</span><span class="o">);</span>
-<span class="n">interProcessMutex</span><span class="o">.</span><span class="na">acquire</span><span class="o">();</span>
-<span class="n">interProcessMutex</span><span class="o">.</span><span class="na">release</span><span class="o">();</span>
-</code></pre></div></div>
-
-<p>其实现分布式锁的核心源码如下：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">internalLockLoop</span><span class="o">(</span><span class="kt">long</span> <span class="n">startMillis</span><span class="o">,</span> <span class="nc">Long</span> <span class="n">millisToWait</span><span class="o">,</span> <span class="nc">String</span> <span class="n">ourPath</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Exception</span>
-<span class="o">{</span>
-    <span class="kt">boolean</span>  <span class="n">haveTheLock</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="kt">boolean</span>  <span class="n">doDelete</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-    <span class="k">try</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span> <span class="n">revocable</span><span class="o">.</span><span class="na">get</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="n">client</span><span class="o">.</span><span class="na">getData</span><span class="o">().</span><span class="na">usingWatcher</span><span class="o">(</span><span class="n">revocableWatcher</span><span class="o">).</span><span class="na">forPath</span><span class="o">(</span><span class="n">ourPath</span><span class="o">);</span>
-        <span class="o">}</span>
-
-        <span class="k">while</span> <span class="o">(</span> <span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="na">getState</span><span class="o">()</span> <span class="o">==</span> <span class="nc">CuratorFrameworkState</span><span class="o">.</span><span class="na">STARTED</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">haveTheLock</span> <span class="o">)</span> <span class="o">{</span>
-            <span class="c1">// 获取当前所有节点排序后的集合</span>
-            <span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span>        <span class="n">children</span> <span class="o">=</span> <span class="n">getSortedChildren</span><span class="o">();</span>
-            <span class="c1">// 获取当前节点的名称</span>
-            <span class="nc">String</span>              <span class="n">sequenceNodeName</span> <span class="o">=</span> <span class="n">ourPath</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="n">basePath</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span> <span class="c1">// +1 to include the slash</span>
-            <span class="c1">// 判断当前节点是否是最小的节点</span>
-            <span class="nc">PredicateResults</span>    <span class="n">predicateResults</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="na">getsTheLock</span><span class="o">(</span><span class="n">client</span><span class="o">,</span> <span class="n">children</span><span class="o">,</span> <span class="n">sequenceNodeName</span><span class="o">,</span> <span class="n">maxLeases</span><span class="o">);</span>
-            <span class="k">if</span> <span class="o">(</span> <span class="n">predicateResults</span><span class="o">.</span><span class="na">getsTheLock</span><span class="o">()</span> <span class="o">)</span> <span class="o">{</span>
-                <span class="c1">// 获取到锁</span>
-                <span class="n">haveTheLock</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="c1">// 没获取到锁，对当前节点的上一个节点注册一个监听器</span>
-                <span class="nc">String</span>  <span class="n">previousSequencePath</span> <span class="o">=</span> <span class="n">basePath</span> <span class="o">+</span> <span class="s">"/"</span> <span class="o">+</span> <span class="n">predicateResults</span><span class="o">.</span><span class="na">getPathToWatch</span><span class="o">();</span>
-                <span class="kd">synchronized</span><span class="o">(</span><span class="k">this</span><span class="o">){</span>
-                    <span class="nc">Stat</span> <span class="n">stat</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">checkExists</span><span class="o">().</span><span class="na">usingWatcher</span><span class="o">(</span><span class="n">watcher</span><span class="o">).</span><span class="na">forPath</span><span class="o">(</span><span class="n">previousSequencePath</span><span class="o">);</span>
-                    <span class="k">if</span> <span class="o">(</span> <span class="n">stat</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">){</span>
-                        <span class="k">if</span> <span class="o">(</span> <span class="n">millisToWait</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">){</span>
-                            <span class="n">millisToWait</span> <span class="o">-=</span> <span class="o">(</span><span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">startMillis</span><span class="o">);</span>
-                            <span class="n">startMillis</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-                            <span class="k">if</span> <span class="o">(</span> <span class="n">millisToWait</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="o">){</span>
-                                <span class="n">doDelete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>    <span class="c1">// timed out - delete our node</span>
-                                <span class="k">break</span><span class="o">;</span>
-                            <span class="o">}</span>
-                            <span class="n">wait</span><span class="o">(</span><span class="n">millisToWait</span><span class="o">);</span>
-                        <span class="o">}</span><span class="k">else</span><span class="o">{</span>
-                            <span class="n">wait</span><span class="o">();</span>
-                        <span class="o">}</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-                <span class="c1">// else it may have been deleted (i.e. lock released). Try to acquire again</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">catch</span> <span class="o">(</span> <span class="nc">Exception</span> <span class="n">e</span> <span class="o">)</span> <span class="o">{</span>
-        <span class="n">doDelete</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
-    <span class="o">}</span> <span class="k">finally</span><span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span> <span class="n">doDelete</span> <span class="o">){</span>
-            <span class="n">deleteOurPath</span><span class="o">(</span><span class="n">ourPath</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">return</span> <span class="n">haveTheLock</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>其实curator实现分布式锁的底层原理和上面分析的是差不多的。这里我们用一张图详细描述其原理：</p>
-
-<p><img src="/assets/images/distributed/0820/v2-b6efe243b1bc93569de0412dbab9b527_1440w.jpg" alt="9" /></p>
-
-<p>小结：本节介绍了zookeeperr实现分布式锁的方案以及zk的开源客户端的基本使用，简要的介绍了其实现原理。</p>
-
-<h4 id="两种方案的优缺点比较">两种方案的优缺点比较</h4>
-
-<p>学完了两种分布式锁的实现方案之后，本节需要讨论的是redis和zk的实现方案中各自的优缺点。对于redis的分布式锁而言，它有以下缺点：</p>
-
-<ul>
-  <li>它获取锁的方式简单粗暴，获取不到锁直接不断尝试获取锁，比较消耗性能。</li>
-  <li>另外来说的话，redis的设计定位决定了它的数据并不是强一致性的，在某些极端情况下，可能会出现问题。锁的模型不够健壮</li>
-  <li>即便使用redlock算法来实现，在某些复杂场景下，也无法保证其实现100%没有问题，关于redlock的讨论可以看How to do distributed locking</li>
-  <li>redis分布式锁，其实需要自己不断去尝试获取锁，比较消耗性能。</li>
-</ul>
-
-<p>但是另一方面使用redis实现分布式锁在很多企业中非常常见，而且大部分情况下都不会遇到所谓的“极端复杂场景”所以使用redis作为分布式锁也不失为一种好的方案，最重要的一点是redis的性能很高，可以支撑高并发的获取、释放锁操作。</p>
-
-<p>对于zk分布式锁而言:</p>
-
-<ul>
-  <li>zookeeper天生设计定位就是分布式协调，强一致性。锁的模型健壮、简单易用、适合做分布式锁。</li>
-  <li>如果获取不到锁，只需要添加一个监听器就可以了，不用一直轮询，性能消耗较小。</li>
-</ul>
-
-<p>但是zk也有其缺点：如果有较多的客户端频繁的申请加锁、释放锁，对于zk集群的压力会比较大。</p>
-
-<h4 id="小结">小结：</h4>
-
-<p>综上所述，redis和zookeeper都有其优缺点。我们在做技术选型的时候可以根据这些问题作为参考因素。</p>
-
-<h3 id="建议">建议</h3>
-
-<p>通过前面的分析，实现分布式锁的两种常见方案：redis和zookeeper，他们各有千秋。应该如何选型呢？</p>
-
-<p>就个人而言的话，我 <strong>比较推崇zk实现的锁</strong>：</p>
-
-<p>因为redis是有可能存在隐患的，可能会导致数据不对的情况。但是，怎么选用要看具体在公司的场景了。</p>
-
-<p>如果公司里面有zk集群条件，优先选用zk实现，但是如果说公司里面只有redis集群，没有条件搭建zk集群。</p>
-
-<p>那么其实用redis来实现也可以，另外还可能是系统设计者考虑到了系统已经有redis，但是又不希望再次引入一些外部依赖的情况下，可以选用redis。</p>
-</div><p><a href="/docker/distributed">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=distributed">distributed</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="distributed-2020-08-20-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="distributed"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/jvm/outofmemory"><h2 itemprop="headline" class="item__header">java内存泄漏与内存溢出</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>内存溢出 out of memory，是指程序在申请内存时，没有足够的内存空间供其使用，出现out of memory；</p>
-
-<p>内存泄露 memory leak，是指程序在申请内存后，无法释放已申请的内存空间，一次内存泄露危害可以忽略，但内存泄露堆积后果很严重，无论多少内存,迟早会被占光。</p>
-
-<p>memory leak会最终会导致out of memory！</p>
-
-<p>以发生的方式来分类，内存泄漏可以分为4类：</p>
-
-<ol>
-  <li>常发性内存泄漏。发生内存泄漏的代码会被多次执行到，每次被执行的时候都会导致一块内存泄漏。</li>
-  <li>偶发性内存泄漏。发生内存泄漏的代码只有在某些特定环境或操作过程下才会发生。常发性和偶发性是相对的。对于特定的环境，偶发性的也许就变成了常发性的。所以测试环境和测试方法对检测内存泄漏至关重要。</li>
-  <li>一次性内存泄漏。发生内存泄漏的代码只会被执行一次，或者由于算法上的缺陷，导致总会有一块仅且一块内存发生泄漏。比如，在类的构造函数中分配内存，在析构函数中却没有释放该内存，所以内存泄漏只会发生一次。</li>
-  <li>隐式内存泄漏。程序在运行过程中不停的分配内存，但是直到结束的时候才释放内存。严格的说这里并没有发生内存泄漏，因为最终程序释放了所有申请的内存。但是对于一个服务器程序，需要运行几天，几周甚至几个月，不及时释放内存也可能导致最终耗尽系统的所有内存。所以，我们称这类内存泄漏为隐式内存泄漏。</li>
-</ol>
-
-<p>从用户使用程序的角度来看，内存泄漏本身不会产生什么危害，作为一般的用户，根本感觉不到内存泄漏的存在。真正有危害的是内存泄漏的堆积，这会最终消耗尽系统所有的内存。从这个角度来说，一次性内存泄漏并没有什么危害，因为它不会堆积，而隐式内存泄漏危害性则非常大，因为较之于常发性和偶发性内存泄漏它更难被检测到</p>
-
-<h4 id="一java内存回收机制">一、Java内存回收机制</h4>
-<p>不论哪种语言的内存分配方式，都需要返回所分配内存的真实地址，也就是返回一个指针到内存块的首地址。Java中对象是采用new或者反射的方法创建的，这些对象的创建都是在堆（Heap）中分配的，所有对象的回收都是由Java虚拟机通过垃圾回收机制完成的。GC为了能够正确释放对象，会监控每个对象的运行状况，对他们的申请、引用、被引用、赋值等状况进行监控，Java会使用有向图的方法进行管理内存，实时监控对象是否可以达到，如果不可到达，则就将其回收，</p>
-
-<h4 id="二java内存泄露引起原因">二、Java内存泄露引起原因</h4>
-<p>内存泄露是指无用对象（不再使用的对象）持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。内存泄露有时不严重且不易察觉，这样开发者就不知道存在内存泄露，但有时也会很严重，会提示你Out of memory。</p>
-
-<p>那么，Java内存泄露根本原因是什么呢？长生命周期的对象持有短生命周期对象的引用就很可能发生内存泄露，尽管短生命周期对象已经不再需要，但是因为长生命周期对象持有它的引用而导致不能被回收，这就是java中内存泄露的发生场景。具体主要有如下几大类：</p>
-<h5 id="1静态集合类引起内存泄露">1、静态集合类引起内存泄露：</h5>
-<p>像HashMap、Vector等的使用最容易出现内存泄露，这些静态变量的生命周期和应用程序一致，他们所引用的所有的对象Object也不能被释放，因为他们也将一直被Vector等引用着。</p>
-
-<pre><code class="language-Java">Static Vector v = new Vector(10);
-for (int i = 1; i&lt;100; i++)
-{
-  Object o = new Object();
-  v.add(o);
-  o = null;
-}//
-</code></pre>
-
-<p>在这个例子中，循环申请Object 对象，并将所申请的对象放入一个Vector 中，如果仅仅释放引用本身（o=null），那么Vector 仍然引用该对象，所以这个对象对GC 来说是不可回收的。因此，如果对象加入到Vector 后，还必须从Vector 中删除，最简单的方法就是将Vector对象设置为null。</p>
-
-<h5 id="2当集合里面的对象属性被修改后再调用remove方法时不起作用">2、当集合里面的对象属性被修改后，再调用remove（）方法时不起作用。</h5>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
-<span class="o">{</span>
-  <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashSet</span><span class="o">&lt;</span><span class="nc">Person</span><span class="o">&gt;();</span>
-  <span class="nc">Person</span> <span class="n">p1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"唐僧"</span><span class="o">,</span><span class="s">"pwd1"</span><span class="o">,</span><span class="mi">25</span><span class="o">);</span>
-  <span class="nc">Person</span> <span class="n">p2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"孙悟空"</span><span class="o">,</span><span class="s">"pwd2"</span><span class="o">,</span><span class="mi">26</span><span class="o">);</span>
-  <span class="nc">Person</span> <span class="n">p3</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"猪八戒"</span><span class="o">,</span><span class="s">"pwd3"</span><span class="o">,</span><span class="mi">27</span><span class="o">);</span>
-  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p1</span><span class="o">);</span>
-  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p2</span><span class="o">);</span>
-  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p3</span><span class="o">);</span>
-  <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"总共有:"</span><span class="o">+</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()+</span><span class="s">" 个元素!"</span><span class="o">);</span> <span class="c1">//结果：总共有:3 个元素!</span>
-  <span class="n">p3</span><span class="o">.</span><span class="na">setAge</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span> <span class="c1">//修改p3的年龄,此时p3元素对应的hashcode值发生改变</span>
-
-  <span class="n">set</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">p3</span><span class="o">);</span> <span class="c1">//此时remove不掉，造成内存泄漏</span>
-
-  <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">p3</span><span class="o">);</span> <span class="c1">//重新添加，居然添加成功</span>
-  <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"总共有:"</span><span class="o">+</span><span class="n">set</span><span class="o">.</span><span class="na">size</span><span class="o">()+</span><span class="s">" 个元素!"</span><span class="o">);</span> <span class="c1">//结果：总共有:4 个元素!</span>
-  <span class="k">for</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">person</span> <span class="o">:</span> <span class="n">set</span><span class="o">)</span>
-  <span class="o">{</span>
-    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<h5 id="3监听器">3、监听器</h5>
-<p>在java 编程中，我们都需要和监听器打交道，通常一个应用当中会用到很多监听器，我们会调用一个控件的诸如addXXXListener()等方法来增加监听器，但往往在释放对象的时候却没有记住去删除这些监听器，从而增加了内存泄漏的机会。</p>
-
-<h5 id="4各种连接">4、各种连接</h5>
-<p>比如数据库连接（dataSourse.getConnection()），网络连接(socket)和io连接，除非其显式的调用了其close（）方法将其连接关闭，否则是不会自动被GC 回收的。对于Resultset 和Statement 对象可以不进行显式回收，但Connection 一定要显式回收，因为Connection 在任何时候都无法自动回收，而Connection一旦回收，Resultset 和Statement 对象就会立即为NULL。但是如果使用连接池，情况就不一样了，除了要显式地关闭连接，还必须显式地关闭Resultset Statement 对象（关闭其中一个，另外一个也会关闭），否则就会造成大量的Statement 对象无法释放，从而引起内存泄漏。这种情况下一般都会在try里面去的连接，在finally里面释放连接。</p>
-
-<h5 id="5单例模式">5、单例模式</h5>
-
-<p>如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露。</p>
-
-<p>如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露</p>
-
-<p>不正确使用单例模式是引起内存泄露的一个常见问题，单例对象在被初始化后将在JVM的整个生命周期中存在（以静态变量的方式），如果单例对象持有外部对象的引用，那么这个外部对象将不能被jvm正常回收，导致内存泄露，考虑下面的例子：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">A</span><span class="o">{</span>
-  <span class="kd">public</span> <span class="nf">A</span><span class="o">(){</span>
-    <span class="no">B</span><span class="o">.</span><span class="na">getInstance</span><span class="o">().</span><span class="na">setA</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-  <span class="o">}</span>
-  <span class="o">....</span>
-<span class="o">}</span>
-<span class="c1">//B类采用单例模式</span>
-<span class="kd">class</span> <span class="nc">B</span><span class="o">{</span>
-  <span class="kd">private</span> <span class="no">A</span> <span class="n">a</span><span class="o">;</span>
-  <span class="kd">private</span> <span class="kd">static</span> <span class="no">B</span> <span class="n">instance</span><span class="o">=</span><span class="k">new</span> <span class="no">B</span><span class="o">();</span>
-  <span class="kd">public</span> <span class="nf">B</span><span class="o">(){}</span>
-  <span class="kd">public</span> <span class="kd">static</span> <span class="no">B</span> <span class="nf">getInstance</span><span class="o">(){</span>
-    <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
-  <span class="o">}</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setA</span><span class="o">(</span><span class="no">A</span> <span class="n">a</span><span class="o">){</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">a</span><span class="o">=</span><span class="n">a</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="c1">//getter...</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>显然B采用singleton模式，它持有一个A对象的引用，而这个A类的对象将不能被回收。想象下如果A是个比较复杂的对象或者集合类型会发生什么情况</p>
-</div><p><a href="/jvm/outofmemory">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=jvm">jvm</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 19, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-08-19-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-19T00:00:00+08:00">
-    <meta itemprop="keywords" content="jvm"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/thread/0818"><h2 itemprop="headline" class="item__header">阻塞式编程和非阻塞式编程</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
-  <li>阻塞IO的含义
-    <ol>
-      <li>阻塞（blocking）IO：资源不可用时，IO请求一直阻塞，知道反馈结果（有数据或者超时）。</li>
-      <li>非阻塞（non-blocking）IO：资源不可用时，IO请求离开返回，返回数据标识资源不可用。</li>
-      <li>同步（synchronous）IO：应用组社发送或接受说句状态，知道数据成功传输或返回失败。</li>
-      <li>异步（asynchronous）IO：应用发送或接受数据后立刻返回，实际处理是异步执行的。</li>
-    </ol>
-  </li>
-</ul>
-
-<p><strong>阻塞和非阻塞是获取资源的方式。同步/异步是程序如何处理资源的逻辑设计。</strong></p>
-
-<p>代码中使用的API：ServerSocket#accept、InputStream#read都是阻塞的API。<strong>操作系统底层API中，默认操作都是Blocking型</strong>。sent./rec等接口都是阻塞的。</p>
-
-<p>带来的问题：阻塞导致处理网络I/O时，一个线程只能处理一个网络连接。</p>
-</div><p><a href="/mianshi/thread/0818">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 18, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-18-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-18T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/0818/01"><h2 itemprop="headline" class="item__header">蚂蚁集团面试题</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="1-dubbo">1 Dubbo</h2>
-
-<h4 id="11-服务调用超时问题怎么解决">1.1 服务调用超时问题怎么解决？</h4>
-
-<p><a href="https://www.cnblogs.com/ASPNET2008/p/7292472.html">dubbo源码分析（二）：超时原理以及应用场景</a></p>
-
-<h4 id="12-dubbo支持哪些序列化方式">1.2 Dubbo支持哪些序列化方式？</h4>
-
-<ul>
-  <li>Hessian 序列化：是修改过的 hessian lite，默认启用</li>
-  <li>json 序列化：使用 FastJson 库</li>
-  <li>java 序列化：JDK 提供的序列化，性能不理想</li>
-  <li>dubbo 序列化：未成熟的高效 java 序列化实现，不建议在生产环境使用</li>
-</ul>
-
-<h4 id="13--dubbo和springcloud的关系">1.3  Dubbo和SpringCloud的关系？</h4>
-
-<table>
-  <thead>
-    <tr>
-      <th>dubbo</th>
-      <th>springcloud</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>消费者，生产者，注册中心，管理中心</td>
-      <td>消费者，生产者，注册中心，管理中心，短路器，分布式配置，消息总线，服务追踪</td>
-    </tr>
-    <tr>
-      <td>Netty这样的NIO框架，是基于TCP协议传输的，配合以Hession序列化完成RPC</td>
-      <td>基于Http协议+rest接口调用远程请求，相对来说，Http请求会有更大的报文，占的带宽也会更多。</td>
-    </tr>
-    <tr>
-      <td>dubbo类似组装机，开发相对复杂</td>
-      <td>springcloud类似一体机，一站式开发，相对简单</td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="14-dubbo的架构设计一共划分了哪些层">1.4 Dubbo的架构设计？一共划分了哪些层？</h4>
-
-<ul>
-  <li>服务接口层(Service)：该层是与实际业务逻辑相关的，根据服务提供方和服务消费方的业务设计对应的接口和实现</li>
-  <li>配置层(Config)：对外配置接口，以 ServiceConfig 和 ReferenceConfig 为中心</li>
-  <li>服务代理层(Proxy)：服务接口透明代理，生成服务的客户端 Stub 和服务器端 Skeleton</li>
-  <li>服务注册层(Registry)：封装服务地址的注册与发现，以服务 URL 为中心</li>
-  <li>集群层(Cluster)：封装多个提供者的路由及负载均衡，并桥接注册中心，以 Invoker 为中心</li>
-  <li>监控层(Monitor)：RPC 调用次数和调用时间监控</li>
-  <li>远程调用层(Protocol)：封将 RPC 调用，以 Invocation 和 Result 为中心，扩展接口为 Protocol、Invoker、Exporter</li>
-  <li>信息交换层(Exchange)：封装请求响应模式，同步转异步，以 Request 和 Response 为中心</li>
-  <li>网络传输层(Transport)：抽象 mina 和 netty 为统一接口，以 Message 为中心</li>
-</ul>
-
-<h4 id="15--dubbo的默认集群容错方案">1.5  Dubbo的默认集群容错方案？</h4>
-
-<ul>
-  <li>
-    <p>Failover Cluster，失败自动切换，当出现失败，重试其它服务器。通常用于读操作，但重试会带来更长延迟。</p>
-  </li>
-  <li>
-    <p>Failfast Cluster，快速失败，只发起一次调用，失败立即报错。通常用于非幂等性的写操作，比如新增记录。</p>
-  </li>
-  <li>
-    <p>Failsafe Cluster，失败安全，出现异常时，直接忽略。通常用于写入日志等。</p>
-  </li>
-  <li>
-    <p>Failback Cluster，失败自动恢复，后台记录失败请求，定时重发。通常用于消息通知等。</p>
-  </li>
-  <li>
-    <p>Forking Cluster，并行调用多个服务器，只要一个成功即返回。通常用于实时性要求较高的读操作，但需要浪费更多服务资源。可通过 forks 来设置最大并行数。</p>
-  </li>
-  <li>
-    <p>Broadcast Cluster，广播调用所有提供者，逐个调用，任意一台报错则报错。通常用于通知所有提供者更新缓存本地资源信息。</p>
-
-    <p>默认 Failover Cluster</p>
-  </li>
-</ul>
-
-<p>1.6 Dubbo使用的是什么通信框架?</p>
-
-<p>1.7 Dubbo的主要应用场景？</p>
-
-<p>1.8 Dubbo服务注册与发现的流程？流程说明。</p>
-
-<p>1.9 Dubbo的集群容错方案有哪些？</p>
-
-<p>1.10 Dubbo的四大组件</p>
-
-<p>1.11 Dubbo在安全机制方面是如何解决的</p>
-
-<p>1.12 Dubbo和SpringCloud的区别？</p>
-
-<p>1.13 Dubbo支持哪些协议，每种协议的应用场景，优缺点？</p>
-
-<p>1.14 Dubbo的核心功能有哪些？</p>
-
-<p>1.15 Dubbo的注册中心集群挂掉，发布者和订阅者之间还能通信么？</p>
-
-<p>1.16 Dubbo集群的负载均衡有哪些策略</p>
-
-<p>1.17 为什么需要服务治理？</p>
-
-<p>1.18 Dubbo超时时间怎样设置？</p>
-
-<h2 id="2-elasticsearch">2 ElasticSearch</h2>
-
-<p>2.1 你们公司的ES集群，一个node一般会分配几个分片？</p>
-
-<p>2.2 Elasticsearch是如何实现Master选举的？</p>
-
-<p>2.3 你是如何做写入调优的？</p>
-
-<p>2.4 如何避免脑裂？</p>
-
-<p>2.5 Elasticsearch对于大数据量（上亿量级）的聚合如何实现？</p>
-
-<p>2.6 ES主分片数量可以在后期更改吗？为什么？</p>
-
-<p>2.7 如何监控集群状态？</p>
-
-<p>2.8 ElasticSearch中的副本是什么？</p>
-
-<p>2.9 ES更新数据的执行流程？</p>
-
-<p>2.10 shard里面是什么组成的？</p>
-
-<p>2.11 ElasticSearch中的分析器是什么？</p>
-
-<p>2.12 什么是脑裂？</p>
-
-<p>2.13 客户端在和集群连接时，如何选择特定的节点执行请求的？</p>
-
-<p>2.14 Elasticsearch中的倒排索引是什么？</p>
-
-<p>2.15 什么是索引？索引（名词） 一个索引(index)</p>
-
-<p>2.16 详细描述一下Elasticsearch更新和删除文档的过程</p>
-
-<h2 id="3-jvm">3 JVM</h2>
-
-<h4 id="31--jvm参数主要有种分类">3.1  JVM参数主要有⼏种分类</h4>
-
-<p>IBM 微软的 hotpot</p>
-
-<h4 id="32--java中会存在内存泄漏吗简述一下">3.2  Java中会存在内存泄漏吗，简述一下。</h4>
-
-<p>会出现内存泄漏，当垃圾回收器清理内存后，现有内存使用量+申请新增内存&gt;最大使用内存时，会出现内存泄漏</p>
-
-<p>主要场景包括以下两种</p>
-
-<ol>
-  <li>机器内存不够用</li>
-  <li>内存分配不合理</li>
-</ol>
-
-<h4 id="33--java虚拟机是如何判定两个java类是相同的">3.3  Java虚拟机是如何判定两个Java类是相同的？</h4>
-
-<p>在新建对象的过程中，需要新通过类加载，而在类加载中通过 <strong>双亲委派机制</strong> 来判断两个类是否相同</p>
-
-<p>当某个加载器需要加载某个.class 文件时，他首先把这个任务委托过他的上一级加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。</p>
-
-<p>下面是类加载的过程</p>
-
-<p><strong>用于自定义类加载器 –&gt; 系统类加载器 –&gt; 扩展类加载 –&gt; 启动类加载</strong></p>
-
-<h4 id="34--java-中都有哪些引用类型">3.4  Java 中都有哪些引用类型</h4>
-
-<ol>
-  <li>__强引用（strongreference）__就是指在程序代码之中普遍存在的,类似“Object obj=new Object()” 这类的引用,只要强引用还存在,垃圾收集器永远不会回收掉被引用的对象实例。</li>
-  <li>__软引用（softreference）__是用来描述一些还有用但并非必需的对象。对于软引用关联着的对象, 在系统将要发生内存溢出异常之前,将会把这些对象实例列进回收范围之中进行 第二次回收。如果这次回收还没有足够的内存,才会抛出内存溢出异常。在 JDK 1.2 之后,提供了 SoftReference 类来实现软引用。</li>
-  <li>__弱引用（weakreference）__也是用来描述非必需对象的,但是它的强度比软引用更弱一些,被弱 引用关联的对象实例只能生存到下一次垃圾收集发生之前。当垃圾收集器工作时, 无论当前内存是否足够,都会回收掉只被弱引用关联的对象实例。在 JDK 1.2 之 后,提供了 WeakReference 类来实现弱引用。</li>
-  <li>__虚引用（phantomreference）__也称为幽灵引用或者幻影引用,它是最弱的一种引用关系。一个对象 实例是否有虚引用的存在,完全不会对其生存时间构成影响,也无法通过虚引用 来取得一个对象实例。为一个对象设置虚引用关联的唯一目的就是能在这个对象 实例被收集器回收时收到一个系统通知。在 JDK 1.2 之后,提供了 PhantomReference 类来实现虚引用</li>
-</ol>
-
-<h4 id="35--在-java-中对象什么时候可以被垃圾回收">3.5  在 Java 中，对象什么时候可以被垃圾回收？</h4>
-
-<p>当对象被判定已经“死去”时，对象可以被垃圾回收，判断对象是否存活可通过以下算法</p>
-
-<ol>
-  <li>__引用计数算法：__通过引用计数器，当被引用+1，当失去引用-1，计数为零的引用被清理</li>
-  <li><strong>可达性分析算法：</strong> 通过跟对象作为起始点，从这个节点开始向下搜索，搜索过程所走的路径称为“引用链”，如果某个对象的到 __GC Roots __间没有连接，则说明该对象不能再被引用</li>
-</ol>
-
-<h4 id="36--stackoverflow异常有没有遇到过一般你猜测会在什么情况下被触发">3.6  StackOverflow异常有没有遇到过？一般你猜测会在什么情况下被触发？</h4>
-
-<p>栈内存溢出。栈内存保存的信息包括：函数地址、函数参数、局部变量等</p>
-
-<p>出现__栈内存溢出的常见原因有2个__：</p>
-
-<ol>
-  <li>函数调用层次过深,每调用一次,函数的参数、局部变量等信息就压一次栈</li>
-  <li>局部静态变量体积太大</li>
-</ol>
-
-<p><strong>解决办法大致说来也有两种</strong>：</p>
-
-<ol>
-  <li>增加栈内存的数目</li>
-  <li>使用堆内存增加栈内存方法</li>
-</ol>
-
-<h4 id="37--堆空间分哪些部分以及如何设置各个部分">3.7  堆空间分哪些部分？以及如何设置各个部分？</h4>
-
-<p>新生代，老年代</p>
-
-<p>其中新生代，分为 伊甸，to，from 按照 8:1:1 的比例进行分割</p>
-
-<h4 id="38--什么是栈帧栈帧存储了什么">3.8  什么是栈帧？栈帧存储了什么？</h4>
-
-<p>栈帧是方法运行期最重要的基本数据结构</p>
-
-<p>存储包括：局部变量表，操作数栈，动态连接和方法返回地址</p>
-
-<h4 id="39--如何设置参数生成gc日志">3.9  如何设置参数生成GC日志？</h4>
-
-<p>-XX:+PrintGC</p>
-
-<h4 id="310--gc-是什么为什么要有-gc">3.10  GC 是什么？为什么要有 GC？</h4>
-
-<p>Garbage Collection 垃圾回收系统，</p>
-
-<p>java提供的gc功能可以自动检测对象是否超出通过垃圾回收系统，由系统自动触发垃圾回收。java没有提供释放垃圾已分配内存的显示操作方法</p>
-
-<h4 id="312--使用过哪些jdk命令并说明各个的作用是什么">3.12  使用过哪些jdk命令，并说明各个的作用是什么</h4>
-
-<p><strong>jps：__用于显示__指定系统内所有HotSpot虚拟机进程</strong>，并且能显示虚拟机执行主类以及本地虚拟机唯一ID</p>
-
-<p><strong>jstat：__用于__监视虚拟机各种运行状态信息的工具</strong>，可以显示本地或者远程的虚拟机进程类装载、内存、GC、JIT等运行数据，在没有GUI图像界面的服务器上，<strong>主要就是用它在运行期定位性能问题</strong></p>
-
-<p><strong>jmap：__用于生成堆转储快照(heapdump或dump文件)，说白了就是把java堆使用情况快照一份导出来供我们查看，__用来排查问题</strong>。</p>
-
-<p>__jhat：__这个就是和jmap搭配使用的，jmap导出来的堆快照文件用jhat 打开分析</p>
-
-<p><strong>jstack：__用于生成虚拟机当前时刻线程快照(threaddump或javacore)。__主要用来定位线程出现长时间停顿的原因，判断死锁啊，死循环的等</strong>。通过jstack就可知各线程的调用堆栈情况</p>
-
-<p>__jinfo：__用来查看和调整虚拟机各项参数使用格式</p>
-
-<h4 id="313--jvm运行时数据区区域分为哪部分">3.13  JVM运行时数据区区域分为哪⼏部分？</h4>
-
-<p>堆，方法区，本地方法区，计数器，栈</p>
-
-<h4 id="314--是否了解类加载器双亲委派模型机制和破坏双亲委派模型">3.14  是否了解类加载器双亲委派模型机制和破坏双亲委派模型？</h4>
-
-<p>在类加载的过程中，会用到双亲委派机制，目的是为了保障.class 文件的唯一性，</p>
-
-<p>他首先把这个任务委托过他的上一级加载器，递归这个操作，如果上级的类加载器没有加载，自己才会去加载这个类。</p>
-
-<p>双亲委派机制中类加载过程：自定义类加载器，程序类加载器，扩展类加载，系统类加载器</p>
-
-<p>破坏双亲委派机制：通过继承 ClassLoader 并重写loadclass</p>
-
-<h4 id="315--逃逸分析有几种类型">3.15  逃逸分析有几种类型？</h4>
-
-<p>方法逃逸：对象的方法被外部方法所引用</p>
-
-<p>线程逃逸：方法被外部线程访问到</p>
-
-<h4 id="316---xms这些参数的含义是什么">3.16  -Xms这些参数的含义是什么？</h4>
-
-<p>设置堆内存</p>
-
-<h4 id="317--你知道哪几种垃圾收集器各自的优缺点重点讲下cms和g1包括原理流程优缺点">3.17  你知道哪几种垃圾收集器,各自的优缺点，重点讲下cms和G1，包括原理，流程，优缺点。</h4>
-
-<h4 id="318--jvm的内存结构eden和survivor比例是多少">3.18  JVM的内存结构，Eden和Survivor比例是多少？</h4>
-
-<p>8:1:1</p>
-
-<h2 id="4-多线程高并发">4 多线程/高并发</h2>
-
-<h4 id="41--负载平衡的意义什么">4.1  负载平衡的意义什么？</h4>
-
-<p>提高硬件的使用率，提升系统的容量</p>
-
-<h4 id="42--请说出同步线程及线程调度相关的方法">4.2  请说出同步线程及线程调度相关的方法？</h4>
-
-<p><strong>线程调度相关方法</strong>：</p>
-
-<p>yield()：线程让步，暂停当前正在执行的线程，把执行机会让给优先级相同或更高的线程。若队列中没有同优先级的线程，忽略此方法。</p>
-
-<p>join() ：当某个程序执行流中调用其他线程的 join() 方法时，调用线程将被阻塞，直到 join() 方法加入的 join 线程执行完为止，低优先级的线程也可以获得执行</p>
-
-<p>sleep(long millis)(毫秒) ： 令当前活动线程在指定时间段内放弃对CPU控制,使其他线程有机会被执行,时间到后重排队。</p>
-
-<p>isAlive()：判断线程是否还活着</p>
-
-<p><strong>线程同步：</strong></p>
-
-<p>synchronized 同步代码快，同步方法</p>
-
-<h4 id="43--关于epoll和select的区别哪些说法-是正确的多选">4.3  关于epoll和select的区别，哪些说法 是正确的？（多选）</h4>
-<p>A. epoll 和 select 都是 I/O 多路复用的技术，都可以实现同时监听 多个I/O事件的状态。
-B. epoll 相比 select 效率更高，主要是基于其操作系统支持的 I/O 事件通知机制，而select是基于轮询机制。
-C. epoll支持水平触发和边沿触发两种模式。
-D. select能并行支持I/O比较小，且无法修改。</p>
-
-<h4 id="44--启动一个线程是调用run方法还是start方法">4.4  启动一个线程是调用run()方法还是start()方法？</h4>
-
-<p>run() 方法，start() 中饱含 run() 方法</p>
-
-<h4 id="45--如何确保n个线程可以访问n个资源同时又不导致死锁">4.5  如何确保N个线程可以访问N个资源同时又不导致死锁？</h4>
-
-<p>多线程产生死锁需要四个条件，分别是互斥性，保持和请求，不可剥夺性还有要形成闭环，这四个条件缺一不可，只要破坏了其中一个条件就可以破坏死锁，其中最简单的方法就是线程都是以同样的顺序加锁和释放锁，也就是破坏了第四个条件</p>
-
-<h4 id="46--编写多线程程序的几种实现方式换个问法创建多线程的方式">4.6  编写多线程程序的几种实现方式（换个问法：创建多线程的方式）？</h4>
-
-<p>继承 Thread 重写run函数</p>
-
-<p>实现Runnable 重写run函数</p>
-
-<p>实现Callable接口，重写call函数</p>
-
-<h4 id="47--线程和进程的区别">4.7  线程和进程的区别？</h4>
-
-<p>线程是进程执行程序的最小单元</p>
-
-<p>进程：一个程序一个进程</p>
-
-<p>线程：一个进程包含多个线程</p>
-
-<h4 id="48--什么是线程池有哪些常用线程池">4.8  什么是线程池，有哪些常用线程池？</h4>
-
-<p>若干个线程放入同一个容器中，使用的时候从池中获取而不用自行创建，使用完毕不需 要销毁线程而是放回池中， 从而减少创建和销毁线程对象的开销</p>
-
-<p><strong>常用线程池：</strong></p>
-
-<p>__newSingleThreadExecutor： __创建一个单线程的线程池， 此线程池保证所有任务的执行顺序按照任务的 提交顺序执行。</p>
-
-<p>__newFixedThreadPool： __创建固定大小的线程池， 每次提交一个任务就创建一个线程， 直到线程达到线 程池的最大大小。</p>
-
-<p><strong>newCachedThreadPool：</strong> 创建一个可缓存的线程池， 此线程池不会对线程池大小做限制， 线程池大小 完全依赖于操作系统（或者说 JVM） 能够创建的最大线程大小。</p>
-
-<p>__newScheduledThreadPool： __创建一个大小无限的线程池， 此线程池支持定时以及周期性执行任务的需 求。</p>
-
-<p>__newSingleThreadExecutor： __创建一个单线程的线程池。 此线程池支持定时以及周期性执行任务的需 求</p>
-
-<h4 id="49--什么是死锁">4.9  什么是死锁？</h4>
-
-<p>是指多个进程在运行过程中因争夺资源而造成的一种僵局，当进程处于这种僵持状态时，若无外力作用，它们都将无法再向前推进</p>
-
-<p>多线程产生死锁需要四个条件，分别是互斥性，保持和请求，不可剥夺性还有要形成闭环，这四个条件缺一不可</p>
-
-<h4 id="410--怎么保证缓存和数据库数据的一致性">4.10  怎么保证缓存和数据库数据的一致性？</h4>
-
-<ul>
-  <li>Cache aside （旁路缓存 ）</li>
-</ul>
-
-<p>这是最常用最常用的pattern了。其具体逻辑如下：</p>
-
-<ul>
-  <li><strong>失效：</strong>应用程序先从cache取数据，没有得到，则从数据库中取数据，成功后，放到缓存中。</li>
-  <li><strong>命中：</strong>应用程序从cache中取数据，取到后返回。</li>
-  <li><strong>更新：</strong>先把数据存到数据库中，成功后，<strong>再让缓存失效</strong>。</li>
-</ul>
-
-<p>注意，我们的更新是先更新数据库，成功后，让缓存失效。那么，这种方式是否可以没有文章前面提到过的那个问题呢？我们可以脑补一下。</p>
-
-<p>一个是查询操作，一个是更新操作的并发，首先，没有了删除cache数据的操作了，而是先更新了数据库中的数据，此时，缓存依然有效，所以，并发的查询操作拿的是没有更新的数据，但是，更新操作马上让缓存的失效了，后续的查询操作再把数据从数据库中拉出来。而不会像文章开头的那个逻辑产生的问题，后续的查询操作一直都在取老的数据。</p>
-
-<p>这是标准的design pattern，包括Facebook的论文《<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.usenix.org%2Fsystem%2Ffiles%2Fconference%2Fnsdi13%2Fnsdi13-final170_update.pdf">Scaling Memcache at Facebook</a>》也使用了这个策略。为什么不是写完数据库后更新缓存？你可以看一下Quora上的这个问答《<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.quora.com%2FWhy-does-Facebook-use-delete-to-remove-the-key-value-pair-in-Memcached-instead-of-updating-the-Memcached-during-write-request-to-the-backend">Why does Facebook use delete to remove the key-value pair in Memcached instead of updating the Memcached during write request to the backend?</a>》，主要是怕两个并发的写操作导致脏数据。</p>
-
-<p>那么，是不是Cache Aside这个就不会有并发问题了？不是的，比如，一个是读操作，但是没有命中缓存，然后就到数据库中取数据，此时来了一个写操作，写完数据库后，让缓存失效，然后，之前的那个读操作再把老的数据放进去，所以，会造成脏数据。</p>
-
-<p>但，这个case理论上会出现，不过，实际上出现的概率可能非常低，因为这个条件需要发生在读缓存时缓存失效，而且并发着有一个写操作。而实际上数据库的写操作会比读操作慢得多，而且还要锁表，而读操作必需在写操作前进入数据库操作，而又要晚于写操作更新缓存，所有的这些条件都具备的概率基本并不大。</p>
-
-<p><strong>所以，这也就是Quora上的那个答案里说的，要么通过2PC或是Paxos协议保证一致性，要么就是拼命的降低并发时脏数据的概率，而Facebook使用了这个降低概率的玩法，因为2PC太慢，而Paxos太复杂。当然，最好还是为缓存设置上过期时间。</strong></p>
-
-<h2 id="5-消息中间件">5 消息中间件</h2>
-
-<h4 id="51--消费者获取消息有几种模式">5.1  消费者获取消息有几种模式？</h4>
-
-<p><strong>推送模式:</strong> consumer把轮询过程封装了，并注册到MessageListener监听器中，对于offset进行自动保存。取到消息后，唤醒MessageListener的consumeMessage()来消费，这种触发方法才会被调用的方式对用户而言感觉就像是被推送过来。</p>
-
-<p>__拉取模式:__这种方法非常少用，它在取消息的过程中需要用户自己手动操作。首先在要消费的Topic中拿到MessageQueue的集合，遍历MessageQueue集合，然后针对每一个MessageQueue批量取消息，每取完一次，记录该队列下一次要取的开始offset，直到取完一整个MessageQueue，再换另一个MessageQueue。</p>
-
-<h4 id="52--rocketmq的特点有哪些">5.2  RocketMQ的特点有哪些？</h4>
-
-<ol>
-  <li>灵活可扩展性
-RocketMQ 天然支持集群，其核心四组件（Name Server、Broker、Producer、Consumer）每一个都可以在没有单点故障的情况下进行水平扩展。</li>
-  <li>海量消息堆积能力
-RocketMQ 采用零拷贝原理实现超大的消息的堆积能力，据说单机已可以支持亿级消息堆积，而且在堆积了这么多消息后依然保持写入低延迟。</li>
-  <li>支持顺序消息
-可以保证消息消费者按照消息发送的顺序对消息进行消费。顺序消息分为全局有序和局部有序，一般推荐使用局部有序，即生产者通过将某一类消息按顺序发送至同一个队列来实现。</li>
-  <li>多种消息过滤方式
-消息过滤分为在服务器端过滤和在消费端过滤。服务器端过滤时可以按照消息消费者的要求做过滤，优点是减少不必要消息传输，缺点是增加了消息服务器的负担，实现相对复杂。消费端过滤则完全由具体应用自定义实现，这种方式更加灵活，缺点是很多无用的消息会传输给消息消费者。</li>
-  <li>支持事务消息
-RocketMQ 除了支持普通消息，顺序消息之外还支持事务消息，这个特性对于分布式事务来说提供了又一种解决思路。</li>
-  <li>回溯消费
-回溯消费是指消费者已经消费成功的消息，由于业务上需求需要重新消费，RocketMQ 支持按照时间回溯消费，时间维度精确到毫秒，可以向前回溯，也可以向后回溯</li>
-</ol>
-
-<h4 id="53--kafka-同时设置了-7-天和-10g-清除数据到第五天的时候消息达到了-10g这个时候-kafka将如何处理">5.3  kafka 同时设置了 7 天和 10G 清除数据，到第五天的时候消息达到了 10G，这个时候 kafka将如何处理？</h4>
-
-<p>这个时候 kafka 会执行数据清除工作，时间和大小不论那个满足条件，都会清空数据。</p>
-
-<h4 id="54--为何需要kafka集群">5.4  为何需要Kafka集群</h4>
-
-<p>提高信息吞吐量，</p>
-
-<h4 id="55--kafka-数据存储设计">5.5  Kafka 数据存储设计</h4>
-
-<h4 id="56--kafka如何判断一个节点是否存活">5.6  Kafka如何判断一个节点是否存活？</h4>
-<p>5.7 kafka消息发送的可靠性机制有几种
- 5.8 请详细说一下推送模式和拉取模式。
- 5.9 Kafka 与传统消息系统之间有三个关键区别</p>
-
-<h4 id="510--rocketmq-由哪些角色组成">5.10  RocketMQ 由哪些角色组成？</h4>
-
-<p><strong>生产者（Producer）</strong>：负责产生消息，生产者向消息服务器发送由业务应用程序系统生成的消息。</p>
-
-<p><strong>消费者（Consumer）</strong>：负责消费消息，消费者从消息服务器拉取信息并将其输入用户应用程序。</p>
-
-<p><strong>消息服务器（Broker）</strong>：是消息存储中心，主要作用是接收来自 Producer 的消息并存储， Consumer 从这里取得消息。</p>
-
-<p><strong>名称服务器（NameServer）</strong>：用来保存 Broker 相关 Topic 等元信息并给 Producer ，提供 Consumer 查找 Broker 信息。</p>
-
-<p>5.12 Kafka的消费者如何消费数据
- 5.13 Kafka的优点
- 5.14 Kafka 的设计是什么样的呢？
- 5.15 说说你对Consumer的了解？
- 5.16 Kafka新建的分区会在哪个目录下创建</p>
-
-<h4 id="517--说一下kafka消费者消费过程">5.17  说一下Kafka消费者消费过程</h4>
-
-<p>消息的消费模型有两种：推送模型(push)和拉取模型(pull)</p>
-
-<p>推送模型(push)：</p>
-
-<p>基于推送模型（push）的消息系统，由消息代理记录消费者的消费状态，消息代理在将消息推送到消费者后，标记这条消息为已消费，但这种方式无法很好地保证消息被处理，比如，消息代理把消息发送出去后，当消费进程挂掉或者由于网络原因没有收到这条消息时，就有可能造成消息丢失（因为消息代理已经把这条消息标记为已消费了，但实际上这条消息并没有被实际处理），如果要保证消息被处理，消息代理发送完消息后，要设置状态为“已发送”，只有收到消费者的确认请求后才更新为“已消费”，这就需要消息代理中记录所有的消费状态，这种做法显然是不可取的</p>
-
-<p>拉取模型(pull)：</p>
-
-<p>Kafka采用拉取模型，由消费者自己记录消费状态，每个消费者互相独立地顺序读取每个分区的消息，有两个消费者(不同消费者组)拉取同一个主题的消息，消费者A的消费进度是3，消费者B的消费进度是6，消费者拉取的最大上限通过最高水位(watermark)控制，生产者最新写入的消息如果还没有达到备份数量，对消费者是不可见的，这种由消费者控制偏移量的优点是：消费者可以按照任意的顺序消费消息，比如：消费者可以重置到旧的偏移量，重新处理之前已经消费过的消息；或者直接跳到最近的位置，从当前的时刻开始消费</p>
-
-<h4 id="518--介绍下kafka">5.18  介绍下Kafka</h4>
-
-<p>kafka是一个 <strong>分布式的</strong>， __可分区__的， __可备份__的日志提交服务，它使用独特的设计实现了一个消息系统的功能。</p>
-
-<h4 id="519--什么情况会导致kafka运行变慢">5.19  什么情况会导致Kafka运行变慢？</h4>
-
-<ul>
-  <li>
-    <p>cpu 性能瓶颈</p>
-  </li>
-  <li>
-    <p>磁盘读写瓶颈</p>
-  </li>
-  <li>
-    <p>网络瓶颈</p>
-  </li>
-</ul>
-
-<h4 id="520--kafka-可以脱离-zookeeper-单独使用吗为什么">5.20  kafka 可以脱离 zookeeper 单独使用吗？为什么？</h4>
-
-<p>kafka 不能脱离 zookeeper 单独使用，</p>
-
-<p>因为 kafka 使用 zookeeper 管理和协调 kafka 的节点服务器。</p>
-
-<h4 id="521--使用-kafka-集群需要注意什么">5.21  使用 kafka 集群需要注意什么？</h4>
-
-<ul>
-  <li>
-    <p>集群的数量不是越多越好，最好不要超过 7 个，</p>
-  </li>
-  <li>
-    <p>因为节点越多，消息复制需要的时间就越长，整个群组的吞吐量就越低。</p>
-  </li>
-  <li>
-    <p>集群数量最好是单数，因为超过一半故障集群就不能用了，设置为单数容错率更高。</p>
-  </li>
-</ul>
-
-<h4 id="522--为什么使用消息队列呢即优势所在">5.22  为什么使用消息队列呢（即优势所在）？</h4>
-
-<ol>
-  <li>
-    <p><strong>实现解耦</strong>；举个简单例子，快递小哥手上有很多快递需要配送，若一一通知收件人，估计快递小哥要疯掉，有了丰巢快递柜后，快递小哥可以集中将快递放到快递柜子里面，后面只需发送短信给收件人即可，这样以来快递柜子就充当了消息中间件，实现了解耦，两个人互不耽误。</p>
-  </li>
-  <li>
-    <p><strong>实现冗余备份</strong>；当快递小哥兴致冲冲的拉来一车快递后，正准备投递到丰巢快递柜子，但不幸的是蜂巢快递柜子坏了，无法投递快递，快递小哥也没招，只能老老实实的去下一个丰巢快递柜子投递快递，若快递柜子又坏了，快递小哥还可以去下一个快递柜子，如此一来，实现了消息队列的冗余备份，保证你的快递不被丢失；</p>
-  </li>
-  <li>
-    <p><strong>异步</strong>；如果楼下有你的快递，快递小哥需要一直在楼下等你取走快递后，快递小哥才能进行下一个快递的派单，这样以来快递小哥的效率极其低下，而有了快递柜子后，快递小哥只需要将你的快递放到柜子，然后给你发送取件短信即可，这样以来效率大大提高，这正体现了中间件的好处；</p>
-  </li>
-  <li>
-    <p><strong>削峰</strong>；当双十一来临后，快递小哥的业务量倍增，这样快递小哥直接怀疑人生，自从各种丰巢、菜鸟驿站等各种消息中间件后，快递小哥没那么繁忙了，这正是体现了消息中间件的削峰作用。</p>
-  </li>
-</ol>
-
-<h4 id="523--kafka数据丢失问题解决方案">5.23  Kafka数据丢失问题解决方案?</h4>
-
-<p>首先对kafka进行限速， 其次启用重试机制，重试间隔时间设置长一些，最后Kafka设置 <strong>acks=all</strong>，即需要相应的所有处于ISR的分区都确认收到该消息后，才算发送成功。</p>
-
-<h4 id="524--kafka数据重复问题解决方案">5.24  Kafka数据重复问题解决方案?</h4>
-
-<p>把kafka消费者的配置 <strong>enable.auto.commit设为false</strong>， <strong>禁止kafka自动提交offset，从而使用spring-kafka提供的offset提交策略</strong>。spring-kafka中的offset提交策略可以保证一批消息数据没有完成消费的情况下，也能提交offset，从而避免了提交失败而导致永远重复消费的问题。</p>
-
-<h4 id="524--kafka消息是否会丢失为什么">5.24  kafka消息是否会丢失？为什么？</h4>
-
-<p>acks参数用于控制producer生产消息的持久性（durability）。对producer而言，kafka在乎的是已提交消息的持久性。一旦消息被提交成功，那么只要有任何一个保存了消息的副本存活，这条消息被视为不会丢失的。
-  acks有3个值：0,1,all(-1)</p>
-
-<ul>
-  <li>acks=0：producer不进行消息接收是否成功的确认。</li>
-  <li>acks=1（默认）：当Leader副本接收成功后，返回接收成功确认信息；</li>
-  <li>acks=all或者-1：当Leader和Follower副本都接收成功后，返回接收成功确认信息。</li>
-</ul>
-
-<p>  从上面acks的设置中可以知道，当acks=0时，一旦发生宕机，肯定会发生消息丢失的情况；acks=1时，只要leader broker一直存活，kafka能够保证消息不丢失；acks=all时，只要还有副本存活，那么这条消息肯定不会丢失。</p>
-</div><p><a href="/mianshi/0818/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 18, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-18-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-18T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/spring/0709/01"><h2 itemprop="headline" class="item__header">Autowired的使用：推荐使用构造函数进行注入</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>近期看同事用idea开发的代码，发现在使用@Autowired的时候，大多使用构造函数进行注入。</p>
-
-<p>以前自己在写代码的时候都是直接在变量上进行注入，也没注意过，查了些资料，发现如果直接在变量上进行注入，那么可能会造成<code class="language-plaintext highlighter-rouge">NPE</code>。</p>
-
-<h5 id="构造函数注入的方式">构造函数注入的方式：</h5>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
-<span class="kd">private</span> <span class="kd">final</span> <span class="nc">TestService</span> <span class="n">testService</span><span class="o">;</span>
-<span class="err">   </span> <span class="err">    </span><span class="nd">@Autowired</span>
-<span class="err">   </span> <span class="err">    </span><span class="kd">public</span> <span class="nf">TestController</span><span class="o">(</span><span class="nc">TestService</span> <span class="n">testService</span><span class="o">)</span> <span class="o">{</span>
-<span class="err">       </span> <span class="err">        </span><span class="k">this</span><span class="o">.</span><span class="na">testService</span> <span class="o">=</span> <span class="n">testService</span><span class="o">;</span>
-<span class="err">   </span> <span class="err">    </span><span class="o">}</span>
-<span class="err">       </span> <span class="err">…</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p> </p>
-
-<h5 id="变量注入的方式">变量注入的方式：</h5>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
-<span class="err">   </span> <span class="err">    </span><span class="nd">@Autowired</span>
-<span class="err">       </span> <span class="kd">private</span> <span class="nc">TestService</span> <span class="n">testService</span><span class="o">;</span><span class="err"> </span> <span class="err"> </span>
-<span class="err">          </span> <span class="err">…</span>
-<span class="err"> </span><span class="o">}</span>
-</code></pre></div></div>
-
-<h5 id="那么为什么变量注入的方式可能会造成npe如下">那么为什么变量注入的方式可能会造成NPE？如下：</h5>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
-<span class="err">   </span> <span class="err">    </span><span class="nd">@Autowired</span>
-<span class="err">       </span> <span class="kd">private</span> <span class="nc">TestService</span> <span class="n">testService</span><span class="o">;</span>
-<span class="err">        </span><span class="kd">private</span> <span class="nc">String</span> <span class="n">testname</span><span class="o">;</span>
-<span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span><span class="kd">public</span> <span class="nf">TestController</span><span class="o">(){</span>
-<span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span><span class="k">this</span><span class="o">.</span><span class="na">testname</span> <span class="o">=</span> <span class="n">testService</span><span class="o">.</span><span class="na">getTestName</span><span class="o">();</span>
-<span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span><span class="o">}</span>
-<span class="err"> </span><span class="o">}</span>
-</code></pre></div></div>
-
-<p>这段代码执行时会报NPE。</p>
-
-<p><strong>该类的构造函数中的变量值是通过TestService实例来调用TestService类中的方法获得，而Java类会先执行构造函数，然后在通过@Autowired注入实例，因此在执行构造函数的时候就会报错。</strong></p>
-
-<p>解决方案就是采用构造函数的注入方式，如下：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestController</span> <span class="o">{</span>
-<span class="err">   </span> <span class="err">    </span><span class="kd">private</span> <span class="nc">TestService</span> <span class="n">testService</span><span class="o">;</span>
-<span class="err">        </span><span class="kd">private</span> <span class="nc">String</span> <span class="n">testname</span><span class="o">;</span>
-<span class="err">       </span> <span class="nd">@Autowired</span>
-<span class="err">         </span><span class="kd">public</span> <span class="nf">TestController</span><span class="o">(</span><span class="nc">TestService</span> <span class="n">testService</span><span class="o">){</span>
-<span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="k">this</span><span class="o">.</span><span class="na">testService</span> <span class="o">=</span> <span class="n">testService</span><span class="o">;</span>
-<span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="k">this</span><span class="o">.</span><span class="na">testname</span> <span class="o">=</span> <span class="n">testService</span><span class="o">.</span><span class="na">getTestName</span><span class="o">();</span>
-<span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="err"> </span> <span class="o">}</span>
-<span class="err"> </span><span class="o">}</span>
-</code></pre></div></div>
-
-<p>上面的方法中没有加入final来修饰，但是spring官方文档上是建议将成员变量加上final类型的，这是为什么呢？</p>
-
-<p>有网友解释：</p>
-
-<p>1.spring配置默认的bean的scope是singleton,可以通过设置bean的scope属性为prototype来声明该对象为动态创建。但是，如果你的service本身是singleton,注入只执行一次。</p>
-
-<p>2.@Autowired本身就是单例模式，只会在程序启动时执行一次，即使不定义final也不会初始化第二次，所以这个final是没有意义的吧。</p>
-
-<p>无论是spring的bean的scope是单例还是多例，成员变量加上了final后，只能被赋值一次，赋值后值不再改变。</p>
-
-<p> </p>
-<h5 id="注意">注意：</h5>
-
-<p>1.如果使用变量注入的话，可能回导致循环依赖，即A里面注入B，B里面又注入A。</p>
-
-<p>2.在代码中发现构造方法中注入了很多依赖，显得很臃肿，对于这个问题，说明类中有太多的责任，违反了类的单一性职责原则，这时候需要考虑使用单一职责原则进行代码重构</p>
-</div><p><a href="/spring/0709/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Jul 09, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="spring-2020-07-09-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-07-09T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>321 post articles, 41 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>326 post articles, 41 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
