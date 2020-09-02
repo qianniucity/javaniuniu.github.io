@@ -374,14 +374,130 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/java/juc/02"><h2 itemprop="headline" class="item__header">Servlet的多线程 和 Servlet线程安全</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>JSP/Servlet的多线程原理:</strong></p>
+
+<ul>
+  <li>1.servelet就是一个CGI,但比传统的CGI要快得过</li>
+</ul>
+
+<p>传统CGI是多进程的,servlet是多线程的
+以多线程方式执行可大大降低对系统的资源需求,提高 系统的并发量及响应时间.</p>
+
+<ul>
+  <li>JSP/Servlet容器默认是采用<strong>单实例多线程(这是造成线程安全的主因)</strong>方式处理多个请求的：</li>
+</ul>
+
+<p>当客户端第一次请求某一个JSP文件时(有的servlet是随容器启动就startup)：</p>
+
+<ol>
+  <li>服务端把该JSP编译成一个CLASS文件</li>
+  <li>并创建一个该类的实例</li>
+  <li>然后<strong>创建一个线程</strong>处理CLIENT端的请求。</li>
+</ol>
+
+<ul>
+  <li>多请求，多线程：</li>
+</ul>
+
+<p>如果有多个客户端同时请求该JSP文件，则服务端会创建多个线程。每个客户端请求对应一个线程。</p>
+
+<p><strong>servlet 的线程安全</strong></p>
+
+<ul>
+  <li>servlet里的 实例变量</li>
+</ul>
+
+<p>servlet里的实例变量，是<strong>被所有线程共享</strong>的,所以不是线程安全的.</p>
+
+<ul>
+  <li>servlet方法里的局部变量</li>
+</ul>
+
+<p>因为每个线程都有它自己的堆栈空间,方法内局部变量存储在这个线程堆栈空间内,
+且参数传入方法是按传值volue copy的方式
+所以是线程安全的</p>
+
+<ul>
+  <li>Application对象</li>
+</ul>
+
+<p>在container运行期间,被整个系统内所有用户共同使用,所以不是线程安全 的</p>
+
+<ul>
+  <li>ServletContext对象</li>
+</ul>
+
+<p><strong>ServletContext是可以多线程同时读/写属性的,线程是不安全的</strong>。
+<strong>struts2 的ServletContext采用的是TreadLocal模式,是线程安全的</strong></p>
+
+<ul>
+  <li>HttpServletRequest对象和HttpServletResponse对象</li>
+</ul>
+
+<p>每一个请求，由一个工作线程来执行，都会<strong>创建</strong>有一对新的ServletRequest对象和ServletResponse,然后传入service()方法内
+<strong>所以每个ServletRequest对象对应每个线程，而不是多线程共享，是线程安全的</strong>。所以不用担心request参数和属性的线程安全性</p>
+
+<ul>
+  <li>HttpSession</li>
+</ul>
+
+<p>Session对象在用户session期间存在，<strong>只能在属于同一个SessionID的请求的线程中被访问</strong>，因此Session对象的理论上是线程安全的。
+(当用户打开多个同属于一个进程的浏览器窗口（常见的弹出窗口），在这些窗口的访问属于同一个Session，会出现多次请求，需要多个工作线程来处理请求,这时就有可能的出现线程安全问题)</p>
+
+<p><strong>servlet 尽量用方法内变量,就一定线程安全么? 局部变量的数据也来自request对象或session对象啊,它们线程安全么?</strong>
+servletRequest 线程是安全的
+因为:每个 request 都会创建一个新线程,每个新线程,容器又都会创建一对servletRequest和servletResponse对象(这是servlet基本原理)
+所以servletRequest对象和servletResponse对象只在一个线程内被创建,存在,被访问</p>
+
+<p><strong>常见的线程安全的解决办法:</strong>
+1.使用方法内局部变量</p>
+
+<ul>
+  <li>是因为各线程有自己堆栈空间,存储局部变量</li>
+  <li>方法参数传入,多采用传值（volue copy)传入方法内</li>
+</ul>
+
+<p>2.对<strong>操作共享资源</strong>的语句,方法,对象, 使用同步
+比如<strong>写入磁盘文件</strong>,采用同步锁，但建议尽量用同步代码块，不要用同步方法</p>
+
+<p>3.使用同步的集合类
+使用Vector代替ArrayList
+使用Hashtable代替HashMap。</p>
+
+<p>4.不要在 Servlet中再创建自己的线程来完成某个功能。
+Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行情况复杂化</p>
+</div><p><a href="/java/juc/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 01, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-juc-2020-09-01-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-01T00:00:00+08:00">
+    <meta itemprop="keywords" content="多线程"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java/one/01"><h2 itemprop="headline" class="item__header">一句话介绍</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="what-why-how">what why how</h1>
-<h1 id="相应的查下-某些技术存在的坑">相应的查下 某些技术存在的坑</h1>
+<h1 id="相应的查下--某些技术存在的坑-编写相应的代码来试错">相应的查下  某些技术存在的坑 编写相应的代码来试错</h1>
 <ul>
   <li>mysql 分库分表 有哪些技术 这些技术有哪些坑</li>
-  <li>mysql 读写分离 有哪些技术 这些技术有哪些坑</li>
-  <li>linkedHashMap 有哪些应用场景 存数据有什么缺点</li>
-  <li>redis有哪些必须要用到的技术点</li>
+  <li>mysql 读写分离 有哪些技术 这些技术有哪些坑
+    <ul>
+      <li>mycat</li>
+      <li>springjdbc</li>
+    </ul>
+  </li>
+  <li>linkedHashMap 有哪些应用场景 存数据有什么缺点
+    <ul>
+      <li>通过LUC算法，当linkedHashMap 满了之后 可以会自动删除使用最少的信息</li>
+      <li>linkedHashMap 含有linked 在插入和删除上的缺陷</li>
+    </ul>
+  </li>
+  <li>redis有哪些必须要用到的技术点
+    <ul>
+      <li>
+        <h2 id="倒计时">倒计时</h2>
+      </li>
+    </ul>
+  </li>
   <li>如何处理大文件的问题</li>
   <li>init方法和内部类有什么区别</li>
   <li>内部类
@@ -398,8 +514,37 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
   <li>hashmap treemap linkedhashmap 对比
     <ul>
       <li>一般情况下，我们用的最多的是HashMap,在Map 中插入、删除和定位元素，HashMap 是最好的选择。但如果要按顺序或自定义顺序遍历键，那么TreeMap会更好。如果需要输出的顺序和输入的相同,用LinkedHashMap 可以实现,它还可以按读取顺序来排列.</li>
+      <li>linkedhashmap 在hashmap的基础上增加了linked，在加快了遍历的速度</li>
+      <li>treeMap 拍好顺序，在查找的时候效率比较高，插入的时候效率也没那么低</li>
+      <li>在多线程高并发的情况下，有ConcurrentSkipListMap 提带treemap</li>
     </ul>
   </li>
+  <li>
+    <h2 id="多线程使用场景">多线程使用场景</h2>
+  </li>
+  <li>lock 如何给对象加锁
+    <ul>
+      <li>无</li>
+    </ul>
+  </li>
+  <li>1：A线程正在执行一个对象中的同步方法，B线程是否可以同时执行同一个对象中的非同步方法？
+2：同上，B线程是否可以同时执行同一个对象中的另一个同步方法？
+3：线程抛出异常会释放锁吗？
+4：volatile和synchronized区别？
+5：写一个程序，证明AtomXXX类比synchronized更高效
+6：AtomXXX类可以保证可见性吗？请写一个程序来证明
+7：写一个程序证明AtomXXX类的多个方法并不构成原子性
+8：写一个程序模拟死锁
+9：写一个程序，在main线程中启动100个线程，100个线程完成后，主线程打印“完成”，使用join()和countdownlatch都可以完成，请比较异同。
+10：一个高效的游戏服务器应该如何设计架构？</li>
+  <li>限流
+    <ul>
+      <li>Guava RateLimter</li>
+    </ul>
+  </li>
+  <li>乐观锁 悲观锁 自旋锁 读写锁(共享锁，排他锁)，分段锁 以及在java中的实现方式
+分别对应 CAS   syn   CAS    ReadWriteLock      LongAdder</li>
+  <li>redis 击穿的概念</li>
 </ul>
 </div><p><a href="/java/one/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
@@ -409,7 +554,390 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <meta itemprop="keywords" content="java基础"></div>
       </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java/juc/01"><h2 itemprop="headline" class="item__header">多线程基础</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody">
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="线程基本概念">线程基本概念</h2>
+
+<p>-</p>
+
+<ul>
+  <li>
+    <p>线程：在一个程序内，程序运行的最小单位，一个程序可以同时执行多个线程</p>
+  </li>
+  <li>创建线程：
+    <ul>
+      <li>继承 Thread 并重写run方法</li>
+      <li>实现 Runable 接口，重写run方法</li>
+    </ul>
+  </li>
+  <li>启动线程的三种方式：
+    <ul>
+      <li>Thread</li>
+      <li>Runable</li>
+      <li>线程池 Executors.newCacheThread</li>
+    </ul>
+  </li>
+  <li>让出线程
+    <ul>
+      <li>sleep  未运行，先让别的线程先运行</li>
+      <li>yield   运行中让出 ，进入等待队列</li>
+      <li>join     用于等待另外一个线程结束，比如AB线程，A在运行中，通过join将B加入到A线程中，等B运行完成后，再运行A
+        <ul>
+          <li>可以通过join的方式，让线程顺序执行</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>线程状态</p>
+
+    <p><img src="/assets/images/juc/0828/7e76cc17-0ad5-3ff3-954e-1f83463519d1.jpg" alt="img" /></p>
+  </li>
+</ul>
+
+<p>-</p>
+
+<ul>
+  <li>中段线程（工程中和少使用）
+    <ul>
+      <li>通过 interrupt() 方法中段 （需要配合try catch使用，）</li>
+      <li>通过stop() 中段（不建议使用，因为可能数据不一致的问题）</li>
+      <li>通过shell命令 kill -9 对应线程中段</li>
+    </ul>
+  </li>
+  <li>
+    <p>获取线程状态</p>
+
+    <ul>
+      <li>Thread.getState();</li>
+    </ul>
+  </li>
+  <li>
+    <p>多线程使用场景</p>
+
+    <p>-</p>
+  </li>
+</ul>
+
+<h2 id="锁">锁</h2>
+
+<ul>
+  <li>synchronized  锁定的是某个对象，
+    <ul>
+      <li>对方法加锁</li>
+      <li>对 对象加锁</li>
+      <li>锁升级的概念</li>
+      <li>可重入锁</li>
+      <li>异常会释放锁，<strong>这个很危险</strong>，释放锁之后会被其他线程拿到锁做相应的业务处理</li>
+      <li>八锁</li>
+      <li>Atomic lock 使用的是自旋锁 ，性能比synchronized 要高
+        <ul>
+          <li>自旋锁锁使用场景：执行时间短，线程少（因为等待情况下才会自旋遍历，很消耗cpu资源）</li>
+          <li>系统锁（synchronized）使用场景：执行时间长，线程多</li>
+        </ul>
+      </li>
+      <li>synchronized(object)
+        <ul>
+          <li>不能使用String常量，Integer Long</li>
+        </ul>
+      </li>
+      <li>偏向锁
+        <ul>
+          <li>当线程来的时候，先拿到线程id，先不给对象加锁，当还是之前的线程，那直接执行相应的任务，这样在不直接加锁的情况下，效率更高</li>
+          <li>当进来的是另外一个线程，那么按照加锁的方式处理</li>
+        </ul>
+      </li>
+      <li>自旋锁
+        <ul>
+          <li>当对象被一个线程锁定后，另一个线程会一直询问，是否可以拿到这把锁，会一直问10次，拿不到就进入wait 状态，进入等待队列</li>
+        </ul>
+      </li>
+      <li>锁升级
+        <ul>
+          <li>偏向锁–&gt;自旋锁–&gt;重量级锁(系统锁)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>volatile
+    <ul>
+      <li>保证可见效</li>
+      <li>禁止指令重排</li>
+      <li>可以保证可见性，但是不能保证原子性，保证原子性 需要使用锁</li>
+      <li>没有把握不要用</li>
+      <li>要的时候尽量使用基础变量，不要使用引用值</li>
+      <li>volatile可以保证引用不变，但是引用里面的值观察不到变化</li>
+    </ul>
+  </li>
+  <li>锁优化
+    <ul>
+      <li>锁的粒度细化</li>
+      <li>锁太多的情况下 多锁做粗化</li>
+    </ul>
+  </li>
+  <li>synchronized 锁对象和锁class
+    <ul>
+      <li>1 无论是修饰方法还是修饰代码块都是 对象锁,当一个线程访问一个带synchronized方法时，由于对象锁的存在，所有加synchronized的方法都不能被访问（前提是在多个线程调用的是同一个对象实例中的方法）</li>
+      <li>2 无论是修饰静态方法还是锁定某个对象,都是 类锁.一个class其中的静态方法和静态变量在内存中只会加载和初始化一份，所以，一旦一个静态的方法被申明为synchronized，此类的所有的实例化对象在调用该方法时，共用同一把锁，称之为类锁。</li>
+    </ul>
+  </li>
+  <li>CAS （无锁优化 自旋）
+    <ul>
+      <li>Compare and set</li>
+      <li>cas
+        <ul>
+          <li>CPU原语支持</li>
+        </ul>
+      </li>
+      <li>ABA问题
+        <ul>
+          <li>加version</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>乐观锁 悲观锁 偏向锁 自旋锁</li>
+  <li>lock 比synchronized 好的的地方
+    <ul>
+      <li>lock 用的是cas</li>
+      <li>tryLock 尝试获取锁 boolean</li>
+      <li>可以打断线程</li>
+      <li>公平锁     队列里面的线程 按照顺序 线程挨个执行</li>
+      <li>非公平锁  队列里面等待的线程 随机执行</li>
+    </ul>
+  </li>
+  <li>CountDownLatch
+    <ul>
+      <li>用法</li>
+    </ul>
+  </li>
+  <li>CyclicBarrier
+    <ul>
+      <li>用法</li>
+    </ul>
+  </li>
+  <li>Phaser
+    <ul>
+      <li>用法</li>
+    </ul>
+  </li>
+  <li>ReadWriteLock
+    <ul>
+      <li>共享锁</li>
+      <li>排他锁</li>
+      <li>怎么用</li>
+    </ul>
+  </li>
+  <li>分布式锁
+    <ul>
+      <li>redis</li>
+      <li>zookpeer</li>
+    </ul>
+  </li>
+  <li>semaphore</li>
+  <li>LockSupport
+    <ul>
+      <li>可以指定线程结束阻塞状态</li>
+    </ul>
+  </li>
+  <li>核心概念</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 所有的线程中，都是通过队列 AbstractQueuedSynchronizer 来排序
+- 线程之间不可见
+- notify 不释放锁
+- wait 会释放锁，并进入阻塞状态
+</code></pre></div></div>
+
+<ul>
+  <li>乐观锁 悲观锁 自旋锁 读写锁(共享锁，排他锁)，分段锁 以及在java中的实现方式
+分别对应 CAS   syn   CAS    ReadWriteLock      LongAdder</li>
+  <li>synchronized 和 Condition 本质区别
+    <ul>
+      <li>synchronized 只有一个等待队列，Condition 可以有多个</li>
+    </ul>
+  </li>
+  <li>Varhandle
+    <ul>
+      <li>可以将非原子性操作改成原子性操作（普通属性也可以改成原子性操作）</li>
+      <li>比反射的效率高，Varhandle 可以直接操作二进制的码</li>
+    </ul>
+  </li>
+  <li>ThreadLocal
+    <ul>
+      <li>set
+        <ul>
+          <li>Thread.currentThread.map(ThreadLocal,new persion)</li>
+        </ul>
+      </li>
+      <li>ThreadLocal 用途
+        <ul>
+          <li>声明式事务</li>
+        </ul>
+      </li>
+      <li>使用ThreadLocal 不用的时候 ，需要做 remove 不然有可能会出现内存泄漏</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="容器">容器</h2>
+
+<h4 id="vector-hashtable">vector hashtable</h4>
+
+<ul>
+  <li>​	自带锁，性能不好，基本不用</li>
+</ul>
+
+<h4 id="list">list</h4>
+
+<h4 id="set">set</h4>
+
+<h4 id="queue">Queue</h4>
+
+<ul>
+  <li>高并发</li>
+  <li>生产者消费者模型</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>队列</th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LinkedBlockingQueue</td>
+      <td>无界的</td>
+      <td>最大jvm内存大小<br /><strong>天生的实现了生产者消费者模型</strong></td>
+    </tr>
+    <tr>
+      <td>ArrayBlockingQueue</td>
+      <td>有界的</td>
+      <td>需要设置队列的大小</td>
+    </tr>
+    <tr>
+      <td>PriorityQueue</td>
+      <td>优先队列</td>
+      <td>数据按照一定顺序输出，默认又小到大输出，也可以自定义比较输出顺序</td>
+    </tr>
+    <tr>
+      <td>DelayQueue</td>
+      <td>可以用在时间上的排序</td>
+      <td>按照时间的顺序制作任务</td>
+    </tr>
+    <tr>
+      <td>SynchronousQueue</td>
+      <td>给线程之间传递任务（容量为零）</td>
+      <td>1. 这里只能用 put 方法 ，只能put一次 ，也不能使用 add 方法 <br />2. SynchronousQueue 没有容量，在put之后进入阻塞状态， 需要把数据tack出去</td>
+    </tr>
+    <tr>
+      <td>LinkedTransferQueue</td>
+      <td>可以在线程间传递多个任务</td>
+      <td>1. transfer() 是阻塞方法，需要 tack() 后才解除阻塞，所有需要先执行 tack() 方法 <br />2.相对 SynchronousQueue 只能两个线程之间信息传递 ，TransferQueue 可以多个线程拿数据 <br />3. 相对 SynchronousQueue 容量为零， TransferQueue 可以在队列里面插入多条数据</td>
+    </tr>
+    <tr>
+      <td>ConcurrentLinkedQueue</td>
+      <td>双端队列Deque</td>
+      <td>1. add()  添加不了抛出异常 <br />2. offer 能不能呢添加会有一个boolean的返回值 <br />3. poll() 取 会remove // peek() 取 不会remove</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="map">Map</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>三个map对比</th>
+      <th>写入</th>
+      <th>读取</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hashtable</td>
+      <td>相对快</td>
+      <td>满</td>
+    </tr>
+    <tr>
+      <td>Collections.synchronizedMap(new HashMap&lt;UUID, UUID&gt;());</td>
+      <td>相对快</td>
+      <td>慢</td>
+    </tr>
+    <tr>
+      <td>ConcurrentHashMap</td>
+      <td>相对慢一点</td>
+      <td>极快</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>
+    <p>linkedhashmap 在hashmap的基础上增加了linked，加快了遍历的速度，但是在查找的时候比较麻烦，它的查找时间负责度是O(n)，</p>
+  </li>
+  <li>treeMap 排好顺序，在查找的时候效率比较高，插入的时候效率也没那么低</li>
+  <li>ConcurrentSkipListMap
+    <ul>
+      <li>在多线程高并发的情况下，有ConcurrentSkipListMap 替代 treemap</li>
+      <li>高并发并且排序</li>
+      <li>跳表的概念，（在查找的时候有点二分查找的感觉）</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/assets/images/juc/0901/Jietu20200901-164715@2x.jpg" alt="ConcurrentSkipListMap" /></p>
+
+<ul>
+  <li>CopyOnWriteList 写时复制</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>普通容器</th>
+      <th>并发容器</th>
+      <th>并发容器使用场景</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ArrayList</td>
+      <td>CopyOnWriteArrayList</td>
+      <td>读多写少(写加锁，读不用加锁)</td>
+    </tr>
+    <tr>
+      <td>HashMap</td>
+      <td>ConcurrentHashMap</td>
+      <td>并发时替代HashMap</td>
+    </tr>
+    <tr>
+      <td>TreeMap</td>
+      <td>ConcurrentSkipListMap</td>
+      <td>高并发并且排序</td>
+    </tr>
+    <tr>
+      <td>ArrayList</td>
+      <td>Collections.synchronizedList(new ArrayList)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>list 和 Queue 却别
+    <ul>
+      <li>Queue提供了 offer peek poll   等 对线程友好的api</li>
+      <li>BlockingQueue 提供了 put 和tack阻塞方法 ，是一个很好的 <strong>生产者消费者模型</strong></li>
+    </ul>
+  </li>
+</ul>
 </div><p><a href="/java/juc/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a>
@@ -1709,62 +2237,8 @@ LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造�
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 23, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-23-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-23T00:00:00+08:00">
     <meta itemprop="keywords" content="面试题"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/jvm/stackoverflow"><h2 itemprop="headline" class="item__header">栈溢出(stackoverflow)的原因及解决办法</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>栈溢出(stackoverflow)</strong> 的原因及解决办法：程序功能大概有网络通信、数据库、绘图等。测试的时候程序一运行到某个函数就出现此错误，查了很多地方，试了很多解决办法，终于把问题解决了。
-大家都知道,Windows程序的内存机制大概是这样的:
-全局变量(局部的静态变量本质也属于此范围)存储于堆内存,该段内存较大,一般不会溢出;
-函数地址、函数参数、局部变量等信息存储于栈内存;
-程序中栈内存默认大小为1M,对于当前日益扩大的程序规模而言,稍有不慎就可能出问题。(动态申请的内存即new出来的内存不在栈中)即如果函数这样写</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">voidtest_stack_overflow</span><span class="o">(){</span>
-  <span class="kt">char</span><span class="err">\</span><span class="o">*</span><span class="n">chdata</span><span class="o">=</span><span class="k">new</span><span class="o">[</span><span class="mi">2</span><span class="err">\</span><span class="o">*</span><span class="mi">1024</span><span class="err">\</span><span class="o">*</span><span class="mi">1024</span><span class="o">];</span>
-  <span class="n">delete</span><span class="o">[]</span><span class="n">chdata</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>是不会出现这个错误的，而这样写则不行：</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">voidtest_stack_overflow</span><span class="o">(){</span>
-  <span class="n">charchdata</span><span class="o">[</span><span class="mi">2</span><span class="err">\</span><span class="o">*</span><span class="mi">1024</span><span class="err">\</span><span class="o">*</span><span class="mi">1024</span><span class="o">];</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>大多数情况下都会出现内存溢出的错误。出现__栈内存溢出的常见原因有2个__：</p>
-
-<ol>
-  <li>函数调用层次过深,每调用一次,函数的参数、局部变量等信息就压一次栈。</li>
-  <li>局部静态变量体积太大</li>
-</ol>
-
-<p>第一种情况不太常见,因为很多情况下我们都用其他方法来代替递归调用(反正我是这么做的),所以只要不出现无限制的调用都应该是没有问题的,起码深度几十层我想是没问题的,这个我没试过但我想没有谁会把调用深度作那么多。</p>
-
-<p>检查是否是此原因的方法为，在引起溢出的那个函数处设一个断点,然后执行程序使其停在断点处,然后按下快捷键Alt+7调出callstack窗口,在窗口中可以看到函数调用的层次关系。</p>
-
-<p>第二种情况比较常见了,我就是犯了这个错误,我在函数里定义了一个局部变量,是一个类对象,该类中有一个大数组,大概是1.5M。</p>
-
-<p><strong>解决办法大致说来也有两种</strong>：</p>
-
-<ol>
-  <li>增加栈内存的数目</li>
-  <li>使用堆内存增加栈内存方法如下,在程序中依次选择Project-&gt;Setting-&gt;Link,在Category中选择output,在Reserve中输入16进制的栈内存大小如:0x10000000，然后点ok就可以了。</li>
-</ol>
-
-<p>其他编译器也有类似的设置,个人认为这不是一个好办法,有一个致命原因,不知道有没有人遇到过,我把栈内存改大后,与数据库建立不了连接了(ADO方式,Acess数据库),把栈内存还原,问题立刻消失。不知道究竟是什么原因，有知道的可以告诉我。</p>
-
-<p>第二种解决办法是比较可行的,具体实现由很多种方法可以直接把数组定义改成指针,然后动态申请内存;也可以把局部变量变成全局变量,一个偷懒的办法是直接在定义前边加个static,呵呵,直接变成静态变量(实质就是全局变量)。即可以把上例中的函数这么写：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">voidtest_stack_overflow</span><span class="o">(){</span>
-  <span class="n">staticcharchdata</span><span class="o">[</span><span class="mi">2</span><span class="err">\</span><span class="o">*</span><span class="mi">1024</span><span class="err">\</span><span class="o">*</span><span class="mi">1024</span><span class="o">];</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>当然,除非万不得已,尽量不要使用这么大的数组，出现这种情况多半说明程序结构有问题。</p>
-</div><p><a href="/jvm/stackoverflow">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=jvm">jvm</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 20, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="jvm-2020-08-20-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-20T00:00:00+08:00">
-    <meta itemprop="keywords" content="jvm"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>326 post articles, 41 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>327 post articles, 41 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
