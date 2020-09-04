@@ -374,6 +374,56 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/docs-util/design"><h2 itemprop="headline" class="item__header">设计模式</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><table>
+  <thead>
+    <tr>
+      <th>设计模式</th>
+      <th>典型应用</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>工厂方法</td>
+      <td>适合在单个产品上做纬度扩展</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>抽象工厂</td>
+      <td>适合在产品族的纬度上扩展</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Mediator 调节模式</td>
+      <td>消息中间件（内部之间调和）（居委会大妈）</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Facade 门面模式</td>
+      <td>将复杂的服务整合，当用户访问后，可以通过简单的方式访问到复杂的服务（包工头）</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>责任链模式</td>
+      <td>需要用状态来确定责任是否完成，通常需要用boolean来确定（比如 Filter Interceptor）</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+</div><p><a href="/docs-util/design">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">设计模式</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 04, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="docs-util-design-09-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-04T00:00:00+08:00">
+    <meta itemprop="keywords" content="设计模式"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/java/ThreadPoolExecutor/01"><h2 itemprop="headline" class="item__header">ThreadPoolExecutor源码解析</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>#</p>
 
@@ -870,7 +920,66 @@ Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行
       <li>并发是指任务提交，并行指任务执行</li>
     </ul>
   </li>
+  <li>创建线程为什么那么昂贵？
+    <ul>
+      <li>必须为线程堆栈分配并初始化一大块内存。</li>
+      <li>需要进行系统调用以在主机OS中创建/注册本机线程。</li>
+      <li>需要创建，初始化描述符并将其添加到JVM内部数据结构中</li>
+    </ul>
+  </li>
+  <li>多线程的目的 大概有两个：
+    <ul>
+      <li><strong>避免阻塞异步调用：</strong> 一是把程序细分成几个功能相对独立的模块，防止其中一个功能模块阻塞导致整个程序假死</li>
+      <li><strong>提高运行效率：</strong> 比如多个核同时跑，或者单核里面，某个线程进行IO操作时，另一个线程可以同时执行</li>
+    </ul>
+  </li>
+  <li>形容词用接口，名称用抽象类</li>
+  <li>工厂方法适合在单个产品上做纬度扩展</li>
+  <li>抽象工厂适合在产品族的纬度上扩展</li>
+  <li>设计模式
+    <ul>
+      <li>工厂模式典型的应用 springioc</li>
+      <li>mediate 调节模式 典型应用 消息中间件</li>
+      <li>mvc 分离</li>
+      <li>对修改关闭，对扩展开放</li>
+      <li>高内聚，低耦合</li>
+      <li>通过单例模式降低耦合度，比如某个类作为其他类方法的参数时，可以通过直接使用单例类，而不需要作为参数传递</li>
+      <li>构造方法一个够用绝对不要写两个，每多一个构造函数都需要维护</li>
+    </ul>
+  </li>
+  <li>数组与链表的区别</li>
 </ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>数组</th>
+      <th>链表</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>数组静态分配内存，</td>
+      <td>链表动态分配内存；</td>
+    </tr>
+    <tr>
+      <td>数组在内存中连续，</td>
+      <td>链表不连续；</td>
+    </tr>
+    <tr>
+      <td>数组元素在栈区，</td>
+      <td>链表元素在堆区；</td>
+    </tr>
+    <tr>
+      <td>数组利用下标定位，时间复杂度为O(1)，</td>
+      <td>链表定位元素时间复杂度O(n)；</td>
+    </tr>
+    <tr>
+      <td>数组插入或删除元素的时间复杂度O(n)，</td>
+      <td>链表的时间复杂度O(1)。</td>
+    </tr>
+  </tbody>
+</table>
 </div><p><a href="/java/one/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
@@ -1315,6 +1424,10 @@ Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行
 
 <h3 id="excutethreadpool">ExcuteThreadPool</h3>
 
+<ul>
+  <li>所有线程共用同一个队列</li>
+</ul>
+
 <ol>
   <li>
     <p>为甚么有SingleExcuteThread</p>
@@ -1346,6 +1459,13 @@ Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行
 <h3 id="并发和并行的区别">并发和并行的区别</h3>
 
 <p>并发是指任务提交，并行指任务执行</p>
+
+<h3 id="forkjoinpool">ForkJoinPool</h3>
+
+<ul>
+  <li>每个线程有自己的队列</li>
+  <li>使用大的任务，通过切分成小的任务加快运行速度</li>
+</ul>
 </div><p><a href="/java/juc/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
                 href="/archive.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a>
@@ -2438,196 +2558,8 @@ LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造�
                 href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
             </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-enums-2020-08-27-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-27T00:00:00+08:00">
     <meta itemprop="keywords" content="java基础"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/mianshi/tcp/nio/01"><h2 itemprop="headline" class="item__header">tcp nio epoll等基本技术知识</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="tcp">TCP</h4>
-
-<p>应用层–&gt;传输层–&gt;网络层–&gt;链路层–物理层</p>
-
-<p>三次握手</p>
-
-<p>四次分手</p>
-
-<p><img src="/assets/images/nio/0824/Jietu20200824-155730@2x.jpg" alt="1" /></p>
-
-<h4 id="io消耗">IO消耗</h4>
-
-<ol>
-  <li>程序调用</li>
-  <li>用户态调用切换到系统调用</li>
-</ol>
-
-<h4 id="bio">BIO</h4>
-
-<p>每个线程对应每个连接</p>
-
-<p>优势：可接收很多的连接</p>
-
-<p>问题：</p>
-
-<ol>
-  <li>线程内存浪费</li>
-  <li>cpu调度消耗</li>
-</ol>
-
-<p>根本原因：</p>
-
-<p>​	BLOCKING 阻塞： accept recv</p>
-
-<p>演变的解决方法 –&gt;NONBLOCKING  非阻塞</p>
-
-<h4 id="nio">NIO</h4>
-
-<p>New IO</p>
-
-<p>NONBLOCKING</p>
-
-<p>优势：避免多线程问题</p>
-
-<p>弊端：假设有1w个连接，只有一个发来数据，每循环一次</p>
-
-<p>其实都需要向内核发生1w次reav系统调用，这里有9999是无意义的</p>
-
-<p>消耗时间和资源（用户空间向内核空间的循环遍历，复杂度在系统调用上）</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.mashibing.io.nio</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.net.InetSocketAddress</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.nio.ByteBuffer</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.nio.channels.SelectionKey</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.nio.channels.Selector</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.nio.channels.ServerSocketChannel</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.nio.channels.SocketChannel</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Iterator</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Server</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
-        <span class="nc">ServerSocketChannel</span> <span class="n">ssc</span> <span class="o">=</span> <span class="nc">ServerSocketChannel</span><span class="o">.</span><span class="na">open</span><span class="o">();</span>
-        <span class="n">ssc</span><span class="o">.</span><span class="na">socket</span><span class="o">().</span><span class="na">bind</span><span class="o">(</span><span class="k">new</span> <span class="nc">InetSocketAddress</span><span class="o">(</span><span class="s">"127.0.0.1"</span><span class="o">,</span> <span class="mi">8888</span><span class="o">));</span>
-        <span class="n">ssc</span><span class="o">.</span><span class="na">configureBlocking</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"server started, listening on :"</span> <span class="o">+</span> <span class="n">ssc</span><span class="o">.</span><span class="na">getLocalAddress</span><span class="o">());</span>
-        <span class="nc">Selector</span> <span class="n">selector</span> <span class="o">=</span> <span class="nc">Selector</span><span class="o">.</span><span class="na">open</span><span class="o">();</span>
-        <span class="n">ssc</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">selector</span><span class="o">,</span> <span class="nc">SelectionKey</span><span class="o">.</span><span class="na">OP_ACCEPT</span><span class="o">);</span>
-
-        <span class="k">while</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">selector</span><span class="o">.</span><span class="na">select</span><span class="o">();</span>
-            <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SelectionKey</span><span class="o">&gt;</span> <span class="n">keys</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="na">selectedKeys</span><span class="o">();</span>
-            <span class="nc">Iterator</span><span class="o">&lt;</span><span class="nc">SelectionKey</span><span class="o">&gt;</span> <span class="n">it</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
-            <span class="k">while</span><span class="o">(</span><span class="n">it</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span> <span class="o">{</span>
-                <span class="nc">SelectionKey</span> <span class="n">key</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>
-                <span class="n">it</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
-                <span class="n">handle</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">handle</span><span class="o">(</span><span class="nc">SelectionKey</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isAcceptable</span><span class="o">())</span> <span class="o">{</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="nc">ServerSocketChannel</span> <span class="n">ssc</span> <span class="o">=</span> <span class="o">(</span><span class="nc">ServerSocketChannel</span><span class="o">)</span> <span class="n">key</span><span class="o">.</span><span class="na">channel</span><span class="o">();</span>
-                <span class="nc">SocketChannel</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">ssc</span><span class="o">.</span><span class="na">accept</span><span class="o">();</span>
-                <span class="n">sc</span><span class="o">.</span><span class="na">configureBlocking</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-                <span class="c1">//new Client</span>
-                <span class="c1">//</span>
-                <span class="c1">//String hostIP = ((InetSocketAddress)sc.getRemoteAddress()).getHostString();</span>
-
-			<span class="cm">/*
-			log.info("client " + hostIP + " trying  to connect");
-			for(int i=0; i&lt;clients.size(); i++) {
-				String clientHostIP = clients.get(i).clientAddress.getHostString();
-				if(hostIP.equals(clientHostIP)) {
-					log.info("this client has already connected! is he alvie " + clients.get(i).live);
-					sc.close();
-					return;
-				}
-			}*/</span>
-
-                <span class="n">sc</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">selector</span><span class="o">(),</span> <span class="nc">SelectionKey</span><span class="o">.</span><span class="na">OP_READ</span> <span class="o">);</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-            <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">isReadable</span><span class="o">())</span> <span class="o">{</span> <span class="c1">//flip</span>
-            <span class="nc">SocketChannel</span> <span class="n">sc</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="n">sc</span> <span class="o">=</span> <span class="o">(</span><span class="nc">SocketChannel</span><span class="o">)</span><span class="n">key</span><span class="o">.</span><span class="na">channel</span><span class="o">();</span>
-                <span class="nc">ByteBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="nc">ByteBuffer</span><span class="o">.</span><span class="na">allocate</span><span class="o">(</span><span class="mi">512</span><span class="o">);</span>
-                <span class="n">buffer</span><span class="o">.</span><span class="na">clear</span><span class="o">();</span>
-                <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">buffer</span><span class="o">);</span>
-
-                <span class="k">if</span><span class="o">(</span><span class="n">len</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">new</span> <span class="nc">String</span><span class="o">(</span><span class="n">buffer</span><span class="o">.</span><span class="na">array</span><span class="o">(),</span> <span class="mi">0</span><span class="o">,</span> <span class="n">len</span><span class="o">));</span>
-                <span class="o">}</span>
-
-                <span class="nc">ByteBuffer</span> <span class="n">bufferToWrite</span> <span class="o">=</span> <span class="nc">ByteBuffer</span><span class="o">.</span><span class="na">wrap</span><span class="o">(</span><span class="s">"HelloClient"</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
-                <span class="n">sc</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">bufferToWrite</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-            <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-                <span class="k">if</span><span class="o">(</span><span class="n">sc</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">try</span> <span class="o">{</span>
-                        <span class="n">sc</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-                    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-                    <span class="o">}</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<h4 id="多路复用">多路复用</h4>
-
-<ul>
-  <li>
-    <p><strong>同步IO模型:</strong>   <strong>如果成自己读取IO，那么这个IO模型，无论是BIO，NIO，多路复用器，都叫做 同步IO模型</strong></p>
-  </li>
-  <li><strong>多路复用器：</strong>还是得自己来读取数据</li>
-  <li>select，poll，epoll 都是同步的</li>
-</ul>
-
-<p><strong>select 和poll的优劣</strong></p>
-
-<p>优势：通过一次系统调用，把fds，传递给内核，内核进行遍历，想多NIO的遍历，多路复用减少了系统调用次数</p>
-
-<p>弊端：1. 因为在where循环中，所有会出现重复传递数据到系统调用</p>
-
-<p>​					- 解决方法：内核开辟内存空间保留fd</p>
-
-<p>​			2. 每次select，poll 都都用重复遍历全量的fd</p>
-
-<ul>
-  <li>
-    <p>多路复用器解释：解决的是IO状态的问题</p>
-
-    <p>​								用更少的系统调用解决所有的IO状态，而不是每一次IO都发送系统调用，减少了用户态到内核态切换的过程</p>
-  </li>
-</ul>
-
-<p>epoll</p>
-
-<p>在内核态中开辟一个空间，</p>
-
-<p><strong>shell命令 工具</strong></p>
-
-<ul>
-  <li>strace 追踪io 可打印出系统调用日志</li>
-</ul>
-
-</div><p><a href="/mianshi/tcp/nio/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E9%9D%A2%E8%AF%95%E9%A2%98">面试题</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 24, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="mianshi-2020-08-24-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-24T00:00:00+08:00">
-    <meta itemprop="keywords" content="面试题"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>328 post articles, 41 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>329 post articles, 42 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
@@ -2640,7 +2572,7 @@ LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造�
                 </li><li>
                   <a class="button button--secondary button--circle" href="/home/page4"><span>4</span></a>
                 </li><li><span class="pagination__omit"><i class="fas fa-ellipsis-h"></i></span></li><li>
-                  <a class="button button--secondary button--circle" href="/home/page41"><span>41</span></a>
+                  <a class="button button--secondary button--circle" href="/home/page42"><span>42</span></a>
                 </li><li><a class="button button--secondary button--circle" href="/home/page2">
             <i class="fas fa-angle-right"></i>
           </a></li></ul>
