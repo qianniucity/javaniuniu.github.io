@@ -380,7 +380,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <tr>
       <th>设计模式</th>
       <th>典型应用</th>
-      <th> </th>
+      <th>框架中的应用</th>
     </tr>
   </thead>
   <tbody>
@@ -392,12 +392,12 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <tr>
       <td>抽象工厂</td>
       <td>适合在产品族的纬度上扩展</td>
-      <td> </td>
+      <td>bean工厂</td>
     </tr>
     <tr>
       <td>Mediator 调节模式</td>
       <td>消息中间件（内部之间调和）（居委会大妈）</td>
-      <td> </td>
+      <td>mq</td>
     </tr>
     <tr>
       <td>Facade 门面模式</td>
@@ -406,16 +406,340 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     </tr>
     <tr>
       <td>责任链模式</td>
-      <td>需要用状态来确定责任是否完成，通常需要用boolean来确定（比如 Filter Interceptor）</td>
+      <td>需要用状态来确定责任是否完成，通常需要用boolean来确定</td>
+      <td>Filter Interceptor，Filter中FilterChain负责调用的顺序，里面是一个递归的方法</td>
+    </tr>
+    <tr>
+      <td>Observer观察者</td>
+      <td>事件处理模型</td>
       <td> </td>
     </tr>
     <tr>
+      <td>Decorator装饰器</td>
+      <td>顾名思义，就是在原来的基础上在加一层装饰，装饰的类和被装饰的类都可以横向扩展（在开发的时候，就是类在继承，而方法在嵌套）</td>
+      <td>在IO流中，比如Reader 包含InputStream</td>
+    </tr>
+    <tr>
+      <td>*观察者模式Observer</td>
+      <td>观察者很少和事件源打交道，主要是和事件打交道，和Listener，hook function，callback function 都是观察者</td>
+      <td>很多系统中，Observer模式往往和负责责任链共同负责对于事件的处理，其中某一个observer负责是否将事件进一步传递</td>
+    </tr>
+    <tr>
+      <td>组合Composite</td>
+      <td>树状结构专用模式</td>
+      <td>可用于导航栏</td>
+    </tr>
+    <tr>
+      <td>享元Flyweight</td>
+      <td>重复利用对象，共享元数据，有池化的概念</td>
+      <td>String 就是这个模式，使用的时候 可以和组合模式一起使用</td>
+    </tr>
+    <tr>
+      <td>代理模式</td>
+      <td>静态代理，动态代理，springAop，代理也实现被代理类的接口，并在代理类中将接口类作为成员变量</td>
+      <td>有点类似 Decorator<br />jdk实现的动态代理需要 实体类实现了接口<br />cglib可以对任何类进行动态代理</td>
+    </tr>
+    <tr>
+      <td>*Iteratror迭代器</td>
+      <td>容器，容器遍历</td>
+      <td>其实就是多态的一个应用</td>
+    </tr>
+    <tr>
+      <td>Visitor访问者</td>
+      <td>在结构不变的情况下动态改变对于内部元素的动作</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>ASM</td>
+      <td>Iteratror+Visitor+chainfresposibility</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>builder</td>
+      <td>构建复杂的对象</td>
+      <td>链式编程（在类的众多参数中，你只需要其中的一些时候，使用该模式，看代码）</td>
+    </tr>
+    <tr>
+      <td>Adapter（Wrapper）</td>
+      <td>接口转换器</td>
+      <td>相当于插线板的转接头一样，加一层</td>
+    </tr>
+    <tr>
+      <td>Bridge</td>
+      <td>双纬度扩展</td>
+      <td>分离抽象和具体</td>
+    </tr>
+    <tr>
+      <td>Command</td>
+      <td>封装命令（doit和undo方法）</td>
+      <td>别名：Action/Transaction</td>
+    </tr>
+    <tr>
+      <td>Prototype原型模式/克隆模式</td>
+      <td>Object.clone() Object 自带clone模式</td>
+      <td>有浅克隆和深克隆区分</td>
+    </tr>
+    <tr>
+      <td>Memento备忘录</td>
+      <td>记录状态便于回滚</td>
+      <td>记录快照（瞬时状态），存盘，使用File做序列化时，使用transient 表示透明的，不需要存盘，需要存盘的都需要实现序列化接口，或者父类实现序列化接口，在网络传输中序列化通常使用google的ProtoBuf</td>
+    </tr>
+    <tr>
+      <td>TemplateMethod模版方法（钩子函数）</td>
       <td> </td>
       <td> </td>
+    </tr>
+    <tr>
+      <td>State状态模式</td>
+      <td>根据状态决定行为</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Intepreter解析器</td>
+      <td>动态脚本解析</td>
       <td> </td>
     </tr>
   </tbody>
 </table>
+
+<p>记住典型的用法和类图</p>
+
+<p><img src="/assets/images/util/0906/Jietu20200905-002623@2x.jpg" alt="1" /></p>
+
+<p><img src="/assets/images/util/0906/Jietu20200905-003109@2x.jpg" alt="2" /></p>
+
+<p><img src="/assets/images/util/0906/Jietu20200905-142642@2x.jpg" alt="3" /></p>
+
+<p><img src="/assets/images/util/0906/Jietu20200906-015254@2x.jpg" alt="4" /></p>
+
+<p><img src="/assets/images/util/0906/Jietu20200906-094229@2x.jpg" alt="5" /></p>
+
+<h3 id="静态代理">静态代理</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 问题：我想记录坦克的移动时间
+ * 最简单的办法：修改代码，记录时间
+ * 问题2：如果无法改变方法源码呢？
+ * 用继承？
+ * v05:使用代理
+ * v06:代理有各种类型
+ * 问题：如何实现代理的各种组合？继承？Decorator?
+ * v07:代理的对象改成Movable类型-越来越像decorator了
+ *
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tank</span> <span class="kd">implements</span> <span class="nc">Movable</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 模拟坦克移动了一段儿时间
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">move</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Tank moving claclacla..."</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="k">new</span> <span class="nc">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">10000</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="nc">Tank</span> <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Tank</span><span class="o">();</span>
+        <span class="nc">TankTimeProxy</span> <span class="n">ttp</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TankTimeProxy</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+        <span class="nc">TankLogProxy</span> <span class="n">tlp</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TankLogProxy</span><span class="o">(</span><span class="n">ttp</span><span class="o">);</span>
+        <span class="n">tlp</span><span class="o">.</span><span class="na">move</span><span class="o">();</span>
+
+<span class="c1">//        new TankLogProxy(</span>
+<span class="c1">//                new TankTimeProxy(</span>
+<span class="c1">//                        new Tank()</span>
+<span class="c1">//                )</span>
+<span class="c1">//        ).move();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">TankTimeProxy</span> <span class="kd">implements</span> <span class="nc">Movable</span> <span class="o">{</span>
+    <span class="nc">Movable</span> <span class="n">m</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">TankTimeProxy</span><span class="o">(</span><span class="nc">Movable</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">move</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">m</span><span class="o">.</span><span class="na">move</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">end</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">TankLogProxy</span> <span class="kd">implements</span> <span class="nc">Movable</span> <span class="o">{</span>
+    <span class="nc">Movable</span> <span class="n">m</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">TankLogProxy</span><span class="o">(</span><span class="nc">Movable</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">move</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"start moving..."</span><span class="o">);</span>
+        <span class="n">m</span><span class="o">.</span><span class="na">move</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">end</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"stopped!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">interface</span> <span class="nc">Movable</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">move</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="动态代理">动态代理</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * 问题：我想记录坦克的移动时间
+ * 最简单的办法：修改代码，记录时间
+ * 问题2：如果无法改变方法源码呢？
+ * 用继承？
+ * v05:使用代理
+ * v06:代理有各种类型
+ * 问题：如何实现代理的各种组合？继承？Decorator?
+ * v07:代理的对象改成Movable类型-越来越像decorator了
+ * v08:如果有stop方法需要代理...
+ * 如果想让LogProxy可以重用，不仅可以代理Tank，还可以代理任何其他可以代理的类型
+ * （毕竟日志记录，时间计算是很多方法都需要的东西），这时该怎么做呢？
+ * 分离代理行为与被代理对象
+ * 使用jdk的动态代理
+ *
+ * v09: 横切代码与业务逻辑代码分离 AOP
+ * v10: 通过反射观察生成的代理对象
+ * jdk反射生成代理必须面向接口，这是由Proxy的内部实现决定的
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tank</span> <span class="kd">implements</span> <span class="nc">Movable</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * 模拟坦克移动了一段儿时间
+     */</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">move</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Tank moving claclacla..."</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="k">new</span> <span class="nc">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">(</span><span class="mi">10000</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Tank</span> <span class="n">tank</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Tank</span><span class="o">();</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">getProperties</span><span class="o">().</span><span class="na">put</span><span class="o">(</span><span class="s">"jdk.proxy.ProxyGenerator.saveGeneratedFiles"</span><span class="o">,</span><span class="s">"true"</span><span class="o">);</span>
+
+        <span class="nc">Movable</span> <span class="n">m</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Movable</span><span class="o">)</span><span class="nc">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="nc">Tank</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span>
+                <span class="k">new</span> <span class="nc">Class</span><span class="o">[]{</span><span class="nc">Movable</span><span class="o">.</span><span class="na">class</span><span class="o">},</span> <span class="c1">//tank.class.getInterfaces()</span>
+                <span class="k">new</span> <span class="nf">TimeProxy</span><span class="o">(</span><span class="n">tank</span><span class="o">)</span>
+        <span class="o">);</span>
+
+        <span class="n">m</span><span class="o">.</span><span class="na">move</span><span class="o">();</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">TimeProxy</span> <span class="kd">implements</span> <span class="nc">InvocationHandler</span> <span class="o">{</span>
+    <span class="nc">Movable</span> <span class="n">m</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">TimeProxy</span><span class="o">(</span><span class="nc">Movable</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">before</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"method start.."</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">after</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"method stop.."</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="nc">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="nc">Method</span> <span class="n">method</span><span class="o">,</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">Throwable</span> <span class="o">{</span>
+        <span class="c1">//Arrays.stream(proxy.getClass().getMethods()).map(Method::getName).forEach(System.out::println);</span>
+
+        <span class="n">before</span><span class="o">();</span>
+        <span class="nc">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+        <span class="n">after</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">o</span><span class="o">;</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+
+<span class="kd">interface</span> <span class="nc">Movable</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">move</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="链式编程-builder模式">链式编程 builder模式</h3>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>
+    <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+    <span class="kt">double</span> <span class="n">weight</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">score</span><span class="o">;</span>
+    <span class="nc">Location</span> <span class="n">loc</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">Person</span><span class="o">()</span> <span class="o">{}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">PersonBuilder</span> <span class="o">{</span>
+        <span class="nc">Person</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">();</span>
+
+        <span class="kd">public</span> <span class="nc">PersonBuilder</span> <span class="nf">basicInfo</span><span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">,</span> <span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">PersonBuilder</span> <span class="nf">weight</span><span class="o">(</span><span class="kt">double</span> <span class="n">weight</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">weight</span> <span class="o">=</span> <span class="n">weight</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">PersonBuilder</span> <span class="nf">score</span><span class="o">(</span><span class="kt">int</span> <span class="n">score</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">score</span> <span class="o">=</span> <span class="n">score</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">PersonBuilder</span> <span class="nf">loc</span><span class="o">(</span><span class="nc">String</span> <span class="n">street</span><span class="o">,</span> <span class="nc">String</span> <span class="n">roomNo</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">p</span><span class="o">.</span><span class="na">loc</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Location</span><span class="o">(</span><span class="n">street</span><span class="o">,</span> <span class="n">roomNo</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Person</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="n">p</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Person</span> <span class="n">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">.</span><span class="na">PersonBuilder</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">basicInfo</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"zhangsan"</span><span class="o">,</span> <span class="mi">18</span><span class="o">)</span>
+                <span class="c1">//.score(20)</span>
+                <span class="o">.</span><span class="na">weight</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
+                <span class="c1">//.loc("bj", "23")</span>
+                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Location</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="n">street</span><span class="o">;</span>
+    <span class="nc">String</span> <span class="n">roomNo</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Location</span><span class="o">(</span><span class="nc">String</span> <span class="n">street</span><span class="o">,</span> <span class="nc">String</span> <span class="n">roomNo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">street</span> <span class="o">=</span> <span class="n">street</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">roomNo</span> <span class="o">=</span> <span class="n">roomNo</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+
+</code></pre></div></div>
 
 </div><p><a href="/docs-util/design">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
               <a class="button button--secondary button--pill button--sm"
@@ -933,7 +1257,6 @@ Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行
       <li><strong>提高运行效率：</strong> 比如多个核同时跑，或者单核里面，某个线程进行IO操作时，另一个线程可以同时执行</li>
     </ul>
   </li>
-  <li>形容词用接口，名称用抽象类</li>
   <li>工厂方法适合在单个产品上做纬度扩展</li>
   <li>抽象工厂适合在产品族的纬度上扩展</li>
   <li>设计模式
@@ -945,6 +1268,11 @@ Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行
       <li>高内聚，低耦合</li>
       <li>通过单例模式降低耦合度，比如某个类作为其他类方法的参数时，可以通过直接使用单例类，而不需要作为参数传递</li>
       <li>构造方法一个够用绝对不要写两个，每多一个构造函数都需要维护</li>
+      <li>继承是直接继承相应的父类，聚合是实现共同的接口，比如父类实现了什么接口，相应的也去实现，以达到可以控制所有实现了该接口的所有类</li>
+      <li>内部类，可以保证只让本类调用，不被外部的类使用</li>
+      <li>由普通的类来实现接口，必须将接口所有抽象方法重写</li>
+      <li>由抽象类来实现接口，则不必重写接口的方法。可以全部不重写或只重写一部分方法。</li>
+      <li>在不确定使用接口还是抽象类修饰的时候，一般形容词用接口，名称用抽象类</li>
     </ul>
   </li>
   <li>数组与链表的区别</li>

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-09-05T01:50:35+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.1.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en" /><updated>2020-09-07T10:07:40+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">JAVA 牛牛</title><subtitle>主要是想看下自己还能在多做些什么
 </subtitle><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><entry><title type="html">设计模式</title><link href="http://localhost:4000/docs-util/design" rel="alternate" type="text/html" title="设计模式" /><published>2020-09-04T00:00:00+08:00</published><updated>2020-09-04T00:00:00+08:00</updated><id>http://localhost:4000/docs-util/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F</id><content type="html" xml:base="http://localhost:4000/docs-util/design">&lt;table&gt;
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th&gt;设计模式&lt;/th&gt;
       &lt;th&gt;典型应用&lt;/th&gt;
-      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;框架中的应用&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
@@ -16,12 +16,12 @@
     &lt;tr&gt;
       &lt;td&gt;抽象工厂&lt;/td&gt;
       &lt;td&gt;适合在产品族的纬度上扩展&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;bean工厂&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;Mediator 调节模式&lt;/td&gt;
       &lt;td&gt;消息中间件（内部之间调和）（居委会大妈）&lt;/td&gt;
-      &lt;td&gt; &lt;/td&gt;
+      &lt;td&gt;mq&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;Facade 门面模式&lt;/td&gt;
@@ -30,16 +30,340 @@
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td&gt;责任链模式&lt;/td&gt;
-      &lt;td&gt;需要用状态来确定责任是否完成，通常需要用boolean来确定（比如 Filter Interceptor）&lt;/td&gt;
+      &lt;td&gt;需要用状态来确定责任是否完成，通常需要用boolean来确定&lt;/td&gt;
+      &lt;td&gt;Filter Interceptor，Filter中FilterChain负责调用的顺序，里面是一个递归的方法&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Observer观察者&lt;/td&gt;
+      &lt;td&gt;事件处理模型&lt;/td&gt;
       &lt;td&gt; &lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
+      &lt;td&gt;Decorator装饰器&lt;/td&gt;
+      &lt;td&gt;顾名思义，就是在原来的基础上在加一层装饰，装饰的类和被装饰的类都可以横向扩展（在开发的时候，就是类在继承，而方法在嵌套）&lt;/td&gt;
+      &lt;td&gt;在IO流中，比如Reader 包含InputStream&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;*观察者模式Observer&lt;/td&gt;
+      &lt;td&gt;观察者很少和事件源打交道，主要是和事件打交道，和Listener，hook function，callback function 都是观察者&lt;/td&gt;
+      &lt;td&gt;很多系统中，Observer模式往往和负责责任链共同负责对于事件的处理，其中某一个observer负责是否将事件进一步传递&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;组合Composite&lt;/td&gt;
+      &lt;td&gt;树状结构专用模式&lt;/td&gt;
+      &lt;td&gt;可用于导航栏&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;享元Flyweight&lt;/td&gt;
+      &lt;td&gt;重复利用对象，共享元数据，有池化的概念&lt;/td&gt;
+      &lt;td&gt;String 就是这个模式，使用的时候 可以和组合模式一起使用&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;代理模式&lt;/td&gt;
+      &lt;td&gt;静态代理，动态代理，springAop，代理也实现被代理类的接口，并在代理类中将接口类作为成员变量&lt;/td&gt;
+      &lt;td&gt;有点类似 Decorator&lt;br /&gt;jdk实现的动态代理需要 实体类实现了接口&lt;br /&gt;cglib可以对任何类进行动态代理&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;*Iteratror迭代器&lt;/td&gt;
+      &lt;td&gt;容器，容器遍历&lt;/td&gt;
+      &lt;td&gt;其实就是多态的一个应用&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Visitor访问者&lt;/td&gt;
+      &lt;td&gt;在结构不变的情况下动态改变对于内部元素的动作&lt;/td&gt;
       &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ASM&lt;/td&gt;
+      &lt;td&gt;Iteratror+Visitor+chainfresposibility&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;builder&lt;/td&gt;
+      &lt;td&gt;构建复杂的对象&lt;/td&gt;
+      &lt;td&gt;链式编程（在类的众多参数中，你只需要其中的一些时候，使用该模式，看代码）&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Adapter（Wrapper）&lt;/td&gt;
+      &lt;td&gt;接口转换器&lt;/td&gt;
+      &lt;td&gt;相当于插线板的转接头一样，加一层&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Bridge&lt;/td&gt;
+      &lt;td&gt;双纬度扩展&lt;/td&gt;
+      &lt;td&gt;分离抽象和具体&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Command&lt;/td&gt;
+      &lt;td&gt;封装命令（doit和undo方法）&lt;/td&gt;
+      &lt;td&gt;别名：Action/Transaction&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Prototype原型模式/克隆模式&lt;/td&gt;
+      &lt;td&gt;Object.clone() Object 自带clone模式&lt;/td&gt;
+      &lt;td&gt;有浅克隆和深克隆区分&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Memento备忘录&lt;/td&gt;
+      &lt;td&gt;记录状态便于回滚&lt;/td&gt;
+      &lt;td&gt;记录快照（瞬时状态），存盘，使用File做序列化时，使用transient 表示透明的，不需要存盘，需要存盘的都需要实现序列化接口，或者父类实现序列化接口，在网络传输中序列化通常使用google的ProtoBuf&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;TemplateMethod模版方法（钩子函数）&lt;/td&gt;
       &lt;td&gt; &lt;/td&gt;
       &lt;td&gt; &lt;/td&gt;
     &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;State状态模式&lt;/td&gt;
+      &lt;td&gt;根据状态决定行为&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Intepreter解析器&lt;/td&gt;
+      &lt;td&gt;动态脚本解析&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
   &lt;/tbody&gt;
-&lt;/table&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="设计模式" /><summary type="html">设计模式 典型应用   工厂方法 适合在单个产品上做纬度扩展   抽象工厂 适合在产品族的纬度上扩展   Mediator 调节模式 消息中间件（内部之间调和）（居委会大妈）   Facade 门面模式 将复杂的服务整合，当用户访问后，可以通过简单的方式访问到复杂的服务（包工头）   责任链模式 需要用状态来确定责任是否完成，通常需要用boolean来确定（比如 Filter Interceptor）        </summary></entry><entry><title type="html">ThreadPoolExecutor源码解析</title><link href="http://localhost:4000/java/ThreadPoolExecutor/01" rel="alternate" type="text/html" title="ThreadPoolExecutor源码解析" /><published>2020-09-02T00:00:00+08:00</published><updated>2020-09-02T00:00:00+08:00</updated><id>http://localhost:4000/java/ThreadPoolExecutor/ThreadPoolExecutor%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90</id><content type="html" xml:base="http://localhost:4000/java/ThreadPoolExecutor/01">&lt;p&gt;#&lt;/p&gt;
+&lt;/table&gt;
+
+&lt;p&gt;记住典型的用法和类图&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/util/0906/Jietu20200905-002623@2x.jpg&quot; alt=&quot;1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/util/0906/Jietu20200905-003109@2x.jpg&quot; alt=&quot;2&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/util/0906/Jietu20200905-142642@2x.jpg&quot; alt=&quot;3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/util/0906/Jietu20200906-015254@2x.jpg&quot; alt=&quot;4&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/util/0906/Jietu20200906-094229@2x.jpg&quot; alt=&quot;5&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;静态代理&quot;&gt;静态代理&lt;/h3&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
+ * 问题：我想记录坦克的移动时间
+ * 最简单的办法：修改代码，记录时间
+ * 问题2：如果无法改变方法源码呢？
+ * 用继承？
+ * v05:使用代理
+ * v06:代理有各种类型
+ * 问题：如何实现代理的各种组合？继承？Decorator?
+ * v07:代理的对象改成Movable类型-越来越像decorator了
+ *
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 模拟坦克移动了一段儿时间
+     */&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tank moving claclacla...&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+        &lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;TankTimeProxy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ttp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TankTimeProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;TankLogProxy&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tlp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TankLogProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ttp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;tlp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;//        new TankLogProxy(&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//                new TankTimeProxy(&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//                        new Tank()&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//                )&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//        ).move();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TankTimeProxy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TankTimeProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentTimeMillis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentTimeMillis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TankLogProxy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TankLogProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;start moving...&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;currentTimeMillis&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stopped!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;动态代理&quot;&gt;动态代理&lt;/h3&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/**
+ * 问题：我想记录坦克的移动时间
+ * 最简单的办法：修改代码，记录时间
+ * 问题2：如果无法改变方法源码呢？
+ * 用继承？
+ * v05:使用代理
+ * v06:代理有各种类型
+ * 问题：如何实现代理的各种组合？继承？Decorator?
+ * v07:代理的对象改成Movable类型-越来越像decorator了
+ * v08:如果有stop方法需要代理...
+ * 如果想让LogProxy可以重用，不仅可以代理Tank，还可以代理任何其他可以代理的类型
+ * （毕竟日志记录，时间计算是很多方法都需要的东西），这时该怎么做呢？
+ * 分离代理行为与被代理对象
+ * 使用jdk的动态代理
+ *
+ * v09: 横切代码与业务逻辑代码分离 AOP
+ * v10: 通过反射观察生成的代理对象
+ * jdk反射生成代理必须面向接口，这是由Proxy的内部实现决定的
+ */&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+
+    &lt;span class=&quot;cm&quot;&gt;/**
+     * 模拟坦克移动了一段儿时间
+     */&lt;/span&gt;
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Tank moving claclacla...&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;nextInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printStackTrace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tank&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getProperties&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;jdk.proxy.ProxyGenerator.saveGeneratedFiles&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;newProxyInstance&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Tank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getClassLoader&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]{&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;},&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//tank.class.getInterfaces()&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TimeProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tank&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TimeProxy&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InvocationHandler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;TimeProxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;method start..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;method stop..&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;invoke&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;proxy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Method&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Throwable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;//Arrays.stream(proxy.getClass().getMethods()).map(Method::getName).forEach(System.out::println);&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;before&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;invoke&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;after&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;o&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Movable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;move&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;链式编程-builder模式&quot;&gt;链式编程 builder模式&lt;/h3&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;Location&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonBuilder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonBuilder&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;basicInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;age&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonBuilder&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonBuilder&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;PersonBuilder&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;street&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;roomNo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;loc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Location&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;street&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;roomNo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+        &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;PersonBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;basicInfo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;zhangsan&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;18&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;c1&quot;&gt;//.score(20)&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;weight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;200&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;c1&quot;&gt;//.loc(&quot;bj&quot;, &quot;23&quot;)&lt;/span&gt;
+                &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Location&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;street&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;roomNo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Location&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;street&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;roomNo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;street&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;street&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;roomNo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;roomNo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="设计模式" /><summary type="html">设计模式 典型应用 框架中的应用 工厂方法 适合在单个产品上做纬度扩展   抽象工厂 适合在产品族的纬度上扩展 bean工厂 Mediator 调节模式 消息中间件（内部之间调和）（居委会大妈） mq Facade 门面模式 将复杂的服务整合，当用户访问后，可以通过简单的方式访问到复杂的服务（包工头）   责任链模式 需要用状态来确定责任是否完成，通常需要用boolean来确定 Filter Interceptor，Filter中FilterChain负责调用的顺序，里面是一个递归的方法 Observer观察者 事件处理模型   Decorator装饰器 顾名思义，就是在原来的基础上在加一层装饰，装饰的类和被装饰的类都可以横向扩展（在开发的时候，就是类在继承，而方法在嵌套） 在IO流中，比如Reader 包含InputStream *观察者模式Observer 观察者很少和事件源打交道，主要是和事件打交道，和Listener，hook function，callback function 都是观察者 很多系统中，Observer模式往往和负责责任链共同负责对于事件的处理，其中某一个observer负责是否将事件进一步传递 组合Composite 树状结构专用模式 可用于导航栏 享元Flyweight 重复利用对象，共享元数据，有池化的概念 String 就是这个模式，使用的时候 可以和组合模式一起使用 代理模式 静态代理，动态代理，springAop，代理也实现被代理类的接口，并在代理类中将接口类作为成员变量 有点类似 Decoratorjdk实现的动态代理需要 实体类实现了接口cglib可以对任何类进行动态代理 *Iteratror迭代器 容器，容器遍历 其实就是多态的一个应用 Visitor访问者 在结构不变的情况下动态改变对于内部元素的动作   ASM Iteratror+Visitor+chainfresposibility   builder 构建复杂的对象 链式编程（在类的众多参数中，你只需要其中的一些时候，使用该模式，看代码） Adapter（Wrapper） 接口转换器 相当于插线板的转接头一样，加一层 Bridge 双纬度扩展 分离抽象和具体 Command 封装命令（doit和undo方法） 别名：Action/Transaction Prototype原型模式/克隆模式 Object.clone() Object 自带clone模式 有浅克隆和深克隆区分 Memento备忘录 记录状态便于回滚 记录快照（瞬时状态），存盘，使用File做序列化时，使用transient 表示透明的，不需要存盘，需要存盘的都需要实现序列化接口，或者父类实现序列化接口，在网络传输中序列化通常使用google的ProtoBuf TemplateMethod模版方法（钩子函数）     State状态模式 根据状态决定行为   Intepreter解析器 动态脚本解析   记住典型的用法和类图 静态代理 /** * 问题：我想记录坦克的移动时间 * 最简单的办法：修改代码，记录时间 * 问题2：如果无法改变方法源码呢？ * 用继承？ * v05:使用代理 * v06:代理有各种类型 * 问题：如何实现代理的各种组合？继承？Decorator? * v07:代理的对象改成Movable类型-越来越像decorator了 * */ public class Tank implements Movable { /** * 模拟坦克移动了一段儿时间 */ @Override public void move() { System.out.println(&quot;Tank moving claclacla...&quot;); try { Thread.sleep(new Random().nextInt(10000)); } catch (InterruptedException e) { e.printStackTrace(); } } public static void main(String[] args) { Tank t = new Tank(); TankTimeProxy ttp = new TankTimeProxy(t); TankLogProxy tlp = new TankLogProxy(ttp); tlp.move(); // new TankLogProxy( // new TankTimeProxy( // new Tank() // ) // ).move(); } } class TankTimeProxy implements Movable { Movable m; public TankTimeProxy(Movable m) { this.m = m; } @Override public void move() { long start = System.currentTimeMillis(); m.move(); long end = System.currentTimeMillis(); System.out.println(end - start); } } class TankLogProxy implements Movable { Movable m; public TankLogProxy(Movable m) { this.m = m; } @Override public void move() { System.out.println(&quot;start moving...&quot;); m.move(); long end = System.currentTimeMillis(); System.out.println(&quot;stopped!&quot;); } } interface Movable { void move(); } 动态代理 /** * 问题：我想记录坦克的移动时间 * 最简单的办法：修改代码，记录时间 * 问题2：如果无法改变方法源码呢？ * 用继承？ * v05:使用代理 * v06:代理有各种类型 * 问题：如何实现代理的各种组合？继承？Decorator? * v07:代理的对象改成Movable类型-越来越像decorator了 * v08:如果有stop方法需要代理... * 如果想让LogProxy可以重用，不仅可以代理Tank，还可以代理任何其他可以代理的类型 * （毕竟日志记录，时间计算是很多方法都需要的东西），这时该怎么做呢？ * 分离代理行为与被代理对象 * 使用jdk的动态代理 * * v09: 横切代码与业务逻辑代码分离 AOP * v10: 通过反射观察生成的代理对象 * jdk反射生成代理必须面向接口，这是由Proxy的内部实现决定的 */ public class Tank implements Movable { /** * 模拟坦克移动了一段儿时间 */ @Override public void move() { System.out.println(&quot;Tank moving claclacla...&quot;); try { Thread.sleep(new Random().nextInt(10000)); } catch (InterruptedException e) { e.printStackTrace(); } } public static void main(String[] args) { Tank tank = new Tank(); System.getProperties().put(&quot;jdk.proxy.ProxyGenerator.saveGeneratedFiles&quot;,&quot;true&quot;); Movable m = (Movable)Proxy.newProxyInstance(Tank.class.getClassLoader(), new Class[]{Movable.class}, //tank.class.getInterfaces() new TimeProxy(tank) ); m.move(); } } class TimeProxy implements InvocationHandler { Movable m; public TimeProxy(Movable m) { this.m = m; } public void before() { System.out.println(&quot;method start..&quot;); } public void after() { System.out.println(&quot;method stop..&quot;); } @Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable { //Arrays.stream(proxy.getClass().getMethods()).map(Method::getName).forEach(System.out::println); before(); Object o = method.invoke(m, args); after(); return o; } } interface Movable { void move(); } 链式编程 builder模式 public class Person { int id; String name; int age; double weight; int score; Location loc; private Person() {} public static class PersonBuilder { Person p = new Person(); public PersonBuilder basicInfo(int id, String name, int age) { p.id = id; p.name = name; p.age = age; return this; } public PersonBuilder weight(double weight) { p.weight = weight; return this; } public PersonBuilder score(int score) { p.score = score; return this; } public PersonBuilder loc(String street, String roomNo) { p.loc = new Location(street, roomNo); return this; } public Person build() { return p; } } public static void main(String[] args) { Person p = new Person.PersonBuilder() .basicInfo(1, &quot;zhangsan&quot;, 18) //.score(20) .weight(200) //.loc(&quot;bj&quot;, &quot;23&quot;) .build(); } } class Location { String street; String roomNo; public Location(String street, String roomNo) { this.street = street; this.roomNo = roomNo; } }</summary></entry><entry><title type="html">ThreadPoolExecutor源码解析</title><link href="http://localhost:4000/java/ThreadPoolExecutor/01" rel="alternate" type="text/html" title="ThreadPoolExecutor源码解析" /><published>2020-09-02T00:00:00+08:00</published><updated>2020-09-02T00:00:00+08:00</updated><id>http://localhost:4000/java/ThreadPoolExecutor/ThreadPoolExecutor%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90</id><content type="html" xml:base="http://localhost:4000/java/ThreadPoolExecutor/01">&lt;p&gt;#&lt;/p&gt;
 
 &lt;h3 id=&quot;1常用变量的解释&quot;&gt;1、常用变量的解释&lt;/h3&gt;
 
@@ -1906,7 +2230,6 @@ LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造�
       &lt;li&gt;&lt;strong&gt;提高运行效率：&lt;/strong&gt; 比如多个核同时跑，或者单核里面，某个线程进行IO操作时，另一个线程可以同时执行&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;形容词用接口，名称用抽象类&lt;/li&gt;
   &lt;li&gt;工厂方法适合在单个产品上做纬度扩展&lt;/li&gt;
   &lt;li&gt;抽象工厂适合在产品族的纬度上扩展&lt;/li&gt;
   &lt;li&gt;设计模式
@@ -1918,6 +2241,11 @@ LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造�
       &lt;li&gt;高内聚，低耦合&lt;/li&gt;
       &lt;li&gt;通过单例模式降低耦合度，比如某个类作为其他类方法的参数时，可以通过直接使用单例类，而不需要作为参数传递&lt;/li&gt;
       &lt;li&gt;构造方法一个够用绝对不要写两个，每多一个构造函数都需要维护&lt;/li&gt;
+      &lt;li&gt;继承是直接继承相应的父类，聚合是实现共同的接口，比如父类实现了什么接口，相应的也去实现，以达到可以控制所有实现了该接口的所有类&lt;/li&gt;
+      &lt;li&gt;内部类，可以保证只让本类调用，不被外部的类使用&lt;/li&gt;
+      &lt;li&gt;由普通的类来实现接口，必须将接口所有抽象方法重写&lt;/li&gt;
+      &lt;li&gt;由抽象类来实现接口，则不必重写接口的方法。可以全部不重写或只重写一部分方法。&lt;/li&gt;
+      &lt;li&gt;在不确定使用接口还是抽象类修饰的时候，一般形容词用接口，名称用抽象类&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;数组与链表的区别&lt;/li&gt;
@@ -1952,7 +2280,7 @@ LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造�
       &lt;td&gt;链表的时间复杂度O(1)。&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
-&lt;/table&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="java基础" /><summary type="html">what why how 相应的查下 某些技术存在的坑 编写相应的代码来试错 mysql 分库分表 有哪些技术 这些技术有哪些坑 mysql 读写分离 有哪些技术 这些技术有哪些坑 mycat springjdbc linkedHashMap 有哪些应用场景 存数据有什么缺点 通过LUC算法，当linkedHashMap 满了之后 可以会自动删除使用最少的信息 linkedHashMap 含有linked 在插入和删除上的缺陷 redis有哪些必须要用到的技术点 倒计时 如何处理大文件的问题 init方法和内部类有什么区别 内部类 内部类解决了java不能多继承的问题 枚举为什么可以直接使用 枚举类默认被 final static 修饰 枚举类的成员变量也 默认被 final static 修饰 hashmap treemap linkedhashmap 对比 一般情况下，我们用的最多的是HashMap,在Map 中插入、删除和定位元素，HashMap 是最好的选择。但如果要按顺序或自定义顺序遍历键，那么TreeMap会更好。如果需要输出的顺序和输入的相同,用LinkedHashMap 可以实现,它还可以按读取顺序来排列. linkedhashmap 在hashmap的基础上增加了linked，在加快了遍历的速度 treeMap 拍好顺序，在查找的时候效率比较高，插入的时候效率也没那么低 在多线程高并发的情况下，有ConcurrentSkipListMap 提带treemap 多线程使用场景 lock 如何给对象加锁 无 1：A线程正在执行一个对象中的同步方法，B线程是否可以同时执行同一个对象中的非同步方法？ 2：同上，B线程是否可以同时执行同一个对象中的另一个同步方法？ 3：线程抛出异常会释放锁吗？ 4：volatile和synchronized区别？ 5：写一个程序，证明AtomXXX类比synchronized更高效 6：AtomXXX类可以保证可见性吗？请写一个程序来证明 7：写一个程序证明AtomXXX类的多个方法并不构成原子性 8：写一个程序模拟死锁 9：写一个程序，在main线程中启动100个线程，100个线程完成后，主线程打印“完成”，使用join()和countdownlatch都可以完成，请比较异同。 10：一个高效的游戏服务器应该如何设计架构？ 限流 Guava RateLimter 乐观锁 悲观锁 自旋锁 读写锁(共享锁，排他锁)，分段锁 以及在java中的实现方式 分别对应 CAS syn CAS ReadWriteLock LongAdder redis 击穿的概念 并发和并行的区别 并发是指任务提交，并行指任务执行 创建线程为什么那么昂贵？ 必须为线程堆栈分配并初始化一大块内存。 需要进行系统调用以在主机OS中创建/注册本机线程。 需要创建，初始化描述符并将其添加到JVM内部数据结构中 多线程的目的 大概有两个： 避免阻塞异步调用： 一是把程序细分成几个功能相对独立的模块，防止其中一个功能模块阻塞导致整个程序假死 提高运行效率： 比如多个核同时跑，或者单核里面，某个线程进行IO操作时，另一个线程可以同时执行 形容词用接口，名称用抽象类 工厂方法适合在单个产品上做纬度扩展 抽象工厂适合在产品族的纬度上扩展 设计模式 工厂模式典型的应用 springioc mediate 调节模式 典型应用 消息中间件 mvc 分离 对修改关闭，对扩展开放 高内聚，低耦合 通过单例模式降低耦合度，比如某个类作为其他类方法的参数时，可以通过直接使用单例类，而不需要作为参数传递 构造方法一个够用绝对不要写两个，每多一个构造函数都需要维护 数组与链表的区别 数组 链表 数组静态分配内存， 链表动态分配内存； 数组在内存中连续， 链表不连续； 数组元素在栈区， 链表元素在堆区； 数组利用下标定位，时间复杂度为O(1)， 链表定位元素时间复杂度O(n)； 数组插入或删除元素的时间复杂度O(n)， 链表的时间复杂度O(1)。</summary></entry><entry><title type="html">Java 枚举(enum) 详解五种常见的用法</title><link href="http://localhost:4000/java/enums/01" rel="alternate" type="text/html" title="Java 枚举(enum) 详解五种常见的用法" /><published>2020-08-27T00:00:00+08:00</published><updated>2020-08-27T00:00:00+08:00</updated><id>http://localhost:4000/java/enums/Java%20%E6%9E%9A%E4%B8%BE(enum)%20%E8%AF%A6%E8%A7%A3%E4%BA%94%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E7%94%A8%E6%B3%95</id><content type="html" xml:base="http://localhost:4000/java/enums/01">&lt;h2 id=&quot;一枚举型常量&quot;&gt;一、枚举型常量&lt;/h2&gt;
+&lt;/table&gt;</content><author><name>java牛牛</name><email>king101125s@gmail.com</email></author><category term="post" /><category term="java基础" /><summary type="html">what why how 相应的查下 某些技术存在的坑 编写相应的代码来试错 mysql 分库分表 有哪些技术 这些技术有哪些坑 mysql 读写分离 有哪些技术 这些技术有哪些坑 mycat springjdbc linkedHashMap 有哪些应用场景 存数据有什么缺点 通过LUC算法，当linkedHashMap 满了之后 可以会自动删除使用最少的信息 linkedHashMap 含有linked 在插入和删除上的缺陷 redis有哪些必须要用到的技术点 倒计时 如何处理大文件的问题 init方法和内部类有什么区别 内部类 内部类解决了java不能多继承的问题 枚举为什么可以直接使用 枚举类默认被 final static 修饰 枚举类的成员变量也 默认被 final static 修饰 hashmap treemap linkedhashmap 对比 一般情况下，我们用的最多的是HashMap,在Map 中插入、删除和定位元素，HashMap 是最好的选择。但如果要按顺序或自定义顺序遍历键，那么TreeMap会更好。如果需要输出的顺序和输入的相同,用LinkedHashMap 可以实现,它还可以按读取顺序来排列. linkedhashmap 在hashmap的基础上增加了linked，在加快了遍历的速度 treeMap 拍好顺序，在查找的时候效率比较高，插入的时候效率也没那么低 在多线程高并发的情况下，有ConcurrentSkipListMap 提带treemap 多线程使用场景 lock 如何给对象加锁 无 1：A线程正在执行一个对象中的同步方法，B线程是否可以同时执行同一个对象中的非同步方法？ 2：同上，B线程是否可以同时执行同一个对象中的另一个同步方法？ 3：线程抛出异常会释放锁吗？ 4：volatile和synchronized区别？ 5：写一个程序，证明AtomXXX类比synchronized更高效 6：AtomXXX类可以保证可见性吗？请写一个程序来证明 7：写一个程序证明AtomXXX类的多个方法并不构成原子性 8：写一个程序模拟死锁 9：写一个程序，在main线程中启动100个线程，100个线程完成后，主线程打印“完成”，使用join()和countdownlatch都可以完成，请比较异同。 10：一个高效的游戏服务器应该如何设计架构？ 限流 Guava RateLimter 乐观锁 悲观锁 自旋锁 读写锁(共享锁，排他锁)，分段锁 以及在java中的实现方式 分别对应 CAS syn CAS ReadWriteLock LongAdder redis 击穿的概念 并发和并行的区别 并发是指任务提交，并行指任务执行 创建线程为什么那么昂贵？ 必须为线程堆栈分配并初始化一大块内存。 需要进行系统调用以在主机OS中创建/注册本机线程。 需要创建，初始化描述符并将其添加到JVM内部数据结构中 多线程的目的 大概有两个： 避免阻塞异步调用： 一是把程序细分成几个功能相对独立的模块，防止其中一个功能模块阻塞导致整个程序假死 提高运行效率： 比如多个核同时跑，或者单核里面，某个线程进行IO操作时，另一个线程可以同时执行 工厂方法适合在单个产品上做纬度扩展 抽象工厂适合在产品族的纬度上扩展 设计模式 工厂模式典型的应用 springioc mediate 调节模式 典型应用 消息中间件 mvc 分离 对修改关闭，对扩展开放 高内聚，低耦合 通过单例模式降低耦合度，比如某个类作为其他类方法的参数时，可以通过直接使用单例类，而不需要作为参数传递 构造方法一个够用绝对不要写两个，每多一个构造函数都需要维护 继承是直接继承相应的父类，聚合是实现共同的接口，比如父类实现了什么接口，相应的也去实现，以达到可以控制所有实现了该接口的所有类 内部类，可以保证只让本类调用，不被外部的类使用 由普通的类来实现接口，必须将接口所有抽象方法重写 由抽象类来实现接口，则不必重写接口的方法。可以全部不重写或只重写一部分方法。 在不确定使用接口还是抽象类修饰的时候，一般形容词用接口，名称用抽象类 数组与链表的区别 数组 链表 数组静态分配内存， 链表动态分配内存； 数组在内存中连续， 链表不连续； 数组元素在栈区， 链表元素在堆区； 数组利用下标定位，时间复杂度为O(1)， 链表定位元素时间复杂度O(n)； 数组插入或删除元素的时间复杂度O(n)， 链表的时间复杂度O(1)。</summary></entry><entry><title type="html">Java 枚举(enum) 详解五种常见的用法</title><link href="http://localhost:4000/java/enums/01" rel="alternate" type="text/html" title="Java 枚举(enum) 详解五种常见的用法" /><published>2020-08-27T00:00:00+08:00</published><updated>2020-08-27T00:00:00+08:00</updated><id>http://localhost:4000/java/enums/Java%20%E6%9E%9A%E4%B8%BE(enum)%20%E8%AF%A6%E8%A7%A3%E4%BA%94%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E7%94%A8%E6%B3%95</id><content type="html" xml:base="http://localhost:4000/java/enums/01">&lt;h2 id=&quot;一枚举型常量&quot;&gt;一、枚举型常量&lt;/h2&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.yang&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;//首先枚举是一个特殊的class&lt;/span&gt;
