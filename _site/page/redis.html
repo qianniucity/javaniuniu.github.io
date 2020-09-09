@@ -3,7 +3,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"><title>关于Redis - JAVA 牛牛</title>
 
-<meta name="description" content="Redis">
+<meta name="description" content="Redis  Redis事务：哪个事务最先执行 exec 哪个业务相应的先执行布隆过滤器：解决redis和mysql之间击穿的问题 ，通过 bigmap 在redis中存储mysql所有数据的索引缓存LRU：这个涉及到redis的内存清理，有LRC 和LFC ，定时清理等多种清理方式	LFC：通过最少使用时间	L...">
 <link rel="canonical" href="http://localhost:4000/page/redis.html"><link rel="alternate" type="application/rss+xml" title="JAVA 牛牛" href="/feed.xml"><!-- start favicons snippet, use https://realfavicongenerator.net/ --><link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png"><link rel="manifest" href="/assets/site.webmanifest"><link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#fc4d50"><link rel="shortcut icon" href="/assets/favicon.ico">
 
 <meta name="msapplication-TileColor" content="#ffc40d"><meta name="msapplication-config" content="/assets/browserconfig.xml">
@@ -384,7 +384,7 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
               <div class="col-main cell cell--auto"><!-- start custom main top snippet -->
 
 <!-- end custom main top snippet -->
-<article itemscope itemtype="http://schema.org/Article"><header style="display:none;"><h1>关于Redis</h1></header><meta itemprop="headline" content="关于Redis"><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-07T10:07:40+08:00"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
+<article itemscope itemtype="http://schema.org/Article"><header style="display:none;"><h1>关于Redis</h1></header><meta itemprop="headline" content="关于Redis"><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-10T00:21:21+08:00"><div class="js-article-content"><div class="layout--article"><!-- start custom article top snippet -->
 
 <!-- end custom article top snippet -->
 <div class="article__content" itemprop="articleBody"><style>
@@ -413,7 +413,99 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
     <h3>Redis</h3>
   </div>
 </div>
-</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-09-07T10:07:40+08:00"><!-- start custom article footer snippet -->
+
+<h3 id="redis">Redis</h3>
+<p>事务：哪个事务最先执行 exec 哪个业务相应的先执行
+布隆过滤器：解决redis和mysql之间击穿的问题 ，通过 bigmap 在redis中存储mysql所有数据的索引
+缓存LRU：这个涉及到redis的内存清理，有LRC 和LFC ，定时清理等多种清理方式
+	LFC：通过最少使用时间
+	LFC：最少使用次数
+	时间1：到时间点自动清理
+	时间2：当内存满了后，会先清理快到期的数据</p>
+
+<h4 id="持久化">持久化</h4>
+<p>RDB 通过开启一个子线程 通过 fork的的形式复制数据
+	- 缺点，宕机会丢失数据
+AOF  通过日志文件的形式记录操作
+	- 缺点，文件大，有IO操作</p>
+
+<h4 id="redis-基本应用">redis 基本应用</h4>
+<p>用于做缓存：多使用RDB 允许数据的丢失
+用于做数据库：使用AOF 记录所有操作日志</p>
+
+<h4 id="单机redis可能会出现的问题">单机redis可能会出现的问题</h4>
+<ol>
+  <li>单点故障</li>
+  <li>容量有限</li>
+  <li>压力</li>
+</ol>
+
+<h4 id="redis高可用解决了什么问题">redis高可用解决了什么问题</h4>
+<p>通过上面的三个问题，在高可用的设计模式使用有 AKF 这个概念</p>
+<ol>
+  <li>通过 多机扩容 解决单点故障</li>
+  <li>通过 业务分离 解决容量有限</li>
+  <li>通过 一个业务多个redis 解决压力</li>
+</ol>
+
+<h4 id="同样高可用会涉及到数据一致性的问题">同样高可用会涉及到数据一致性的问题</h4>
+
+<h4 id="高可用在应用上要注意的点">高可用在应用上要注意的点</h4>
+<p>主从，主备：一般都是对主高可用，即主redis 需要部署多台</p>
+
+<h4 id="一致性问题">一致性问题</h4>
+<p>强一致性：通过redis阻塞，实现
+弱一致性：通过异步实现
+弱一致性升级版，通过加入 kafa 消息队列，来保证数据的一致性，并且还可以保证数据不会丢失</p>
+
+<h4 id="redis中的模式">redis中的模式</h4>
+<p>哨兵模式：当master节点宕机，可以设置从节点为master节点 ，即可以 <strong>解决redis单点问题</strong>
+分区（Cluster）：可以实现 业务分离，解决单机容量问题
+    - 同时也带来了 数据聚合的问题
+      - 通过 hash tag 实现数据被放在同一个分区 进而实现事务
+      - 可以使用代理实现分区 比如（twemproxy predixy）
+      - 分区代理的事务的问题
+        - predixy 在只开启一个分组的情况下，可以实现事务
+        - twemproxy 不能解决事务的问题
+    - redis的 create-cluster + hash tag 能解决分区 分槽 事务问题</p>
+
+<h4 id="面试题常见问题">面试题常见问题</h4>
+<ul>
+  <li>击穿 在高并发下，需要请求的数据 在redis正好没有或者被过期处理了，并发直接请求到数据库
+    <ul>
+      <li>解决方案，通过redis锁，阻塞住请求，以达到并发请求的目的</li>
+      <li>同时 获得锁的用户请求数据库，并把数据返回到redis</li>
+      <li>后面的数据通过 redis 拿对应的值</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="assets/images/redis/Jietu20200909-185030@2x.jpg" alt="1" /></p>
+
+<ul>
+  <li>穿透 业务接收查询的的是你数据库中根本没有的数据
+    <ul>
+      <li>解决方案： 使用布隆过滤器</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="assets/images/redis/Jietu20200909-185635@2x.jpg" alt="2" /></p>
+
+<ul>
+  <li>
+    <p>雪崩 大量的key失效，间接照成大量访问数据库
+<img src="assets/images/redis/Jietu20200909-190338@2x.jpg" alt="3" /></p>
+  </li>
+  <li>
+    <p>分布式锁</p>
+    <ul>
+      <li>使用redis实现</li>
+      <li>zookeeper 实现</li>
+    </ul>
+  </li>
+</ul>
+</div><div class="d-print-none"><footer class="article__footer"><meta itemprop="dateModified" content="2020-09-10T00:21:21+08:00"><!-- start custom article footer snippet -->
 
 <!-- end custom article footer snippet -->
 </footer>
