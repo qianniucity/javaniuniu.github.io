@@ -374,6 +374,873 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
 
 <!-- end custom main top snippet -->
 <article itemscope itemtype="http://schema.org/WebPage"><header style="display:none;"><h1>Home</h1></header><meta itemprop="headline" content="Home"><meta itemprop="author" content="java牛牛"/><div class="js-article-content"><div class="layout--articles"><div class="article-list items items--divided"><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringCloud/sop/transaction"><h2 itemprop="headline" class="item__header">分布式事务</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="分布式事务">分布式事务</h4>
+
+<ul>
+  <li>分布式事务一般都是柔性事务
+    <ul>
+      <li>事务种类
+        <ul>
+          <li>刚性事务 acid  可以理解为实时一致性</li>
+          <li>柔性事务 base 可以理解为最终一致性</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>当一个服务链路上要经过两个系统，就需要分布式事务</li>
+  <li>数据库的本地事务是怎么保证的
+    <ul>
+      <li>锁，redo，undo
+        <ul>
+          <li>ACID， AD（日志文件） CI（锁）</li>
+          <li>数据库在插入数据之前会先写日志文件，日志文件写之后操作写数据文件，如果事务提交了，而数据库没有插入，会执行 redo 操作，如果事务没有提交那么执行 undo 操作</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</div><p><a href="/SpringCloud/sop/transaction">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringCloud">SpringCloud</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=transaction">transaction</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 15, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="SpringCloud-09-15-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-15T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringCloud,transaction"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringCloud/sop/zuul-server"><h2 itemprop="headline" class="item__header">zuul-server</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h3 id="zuul-基本使用">zuul 基本使用</h3>
+
+<ul>
+  <li>zuul（网关可以做什么）
+    <ul>
+      <li>分发服务</li>
+      <li>身份认证</li>
+      <li>过滤请求</li>
+      <li>监控</li>
+      <li>路由</li>
+      <li>限流</li>
+    </ul>
+  </li>
+  <li>过滤器的执行顺序，节省计算的资源</li>
+  <li>网关接口容错
+    <ul>
+      <li>创建一个对象实现 FallbackProvider</li>
+    </ul>
+  </li>
+  <li>生产中小技巧
+    <ul>
+      <li>db中存储：过滤器开关
+        <ul>
+          <li>配合 spring-boot-starter-actuator 更清爽</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="项目中遇到的问题">项目中遇到的问题</h4>
+
+<ul>
+  <li>
+    <p>使用zuul cookie 和token 不能向后传递的问题</p>
+
+    <ul>
+      <li>
+        <p>通过在yml里面配置下 ，把敏感信息制成空</p>
+
+        <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">zuul</span><span class="pi">:</span>
+<span class="c1">#    以下配置，表示忽略下面的值向微服务传播，以下配置为空表示：所有请求头都透传到后面微服务。</span>
+<span class="c1">#  sensitive-headers:</span>
+  <span class="na">routes</span><span class="pi">:</span>
+    <span class="c1"># 此处名字随便取</span>
+    <span class="na">custom-zuul-name</span><span class="pi">:</span>
+      <span class="na">path</span><span class="pi">:</span> <span class="s">/zuul-custom-name/**</span>
+      <span class="na">service-id</span><span class="pi">:</span> <span class="s">service-sms</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>老项目改造中路由问题</p>
+
+    <ul>
+      <li>方式一 yml配置</li>
+    </ul>
+
+    <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">RibbonXXXFilter 路由到其他服务</span>
+<span class="s">SimpleHostRoultFilter 路由到其他url</span>
+<span class="s">SendForewordFilter 路由到自己的路径</span>
+<span class="na">zuul</span><span class="pi">:</span>
+  <span class="na">routes</span><span class="pi">:</span>
+    <span class="na">xxx</span><span class="pi">:</span>
+      <span class="na">path</span><span class="pi">:</span> <span class="s">/forword1/**</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s">forward:/myController</span>
+  
+  
+<span class="c1">#    # 配合 风雨冷人</span>
+<span class="c1">#    xxxx: /zuul-api-driver/**</span>
+<span class="c1">##     此处名字随便取</span>
+<span class="c1">#    custom-zuul-name:</span>
+<span class="c1">#      path: /zuul-api-driver/**</span>
+<span class="c1">#      url: http://localhost:8003/</span>
+</code></pre></div>    </div>
+
+    <ul>
+      <li>
+        <p>方式二，使用zuul的Filter</p>
+
+        <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">1.过滤器 route</span>
+<span class="s">2.获取请求过来的url（请求）</span>
+<span class="s">3.url（请求） = url（目的地）映射</span>
+<span class="s">4.设置RequestContext中的 serviceid url</span>
+<span class="s">====</span>
+<span class="s">开发之前，想清楚步骤</span>
+<span class="s">技术和业务做选择和取舍。（100种方法，你去其中一种，出问题自己扛）</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>动态路由（根据不同的用户路由到不同的服务）</p>
+
+    <ul>
+      <li>路由到服务</li>
+      <li>路由到具体地址</li>
+    </ul>
+  </li>
+  <li>
+    <p>微服务404的原因</p>
+
+    <ul>
+      <li>url是从哪里拿到的
+        <ul>
+          <li>从eureka中拿到</li>
+          <li>从配置文件中拿到</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+</div><p><a href="/SpringCloud/sop/zuul-server">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringCloud">SpringCloud</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=zuul">zuul</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 14, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="SpringCloud-09-14-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-14T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringCloud,zuul"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringCloud/sop/design"><h2 itemprop="headline" class="item__header">微服务项目结构</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p>项目在独立的仓库</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>—online-taxi-tree</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— 项目A</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— 项目B</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>单独项目</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>— pom</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>— src</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— controller</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— service</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>​			impl</p>
+
+<p>​			接口</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— dao</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>​			entity</p>
+
+<p>​			mapper</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— manager</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— constant 常量</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— request 接受的参数bean</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— response 返回的参数bean</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>—  resource</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— mapper</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>​</td>
+      <td>— xxxmapper.xml</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>​	yml</p>
+
+<h3 id="异常">异常</h3>
+
+<p>dao层的一次：必用打日志，catch，抛出去</p>
+
+<p>service：打日志，详细形象，时间，参数</p>
+
+<p>controller：异常包装成 状态码</p>
+
+<h4 id="公司maven私服">公司maven私服</h4>
+
+<p>userBean</p>
+
+<p>dto：common 二方库</p>
+</div><p><a href="/SpringCloud/sop/design">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringCloud">SpringCloud</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="SpringCloud-09-12-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringCloud"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringCloud/api/design"><h2 itemprop="headline" class="item__header">接口设计规范</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h4 id="接口设计规范">接口设计规范</h4>
+<ul>
+  <li>协议：https:ios只能用https</li>
+  <li>域名： /api.yuming.com/</li>
+  <li>版本：v1</li>
+  <li>路径：/ooxx/xxoo</li>
+  <li>动作：</li>
+  <li>post：新建</li>
+  <li>put：修改（修改后的全量数据）</li>
+  <li>patch：修改（修改哪个传哪个）</li>
+  <li>delete：删除</li>
+  <li>get：查询</li>
+</ul>
+
+<h4 id="接口安全">接口安全</h4>
+<ul>
+  <li>CIA：保密性，完整性，可用性</li>
+  <li>手机号，身份证号等要脱敏</li>
+  <li>数据层面
+    <ul>
+      <li>
+        <p>sql注入，（id，sql）</p>
+      </li>
+      <li>
+        <p>select * form table where name=(变量；delete table)</p>
+      </li>
+      <li>
+        <p>过滤 jsoup框架</p>
+      </li>
+      <li>
+        <p>xss: spring-htmlUtils</p>
+
+        <ul>
+          <li>在正常用户请求中执行了黑客提供的恶意代码， <strong>用户数据没有过滤，转义</strong></li>
+        </ul>
+      </li>
+      <li>
+        <p>csrf（跨站伪装请求）:人机交互，token</p>
+
+        <ul>
+          <li>冒充别人的登录信息，问题出在：<strong>没有防范不信任的调用</strong></li>
+        </ul>
+
+        <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Java对html标签的过滤和清洗
+  https://www.cnblogs.com/qizhelongdeyang/p/9884716.html
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>referer：防盗链</p>
+      </li>
+      <li>
+        <p>数据权限控制</p>
+
+        <ul>
+          <li>link1链接</li>
+          <li>A用户请求，删除 order/a1</li>
+          <li>B用户请求，删除 order/a1</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="项目中优化的点">项目中优化的点</h3>
+
+<ul>
+  <li>
+    <p>开发时用快照版本 生产环境不能用快照版本</p>
+  </li>
+  <li>通过将数据从堆移到栈中提升效率</li>
+  <li>常用不变的用缓存，不要用db（<strong>把内存用起来减少io</strong> ，io是瓶颈，比如网络io，磁盘io）</li>
+  <li>提高QPS
+    <ul>
+      <li>提高并发数
+        <ul>
+          <li>能用多线程就使用多线程</li>
+          <li>增加各种连接数，tomcat，mysql，redis等等</li>
+          <li>服务无状态：便于横向扩展，扩机器</li>
+          <li>让服务能力怼等（serviceUrl，打乱顺序）</li>
+        </ul>
+      </li>
+      <li>减少相应时间
+        <ul>
+          <li>异步（最终一致性）</li>
+          <li>缓存</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+</div><p><a href="/SpringCloud/api/design">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringCloud">SpringCloud</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="SpringCloud-09-12-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringCloud"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringCloud/sop/eureka/core"><h2 itemprop="headline" class="item__header">eureka中的核心参数</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="eureka中的核心参数">eureka中的核心参数：</h1>
+
+<h2 id="client端核心参数">client端核心参数：</h2>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">eureka</span><span class="pi">:</span>
+  <span class="na">client</span><span class="pi">:</span>
+    <span class="c1">##=========&gt;基本参数&lt;============</span>
+    <span class="c1">#告知Client有哪些region和availability-zones，支持配置修改运行时生效</span>
+    <span class="na">availability-zones</span><span class="pi">:</span> <span class="no">null</span>
+    <span class="c1">#是否过滤出注册到eureka中所有InstanceStatus为UP的实例，默认为true</span>
+    <span class="na">filter-only-up-instances</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="c1">#是否将该实例注册到 eureka server，eureka注册中心配置为false，不把自身注册到eureka</span>
+    <span class="na">register-with-eureka</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="c1">#是否优先使用与该实例处于相同zone的Eureka server ,默认为true，</span>
+    <span class="c1">#即默认会使用与实力处于相同zone的server，如果找不到，才会默认使用defaultZone中配置的</span>
+    <span class="na">prefer-same-zone-eureka</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="c1">#是否将本地实例状态通过ApplicationInfoManager实时同步到到Eureka Server中，默认是true，一般情况下不要改，默认就行</span>
+    <span class="na">on-demand-update-status-change</span><span class="pi">:</span> <span class="no">true</span>
+
+    <span class="c1">##=========&gt;定时任务参数&lt;============</span>
+    <span class="c1">#指定用于刷新缓存的CacheRefreshThread的线程池大小，默认是2个</span>
+    <span class="na">cache-refresh-executor-thread-pool-size</span><span class="pi">:</span> <span class="m">2</span>
+    <span class="c1">#调度任务执行超时时，下次再次执行的延时时间</span>
+    <span class="na">cache-refresh-executor-exponential-back-off-bound</span><span class="pi">:</span> <span class="m">12</span>
+    <span class="c1">#发送心跳线程的线程池大小</span>
+    <span class="na">heartbeat-executor-thread-pool-size</span><span class="pi">:</span> <span class="m">3</span>
+    <span class="c1">#CacherefreshThread线程的调度频率，eureka默认30秒刷新一次缓存</span>
+    <span class="na">registry-fetch-interval-seconds</span><span class="pi">:</span> <span class="m">30</span>
+    <span class="c1">#刷新Eureka Server地址的时间间隔</span>
+    <span class="na">eureka-service-url-poll-interval-seconds</span><span class="pi">:</span> <span class="m">300</span>
+    <span class="c1">#instanceInfoReplication将实例信息变更同步到Eureka Server的初始延时时间，默认40秒</span>
+    <span class="na">initial-instance-info-replication-interval-seconds</span><span class="pi">:</span> <span class="m">40</span>
+    <span class="c1">#InstanceInfoReplication将实例信息变更同步到Eureka Server的时间间隔</span>
+    <span class="na">instance-info-replication-interval-seconds</span><span class="pi">:</span> <span class="m">30</span>
+
+
+
+    <span class="c1">##=========&gt;http参数&lt;============</span>
+    <span class="c1">#连接server的超时时间 默认5秒</span>
+    <span class="na">eureka-server-connect-timeout-seconds</span><span class="pi">:</span> <span class="m">5</span>
+    <span class="c1">#client 从server读取数据超时时间，默认8秒</span>
+    <span class="na">eureka-server-read-timeout-seconds</span><span class="pi">:</span> <span class="m">8</span>
+    <span class="c1">#连接池最大的活动链接数 最大默认200个连接数</span>
+    <span class="na">eureka-server-total-connections</span><span class="pi">:</span> <span class="m">200</span>
+    <span class="c1">#每个host能使用的最大连接数 ，默认每个主机最多只能使用50个练级</span>
+    <span class="na">eureka-server-total-connections-per-host</span><span class="pi">:</span> <span class="m">50</span>
+    <span class="c1">#连接池中连接的空闲时间</span>
+    <span class="na">eureka-connection-idle-timeout-seconds</span><span class="pi">:</span> <span class="m">30</span>
+  <span class="na">instance</span><span class="pi">:</span>
+    <span class="c1">##=========&gt;基本参数&lt;============</span>
+    <span class="c1">#指定该应用实例的元数据信息</span>
+    <span class="na">metadata-map</span><span class="pi">:</span>
+    <span class="c1">#是否优先使用IP地址来代替host name作为市里的hostname字段值，默认是false</span>
+    <span class="na">prefer-ip-address</span><span class="pi">:</span> <span class="no">false</span>
+    <span class="c1">#指定Eureka Client间隔多久向Eureka Server发送心跳来告知Eureka Server该实例还存活，默认是90秒</span>
+    <span class="na">lease-expiration-duration-in-seconds</span><span class="pi">:</span> <span class="m">30</span>
+
+
+    <span class="c1">##=========&gt;定时任务参数&lt;============</span>
+    <span class="c1">#Eureka Client向Server发送心跳的时间间隔，默认CLient隔30秒就会向Server发送一次心跳</span>
+    <span class="na">lease-renewal-interval-in-seconds</span><span class="pi">:</span> <span class="m">30</span>
+</code></pre></div></div>
+
+<h2 id="server端参数">Server端参数</h2>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">eureka</span><span class="pi">:</span>
+  <span class="na">server</span><span class="pi">:</span>
+    <span class="c1">##=========&gt;基本参数&lt;============</span>
+    <span class="c1">#是否开启自我保护模式，默认是开启的</span>
+    <span class="na">enable-self-preservation</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="c1">#每分钟需要收到的续约次数的阈值 server会根据某个应用注册时实例数，计算每分钟应收到的续约次数</span>
+    <span class="c1">#若收到的次数少于该阈值，server会关闭该租约，并禁止定时任务剔除失效的实例，保护注册信息</span>
+    <span class="na">renewal-percent-threshold</span><span class="pi">:</span> <span class="m">0.85</span>
+    <span class="c1">#指定updateRenewalThreshold定时任务的调度频率，来动态更新expectedNumberOfRenewsPerMin和numberOfRenewsPerMinThreshold值</span>
+    <span class="na">renewal-threshold-update-interval-ms</span><span class="pi">:</span> <span class="m">15</span>
+    <span class="c1">#指定EvictionTask定时任务的调度频率，用于剔除过期的实例，默认是60秒执行一次</span>
+    <span class="na">eviction-interval-timer-in-ms</span><span class="pi">:</span> <span class="m">60000</span>
+
+
+    <span class="c1">##=========&gt;response cache参数&lt;============</span>
+    <span class="c1">#是否使用只读的response-cache，默认是使用</span>
+    <span class="na">use-read-only-response-cache</span><span class="pi">:</span> <span class="no">true</span>
+    <span class="c1">#设置CacheUpdateTask的调度时间间隔，用于从readWriteCacheMap更新数据到readOnlyCacheMap</span>
+    <span class="c1">#仅在use-read-only-response-cache设置为true是才生效</span>
+    <span class="na">response-cache-update-interval-ms</span><span class="pi">:</span> <span class="m">30000</span>
+    <span class="c1">#设置readWriteCacheMap的expireAfterWrite参数，指定写入多长时间后，cache过期</span>
+    <span class="na">response-cache-auto-expiration-in-seconds</span><span class="pi">:</span> <span class="m">180</span>
+
+    <span class="c1">##=========&gt;peer参数 eureka server节点间同步数据的配置&lt;============</span>
+    <span class="c1">#指定peerUpdateTask调度的时间间隔，</span>
+    <span class="c1">#用于从配置文件刷新peerEurekaNodes节点之间的配置信息（eureka.client.serviceUrl相关的zone的配置）</span>
+    <span class="c1">#默认10分钟</span>
+    <span class="na">peer-eureka-nodes-update-interval-ms</span><span class="pi">:</span> <span class="m">10</span>
+    <span class="c1">#指定更新peer node状态的时间间隔，默认30秒更新各node间的状态信息</span>
+    <span class="na">peer-eureka-status-refresh-time-interval-ms</span><span class="pi">:</span> <span class="m">30000</span>
+    <span class="c1">##=========&gt;http参数&lt;============</span>
+    <span class="c1">#server各node间连接超时时长，默认200毫秒，200毫秒没连接上server的其他节点，就会认为该node不可用</span>
+    <span class="na">peer-node-connect-timeout-ms</span><span class="pi">:</span> <span class="m">200</span>
+    <span class="c1">#从其他节点读取数据超时时间 ，默认200毫秒</span>
+    <span class="na">peer-node-read-timeout-ms</span><span class="pi">:</span> <span class="m">200</span>
+    <span class="c1">#server的单个node连接池最大的活动连接数</span>
+    <span class="na">peer-node-total-connections</span><span class="pi">:</span> <span class="m">1000</span>
+    <span class="c1">#server的单个node每个hot能使用的最大连接数</span>
+    <span class="na">peer-node-total-connections-per-host</span><span class="pi">:</span> <span class="m">500</span>
+    <span class="c1">#server的node连接池连接的空闲时间</span>
+    <span class="na">peer-node-connection-idle-timeout-seconds</span><span class="pi">:</span> <span class="m">30</span>
+  <span class="na">instance</span><span class="pi">:</span>
+    <span class="na">registry</span><span class="pi">:</span>
+      <span class="c1">##=========&gt;基本参数&lt;============</span>
+      <span class="c1">#指定每分钟需要收到的续约次数值，实际该值被写死为实例值*2</span>
+      <span class="na">expected-number-of-clients-sending-renews</span><span class="pi">:</span> <span class="m">1</span>
+</code></pre></div></div>
+
+<h1 id="参数调优">参数调优</h1>
+
+<p>一般最简单常见的问题有这几个：</p>
+
+<ul>
+  <li>服务下线了，为什么还能调通接口</li>
+  <li>服务注册了，Client不能及时获取到</li>
+  <li>自我保护机制。</li>
+</ul>
+
+<p><strong>解决办法</strong></p>
+
+<ol>
+  <li>因为Eureka不是强一致性的，因此registry中会有过期的实例信息，实例过期有以下原因
+    <ul>
+      <li>应用实例异常挂掉，在挂掉之前没来得及通知Eureka Server要下线掉自己这个实例。这个要Eureka的 EvicitionTask去剔除了
+        <ul>
+          <li>剔除可以人工手动请求剔除</li>
+          <li>在yml配置文件中，可以配置剔除时间间隔，可以调小一些</li>
+        </ul>
+      </li>
+      <li>应用实例下线时有通知Server下线自己这个实例，但是由于Server 的API有启用readOnlyCache，所以需要等 待缓存过期才能更新
+        <ul>
+          <li>缓存可以开启和关闭，关闭久不存在这个问题</li>
+          <li>在开启情况下，也可以设置更新缓存的时间</li>
+        </ul>
+      </li>
+      <li>由于Server开启了自我保护机制，导致registry不能因过期而剔除
+针对Client下线，没来得及通知server，可以调整EvictionTask的调度频率，加快剔除过期实例的频率</li>
+      <li>针对responseCache问题，可以根据实际情况关机readOnlyCacheMap，或者调整readWriteCacheMap的过期时间，缩短点cache过期时间</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>针对自我保护机制</strong>，测试环境可以适当选择关闭自我保护机制。但是有时候，由于网络问题，Client的续约未能如期保持，但是服务本身是健康的，这个时候按照租约机制剔除的话，会造成误判。可以选择适当的调低触发自我保护机制的阈值，或者调低client向Server发送心跳的时间间隔</p>
+
+<p>针对服务上线了，Client不能及时获取到，可以适当提高Client获取Server注册信息的频率，如将30秒改为5秒</p>
+</div><p><a href="/SpringCloud/sop/eureka/core">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringCloud">SpringCloud</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=eureka">eureka</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="SpringCloud-09-12-04">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringCloud,eureka"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
+          <header><a href="/SpringCloud/sop/eureka-server"><h2 itemprop="headline" class="item__header">eureka-server</h2></a></header>
+          <div class="item__description"><div class="article__content" itemprop="description articleBody"><ul>
+  <li><a href="https://docs.spring.io/spring-cloud-netflix/docs/2.2.5.RELEASE/reference/html/#refreshing-eureka-clients">eureka集群配置</a></li>
+  <li><a href="https://www.cnblogs.com/aaron911/p/11282364.html">通过spring.factory文件来加载第三方的bean</a></li>
+</ul>
+
+<h4 id="eureka-server知识点">eureka-server知识点</h4>
+
+<p>注册，下线，心跳，剔除，拉取注册表，集群同步</p>
+
+<h4 id="生产环境相应优化">生产环境相应优化</h4>
+
+<h5 id="eureka-server-优化指导">eureka-server 优化指导</h5>
+
+<ul>
+  <li>
+    <p>优化目的：减少服务上下线的延时</p>
+  </li>
+  <li>
+    <p>自我保护的选择：看网络和服务情况</p>
+  </li>
+  <li>
+    <p>服务更新：停止，在发送线下请求</p>
+
+    <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">server</span><span class="pi">:</span>
+<span class="c1">#    enable-replicated-request-compression: false #关闭自我保护</span>
+    <span class="na">renewal-percent-threshold</span><span class="pi">:</span> <span class="m">0.85</span> <span class="c1"># 在开启的情况下，设置自我保护阀值</span>
+    <span class="na">eviction-interval-timer-in-ms</span><span class="pi">:</span> <span class="m">1000</span> <span class="c1"># 踢除服务毫秒数，如果其他服务在1秒内拉取服务，还是能拉取的，包括不可用的服务</span>
+    <span class="na">use-read-only-response-cache</span><span class="pi">:</span> <span class="no">true</span>  <span class="c1"># 关闭eureka 三级缓存 在高并发下可以更快速的读取数据</span>
+    <span class="na">response-cache-update-interval-ms</span><span class="pi">:</span> <span class="m">1000</span> <span class="c1"># 开启的情况下，提高服务被发现的速度</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h5 id="client配置总结">client配置总结</h5>
+
+<ul>
+  <li>
+    <p>刷新注册（拉取注册表）间隔</p>
+  </li>
+  <li>
+    <p>心跳间隔</p>
+
+    <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">client</span><span class="pi">:</span>
+      <span class="c1"># 针对新服务上线, Eureka client获取不及时的问题，在测试环境，可以适当提高Client端拉取Server注册信息的频率，默认：30秒</span>
+    <span class="na">registry-fetch-interval-seconds</span><span class="pi">:</span> <span class="m">30</span>
+  
+<span class="err">  </span><span class="na">instance</span><span class="pi">:</span>
+    <span class="na">lease-renewal-interval-in-seconds</span><span class="pi">:</span> <span class="m">30</span> <span class="c1"># 再续约时间</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>实际工作中service-ul：打乱配置，不要所有的服务都写一样顺序的配置</p>
+
+    <div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">某一台连接eureka的客户端：defaultZone</span><span class="pi">:</span> <span class="s">http://localhost:7900/eureka/,http://localhost:7901/eureka/,http://localhost:7902/eureka/</span>
+<span class="s">另一台连接eureka的客户端：defaultZone</span><span class="pi">:</span> <span class="s">http://localhost:7901/eureka/,http://localhost:7900/eureka/,http://localhost:7902/eureka/</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>多个eureka之间要互相注册,才能互相通信同步信息</p>
+
+    <p>```yml
+spring:
+  application:
+    name: cloud-eureka
+eureka:
+  instance:
+  #    prefer-ip-address: true
+  #    ip-address: 127.0.0.1</p>
+
+    <p>client:
+    register-with-eureka: true # false 禁止自己当做服务注册
+    fetch-registry: true # false #屏蔽注册信息
+    service-url:
+      # 5 24
+      defaultZone: http://eureka-7900:7900/eureka/,http://eureka-7901:7901/eureka/,http://eureka-7902:7902/eureka/
+      #,
+  server:
+    # 自我保护看自己情况
+    enable-self-preservation: true
+    # 续约阈值，和自我保护相关
+    renewal-percent-threshold: 0.85
+    # server剔除过期服务的时间间隔
+    eviction-interval-timer-in-ms: 1000
+    # 是否开启readOnly读缓存
+    use-read-only-response-cache: true
+    # 关闭 readOnly
+    response-cache-update-interval-ms: 1000</p>
+  </li>
+</ul>
+
+<hr />
+<p>spring:
+    profiles: 7900
+  server:
+    port: 7900
+  eureka:
+    instance:
+      hostname: eureka-7900
+    client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        # 5 24 互相注册
+        defaultZone: http://eureka-7900:7901/eureka/,http://eureka-7900:7902/eureka/</p>
+
+<hr />
+<p>spring:
+    profiles: 7901
+  server:
+    port: 7901
+  eureka:
+    instance:
+      hostname: eureka-7901
+    client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        # 5 24 互相注册
+        defaultZone: http://eureka-7900:7900/eureka/,http://eureka-7900:7902/eureka/
+  —
+  spring:
+    profiles: 7902
+  server:
+    port: 7902
+  eureka:
+    instance:
+      hostname: eureka-7902
+    client:
+      register-with-eureka: true
+      fetch-registry: true
+      service-url:
+        # 5 24 互相注册
+        defaultZone: http://eureka-7900:7900/eureka/,http://eureka-7900:7901/eureka/</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+  
+
+### eureka
+
+#### cap
+
+ - 三级缓存
+
+   ```xml
+   use-read-only-response-cache: false  # 关闭eureka 三级缓存 在高并发下可以更快速的读取数据
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>从其他peer拉取注册表，peer</p>
+
+    <ul>
+      <li>p：网络不好的情况下，还是可以拉取到注册表进行调用的，服务还可以调用</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="自我保护剔除eureka优化">自我保护剔除(*eureka优化)</h4>
+
+<ul>
+  <li>
+    <p>eureka会定期的将没有心跳的服务剔除</p>
+
+    <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>eviction-interval-timer-in-ms: 1000 # 踢除服务毫秒数，如果其他服务在1秒内拉取服务，还是能拉取的，包括不可用的服务
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>开关</p>
+
+    <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>enable-replicated-request-compression: false #关闭自我保护
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>阀值</p>
+
+    <div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>renewal-percent-threshold: 0.85 # 在开启的情况下，设置自我保护阀值
+eviction-interval-timer-in-ms: 1000 # 踢除服务毫秒数，如果其他服务在1秒内拉取服务，还是能拉取的，包括不可用的服务
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>推荐: <strong>服务少不开自我保护，服务多开自我保护</strong></p>
+
+    <ul>
+      <li>当服务少时，开了自我保护，当其中一个服务不能使用，请求依然会指向不可用的服务</li>
+      <li>当服务多时，开启自我保护，因为服务集群够多，请求到不能使用的服务将会被路由的其他可用的服务，所以可以里面重启会在让不可以服务变为空用即可，比如网络抖动不用了，就没必要提出</li>
+    </ul>
+  </li>
+  <li>服务即时感知
+    <ul>
+      <li>上线感知</li>
+      <li>下线感知</li>
+    </ul>
+  </li>
+  <li>缓存问题</li>
+  <li>写度</li>
+  <li>滥用缓存</li>
+  <li>服务滞后时间</li>
+  <li>分布式事务</li>
+  <li></li>
+  <li>服务注册
+    <ul>
+      <li>服务向eureka注册，发送心跳，下线，服务向eureka拉取注册表</li>
+      <li>集群同步</li>
+    </ul>
+  </li>
+  <li>服务发现
+    <ul>
+      <li>另一个服务也向eureka拉去注册表，拉去完之后，两个服务之间就可以互相调用</li>
+    </ul>
+  </li>
+  <li>Cap 在eureka中为什么只有ap
+    <ul>
+      <li>C表示强一致性，而eureka 做不到</li>
+      <li>当新的eureka启动的时候，会触发拉取久的eureka的注册表，在在这个时候如果有新的服务向久的eureka发起注册，新的eureka时获取不到新的服务的信息的</li>
+    </ul>
+  </li>
+  <li>服务测算
+    <ul>
+      <li>20个服务，每个服务部署5个，则eureka lient 连接100个</li>
+      <li>默认30发起一次 renewal 再续时间，即1分钟200次心跳</li>
+      <li>一天差不多几十万次心跳，即 eureka每天能承受多大的访问量</li>
+      <li>
+        <h2 id="相应的可以选择对应能承受该心跳次数的硬件">相应的可以选择对应能承受该心跳次数的硬件</h2>
+      </li>
+    </ul>
+  </li>
+  <li>eureka 使用guava 做缓存</li>
+  <li>
+    <p>实际应用中可通过 guava 做一些 集合+时间 的一些业务，比如做限流</p>
+  </li>
+  <li>验证参数可以通过 validata实现，可以减少if else 的使用</li>
+  <li>CAP原则
+    <ul>
+      <li>一致性、可用性和分区容错性，其中最多只能同时满是两个，而大多数情况下时满是AP，可用性（集群解决单点故障），容错性（），一致性都是通过最终一致性</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>序号</th>
+      <th>被抛弃的谁</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>放弃P，满足AC</td>
+      <td>将数据和服务都放在一个节点上，避免因网络引起的负面影响， 充分保证系统的可用性和一致性。但放弃P意味着放弃了系统的可扩展性</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>放弃A，满足PC</td>
+      <td>当节点故障或者网络故障时，受到影响的服务需要等待一定的世 界，因此在等待时间里，系统无法对外提供正常服务，因此是不可用的</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>放弃C，满足AP</td>
+      <td>系统无法保证数据的实时一致性，但是承诺数据最终会保证一致 性。因此存在数据不一致的窗口期，至于窗口期的长短取决于系统的设计</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="面试题">面试题</h4>
+
+<ul>
+  <li>生产环境中，服务重启时，先停服，在手动出发下线</li>
+</ul>
+</div><p><a href="/SpringCloud/sop/eureka-server">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=SpringCloud">SpringCloud</a>
+            </li><li>
+              <a class="button button--secondary button--pill button--sm"
+                href="/archive.html?tag=eureka">eureka</a>
+            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 12, 2020</span>
+            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="SpringCloud-09-12-03">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-12T00:00:00+08:00">
+    <meta itemprop="keywords" content="SpringCloud,eureka"></div>
+      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
           <header><a href="/docs-util/design"><h2 itemprop="headline" class="item__header">设计模式</h2></a></header>
           <div class="item__description"><div class="article__content" itemprop="description articleBody"><table>
   <thead>
@@ -1067,1827 +1934,8 @@ MTE6NTA6MjkrMDA6MDD2rwIvAAAAAElFTkSuQmCC" />
             </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 02, 2020</span>
             </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-juc-2020-09-02-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-02T00:00:00+08:00">
     <meta itemprop="keywords" content="多线程"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java/juc/02"><h2 itemprop="headline" class="item__header">Servlet的多线程 和 Servlet线程安全</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>JSP/Servlet的多线程原理:</strong></p>
-
-<ul>
-  <li>1.servelet就是一个CGI,但比传统的CGI要快得过</li>
-</ul>
-
-<p>传统CGI是多进程的,servlet是多线程的
-以多线程方式执行可大大降低对系统的资源需求,提高 系统的并发量及响应时间.</p>
-
-<ul>
-  <li>JSP/Servlet容器默认是采用<strong>单实例多线程(这是造成线程安全的主因)</strong>方式处理多个请求的：</li>
-</ul>
-
-<p>当客户端第一次请求某一个JSP文件时(有的servlet是随容器启动就startup)：</p>
-
-<ol>
-  <li>服务端把该JSP编译成一个CLASS文件</li>
-  <li>并创建一个该类的实例</li>
-  <li>然后<strong>创建一个线程</strong>处理CLIENT端的请求。</li>
-</ol>
-
-<ul>
-  <li>多请求，多线程：</li>
-</ul>
-
-<p>如果有多个客户端同时请求该JSP文件，则服务端会创建多个线程。每个客户端请求对应一个线程。</p>
-
-<p><strong>servlet 的线程安全</strong></p>
-
-<ul>
-  <li>servlet里的 实例变量</li>
-</ul>
-
-<p>servlet里的实例变量，是<strong>被所有线程共享</strong>的,所以不是线程安全的.</p>
-
-<ul>
-  <li>servlet方法里的局部变量</li>
-</ul>
-
-<p>因为每个线程都有它自己的堆栈空间,方法内局部变量存储在这个线程堆栈空间内,
-且参数传入方法是按传值volue copy的方式
-所以是线程安全的</p>
-
-<ul>
-  <li>Application对象</li>
-</ul>
-
-<p>在container运行期间,被整个系统内所有用户共同使用,所以不是线程安全 的</p>
-
-<ul>
-  <li>ServletContext对象</li>
-</ul>
-
-<p><strong>ServletContext是可以多线程同时读/写属性的,线程是不安全的</strong>。
-<strong>struts2 的ServletContext采用的是TreadLocal模式,是线程安全的</strong></p>
-
-<ul>
-  <li>HttpServletRequest对象和HttpServletResponse对象</li>
-</ul>
-
-<p>每一个请求，由一个工作线程来执行，都会<strong>创建</strong>有一对新的ServletRequest对象和ServletResponse,然后传入service()方法内
-<strong>所以每个ServletRequest对象对应每个线程，而不是多线程共享，是线程安全的</strong>。所以不用担心request参数和属性的线程安全性</p>
-
-<ul>
-  <li>HttpSession</li>
-</ul>
-
-<p>Session对象在用户session期间存在，<strong>只能在属于同一个SessionID的请求的线程中被访问</strong>，因此Session对象的理论上是线程安全的。
-(当用户打开多个同属于一个进程的浏览器窗口（常见的弹出窗口），在这些窗口的访问属于同一个Session，会出现多次请求，需要多个工作线程来处理请求,这时就有可能的出现线程安全问题)</p>
-
-<p><strong>servlet 尽量用方法内变量,就一定线程安全么? 局部变量的数据也来自request对象或session对象啊,它们线程安全么?</strong>
-servletRequest 线程是安全的
-因为:每个 request 都会创建一个新线程,每个新线程,容器又都会创建一对servletRequest和servletResponse对象(这是servlet基本原理)
-所以servletRequest对象和servletResponse对象只在一个线程内被创建,存在,被访问</p>
-
-<p><strong>常见的线程安全的解决办法:</strong>
-1.使用方法内局部变量</p>
-
-<ul>
-  <li>是因为各线程有自己堆栈空间,存储局部变量</li>
-  <li>方法参数传入,多采用传值（volue copy)传入方法内</li>
-</ul>
-
-<p>2.对<strong>操作共享资源</strong>的语句,方法,对象, 使用同步
-比如<strong>写入磁盘文件</strong>,采用同步锁，但建议尽量用同步代码块，不要用同步方法</p>
-
-<p>3.使用同步的集合类
-使用Vector代替ArrayList
-使用Hashtable代替HashMap。</p>
-
-<p>4.不要在 Servlet中再创建自己的线程来完成某个功能。
-Servlet本身就是多线程的，在Servlet中再创建线程，将导致执行情况复杂化</p>
-</div><p><a href="/java/juc/02">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Sep 01, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-juc-2020-09-01-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-09-01T00:00:00+08:00">
-    <meta itemprop="keywords" content="多线程"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java/one/01"><h2 itemprop="headline" class="item__header">一句话介绍</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h1 id="what-why-how">what why how</h1>
-<h1 id="相应的查下--某些技术存在的坑-编写相应的代码来试错">相应的查下  某些技术存在的坑 编写相应的代码来试错</h1>
-<ul>
-  <li>mysql 分库分表 有哪些技术 这些技术有哪些坑</li>
-  <li>mysql 读写分离 有哪些技术 这些技术有哪些坑
-    <ul>
-      <li>mycat</li>
-      <li>springjdbc</li>
-    </ul>
-  </li>
-  <li>linkedHashMap 有哪些应用场景 存数据有什么缺点
-    <ul>
-      <li>通过LUC算法，当linkedHashMap 满了之后 可以会自动删除使用最少的信息</li>
-      <li>linkedHashMap 含有linked 在插入和删除上的缺陷</li>
-    </ul>
-  </li>
-  <li>redis有哪些必须要用到的技术点
-    <ul>
-      <li>
-        <h2 id="倒计时">倒计时</h2>
-      </li>
-    </ul>
-  </li>
-  <li>如何处理大文件的问题</li>
-  <li>init方法和内部类有什么区别</li>
-  <li>内部类
-    <ul>
-      <li>内部类解决了java不能多继承的问题</li>
-    </ul>
-  </li>
-  <li>枚举为什么可以直接使用
-    <ul>
-      <li>枚举类默认被 final static 修饰</li>
-      <li>枚举类的成员变量也 默认被 final static 修饰</li>
-    </ul>
-  </li>
-  <li>hashmap treemap linkedhashmap 对比
-    <ul>
-      <li>一般情况下，我们用的最多的是HashMap,在Map 中插入、删除和定位元素，HashMap 是最好的选择。但如果要按顺序或自定义顺序遍历键，那么TreeMap会更好。如果需要输出的顺序和输入的相同,用LinkedHashMap 可以实现,它还可以按读取顺序来排列.</li>
-      <li>linkedhashmap 在hashmap的基础上增加了linked，在加快了遍历的速度</li>
-      <li>treeMap 拍好顺序，在查找的时候效率比较高，插入的时候效率也没那么低</li>
-      <li>在多线程高并发的情况下，有ConcurrentSkipListMap 提带treemap</li>
-    </ul>
-  </li>
-  <li>
-    <h2 id="多线程使用场景">多线程使用场景</h2>
-  </li>
-  <li>lock 如何给对象加锁
-    <ul>
-      <li>无</li>
-    </ul>
-  </li>
-  <li>1：A线程正在执行一个对象中的同步方法，B线程是否可以同时执行同一个对象中的非同步方法？
-2：同上，B线程是否可以同时执行同一个对象中的另一个同步方法？
-3：线程抛出异常会释放锁吗？
-4：volatile和synchronized区别？
-5：写一个程序，证明AtomXXX类比synchronized更高效
-6：AtomXXX类可以保证可见性吗？请写一个程序来证明
-7：写一个程序证明AtomXXX类的多个方法并不构成原子性
-8：写一个程序模拟死锁
-9：写一个程序，在main线程中启动100个线程，100个线程完成后，主线程打印“完成”，使用join()和countdownlatch都可以完成，请比较异同。
-10：一个高效的游戏服务器应该如何设计架构？</li>
-  <li>限流
-    <ul>
-      <li>Guava RateLimter</li>
-    </ul>
-  </li>
-  <li>乐观锁 悲观锁 自旋锁 读写锁(共享锁，排他锁)，分段锁 以及在java中的实现方式
-分别对应 CAS   syn   CAS    ReadWriteLock      LongAdder</li>
-  <li>redis 击穿的概念</li>
-  <li>并发和并行的区别
-    <ul>
-      <li>并发是指任务提交，并行指任务执行</li>
-    </ul>
-  </li>
-  <li>创建线程为什么那么昂贵？
-    <ul>
-      <li>必须为线程堆栈分配并初始化一大块内存。</li>
-      <li>需要进行系统调用以在主机OS中创建/注册本机线程。</li>
-      <li>需要创建，初始化描述符并将其添加到JVM内部数据结构中</li>
-    </ul>
-  </li>
-  <li>多线程的目的 大概有两个：
-    <ul>
-      <li><strong>避免阻塞异步调用：</strong> 一是把程序细分成几个功能相对独立的模块，防止其中一个功能模块阻塞导致整个程序假死</li>
-      <li><strong>提高运行效率：</strong> 比如多个核同时跑，或者单核里面，某个线程进行IO操作时，另一个线程可以同时执行</li>
-    </ul>
-  </li>
-  <li>工厂方法适合在单个产品上做纬度扩展</li>
-  <li>抽象工厂适合在产品族的纬度上扩展</li>
-  <li>设计模式
-    <ul>
-      <li>工厂模式典型的应用 springioc</li>
-      <li>mediate 调节模式 典型应用 消息中间件</li>
-      <li>mvc 分离</li>
-      <li>对修改关闭，对扩展开放</li>
-      <li>高内聚，低耦合</li>
-      <li>通过单例模式降低耦合度，比如某个类作为其他类方法的参数时，可以通过直接使用单例类，而不需要作为参数传递</li>
-      <li>构造方法一个够用绝对不要写两个，每多一个构造函数都需要维护</li>
-      <li>继承是直接继承相应的父类，聚合是实现共同的接口，比如父类实现了什么接口，相应的也去实现，以达到可以控制所有实现了该接口的所有类</li>
-      <li>内部类，可以保证只让本类调用，不被外部的类使用</li>
-      <li>由普通的类来实现接口，必须将接口所有抽象方法重写</li>
-      <li>由抽象类来实现接口，则不必重写接口的方法。可以全部不重写或只重写一部分方法。</li>
-      <li>在不确定使用接口还是抽象类修饰的时候，一般形容词用接口，名称用抽象类</li>
-    </ul>
-  </li>
-  <li>数组与链表的区别</li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th>数组</th>
-      <th>链表</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>数组静态分配内存，</td>
-      <td>链表动态分配内存；</td>
-    </tr>
-    <tr>
-      <td>数组在内存中连续，</td>
-      <td>链表不连续；</td>
-    </tr>
-    <tr>
-      <td>数组元素在栈区，</td>
-      <td>链表元素在堆区；</td>
-    </tr>
-    <tr>
-      <td>数组利用下标定位，时间复杂度为O(1)，</td>
-      <td>链表定位元素时间复杂度O(n)；</td>
-    </tr>
-    <tr>
-      <td>数组插入或删除元素的时间复杂度O(n)，</td>
-      <td>链表的时间复杂度O(1)。</td>
-    </tr>
-  </tbody>
-</table>
-</div><p><a href="/java/one/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 28, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-one-2020-08-28-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
-    <meta itemprop="keywords" content="java基础"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java/juc/01"><h2 itemprop="headline" class="item__header">多线程基础</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="线程基本概念">线程基本概念</h2>
-
-<p>-</p>
-
-<ul>
-  <li>
-    <p>线程：在一个程序内，程序运行的最小单位，一个程序可以同时执行多个线程</p>
-  </li>
-  <li>创建线程：
-    <ul>
-      <li>继承 Thread 并重写run方法</li>
-      <li>实现 Runable 接口，重写run方法</li>
-    </ul>
-  </li>
-  <li>启动线程的三种方式：
-    <ul>
-      <li>Thread</li>
-      <li>Runable</li>
-      <li>线程池 Executors.newCacheThread</li>
-    </ul>
-  </li>
-  <li>让出线程
-    <ul>
-      <li>sleep  未运行，先让别的线程先运行</li>
-      <li>yield   运行中让出 ，进入等待队列</li>
-      <li>join     用于等待另外一个线程结束，比如AB线程，A在运行中，通过join将B加入到A线程中，等B运行完成后，再运行A
-        <ul>
-          <li>可以通过join的方式，让线程顺序执行</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>线程状态</p>
-
-    <p><img src="/assets/images/juc/0828/7e76cc17-0ad5-3ff3-954e-1f83463519d1.jpg" alt="img" /></p>
-  </li>
-</ul>
-
-<p>-</p>
-
-<ul>
-  <li>中段线程（工程中和少使用）
-    <ul>
-      <li>通过 interrupt() 方法中段 （需要配合try catch使用，）</li>
-      <li>通过stop() 中段（不建议使用，因为可能数据不一致的问题）</li>
-      <li>通过shell命令 kill -9 对应线程中段</li>
-    </ul>
-  </li>
-  <li>
-    <p>获取线程状态</p>
-
-    <ul>
-      <li>Thread.getState();</li>
-    </ul>
-  </li>
-  <li>
-    <p>多线程使用场景</p>
-
-    <p>-</p>
-  </li>
-</ul>
-
-<h2 id="锁">锁</h2>
-
-<ul>
-  <li>synchronized  锁定的是某个对象，
-    <ul>
-      <li>对方法加锁</li>
-      <li>对 对象加锁</li>
-      <li>锁升级的概念</li>
-      <li>可重入锁</li>
-      <li>异常会释放锁，<strong>这个很危险</strong>，释放锁之后会被其他线程拿到锁做相应的业务处理</li>
-      <li>八锁</li>
-      <li>Atomic lock 使用的是自旋锁 ，性能比synchronized 要高
-        <ul>
-          <li>自旋锁锁使用场景：执行时间短，线程少（因为等待情况下才会自旋遍历，很消耗cpu资源）</li>
-          <li>系统锁（synchronized）使用场景：执行时间长，线程多</li>
-        </ul>
-      </li>
-      <li>synchronized(object)
-        <ul>
-          <li>不能使用String常量，Integer Long</li>
-        </ul>
-      </li>
-      <li>偏向锁
-        <ul>
-          <li>当线程来的时候，先拿到线程id，先不给对象加锁，当还是之前的线程，那直接执行相应的任务，这样在不直接加锁的情况下，效率更高</li>
-          <li>当进来的是另外一个线程，那么按照加锁的方式处理</li>
-        </ul>
-      </li>
-      <li>自旋锁
-        <ul>
-          <li>当对象被一个线程锁定后，另一个线程会一直询问，是否可以拿到这把锁，会一直问10次，拿不到就进入wait 状态，进入等待队列</li>
-        </ul>
-      </li>
-      <li>锁升级
-        <ul>
-          <li>偏向锁–&gt;自旋锁–&gt;重量级锁(系统锁)</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>volatile
-    <ul>
-      <li>保证可见效</li>
-      <li>禁止指令重排</li>
-      <li>可以保证可见性，但是不能保证原子性，保证原子性 需要使用锁</li>
-      <li>没有把握不要用</li>
-      <li>要的时候尽量使用基础变量，不要使用引用值</li>
-      <li>volatile可以保证引用不变，但是引用里面的值观察不到变化</li>
-    </ul>
-  </li>
-  <li>锁优化
-    <ul>
-      <li>锁的粒度细化</li>
-      <li>锁太多的情况下 多锁做粗化</li>
-    </ul>
-  </li>
-  <li>synchronized 锁对象和锁class
-    <ul>
-      <li>1 无论是修饰方法还是修饰代码块都是 对象锁,当一个线程访问一个带synchronized方法时，由于对象锁的存在，所有加synchronized的方法都不能被访问（前提是在多个线程调用的是同一个对象实例中的方法）</li>
-      <li>2 无论是修饰静态方法还是锁定某个对象,都是 类锁.一个class其中的静态方法和静态变量在内存中只会加载和初始化一份，所以，一旦一个静态的方法被申明为synchronized，此类的所有的实例化对象在调用该方法时，共用同一把锁，称之为类锁。</li>
-    </ul>
-  </li>
-  <li>CAS （无锁优化 自旋）
-    <ul>
-      <li>Compare and set</li>
-      <li>cas
-        <ul>
-          <li>CPU原语支持</li>
-        </ul>
-      </li>
-      <li>ABA问题
-        <ul>
-          <li>加version</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>乐观锁 悲观锁 偏向锁 自旋锁</li>
-  <li>lock 比synchronized 好的的地方
-    <ul>
-      <li>lock 用的是cas</li>
-      <li>tryLock 尝试获取锁 boolean</li>
-      <li>可以打断线程</li>
-      <li>公平锁     队列里面的线程 按照顺序 线程挨个执行</li>
-      <li>非公平锁  队列里面等待的线程 随机执行</li>
-    </ul>
-  </li>
-  <li>CountDownLatch
-    <ul>
-      <li>用法</li>
-    </ul>
-  </li>
-  <li>CyclicBarrier
-    <ul>
-      <li>用法</li>
-    </ul>
-  </li>
-  <li>Phaser
-    <ul>
-      <li>用法</li>
-    </ul>
-  </li>
-  <li>ReadWriteLock
-    <ul>
-      <li>共享锁</li>
-      <li>排他锁</li>
-      <li>怎么用</li>
-    </ul>
-  </li>
-  <li>分布式锁
-    <ul>
-      <li>redis</li>
-      <li>zookpeer</li>
-    </ul>
-  </li>
-  <li>semaphore</li>
-  <li>LockSupport
-    <ul>
-      <li>可以指定线程结束阻塞状态</li>
-    </ul>
-  </li>
-  <li>核心概念</li>
-</ul>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 所有的线程中，都是通过队列 AbstractQueuedSynchronizer 来排序
-- 线程之间不可见
-- notify 不释放锁
-- wait 会释放锁，并进入阻塞状态
-</code></pre></div></div>
-
-<ul>
-  <li>乐观锁 悲观锁 自旋锁 读写锁(共享锁，排他锁)，分段锁 以及在java中的实现方式
-分别对应 CAS   syn   CAS    ReadWriteLock      LongAdder</li>
-  <li>synchronized 和 Condition 本质区别
-    <ul>
-      <li>synchronized 只有一个等待队列，Condition 可以有多个</li>
-    </ul>
-  </li>
-  <li>Varhandle
-    <ul>
-      <li>可以将非原子性操作改成原子性操作（普通属性也可以改成原子性操作）</li>
-      <li>比反射的效率高，Varhandle 可以直接操作二进制的码</li>
-    </ul>
-  </li>
-  <li>ThreadLocal
-    <ul>
-      <li>set
-        <ul>
-          <li>Thread.currentThread.map(ThreadLocal,new persion)</li>
-        </ul>
-      </li>
-      <li>ThreadLocal 用途
-        <ul>
-          <li>声明式事务</li>
-        </ul>
-      </li>
-      <li>使用ThreadLocal 不用的时候 ，需要做 remove 不然有可能会出现内存泄漏</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="容器">容器</h2>
-
-<h4 id="vector-hashtable">vector hashtable</h4>
-
-<ul>
-  <li>​	自带锁，性能不好，基本不用</li>
-</ul>
-
-<h4 id="list">list</h4>
-
-<h4 id="set">set</h4>
-
-<h4 id="queue">Queue</h4>
-
-<ul>
-  <li>高并发</li>
-  <li>生产者消费者模型</li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th>队列</th>
-      <th> </th>
-      <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>LinkedBlockingQueue</td>
-      <td>无界的</td>
-      <td>最大jvm内存大小<br /><strong>天生的实现了生产者消费者模型</strong></td>
-    </tr>
-    <tr>
-      <td>ArrayBlockingQueue</td>
-      <td>有界的</td>
-      <td>需要设置队列的大小</td>
-    </tr>
-    <tr>
-      <td>PriorityQueue</td>
-      <td>优先队列</td>
-      <td>数据按照一定顺序输出，默认又小到大输出，也可以自定义比较输出顺序</td>
-    </tr>
-    <tr>
-      <td>DelayQueue</td>
-      <td>可以用在时间上的排序</td>
-      <td>按照时间的顺序制作任务</td>
-    </tr>
-    <tr>
-      <td>SynchronousQueue</td>
-      <td>给线程之间传递任务（容量为零）</td>
-      <td>1. 这里只能用 put 方法 ，只能put一次 ，也不能使用 add 方法 <br />2. SynchronousQueue 没有容量，在put之后进入阻塞状态， 需要把数据tack出去</td>
-    </tr>
-    <tr>
-      <td>LinkedTransferQueue</td>
-      <td>可以在线程间传递多个任务</td>
-      <td>1. transfer() 是阻塞方法，需要 tack() 后才解除阻塞，所有需要先执行 tack() 方法 <br />2.相对 SynchronousQueue 只能两个线程之间信息传递 ，TransferQueue 可以多个线程拿数据 <br />3. 相对 SynchronousQueue 容量为零， TransferQueue 可以在队列里面插入多条数据</td>
-    </tr>
-    <tr>
-      <td>ConcurrentLinkedQueue</td>
-      <td>双端队列Deque</td>
-      <td>1. add()  添加不了抛出异常 <br />2. offer 能不能呢添加会有一个boolean的返回值 <br />3. poll() 取 会remove // peek() 取 不会remove</td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="map">Map</h4>
-
-<table>
-  <thead>
-    <tr>
-      <th>三个map对比</th>
-      <th>写入</th>
-      <th>读取</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Hashtable</td>
-      <td>相对快</td>
-      <td>满</td>
-    </tr>
-    <tr>
-      <td>Collections.synchronizedMap(new HashMap&lt;UUID, UUID&gt;());</td>
-      <td>相对快</td>
-      <td>慢</td>
-    </tr>
-    <tr>
-      <td>ConcurrentHashMap</td>
-      <td>相对慢一点</td>
-      <td>极快</td>
-    </tr>
-  </tbody>
-</table>
-
-<ul>
-  <li>
-    <p>linkedhashmap 在hashmap的基础上增加了linked，加快了遍历的速度，但是在查找的时候比较麻烦，它的查找时间负责度是O(n)，</p>
-  </li>
-  <li>treeMap 排好顺序，在查找的时候效率比较高，插入的时候效率也没那么低</li>
-  <li>ConcurrentSkipListMap
-    <ul>
-      <li>在多线程高并发的情况下，有ConcurrentSkipListMap 替代 treemap</li>
-      <li>高并发并且排序</li>
-      <li>跳表的概念，（在查找的时候有点二分查找的感觉）</li>
-    </ul>
-  </li>
-</ul>
-
-<p><img src="/assets/images/juc/0901/Jietu20200901-164715@2x.jpg" alt="ConcurrentSkipListMap" /></p>
-
-<ul>
-  <li>CopyOnWriteList 写时复制</li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th>普通容器</th>
-      <th>并发容器</th>
-      <th>并发容器使用场景</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>ArrayList</td>
-      <td>CopyOnWriteArrayList</td>
-      <td>读多写少(写加锁，读不用加锁)</td>
-    </tr>
-    <tr>
-      <td>HashMap</td>
-      <td>ConcurrentHashMap</td>
-      <td>并发时替代HashMap</td>
-    </tr>
-    <tr>
-      <td>TreeMap</td>
-      <td>ConcurrentSkipListMap</td>
-      <td>高并发并且排序</td>
-    </tr>
-    <tr>
-      <td>ArrayList</td>
-      <td>Collections.synchronizedList(new ArrayList)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
-<ul>
-  <li>list 和 Queue 却别
-    <ul>
-      <li>Queue提供了 offer peek poll   等 对线程友好的api</li>
-      <li>BlockingQueue 提供了 put 和tack阻塞方法 ，是一个很好的 <strong>生产者消费者模型</strong></li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="线程池-threadpool">线程池 ThreadPool</h2>
-
-<p>Callable –&gt; Runable + return</p>
-
-<p>Future：接受未来将会产生的结果</p>
-
-<p>FutrueTask –&gt; Futurn+Runable</p>
-
-<h3 id="excutethreadpool--7大参数">ExcuteThreadPool  7大参数</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>ExcuteThreadPool  7大参数</th>
-      <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>coorePoolSize</td>
-      <td>核心线程</td>
-    </tr>
-    <tr>
-      <td>maximumPoolSize</td>
-      <td>最大线程数</td>
-    </tr>
-    <tr>
-      <td>线程空闲时多久销毁</td>
-      <td>可以设置任何时间长度</td>
-    </tr>
-    <tr>
-      <td>销毁的时间单位</td>
-      <td>对应 秒，微秒等</td>
-    </tr>
-    <tr>
-      <td>任务队列</td>
-      <td>BlockingQueue 的子类都可以使用</td>
-    </tr>
-    <tr>
-      <td>生产线程的方式</td>
-      <td>jdk提供了一种默认策略，也可以自定义</td>
-    </tr>
-    <tr>
-      <td>执行任务的线程和队列满了后，对于的处理方式</td>
-      <td>jdk提供了四种策略，也可自定义处理策略</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="excutethreadpool">ExcuteThreadPool</h3>
-
-<ul>
-  <li>所有线程共用同一个队列</li>
-</ul>
-
-<ol>
-  <li>
-    <p>为甚么有SingleExcuteThread</p>
-
-    <blockquote>
-      <p>任务队列，线程管理</p>
-    </blockquote>
-
-    <ol>
-      <li>Cached vs Fixed</li>
-    </ol>
-
-    <blockquote>
-      <p>阿里都不用，自己估计，进行精确定义</p>
-    </blockquote>
-
-    <ol>
-      <li>Scheduled 定时任务线程池</li>
-    </ol>
-
-    <blockquote>
-      <p>定时器框架：quartz</p>
-
-      <p>面试题：假如提供一个闹钟服务，订阅的人有10亿，怎么优化？</p>
-    </blockquote>
-  </li>
-</ol>
-
-<h3 id="并发和并行的区别">并发和并行的区别</h3>
-
-<p>并发是指任务提交，并行指任务执行</p>
-
-<h3 id="forkjoinpool">ForkJoinPool</h3>
-
-<ul>
-  <li>每个线程有自己的队列</li>
-  <li>使用大的任务，通过切分成小的任务加快运行速度</li>
-</ul>
-</div><p><a href="/java/juc/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=%E5%A4%9A%E7%BA%BF%E7%A8%8B">多线程</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-calendar-alt"></i> <span>Aug 28, 2020</span>
-            </li><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-juc-2020-08-27-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
-    <meta itemprop="keywords" content="多线程"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java/InnerClass/01"><h2 itemprop="headline" class="item__header">java提高篇(八)----详解内部类</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><blockquote>
-  <p><strong>可以将一个类的定义放在另一个类的定义内部，这就是内部类。</strong></p>
-</blockquote>
-
-<p>内部类是一个非常有用的特性但又比较难理解使用的特性(鄙人到现在都没有怎么使用过内部类，对内部类也只是略知一二)。</p>
-
-<h2 id="第一次见面">第一次见面</h2>
-
-<p>内部类我们从外面看是非常容易理解的，无非就是在一个类的内部在定义一个类。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span> <span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setAge</span><span class="o">(</span><span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
-        <span class="kd">public</span> <span class="nf">InnerClass</span><span class="o">(){</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="s">"chenssy"</span><span class="o">;</span>
-            <span class="n">age</span> <span class="o">=</span> <span class="mi">23</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>在这里InnerClass就是内部类，对于初学者来说内部类实在是使用的不多，鄙人菜鸟一个同样没有怎么使用过(貌似仅仅只在做swing 注册事件中使用过)，但是随着编程能力的提高，我们会领悟到它的魅力所在，它可以使用能够更加优雅的设计我们的程序结构。在使用内部类之间我们需要明白为什么要使用内部类，内部类能够为我们带来什么样的好处。</p>
-
-<h2 id="一为什么要使用内部类">一、为什么要使用内部类</h2>
-
-<p>为什么要使用内部类？在《Think in java》中有这样一句话：使用内部类最吸引人的原因是：每个内部类都能独立地继承一个（接口的）实现，所以无论外围类是否已经继承了某个（接口的）实现，对于内部类都没有影响。</p>
-
-<p>在我们程序设计中有时候会存在一些使用接口很难解决的问题，这个时候我们可以利用内部类提供的、可以继承多个具体的或者抽象的类的能力来解决这些程序设计问题。可以这样说，接口只是解决了部分问题，而 <strong>内部类使得多重继承的解决方案变得更加完整。</strong></p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Father</span> <span class="o">{</span>
-
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Mother</span> <span class="o">{</span>
-
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Son</span> <span class="kd">implements</span> <span class="nc">Father</span><span class="o">,</span> <span class="nc">Mother</span> <span class="o">{</span>
-
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Daughter</span> <span class="kd">implements</span> <span class="nc">Father</span><span class="o">{</span>
-
-    <span class="kd">class</span> <span class="nc">Mother_</span> <span class="kd">implements</span> <span class="nc">Mother</span><span class="o">{</span>
-
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>其实对于这个实例我们确实是看不出来使用内部类存在何种优点，但是如果Father、Mother不是接口，而是抽象类或者具体类呢？这个时候我们就只能使用内部类才能实现多重继承了。</p>
-
-<p>其实使用内部类最大的优点就在于它能够非常好的解决多重继承的问题，但是如果我们不需要解决多重继承问题，那么我们自然可以使用其他的编码方式，但是使用内部类还能够为我们带来如下特性（摘自《Think in java》）：</p>
-
-<p><strong>1、</strong>内部类可以用多个实例，每个实例都有自己的状态信息，并且与其他外围对象的信息相互独立。</p>
-
-<p><strong>2、</strong>在单个外围类中，可以让多个内部类以不同的方式实现同一个接口，或者继承同一个类。</p>
-
-<p><strong>3、</strong>创建内部类对象的时刻并不依赖于外围类对象的创建。</p>
-
-<p><strong>4、</strong>内部类并没有令人迷惑的“is-a”关系，他就是一个独立的实体。</p>
-
-<p><strong>5、</strong>内部类提供了更好的封装，除了该外围类，其他类都不能访问。</p>
-
-<h2 id="二内部类基础">二、内部类基础</h2>
-
-<p>在这个部分主要介绍内部类如何使用外部类的属性和方法，以及使用.this与.new。</p>
-
-<p>当我们在创建一个内部类的时候，它无形中就与外围类有了一种联系，依赖于这种联系，它可以无限制地访问外围类的元素。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span> <span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-
-    <span class="cm">/**省略getter和setter方法**/</span>
-
-    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
-        <span class="kd">public</span> <span class="nf">InnerClass</span><span class="o">(){</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="s">"chenssy"</span><span class="o">;</span>
-            <span class="n">age</span> <span class="o">=</span> <span class="mi">23</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"name："</span> <span class="o">+</span> <span class="n">getName</span><span class="o">()</span> <span class="o">+</span><span class="s">"   ;age："</span> <span class="o">+</span> <span class="n">getAge</span><span class="o">());</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">OuterClass</span> <span class="n">outerClass</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
-        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass</span> <span class="n">innerClass</span> <span class="o">=</span> <span class="n">outerClass</span><span class="o">.</span><span class="na">new</span> <span class="nf">InnerClass</span><span class="o">();</span>
-        <span class="n">innerClass</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">--------------</span>
-<span class="nc">Output</span><span class="err">：</span>
-<span class="n">name</span><span class="err">：</span><span class="n">chenssy</span>   <span class="o">;</span><span class="n">age</span><span class="err">：</span><span class="mi">23</span>
-</code></pre></div></div>
-
-<p>在这个应用程序中，我们可以看到内部了InnerClass可以对外围类OuterClass的属性进行无缝的访问，尽管它是private修饰的。这是因为当我们在创建某个外围类的内部类对象时，此时内部类对象必定会捕获一个指向那个外围类对象的引用，只要我们在访问外围类的成员时，就会用这个引用来选择外围类的成员。</p>
-
-<p>其实在这个应用程序中我们还看到了如何来引用内部类：引用内部类我们需要指明这个对象的类型：OuterClasName.InnerClassName。同时如果我们需要创建某个内部类对象，必须要利用外部类的对象通过.new来创建内部类： OuterClass.InnerClass innerClass = outerClass.new InnerClass();。</p>
-
-<p>同时如果我们需要生成对外部类对象的引用，可以使用OuterClassName.this，这样就能够产生一个正确引用外部类的引用了。当然这点实在编译期就知晓了，没有任何运行时的成本。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"OuterClass..."</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
-        <span class="kd">public</span> <span class="nc">OuterClass</span> <span class="nf">getOuterClass</span><span class="o">(){</span>
-            <span class="k">return</span> <span class="nc">OuterClass</span><span class="o">.</span><span class="na">this</span><span class="o">;</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">OuterClass</span> <span class="n">outerClass</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
-        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass</span> <span class="n">innerClass</span> <span class="o">=</span> <span class="n">outerClass</span><span class="o">.</span><span class="na">new</span> <span class="nf">InnerClass</span><span class="o">();</span>
-        <span class="n">innerClass</span><span class="o">.</span><span class="na">getOuterClass</span><span class="o">().</span><span class="na">display</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">-------------</span>
-<span class="nl">Output:</span>
-<span class="nc">OuterClass</span><span class="o">...</span>
-</code></pre></div></div>
-
-<p>到这里了我们需要明确一点，内部类是个编译时的概念，一旦编译成功后，它就与外围类属于两个完全不同的类（当然他们之间还是有联系的）。对于一个名为OuterClass的外围类和一个名为InnerClass的内部类，在编译成功后，会出现这样两个class文件：OuterClass.class和OuterClass$InnerClass.class。</p>
-
-<p>在Java中内部类主要分为成员内部类、局部内部类、匿名内部类、静态内部类。</p>
-
-<h2 id="三成员内部类">三、成员内部类</h2>
-
-<p>成员内部类也是最普通的内部类，它是外围类的一个成员，所以他是可以无限制的访问外围类的所有 成员属性和方法，尽管是private的，但是外围类要访问内部类的成员属性和方法则需要通过内部类实例来访问。</p>
-
-<p>在成员内部类中要注意两点，<strong>第一：</strong>成员内部类中不能存在任何static的变量和方法；<strong>第二：</strong>成员内部类是依附于外围类的，所以只有先创建了外围类才能够创建内部类。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">str</span><span class="o">;</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">outerDisplay</span><span class="o">(){</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"outerClass..."</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">InnerClass</span><span class="o">{</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">innerDisplay</span><span class="o">(){</span>
-            <span class="c1">//使用外围内的属性</span>
-            <span class="n">str</span> <span class="o">=</span> <span class="s">"chenssy..."</span><span class="o">;</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
-            <span class="c1">//使用外围内的方法</span>
-            <span class="n">outerDisplay</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="cm">/*推荐使用getxxx()来获取成员内部类，尤其是该内部类的构造函数无参数时 */</span>
-    <span class="kd">public</span> <span class="nc">InnerClass</span> <span class="nf">getInnerClass</span><span class="o">(){</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">InnerClass</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">OuterClass</span> <span class="n">outer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
-        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">outer</span><span class="o">.</span><span class="na">getInnerClass</span><span class="o">();</span>
-        <span class="n">inner</span><span class="o">.</span><span class="na">innerDisplay</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">--------------------</span>
-<span class="n">chenssy</span><span class="o">...</span>
-<span class="n">outerClass</span><span class="o">...</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p><strong>推荐使用getxxx()来获取成员内部类，尤其是该内部类的构造函数无参数时 。</strong></p>
-</blockquote>
-
-<h2 id="四局部内部类">四、局部内部类</h2>
-
-<p>有这样一种内部类，它是嵌套在方法和作用于内的，对于这个类的使用主要是应用与解决比较复杂的问题，想创建一个类来辅助我们的解决方案，到那时又不希望这个类是公共可用的，所以就产生了局部内部类，局部内部类和成员内部类一样被编译，只是它的作用域发生了改变，它只能在该方法和属性中被使用，出了该方法和属性就会失效。</p>
-
-<p>对于局部内部类实在是想不出什么好例子，所以就引用《Think in java》中的经典例子了。</p>
-
-<p>定义在方法里：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Parcel5</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">Destionation</span> <span class="nf">destionation</span><span class="o">(</span><span class="nc">String</span> <span class="n">str</span><span class="o">){</span>
-        <span class="kd">class</span> <span class="nc">PDestionation</span> <span class="kd">implements</span> <span class="nc">Destionation</span><span class="o">{</span>
-            <span class="kd">private</span> <span class="nc">String</span> <span class="n">label</span><span class="o">;</span>
-            <span class="kd">private</span> <span class="nf">PDestionation</span><span class="o">(</span><span class="nc">String</span> <span class="n">whereTo</span><span class="o">){</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="n">whereTo</span><span class="o">;</span>
-            <span class="o">}</span>
-            <span class="kd">public</span> <span class="nc">String</span> <span class="nf">readLabel</span><span class="o">(){</span>
-                <span class="k">return</span> <span class="n">label</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">PDestionation</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Parcel5</span> <span class="n">parcel5</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Parcel5</span><span class="o">();</span>
-        <span class="nc">Destionation</span> <span class="n">d</span> <span class="o">=</span> <span class="n">parcel5</span><span class="o">.</span><span class="na">destionation</span><span class="o">(</span><span class="s">"chenssy"</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>定义在作用域内:</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Parcel6</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">internalTracking</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">b</span><span class="o">){</span>
-        <span class="k">if</span><span class="o">(</span><span class="n">b</span><span class="o">){</span>
-            <span class="kd">class</span> <span class="nc">TrackingSlip</span><span class="o">{</span>
-                <span class="kd">private</span> <span class="nc">String</span> <span class="n">id</span><span class="o">;</span>
-                <span class="nc">TrackingSlip</span><span class="o">(</span><span class="nc">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="n">id</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
-                <span class="o">}</span>
-                <span class="nc">String</span> <span class="nf">getSlip</span><span class="o">(){</span>
-                    <span class="k">return</span> <span class="n">id</span><span class="o">;</span>
-                <span class="o">}</span>
-            <span class="o">}</span>
-            <span class="nc">TrackingSlip</span> <span class="n">ts</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TrackingSlip</span><span class="o">(</span><span class="s">"chenssy"</span><span class="o">);</span>
-            <span class="nc">String</span> <span class="n">string</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="na">getSlip</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">track</span><span class="o">(){</span>
-        <span class="n">internalTracking</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">Parcel6</span> <span class="n">parcel6</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Parcel6</span><span class="o">();</span>
-        <span class="n">parcel6</span><span class="o">.</span><span class="na">track</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h2 id="五匿名内部类">五、匿名内部类</h2>
-
-<p>在做Swing编程中，我们经常使用这种方式来绑定事件</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">button2</span><span class="o">.</span><span class="na">addActionListener</span><span class="o">(</span>  
-                <span class="k">new</span> <span class="nf">ActionListener</span><span class="o">(){</span>  
-                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="nc">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>  
-                        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"你按了按钮二"</span><span class="o">);</span>  
-                    <span class="o">}</span>  
-                <span class="o">});</span>
-</code></pre></div></div>
-
-<p>我们咋一看可能觉得非常奇怪，因为这个内部类是没有名字的，在看如下这个例子：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="nc">InnerClass</span> <span class="nf">getInnerClass</span><span class="o">(</span><span class="kd">final</span> <span class="kt">int</span> <span class="n">num</span><span class="o">,</span><span class="nc">String</span> <span class="n">str2</span><span class="o">){</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nf">InnerClass</span><span class="o">(){</span>
-            <span class="kt">int</span> <span class="n">number</span> <span class="o">=</span> <span class="n">num</span> <span class="o">+</span> <span class="mi">3</span><span class="o">;</span>
-            <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNumber</span><span class="o">(){</span>
-                <span class="k">return</span> <span class="n">number</span><span class="o">;</span>
-            <span class="o">}</span>
-        <span class="o">};</span>        <span class="cm">/* 注意：分号不能省 */</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">OuterClass</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
-        <span class="nc">InnerClass</span> <span class="n">inner</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="na">getInnerClass</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"chenssy"</span><span class="o">);</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">inner</span><span class="o">.</span><span class="na">getNumber</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">interface</span> <span class="nc">InnerClass</span> <span class="o">{</span>
-    <span class="kt">int</span> <span class="nf">getNumber</span><span class="o">();</span>
-<span class="o">}</span>
-
-<span class="o">----------------</span>
-<span class="nl">Output:</span>
-<span class="mi">5</span>
-</code></pre></div></div>
-
-<p>这里我们就需要看清几个地方</p>
-
-<p>​    <strong>1、</strong> 匿名内部类是没有访问修饰符的。</p>
-
-<p>​     <strong>2、</strong> new 匿名内部类，这个类首先是要存在的。如果我们将那个InnerClass接口注释掉，就会出现编译出错。</p>
-
-<p>​     <strong>3、</strong> 注意getInnerClass()方法的形参，第一个形参是用final修饰的，而第二个却没有。同时我们也发现第二个形参在匿名内部类中没有使用过，所以当所在方法的形参需要被匿名内部类使用，那么这个形参就必须为final。</p>
-
-<p>​    <strong>4、</strong> 匿名内部类是没有构造方法的。因为它连名字都没有何来构造方法。</p>
-
-<blockquote>
-  <p><strong>PS：</strong>由于篇幅有限，对匿名内部类就介绍到这里，有关更多关于匿名内部类的知识，我就会在下篇博客（java提高篇—–详解匿名内部类）做详细的介绍，包括为何形参要定义成final，怎么对匿名内部类进行初始化等等，敬请期待……</p>
-</blockquote>
-
-<h2 id="六静态内部类">六、静态内部类</h2>
-
-<p>在java提高篇—–关键字static中提到Static可以修饰成员变量、方法、代码块，其他它还可以修饰内部类，使用static修饰的内部类我们称之为静态内部类，不过我们更喜欢称之为嵌套内部类。静态内部类与非静态内部类之间存在一个最大的区别，我们知道非静态内部类在编译完成之后会隐含地保存着一个引用，该引用是指向创建它的外围内，但是静态内部类却没有。没有这个引用就意味着：</p>
-
-<p><strong>1、</strong> 它的创建是不需要依赖于外围类的。</p>
-
-<p><strong>2、</strong> 它不能使用任何外围类的非static成员变量和方法。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OuterClass</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">sex</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="n">name</span> <span class="o">=</span> <span class="s">"chenssy"</span><span class="o">;</span>
-
-    <span class="cm">/**
-     *静态内部类
-     */</span>
-    <span class="kd">static</span> <span class="kd">class</span> <span class="nc">InnerClass1</span><span class="o">{</span>
-        <span class="cm">/* 在静态内部类中可以存在静态成员 */</span>
-        <span class="kd">public</span> <span class="kd">static</span> <span class="nc">String</span> <span class="n">_name1</span> <span class="o">=</span> <span class="s">"chenssy_static"</span><span class="o">;</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
-            <span class="cm">/*
-             * 静态内部类只能访问外围类的静态成员变量和方法
-             * 不能访问外围类的非静态成员变量和方法
-             */</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"OutClass name :"</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * 非静态内部类
-     */</span>
-    <span class="kd">class</span> <span class="nc">InnerClass2</span><span class="o">{</span>
-        <span class="cm">/* 非静态内部类中不能存在静态成员 */</span>
-        <span class="kd">public</span> <span class="nc">String</span> <span class="n">_name2</span> <span class="o">=</span> <span class="s">"chenssy_inner"</span><span class="o">;</span>
-        <span class="cm">/* 非静态内部类中可以调用外围类的任何成员,不管是静态的还是非静态的 */</span>
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
-            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"OuterClass name："</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-
-    <span class="cm">/**
-     * @desc 外围类方法
-     * @author chenssy
-     * @data 2013-10-25
-     * @return void
-     */</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">display</span><span class="o">(){</span>
-        <span class="cm">/* 外围类访问静态内部类：内部类. */</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="nc">InnerClass1</span><span class="o">.</span><span class="na">_name1</span><span class="o">);</span>
-        <span class="cm">/* 静态内部类 可以直接创建实例不需要依赖于外围类 */</span>
-        <span class="k">new</span> <span class="nf">InnerClass1</span><span class="o">().</span><span class="na">display</span><span class="o">();</span>
-
-        <span class="cm">/* 非静态内部的创建需要依赖于外围类 */</span>
-        <span class="nc">OuterClass</span><span class="o">.</span><span class="na">InnerClass2</span> <span class="n">inner2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">().</span><span class="na">new</span> <span class="nc">InnerClass2</span><span class="o">();</span>
-        <span class="cm">/* 方位非静态内部类的成员需要使用非静态内部类的实例 */</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">inner2</span><span class="o">.</span><span class="na">_name2</span><span class="o">);</span>
-        <span class="n">inner2</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nc">OuterClass</span> <span class="n">outer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">OuterClass</span><span class="o">();</span>
-        <span class="n">outer</span><span class="o">.</span><span class="na">display</span><span class="o">();</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-<span class="o">----------------</span>
-<span class="nl">Output:</span>
-<span class="n">chenssy_static</span>
-<span class="nc">OutClass</span> <span class="n">name</span> <span class="o">:</span><span class="n">chenssy</span>
-<span class="n">chenssy_inner</span>
-<span class="nc">OuterClass</span> <span class="n">name</span><span class="err">：</span><span class="n">chenssy</span>
-</code></pre></div></div>
-
-<p>上面这个例子充分展现了静态内部类和非静态内部类的区别。</p>
-
-<p>​    到这里内部类的介绍就基本结束了！对于内部类其实本人认识也只是皮毛，逼近菜鸟一枚，认知有限！我会利用这几天时间好好研究内部类!</p>
-</div><p><a href="/java/InnerClass/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-InnerClass-2020-08-28-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
-    <meta itemprop="keywords" content="java基础"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java/LinkedHashMap/01"><h2 itemprop="headline" class="item__header">Java集合之LinkedHashMap</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><p><strong>一、初识LinkedHashMap</strong></p>
-
-<p>上篇文章讲了HashMap。HashMap是一种非常常见、非常有用的集合，但在多线程情况下使用不当会有线程安全问题。</p>
-
-<p>大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是<strong>迭代HashMap的顺序并不是HashMap放置的顺序</strong>，也就是无序。HashMap的这一缺点往往会带来困扰，因为有些场景，我们期待一个有序的Map。</p>
-
-<p>这个时候，LinkedHashMap就闪亮登场了，它虽然增加了时间和空间上的开销，但是<strong>通过维护一个运行于所有条目的双向链表，LinkedHashMap保证了元素迭代的顺序</strong>。<strong>该迭代顺序可以是插入顺序或者是访问顺序。</strong></p>
-
-<p><strong>二、四个关注点在LinkedHashMap上的答案</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th><strong>关  注  点</strong></th>
-      <th><strong>结    论</strong></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>LinkedHashMap是否允许空</td>
-      <td>Key和Value都允许空</td>
-    </tr>
-    <tr>
-      <td>LinkedHashMap是否允许重复数据</td>
-      <td>Key重复会覆盖、Value允许重复</td>
-    </tr>
-    <tr>
-      <td>LinkedHashMap是否有序</td>
-      <td><strong>有序</strong></td>
-    </tr>
-    <tr>
-      <td>LinkedHashMap是否线程安全</td>
-      <td>非线程安全</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><strong>三、LinkedHashMap基本结构</strong></p>
-
-<p>关于LinkedHashMap，先提两点：</p>
-
-<p>1、LinkedHashMap可以认为是<strong>HashMap+LinkedList</strong>，即它既使用HashMap操作数据结构，又使用LinkedList维护插入元素的先后顺序。</p>
-
-<p>2、LinkedHashMap的基本实现思想就是—-<strong>多态</strong>。可以说，理解多态，再去理解LinkedHashMap原理会事半功倍；反之也是，对于LinkedHashMap原理的学习，也可以促进和加深对于多态的理解。</p>
-
-<p>为什么可以这么说，首先看一下，LinkedHashMap的定义：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span>
-    <span class="kd">extends</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span>
-    <span class="kd">implements</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span>
-<span class="o">{</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>看到，LinkedHashMap是HashMap的子类，自然LinkedHashMap也就继承了HashMap中所有非private的方法。再看一下LinkedHashMap中本身的方法：</p>
-
-<p><img src="/assets/images/javabase/249993-20161213135723526-1007577204.png" alt="img" /></p>
-
-<p>看到LinkedHashMap中并没有什么操作数据结构的方法，也就是说LinkedHashMap操作数据结构（比如put一个数据），和HashMap操作数据的方法完全一样，无非就是细节上有一些的不同罢了。</p>
-
-<p>LinkedHashMap只定义了两个属性：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * The head of the doubly linked list.
- * 双向链表的头节点
- */</span>
-<span class="kd">private</span> <span class="kd">transient</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">header</span><span class="o">;</span>
-<span class="cm">/**
- * The iteration ordering method for this linked hash map: true
- * for access-order, false for insertion-order.
- * true表示最近最少使用次序，false表示插入顺序
- */</span>
-<span class="kd">private</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="n">accessOrder</span><span class="o">;</span>
-</code></pre></div></div>
-
-<p>LinkedHashMap一共提供了五个构造方法：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// 构造方法1，构造一个指定初始容量和负载因子的、按照插入顺序的LinkedList</span>
-<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span> <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="n">loadFactor</span><span class="o">);</span>
-    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 构造方法2，构造一个指定初始容量的LinkedHashMap，取得键值对的顺序是插入顺序</span>
-<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">);</span>
-    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 构造方法3，用默认的初始化容量和负载因子创建一个LinkedHashMap，取得键值对的顺序是插入顺序</span>
-<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">()</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">();</span>
-    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 构造方法4，通过传入的map创建一个LinkedHashMap，容量为默认容量（16）和(map.zise()/DEFAULT_LOAD_FACTORY)+1的较大者，装载因子为默认值</span>
-<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="nc">Map</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="no">K</span><span class="o">,</span> <span class="o">?</span> <span class="kd">extends</span> <span class="no">V</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">m</span><span class="o">);</span>
-    <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="c1">// 构造方法5，根据指定容量、装载因子和键值对保持顺序创建一个LinkedHashMap</span>
-<span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span>
-             <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span>
-                         <span class="kt">boolean</span> <span class="n">accessOrder</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="n">loadFactor</span><span class="o">);</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">accessOrder</span> <span class="o">=</span> <span class="n">accessOrder</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>从构造方法中可以看出，默认都采用<strong>插入顺序</strong>来维持取出键值对的次序。所有构造方法都是通过调用父类的构造方法来创建对象的。</p>
-
-<p>LinkedHashMap和HashMap的区别在于它们的基本数据结构上，看一下LinkedHashMap的基本数据结构，也就是Entry：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="kd">extends</span> <span class="nc">HashMap</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="o">{</span>
-    <span class="c1">// These fields comprise the doubly linked list used for iteration.</span>
-    <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">before</span><span class="o">,</span> <span class="n">after</span><span class="o">;</span>
-
-    <span class="nc">Entry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="nc">HashMap</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">next</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>列一下Entry里面有的一些属性吧：</p>
-
-<p>1、K key</p>
-
-<p>2、V value</p>
-
-<p>3、Entry&lt;K, V&gt; next</p>
-
-<p>4、int hash</p>
-
-<p>5、Entry&lt;K, V&gt; before</p>
-
-<p>6、Entry&lt;K, V&gt; after</p>
-
-<p>其中前面四个，也就是红色部分是从HashMap.Entry中继承过来的；后面两个，也就是蓝色部分是LinkedHashMap独有的。不要搞错了next和before、After，<strong>next是用于维护HashMap指定table位置上连接的Entry的顺序的，before、After是用于维护Entry插入的先后顺序的</strong>。</p>
-
-<p>还是用图表示一下，列一下属性而已：</p>
-
-<p><img src="/assets/images/javabase/249993-20161213140338917-602479781.png" alt="img" /></p>
-
-<p><img src="/assets/images/javabase/249993-20161215143120620-1544337380.png" alt="img" /></p>
-
-<p><img src="/assets/images/javabase/249993-20161215143544401-1850524627.jpg" alt="img" /></p>
-
-<p>第一张图为LinkedHashMap整体结构图，第二张图专门把循环双向链表抽取出来，直观一点，注意该循环双向链表的头部存放的是最久访问的节点或最先插入的节点，尾部为最近访问的或最近插入的节点，迭代器遍历方向是从链表的头部开始到链表尾部结束，在链表尾部有一个空的header节点，该节点不存放key-value内容，为LinkedHashMap类的成员属性，循环双向链表的入口。</p>
-
-<p><strong>四、初始化LinkedHashMap</strong></p>
-
-<p>假如有这么一段代码：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
-<span class="o">{</span>
-     <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">linkedHashMap</span> <span class="o">=</span>
-             <span class="k">new</span> <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;();</span>
-     <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"111"</span><span class="o">,</span> <span class="s">"111"</span><span class="o">);</span>
-     <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"222"</span><span class="o">,</span> <span class="s">"222"</span><span class="o">);</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<p>首先是第3行~第4行，new一个LinkedHashMap出来，看一下做了什么：</p>
-
-<p>通过源代码可以看出，在LinkedHashMap的构造方法中，实际调用了父类HashMap的相关构造方法来构造一个底层存放的table数组。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">()</span> <span class="o">{</span>
-     <span class="kd">super</span><span class="o">();</span>
-     <span class="n">accessOrder</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
- <span class="o">}</span>
- <span class="kd">public</span> <span class="nf">HashMap</span><span class="o">()</span> <span class="o">{</span>
-     <span class="k">this</span><span class="o">.</span><span class="na">loadFactor</span> <span class="o">=</span> <span class="no">DEFAULT_LOAD_FACTOR</span><span class="o">;</span>
-     <span class="n">threshold</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="no">DEFAULT_INITIAL_CAPACITY</span> <span class="o">*</span> <span class="no">DEFAULT_LOAD_FACTOR</span><span class="o">);</span>
-     <span class="n">table</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">[</span><span class="no">DEFAULT_INITIAL_CAPACITY</span><span class="o">];</span>
-     <span class="n">init</span><span class="o">();</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<p>我们已经知道LinkedHashMap的Entry元素继承HashMap的Entry，提供了双向链表的功能。在上述HashMap的构造器中，最后会调用init()方法，进行相关的初始化，这个方法在HashMap的实现中并无意义，只是提供给子类实现相关的初始化调用。
-LinkedHashMap重写了init()方法，在调用父类的构造方法完成构造后，进一步实现了对其元素Entry的初始化操作。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">void</span> <span class="nf">init</span><span class="o">()</span> <span class="o">{</span>
-      <span class="n">header</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;(-</span><span class="mi">1</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
-      <span class="n">header</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="n">header</span><span class="o">;</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<p>这里出现了第一个多态：init()方法。尽管init()方法定义在HashMap中，但是由于：</p>
-
-<p>1、LinkedHashMap重写了init方法</p>
-
-<p>2、实例化出来的是LinkedHashMap</p>
-
-<p>因此实际调用的init方法是LinkedHashMap重写的init方法。假设header的地址是0x00000000，那么初始化完毕，实际上是这样的：</p>
-
-<p><img src="/assets/images/javabase/249993-20161213164756542-224440628.png" alt="img" /></p>
-
-<p>注意这个header，hash值为-1，其他都为null，也就是说这个header不放在数组中，就是用来指示开始元素和标志结束元素的。</p>
-
-<p>header的目的是为了记录第一个插入的元素是谁，在遍历的时候能够找到第一个元素。</p>
-
-<p><strong>五、LinkedHashMap存储元素</strong></p>
-
-<p>LinkedHashMap并未重写父类HashMap的put方法，而是重写了父类HashMap的put方法调用的子方法void recordAccess(HashMap m) ，void addEntry(int hash, K key, V value, int bucketIndex) 和void createEntry(int hash, K key, V value, int bucketIndex)，提供了自己特有的双向链接列表的实现。</p>
-
-<p>继续看LinkedHashMap存储元素，也就是put(“111”,”111”)做了什么，首先当然是调用HashMap的put方法：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">//这个方法应该挺熟悉的，如果看了HashMap的解析的话</span>
- <span class="kd">public</span> <span class="no">V</span> <span class="nf">put</span><span class="o">(</span><span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-      <span class="c1">//key为null的情况</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-          <span class="k">return</span> <span class="nf">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-      <span class="c1">//通过key算hash，进而算出在数组中的位置，也就是在第几个桶中</span>
-      <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">());</span>
-      <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
-      <span class="c1">//查看桶中是否有相同的key值，如果有就直接用新值替换旧值，而不用再创建新的entry了</span>
-     <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
-         <span class="nc">Object</span> <span class="n">k</span><span class="o">;</span>
-         <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>
-             <span class="no">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
-             <span class="n">e</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-             <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-             <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
-         <span class="o">}</span>
-     <span class="o">}</span>
-
-     <span class="n">modCount</span><span class="o">++;</span>    
-     <span class="c1">//上面度是熟悉的东西，最重要的地方来了，就是这个方法，LinkedHashMap执行到这里，addEntry()方法不会执行HashMap中的方法，</span>
-     <span class="c1">//而是执行自己类中的addEntry方法，</span>
-     <span class="n">addEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
-     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<p>第23行又是一个多态，因为LinkedHashMap重写了addEntry方法，因此addEntry调用的是LinkedHashMap重写了的方法：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kt">void</span> <span class="nf">addEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
-      <span class="c1">//调用create方法，将新元素以双向链表的的形式加入到映射中</span>
-      <span class="n">createEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">bucketIndex</span><span class="o">);</span>
-
-      <span class="c1">// Remove eldest entry if instructed, else grow capacity if appropriate</span>
-      <span class="c1">// 删除最近最少使用元素的策略定义  </span>
-      <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">eldest</span> <span class="o">=</span> <span class="n">header</span><span class="o">.</span><span class="na">after</span><span class="o">;</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">removeEldestEntry</span><span class="o">(</span><span class="n">eldest</span><span class="o">))</span> <span class="o">{</span>
-          <span class="n">removeEntryForKey</span><span class="o">(</span><span class="n">eldest</span><span class="o">.</span><span class="na">key</span><span class="o">);</span>
-     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-         <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">&gt;=</span> <span class="n">threshold</span><span class="o">)</span>
-             <span class="n">resize</span><span class="o">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
-     <span class="o">}</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<p>因为LinkedHashMap由于其本身维护了插入的先后顺序，因此LinkedHashMap可以用来做缓存，第7行~第9行是用来支持FIFO算法的，这里暂时不用去关心它。看一下createEntry方法：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="kt">void</span> <span class="nf">createEntry</span><span class="o">(</span><span class="kt">int</span> <span class="n">hash</span><span class="o">,</span> <span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">bucketIndex</span><span class="o">)</span> <span class="o">{</span>
-     <span class="nc">HashMap</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">old</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">];</span>
-     <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">old</span><span class="o">);</span>
-     <span class="n">table</span><span class="o">[</span><span class="n">bucketIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
-     <span class="c1">//将该节点插入到链表尾部</span>
-     <span class="n">e</span><span class="o">.</span><span class="na">addBefore</span><span class="o">(</span><span class="n">header</span><span class="o">);</span>
-     <span class="n">size</span><span class="o">++;</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">addBefore</span><span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">existingEntry</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">after</span>  <span class="o">=</span> <span class="n">existingEntry</span><span class="o">;</span>
-    <span class="n">before</span> <span class="o">=</span> <span class="n">existingEntry</span><span class="o">.</span><span class="na">before</span><span class="o">;</span>
-    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>createEntry(int hash,K key,V value,int bucketIndex)方法覆盖了父类HashMap中的方法。这个方法不会拓展table数组的大小。该方法首先保留table中bucketIndex处的节点，然后调用Entry的构造方法（将调用到父类HashMap.Entry的构造方法）添加一个节点，即将当前节点的next引用指向table[bucketIndex] 的节点，之后调用的e.addBefore(header)是修改链表，将e节点添加到header节点之前。</p>
-
-<p>第2行~第4行的代码和HashMap没有什么不同，新添加的元素放在table[i]上，差别在于LinkedHashMap还做了addBefore操作，这四行代码的意思就是让新的Entry和原链表生成一个双向链表。假设字符串111放在位置table[1]上，生成的Entry地址为0x00000001，那么用图表示是这样的：</p>
-
-<p><img src="/assets/images/javabase/249993-20161214110719058-422696089.png" alt="img" /></p>
-
-<p>如果熟悉LinkedList的源码应该不难理解，还是解释一下，注意下existingEntry表示的是header：</p>
-
-<p>1、after=existingEntry，即新增的Entry的after=header地址，即after=0x00000000</p>
-
-<p>2、before=existingEntry.before，即新增的Entry的before是header的before的地址，header的before此时是0x00000000，因此新增的Entry的before=0x00000000</p>
-
-<p>3、before.after=this，新增的Entry的before此时为0x00000000即header，header的after=this，即header的after=0x00000001</p>
-
-<p>4、after.before=this，新增的Entry的after此时为0x00000000即header，header的before=this，即header的before=0x00000001</p>
-
-<p>这样，header与新增的Entry的一个双向链表就形成了。再看，新增了字符串222之后是什么样的，假设新增的Entry的地址为0x00000002，生成到table[2]上，用图表示是这样的：</p>
-
-<p><img src="/assets/images/javabase/249993-20161214112800604-1097231647.png" alt="img" /></p>
-
-<p>就不细解释了，只要before、after清除地知道代表的是哪个Entry的就不会有什么问题。</p>
-
-<p>注意，这里的插入有两重含义：</p>
-
-<p><strong>1.从table的角度看，新的entry需要插入到对应的bucket里，当有哈希冲突时，采用头插法将新的entry插入到冲突链表的头部。</strong>
-<strong>2.从header的角度看，新的entry需要插入到双向链表的尾部。</strong></p>
-
-<p>总得来看，再说明一遍，LinkedHashMap的实现就是HashMap+LinkedList的实现方式，以HashMap维护数据结构，以LinkList的方式维护数据插入顺序。</p>
-
-<p><strong>六、LinkedHashMap读取元素</strong></p>
-
-<p>LinkedHashMap重写了父类HashMap的get方法，实际在调用父类getEntry()方法取得查找的元素后，再判断当排序模式accessOrder为true时（即按访问顺序排序），先将当前节点从链表中移除，然后再将当前节点插入到链表尾部。由于的链表的增加、删除操作是常量级的，故并不会带来性能的损失。</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * 通过key获取value，与HashMap的区别是：当LinkedHashMap按访问顺序排序的时候，会将访问的当前节点移到链表尾部(头结点的前一个节点)
- */</span>
-<span class="kd">public</span> <span class="no">V</span> <span class="nf">get</span><span class="o">(</span><span class="nc">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c1">// 调用父类HashMap的getEntry()方法，取得要查找的元素。  </span>
-    <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">getEntry</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="c1">// 记录访问顺序。</span>
-    <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * 在HashMap的put和get方法中，会调用该方法，在HashMap中该方法为空
- * 在LinkedHashMap中，当按访问顺序排序时，该方法会将当前节点插入到链表尾部(头结点的前一个节点)，否则不做任何事
- */</span>
-<span class="kt">void</span> <span class="nf">recordAccess</span><span class="o">(</span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">lm</span> <span class="o">=</span> <span class="o">(</span><span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">m</span><span class="o">;</span>
-    <span class="c1">//当LinkedHashMap按访问排序时</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">accessOrder</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">lm</span><span class="o">.</span><span class="na">modCount</span><span class="o">++;</span>
-        <span class="c1">//移除当前节点</span>
-        <span class="n">remove</span><span class="o">();</span>
-        <span class="c1">//将当前节点插入到头结点前面</span>
-        <span class="n">addBefore</span><span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">header</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
- * 移除节点，并修改前后引用
- */</span>
-<span class="kd">private</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
-    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="n">after</span><span class="o">;</span>
-    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="n">before</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">addBefore</span><span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">existingEntry</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">after</span>  <span class="o">=</span> <span class="n">existingEntry</span><span class="o">;</span>
-    <span class="n">before</span> <span class="o">=</span> <span class="n">existingEntry</span><span class="o">.</span><span class="na">before</span><span class="o">;</span>
-    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p><strong>七、利用LinkedHashMap实现LRU算法缓存</strong></p>
-
-<p>前面讲了LinkedHashMap添加元素，删除、修改元素就不说了，比较简单，和HashMap+LinkedList的删除、修改元素大同小异，下面讲一个新的内容。</p>
-
-<p>LinkedHashMap可以用来作缓存，比方说LRUCache，看一下这个类的代码，很简单，就十几行而已：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LRUCache</span> <span class="kd">extends</span> <span class="nc">LinkedHashMap</span>
-<span class="o">{</span>
-    <span class="kd">public</span> <span class="nf">LRUCache</span><span class="o">(</span><span class="kt">int</span> <span class="n">maxSize</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="kd">super</span><span class="o">(</span><span class="n">maxSize</span><span class="o">,</span> <span class="mf">0.75</span><span class="no">F</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-        <span class="n">maxElements</span> <span class="o">=</span> <span class="n">maxSize</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">protected</span> <span class="kt">boolean</span> <span class="nf">removeEldestEntry</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Map</span><span class="o">.</span><span class="na">Entry</span> <span class="n">eldest</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="k">return</span> <span class="nf">size</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">maxElements</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
-    <span class="kd">protected</span> <span class="kt">int</span> <span class="n">maxElements</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>顾名思义，LRUCache就是基于LRU算法的Cache（缓存），这个类继承自LinkedHashMap，而类中看到没有什么特别的方法，这说明LRUCache实现缓存LRU功能都是源自LinkedHashMap的。LinkedHashMap可以实现LRU算法的缓存基于两点：</p>
-
-<p>1、LinkedList首先它是一个Map，Map是基于K-V的，和缓存一致</p>
-
-<p>2、LinkedList提供了一个boolean值可以让用户指定是否实现LRU</p>
-
-<p>那么，首先我们了解一下什么是LRU：<strong>LRU即Least Recently Used，最近最少使用，也就是说，当缓存满了，会优先淘汰那些最近最不常访问的数据</strong>。比方说数据a，1天前访问了；数据b，2天前访问了，缓存满了，优先会淘汰数据b。</p>
-
-<p>我们看一下LinkedList带boolean型参数的构造方法：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nf">LinkedHashMap</span><span class="o">(</span><span class="kt">int</span> <span class="n">initialCapacity</span><span class="o">,</span>
-         <span class="kt">float</span> <span class="n">loadFactor</span><span class="o">,</span>
-                     <span class="kt">boolean</span> <span class="n">accessOrder</span><span class="o">)</span> <span class="o">{</span>
-    <span class="kd">super</span><span class="o">(</span><span class="n">initialCapacity</span><span class="o">,</span> <span class="n">loadFactor</span><span class="o">);</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">accessOrder</span> <span class="o">=</span> <span class="n">accessOrder</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>就是这个accessOrder，它表示：</p>
-
-<p><strong>（1）false，所有的Entry按照插入的顺序排列</strong></p>
-
-<p><strong>（2）true，所有的Entry按照访问的顺序排列</strong></p>
-
-<p>第二点的意思就是，如果有1 2 3这3个Entry，那么访问了1，就把1移到尾部去，即2 3 1。每次访问都把访问的那个数据移到双向队列的尾部去，那么每次要淘汰数据的时候，双向队列最头的那个数据不就是最不常访问的那个数据了吗？换句话说，双向链表最头的那个数据就是要淘汰的数据。</p>
-
-<p>“访问”，这个词有两层意思：</p>
-
-<p>1、根据Key拿到Value，也就是get方法</p>
-
-<p>2、修改Key对应的Value，也就是put方法</p>
-
-<p>首先看一下get方法，它在LinkedHashMap中被重写：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="no">V</span> <span class="nf">get</span><span class="o">(</span><span class="nc">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">getEntry</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-    <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>然后是put方法，沿用父类HashMap的：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">public</span> <span class="no">V</span> <span class="nf">put</span><span class="o">(</span><span class="no">K</span> <span class="n">key</span><span class="o">,</span> <span class="no">V</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">if</span> <span class="o">(</span><span class="n">key</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
-          <span class="k">return</span> <span class="nf">putForNullKey</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-      <span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">());</span>
-      <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
-      <span class="k">for</span> <span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">table</span><span class="o">[</span><span class="n">i</span><span class="o">];</span> <span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">;</span> <span class="n">e</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">next</span><span class="o">)</span> <span class="o">{</span>
-          <span class="nc">Object</span> <span class="n">k</span><span class="o">;</span>
-          <span class="k">if</span> <span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">hash</span> <span class="o">==</span> <span class="n">hash</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="n">k</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">key</span><span class="o">)</span> <span class="o">==</span> <span class="n">key</span> <span class="o">||</span> <span class="n">key</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">k</span><span class="o">)))</span> <span class="o">{</span>
-              <span class="no">V</span> <span class="n">oldValue</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
-             <span class="n">e</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-             <span class="n">e</span><span class="o">.</span><span class="na">recordAccess</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-             <span class="k">return</span> <span class="n">oldValue</span><span class="o">;</span>
-         <span class="o">}</span>
-     <span class="o">}</span>
-
-     <span class="n">modCount</span><span class="o">++;</span>
-     <span class="n">addEntry</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
-     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
- <span class="o">}</span>
-</code></pre></div></div>
-
-<p>修改数据也就是第6行~第14行的代码。看到两端代码都有一个共同点：<strong>都调用了recordAccess方法</strong>，且这个方法是Entry中的方法，也就是说每次的recordAccess操作的都是某一个固定的Entry。</p>
-
-<p>recordAccess，顾名思义，记录访问，也就是说你这次访问了双向链表，我就把你记录下来，怎么记录？<strong>把你访问的Entry移到尾部去</strong>。这个方法在HashMap中是一个空方法，就是用来给子类记录访问用的，看一下LinkedHashMap中的实现：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">recordAccess</span><span class="o">(</span><span class="nc">HashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">lm</span> <span class="o">=</span> <span class="o">(</span><span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;)</span><span class="n">m</span><span class="o">;</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">accessOrder</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">lm</span><span class="o">.</span><span class="na">modCount</span><span class="o">++;</span>
-        <span class="n">remove</span><span class="o">();</span>
-        <span class="n">addBefore</span><span class="o">(</span><span class="n">lm</span><span class="o">.</span><span class="na">header</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span>
-    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="n">after</span><span class="o">;</span>
-    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="n">before</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="kd">private</span> <span class="kt">void</span> <span class="nf">addBefore</span><span class="o">(</span><span class="nc">Entry</span><span class="o">&lt;</span><span class="no">K</span><span class="o">,</span><span class="no">V</span><span class="o">&gt;</span> <span class="n">existingEntry</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">after</span>  <span class="o">=</span> <span class="n">existingEntry</span><span class="o">;</span>
-    <span class="n">before</span> <span class="o">=</span> <span class="n">existingEntry</span><span class="o">.</span><span class="na">before</span><span class="o">;</span>
-    <span class="n">before</span><span class="o">.</span><span class="na">after</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-    <span class="n">after</span><span class="o">.</span><span class="na">before</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>看到每次recordAccess的时候做了两件事情：</p>
-
-<p>1、把待移动的Entry的前后Entry相连</p>
-
-<p>2、把待移动的Entry移动到尾部</p>
-
-<p>当然，这一切都是基于<strong>accessOrder=true</strong>的情况下。最后用一张图表示一下整个recordAccess的过程吧：</p>
-
-<p><img src="/assets/images/javabase/249993-20161214141549995-522671418.png" alt="img" /></p>
-
-<p>void recordAccess(HashMap&lt;K,V&gt; m) 这个方法就是我们一开始说的，accessOrder为true时，就是使用的访问顺序，访问次数最少到访问次数最多，此时要做特殊处理。处理机制就是访问了一次，就将自己往后移一位，这里就是先将自己删除了，然后在把自己添加，这样，近期访问的少的就在链表的开始，最近访问的元素就会在链表的末尾。如果为false。那么默认就是插入顺序，直接通过链表的特点就能依次找到插入元素，不用做特殊处理。</p>
-
-<p><strong>八、代码演示LinkedHashMap按照访问顺序排序的效果</strong></p>
-
-<p>最后代码演示一下LinkedList按照访问顺序排序的效果，验证一下上一部分LinkedHashMap的LRU功能：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span>
-<span class="o">{</span>
-    <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">linkedHashMap</span> <span class="o">=</span>
-            <span class="k">new</span> <span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;(</span><span class="mi">16</span><span class="o">,</span> <span class="mf">0.75f</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"111"</span><span class="o">,</span> <span class="s">"111"</span><span class="o">);</span>
-    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"222"</span><span class="o">,</span> <span class="s">"222"</span><span class="o">);</span>
-    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"333"</span><span class="o">,</span> <span class="s">"333"</span><span class="o">);</span>
-    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"444"</span><span class="o">,</span> <span class="s">"444"</span><span class="o">);</span>
-    <span class="n">loopLinkedHashMap</span><span class="o">(</span><span class="n">linkedHashMap</span><span class="o">);</span>
-    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"111"</span><span class="o">);</span>
-    <span class="n">loopLinkedHashMap</span><span class="o">(</span><span class="n">linkedHashMap</span><span class="o">);</span>
-    <span class="n">linkedHashMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"222"</span><span class="o">,</span> <span class="s">"2222"</span><span class="o">);</span>
-    <span class="n">loopLinkedHashMap</span><span class="o">(</span><span class="n">linkedHashMap</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">loopLinkedHashMap</span><span class="o">(</span><span class="nc">LinkedHashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;</span> <span class="n">linkedHashMap</span><span class="o">)</span>
-<span class="o">{</span>
-    <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">set</span> <span class="o">=</span> <span class="n">inkedHashMap</span><span class="o">.</span><span class="na">entrySet</span><span class="o">();</span>
-    <span class="nc">Iterator</span><span class="o">&lt;</span><span class="nc">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">String</span><span class="o">&gt;&gt;</span> <span class="n">iterator</span> <span class="o">=</span> <span class="n">set</span><span class="o">.</span><span class="na">iterator</span><span class="o">();</span>
-
-    <span class="k">while</span> <span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">hasNext</span><span class="o">())</span>
-    <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">iterator</span><span class="o">.</span><span class="na">next</span><span class="o">()</span> <span class="o">+</span> <span class="s">"\t"</span><span class="o">);</span>
-    <span class="o">}</span>
-    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>注意这里的构造方法要用三个参数那个且最后的要传入true，这样才表示按照访问顺序排序。看一下代码运行结果：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">111</span><span class="o">=</span><span class="mi">111</span>    <span class="mi">222</span><span class="o">=</span><span class="mi">222</span>    <span class="mi">333</span><span class="o">=</span><span class="mi">333</span>    <span class="mi">444</span><span class="o">=</span><span class="mi">444</span>    
-<span class="mi">222</span><span class="o">=</span><span class="mi">222</span>    <span class="mi">333</span><span class="o">=</span><span class="mi">333</span>    <span class="mi">444</span><span class="o">=</span><span class="mi">444</span>    <span class="mi">111</span><span class="o">=</span><span class="mi">111</span>    
-<span class="mi">333</span><span class="o">=</span><span class="mi">333</span>    <span class="mi">444</span><span class="o">=</span><span class="mi">444</span>    <span class="mi">111</span><span class="o">=</span><span class="mi">111</span>    <span class="mi">222</span><span class="o">=</span><span class="mi">2222</span>   
-</code></pre></div></div>
-
-<p>代码运行结果证明了两点：</p>
-
-<p>1、LinkedList是有序的</p>
-
-<p>2、每次访问一个元素（get或put），被访问的元素都被提到最后面去了</p>
-</div><p><a href="/java/LinkedHashMap/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-LinkedHashMap-2020-08-28-02">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-28T00:00:00+08:00">
-    <meta itemprop="keywords" content="java基础"></div>
-      </article><article class="item" itemscope itemtype="http://schema.org/BlogPosting"><div class="item__content">
-          <header><a href="/java/enums/01"><h2 itemprop="headline" class="item__header">Java 枚举(enum) 详解五种常见的用法</h2></a></header>
-          <div class="item__description"><div class="article__content" itemprop="description articleBody"><h2 id="一枚举型常量">一、枚举型常量</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
-<span class="c1">//首先枚举是一个特殊的class</span>
-<span class="c1">//这个class相当于final static修饰，不能被继承</span>
-<span class="c1">//他的构造方法强制被私有化，下面有一个默认的构造方法private ColorEnum();</span>
-<span class="c1">//所有的枚举都继承自java.lang.Enum类。由于Java 不支持多继承，所以枚举对象不能再继承其他类</span>
-<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">ColorEnum</span> <span class="o">{</span>
-    <span class="c1">//每个枚举变量都是枚举类ColorEnum的实例，相当于RED=new ColorEnum（1），按序号来。</span>
-    <span class="c1">//每个成员变量都是final static修饰</span>
-    <span class="no">RED</span><span class="o">,</span> <span class="no">GREEN</span><span class="o">,</span> <span class="no">BLANK</span><span class="o">,</span> <span class="no">YELLOW</span><span class="o">;</span>
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>测试类：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">ColorTest</span><span class="o">()</span> <span class="o">{</span>
-    <span class="c1">//ordinal返回枚举变量的序号</span>
-    <span class="k">for</span><span class="o">(</span><span class="nc">ColorEnum</span> <span class="nl">color:</span><span class="nc">ColorEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color</span><span class="o">+</span><span class="s">",ordinal:"</span><span class="o">+</span><span class="n">color</span><span class="o">.</span><span class="na">ordinal</span><span class="o">()+</span><span class="s">",name:"</span><span class="o">+</span><span class="n">color</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h2 id="二带一个参数的枚举">二、带一个参数的枚举</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">TypeEnum</span> <span class="o">{</span>
-
-    <span class="no">FIREWALL</span><span class="o">(</span><span class="s">"firewall"</span><span class="o">),</span>  
-    <span class="no">SECRET</span><span class="o">(</span><span class="s">"secretMac"</span><span class="o">),</span>  
-    <span class="no">BALANCE</span><span class="o">(</span><span class="s">"f5"</span><span class="o">);</span>  
-
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">typeName</span><span class="o">;</span>  
-
-    <span class="nc">TypeEnum</span><span class="o">(</span><span class="nc">String</span> <span class="n">typeName</span><span class="o">)</span> <span class="o">{</span>  
-        <span class="k">this</span><span class="o">.</span><span class="na">typeName</span> <span class="o">=</span> <span class="n">typeName</span><span class="o">;</span>  
-    <span class="o">}</span>  
-
-    <span class="cm">/**
-     * 根据类型的名称，返回类型的枚举实例。
-     *
-     * @param typeName 类型名称
-     */</span>  
-    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">TypeEnum</span> <span class="nf">fromTypeName</span><span class="o">(</span><span class="nc">String</span> <span class="n">typeName</span><span class="o">)</span> <span class="o">{</span>  
-        <span class="k">for</span> <span class="o">(</span><span class="nc">TypeEnum</span> <span class="n">type</span> <span class="o">:</span> <span class="nc">TypeEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>  
-            <span class="k">if</span> <span class="o">(</span><span class="n">type</span><span class="o">.</span><span class="na">getTypeName</span><span class="o">().</span><span class="na">equals</span><span class="o">(</span><span class="n">typeName</span><span class="o">))</span> <span class="o">{</span>  
-                <span class="k">return</span> <span class="n">type</span><span class="o">;</span>  
-            <span class="o">}</span>  
-        <span class="o">}</span>  
-        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>  
-    <span class="o">}</span>  
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getTypeName</span><span class="o">()</span> <span class="o">{</span>  
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">typeName</span><span class="o">;</span>  
-    <span class="o">}</span>    
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>测试类：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">TypeTest</span><span class="o">()</span> <span class="o">{</span>
-    <span class="nc">String</span> <span class="n">typeName</span> <span class="o">=</span> <span class="s">"f5"</span><span class="o">;</span>  
-    <span class="nc">TypeEnum</span> <span class="n">type</span> <span class="o">=</span> <span class="nc">TypeEnum</span><span class="o">.</span><span class="na">fromTypeName</span><span class="o">(</span><span class="n">typeName</span><span class="o">);</span>
-    <span class="c1">//type:是TypeEnum类实例化对象     typeName：实例化对象type的值             </span>
-    <span class="c1">// ordinal：实例化对象type的序号（int）          排序值(默认自带的属性 ordinal 的值)</span>
-    <span class="c1">//name：实化对象的名字（String）                            枚举名称(即默认自带的属性 name 的值)</span>
-    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">type</span><span class="o">+</span><span class="s">",typeName:"</span><span class="o">+</span><span class="n">type</span><span class="o">.</span><span class="na">getTypeName</span><span class="o">()+</span><span class="s">",ordinal:"</span><span class="o">+</span><span class="n">type</span><span class="o">.</span><span class="na">ordinal</span><span class="o">()+</span><span class="s">",name:"</span><span class="o">+</span><span class="n">type</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h2 id="三向枚举中添加新方法">三、向枚举中添加新方法</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">SeasonEunm</span> <span class="o">{</span>
-    <span class="c1">//每一个枚举变量都是枚举类SeasonEunm的实例化</span>
-    <span class="c1">//SeasonEunm.SPRING获得的对象相当于new SeasonEunm("春","春困");获得的对象</span>
-    <span class="no">SPRING</span><span class="o">(</span><span class="s">"春"</span><span class="o">,</span><span class="s">"春困"</span><span class="o">),</span><span class="no">SUMMER</span><span class="o">(</span><span class="s">"夏"</span><span class="o">,</span><span class="s">"夏睡"</span><span class="o">),</span><span class="no">AUTUMN</span><span class="o">(</span><span class="s">"秋"</span><span class="o">,</span><span class="s">"秋乏"</span><span class="o">),</span><span class="no">WINTER</span><span class="o">(</span><span class="s">"冬"</span><span class="o">,</span><span class="s">"冬眠"</span><span class="o">);</span>
-
-    <span class="c1">//强制私有化的构造方法，因为枚举类默认继承Eunm类，被final static修饰，不能被继承</span>
-    <span class="c1">//由于被强制private，所以不能使用new去生成枚举对象</span>
-    <span class="c1">//在SeasonEunm.SPRING获得对象，隐式调用了下面的构造方法</span>
-    <span class="c1">// 构造方法 ,赋值给成员变量</span>
-    <span class="kd">private</span> <span class="nf">SeasonEunm</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-
-
-    <span class="c1">//添加成员变量的原因是，方便够着方法赋值，使用SeasonEunm.SPRING.getName就能获取对应的值</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">value</span><span class="o">;</span>
-
-
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setName</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setValue</span><span class="o">(</span><span class="nc">String</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-    <span class="o">}</span>
-
-
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>测试类：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">SessionTest</span><span class="o">()</span> <span class="o">{</span>
-    <span class="c1">//ordinal返回枚举变量的序号</span>
-    <span class="k">for</span><span class="o">(</span><span class="nc">SeasonEunm</span> <span class="nl">seasion:</span><span class="nc">SeasonEunm</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">seasion</span><span class="o">+</span><span class="s">",ordinal:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">ordinal</span><span class="o">()+</span><span class="s">",name:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">name</span><span class="o">());</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"枚举变量值:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">getName</span><span class="o">()+</span><span class="s">",枚举变量值:"</span><span class="o">+</span><span class="n">seasion</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<h2 id="四覆盖枚举的方法">四、覆盖枚举的方法</h2>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.yang</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">RGBEnum</span> <span class="o">{</span>
-    <span class="no">RED</span><span class="o">(</span><span class="s">"红色"</span><span class="o">,</span> <span class="mi">1</span><span class="o">),</span> <span class="no">GREEN</span><span class="o">(</span><span class="s">"绿色"</span><span class="o">,</span> <span class="mi">2</span><span class="o">),</span> <span class="no">BLANK</span><span class="o">(</span><span class="s">"白色"</span><span class="o">,</span> <span class="mi">3</span><span class="o">),</span> <span class="no">YELLO</span><span class="o">(</span><span class="s">"黄色"</span><span class="o">,</span> <span class="mi">4</span><span class="o">);</span>  
-    <span class="c1">// 成员变量  </span>
-    <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>  
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>  
-    <span class="c1">// 构造方法 ,赋值给成员变量</span>
-    <span class="kd">private</span> <span class="nf">RGBEnum</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>  
-        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>  
-        <span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>  
-    <span class="o">}</span>  
-
-    <span class="c1">//覆盖方法  :只能使用toString方法来输出枚举变量值</span>
-    <span class="nd">@Override</span>  
-    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>  
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">index</span><span class="o">+</span><span class="s">"_"</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="na">name</span><span class="o">;</span>  
-    <span class="o">}</span>  
-<span class="o">}</span>
-
-</code></pre></div></div>
-
-<p>测试方法：</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Test</span>
-<span class="kd">public</span> <span class="kt">void</span> <span class="nf">RGBEnumTest</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">for</span><span class="o">(</span><span class="nc">RGBEnum</span> <span class="nl">rgb:</span><span class="nc">RGBEnum</span><span class="o">.</span><span class="na">values</span><span class="o">())</span> <span class="o">{</span>
-        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">rgb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div></div>
-</div><p><a href="/java/enums/01">Read more</a></p></div><div class="article__info clearfix"><ul class="left-col menu"><li>
-              <a class="button button--secondary button--pill button--sm"
-                href="/archive.html?tag=java%E5%9F%BA%E7%A1%80">java基础</a>
-            </li></ul><ul class="right-col menu"><li><i class="far fa-eye"></i> <span class="js-pageview" data-page-key="java-enums-2020-08-27-01">0</span> views</li></ul></div><meta itemprop="author" content="java牛牛"/><meta itemprop="datePublished" content="2020-08-27T00:00:00+08:00">
-    <meta itemprop="keywords" content="java基础"></div>
       </article></div>
-</div><div class="layout--home"><div class="pagination"><p>329 post articles, 42 pages.</p>
+</div><div class="layout--home"><div class="pagination"><p>335 post articles, 42 pages.</p>
     <div class="pagination__menu">
       <ul class="menu menu--nowrap"><li><div class="button button--secondary button--circle disabled">
             <i class="fas fa-angle-left"></i>
