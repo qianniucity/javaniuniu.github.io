@@ -15,7 +15,6 @@ key: SpringCloud-12-07-01
 @Documented
 public @interface FeignClient {
 
-
 	@AliasFor("name")
 	String value() default "";
 
