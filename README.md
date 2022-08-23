@@ -1,1 +1,1 @@
-https://javaniuniu.comm
+https://javaniuniu.com
