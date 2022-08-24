@@ -4,7 +4,7 @@ permalink: Annotation/myself
 tags: 注解 CodeMark
 key: Annotation-myself
 ---
-[Github源码](https://github.com/javaniuniu/springboot-buckets/springboot-aop-transactional)
+[Github源码](https://github.com/mcks2000/springboot-buckets/springboot-aop-transactional)
 
 ```java
 package com.javaniuniu.scshorlsweb.system.commons.preventresubmit;

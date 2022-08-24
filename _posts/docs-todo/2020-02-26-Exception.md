@@ -23,26 +23,26 @@ key: Exception-all
 ```
 ```
 异常：Could not write JSON: Infinite recursion (StackOverflowError)
-对应项目：[Github](https://github.com/javaniuniu/springboot-buckets/springboot-restful)
+对应项目：[Github](https://github.com/mcks2000/springboot-buckets/springboot-restful)
 原因：返回的json数据死循环
 解决方法：在父类get方法添加 @JsonManagedReference 子类get方法添加 @JsonBackReference
 ```
 ```
 异常：Cannot deserialize instance of
-对应项目：[Github](https://github.com/javaniuniu/springboot-buckets/springboot-restful)
+对应项目：[Github](https://github.com/mcks2000/springboot-buckets/springboot-restful)
 原因：参数为List 少用了 []
 解决方法： 在入参值上面添加 []
 ```
 ```
 异常：java.lang.ClassNotFoundException: com.mysql.cj.jdbc.Driver
-对应项目：[Github](https://github.com/javaniuniu/springboot-buckets/springboot-hibernate)
+对应项目：[Github](https://github.com/mcks2000/springboot-buckets/springboot-hibernate)
 原因：mysql版本不支持
 解决方法：版本 5.7 -> 8.0.19
 ```
 
 ```
 异常：org.hibernate.QueryException: Legacy-style query parameters (`?`) are no longer supported
-对应项目：[Github](https://github.com/javaniuniu/springboot-buckets/springboot-hibernate)
+对应项目：[Github](https://github.com/mcks2000/springboot-buckets/springboot-hibernate)
 原因：hibernate最新版本需要在参数上添加序号
 解决方法：比如
 this.getHibernateTemplate().find("from Product p where p.pname=?", name);

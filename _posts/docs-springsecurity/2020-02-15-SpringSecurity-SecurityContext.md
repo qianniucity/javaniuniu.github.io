@@ -73,5 +73,5 @@ SecurityContext
     }
 ```
 参考文档
-- [principal](https://github.com/javaniuniu/vhr/tree/master/vhr/vhrserver/vhr-web/src/main/java/org/javaboy/vhr/controller)
-- [SecurityContextHolder](https://github.com/javaniuniu/sc-whorl/tree/master/sc-whorl-web/src/main/java/sc/whorl/system/commons)
+- [principal](https://github.com/mcks2000/vhr/tree/master/vhr/vhrserver/vhr-web/src/main/java/org/javaboy/vhr/controller)
+- [SecurityContextHolder](https://github.com/mcks2000/sc-whorl/tree/master/sc-whorl-web/src/main/java/sc/whorl/system/commons)

@@ -4,7 +4,7 @@ permalink: /web/Controller/retrurn/2
 tags: CodeMark
 key: web-Controller-retrurn-2
 ---
-[GitHub源码](https://github.com/javaniuniu/shops/tree/master/src/main/java/com/javaniuniu/shops/controller)
+[GitHub源码](https://github.com/mcks2000/shops/tree/master/src/main/java/com/javaniuniu/shops/controller)
 
 ### 直接返回所需要的数据
 ```js
